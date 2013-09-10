@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.conf import settings
 
+from django.utils import timezone
 
 class App(models.Model):
 
