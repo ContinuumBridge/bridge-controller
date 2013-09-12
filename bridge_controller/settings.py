@@ -198,6 +198,7 @@ INSTALLED_APPS = (
     'bridges',
     'cb_account',
     'apps',
+    'core',
     'south',
     'tastypie',
     #'annoying',
