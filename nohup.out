@@ -1,0 +1,10 @@
+[10/Oct/2013 10:01:01] "GET /api/v1/app/ HTTP/1.1" 200 276
+[10/Oct/2013 10:01:01] "GET /api/v1/device/ HTTP/1.1" 200 302
+[10/Oct/2013 10:06:21] "GET /api/v1/app/ HTTP/1.1" 200 276
+[10/Oct/2013 10:06:22] "GET /api/v1/device/ HTTP/1.1" 200 302
+[10/Oct/2013 10:16:28] "GET /api/v1/app/ HTTP/1.1" 200 276
+[10/Oct/2013 10:16:28] "GET /api/v1/device/ HTTP/1.1" 200 302
+[15/Oct/2013 13:16:58] "GET /api/v1/app/ HTTP/1.1" 200 276
+[15/Oct/2013 13:16:58] "GET /api/v1/device/ HTTP/1.1" 200 302
+[15/Oct/2013 14:00:28] "GET /api/v1/app/ HTTP/1.1" 200 276
+[15/Oct/2013 14:00:28] "GET /api/v1/device/ HTTP/1.1" 200 302

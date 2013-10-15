@@ -16,6 +16,8 @@ function AppController(socketPort, djangoPort,  testCallback) {
 
     var djangoBackbone = require('./django_backbone.js');
 
+    appController.appMessages = new Bacon.Bus();
+
     apps = new djangoBackbone('http://localhost:8000/api/v1/app/');
     devices = new djangoBackbone('http://localhost:8000/api/v1/device/');
 
@@ -25,7 +27,19 @@ function AppController(socketPort, djangoPort,  testCallback) {
         app: apps.backboneSocket,
     }); 
 
-    appController.appMessages = new Bacon.Bus();
+    // Configure the socket to store the sessionid
+    /*
+    appController.backboneio.configure(function() {
+        io.set('authorization', function(data, accept){
+            if(data.headers.cookie){
+                data.cookie = cookie_reader.parse(data.headers.cookie);
+                return accept(null, true);
+            }
+            return accept('error', false);
+        });
+        io.set('log level', 1);
+    });
+    */
 
     appController.backboneio.on('connection', function (socket) {
 
@@ -42,7 +56,6 @@ function AppController(socketPort, djangoPort,  testCallback) {
             appController.appMessages.push({ cmd: cmd });
         }); 
     });
-
 
     return appController;
 }
