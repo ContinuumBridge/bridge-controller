@@ -8,3 +8,10 @@
 [15/Oct/2013 13:16:58] "GET /api/v1/device/ HTTP/1.1" 200 302
 [15/Oct/2013 14:00:28] "GET /api/v1/app/ HTTP/1.1" 200 276
 [15/Oct/2013 14:00:28] "GET /api/v1/device/ HTTP/1.1" 200 302
+Validating models...
+
+0 errors found
+October 10, 2013 - 10:00:33
+Django version 1.5.1, using settings 'bridge_controller.settings'
+Development server is running at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.

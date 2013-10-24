@@ -6,7 +6,7 @@ gettext = lambda s: s
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
-AUTH_USER_MODEL = 'cb_account.CBUser'
+AUTH_USER_MODEL = 'cb_account.CBAuth'
 
 # All Auth 
 ACCOUNT_AUTHENTICATION_METHOD='email'
@@ -57,18 +57,14 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        # For use with postgis
-        #'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        #'ENGINE': 'postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd608es2kb9p137',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'arjzumvlvkxvky',
-        'PASSWORD': 'b0Bv41cTMAv91TyLeZF9gxcHgm',
-        'HOST': 'ec2-23-21-196-147.compute-1.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432',                      # Set to empty string for default.
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'd1a13ht78qe0ac',
+    'HOST': 'ec2-54-204-20-28.compute-1.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'ytjmhwznwjggaz',
+    'PASSWORD': 'SshP1x0Nu6RRinII5pLsW7cJXa'
+  }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -199,7 +195,6 @@ INSTALLED_APPS = (
     'cb_account',
     'apps',
     'devices',
-    'core',
     'south',
     'tastypie',
     #'annoying',
@@ -244,9 +239,9 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
-    'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.facebook',
+    #'allauth.socialaccount.providers.twitter',
+    #'allauth.socialaccount.providers.google',
     
 )
 

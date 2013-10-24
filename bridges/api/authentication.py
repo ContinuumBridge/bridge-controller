@@ -56,30 +56,19 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
         if not sessionid or sessionid == 'null':
             sessionid = request.COOKIES['sessionid']
         #csrftoken =   request.META.get('HTTP_X_VENNYOU_CSRFTOKEN')
-
-        #print request.META
-        print "Session ID is %s" % sessionid
-        print "request.COOKIES is %r" % request.COOKIES['sessionid']
+        #print "Session ID is %s" % sessionid
+        #print "request.COOKIES is %r" % request.COOKIES['sessionid']
 
         s = Session.objects.get(pk=sessionid)
-        #s = Session.objects.all()
 
         #print "Session decode is %s" % s.get_decoded()
-        print "Session decode is %s" % s
-
+        #print "Session decode is %s" % s
         #print "request.user is set to: %r" % bundle.request.user
 
         if '_auth_user_id' in s.get_decoded():
-            u = VennUser.objects.get(id=s.get_decoded()['_auth_user_id'])
+            u = CBUser.objects.get(id=s.get_decoded()['_auth_user_id'])
             request.user = u
             return True
 
-        
-        #if 'sessionid' in request.COOKIES:
-        #    s = Session.objects.get(pk=request.COOKIES['sessionid'])
-        #    if '_auth_user_id' in s.get_decoded():
-        #        u = User.objects.get(id=s.get_decoded()['_auth_user_id'])
-        #        request.user = u
-        #        return True
         return super(HTTPHeaderSessionAuthentication, self).is_authenticated(request, **kwargs)
 
