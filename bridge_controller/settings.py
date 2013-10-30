@@ -32,11 +32,18 @@ SOCIALACCOUNT_PROVIDERS = \
           'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
           'METHOD': 'oauth2'} }
 
-SESSION_COOKIE_HTTPONLY = False
-
 # Facebook info
 FACEBOOK_APP_ID = '511836845532247'
 FACEBOOK_APP_SECRET = 'b2d0fcf6fbdee2e0ac5893b77666ff50'
+
+SESSION_COOKIE_HTTPONLY = False
+
+#SESSION_ENGINE = 'redis_sessions.session'
+#SESSION_REDIS_HOST = 'localhost'
+#SESSION_REDIS_PORT = 6379
+#SESSION_REDIS_DB = 0
+#SESSION_REDIS_PASSWORD = 'password'
+#SESSION_REDIS_PREFIX = 'session'
 
 # Cross domain middleware settings
 XS_SHARING_ALLOWED_ORIGINS = '*'

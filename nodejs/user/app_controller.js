@@ -1,9 +1,13 @@
 
-var http = require('http');
-var rest = require('restler');
-var backboneio = require('backbone.io');
+var http = require('http'),
+    connect = require('connect'),
+    rest = require('restler'),
+    backboneio = require('backbone.io');
+    //MemoryStore = require('connect/middleware/session/memory');
 
-var djangoBackbone = require('./django_backbone.js');
+var djangoBackbone = require('./django_backbone.js'),
+    backendAuth = require('../backend_auth.js');
+
 var redis = require('socket.io/node_modules/redis');
 
 var Bacon = require('baconjs').Bacon;
@@ -16,12 +20,19 @@ module.exports = AppController;
 
 function AppController(socketPort, djangoPort,  testCallback) {
 
-    var appController ={};
+    var appController = {};
 
-    var server = http.createServer();
+    var server = http.createServer(connect()
+        .use(function(req, res, next) {
+            console.log('We are using middleware!');
+            next();
+        })
+    );
     server.listen(4000);
 
-    appController.appMessages = new Bacon.Bus();
+    appController.fromApp = new Bacon.Bus();
+
+    appController.redisClient = redis.createClient();
 
     apps = new djangoBackbone('http://localhost:8000/api/v1/app/');
     devices = new djangoBackbone('http://localhost:8000/api/v1/device/');
@@ -39,48 +50,40 @@ function AppController(socketPort, djangoPort,  testCallback) {
             //console.log('this in Authorization data is', this);
             //console.log('this in Authorization data is', appController);
             
+            data.sessionID = 'Test sessionID';
+            console.log('Data in authorization is', data);
+            if (appController.backboneio.test) {
+                //console.log('appController.backboneio.test is:', appController.backboneio.test);
+            } else if (!appController.backboneio.test) {
+                //appController.backboneio.test = "Test value!";
+                //console.log('appController.backboneio.test is set to:', appController.backboneio.test);
+            } else {
+                //console.log('Mysterious else for appController.backboneio.test');
+            }
+
+            //console.log('backboneio is:', backboneio);
+            //console.log('appController.backboneio is:', appController.backboneio);
+            //console.log('appController.backboneio is:');
+            
             if(data.headers.cookie){
                 // Pull out the cookies from the data
                 var cookies = cookie_reader.parse(data.headers.cookie);
 
-                // Define options for Django REST Client
-                var djangoAuthOptions = {
-                    method: "get",
-                    headers: {
-                        'Content-type': 'application/json', 
-                        'Accept': 'application/json',
-                        'X_CB_SESSIONID': cookies.sessionid
-                    }
-                };
-                djangoAuthURL = DJANGO_URL + 'current_user/user/'
-                // Make a request to Django to get current user id and associated bridges
-                rest.get(djangoAuthURL, djangoAuthOptions).on('complete', function(data, response) {
+                var sessionID = cookies.sessionid;
 
-                    try {
-                        console.log('Django auth client gave data \n\n\n', data);
-                        //appController.authData = JSON.parse(data);
-                        //var authData = 'apples'
-                        //var authData = JSON.parse(data);
-                        //appController.authData = data;
-                        var bridge_control = data;
-                        var json_bc = JSON.stringify(data);
-                        //console.log('Django authData', appController.authData.email);
-                        console.log('Django authData', data.bridge_control);
-                        console.log('Django authData bc', bridge_control);
-                        console.log('Django authData json_bc', json_bc);
-                    }
-                    catch (e) {
-                        // Not sure what this other data being received is atm..
-                        console.log('Strange data recieved from Django');
-                    }
+                //appController.authData = backendAuth(appController.redisClient, DJANGO_URL, sessionid); 
+                backendAuth(appController.redisClient, DJANGO_URL, sessionID).then(function(authData) {
+                    //console.log('backendAuth returned authData:', authData);
+                    //console.log('authorization gave data:', data);
+                    data.authData = authData;
+                    data.sessionID = sessionID;
+                    
+                }, function(error) {
+                    console.log('backendAuth returned error:', error);
                 });
 
-                var sub = redis.createClient();
-                sub.subscribe('test');
-                sub.on('message', function(channel, message) {
-                    console.log('Redis sent', message);
-                });
-
+                //console.log('appController.authData is:', appController.authData);
+                
                 return accept(null, true);
             }
             return accept('error', false);
@@ -91,16 +94,19 @@ function AppController(socketPort, djangoPort,  testCallback) {
     appController.backboneio.on('connection', function (socket) {
 
         var address = socket.handshake.address;
+        console.log('Connection sessionID is', socket.handshake);
         console.log('Server > New user connection from ' + address.address + ":" + address.port);
 
         socket.on('devices', function (message) {
 
-            appController.appMessages.push({ cmd: message });
+            console.log('appController.backboneio.sessionID', socket.sessionID);
+            //appController.fromApp.push({ cmd: message });
         });
     
         socket.on('cmd', function (cmd) {
 
-            appController.appMessages.push({ cmd: cmd });
+            //console.log('appController.backboneio.sessionID', appController.backboneio);
+            //appController.fromApp.push({ cmd: cmd });
         }); 
     });
 
