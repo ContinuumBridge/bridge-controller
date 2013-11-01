@@ -16,6 +16,7 @@ from tastypie.compat import User, username_field
 from tastypie.authentication import BasicAuthentication
 
 from cb_account.models import CBUser
+from bridges.models import Bridge
 
 try:
     from hashlib import sha1
@@ -49,24 +50,25 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
         super(HTTPHeaderSessionAuthentication, self).__init__(*args, **kwargs)
 
     def is_authenticated(self, request, **kwargs):
+
         from django.contrib.sessions.models import Session
-        print "in is_authenticated"
-        print "sessionid cookie is %r" % request
+
         sessionid =  request.META.get('HTTP_X_CB_SESSIONID') 
         if not sessionid or sessionid == 'null':
             sessionid = request.COOKIES['sessionid']
-        #csrftoken =   request.META.get('HTTP_X_VENNYOU_CSRFTOKEN')
-        #print "Session ID is %s" % sessionid
-        #print "request.COOKIES is %r" % request.COOKIES['sessionid']
 
         s = Session.objects.get(pk=sessionid)
 
-        #print "Session decode is %s" % s.get_decoded()
-        #print "Session decode is %s" % s
-        #print "request.user is set to: %r" % bundle.request.user
-
         if '_auth_user_id' in s.get_decoded():
-            u = CBUser.objects.get(id=s.get_decoded()['_auth_user_id'])
+            # Look up the id first as a User, then as a Bridge
+            try:
+                u = CBUser.objects.get(id=s.get_decoded()['_auth_user_id'])
+            except CBUser.DoesNotExist:
+                try:
+                    u = Bridge.objects.get(id=s.get_decoded()['_auth_user_id'])
+                except Bridge.DoesNotExist:
+                    return self._unauthorized()
+
             request.user = u
             return True
 

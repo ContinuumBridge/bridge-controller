@@ -8,9 +8,10 @@ var http = require('http'),
 var djangoBackbone = require('./django_backbone.js'),
     backendAuth = require('../backend_auth.js');
 
-var redis = require('socket.io/node_modules/redis');
+var redis = require('socket.io/node_modules/redis'),
+    Bacon = require('baconjs').Bacon,
+    Q = require('q');
 
-var Bacon = require('baconjs').Bacon;
 var cookie_reader = require('cookie');
 
 /* App Controller */
@@ -32,7 +33,10 @@ function AppController(socketPort, djangoPort,  testCallback) {
 
     appController.fromApp = new Bacon.Bus();
 
-    appController.redisClient = redis.createClient();
+    appController.redis = {};
+    appController.redis.authClient = redis.createClient();
+    appController.redis.subClient = redis.createClient();
+    appController.redis.pubClient = redis.createClient();
 
     apps = new djangoBackbone('http://localhost:8000/api/v1/app/');
     devices = new djangoBackbone('http://localhost:8000/api/v1/device/');
@@ -61,10 +65,6 @@ function AppController(socketPort, djangoPort,  testCallback) {
                 //console.log('Mysterious else for appController.backboneio.test');
             }
 
-            //console.log('backboneio is:', backboneio);
-            //console.log('appController.backboneio is:', appController.backboneio);
-            //console.log('appController.backboneio is:');
-            
             if(data.headers.cookie){
                 // Pull out the cookies from the data
                 var cookies = cookie_reader.parse(data.headers.cookie);
@@ -72,10 +72,10 @@ function AppController(socketPort, djangoPort,  testCallback) {
                 var sessionID = cookies.sessionid;
 
                 //appController.authData = backendAuth(appController.redisClient, DJANGO_URL, sessionid); 
-                backendAuth(appController.redisClient, DJANGO_URL, sessionID).then(function(authData) {
+                backendAuth(appController.redis.authClient, DJANGO_URL, sessionID).then(function(authData) {
                     //console.log('backendAuth returned authData:', authData);
                     //console.log('authorization gave data:', data);
-                    data.authData = authData;
+                    data.authData = JSON.parse(authData);
                     data.sessionID = sessionID;
                     
                 }, function(error) {
@@ -97,9 +97,33 @@ function AppController(socketPort, djangoPort,  testCallback) {
         console.log('Connection sessionID is', socket.handshake);
         console.log('Server > New user connection from ' + address.address + ":" + address.port);
 
+        var authData = socket.handshake.authData;
+
+        appController.redis.publishAll = function(message) {
+            
+            //var publishSuccess = Q.defer();
+            
+            for(var i = 0; i < authData.bridge_control.length; i++) {
+
+                var bridgeControl = authData.bridge_control[i];
+                var publicationAddress = 'CBID' + bridgeControl.id;
+                appController.redis.pubClient.publish('CBID2', message);
+                console.log('Server > ', message, 'published to ',  publicationAddress);
+            }
+        }
+
+        var subscriptionAddress = 'CBID' + authData.id;
+        appController.redis.subClient.subscribe(subscriptionAddress);
+        appController.redis.subClient.on('message', function(channel, message) {
+            
+            console.log('Client sent', message, 'on channel', channel); 
+        });
+
+
         socket.on('devices', function (message) {
 
-            console.log('appController.backboneio.sessionID', socket.sessionID);
+            console.log('appController.backboneio.sessionID', socket.handshake.authData);
+            appController.redis.publishAll('Test message');
             //appController.fromApp.push({ cmd: message });
         });
     

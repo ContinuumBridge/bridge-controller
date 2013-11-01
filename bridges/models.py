@@ -79,6 +79,14 @@ class Bridge(CBAuth):
         "Returns the short name for the user."
         return self.first_name
 
+    def get_controllers(self):
+        print "We're in get_controllers!"
+        controllers = []
+        for bridge_control in self.bridgecontrol_set.filter():
+            print "Event BridgeControl is %r" % bridge_control
+            controllers.append(bridge_control)
+        return controllers
+
 class BridgeControl(models.Model):
     
     class Meta:
