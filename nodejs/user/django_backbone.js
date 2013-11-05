@@ -22,7 +22,7 @@ function DjangoBackbone(djangoURL) {
         if (req.socket.handshake.headers.cookie) {
 
             cookies = cookie_reader.parse(req.socket.handshake.headers.cookie);
-            console.log('cookie is', cookies);
+            //console.log('cookie is', cookies);
 
             req.args={
                 headers:{ "X_CB_SESSIONID": cookies['sessionid'] }

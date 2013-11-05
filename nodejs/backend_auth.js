@@ -8,7 +8,7 @@ var backendAuth = function(redisClient, djangoURL, sessionid) {
 
     /* backendAuth takes a sessionid and returns session information about the user and bridges they control */
 
-    console.log('Backend Auth was called');
+    //console.log('Backend Auth was called');
 
     var deferredSessionData = Q.defer();
 
@@ -18,7 +18,7 @@ var backendAuth = function(redisClient, djangoURL, sessionid) {
         if (reply && !err) {
 
             // If the sessionid data exists in Redis then return it
-            deferredSessionData.resolve(reply);
+            deferredSessionData.resolve(JSON.parse(reply));
 
         } else if (!reply) {
 
@@ -33,14 +33,15 @@ var backendAuth = function(redisClient, djangoURL, sessionid) {
                 }
             };
 
-            djangoAuthURL = djangoURL + 'current_user/user/'
+            //djangoAuthURL = djangoURL + 'current_user/user/'
 
             // Make a request to Django to get session data
-            rest.get(djangoAuthURL, djangoAuthOptions).on('complete', function(data, response) {
+            rest.get(djangoURL, djangoAuthOptions).on('complete', function(data, response) {
                 
                 // If the response was good, return the session data
                 if (response.statusCode == 200) {
                     deferredSessionData.resolve(data);
+                    //console.log('backendAuth Django returned', data);
                     redisClient.set(sessionid, JSON.stringify(data), redisClient.print);
                 } else {
                     deferredSessionData.reject('There was an error connecting to Django');

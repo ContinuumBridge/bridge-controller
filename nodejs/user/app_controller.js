@@ -1,8 +1,8 @@
 
 var http = require('http'),
     connect = require('connect'),
-    rest = require('restler'),
     backboneio = require('backbone.io');
+    //rest = require('restler'),
     //MemoryStore = require('connect/middleware/session/memory');
 
 var djangoBackbone = require('./django_backbone.js'),
@@ -19,13 +19,13 @@ var cookie_reader = require('cookie');
 var DJANGO_URL = 'http://localhost:8000/api/v1/'
 module.exports = AppController;
 
-function AppController(socketPort, djangoPort,  testCallback) {
+function AppController(socketPort) {
 
     var appController = {};
 
     var server = http.createServer(connect()
         .use(function(req, res, next) {
-            console.log('We are using middleware!');
+            //console.log('We are using middleware!');
             next();
         })
     );
@@ -54,39 +54,27 @@ function AppController(socketPort, djangoPort,  testCallback) {
             //console.log('this in Authorization data is', this);
             //console.log('this in Authorization data is', appController);
             
-            data.sessionID = 'Test sessionID';
-            console.log('Data in authorization is', data);
-            if (appController.backboneio.test) {
-                //console.log('appController.backboneio.test is:', appController.backboneio.test);
-            } else if (!appController.backboneio.test) {
-                //appController.backboneio.test = "Test value!";
-                //console.log('appController.backboneio.test is set to:', appController.backboneio.test);
-            } else {
-                //console.log('Mysterious else for appController.backboneio.test');
-            }
-
-            if(data.headers.cookie){
+                if(data.headers.cookie){
                 // Pull out the cookies from the data
                 var cookies = cookie_reader.parse(data.headers.cookie);
 
                 var sessionID = cookies.sessionid;
+                var appAuthURL = DJANGO_URL + 'current_user/user/';
 
                 //appController.authData = backendAuth(appController.redisClient, DJANGO_URL, sessionid); 
-                backendAuth(appController.redis.authClient, DJANGO_URL, sessionID).then(function(authData) {
-                    //console.log('backendAuth returned authData:', authData);
+                backendAuth(appController.redis.authClient, appAuthURL, sessionID).then(function(authData) {
+                    console.log('backendAuth returned authData:', authData);
                     //console.log('authorization gave data:', data);
-                    data.authData = JSON.parse(authData);
+                    //data.authData = JSON.parse(authData);
+                    data.authData = authData;
                     data.sessionID = sessionID;
+                    return accept(null, true);
                     
                 }, function(error) {
                     console.log('backendAuth returned error:', error);
+                    return accept('error', false);
                 });
-
-                //console.log('appController.authData is:', appController.authData);
-                
-                return accept(null, true);
             }
-            return accept('error', false);
         });
         //appController.backboneio.set('log level', 1);
     });
@@ -94,37 +82,41 @@ function AppController(socketPort, djangoPort,  testCallback) {
     appController.backboneio.on('connection', function (socket) {
 
         var address = socket.handshake.address;
-        console.log('Connection sessionID is', socket.handshake);
-        console.log('Server > New user connection from ' + address.address + ":" + address.port);
-
         var authData = socket.handshake.authData;
+        console.log('authData is', authData);
+        var subscriptionAddress = 'UID' + authData.id;
+        var publicationAddresses = new Array();
+        authData.bridge_control.forEach(function(bridge) {
 
-        appController.redis.publishAll = function(message) {
-            
-            //var publishSuccess = Q.defer();
-            
-            for(var i = 0; i < authData.bridge_control.length; i++) {
+            bridgeAddress = 'BID' + bridge.id;
+            publicationAddresses.push(bridgeAddress);
+        });
 
-                var bridgeControl = authData.bridge_control[i];
-                var publicationAddress = 'CBID' + bridgeControl.id;
-                appController.redis.pubClient.publish('CBID2', message);
-                console.log('Server > ', message, 'published to ',  publicationAddress);
-            }
+        console.log('Server > New user connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address, address.port, subscriptionAddress, authData.email, publicationAddresses);
+
+        appController.redis.publish = function(message) {
+            
+            publicationAddresses.forEach(function(publicationAddress) {
+                appController.redis.pubClient.publish(publicationAddress, message);
+                console.log('App > ', message, 'published to ',  publicationAddress);
+            });
         }
 
-        var subscriptionAddress = 'CBID' + authData.id;
         appController.redis.subClient.subscribe(subscriptionAddress);
         appController.redis.subClient.on('message', function(channel, message) {
             
-            console.log('Client sent', message, 'on channel', channel); 
+            socket.emit('message', message);
+            console.log('App received', message, 'from', channel); 
         });
 
+        socket.on('message', function (message) {
+
+            appController.redis.publish(message);
+        });
 
         socket.on('devices', function (message) {
 
-            console.log('appController.backboneio.sessionID', socket.handshake.authData);
-            appController.redis.publishAll('Test message');
-            //appController.fromApp.push({ cmd: message });
+            appController.redis.publish('Test message');
         });
     
         socket.on('cmd', function (cmd) {
