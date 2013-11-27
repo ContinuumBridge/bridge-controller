@@ -1,0 +1,26 @@
+{
+  "author": "",
+  "name": "bridge-controller",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ContinuumBridge/bridge-controller.git"
+  },
+  "dependencies": {
+    "backbone.io": "~0.4.1",
+    "baconjs": "~0.6.22",
+    "connect": "~2.7.8",
+    "cookie": "~0.1.0",
+    "node-rest-client": "~0.7.0",
+    "q": "~0.9.7",
+    "querystring": "~0.2.0",
+    "restler": "~2.0.1",
+    "redis": "~0.9.1",
+    "socket.io": "~0.9.16"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

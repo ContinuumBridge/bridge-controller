@@ -1,5 +1,6 @@
 var backboneio = require('backbone.io');
-var RestClient = require('node-rest-client').Client;
+var rest = require('restler');
+//var RestClient = require('node-rest-client').Client;
 
 var cookie_reader = require('cookie');
 
@@ -12,7 +13,7 @@ function DjangoBackbone(djangoURL) {
     var djangoBackbone = {};
 
     // Setup REST client
-    djangoBackbone.djangoClient = new RestClient();
+    //djangoBackbone.djangoClient = new RestClient();
 
     // Setup backbone websockets
     djangoBackbone.backboneSocket = backboneio.createBackend();
@@ -37,14 +38,26 @@ function DjangoBackbone(djangoURL) {
 
     djangoBackbone.backboneSocket.read(function(req, res) {
         
-        //console.log(req.backend);
-        //console.log(req.method);
-        //console.log(JSON.stringify(req.model));
+        var djangoOptions = {
+            method: "get",
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json', 
+            }
+        };
 
+        // Make a request to Django to get session data
+        rest.get(djangoURL, djangoOptions).on('complete', function(data, response) {
+
+            res.end(data);
+        });
+
+        /*
         djangoBackbone.djangoClient.get(djangoURL, function(data, response) {
             
             res.end(data);
         });
+        */
     });
 
     djangoBackbone.backboneSocket.use(backboneio.middleware.memoryStore());

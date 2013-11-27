@@ -1,0 +1,5 @@
+Django
+dateutils
+mimeparse
+-e git+http://github.com/codysoyland/django-qunit.git#egg=qunit
+-e git+http://github.com/toastdriven/django-tastypie.git#egg=tastypie
