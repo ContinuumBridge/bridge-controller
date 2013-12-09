@@ -1,0 +1,17 @@
+[
+	{
+		"created": "2013-08-05T21:54:50.678533",
+		"description": "Sample App 1",
+		"id": 1,
+		"name": "App 1",
+		"resource_uri": "/api/v1/app/1/",
+	},
+	
+	{
+		"created": "2013-08-05T21:54:50.678533",
+		"description": "Sample App 2",
+		"id": 2,
+		"name": "App 2",
+		"resource_uri": "/api/v1/app/2/",
+	},
+]
