@@ -12,7 +12,7 @@ from bridges.api import cb_fields
 class AppDevicePermissionResource(ThroughModelResource):
 
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=False)
-    app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app', full=True)
+    app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
     
     class Meta:
        queryset = AppInstall.objects.all()
@@ -26,7 +26,7 @@ class AppInstallResource(ThroughModelResource):
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
     
-    device = cb_fields.ToManyThroughField(AppDevicePermissionResource,
+    devices = cb_fields.ToManyThroughField(AppDevicePermissionResource,
                     attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,
                    null=True, readonly=True, nonmodel=True)
 
