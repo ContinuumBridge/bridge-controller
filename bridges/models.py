@@ -79,13 +79,24 @@ class Bridge(CBAuth):
         "Returns the short name for the user."
         return self.first_name
 
+    def get_apps(self):
+        apps = []
+        for app_install in self.appinstall_set.filter():
+            apps.append(app_install)
+        return apps
+
     def get_controllers(self):
-        print "We're in get_controllers!"
         controllers = []
         for bridge_control in self.bridgecontrol_set.filter():
-            print "Event BridgeControl is %r" % bridge_control
             controllers.append(bridge_control)
         return controllers
+
+    def get_device_installs(self):
+        device_installs = []
+        for device_install in self.deviceinstall_set.filter():
+            device_installs.append(device_install)
+        return device_installs
+
 
 class BridgeControl(models.Model):
     

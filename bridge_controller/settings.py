@@ -201,6 +201,7 @@ INSTALLED_APPS = (
     'bridges',
     'cb_account',
     'apps',
+    'adaptors',
     'devices',
     'south',
     'tastypie',

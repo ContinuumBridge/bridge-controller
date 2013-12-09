@@ -1,45 +1,38 @@
 
-from tastypie.resources import ModelResource 
+from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 
-from bridges.api.abstract_resources import ThroughModelResource
-from apps.models import App, AppInstall
+from django.contrib.auth import authenticate, login, logout
+from tastypie.http import HttpUnauthorized, HttpForbidden
+from django.conf.urls import url
+from tastypie.utils import trailing_slash
 
-from bridges.api.abstract_resources import ThroughModelResource
+from django.conf.urls.defaults import url
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+
+from tastypie.authentication import SessionAuthentication
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
+from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
+from tastypie import fields
+
+from django.core.exceptions import MultipleObjectsReturned, ValidationError
+from tastypie.resources import ObjectDoesNotExist
+from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
+
+from bridges.models import Bridge, BridgeControl
+
+from bridges.api.authentication import HTTPHeaderSessionAuthentication
+from cb_account.api.authorization import CurrentUserAuthorization
+
 from bridges.api import cb_fields
-#from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AppDevicePermissionResource(ThroughModelResource):
-
-    device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=False)
-    app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app', full=True)
-    
-    class Meta:
-       queryset = AppInstall.objects.all()
-       authorization = Authorization()
-       #list_allowed_methods = ['get', 'post']
-       #detail_allowed_methods = ['get']
-       resource_name = 'app_device_permission' 
-
-class AppInstallResource(ThroughModelResource):
-
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    
-    device = cb_fields.ToManyThroughField(AppDevicePermissionResource,
-                    attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,
-                   null=True, readonly=True, nonmodel=True)
+class ThroughModelResource(ModelResource):
 
     class Meta:
-       queryset = AppInstall.objects.all()
-       authorization = Authorization()
-       #list_allowed_methods = ['get', 'post']
-       #detail_allowed_methods = ['get']
-       resource_name = 'app_install' 
+        resource_name = 'through_model_resource'
 
-    '''
     def full_dehydrate(self, bundle, for_list=False):
-        """ 
+        """
         Given a bundle with an object instance, extract the information from it
         to populate the resource.
         """
@@ -55,6 +48,7 @@ class AppInstallResource(ThroughModelResource):
             else:
                 if field_use_in not in use_in:
                     continue
+
             # A touch leaky but it makes URI resolution work.
             if getattr(field_object, 'dehydrated_type', None) == 'related':
                 field_object.api_name = self._meta.api_name
@@ -67,11 +61,12 @@ class AppInstallResource(ThroughModelResource):
 
             if method:
                 bundle.data[field_name] = method(bundle)
-
+            '''
             # Dehydrate ids of related resources if they have them and append them to the ToMany level
             if 'dehydrate_id' in dir(field_object) and callable(field_object.dehydrate_id):
                 print "Field object is callable"
                 bundle.data['%s_id' % field_name] = field_object.dehydrate_id(bundle)
+            '''
 
         if hasattr(self, 'instance'):
             # Add the through model id to the bundle 
@@ -79,14 +74,4 @@ class AppInstallResource(ThroughModelResource):
 
         bundle = self.dehydrate(bundle)
         return bundle
-    '''
-
-class AppResource(ModelResource):
-
-    class Meta:
-        queryset = App.objects.all()
-        authorization = Authorization()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
-        resource_name = 'app' 
 

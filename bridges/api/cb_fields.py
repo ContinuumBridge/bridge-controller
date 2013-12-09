@@ -13,6 +13,15 @@ from tastypie.fields import ApiField, RelatedField, ToOneField, ToManyField, NOT
 
 from django.utils import six
 
+class ToOneThroughField(ToOneField):
+    
+    def dehydrate_id(self, bundle, for_list=True):
+        
+        # Dehydrates id of the related model
+        dehydrate_model_id = getattr(bundle.obj, "%s_id" % self.attribute, None)
+
+        return dehydrate_model_id
+
 class ToManyThroughField(ToManyField):
 
     def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,

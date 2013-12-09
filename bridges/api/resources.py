@@ -1,32 +1,41 @@
 
-from tastypie.resources import ModelResource
-from tastypie.authorization import Authorization
+from django.core.exceptions import MultipleObjectsReturned, ValidationError
 
 from django.contrib.auth import authenticate, login, logout
 from tastypie.http import HttpUnauthorized, HttpForbidden
 from django.conf.urls import url
-from tastypie.utils import trailing_slash
 
 from django.conf.urls.defaults import url
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
+from tastypie.resources import ModelResource
+from tastypie.authorization import Authorization
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
+from tastypie.utils import trailing_slash
 from tastypie import fields
 
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from tastypie.resources import ObjectDoesNotExist
 from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
+
+from cb_account.api.authorization import CurrentUserAuthorization
+from apps.api.resources import AppInstallResource
+from devices.api.resources import DeviceInstallResource
 
 from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from cb_account.api.authorization import CurrentUserAuthorization
-
 from bridges.api import cb_fields
+from bridges.api.abstract_resources import ThroughModelResource
 
-class BridgeControlResource(ModelResource):
+# For test
+from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
+
+class BridgeControlResource(ThroughModelResource):
+
+    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
+    user = cb_fields.ToOneThroughField('cb_account.api.resources.UserResource', 'user', full=True)
 
     class Meta:
         queryset = BridgeControl.objects.all()
@@ -35,58 +44,32 @@ class BridgeControlResource(ModelResource):
         #detail_allowed_methods = ['get']
         resource_name = 'bridge_control'
 
-    def full_dehydrate(self, bundle, for_list=False):
+    '''
+    def get_resource_uri(self, bundle_or_obj=None, url_name='api_dispatch_list'):
         """
-        Given a bundle with an object instance, extract the information from it
-        to populate the resource.
+        Handles generating a resource URI.
+
+        If the ``bundle_or_obj`` argument is not provided, it builds the URI
+        for the list endpoint.
+
+        If the ``bundle_or_obj`` argument is provided, it builds the URI for
+        the detail endpoint.
+
+        Return the generated URI. If that URI can not be reversed (not found
+        in the URLconf), it will return an empty string.
         """
-        use_in = ['all', 'list' if for_list else 'detail']
+        if bundle_or_obj is not None:
+            url_name = 'api_dispatch_detail'
 
-        #print "Inside full_dehydrate"
-
-        print "The bundle in %r \n is %r" % (self, bundle)
-        #for field_name, field_object in self.fields.items():
-        #    print "field_name: %r field_object: %r" % (field_name, field_object)
-            
-
-        # Dehydrate each field.
-        for field_name, field_object in self.fields.items():
-            print "field_name is %r \n field_object is %r" % (field_name, field_object.__dict__)
-            #print "bundle is: %r" % bundle
-            print "self is: %r" % self.__dict__
-            # If it's not for use in this mode, skip
-            field_use_in = getattr(field_object, 'use_in', 'all')
-            if callable(field_use_in):
-                if not field_use_in(bundle):
-                    continue
-            else:
-                if field_use_in not in use_in:
-                    continue
-
-            # A touch leaky but it makes URI resolution work.
-            if getattr(field_object, 'dehydrated_type', None) == 'related':
-                field_object.api_name = self._meta.api_name
-                field_object.resource_name = self._meta.resource_name
-
-            bundle.data[field_name] = field_object.dehydrate(bundle, for_list=for_list)
-
-            # Check for an optional method to do further dehydration.
-            method = getattr(self, "dehydrate_%s" % field_name, None)
-
-            if method:
-                bundle.data[field_name] = method(bundle)
-            
-            # Dehydrate ids of related resources if they have them and append them to the ToMany level
-            if 'dehydrate_id' in dir(field_object) and callable(field_object.dehydrate_id):
-                print "Field object is callable"
-                bundle.data['%s_id' % field_name] = field_object.dehydrate_id(bundle)
-
-        if hasattr(self, 'instance'):
-            # Add the through model id to the bundle 
-            bundle.data['id'] = self.instance.id
-
-        bundle = self.dehydrate(bundle)
-        return bundle
+        try:
+            print "In get_resouce_uri url_name", url_name
+            print "In get_resouce_uri bundle_or_obj", bundle_or_obj
+            print "In get_resouce_uri resource_uri_kwargs", self.resource_uri_kwargs(bundle_or_obj)
+            print "In get_resouce_uri", self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
+            return self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
+        except NoReverseMatch:
+            return ''
+    '''
 
 
 class BridgeResource(ModelResource):
@@ -101,7 +84,15 @@ class BridgeResource(ModelResource):
 class CurrentBridgeResource(ModelResource):
     
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
-                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.eventrsvp_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    apps = cb_fields.ToManyThroughField(AppInstallResource, 
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
+                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     class Meta:
@@ -151,6 +142,68 @@ class CurrentBridgeResource(ModelResource):
             return http.HttpNoContent()
 
         return response
+
+    def get_resource_uri(self, bundle_or_obj=None, url_name='api_dispatch_list'):
+        """
+        Handles generating a resource URI.
+
+        If the ``bundle_or_obj`` argument is not provided, it builds the URI
+        for the list endpoint.
+
+        If the ``bundle_or_obj`` argument is provided, it builds the URI for
+        the detail endpoint.
+
+        Return the generated URI. If that URI can not be reversed (not found
+        in the URLconf), it will return an empty string.
+        """
+        if bundle_or_obj is not None:
+            url_name = 'api_dispatch_detail'
+
+        try:
+            print "In get_resouce_uri url_name", url_name
+            print "In get_resouce_uri bundle_or_obj", bundle_or_obj
+            print "In get_resouce_uri resource_uri_kwargs", self.resource_uri_kwargs(bundle_or_obj)
+            print "In get_resouce_uri", self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
+            return self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
+        except NoReverseMatch:
+            return ''
+
+    def full_dehydrate(self, bundle, for_list=False):
+        """
+        Given a bundle with an object instance, extract the information from it
+        to populate the resource.
+        """
+        use_in = ['all', 'list' if for_list else 'detail']
+
+        # Dehydrate each field.
+        for field_name, field_object in self.fields.items():
+            print "In CurrentBridge dehydrate_all", field_name, field_object
+            # If it's not for use in this mode, skip
+            field_use_in = getattr(field_object, 'use_in', 'all')
+            if callable(field_use_in):
+                if not field_use_in(bundle):
+                    continue
+            else:
+                if field_use_in not in use_in:
+                    continue
+
+            # A touch leaky but it makes URI resolution work.
+            if getattr(field_object, 'dehydrated_type', None) == 'related':
+                field_object.api_name = self._meta.api_name
+                field_object.resource_name = self._meta.resource_name
+
+            bundle.data[field_name] = field_object.dehydrate(bundle, for_list=for_list)
+            
+
+            # Check for an optional method to do further dehydration.
+            method = getattr(self, "dehydrate_%s" % field_name, None)
+
+            if method:
+                bundle.data[field_name] = method(bundle)
+
+        bundle = self.dehydrate(bundle)
+        return bundle
+
 
 
 class BridgeAuthResource(ModelResource):
