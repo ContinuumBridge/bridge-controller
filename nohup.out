@@ -15,3 +15,181 @@ October 10, 2013 - 10:00:33
 Django version 1.5.1, using settings 'bridge_controller.settings'
 Development server is running at http://0.0.0.0:8000/
 Quit the server with CONTROL-C.
+*** Starting uWSGI 1.9.13 (32bit) on [Mon Dec  9 12:54:53 2013] ***
+compiled with version: 4.6.3 on 27 November 2013 12:28:43
+os: Linux-3.2.0-48-virtual #74-Ubuntu SMP Thu Jun 6 20:25:34 UTC 2013
+nodename: ip-172-31-25-80
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /home/bridge-controller
+detected binary path: /usr/local/bin/uwsgi
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 4674
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+*** starting uWSGI Emperor ***
+*** has_emperor mode detected (fd: 6) ***
+[uWSGI] getting INI configuration from cb-uwsgi.ini
+*** Starting uWSGI 1.9.13 (32bit) on [Mon Dec  9 12:54:53 2013] ***
+compiled with version: 4.6.3 on 27 November 2013 12:28:43
+os: Linux-3.2.0-48-virtual #74-Ubuntu SMP Thu Jun 6 20:25:34 UTC 2013
+nodename: ip-172-31-25-80
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /etc/uwsgi/vassals
+detected binary path: /usr/local/bin/uwsgi
+your processes number limit is 4674
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+uwsgi socket 0 bound to UNIX address /tmp/uwsgi_bridge_controller.sock fd 3
+Python version: 2.7.3 (default, Sep 26 2013, 20:26:19)  [GCC 4.6.3]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x8fb42e0
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 704000 bytes (687 KB) for 10 cores
+*** Operational MODE: preforking ***
+added ../ to pythonpath.
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x8fb42e0 pid: 7380 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 7380)
+spawned uWSGI worker 1 (pid: 7381, cores: 1)
+spawned uWSGI worker 2 (pid: 7382, cores: 1)
+spawned uWSGI worker 3 (pid: 7383, cores: 1)
+spawned uWSGI worker 4 (pid: 7384, cores: 1)
+spawned uWSGI worker 5 (pid: 7385, cores: 1)
+spawned uWSGI worker 6 (pid: 7386, cores: 1)
+spawned uWSGI worker 7 (pid: 7387, cores: 1)
+spawned uWSGI worker 8 (pid: 7388, cores: 1)
+spawned uWSGI worker 9 (pid: 7389, cores: 1)
+spawned uWSGI worker 10 (pid: 7390, cores: 1)
+/usr/local/lib/python2.7/dist-packages/django/conf/urls/defaults.py:3: DeprecationWarning: django.conf.urls.defaults is deprecated; use django.conf.urls instead
+  DeprecationWarning)
+
+/usr/local/lib/python2.7/dist-packages/tastypie/resources.py:328: UserWarning: 'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.
+  warnings.warn("'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.")
+
+We're in get_controllers!
+Event BridgeControl is <BridgeControl: BridgeControl object>
+The m2ms iss [<BridgeControl: BridgeControl object>]
+The bundle in <bridges.api.resources.BridgeControlResource object at 0x9c4cd0c> 
+ is <Bundle for obj: 'BridgeControl object' and with data: '{}'>
+field_name is u'id' 
+ field_object is {'unique': True, '_resource': None, 'attribute': u'id', 'value': None, 'instance_name': u'id', 'readonly': False, 'blank': True, '_default': u'', 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8896c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8812c>}, 'instance': <BridgeControl: BridgeControl object>}
+field_name is u'resource_uri' 
+ field_object is {'unique': False, '_resource': <class 'bridges.api.resources.BridgeControlResource'>, 'attribute': None, 'value': None, 'instance_name': u'resource_uri', 'readonly': True, 'blank': False, '_default': <class tastypie.fields.NOT_PROVIDED at 0x9ba90ec>, 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8896c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8812c>}, 'instance': <BridgeControl: BridgeControl object>}
+[pid: 7389|app: 0|req: 1/1] 2.217.103.124 () {40 vars in 770 bytes} [Mon Dec  9 12:55:01 2013] GET /api/v1/current_bridge/bridge/?format=json => generated 211 bytes in 1966 msecs (HTTP/1.1 200) 3 headers in 90 bytes (1 switches on core 0)
+announcing my loyalty to the Emperor...
+[emperor] vassal cb-uwsgi.ini is now loyal
+/usr/local/lib/python2.7/dist-packages/django/conf/urls/defaults.py:3: DeprecationWarning: django.conf.urls.defaults is deprecated; use django.conf.urls instead
+  DeprecationWarning)
+
+/usr/local/lib/python2.7/dist-packages/tastypie/resources.py:328: UserWarning: 'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.
+  warnings.warn("'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.")
+
+We're in get_controllers!
+Event BridgeControl is <BridgeControl: BridgeControl object>
+The m2ms iss [<BridgeControl: BridgeControl object>]
+The bundle in <bridges.api.resources.BridgeControlResource object at 0x9c4cd0c> 
+ is <Bundle for obj: 'BridgeControl object' and with data: '{}'>
+field_name is u'id' 
+ field_object is {'unique': True, '_resource': None, 'attribute': u'id', 'value': None, 'instance_name': u'id', 'readonly': False, 'blank': True, '_default': u'', 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8896c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8812c>}, 'instance': <BridgeControl: BridgeControl object>}
+field_name is u'resource_uri' 
+ field_object is {'unique': False, '_resource': <class 'bridges.api.resources.BridgeControlResource'>, 'attribute': None, 'value': None, 'instance_name': u'resource_uri', 'readonly': True, 'blank': False, '_default': <class tastypie.fields.NOT_PROVIDED at 0x9ba90ec>, 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8896c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8812c>}, 'instance': <BridgeControl: BridgeControl object>}
+[pid: 7390|app: 0|req: 1/2] 2.217.103.124 () {40 vars in 770 bytes} [Mon Dec  9 13:12:00 2013] GET /api/v1/current_bridge/bridge/?format=json => generated 211 bytes in 1962 msecs (HTTP/1.1 200) 3 headers in 90 bytes (1 switches on core 0)
+announcing my loyalty to the Emperor...
+[emperor] vassal cb-uwsgi.ini is now loyal
+[pid: 7389|app: 0|req: 2/3] 2.217.103.124 () {40 vars in 673 bytes} [Mon Dec  9 13:12:17 2013] GET /api/v1/current_bridge/bridge => generated 0 bytes in 3 msecs (HTTP/1.1 301) 2 headers in 135 bytes (1 switches on core 0)
+/usr/local/lib/python2.7/dist-packages/django/conf/urls/defaults.py:3: DeprecationWarning: django.conf.urls.defaults is deprecated; use django.conf.urls instead
+  DeprecationWarning)
+
+/usr/local/lib/python2.7/dist-packages/tastypie/resources.py:328: UserWarning: 'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.
+  warnings.warn("'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.")
+
+We're in get_controllers!
+Event BridgeControl is <BridgeControl: BridgeControl object>
+The m2ms iss [<BridgeControl: BridgeControl object>]
+The bundle in <bridges.api.resources.BridgeControlResource object at 0x9c4ccec> 
+ is <Bundle for obj: 'BridgeControl object' and with data: '{}'>
+field_name is u'id' 
+ field_object is {'unique': True, '_resource': None, 'attribute': u'id', 'value': None, 'instance_name': u'id', 'readonly': False, 'blank': True, '_default': u'', 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8894c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8810c>}, 'instance': <BridgeControl: BridgeControl object>}
+field_name is u'resource_uri' 
+ field_object is {'unique': False, '_resource': <class 'bridges.api.resources.BridgeControlResource'>, 'attribute': None, 'value': None, 'instance_name': u'resource_uri', 'readonly': True, 'blank': False, '_default': <class tastypie.fields.NOT_PROVIDED at 0x9ba80ec>, 'null': False, 'use_in': u'all'}
+self is: {'fields': {u'id': <tastypie.fields.IntegerField object at 0x9c8894c>, u'resource_uri': <tastypie.fields.CharField object at 0x9c8810c>}, 'instance': <BridgeControl: BridgeControl object>}
+[pid: 7388|app: 0|req: 1/4] 2.217.103.124 () {40 vars in 675 bytes} [Mon Dec  9 13:12:17 2013] GET /api/v1/current_bridge/bridge/ => generated 211 bytes in 1808 msecs (HTTP/1.1 200) 3 headers in 90 bytes (1 switches on core 0)
+announcing my loyalty to the Emperor...
+[emperor] vassal cb-uwsgi.ini is now loyal
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    response = middleware_method(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    "Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): %s" % host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    response = self.handle_uncaught_exception(request, resolver, sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    return debug.technical_500_response(request, *exc_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    return t.render(c)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    return nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    output = self.filter_expression.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    obj = self.var.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    value = self._resolve_lookup(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    current = current()
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    self.get_host(), self.path)
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    "Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): %s" % host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 7390|app: 0|req: 2/5] 27.109.20.234 () {24 vars in 242 bytes} [Mon Dec  9 14:42:46 2013] HEAD / => generated 0 bytes in 77 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 7390|app: 0|req: 3/6] 122.226.102.31 () {34 vars in 447 bytes} [Mon Dec  9 17:30:22 2013] GET /manager/html => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 4/7] 188.40.74.133 () {36 vars in 462 bytes} [Mon Dec  9 21:33:22 2013] GET //cgi-bin/php => generated 2571 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 3/8] 188.40.74.133 () {36 vars in 464 bytes} [Mon Dec  9 21:33:22 2013] GET //cgi-bin/php5 => generated 2574 bytes in 8 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 5/9] 120.192.223.134 () {34 vars in 448 bytes} [Tue Dec 10 10:37:27 2013] GET /manager/html => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 4/10] 120.192.101.25 () {34 vars in 447 bytes} [Tue Dec 10 10:37:45 2013] GET /manager/html => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 6/11] 111.74.122.19 () {34 vars in 446 bytes} [Tue Dec 10 10:42:23 2013] GET /manager/html => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 7/12] 85.17.155.196 () {36 vars in 479 bytes} [Tue Dec 10 11:17:26 2013] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2661 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 5/13] 85.17.155.196 () {36 vars in 453 bytes} [Tue Dec 10 11:17:26 2013] GET /phpMyAdmin/scripts/setup.php => generated 2622 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7388|app: 0|req: 2/14] 85.17.155.196 () {36 vars in 453 bytes} [Tue Dec 10 11:17:26 2013] GET /phpmyadmin/scripts/setup.php => generated 2622 bytes in 8 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 8/15] 85.17.155.196 () {36 vars in 439 bytes} [Tue Dec 10 11:17:26 2013] GET /pma/scripts/setup.php => generated 2601 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 6/16] 85.17.155.196 () {36 vars in 447 bytes} [Tue Dec 10 11:17:26 2013] GET /myadmin/scripts/setup.php => generated 2613 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 9/17] 85.17.155.196 () {36 vars in 447 bytes} [Tue Dec 10 11:17:26 2013] GET /MyAdmin/scripts/setup.php => generated 2613 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 10/18] 94.102.52.147 () {36 vars in 461 bytes} [Tue Dec 10 11:33:03 2013] GET /cgi-bin/php => generated 2571 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 7/19] 94.102.52.147 () {36 vars in 463 bytes} [Tue Dec 10 11:33:03 2013] GET /cgi-bin/php4 => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7388|app: 0|req: 3/20] 94.102.52.147 () {36 vars in 463 bytes} [Tue Dec 10 11:33:03 2013] GET /cgi-bin/php5 => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 11/21] 94.102.52.147 () {36 vars in 469 bytes} [Tue Dec 10 11:33:03 2013] GET /cgi-bin/php-cgi => generated 2583 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7389|app: 0|req: 8/22] 94.102.52.147 () {36 vars in 469 bytes} [Tue Dec 10 11:33:03 2013] GET /cgi-bin/php.cgi => generated 2583 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 7390|app: 0|req: 12/23] 120.192.223.134 () {34 vars in 448 bytes} [Tue Dec 10 11:45:11 2013] GET /manager/html => generated 2574 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
