@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^api/', include(v1.urls)),
+
+    (r'^pages/', include('pages.urls')),
 )
 if settings.DEBUG:
     urlpatterns = patterns('',
