@@ -64,3 +64,14 @@ class CurrentUserResource(ModelResource):
             return http.HttpNoContent()
 
         return response
+
+
+class UserResource(ModelResource):
+
+    class Meta:
+        resource_name = 'user'
+        queryset = CBUser.objects.all()
+        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
+        authentication = HTTPHeaderSessionAuthentication()
+        authorization = ReadOnlyAuthorization()
+

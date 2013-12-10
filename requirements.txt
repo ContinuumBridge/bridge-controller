@@ -6,6 +6,7 @@ distribute
 django-allauth==0.13.0
 django-annoying==0.7.7
 django-avatar==1.0.5
+django-braces==1.2.2
 django-classy-tags==0.4
 #django-cms==2.4.1
 django-countries==1.5

@@ -136,7 +136,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'q23$2g_x+cxuqu5#15(-ecjlzq8g^67+64-rs8bizkkigrger1'
+SECRET_KEY = 'aa$t%s&3-$wluc*sd_mu)1*i$jqqv7my)r%(vcwe7p8_ll)mnv'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -201,7 +201,9 @@ INSTALLED_APPS = (
     'bridges',
     'cb_account',
     'apps',
+    'adaptors',
     'devices',
+    'pages',
     'south',
     'tastypie',
     #'annoying',

@@ -15,12 +15,15 @@ var backendAuth = function(redisClient, djangoURL, sessionid) {
     // Check if the session id exists in the redis store
     redisClient.get(sessionid, function(err, reply) {
         
-        if (reply && !err) {
+        //if (reply && !err) {
+        if (false) {
 
             // If the sessionid data exists in Redis then return it
+            console.log('Reply from redis was', reply);
             deferredSessionData.resolve(JSON.parse(reply));
 
-        } else if (!reply) {
+        //} else if (!reply) {
+        } else if (!err) {
 
             // If Redis doesn't have the session data then try Django next
             // Define options for Django REST Client
