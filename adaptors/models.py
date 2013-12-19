@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from bridges.models import Bridge
-from devices.models import Device
+from devices.models import Device, DeviceInstall
 
 class Adaptor(models.Model):
 
@@ -43,7 +43,7 @@ class AdaptorInstall(models.Model):
 
     """ Through model for a Adaptor and a Device """
 
-    device = models.ForeignKey(Device)
+    device = models.ForeignKey(DeviceInstall)
     adaptor = models.ForeignKey(Adaptor)
 
     class Meta:
