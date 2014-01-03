@@ -14,7 +14,8 @@ django-countries==1.5
 django-crispy-forms==1.2.8
 django-facebook==5.2.1
 django-filer==0.9.4
-django-mptt==0.5.2
+#django-mptt==0.5.2
+django-model-utils==1.5.0
 django-polymorphic==0.4.2
 django-redis-sessions
 django-sekizai==0.7
