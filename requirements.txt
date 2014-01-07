@@ -25,6 +25,7 @@ django-tastypie==0.10.0
 #git+https://github.com/toastdriven/django-tastypie.git@04602b66c758cb72ab87ca6f62b06d9656e8b6ac
 django-userena==1.2.1
 easy-thumbnails==1.2
+factory_boy==2.2.1
 geopy==0.95.1
 html5lib==1.0b1
 mimeparse==0.1.3
