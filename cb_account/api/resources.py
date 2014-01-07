@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import url
+from django.conf.urls import patterns, url, include
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from tastypie.authentication import SessionAuthentication

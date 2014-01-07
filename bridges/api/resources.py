@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from tastypie.http import HttpUnauthorized, HttpForbidden
 from django.conf.urls import url
 
-from django.conf.urls.defaults import url
+from django.conf.urls import patterns, url, include
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from tastypie.resources import ModelResource
@@ -230,7 +230,7 @@ class BridgeAuthResource(ModelResource):
     def login(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
 
-        data = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
 
         email = data.get('email', '')
         password = data.get('password', '')

@@ -7,6 +7,10 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ("devices", "0004_auto__del_field_device_mac_addr__add_field_deviceinstall_mac_addr"),
+    )
+
     def forwards(self, orm):
         # Adding model 'AppDevicePermission'
         db.create_table(u'apps_appdevicepermission', (

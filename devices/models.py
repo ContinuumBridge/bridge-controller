@@ -32,6 +32,7 @@ class Device(models.Model):
     
 class DeviceInstall(models.Model):
     
+    friendly_name = models.CharField(_("friendly_name"), max_length = 255, blank=True)
     mac_addr = models.CharField(_("mac_addr"), max_length = 255)
 
     bridge = models.ForeignKey(Bridge)

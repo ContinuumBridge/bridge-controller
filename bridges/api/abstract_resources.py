@@ -7,7 +7,7 @@ from tastypie.http import HttpUnauthorized, HttpForbidden
 from django.conf.urls import url
 from tastypie.utils import trailing_slash
 
-from django.conf.urls.defaults import url
+from django.conf.urls import patterns, url, include
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from tastypie.authentication import SessionAuthentication

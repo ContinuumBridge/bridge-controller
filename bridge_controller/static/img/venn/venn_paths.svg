@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="Group_1__x2B__circles_back__x2B__Layer_1__x2B__Buzz__x2B__Discounts_circle__x2B__blue_x2F_red__x2B__green_x2F_blue__x2B__Friends__x2B__red_x2F_green__x2B__Outlines__x2B__Venn_xA0_Image_1_"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1600px" height="1600px"
+	 viewBox="0 0 1600 1600" enable-background="new 0 0 1600 1600" xml:space="preserve">
+<a xlink:href="./venn.html" >
+	<path id="venn" fill="#FFFFDD" stroke="#000000" stroke-miterlimit="10" d="M1036.72,670.06
+		c-4.989,170.2-95.89,318.84-230.83,404.06c-137.38-85.3-229.91-236-234.1-408.59c68.29-35.54,145.9-55.63,228.21-55.63
+		C885.75,609.9,966.4,631.7,1036.72,670.06z"/>
+</a>
+
+	<path id="friends" fill="#04AA23" stroke="#000000" stroke-miterlimit="10" d="M1036.94,655.27c0,4.95-0.07,9.88-0.221,14.79
+		C966.4,631.7,885.75,609.9,800,609.9c-268.46,0-487.01,213.69-494.83,480.26C151.26,1006.21,46.84,842.93,46.84,655.27
+		c0-273.41,221.64-495.05,495.05-495.05C815.3,160.22,1036.94,381.86,1036.94,655.27z"/>
+
+<a xlink:href="./info.html" >
+	<path id="info" fill="#0260C0" stroke="#000000" stroke-miterlimit="10" d="M1561.74,653.27
+		c0,191.1-108.28,356.92-266.84,439.42c-68.29,35.54-145.9,55.63-228.21,55.63c-95.71,0-185.08-27.16-260.811-74.2
+		c138.84-87.68,231.061-242.49,231.061-418.85c0-177.7-93.631-333.54-234.25-420.85c76.409-48.27,166.939-76.2,264-76.2
+		C1340.1,158.22,1561.74,379.87,1561.74,653.27z"/>
+</a>
+<a xlink:href="./buzz.html" >
+	<path id="buzz" fill="#B70015" stroke="#000000" stroke-miterlimit="10" d="M1295.05,1104.95
+		c0,273.41-221.64,495.05-495.05,495.05s-495.05-221.64-495.05-495.05c0-191.101,108.28-356.92,266.84-439.42
+		c6.51,267.74,225.59,482.791,494.9,482.791c82.31,0,159.92-20.09,228.21-55.63C1295,1096.77,1295.05,1100.85,1295.05,1104.95z"/>
+</a>
+</svg>
