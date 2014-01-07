@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from bridges.models import Bridge
-from devices.models import Device
+from devices.models import Device, DeviceInstall
 
 class App(models.Model):
 
@@ -56,7 +56,7 @@ class AppInstall(models.Model):
 
 class AppDevicePermission(models.Model):
 
-    device = models.ForeignKey(Device)
+    device_install = models.ForeignKey(DeviceInstall)
     app_install = models.ForeignKey(AppInstall)
 
     class Meta:

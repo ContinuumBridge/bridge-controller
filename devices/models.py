@@ -12,8 +12,6 @@ class Device(models.Model):
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
 
-    mac_addr = models.CharField(_("mac_addr"), max_length = 255)
-
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("creator"), related_name=_('user_device_creator'))
     created = models.DateTimeField(_("created"), editable=False)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("modifier"), related_name=_('user_device_modifier'))
@@ -32,14 +30,10 @@ class Device(models.Model):
         self.modified = timezone.now()
         super(Device, self).save(*args, **kwargs)
     
-    def get_adaptor_install(self):
-        adaptor_installs = []
-        for adaptor_install in self.adaptorinstall_set.filter():
-            adaptor_installs.append(adaptor_install)
-        return adaptor_installs
-
 class DeviceInstall(models.Model):
     
+    mac_addr = models.CharField(_("mac_addr"), max_length = 255)
+
     bridge = models.ForeignKey(Bridge)
     device = models.ForeignKey(Device)
 
@@ -47,5 +41,11 @@ class DeviceInstall(models.Model):
         verbose_name = _('device_install')
         verbose_name_plural = _('device_installs')
         app_label = 'devices'
+
+    def get_adaptor_install(self):
+        adaptor_installs = []
+        for adaptor_install in self.adaptorinstall_set.filter():
+            adaptor_installs.append(adaptor_install)
+        return adaptor_installs
 
 

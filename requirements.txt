@@ -1,5 +1,5 @@
 autobahn==0.5.9
-Django==1.5.1
+Django==1.6.1
 South==0.7.6
 argparse==1.2.1
 distribute
@@ -14,7 +14,8 @@ django-countries==1.5
 django-crispy-forms==1.2.8
 django-facebook==5.2.1
 django-filer==0.9.4
-django-mptt==0.5.2
+#django-mptt==0.5.2
+django-model-utils==1.5.0
 django-polymorphic==0.4.2
 django-redis-sessions
 django-sekizai==0.7
@@ -24,11 +25,13 @@ django-tastypie==0.10.0
 #git+https://github.com/toastdriven/django-tastypie.git@04602b66c758cb72ab87ca6f62b06d9656e8b6ac
 django-userena==1.2.1
 easy-thumbnails==1.2
+factory_boy==2.2.1
 geopy==0.95.1
 html5lib==1.0b1
 mimeparse==0.1.3
 oauthlib==0.4.2
-PIL
+#PIL
+Pillow==1.6.0
 psycopg2==2.4.5
 python-dateutil==2.1
 python-openid==2.2.5
