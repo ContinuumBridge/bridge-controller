@@ -201,7 +201,7 @@ INSTALLED_APPS = (
     'apps',
     'adaptors',
     'devices',
-    'pages',
+    'portal',
     'south',
     'tastypie',
     #'reversion',

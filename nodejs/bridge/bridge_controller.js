@@ -24,7 +24,9 @@ function BridgeController(port){
     bridgeController.redis.pubClient = redis.createClient();
 
     bridgeController.bridgeServer.configure(function() {
+
         bridgeController.bridgeServer.set('authorization', function(data, accept){
+
             console.log('Authorization data is', data.query);
             //console.log('this in Authorization data is', this);
             //console.log('this in Authorization data is', bridgeController);
@@ -92,12 +94,15 @@ function BridgeController(port){
             console.log('Bridge received', message, 'on channel', channel); 
         }); 
 
-        socket.on('message', function (message) {
+        socket.on('message', function (jsonMessage) {
 
+            message = JSON.parse(jsonMessage);
+
+            console.log('Bridge Controller message >', jsonMessage.msg);
             //messageJSON= JSON.stringify(message);
             //console.log('The bridge sent', message);
             //console.log('The bridge sent JSON', messageJSON);
-            bridgeController.redis.publish(message);
+            bridgeController.redis.publish(JSON.stringify(message));
         });
 
         bridgeController.socket = socket;

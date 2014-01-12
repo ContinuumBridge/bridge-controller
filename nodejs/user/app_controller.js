@@ -6,6 +6,7 @@ var http = require('http'),
     //MemoryStore = require('connect/middleware/session/memory');
 
 var djangoBackbone = require('./django_backbone.js'),
+    //deviceDiscovery = require(./device_discovery.js),
     backendAuth = require('../backend_auth.js');
 
 var redis = require('socket.io/node_modules/redis'),
@@ -40,10 +41,12 @@ function AppController(socketPort) {
 
     apps = new djangoBackbone('http://localhost:8000/api/v1/app/');
     devices = new djangoBackbone('http://localhost:8000/api/v1/device/');
+    //deviceDiscovery = new deviceDiscovery();
 
     // Start backbone io listening
     appController.backboneio = backboneio.listen(server, { 
         device: devices.backboneSocket,
+        //deviceDiscovery: deviceDiscovery.backboneSocket,
         app: apps.backboneSocket,
     }); 
 

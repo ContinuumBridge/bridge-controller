@@ -10699,3 +10699,1001 @@ django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may ne
 [pid: 9109|app: 0|req: 358/439] 54.193.17.176 () {32 vars in 404 bytes} [Tue Jan  7 13:25:19 2014] GET / => generated 2645 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
 [pid: 9108|app: 0|req: 69/440] 90.211.55.187 () {40 vars in 871 bytes} [Tue Jan  7 13:25:24 2014] GET /api/v1/current_bridge/bridge => generated 0 bytes in 21 msecs (HTTP/1.1 301) 2 headers in 135 bytes (1 switches on core 0)
 [pid: 9109|app: 0|req: 359/441] 90.211.55.187 () {40 vars in 873 bytes} [Tue Jan  7 13:25:24 2014] GET /api/v1/current_bridge/bridge/ => generated 1995 bytes in 24 msecs (HTTP/1.1 500) 1 headers in 70 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 360/442] 41.160.2.18 () {36 vars in 459 bytes} [Tue Jan  7 23:56:57 2014] GET /phpmyadmin/ => generated 2678 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 70/443] 41.160.2.18 () {36 vars in 459 bytes} [Tue Jan  7 23:56:57 2014] GET /phpMyAdmin/ => generated 2678 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 361/444] 41.160.2.18 () {36 vars in 445 bytes} [Tue Jan  7 23:56:58 2014] GET /PMA/ => generated 2657 bytes in 5 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 14/445] 41.160.2.18 () {36 vars in 445 bytes} [Tue Jan  7 23:56:58 2014] GET /pma/ => generated 2657 bytes in 9 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 115, in get_response
+    except Exception as e:
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 219, in wrapper
+    urlpatterns = patterns('',
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    result = middleware.process_request(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 201, in inner
+    # We add csrf_protect here so this function can be used as a utility
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 334, in login
+    """
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/debug.py", line 69, in sensitive_post_parameters_wrapper
+    "are decorating a classmethod, be sure to use @method_decorator."
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    result = middleware.process_request(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/views.py", line 57, in login
+    if extra_context is not None:
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/sites/models.py", line 95, in get_current_site
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/sites/models.py", line 26, in get_current
+    code='invalid',
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 143, in get
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 382, in get
+    except DatabaseError:
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 90, in __len__
+    tuples. In some cases the return values are converted to
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 297, in iterator
+    """
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 232, in get_compiler
+    obj.where = self.where.clone()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/__init__.py", line 703, in compiler
+    Returns the maximum allowed batch size for the backend. The fields
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    for character in name:
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 8, in <module>
+    from django.db.models.sql.constants import (SINGLE, MULTI, ORDER_DIR,
+ImportError: cannot import name SelectInfo
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 297, in get_traceback_html
+    'unicode_hint': unicode_hint,
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 255, in get_traceback_data
+    self.template_does_not_exist = True
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 402, in get_traceback_frames
+    match = re.search(br'coding[:=]\s*([-\w.]+)', line)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 383, in _get_lines_from_file
+    if source is not None:
+IndexError: list index out of range
+[pid: 9109|app: 0|req: 362/446] 41.160.2.18 () {36 vars in 449 bytes} [Tue Jan  7 23:56:59 2014] GET /admin/ => generated 0 bytes in 56 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9108|app: 0|req: 71/447] 41.160.2.18 () {36 vars in 453 bytes} [Tue Jan  7 23:56:59 2014] GET /dbadmin/ => generated 2669 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 363/448] 41.160.2.18 () {36 vars in 445 bytes} [Tue Jan  7 23:56:59 2014] GET /sql/ => generated 2657 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 72/449] 41.160.2.18 () {36 vars in 449 bytes} [Tue Jan  7 23:57:00 2014] GET /mysql/ => generated 2663 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 364/450] 41.160.2.18 () {36 vars in 453 bytes} [Tue Jan  7 23:57:00 2014] GET /myadmin/ => generated 2669 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 73/451] 41.160.2.18 () {36 vars in 461 bytes} [Tue Jan  7 23:57:01 2014] GET /phpmyadmin2/ => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 15/452] 41.160.2.18 () {36 vars in 461 bytes} [Tue Jan  7 23:57:01 2014] GET /phpMyAdmin2/ => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 365/453] 41.160.2.18 () {36 vars in 463 bytes} [Tue Jan  7 23:57:01 2014] GET /phpMyAdmin-2/ => generated 2684 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 74/454] 41.160.2.18 () {36 vars in 463 bytes} [Tue Jan  7 23:57:02 2014] GET /php-my-admin/ => generated 2684 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 16/455] 41.160.2.18 () {36 vars in 459 bytes} [Tue Jan  7 23:57:02 2014] GET /sqlmanager/ => generated 2678 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 366/456] 41.160.2.18 () {36 vars in 463 bytes} [Tue Jan  7 23:57:03 2014] GET /mysqlmanager/ => generated 2684 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 75/457] 41.160.2.18 () {36 vars in 449 bytes} [Tue Jan  7 23:57:03 2014] GET /p/m/a/ => generated 2663 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 17/458] 41.160.2.18 () {36 vars in 461 bytes} [Tue Jan  7 23:57:03 2014] GET /php-myadmin/ => generated 2681 bytes in 7 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 367/459] 41.160.2.18 () {36 vars in 461 bytes} [Tue Jan  7 23:57:04 2014] GET /phpmy-admin/ => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 76/460] 41.160.2.18 () {36 vars in 455 bytes} [Tue Jan  7 23:57:04 2014] GET /webadmin/ => generated 2672 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 18/461] 41.160.2.18 () {36 vars in 451 bytes} [Tue Jan  7 23:57:05 2014] GET /sqlweb/ => generated 2666 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 368/462] 41.160.2.18 () {36 vars in 451 bytes} [Tue Jan  7 23:57:05 2014] GET /websql/ => generated 2666 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 77/463] 41.160.2.18 () {36 vars in 449 bytes} [Tue Jan  7 23:57:05 2014] GET /webdb/ => generated 2663 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 369/464] 41.160.2.18 () {36 vars in 459 bytes} [Tue Jan  7 23:57:06 2014] GET /mysqladmin/ => generated 2678 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 19/465] 41.160.2.18 () {36 vars in 461 bytes} [Tue Jan  7 23:57:06 2014] GET /mysql-admin/ => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 370/466] 173.244.215.194 () {28 vars in 338 bytes} [Wed Jan  8 08:27:07 2014] GET / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 371/467] 109.68.190.145 () {28 vars in 337 bytes} [Wed Jan  8 11:00:26 2014] GET / => generated 0 bytes in 34 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 372/468] 120.192.31.182 () {34 vars in 447 bytes} [Wed Jan  8 12:57:30 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 373/469] 120.192.101.153 () {34 vars in 448 bytes} [Wed Jan  8 14:35:41 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 374/470] 66.85.144.237 () {28 vars in 336 bytes} [Wed Jan  8 16:49:59 2014] GET / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 375/471] 94.1.76.206 () {38 vars in 854 bytes} [Wed Jan  8 18:30:47 2014] GET / => generated 2645 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 78/472] 94.1.76.206 () {38 vars in 805 bytes} [Wed Jan  8 18:30:48 2014] GET /favicon.ico => generated 2678 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 376/473] 76.74.203.102 () {28 vars in 336 bytes} [Thu Jan  9 07:34:10 2014] GET / => generated 0 bytes in 45 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 377/474] 82.138.16.125 () {38 vars in 607 bytes} [Thu Jan  9 09:13:24 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 378/475] 119.9.46.159 () {28 vars in 335 bytes} [Thu Jan  9 09:42:59 2014] GET / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 379/476] 54.217.234.26 () {24 vars in 242 bytes} [Thu Jan  9 13:05:20 2014] HEAD / => generated 0 bytes in 39 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 380/477] 218.22.124.250 () {32 vars in 393 bytes} [Thu Jan  9 20:46:54 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 381/478] 46.38.48.66 () {28 vars in 334 bytes} [Fri Jan 10 07:12:59 2014] GET / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 382/479] 183.60.20.35 () {36 vars in 478 bytes} [Fri Jan 10 09:08:28 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 9 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 79/480] 183.60.20.35 () {36 vars in 452 bytes} [Fri Jan 10 09:08:29 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 383/481] 183.60.20.35 () {36 vars in 452 bytes} [Fri Jan 10 09:08:29 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 80/482] 183.60.20.35 () {36 vars in 438 bytes} [Fri Jan 10 09:08:30 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 8 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 384/483] 183.60.20.35 () {36 vars in 446 bytes} [Fri Jan 10 09:08:31 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 81/484] 183.60.20.35 () {36 vars in 446 bytes} [Fri Jan 10 09:08:31 2014] GET /MyAdmin/scripts/setup.php => generated 2720 bytes in 7 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 385/485] 121.11.69.251 () {24 vars in 242 bytes} [Fri Jan 10 09:35:00 2014] HEAD / => generated 0 bytes in 36 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 386/486] 109.68.191.26 () {28 vars in 336 bytes} [Fri Jan 10 11:00:08 2014] GET / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 387/487] 120.192.101.153 () {34 vars in 448 bytes} [Fri Jan 10 12:57:57 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 82/488] 120.192.101.153 () {34 vars in 448 bytes} [Fri Jan 10 12:59:55 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 388/489] 54.227.13.123 () {28 vars in 299 bytes} [Fri Jan 10 16:04:15 2014] HEAD / => generated 0 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 389/490] 54.201.228.214 () {26 vars in 267 bytes} [Fri Jan 10 22:03:37 2014] GET / => generated 2645 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 390/491] 219.139.20.9 () {34 vars in 445 bytes} [Fri Jan 10 22:48:06 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 391/492] 120.192.31.182 () {34 vars in 447 bytes} [Sat Jan 11 00:09:58 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 392/493] 202.28.68.81 () {24 vars in 241 bytes} [Sat Jan 11 00:58:42 2014] HEAD / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9108|app: 0|req: 83/494] 77.68.58.24 () {24 vars in 240 bytes} [Sat Jan 11 00:59:31 2014] HEAD / => generated 0 bytes in 35 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 393/495] 89.248.171.55 () {36 vars in 479 bytes} [Sat Jan 11 02:10:05 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 84/496] 89.248.171.55 () {36 vars in 453 bytes} [Sat Jan 11 02:10:06 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 394/497] 89.248.171.55 () {36 vars in 453 bytes} [Sat Jan 11 02:10:07 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 85/498] 89.248.171.55 () {36 vars in 439 bytes} [Sat Jan 11 02:10:07 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 395/499] 89.248.171.55 () {36 vars in 447 bytes} [Sat Jan 11 02:10:08 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 86/500] 89.248.171.55 () {36 vars in 447 bytes} [Sat Jan 11 02:10:08 2014] GET /MyAdmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 396/501] 74.208.167.82 () {36 vars in 479 bytes} [Sat Jan 11 04:36:19 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 87/502] 74.208.167.82 () {36 vars in 453 bytes} [Sat Jan 11 04:36:19 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 397/503] 74.208.167.82 () {36 vars in 453 bytes} [Sat Jan 11 04:36:19 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 88/504] 74.208.167.82 () {36 vars in 439 bytes} [Sat Jan 11 04:36:19 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 7 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 398/505] 74.208.167.82 () {36 vars in 447 bytes} [Sat Jan 11 04:36:20 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 89/506] 74.208.167.82 () {36 vars in 447 bytes} [Sat Jan 11 04:36:20 2014] GET /MyAdmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 399/507] 186.248.66.50 () {24 vars in 242 bytes} [Sat Jan 11 07:05:40 2014] HEAD / => generated 0 bytes in 32 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 400/508] 92.42.51.121 () {24 vars in 241 bytes} [Sat Jan 11 07:36:57 2014] HEAD / => generated 0 bytes in 32 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 401/509] 54.218.56.66 () {24 vars in 241 bytes} [Sat Jan 11 09:24:28 2014] HEAD / => generated 0 bytes in 32 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 402/510] 41.74.178.128 () {24 vars in 242 bytes} [Sat Jan 11 10:40:19 2014] HEAD / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 403/511] 82.165.198.170 () {36 vars in 480 bytes} [Sat Jan 11 13:53:06 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 9 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 90/512] 82.165.198.170 () {36 vars in 454 bytes} [Sat Jan 11 13:53:06 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 404/513] 82.165.198.170 () {36 vars in 454 bytes} [Sat Jan 11 13:53:06 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 91/514] 82.165.198.170 () {36 vars in 440 bytes} [Sat Jan 11 13:53:06 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 405/515] 82.165.198.170 () {36 vars in 448 bytes} [Sat Jan 11 13:53:06 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 92/516] 82.165.198.170 () {36 vars in 448 bytes} [Sat Jan 11 13:53:06 2014] GET /MyAdmin/scripts/setup.php => generated 2720 bytes in 8 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 406/517] 162.243.197.243 () {32 vars in 495 bytes} [Sat Jan 11 16:06:44 2014] GET / => generated 2645 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 407/518] 162.243.203.237 () {32 vars in 495 bytes} [Sat Jan 11 17:50:01 2014] GET / => generated 2645 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 408/519] 120.192.18.164 () {34 vars in 447 bytes} [Sat Jan 11 22:41:02 2014] GET /manager/html => generated 2681 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 409/520] 220.165.8.137 () {24 vars in 242 bytes} [Sun Jan 12 01:41:53 2014] HEAD / => generated 0 bytes in 33 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 410/521] 89.248.171.55 () {36 vars in 479 bytes} [Sun Jan 12 04:19:57 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 93/522] 89.248.171.55 () {36 vars in 453 bytes} [Sun Jan 12 04:19:58 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9107|app: 0|req: 20/523] 89.248.171.55 () {36 vars in 453 bytes} [Sun Jan 12 04:19:59 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 411/524] 89.248.171.55 () {36 vars in 439 bytes} [Sun Jan 12 04:20:00 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 94/525] 89.248.171.55 () {36 vars in 447 bytes} [Sun Jan 12 04:20:02 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 412/526] 66.85.140.110 () {28 vars in 336 bytes} [Sun Jan 12 08:15:08 2014] GET / => generated 0 bytes in 35 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+[pid: 9109|app: 0|req: 413/527] 74.208.170.158 () {36 vars in 480 bytes} [Sun Jan 12 10:55:14 2014] GET /w00tw00t.at.blackhats.romanian.anti-sec:) => generated 2768 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 95/528] 74.208.170.158 () {36 vars in 454 bytes} [Sun Jan 12 10:55:14 2014] GET /phpMyAdmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 414/529] 74.208.170.158 () {36 vars in 454 bytes} [Sun Jan 12 10:55:15 2014] GET /phpmyadmin/scripts/setup.php => generated 2729 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 96/530] 74.208.170.158 () {36 vars in 440 bytes} [Sun Jan 12 10:55:15 2014] GET /pma/scripts/setup.php => generated 2708 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9109|app: 0|req: 415/531] 74.208.170.158 () {36 vars in 448 bytes} [Sun Jan 12 10:55:15 2014] GET /myadmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+[pid: 9108|app: 0|req: 97/532] 74.208.170.158 () {36 vars in 448 bytes} [Sun Jan 12 10:55:15 2014] GET /MyAdmin/scripts/setup.php => generated 2720 bytes in 6 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 416/533] 188.21.91.114 () {26 vars in 271 bytes} [Sun Jan 12 14:31:18 2014] HEAD / => generated 0 bytes in 32 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)

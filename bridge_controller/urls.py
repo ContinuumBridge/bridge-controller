@@ -21,13 +21,14 @@ urlpatterns = patterns('',
     (r'^accounts/', include('allauth.urls')),
     url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 
+    (r'^portal/', include('portal.urls')),
+
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^api/', include(v1.urls)),
-
-    (r'^pages/', include('pages.urls')),
 )
+
 if settings.DEBUG:
     urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',

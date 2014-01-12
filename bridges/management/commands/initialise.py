@@ -6,6 +6,7 @@ import factory
 
 from cb_account.models import CBUser
 
+from adaptors.models import Adaptor, AdaptorInstall
 from apps.models import App, AppInstall, AppDevicePermission
 from bridges.models import Bridge, BridgeControl
 from devices.models import Device, DeviceInstall
@@ -136,6 +137,48 @@ class Command(NoArgsCommand):
             device = device_2
         )
 
+        # Give each device installed an adaptor
+        class CBAdaptorFactory(factory.DjangoModelFactory):
+            FACTORY_FOR = Adaptor
+            provider = "Continuum Bridge"
+            version = "0.0.1"
+            protocol = "other"
+            url = "url.for.the.adaptor.com"
+            exe = "executable"
+
+        adaptor_1 = CBAdaptorFactory(
+            name = "Adaptor 1",
+            description = "Description for Adaptor 1",
+        )
+            
+        adaptor_2 = CBAdaptorFactory(
+            name = "Adaptor 2",
+            description = "Description for Adaptor 2",
+        )
+
+        class AdaptorInstallFactory(factory.DjangoModelFactory):
+            FACTORY_FOR = AdaptorInstall
+
+        adaptor_install_1 = AdaptorInstallFactory(
+            device = device_install_marks_bridge_device_1,
+            adaptor = adaptor_1
+        )
+        
+        adaptor_install_2 = AdaptorInstallFactory(
+            device = device_install_marks_bridge_device_2,
+            adaptor = adaptor_2
+        )
+        
+        adaptor_install_3 = AdaptorInstallFactory(
+            device = device_install_petes_bridge_device_1,
+            adaptor = adaptor_1
+        )
+        
+        adaptor_install_4 = AdaptorInstallFactory(
+            device = device_install_petes_bridge_device_2,
+            adaptor = adaptor_2
+        )
+        
         # Give the apps permission to access the devices
         class AppDevicePermissionFactory(factory.DjangoModelFactory):
                 FACTORY_FOR = AppDevicePermission
