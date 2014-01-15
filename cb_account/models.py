@@ -15,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.http import urlquote
 
+#from bridges.models.common import LoggedModelMixin
+
 class CBAuthManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):

@@ -77,31 +77,31 @@ class Migration(SchemaMigration):
         'bridges.bridge': {
             'Meta': {'object_name': 'Bridge', '_ormbases': ['cb_account.CBAuth']},
             u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cb_account.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'user_bridge_creator'", 'null': 'True', 'to': "orm['cb_account.CBAuth']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {}),
-            'modifier': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'user_bridge_modifier'", 'null': 'True', 'to': "orm['cb_account.CBAuth']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'plaintext_password': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'bridges.bridgecontrol': {
             'Meta': {'object_name': 'BridgeControl'},
             'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bridges_bridgecontrol_created_by_related'", 'null': 'True', 'to': "orm['cb_account.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bridges_bridgecontrol_modified_by_related'", 'null': 'True', 'to': "orm['cb_account.CBAuth']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cb_account.CBUser']"})
         },
         'cb_account.cbauth': {
             'Meta': {'object_name': 'CBAuth'},
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '75'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"})
         },
         'cb_account.cbuser': {
             'Meta': {'object_name': 'CBUser', '_ormbases': ['cb_account.CBAuth']},
