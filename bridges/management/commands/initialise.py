@@ -4,7 +4,7 @@ from django.utils import timezone
 
 import factory
 
-from cb_account.models import CBUser
+from accounts.models import CBUser
 
 from adaptors.models import Adaptor, AdaptorInstall
 from apps.models import App, AppInstall, AppDevicePermission
@@ -51,7 +51,7 @@ class Command(NoArgsCommand):
                     password = "zqN17m94GftDvNiWNGls+6tyxryCJFWxzWC5hs/fTmF7YXn4i8eogVa/HzwK5fK2"
         )
 
-        marks_bridgecontrol = BridgeControlFactory(
+        petes_bridgecontrol = BridgeControlFactory(
             bridge = petes_bridge,
             user = pete
         )
@@ -62,16 +62,17 @@ class Command(NoArgsCommand):
             provider = "Continuum Bridge",
             version = "0.0.0",
             url = "test.url.for.this.app.com",
-            exe = "url.to.executable"
 
         app_1 = CBAppFactory(
-            name = "Test App 1",
+            name = "UWE Test App",
             description = "This is a description of Test App 1",
+            exe = "uwe_app.py"
         )
 
         app_2 = CBAppFactory(
             name = "Test App 2",
             description = "This is a description of Test App 2",
+            exe = "uwe_app.py"
         )
 
         # Install the apps
@@ -115,26 +116,33 @@ class Command(NoArgsCommand):
         # Install the devices
         class DeviceInstallFactory(factory.DjangoModelFactory):
                 FACTORY_FOR = DeviceInstall
-                mac_addr = "test_mac_address"
 
         device_install_marks_bridge_device_1 = DeviceInstallFactory(
             bridge = marks_bridge,
-            device = device_1
+            device = device_1,
+            friendly_name = 'Tag C381',
+            mac_addr = '1C:BA:8C:20:C3:81'
         )
 
         device_install_marks_bridge_device_2 = DeviceInstallFactory(
             bridge = marks_bridge,
-            device = device_2
+            device = device_2,
+            friendly_name = 'Tag 8212',
+            mac_addr = '90:59:AF:0B:82:12'
         )
 
         device_install_petes_bridge_device_1 = DeviceInstallFactory(
             bridge = petes_bridge,
-            device = device_1
+            device = device_1,
+            friendly_name = 'Tag C381',
+            mac_addr = '1C:BA:8C:20:C3:81'
         )
 
         device_install_petes_bridge_device_2 = DeviceInstallFactory(
             bridge = petes_bridge,
-            device = device_2
+            device = device_2,
+            friendly_name = 'Tag 8212',
+            mac_addr = '90:59:AF:0B:82:12'
         )
 
         # Give each device installed an adaptor
@@ -144,7 +152,7 @@ class Command(NoArgsCommand):
             version = "0.0.1"
             protocol = "other"
             url = "url.for.the.adaptor.com"
-            exe = "executable"
+            exe = "sensortagadaptor.py"
 
         adaptor_1 = CBAdaptorFactory(
             name = "Adaptor 1",

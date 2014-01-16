@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from bridges.models import Bridge, BridgeControl
-from apps.admin import AppInstallInline
-from devices.admin import DeviceInstallInline
+#from apps.admin import AppInstallInline
+#from devices.admin import DeviceInstallInline
 
 class BridgeControlInline(admin.TabularInline):
     model = BridgeControl
@@ -17,15 +17,19 @@ class BridgeAdmin(admin.ModelAdmin):
     ]
 
     inlines = [
-        BridgeControlInline, AppInstallInline, DeviceInstallInline
+        BridgeControlInline, 
+        #AppInstallInline, 
+        #DeviceInstallInline
     ]
 
-    list_display = ('name','id', 'email', 'created')
+    list_display = ('name','id', 'email', 
+    #'created'
+    )
 
     list_filter = ['id']
     
     search_fields = ['name']
 
-    date_hierarchy = 'created'
+    #date_hierarchy = 'created'
 
 admin.site.register(Bridge, BridgeAdmin)

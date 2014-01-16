@@ -22,7 +22,7 @@ from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from cb_account.api.authorization import CurrentUserAuthorization
+from accounts.api.authorization import CurrentUserAuthorization
 
 from bridges.api import cb_fields
 

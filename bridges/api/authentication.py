@@ -15,7 +15,7 @@ from tastypie.compat import User, username_field
 
 from tastypie.authentication import BasicAuthentication
 
-from cb_account.models import CBUser
+from accounts.models import CBUser
 from bridges.models import Bridge
 
 try:

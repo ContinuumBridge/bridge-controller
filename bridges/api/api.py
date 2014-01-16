@@ -1,5 +1,5 @@
 from tastypie.api import Api
-from cb_account.api.resources import UserResource, CurrentUserResource
+from accounts.api.resources import UserResource, CurrentUserResource
 from apps.api.resources import AppResource, AppInstallResource, AppDevicePermissionResource
 from devices.api.resources import DeviceResource, DeviceInstallResource
 from adaptors.api.resources import AdaptorResource, AdaptorInstallResource 

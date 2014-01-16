@@ -2,9 +2,12 @@ from django.contrib import admin
 
 from apps.models import App, AppInstall, AppDevicePermission
 
+'''
 class AppInstallInline(admin.TabularInline):
     model = AppInstall
+    #fk_name = 'app_install'
     extra = 0
+'''
 
 class AppDevicePermissionInline(admin.TabularInline):
     model = AppDevicePermission
@@ -18,9 +21,11 @@ class AppAdmin(admin.ModelAdmin):
         #('Meta', {'fields': ['creator', 'modifier']}),
     ]
 
+    '''
     inlines = [
         AppInstallInline,
     ]
+    '''
     
     list_display = ('name','id', 'created')
 

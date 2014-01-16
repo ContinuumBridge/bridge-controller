@@ -17,7 +17,7 @@ gettext = lambda s: s
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
-AUTH_USER_MODEL = 'cb_account.CBAuth'
+AUTH_USER_MODEL = 'accounts.CBAuth'
 
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'aa$t%s&3-$wluc*sd_mu)1*i$jqqv7my)r%(vcwe7p8_ll)mnv'
@@ -196,8 +196,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
     'bridges',
-    'cb_account',
     'apps',
     'adaptors',
     'devices',
@@ -205,9 +205,11 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
     #'reversion',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
     #'allauth.socialaccount.providers.facebook',
     #'allauth.socialaccount.providers.twitter',
     #'allauth.socialaccount.providers.google',

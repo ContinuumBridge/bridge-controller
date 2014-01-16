@@ -19,7 +19,7 @@ from tastypie import fields
 from tastypie.resources import ObjectDoesNotExist
 from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
-from cb_account.api.authorization import CurrentUserAuthorization
+from accounts.api.authorization import CurrentUserAuthorization
 from apps.api.resources import AppInstallResource
 from devices.api.resources import DeviceInstallResource
 
@@ -35,7 +35,7 @@ from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver4
 class BridgeControlResource(ThroughModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    user = cb_fields.ToOneThroughField('cb_account.api.resources.UserResource', 'user', full=True)
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
 
     class Meta:
         queryset = BridgeControl.objects.all()

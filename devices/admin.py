@@ -3,9 +3,11 @@ from django.contrib import admin
 from adaptors.admin import AdaptorInstallInline
 from devices.models import Device, DeviceInstall
 
+'''
 class DeviceInstallInline(admin.TabularInline):
     model = DeviceInstall
     extra = 0
+'''
 
 class DeviceAdmin(admin.ModelAdmin):
 

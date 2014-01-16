@@ -5,6 +5,8 @@ var redis = require('socket.io/node_modules/redis'),
     Bacon = require('baconjs').Bacon,
     Q = require('q');
 
+var rest = require('restler');
+
 var backendAuth = require('../backend_auth.js');
 
 /* Bridge Controller */
@@ -69,7 +71,9 @@ function BridgeController(port){
         var authData = socket.handshake.authData;
         var subscriptionAddress = 'BID' + authData.id;
         var publicationAddresses = new Array();
+
         console.log('authData is', authData.controllers);
+
         authData.controllers.forEach(function(controller) {
             
             controllerAddress = 'UID' + controller.id;
@@ -98,7 +102,39 @@ function BridgeController(port){
 
             message = JSON.parse(jsonMessage);
 
-            console.log('Bridge Controller message >', jsonMessage.msg);
+            //console.log('SessionID is', socket.handshake.query.sessionID);
+            var sessionID = socket.handshake.query.sessionID;
+
+            if (message 
+                && message.msg == 'req'
+                && message.req == 'get'
+                && message.uri == '/api/v1/current_bridge/bridge') {
+
+                console.log('Request was received');
+
+                var djangoURL = 'http://localhost:8000/api/v1/current_bridge/bridge'
+                var djangoOptions = {
+                    method: "get",
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                        'X_CB_SESSIONID': sessionID
+                    }
+                };
+
+                rest.get(djangoURL, djangoOptions).on('complete', function(data, response) {
+
+                    //res.end(data);
+                    console.log('Response from django for bridge data is', response);
+                    res = {};
+                    res.msg = 'response';
+                    res.uri = '/api/v1/current_bridge/bridge';
+                    res.body = data;
+                    console.log('Data is', data);
+                    socket.emit('message', JSON.stringify(res));
+                });
+            }
+            console.log('Bridge Controller message >', jsonMessage);
             //messageJSON= JSON.stringify(message);
             //console.log('The bridge sent', message);
             //console.log('The bridge sent JSON', messageJSON);

@@ -8,7 +8,9 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils import timezone
 from django.conf import settings
 
-from cb_account.models import CBAuth, CBUser
+from accounts.models import CBAuth, CBUser
+from .common import LoggedModelMixin
+
 
 class BridgeModelManager(BaseUserManager):
 
@@ -37,7 +39,9 @@ class BridgeModelManager(BaseUserManager):
                 
         bridge = self.model(email=email, plaintext_password=password,
                           is_active=True, is_staff=False, is_superuser=False,
-                          last_login=now, created=now, **extra_fields)
+                          last_login=now, 
+                          #created=now, 
+                          **extra_fields)
         bridge.set_password(password)
         bridge.save(using=self._db)
         return bridge
@@ -46,12 +50,22 @@ class Bridge(CBAuth):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("creator"), related_name=_('user_bridge_creator'))
-    created = models.DateTimeField(_("created"), editable=False)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("modifier"), related_name=_('user_bridge_modifier'))
-    modified = models.DateTimeField(editable=False)
 
     plaintext_password = models.CharField(_("plaintext_password"), max_length = 255)
+
+    created = models.DateTimeField(_("created"), 
+        auto_now_add=True, editable=False)
+
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
+        null = True, verbose_name=_("created_by"), 
+        related_name="created_bridges")
+
+    modified = models.DateTimeField(_("modified"),
+        auto_now=True, editable=False,)
+
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
+        null = True, verbose_name=_("modified_by"), 
+        related_name="modified_bridges)")
 
     objects = BridgeModelManager()
 
@@ -61,11 +75,13 @@ class Bridge(CBAuth):
         app_label = 'bridges'
 
     def save(self, *args, **kwargs):
-        '''On save, update timestamps'''
+        #On save, update timestamps
+        '''
         if not self.id:
             self.created = timezone.now() 
        
         self.modified = timezone.now()
+        '''
         super(Bridge, self).save(*args, **kwargs)
 
     def get_full_name(self):
@@ -98,7 +114,7 @@ class Bridge(CBAuth):
         return device_installs
 
 
-class BridgeControl(models.Model):
+class BridgeControl(LoggedModelMixin):
     
     class Meta:
         verbose_name = _('bridgecontrol')

@@ -6,9 +6,10 @@ from django.conf import settings
 from django.utils import timezone
 
 from bridges.models import Bridge
+from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
 
-class Adaptor(models.Model):
+class Adaptor(LoggedModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), blank = True)
@@ -19,11 +20,6 @@ class Adaptor(models.Model):
     #mac_addr = models.CharField(_("MACAddr"), max_length = 255)
     url = models.CharField(_("url"), max_length = 255, blank = True)
     exe = models.CharField(_("exe"), max_length = 255, blank = True)
-
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("creator"), related_name=_('user_adaptor_creator'))
-    created = models.DateTimeField(_("created"), editable=False)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("modifier"), related_name=_('user_adaptor_modifier'))
-    modified = models.DateTimeField(editable=False)
 
     class Meta:
         verbose_name = _('adaptor')
@@ -39,7 +35,7 @@ class Adaptor(models.Model):
         super(Adaptor, self).save(*args, **kwargs)
 
 
-class AdaptorInstall(models.Model):
+class AdaptorInstall(LoggedModelMixin):
 
     """ Through model for a Adaptor and a Device """
 

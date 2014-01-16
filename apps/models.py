@@ -6,9 +6,10 @@ from django.conf import settings
 from django.utils import timezone
 
 from bridges.models import Bridge
+from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
 
-class App(models.Model):
+class App(LoggedModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
@@ -16,11 +17,6 @@ class App(models.Model):
     version = models.CharField(_("version"), max_length = 255)
     url = models.URLField(_("url"), max_length = 255)
     exe = models.URLField(_("exe"), max_length = 255)
-
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("creator"), related_name=_('user_app_creator'))
-    created = models.DateTimeField(_("created"), editable=False)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, null = True, verbose_name=_("modifier"), related_name=_('user_app_modifier'))
-    modified = models.DateTimeField(editable=False)
 
     class Meta:
         verbose_name = _('app')
@@ -36,7 +32,7 @@ class App(models.Model):
         super(App, self).save(*args, **kwargs)
     
 
-class AppInstall(models.Model):
+class AppInstall(LoggedModelMixin):
     
     """ Through model for a Bridge and an App """
 
@@ -54,7 +50,7 @@ class AppInstall(models.Model):
             device_permissions.append(device_permission)
         return device_permissions
 
-class AppDevicePermission(models.Model):
+class AppDevicePermission(LoggedModelMixin):
 
     device_install = models.ForeignKey(DeviceInstall)
     app_install = models.ForeignKey(AppInstall)
@@ -63,4 +59,5 @@ class AppDevicePermission(models.Model):
         verbose_name = _('app_device_permission')
         verbose_name_plural = _('app_device_permissions')
         app_label = 'apps'
+
 
