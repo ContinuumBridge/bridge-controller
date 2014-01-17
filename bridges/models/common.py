@@ -12,7 +12,7 @@ class LoggedModelMixin(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         null = True, verbose_name=_("created_by"), 
-        related_name="%(app_label)s_%(class)s_created_by_related"
+        related_name="created_%(app_label)s_%(class)s_related"
     )   
 
     created = models.DateTimeField(
@@ -25,7 +25,7 @@ class LoggedModelMixin(models.Model):
     modified_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         null = True, verbose_name=_("modified_by"), 
-        related_name="%(app_label)s_%(class)s_modified_by_related"
+        related_name="modified_%(app_label)s_%(class)s"
     )   
 
     modified = models.DateTimeField(

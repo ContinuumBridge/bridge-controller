@@ -53,6 +53,7 @@ class Bridge(CBAuth):
 
     plaintext_password = models.CharField(_("plaintext_password"), max_length = 255)
 
+    '''
     created = models.DateTimeField(_("created"), 
         auto_now_add=True, editable=False)
 
@@ -66,6 +67,7 @@ class Bridge(CBAuth):
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
         null = True, verbose_name=_("modified_by"), 
         related_name="modified_bridges)")
+    '''
 
     objects = BridgeModelManager()
 

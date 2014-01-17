@@ -4,9 +4,11 @@ from bridges.models import Bridge, BridgeControl
 #from apps.admin import AppInstallInline
 #from devices.admin import DeviceInstallInline
 
+'''
 class BridgeControlInline(admin.TabularInline):
     model = BridgeControl
     extra = 0
+'''
 
 class BridgeAdmin(admin.ModelAdmin):
 
@@ -17,7 +19,7 @@ class BridgeAdmin(admin.ModelAdmin):
     ]
 
     inlines = [
-        BridgeControlInline, 
+        #BridgeControlInline, 
         #AppInstallInline, 
         #DeviceInstallInline
     ]

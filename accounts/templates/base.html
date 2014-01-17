@@ -1,0 +1,94 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+    
+    <script src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        showAlert = function() {
+          alert(
+            'Alert message'  // message
+          );
+        }
+
+        function createCookie(name,value,days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                var expires = "; expires="+date.toGMTString();
+            }
+            else var expires = "";
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            createCookie(name,"",-1);
+        }
+
+        {% if user.is_authenticated %}
+
+        function phonegapRedirect() {
+            var isPhonegap = readCookie('is_phonegap');
+            var csrfToken = readCookie('csrftoken');
+            var sessionID = readCookie('sessionid');
+            if (isPhonegap) {
+                window.location.replace('http://localhost?csrftoken='+csrfToken+'&sessionid='+sessionID);
+            }
+        }
+        
+        window.onload = phonegapRedirect();        
+
+    {% endif %}
+
+    </script>
+  </head>
+  <body>
+    {% block body %}
+
+    <em>TestImportant: Authentication via OAuth based providers will not work until you <a href="/admin/socialaccount/socialapp/">setup proper applicaton credentials</a>.</em>
+
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div>
+      <strong>Menu:</strong>
+      <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+        {% else %}
+        <li><a href="{% url 'account_login' %}">Sign In</a></li>
+        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+  </body>
+</html>

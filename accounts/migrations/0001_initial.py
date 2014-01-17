@@ -8,34 +8,56 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Bridge'
-        db.create_table(u'bridges_bridge', (
-            (u'cbauth_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.CBAuth'], unique=True, primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('plaintext_password', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('bridges', ['Bridge'])
-
-        # Adding model 'BridgeControl'
-        db.create_table(u'bridges_bridgecontrol', (
+        # Adding model 'CBAuth'
+        db.create_table(u'accounts_cbauth', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_bridges_bridgecontrol_related', null=True, to=orm['accounts.CBAuth'])),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_bridges_bridgecontrol', null=True, to=orm['accounts.CBAuth'])),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('bridge', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bridges.Bridge'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBUser'])),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('email', self.gf('django.db.models.fields.EmailField')(unique=True, max_length=75)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('bridges', ['BridgeControl'])
+        db.send_create_signal('accounts', ['CBAuth'])
+
+        # Adding M2M table for field groups on 'CBAuth'
+        db.create_table(u'accounts_cbauth_groups', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('cbauth', models.ForeignKey(orm['accounts.cbauth'], null=False)),
+            ('group', models.ForeignKey(orm[u'auth.group'], null=False))
+        ))
+        db.create_unique(u'accounts_cbauth_groups', ['cbauth_id', 'group_id'])
+
+        # Adding M2M table for field user_permissions on 'CBAuth'
+        db.create_table(u'accounts_cbauth_user_permissions', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('cbauth', models.ForeignKey(orm['accounts.cbauth'], null=False)),
+            ('permission', models.ForeignKey(orm[u'auth.permission'], null=False))
+        ))
+        db.create_unique(u'accounts_cbauth_user_permissions', ['cbauth_id', 'permission_id'])
+
+        # Adding model 'CBUser'
+        db.create_table(u'accounts_cbuser', (
+            (u'cbauth_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.CBAuth'], unique=True, primary_key=True)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+        ))
+        db.send_create_signal('accounts', ['CBUser'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Bridge'
-        db.delete_table(u'bridges_bridge')
+        # Deleting model 'CBAuth'
+        db.delete_table(u'accounts_cbauth')
 
-        # Deleting model 'BridgeControl'
-        db.delete_table(u'bridges_bridgecontrol')
+        # Removing M2M table for field groups on 'CBAuth'
+        db.delete_table('accounts_cbauth_groups')
+
+        # Removing M2M table for field user_permissions on 'CBAuth'
+        db.delete_table('accounts_cbauth_user_permissions')
+
+        # Deleting model 'CBUser'
+        db.delete_table(u'accounts_cbuser')
 
 
     models = {
@@ -81,13 +103,13 @@ class Migration(SchemaMigration):
         },
         'bridges.bridgecontrol': {
             'Meta': {'object_name': 'BridgeControl'},
-            'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
+            'bridge': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bridge_control'", 'to': "orm['bridges.Bridge']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_bridges_bridgecontrol_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bridges_bridgecontrol_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_bridges_bridgecontrol'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBUser']"})
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'bridges_bridgecontrol_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'user'", 'to': "orm['accounts.CBUser']"})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -98,4 +120,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['bridges']
+    complete_apps = ['accounts']
