@@ -1,64 +1,63 @@
-(function($){
 
-	window.Device = Backbone.RelationalModel.extend({
-		
-        idAttribute: 'id',
-		backend: 'device',
-		
-        initialize: function() {
-            
-            
-        },
+CBApp.Device = Backbone.RelationalModel.extend({
+    
+    idAttribute: 'id',
+    
+    initialize: function() {
+        
+        
+    },
 
-    }); 
+}); 
 
-    window.DeviceCollection = Backbone.Collection.extend({
-        model: Device,
-        backend: 'device',
+CBApp.DeviceCollection = Backbone.Collection.extend({
+    model: CBApp.Device,
+    backend: 'device',
 
-		initialize: function() {
-			this.bindBackend();
-		},
-		
-        parse : function(response){
-            console.log('response was %s', response);
-            return response.objects;
-        },
+    initialize: function() {
+        this.bindBackend();
+    },
+    
+    parse : function(response){
+        console.log('response was %s', response);
+        return response.objects;
+    },
 
-        test: function() {
-            console.log('Hello there');
-        },
+    test: function() {
+        console.log('Hello there');
+    },
 
-    });
+});
 
-	window.DiscoveredDevice = Backbone.RelationalModel.extend({
-		
-        idAttribute: 'id',
-		
-        initialize: function() {
-            
-            
-        },
+/*
+CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
+    
+    idAttribute: 'id',
+    
+    initialize: function() {
+        
+        
+    },
 
-    }); 
+}); 
 
-    window.DiscoveredDeviceCollection = Backbone.Collection.extend({
-        model: DiscoveredDevice,
-        backend: 'discoveredDevice',
+CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
+    model: CBApp.DiscoveredDevice,
+    backend: 'discoveredDevice',
 
-		initialize: function() {
-			this.bindBackend();
-		},
-		
-        parse : function(response){
-            console.log('response was %s', response);
-            return response.objects;
-        },
+    initialize: function() {
+        this.bindBackend();
+    },
+    
+    parse : function(response){
+        console.log('response was %s', response);
+        return response.objects;
+    },
 
-        test: function() {
-            console.log('Hello there');
-        },
+    test: function() {
+        console.log('Hello there');
+    },
 
-    });
+});
+*/
 
-})(jQuery);

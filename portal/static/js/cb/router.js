@@ -2,6 +2,8 @@
 
 	$(document).ready(function() {
 		
+        
+
 		window.VRouter = Backbone.Router.extend({
                 routes: {
                     '': 'home',

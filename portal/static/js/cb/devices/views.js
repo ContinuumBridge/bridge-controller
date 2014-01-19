@@ -1,102 +1,116 @@
-(function($){
 
-	$(document).ready(function() {
-		
-		window.DeviceView = Backbone.Layout.extend({
-            
-            className: 'device span4 first',
-            template: '#deviceTemplate',
+CBApp.DeviceOptionsView = Marionette.ItemView.extend({
+    
+    tagName: "tr",
+    template: '#deviceOptionsTemplate',
+
+    events: {
+
+    },
+
+    onRender: function(){
+        
+        console.log('DeviceOptionsView rendered');
+        $(this.el).html('Test html');
+    }
+});
+
+CBApp.DeviceView = Marionette.ItemView.extend({
+    
+    tagName: "tr",
+    template: '#deviceTemplate',
+
+    events: {
+        //'click': 'eventWrapperClick',
+        //'click #interest-button': 'interestButtonClick',
+    },
+    /*
+    render: function () {
+      console.log('DeviceView rendered');
+      var source = $(this.template).html();
+      var data = { descriptor: 'test_descriptor' };
+      var compiled = _.template(source, data);
+      this.$el.html(compiled);
+      return this;
+    }
+    */
+});
 
 
-            events: {
-                //'click': 'eventWrapperClick',
-                //'click #interest-button': 'interestButtonClick',
-            },
+CBApp.DeviceListView = Marionette.CollectionView.extend({
+    
+    tagName: 'table',
+    //className: 'table',
+    itemView: CBApp.DeviceView,
 
-            initialize: function() {
+    //initialize: function(){
+    //  this.listenTo(this.collection, "sort", this.renderCollection);
+    //},
 
-                _.bindAll(this, 'render');
+    onRender : function(){
+      console.log("DeviceListView Rendered")
+    },
+
+    //appendHtml: function(collectionView, itemView){
+    //  collectionView.$("tbody").append(itemView.el);
+    //}
+
+});
+
+CBApp.DeviceLayoutView = Marionette.Layout.extend({
+    template: '#deviceSectionTemplate',
+    regions: {
+        deviceList: '#device-list',
+        deviceOptions: '#device-options'
+    },
+    onRender: function() {
+        console.log('DeviceLayoutView rendered', this);
+        //$(this.el).html('Test html');
+        var deviceListView = new CBApp.DeviceListView({ collection: this.collection });
+        var optionView = new CBApp.DeviceOptionsView({});
+        
+        this.deviceList.show(deviceListView);
+        //this.deviceList.show(new CBApp.DeviceListView({ collection: this.collection }));
+        this.deviceOptions.show(optionView);
+    }
+})
+/*
+window.DevicesWrapperView = Backbone.Layout.extend({
+        
+    id: 'devicesWrapper',
+    className: 'span4',
+    template: '#devicesWrapperTemplate',
+
+    
+    events: {
+        'click #connect-device': 'connectDevice',
+        //'click #interest-button': 'interestButtonClick',
+    },
+    
+    initialize: function() {
+
+        _.bindAll(this, 'render');
 
 
-            },
+    },
+    
+    connectDevice: function() {
 
-            beforeRender: function() {
-                 
-
-
-
-
-            },
-
+        //alert('connectDevice was clicked');
+        window.socket.emit('message', '{"msg": "cmd", "body": "discover"}', function(data){
+            console.log(data);
         });
         
+    },
+
+    beforeRender: function() {
         
-    	window.DeviceListView = Backbone.Layout.extend({
-            
-            tagName: 'section',
-            className: 'list',
-            template: '#deviceListTemplate',
-
-            initialize: function() {
-                _.bindAll(this, 'beforeRender');
-                this.collection.bind('reset', this.render);
-                
-            },
-
-            beforeRender: function() {
-				
-                collection = this.collection;
-
-                this.collection.each(function(device) {
-                    this.insertView(new ListVEventView({
-                        model: device,
-                        collection: collection,
-                    }));
-                }, this);
-                
-            },
-
-    	});
+        this.deviceList = this.setView('#deviceList', new DeviceListView({
+            collection: window.deviceCollection,
+        }), true);
         
-	
-		window.DevicesWrapperView = Backbone.Layout.extend({
-				
-			id: 'devicesWrapper',
-			className: 'span4',
-			template: '#devicesWrapperTemplate',
+    },
 
-			
-			events: {
-				'click #connect-device': 'connectDevice',
-				//'click #interest-button': 'interestButtonClick',
-			},
-			
-			initialize: function() {
-
-				_.bindAll(this, 'render');
-
-
-			},
-			
-			connectDevice: function() {
-
-				//alert('connectDevice was clicked');
-				window.socket.emit('message', '{"msg": "cmd", "body": "discover"}', function(data){
-					console.log(data);
-				});
-				
-			},
-
-			beforeRender: function() {
-				
-				this.deviceList = this.setView('#deviceList', new DeviceListView({
-					collection: window.deviceCollection,
-				}), true);
-				
-			},
-	
-		});
-			
-	});
-
-})(jQuery);
+});
+*/
+    

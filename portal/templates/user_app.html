@@ -32,8 +32,9 @@
     <script src="{{ STATIC_URL }}js/socket.io.js"></script>
     <script src="{{ STATIC_URL }}js/backbone.js"></script>
     <script src="{{ STATIC_URL }}js/backbone-relational.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone.layoutmanager.js"></script>
+    <script src="{{ STATIC_URL }}js/backbone.marionette.js"></script>
     <script src="{{ STATIC_URL }}js/backbone.io.js"></script>
+    <!--<script src="{{ STATIC_URL }}js/marionette.bossview.js"></script>-->
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/theme.js"></script>
     <script src="{{ STATIC_URL }}js/svg.min.js"></script>
@@ -45,29 +46,17 @@
     <script src="{{ STATIC_URL }}js/greensock-v12-js/minified/plugins/CSSPlugin.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     
+    <!--
 	<script src="{{ STATIC_URL }}js/onerror.js"></script>
 	<script src="{{ STATIC_URL }}js/console.log.js"></script>
-	
-    <script type="application/javascript" charset="utf-8">
-      HOST_ADDRESS = '{{ host_address }}';
-      PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
-      {% if data %}
-      app = {loaded: true};
-      {% endif %}
-    </script>
+    -->
 
-	<!--<script src="javascripts/application.js"></script>--> 
-	<script src="{{ STATIC_URL }}js/cb/cb-backboneio.js"></script>
-	<script src="{{ STATIC_URL }}js/cb/app-phonegap.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/command_views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/router.js"></script>
+    <script type="text/template" id="portalLayoutTemplate">
+    	portalLayoutTemplate
+        <div id="device-region"></div>
+    </script>
     
-    <script type="text/html" id="appTemplate">
+    <script type="text/template" id="appTemplate">
     </script>
 
     <script type="text/template" id="appListTemplate">
@@ -80,12 +69,24 @@
     	<div class="topcoat-button--cta center full" ontouchend="showAlert()">Download Apps</div></br>
     </script>
     
+    <script type="text/template" id="deviceOptionsTemplate">
+    	deviceOptionsTemplate
+    </script>
+    
     <script type="text/template" id="deviceTemplate">
     	deviceTemplate
+        <%=name%>
     </script>
     
     <script type="text/template" id="deviceListTemplate">
-		deviceListTemplate
+    	deviceListTemplate
+    </script>
+    
+    <script type="text/template" id="deviceSectionTemplate">
+        deviceSectionTemplate 
+
+        <div id="device-list"></div>
+        <div id="device-options"></div>
     </script>
     
     <script type="text/template" id="devicesWrapperTemplate">
@@ -123,7 +124,37 @@
         <div id="devices"></div>
         <div id="commands"></div>
     </script>
+    	
+    <script type="application/javascript" charset="utf-8">
+      HOST_ADDRESS = '{{ host_address }}';
+      PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
+      {% if data %}
+      app = {loaded: true};
+      {% endif %}
+    </script>
+
+	<!--<script src="javascripts/application.js"></script>--> 
+	<script src="{{ STATIC_URL }}js/cb/cb-backboneio.js"></script>
+	<!--<script src="{{ STATIC_URL }}js/cb/app-phonegap.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/command_views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/router.js"></script>
+    -->
     
+    <script src="{{ STATIC_URL }}js/cb/index.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/models.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/views.js"></script>
+
+    <script type="application/javascript" charset="utf-8">
+        $(function(){
+            CBApp.start();
+        })
+    </script>
+
+
 </head>
 <body class="pull_top">
 	<div class="navbar transparent navbar-inverse navbar-fixed-top">
@@ -159,6 +190,9 @@
 		</div>
 	</div>
 	<div id="app" class="container">
+        <div id="app-region"></div>
+        <div id="device-region"></div>
+        <div id="commands"></div>
 		<a href="./notificationExample.html"> Notifications</a></br>
 		<a href="./deviceExample.html"> Device</a></br>
 		<a href="./geolocationExample.html"> Geolocation</a></br>

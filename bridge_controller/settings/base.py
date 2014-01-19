@@ -14,7 +14,8 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 gettext = lambda s: s
-PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+#PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
 AUTH_USER_MODEL = 'accounts.CBAuth'
@@ -186,6 +187,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #'/home/bridge_controller/bridge_controller/templates',
     os.path.join(PROJECT_PATH, "templates"),
 )
 
