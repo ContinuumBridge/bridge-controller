@@ -17,7 +17,9 @@ CBApp.DeviceOptionsView = Marionette.ItemView.extend({
 
 CBApp.DeviceView = Marionette.ItemView.extend({
     
-    tagName: "tr",
+    tagName: 'li',
+    //className: 'list-group-item',
+    className: 'new-item',
     template: '#deviceTemplate',
 
     events: {
@@ -39,8 +41,10 @@ CBApp.DeviceView = Marionette.ItemView.extend({
 
 CBApp.DeviceListView = Marionette.CollectionView.extend({
     
-    tagName: 'table',
-    //className: 'table',
+    //tagName: 'table',
+    tagName: 'ul',
+    //className: 'list-group',
+    className: 'reminders',
     itemView: CBApp.DeviceView,
 
     //initialize: function(){
