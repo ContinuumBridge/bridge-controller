@@ -11,7 +11,16 @@ from bridges.models.common import LoggedModelMixin
 class Device(LoggedModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
-    description = models.TextField(_("description"), null = True, blank = True)
+    description = models.TextField(_("description"), blank = True)
+
+    method = models.CharField(_("method"), max_length = 255, blank = True)
+
+    manufacturer_name = models.CharField(_("manufacturer_name"), max_length = 255, blank = True)
+    hardware_revision = models.CharField(_("hardware_revision"), max_length = 255, blank = True)
+    firmware_revision = models.CharField(_("firmware_revision"), max_length = 255, blank = True)
+    software_revision = models.CharField(_("software_revision"), max_length = 255, blank = True)
+    model_number = models.CharField(_("model_number"), max_length = 255, blank = True)
+    system_id =  models.CharField(_("system_id"), max_length = 255, blank = True)
 
     class Meta:
         verbose_name = _('device')
@@ -19,11 +28,6 @@ class Device(LoggedModelMixin):
         app_label = 'devices'
 
     def save(self, *args, **kwargs):
-        '''On save, update timestamps'''
-        if not self.id:
-            self.created = timezone.now() 
-           
-        self.modified = timezone.now()
         super(Device, self).save(*args, **kwargs)
     
 

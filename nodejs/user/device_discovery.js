@@ -1,4 +1,4 @@
-var backboneio = require('backbone.io');
+var backboneio = require('cb-backbone.io');
 var rest = require('restler');
 //var RestClient = require('node-rest-client').Client;
 
@@ -20,6 +20,8 @@ function DeviceDiscovery() {
 
     deviceDiscovery.backboneSocket.use(function(req, res, next) {
         
+        console.log('deviceDiscovery use');
+
         if (req.socket.handshake.headers.cookie) {
 
             cookies = cookie_reader.parse(req.socket.handshake.headers.cookie);
@@ -38,6 +40,24 @@ function DeviceDiscovery() {
 
     deviceDiscovery.backboneSocket.read(function(req, res) {
         
+        // TODO Read request triggers device discovery process on bridge
+
+        console.log('deviceDiscovery read');
+
+        /*
+        fs = require('fs')
+        fs.readFile(__dirname + '/discovered_devices.json', 'utf8', function (err, device_discoveries) {
+            if (err) {
+                return console.log(err);
+            }   
+            //resp = {}; 
+            //resp.msg = "resp";
+            //resp.body = JSON.parse(test_config);
+            res.end(JSON.parse(device_discoveries));
+        }); 
+        */
+
+        /*
         var djangoOptions = {
             method: "get",
             headers: {
@@ -49,12 +69,6 @@ function DeviceDiscovery() {
         // Make a request to Django to get session data
         rest.get(djangoURL, djangoOptions).on('complete', function(data, response) {
 
-            res.end(data);
-        });
-
-        /*
-        djangoBackbone.djangoClient.get(djangoURL, function(data, response) {
-            
             res.end(data);
         });
         */

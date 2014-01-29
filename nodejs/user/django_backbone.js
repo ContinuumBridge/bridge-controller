@@ -1,4 +1,4 @@
-var backboneio = require('backbone.io');
+var backboneio = require('cb-backbone.io');
 var rest = require('restler');
 //var RestClient = require('node-rest-client').Client;
 
@@ -23,7 +23,7 @@ function DjangoBackbone(djangoURL) {
         if (req.socket.handshake.headers.cookie) {
 
             cookies = cookie_reader.parse(req.socket.handshake.headers.cookie);
-            //console.log('cookie is', cookies);
+            console.log('cookie is', cookies);
 
             req.args={
                 headers:{ "X_CB_SESSIONID": cookies['sessionid'] }
@@ -36,28 +36,54 @@ function DjangoBackbone(djangoURL) {
         next(); 
     });
 
+    djangoBackbone.backboneSocket.create(function(req, res) {
+
+        var that = this;
+
+        // On a backboneio create function make a post request to Django 
+        console.log('Model data in controller.backboneBackend.create is', req.model);
+        console.log('SESSIONID in controller.backboneBackend.create is', req.args.headers.X_CB_SESSIONID);
+
+        var jsonData = JSON.stringify(req.model);
+
+        console.log('jsonData in controller.backboneBackend.create is', jsonData );
+        var restOptions = {
+            method: "post",
+            data: jsonData,
+            headers: {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json',
+                'X_CB_SESSIONID': req.args.headers.X_CB_SESSIONID
+            }
+        };
+
+        rest.post(djangoURL, restOptions).on('complete', function(data, response) {
+            
+            console.log('Data response is', data);
+            console.log('response is', response);
+            //that.createSuccess();
+            res.end(data);
+        });
+    }),
+
     djangoBackbone.backboneSocket.read(function(req, res) {
         
+        var requestURL = (req.model.id) ? djangoURL + req.model.id : djangoURL;
+
         var djangoOptions = {
             method: "get",
             headers: {
                 'Content-type': 'application/json',
                 'Accept': 'application/json', 
+                'X_CB_SESSIONID': req.args.headers.X_CB_SESSIONID
             }
         };
 
         // Make a request to Django to get session data
-        rest.get(djangoURL, djangoOptions).on('complete', function(data, response) {
+        rest.get(requestURL, djangoOptions).on('complete', function(data, response) {
 
             res.end(data);
         });
-
-        /*
-        djangoBackbone.djangoClient.get(djangoURL, function(data, response) {
-            
-            res.end(data);
-        });
-        */
     });
 
     djangoBackbone.backboneSocket.use(backboneio.middleware.memoryStore());

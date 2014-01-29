@@ -1,7 +1,7 @@
 
-var AppController = require('./user/app_controller.js');
+var PortalController = require('./user/portal_controller.js');
 
-appController = new AppController(4000);
+portalController = new PortalController(4000);
 
 /*
 appController.fromApp.onValue(function(value) { console.log('User >', value);});

@@ -11,13 +11,34 @@ from tastypie.resources import ObjectDoesNotExist
 from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
 from accounts.models import CBUser
-from bridges.api.resources import BridgeResource
+from bridges.models import BridgeControl
+
+from bridges.api import cb_fields
+from bridges.api.resources import BridgeResource, BridgeControlResource
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
+from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import CurrentUserAuthorization
+
+class UserBridgeControlResource(ThroughModelResource):
+
+    bridge = cb_fields.ToOneThroughField('bridges.api.resources.CurrentBridgeResource', 'bridge', full=True)
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+
+    class Meta:
+        queryset = BridgeControl.objects.all()
+        authorization = Authorization()
+        #list_allowed_methods = ['get', 'post']
+        #detail_allowed_methods = ['get']
+        resource_name = 'user_bridge_control'
+
 
 class CurrentUserResource(ModelResource):
 
-    bridge_control = fields.ToManyField(BridgeResource, 'bridge_control', full=True)
+    #bridge_control = fields.ToManyField(UserBridgeControlResource, 'bridge_control', full=True)
+
+    bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
+                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
 
     class Meta:
         resource_name = 'current_user'
@@ -26,6 +47,12 @@ class CurrentUserResource(ModelResource):
         excludes = ['password', 'is_staff', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()
+
+    def get_bridge_controls(self):
+        bridge_controls = []
+        for bridge_control in self.bridgecontrol_set.filter():
+            bridge_controls.append(bridge_control)
+        return bridge_controls
 
     def dispatch(self, request_type, request, **kwargs):
         """

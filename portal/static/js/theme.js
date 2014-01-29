@@ -1,10 +1,10 @@
 $(function () {
     $(window).scroll(function() {
         if ($(".navbar").offset().top>30) {
-            $(".navbar-inner").addClass("sticky");
+            $(".navbar-fixed-top").addClass("sticky");
         }
         else {
-            $(".navbar-inner").removeClass("sticky");
+            $(".navbar-fixed-top").removeClass("sticky");
         }
     });
 
@@ -18,6 +18,18 @@ $(function () {
     staticHeader.initialize();
 
     portfolioItem.initialize();
+
+
+    // segun esto corrige el pedo del dropdown en tablets and such
+    // hay que testearlo!
+    $('.dropdown-toggle').click(function(e) {
+        e.preventDefault();
+        setTimeout($.proxy(function() {
+            if ('ontouchstart' in document.documentElement) {
+                $(this).siblings('.dropdown-backdrop').off().remove();
+            }
+        }, this), 0);
+    });
 });
 
 var portfolioItem = {
@@ -60,4 +72,5 @@ var servicesCircle = {
         });
     }
 }
+
 

@@ -29,12 +29,6 @@ function BridgeController(port){
 
         bridgeController.bridgeServer.set('authorization', function(data, accept){
 
-            console.log('Authorization data is', data.query);
-            //console.log('this in Authorization data is', this);
-            //console.log('this in Authorization data is', bridgeController);
-
-            //accept(null, true);
-
             if (data && data.query && data.query.sessionID) {
 
                 console.log('bridgeController sessionID is:', data.query.sessionID);
@@ -42,12 +36,7 @@ function BridgeController(port){
                 var bridgeAuthURL = DJANGO_URL + 'current_bridge/bridge/';
 
                 backendAuth(bridgeController.redis.authClient, bridgeAuthURL, sessionID).then(function(authData) {
-                    //console.log('backendAuth returned authData:', authData);
-                    //console.log('authorization gave data:', data);
-                    console.log('bridgeController data.authData is:', authData);
-                    console.log('bridgeController data is:', data);
-                    console.log('backendAuth promise bridgeAuthURL is', accept);
-                    //data.authData = JSON.parse(authData);
+
                     data.authData = authData;
                     data.sessionID = sessionID;
                     accept(null, true);
@@ -74,16 +63,17 @@ function BridgeController(port){
 
         console.log('authData is', authData.controllers);
 
+        // Publication to Redis
         authData.controllers.forEach(function(controller) {
             
-            controllerAddress = 'UID' + controller.id;
+            // Set up an array of portals to publish to
+            controllerAddress = 'UID' + controller.user.id;
             publicationAddresses.push(controllerAddress);
         });
  
-        console.log('Server > New bridge connection from ' + address.address + ":" + address.port);
-
         bridgeController.redis.publish = function(message) {
     
+            // Publish message to each portal address
             publicationAddresses.forEach(function(publicationAddress) {
 
                 bridgeController.redis.pubClient.publish(publicationAddress, message);
@@ -91,11 +81,12 @@ function BridgeController(port){
             });
         }   
 
+        // Subscription to Redis
         bridgeController.redis.subClient.subscribe(subscriptionAddress);
         bridgeController.redis.subClient.on('message', function(channel, message) {
     
             socket.emit('message', message);
-            console.log('Bridge received', message, 'on channel', channel); 
+            //console.log('Bridge received', message, 'on channel', channel); 
         }); 
 
         socket.on('message', function (jsonMessage) {
@@ -140,6 +131,8 @@ function BridgeController(port){
             //console.log('The bridge sent JSON', messageJSON);
             bridgeController.redis.publish(JSON.stringify(message));
         });
+
+        console.log('Server > New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address,     address.port, subscriptionAddress, authData.email, publicationAddresses);
 
         bridgeController.socket = socket;
     });

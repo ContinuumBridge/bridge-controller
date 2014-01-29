@@ -74,9 +74,20 @@ class BridgeControlResource(ThroughModelResource):
 
 class BridgeResource(ModelResource):
 
+    '''
+    apps = cb_fields.ToManyThroughField(AppInstallResource, 
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
+                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+    '''
+
+
     class Meta:
         queryset = Bridge.objects.all()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
         resource_name = 'bridge'
@@ -103,6 +114,7 @@ class CurrentBridgeResource(ModelResource):
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
         excludes = ['password', 'is_staff', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
+        #authorization = ReadOnlyAuthorization()
         authorization = CurrentUserAuthorization()
 
     def dispatch(self, request_type, request, **kwargs):

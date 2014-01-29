@@ -1,91 +1,41 @@
-(function($){
 
-	$(document).ready(function() {
-		
-		window.AppView = Backbone.Layout.extend({
-            
-            className: 'app span4 first',
-            template: '#appTemplate',
+CBApp.AppView = Marionette.ItemView.extend({
+    
+    tagName: 'li',
+    className: 'new-item',
+    template: '#appItemViewTemplate',
 
-            events: {
-                //'click': 'eventWrapperClick',
-                //'click #interest-button': 'interestButtonClick',
-            },
+    events: {
+        //'click': 'eventWrapperClick',
+        //'click #interest-button': 'interestButtonClick',
+    },
+});
 
-            initialize: function() {
+CBApp.AppListView = Marionette.CollectionView.extend({
+    
+    tagName: 'u1',
+    className: 'animated-list',
+    itemView: CBApp.AppView,
 
-                _.bindAll(this, 'render');
+    onRender : function(){
+      console.log("AppListView Rendered");
+    }
+});
 
-
-            },
-
-            beforeRender: function() {
-                 
-
-				
-
-
-            },
-
-        });
-        
-        window.AppListView = Backbone.Layout.extend({
-            
-            tagName: 'section',
-            className: 'list',
-            template: '#appListTemplate',
-
-            initialize: function() {
-                //_.bindAll(this, 'render');
-                this.collection.bind('reset', this.render);
-                
-            },
-
-            beforeRender: function() {
-				
-                collection = this.collection;
-				
-                this.collection.each(function(app) {
-                    this.insertView(new AppView({
-                        model: app,
-                        collection: collection,
-                    }));
-                }, this);
-                
-                
-            },
-
-        });
-        
-        window.AppsWrapperView = Backbone.Layout.extend({
-            
-            id: 'appsWrapper',
-            className: 'span4',
-            template: '#appsWrapperTemplate',
+CBApp.AppLayoutView = Marionette.Layout.extend({
+    template: '#appSectionTemplate',
+    regions: {
+        appList: '#app-list',
+        appOptions: '#app-options'
+    },  
+    onRender: function() {
+        console.log('AppLayoutView rendered', this);
+        var appListView = new CBApp.AppListView({ collection: this.collection }); 
+        //var optionView = new CBApp.AppOptionsView({});
+    
+        this.appList.show(appListView);
+        //this.appOptions.show(optionView);
+    }   
+});
 
 
-            events: {
-                //'click': 'eventWrapperClick',
-                //'click #interest-button': 'interestButtonClick',
-            },
-
-            initialize: function() {
-
-                _.bindAll(this, 'render');
-
-
-            },
-
-            beforeRender: function() {
-                
-				this.appList = this.setView('#appList', new AppListView({
-					collection: window.appCollection,
-				}), true);
-				
-            },
-
-        });
-        
-	});
-
-})(jQuery);

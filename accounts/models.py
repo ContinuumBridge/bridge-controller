@@ -131,6 +131,12 @@ class CBUser(CBAuth):
         verbose_name_plural = _('cb_users')
         app_label = 'accounts'
 
+    def get_bridge_controls(self):
+        bridge_controls = []
+        for bridge_control in self.bridgecontrol_set.filter():
+            bridge_controls.append(bridge_control)
+        return bridge_controls
+
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.pk)
 

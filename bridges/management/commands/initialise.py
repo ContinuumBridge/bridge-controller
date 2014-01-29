@@ -101,16 +101,19 @@ class Command(NoArgsCommand):
 
         # Create some devices
         class DeviceFactory(factory.DjangoModelFactory):
-                FACTORY_FOR = Device
+            FACTORY_FOR = Device
+            manufacturer_name = 'Texas Instruments'
 
         device_1 = DeviceFactory(
             name = "Test Device 1",
-            description = "This is a description for Test Device 1"
+            description = "This is a description for Test Device 1",
+            model_number = '1'
         )
 
         device_2 = DeviceFactory(
             name = "Test Device 2",
-            description = "This is a description for Test Device 2"
+            description = "This is a description for Test Device 2",
+            model_number = '2'
         )
 
         # Install the devices

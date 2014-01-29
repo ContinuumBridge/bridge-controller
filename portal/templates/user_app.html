@@ -56,27 +56,30 @@
 
     <script type="text/template" id="portalLayoutTemplate">
     	portalLayoutTemplate
-        <div id="device-region"></div>
+        <div id="main-region"></div>
     </script>
     
-    <script type="text/template" id="appTemplate">
+    <script type="text/template" id="appItemViewTemplate">
+        <h4 class="list-group-item-heading"><%=name%></h4>
     </script>
 
     <script type="text/template" id="appListTemplate">
     	appListTemplate
     </script>
     
-    <script type="text/template" id="appsWrapperTemplate">
-    	<h2>Apps</h2>
-    	<div id="appList"></div>
-    	<div class="topcoat-button--cta center full" ontouchend="showAlert()">Download Apps</div></br>
+    <script type="text/template" id="appSectionTemplate">
+		<h2>Apps</h2>
+
+        <div id="app-list" class="table"></div>
+        <div id="app-options"></div>
+    	<div id="download-apps"  class="topcoat-button--cta center full">Download Apps</div></br>
     </script>
     
     <script type="text/template" id="deviceOptionsTemplate">
     	deviceOptionsTemplate
     </script>
     
-    <script type="text/template" id="deviceTemplate">
+    <script type="text/template" id="deviceItemViewTemplate">
         <h4 class="list-group-item-heading"><%=name%></h4>
     </script>
     
@@ -96,6 +99,17 @@
     	<div id="deviceList"></div>
     </script>
     
+    <script type="text/template" id="discoveredDeviceItemViewTemplate">
+        <h4 class="list-group-item-heading"><%=name%></h4>
+    </script>
+    
+    <script type="text/template" id="deviceDiscoverySectionTemplate">
+		<h2>Device Discovery</h2>
+
+        <div id="discovered-device-list" class="table"></div>
+    	<div id="rescan" class="topcoat-button--cta center full">Rescan</div></br>
+    </script>
+
     <script type="text/template" id="commandsTemplate">
 		<h2>Bridge Commands</h2>
 	    
@@ -120,10 +134,48 @@
     	
     </script>
     
-    <script type="text/template" id="homeTemplate">
-        <div id="apps"></div>
-        <div id="devices"></div>
-        <div id="commands"></div>
+    <script type="text/template" id="navSectionTemplate">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="index.html" class="navbar-brand"><strong>CB</strong></a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
+            <ul id="navbar-left" class="nav navbar-nav navbar-left">
+                <li id="bridge-dropdown" class="dropdown"></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="index.html">HOME</a></li>
+                <li><a href="about-us.html">ABOUT US</a></li>
+                <li><a href="sign-in.html">Sign in</a></li>
+            </ul>
+        </div>
+    </script>
+
+    <script type="text/template" id="bridgeDropdownTemplate">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">BRIDGES <b class="caret"></b></a>
+        <ul id="bridge-list" class="dropdown-menu">
+        </ul>
+    </script>
+    
+    <script type="text/template" id="bridgeItemViewTemplate">
+        <a href="#"><%=name%></a>
+    </script>
+
+    <script type="text/template" id="homeSectionTemplate">
+        <div class="row">
+            <div id="app-section" class="col-md-6"></div>
+            <div id="device-section" class="col-md-6"></div>
+        </div>
+        <div class="row">
+            <div id="command-panel" class="col-md-6"></div>
+            <div id="device-discovery-section" class="col-md-6"></div>
+        </div>
     </script>
     	
     <script type="application/javascript" charset="utf-8">
@@ -146,8 +198,23 @@
     -->
     
     <script src="{{ STATIC_URL }}js/cb/index.js"></script>
+
+    <script src="{{ STATIC_URL }}js/cb/decorators.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/filters.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/cb-models.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/cb-views.js"></script>
+
+    <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/bridges/models.js"></script>
     <script src="{{ STATIC_URL }}js/cb/devices/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/users/models.js"></script>
+
+    <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/device_views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/device_discovery_views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/commands_view.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/nav_view.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/home_view.js"></script>
 
     <script type="application/javascript" charset="utf-8">
         $(function(){
@@ -157,43 +224,10 @@
 
 
 </head>
-<body class="pull_top">
-	<div class="navbar transparent navbar-inverse navbar-fixed-top">
-		  <div class="navbar-inner">
-			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="index.html">
-					<strong>CB</strong>
-				</a>
-				
-				<div class="nav-collapse collapse">
-					<ul class="nav pull-right">
-	
-						
-						<li class="selected">
-							<a href="/">Configuration</a>
-							
-						</li>
-						
-						<li class="sibling">
-							<a href="/en/events/">About Continuum Bridge</a>
-							
-						</li> 
-						
-	
-					</ul>
-				</div>
-		  </div>
-		</div>
-	</div>
-	<div id="app" class="container">
-        <div id="app-region"></div>
-        <div id="device-region"></div>
-        <div id="command-region"></div>
-	</div>
-  </body>
+<body id="app" class="pull_top">
+    <div id="nav-region"  class="navbar navbar-inverse navbar-fixed-top" role="navigation"></div>
+    <div id="" class="container">
+        <div id="main-region"></div>
+    </div>
+</body>
 </html>
