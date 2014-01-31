@@ -21,6 +21,7 @@ class PortalView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PortalView, self).get_context_data(**kwargs)
         context['host_address'] = settings.SERVER_ADDRESS
+        #raise Exception('ally bad')
         return context
 
 

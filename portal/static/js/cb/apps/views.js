@@ -13,7 +13,7 @@ CBApp.AppView = Marionette.ItemView.extend({
 
 CBApp.AppListView = Marionette.CollectionView.extend({
     
-    tagName: 'u1',
+    tagName: 'ul',
     className: 'animated-list',
     itemView: CBApp.AppView,
 

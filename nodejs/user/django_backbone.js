@@ -86,6 +86,40 @@ function DjangoBackbone(djangoURL) {
         });
     });
 
+    djangoBackbone.backboneSocket.delete(function(req, res) {
+
+        var that = this;
+
+        // On a backboneio delete function make a delete request to Django 
+        console.log('Model data in controller.backboneBackend.create is', req.model);
+        console.log('Model id in controller.backboneBackend.create is', req.model.id);
+
+        // Set the URL of the item to be deleted
+        var resourceURL = djangoURL + req.model.id.toString();
+
+        var restOptions = {
+            method: "delete",
+            headers: {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json',
+                'X_CB_SESSIONID': req.args.headers.X_CB_SESSIONID
+            }
+        };
+
+        rest.del(resourceURL, restOptions).on('complete', function(data, response) {
+            
+            if (response && response.statusCode == 204) {
+                res.end(data);
+                //that.deleteSuccess();
+            } else if (response.statusCode) {
+                res.end(new Error(response.statusCode));
+            } else {
+                res.end(new Error('Something went wrong with delete'));
+            }
+        });
+    }),
+
+
     djangoBackbone.backboneSocket.use(backboneio.middleware.memoryStore());
 
     return djangoBackbone;

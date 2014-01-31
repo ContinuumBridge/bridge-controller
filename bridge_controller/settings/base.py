@@ -15,7 +15,7 @@ def get_env_variable(var_name):
 
 gettext = lambda s: s
 #PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..'))
+PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', '..'))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
 AUTH_USER_MODEL = 'accounts.CBAuth'
@@ -23,6 +23,9 @@ AUTH_USER_MODEL = 'accounts.CBAuth'
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'aa$t%s&3-$wluc*sd_mu)1*i$jqqv7my)r%(vcwe7p8_ll)mnv'
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+
+RAYGUN_API_KEY = "jB/eb5l92ZfmjO0VbMRudg=="
+RAYGUN_API_ENABLED = True
 
 # All Auth 
 ACCOUNT_AUTHENTICATION_METHOD='email'
@@ -153,6 +156,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'raygun_dot_io.middleware.RaygunDotIOMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
@@ -188,7 +192,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     #'/home/bridge_controller/bridge_controller/templates',
-    os.path.join(PROJECT_PATH, "templates"),
+    os.path.join(PROJECT_PATH, 'bridge_controller', "templates"),
 )
 
 INSTALLED_APPS = (

@@ -16,7 +16,8 @@
     "querystring": "~0.2.0",
     "restler": "~2.0.1",
     "redis": "~0.9.1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "raygun": "~0.4.1"
   },
   "devDependencies": {},
   "optionalDependencies": {},

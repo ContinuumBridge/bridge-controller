@@ -33,6 +33,15 @@ class DeviceResource(ModelResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
    
+    '''
+    def prepend_urls(self):
+        """
+        A hook for adding your own URLs or matching before the default URLs.
+        """
+        #raise Exception("ally bad")
+        return []
+    '''
+
     def post_list(self, request, **kwargs):
         """
         Creates a new resource/object with the provided data.

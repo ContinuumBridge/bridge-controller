@@ -8,6 +8,19 @@ CBApp.Device = Backbone.RelationalModel.extend({
         
     },
 
+    uninstall: function() {
+        
+        console.log('Uninstall called');
+        var deviceInstall = CBApp.deviceInstallCollection.findWhere({
+                bridge: CBApp.currentBridge,
+                device: this
+        });
+
+        
+        console.log('deviceInstall is', deviceInstall);
+        deviceInstall.destroy({wait: true});
+    },
+
     relations: [
         /*
         {   
@@ -75,7 +88,6 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
     },
 
     relations: [
-        /*
         {  
             type: Backbone.HasOne,
             key: 'bridge',
@@ -84,10 +96,9 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
             relatedModel: 'CBApp.Bridge',
             collectionType: 'CBApp.BridgeCollection',
             createModels: false,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
         },  
-        */
         {  
             type: Backbone.HasOne,
             key: 'device',
@@ -139,7 +150,7 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
         
     },
 
-    installDevice: function() {
+    installDevice: function(friendlyName) {
 
         console.log('createDevice on DiscoveredDevice', this.toJSON());
         var discoveredJSON = this.toJSON();
@@ -147,9 +158,10 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
         var device = CBApp.Device.findOrCreate(discoveredJSON);
         var deviceInstall = CBApp.DeviceInstall.findOrCreate({
                 bridge: CBApp.currentBridge,
-                device: device
+                device: device,
+                friendly_name: friendlyName
         });
-        deviceInstall.set('bridge', '/api/v1/bridge/2/'); 
+        //deviceInstall.set('bridge', '/api/v1/bridge/2/'); 
 
         console.log('device is', device);
         console.log('device install is', deviceInstall);

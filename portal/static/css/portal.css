@@ -1,0 +1,12 @@
+
+.edit-button,
+.uninstall-button {
+  position: absolute;
+  top: 15px;
+  color: #aaa;
+  cursor: pointer;
+  right: 40px;
+}
+.uninstall-button {
+  right: 12px;
+}

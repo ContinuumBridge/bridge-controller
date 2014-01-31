@@ -13,8 +13,12 @@
 	<!-- Styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/portal.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/list.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.theme.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ionicons.css">
 	<!--<link rel="stylesheet" href="stylesheets/index.css" type="text/css" media="screen" />-->
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/animate.css" media="screen, projection">    
@@ -35,6 +39,7 @@
     <script src="{{ STATIC_URL }}js/backbone-relational.js"></script>
     <script src="{{ STATIC_URL }}js/backbone.marionette.js"></script>
     <script src="{{ STATIC_URL }}js/backbone.io.js"></script>
+    <script src="{{ STATIC_URL }}js/backbone.modal-bundled-min.js"></script>
     <!--<script src="{{ STATIC_URL }}js/marionette.bossview.js"></script>-->
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/theme.js"></script>
@@ -71,7 +76,6 @@
 		<h2>Apps</h2>
 
         <div id="app-list" class="table"></div>
-        <div id="app-options"></div>
     	<div id="download-apps"  class="topcoat-button--cta center full">Download Apps</div></br>
     </script>
     
@@ -81,17 +85,14 @@
     
     <script type="text/template" id="deviceItemViewTemplate">
         <h4 class="list-group-item-heading"><%=name%></h4>
-    </script>
-    
-    <script type="text/template" id="deviceListTemplate">
-    	deviceListTemplate
+        <i id="edit-button" class="icon ion-edit edit-button"></i>
+        <i class="icon ion-trash-a uninstall-button"></i>
     </script>
     
     <script type="text/template" id="deviceSectionTemplate">
 		<h2>Devices</h2>
 
         <div id="device-list" class="table"></div>
-        <div id="device-options"></div>
     	<div id="connect-device" class="topcoat-button--cta center full">Connect to a Device</div></br>
     </script>
     
@@ -110,6 +111,22 @@
     	<div id="rescan" class="topcoat-button--cta center full">Rescan</div></br>
     </script>
 
+    <script type="text/template" id="modal-template">
+      <div class="bbm-modal__topbar">
+        <h3 class="bbm-modal__title">Install Device</h3>
+      </div>
+      <div class="bbm-modal__section">
+        <ul>
+        <li><label>Device [friendly] name</label></li>
+        <li><input id="friendly-name" type="text" placeholder="Eg. Front door"></li>
+        </ul>
+      </div>
+      <div class="bbm-modal__bottombar">
+        <a href="#" id="submit-button" class="bbm-button">Install Device</a>
+        <a href="#" id="cancel-button" class="bbm-button">Close</a>
+      </div>
+    </script>
+
     <script type="text/template" id="commandsTemplate">
 		<h2>Bridge Commands</h2>
 	    
@@ -122,13 +139,19 @@
 		  <div id='stop' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Stop</button>
 		  </div>
-		</div>
-		<div class="topcoat-button-bar">
 		  <div id='update' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Update</button>
 		  </div>
+		</div>
+	    <div class="topcoat-button-bar">
 		  <div id='config' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Config</button>
+		  </div>
+		  <div id='restart' class="topcoat-button-bar__item">
+			<button class="topcoat-button-bar__button">Restart</button>
+		  </div>
+		  <div id='reboot' class="topcoat-button-bar__item">
+			<button class="topcoat-button-bar__button">Reboot</button>
 		  </div>
 		</div>
     	
@@ -212,6 +235,7 @@
     <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
     <script src="{{ STATIC_URL }}js/cb/devices/device_views.js"></script>
     <script src="{{ STATIC_URL }}js/cb/devices/device_discovery_views.js"></script>
+    <script src="{{ STATIC_URL }}js/cb/devices/modal_views.js"></script>
     <script src="{{ STATIC_URL }}js/cb/commands_view.js"></script>
     <script src="{{ STATIC_URL }}js/cb/nav_view.js"></script>
     <script src="{{ STATIC_URL }}js/cb/home_view.js"></script>
@@ -226,7 +250,8 @@
 </head>
 <body id="app" class="pull_top">
     <div id="nav-region"  class="navbar navbar-inverse navbar-fixed-top" role="navigation"></div>
-    <div id="" class="container">
+    <div id="modals-region"></div>
+    <div id="portal-body" class="container">
         <div id="main-region"></div>
     </div>
 </body>
