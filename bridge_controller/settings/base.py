@@ -21,8 +21,8 @@ PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 
 AUTH_USER_MODEL = 'accounts.CBAuth'
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = 'aa$t%s&3-$wluc*sd_mu)1*i$jqqv7my)r%(vcwe7p8_ll)mnv'
-SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
+#SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
 RAYGUN_API_KEY = "jB/eb5l92ZfmjO0VbMRudg=="
 RAYGUN_API_ENABLED = True
@@ -111,7 +111,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
+MEDIA_ROOT = os.path.join(PROJECT_PATH, "media/")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -122,7 +122,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(PROJECT_PATH, "static") 
+STATIC_ROOT = os.path.join(PROJECT_PATH, "static/") 
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"

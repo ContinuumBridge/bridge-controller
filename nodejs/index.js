@@ -5,6 +5,7 @@ var raygunClient = new raygun.Client().init({ apiKey: 'jB/eb5l92ZfmjO0VbMRudg=='
 var d = require('domain').create();
 
 d.on('error', function(err){
+  console.error(err);
   raygunClient.send(err);
   process.exit();
 });
@@ -19,6 +20,7 @@ d.run(function(){
 
   bridgeController = new BridgeController(3000);
 
+  /*
   var errorFunction = function() {
       var err = new Error('another error');
       raygunClient.send(err);
@@ -26,6 +28,7 @@ d.run(function(){
   }
   errorFunction();
   //var t=setInterval(errorFunction,1000);
+  */
 });
 
 

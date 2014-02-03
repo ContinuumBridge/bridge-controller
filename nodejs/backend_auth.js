@@ -42,12 +42,12 @@ var backendAuth = function(redisClient, djangoURL, sessionid) {
             rest.get(djangoURL, djangoAuthOptions).on('complete', function(data, response) {
                 
                 // If the response was good, return the session data
-                if (response.statusCode == 200) {
+                if (response && response.statusCode == 200) {
                     deferredSessionData.resolve(data);
                     //console.log('backendAuth Django returned', data);
                     redisClient.set(sessionid, JSON.stringify(data), redisClient.print);
                 } else {
-                    deferredSessionData.reject('There was an error connecting to Django');
+                    deferredSessionData.reject('There was an error connecting to Django', response);
                 }
             });
         }

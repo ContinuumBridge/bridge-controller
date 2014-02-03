@@ -15762,3 +15762,68 @@ django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may ne
 [pid: 9109|app: 0|req: 637/883] 90.209.3.227 () {38 vars in 2040 bytes} [Fri Jan 31 10:46:29 2014] GET / => generated 2645 bytes in 7 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
 [pid: 9108|app: 0|req: 189/884] 90.209.3.227 () {38 vars in 1991 bytes} [Fri Jan 31 10:46:29 2014] GET /favicon.ico => generated 2678 bytes in 7 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
 [pid: 9109|app: 0|req: 638/885] 90.209.3.227 () {38 vars in 2052 bytes} [Fri Jan 31 10:46:35 2014] GET /portal => generated 2663 bytes in 44 msecs (HTTP/1.1 404) 1 headers in 51 bytes (1 switches on core 0)
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 92, in get_response
+    break
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 57, in process_request
+    # Check for a redirect based on settings.APPEND_SLASH
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 255, in __call__
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 178, in get_response
+    security_logger.error(force_text(e))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 217, in handle_uncaught_exception
+    available would be an error.
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 69, in technical_500_response
+    html = reporter.get_traceback_html()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/debug.py", line 298, in get_traceback_html
+    'frames': frames,
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 284, in render
+    def __iter__(self):
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 830, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 578, in resolve
+    
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 728, in resolve
+    var)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 779, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 112, in build_absolute_uri
+    this request. If no location is specified, the absolute URI is built on
+  File "/usr/local/lib/python2.7/dist-packages/django/http/request.py", line 72, in get_host
+    domain, port = split_domain_port(host)
+django.core.exceptions.SuspiciousOperation: Invalid HTTP_HOST header (you may need to set ALLOWED_HOSTS): _
+[pid: 9109|app: 0|req: 639/886] 109.68.191.26 () {28 vars in 336 bytes} [Fri Jan 31 11:35:23 2014] GET / => generated 0 bytes in 80 msecs (HTTP/1.0 500) 0 headers in 0 bytes (0 switches on core 0)
+...brutally killing workers...
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 4 buried after 1 seconds
+worker 5 buried after 1 seconds
+worker 6 buried after 1 seconds
+worker 7 buried after 1 seconds
+worker 8 buried after 1 seconds
+worker 9 buried after 1 seconds
+worker 10 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/bridge-controller
+closing all non-uwsgi socket fds > 2 (max_fd = 1024)...
+found fd 3 mapped to socket 0 (/tmp/uwsgi_bridge_controller.sock)
+running /usr/local/bin/uwsgi
+realpath() of /home/bridge-controller/server_files/cb-uwsgi.ini failed: No such file or directory [core/utils.c line 3355]

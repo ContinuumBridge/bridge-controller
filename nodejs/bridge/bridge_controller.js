@@ -11,7 +11,7 @@ var backendAuth = require('../backend_auth.js');
 
 /* Bridge Controller */
 
-var DJANGO_URL = 'http://localhost:8000/api/v1/'
+var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost/api/v1/' : 'http://localhost:8000/api/v1/'
 module.exports = BridgeController;
 
 function BridgeController(port){

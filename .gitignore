@@ -1,4 +1,5 @@
 node_modules/
+media/
 .DS_STORE
 *.log
 *.pot

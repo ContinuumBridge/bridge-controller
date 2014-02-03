@@ -16,8 +16,9 @@ var redis = require('socket.io/node_modules/redis'),
 var cookie_reader = require('cookie');
 
 /* App Controller */
-
-var DJANGO_URL = 'http://localhost:8000/api/v1/'
+console.log('Environment is', process.env.NODE_ENV);
+var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
+console.log('DJANGO_URL', DJANGO_URL);
 module.exports = PortalController;
 
 function PortalController(socketPort) {
@@ -39,17 +40,17 @@ function PortalController(socketPort) {
     portalController.redis.subClient = redis.createClient();
     portalController.redis.pubClient = redis.createClient();
 
-    var appController = new djangoBackbone('http://localhost:8000/api/v1/app/');
-    var appInstallController = new djangoBackbone('http://localhost:8000/api/v1/app_install/');
+    var appController = new djangoBackbone(DJANGO_URL + 'app/');
+    var appInstallController = new djangoBackbone(DJANGO_URL + 'app_install/');
 
-    var deviceController = new djangoBackbone('http://localhost:8000/api/v1/device/');
-    var deviceInstallController = new djangoBackbone('http://localhost:8000/api/v1/device_install/');
+    var deviceController = new djangoBackbone(DJANGO_URL + 'device/');
+    var deviceInstallController = new djangoBackbone(DJANGO_URL + 'device_install/');
 
     var deviceDiscoveryController = new DeviceDiscovery();
 
-    var bridgeController = new djangoBackbone('http://localhost:8000/api/v1/bridge/');
-    var bridgeControlController = new djangoBackbone('http://localhost:8000/api/v1/bridge_control/');
-    var currentUserController = new djangoBackbone('http://localhost:8000/api/v1/current_user/');
+    var bridgeController = new djangoBackbone(DJANGO_URL + 'bridge/');
+    var bridgeControlController = new djangoBackbone(DJANGO_URL + 'bridge_control/');
+    var currentUserController = new djangoBackbone(DJANGO_URL + 'current_user/');
     //var currentUserController = new djangoBackbone('http://54-194-28-63-m54ga2jjusw6.runscope.net/api/v1/current_user/');
     // Start backbone io listening
     portalController.backboneio = backboneio.listen(server, { 
@@ -73,6 +74,7 @@ function PortalController(socketPort) {
 
                 var sessionID = cookies.sessionid;
                 var appAuthURL = DJANGO_URL + 'current_user/user/';
+                console.log('appAuthURL is', appAuthURL);
 
                 backendAuth(portalController.redis.authClient, appAuthURL, sessionID).then(function(authData) {
                     console.log('backendAuth returned authData:', authData);
