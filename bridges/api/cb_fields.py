@@ -15,6 +15,20 @@ from django.utils import six
 
 class ToOneThroughField(ToOneField):
     
+    def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,
+                 null=False, blank=False, nonmodel=False,readonly=False, full=False,
+                 unique=False, help_text=None, use_in='all', full_list=True, full_detail=True):
+
+        self.nonmodel = nonmodel
+
+        super(ToOneThroughField, self).__init__(
+            to, attribute, related_name=related_name, default=default,
+            null=null, blank=blank, readonly=readonly, full=full,
+            unique=unique, help_text=help_text, use_in=use_in,
+            full_list=full_list, full_detail=full_detail
+        )
+        self.m2m_bundles = []
+
     def dehydrate_id(self, bundle, for_list=True):
         
         # Dehydrates id of the related model
@@ -55,6 +69,7 @@ class ToManyThroughField(ToManyField):
         #print "Related instance is %r" % related_instance
         return related_resource
     
+    '''
     def dehydrate_related(self, bundle, related_resource, for_list=True):
         """
         Based on the ``full_resource``, returns either the endpoint or the data
@@ -77,6 +92,7 @@ class ToManyThroughField(ToManyField):
             #print "Should dehydrate full resource"
             #print "Bundle in dehydrate_related is %r \n related_resource is %r \n for_list is %r" % (bundle, related_resource, for_list)
             return related_resource.full_dehydrate(bundle)
+    '''
 
 
     def dehydrate(self, bundle, for_list=True):

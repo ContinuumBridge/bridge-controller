@@ -13,7 +13,6 @@
 	<!-- Styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/portal.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/list.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.css">
@@ -23,8 +22,9 @@
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/animate.css" media="screen, projection">    
 	
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/topcoat-mobile-light.css" />
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/application.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topcoat-mobile-light.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/portal.css">
 	
 	<!-- Scripts -->
 	<!-- cordova.js is served from localhost to ensure the correct version -->
@@ -84,7 +84,7 @@
     </script>
     
     <script type="text/template" id="deviceItemViewTemplate">
-        <h4 class="list-group-item-heading"><%=name%></h4>
+        <h4 class="list-group-item-heading"><%=label%></h4>
         <i id="edit-button" class="icon ion-edit edit-button"></i>
         <i class="icon ion-trash-a uninstall-button"></i>
     </script>
@@ -101,7 +101,8 @@
     </script>
     
     <script type="text/template" id="discoveredDeviceItemViewTemplate">
-        <h4 class="list-group-item-heading"><%=name%></h4>
+        <h4 class="list-group-item-heading"><%=label%></h4>
+        <button class="topcoat-button install-button"><%=install%></button>
     </script>
     
     <script type="text/template" id="deviceDiscoverySectionTemplate">
@@ -227,6 +228,7 @@
     <script src="{{ STATIC_URL }}js/cb/cb-models.js"></script>
     <script src="{{ STATIC_URL }}js/cb/cb-views.js"></script>
 
+    <script src="{{ STATIC_URL }}js/cb/adaptors/models.js"></script>
     <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
     <script src="{{ STATIC_URL }}js/cb/bridges/models.js"></script>
     <script src="{{ STATIC_URL }}js/cb/devices/models.js"></script>

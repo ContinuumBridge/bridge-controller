@@ -17,7 +17,8 @@ var cookie_reader = require('cookie');
 
 /* App Controller */
 console.log('Environment is', process.env.NODE_ENV);
-var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
+
+DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
 console.log('DJANGO_URL', DJANGO_URL);
 module.exports = PortalController;
 
@@ -107,10 +108,20 @@ function PortalController(socketPort) {
 
         portalController.redis.publishAll = function(message) {
             
+            // Ensure the message is a string
+            if (typeof message == 'object') {
+                var jsonMessage = JSON.stringify(message);
+            } else if (typeof message == 'string') {
+                var jsonMessage = message;
+            } else {
+                console.error('This message is not an object or a string', message); 
+                return;
+            }
             // Publish message to each bridge address
             publicationAddresses.forEach(function(publicationAddress) {
-                portalController.redis.pubClient.publish(publicationAddress, message);
-                console.log('App > ', message, 'published to ',  publicationAddress);
+
+                portalController.redis.pubClient.publish(publicationAddress, jsonMessage);
+                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
             });
         }
 
@@ -122,19 +133,34 @@ function PortalController(socketPort) {
         // Subscription
         var subscriptionAddress = 'UID' + authData.id;
         portalController.redis.subClient.subscribe(subscriptionAddress);
-        portalController.redis.subClient.on('message', function(channel, messageJSON) {
-            
-            message = JSON.parse(messageJSON);
 
+        portalController.onMessage = function(channel, jsonMessage) {
+            
+            var message = JSON.parse(jsonMessage);
+            
+            console.log('\033[2J');
+            console.log('Message is', message);
             // Discovered devices
             if (message.uri == '/api/v1/device_discovery') {
 
                 console.log('Device discovery!');
-                console.log('message body is', message.body);
+                //console.log('message body is', message.body);
+                //console.log('socket is', socket.handshake.authData);
+                //console.log('authData is', socket.handshake.authData);
 
+                deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
+                   
+                    console.log('found devices are', foundDevices);
+                    deviceDiscoveryController.backboneSocket.emit('reset', foundDevices);
+                     
+                }, function(error) {
+                    
+                    console.error(error);
+                });
+                
                 //deviceDiscoveryController.backboneSocket.emit('test');
                 //deviceDiscoveryController.backboneSocket.emit('reset', {name: "Test"});
-                deviceDiscoveryController.backboneSocket.emit('reset', message.body);
+                //deviceDiscoveryController.backboneSocket.emit('reset', message.body);
                 /*
                 message.body.forEach(function(discovered_device) {
 
@@ -156,8 +182,20 @@ function PortalController(socketPort) {
             } else {
 
                 // When a message is received, send it down to the portal
-                socket.emit('message', messageJSON);
+                socket.emit('message', jsonMessage);
             }
+        };
+
+        //portalController.redis.subClient.on('message', function(channel, jsonMessage) {
+
+        // Listen for messages from redis
+        portalController.redis.subClient.addListener('message', portalController.onMessage);
+
+        socket.on('disconnect', function () {
+            
+            console.log('Remove listener');
+            // Stop listening for messages from redis
+            portalController.redis.subClient.removeListener('message', portalController.onMessage);
         });
 
         console.log('Server > New user connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address, address.port, subscriptionAddress, authData.email, publicationAddresses);

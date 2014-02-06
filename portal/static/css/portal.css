@@ -10,3 +10,10 @@
 .uninstall-button {
   right: 12px;
 }
+
+.install-button {
+  position: absolute;
+  top: 7px;
+  cursor: pointer;
+  right: 10px;
+}

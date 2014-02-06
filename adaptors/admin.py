@@ -1,11 +1,13 @@
 from django.contrib import admin
 
 from apps.models import App, AppInstall
-from adaptors.models import Adaptor, AdaptorInstall
+from adaptors.models import Adaptor
 
+'''
 class AdaptorInstallInline(admin.TabularInline):
     model = AdaptorInstall
     extra = 0 
+'''
 
 class AdaptorAdmin(admin.ModelAdmin):
 
@@ -15,9 +17,11 @@ class AdaptorAdmin(admin.ModelAdmin):
         #('Meta', {'fields': ['creator', 'modifier']}),
     ]   
 
+    '''
     inlines = [ 
         AdaptorInstallInline,
     ]   
+    '''
     
     list_display = ('name','id', 'created')
 

@@ -19,7 +19,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
         //var modalView = new CBApp.InstallDeviceModal();
         //$('#portal-body').html(modalView.render().el);
         //this.model.installDevice();
-    }
+    },
     /*
     render: function () {
       console.log('DeviceView rendered');
@@ -29,7 +29,24 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
       this.$el.html(compiled);
       return this;
     }
+    */
+
+    serializeData: function() {
+
+      var data = {};
+      data.install = this.model.get('device') ? 'Install' : 'Request an adaptor';
+      // The label is the first four letters of the mac address
+      var device_install = this.model.get('device_install');
+      var mac_addr = device_install.mac_addr;
+      data.label = mac_addr.substring(0,5);
+      //console.log('data is', JSON.stringify(data));
+      //return JSON.stringify(data);
+      return data;
+    },
+
+    /*
     onRender: function(){
+        
         
         console.log('DiscoveredDeviceView rendered');
     }

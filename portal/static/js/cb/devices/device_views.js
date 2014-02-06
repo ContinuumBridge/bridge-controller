@@ -13,18 +13,17 @@ CBApp.DeviceView = Marionette.ItemView.extend({
 
     uninstall: function() {
         this.model.uninstall();
-    }
+    },
 
-    /*
-    render: function () {
-      console.log('DeviceView rendered');
-      var source = $(this.template).html();
-      var data = { descriptor: 'test_descriptor' };
-      var compiled = _.template(source, data);
-      this.$el.html(compiled);
-      return this;
+    serializeData: function() {
+
+      var data = {}; 
+      // The label is the first four letters of the mac address
+      //var device_install = this.model.get('device_install');
+      //var mac_addr = device_install.mac_addr;
+      data.label = this.model.get('friendly_name');
+      return data;
     }
-    */
 });
 
 

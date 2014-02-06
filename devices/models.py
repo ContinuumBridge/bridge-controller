@@ -5,6 +5,7 @@ from django.conf import settings
 
 from django.utils import timezone
 
+#from adaptors.models import Adaptor
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
 
@@ -29,6 +30,13 @@ class Device(LoggedModelMixin):
 
     def save(self, *args, **kwargs):
         super(Device, self).save(*args, **kwargs)
+
+    def get_adaptor_compatibility(self):
+        adaptor_compatibilities = []
+        for adaptor_compatibility in self.adaptorcompatibility_set.filter():
+            adaptor_compatibilities.append(adaptor_compatibility)
+        return adaptor_compatibilities
+
     
 
 class DeviceInstall(LoggedModelMixin):
@@ -36,6 +44,7 @@ class DeviceInstall(LoggedModelMixin):
     friendly_name = models.CharField(_("friendly_name"), max_length = 255, blank=True)
     mac_addr = models.CharField(_("mac_addr"), max_length = 255)
 
+    adaptor = models.ForeignKey('adaptors.Adaptor')
     bridge = models.ForeignKey(Bridge)
     device = models.ForeignKey(Device)
 
@@ -44,11 +53,8 @@ class DeviceInstall(LoggedModelMixin):
         verbose_name_plural = _('device_installs')
         app_label = 'devices'
 
-    def get_adaptor_install(self):
-        adaptor_installs = []
-        for adaptor_install in self.adaptorinstall_set.filter():
-            adaptor_installs.append(adaptor_install)
-        return adaptor_installs
+    #def get_adaptor_install(self):
+    #    return self.adaptor_install
 
 
 '''

@@ -2,6 +2,9 @@ import sys
 import re
 
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
+from django.conf.urls import url
+from django.core.paginator import Paginator, InvalidPage
+from django.http import Http404
 
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
@@ -13,18 +16,24 @@ from tastypie.exceptions import NotFound, BadRequest, InvalidFilterError, Hydrat
 from tastypie.resources import ObjectDoesNotExist
 from tastypie import http
 
-from tastypie.resources import ModelResource 
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
+
+#from haystack.query import SearchQuerySet
 
 from bridges.api.abstract_resources import ThroughModelResource
 from bridges.api import cb_fields
 
-from adaptors.api.resources import AdaptorInstallResource
+from adaptors.api.resources import AdaptorDeviceCompatibilityResource
 from devices.models import Device, DeviceInstall
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
 class DeviceResource(ModelResource):
+
+    adaptor_compatibility = cb_fields.ToManyThroughField(AdaptorDeviceCompatibilityResource, 
+                    attribute=lambda bundle: bundle.obj.get_adaptor_compatibility() or bundle.obj.adaptorcompatibility_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
 
     class Meta:
         queryset = Device.objects.all()
@@ -32,16 +41,51 @@ class DeviceResource(ModelResource):
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
-   
+        filtering = {
+            'name': ALL,
+            'method': ALL,
+            'manufacturer_name': ALL,
+            'hardware_revision': ALL,
+            'firmware_revision': ALL,
+            'software_revision' : ALL,
+            'model_number': ALL,
+            'system_id': ALL,
+        }
     '''
     def prepend_urls(self):
-        """
-        A hook for adding your own URLs or matching before the default URLs.
-        """
-        #raise Exception("ally bad")
-        return []
-    '''
+        return [
+            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_search'), name="api_get_search"),
+        ]
 
+    def get_search(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+
+        # Do the query.
+        sqs = SearchQuerySet().models(Device).load_all().auto_query(request.GET.get('q', ''))
+        paginator = Paginator(sqs, 20)
+
+        try:
+            page = paginator.page(int(request.GET.get('page', 1)))
+        except InvalidPage:
+            raise Http404("Sorry, no results on that page.")
+
+        objects = []
+
+        for result in page.object_list:
+            bundle = self.build_bundle(obj=result.object, request=request)
+            bundle = self.full_dehydrate(bundle)
+            objects.append(bundle)
+
+        object_list = {
+            'objects': objects,
+        }
+
+        self.log_throttled_access(request)
+        return self.create_response(request, object_list)
+
+    '''
     def post_list(self, request, **kwargs):
         """
         Creates a new resource/object with the provided data.
@@ -99,9 +143,17 @@ class DeviceInstallResource(ThroughModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=True)
+    adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
+
+    '''
+    adaptor_install = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorInstallResource', 
+                    attribute=lambda bundle: bundle.obj.get_adaptor_install() or bundle.obj.adaptorinstall_set,
+                    full=True, null=True)
     adaptor_install = cb_fields.ToManyThroughField(AdaptorInstallResource, 
                     attribute=lambda bundle: bundle.obj.get_adaptor_install() or bundle.obj.adaptorinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
+    '''
+
     class Meta:
         queryset = DeviceInstall.objects.all()
         authorization = Authorization()
@@ -135,9 +187,10 @@ class DeviceInstallResource(ThroughModelResource):
         # Populate search arguments
         search_fields = kwargs.copy() 
         for field, value in deserialized.iteritems():
+            uri = None
             # Assign possible URIs to uri
             if type(value) is dict:
-                uri = value.get('resource_uri', value)
+                uri = value.get('resource_uri', None)
 
             # Extract the id from foreign key resource uri
             if isinstance(uri, basestring) and field != 'resource_uri':

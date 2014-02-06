@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from adaptors.admin import AdaptorInstallInline
+#from adaptors.admin import AdaptorInstallInline
 from devices.models import Device, DeviceInstall
 
 '''
@@ -16,9 +16,11 @@ class DeviceAdmin(admin.ModelAdmin):
         #('Details', {'fields': ['creator', 'modifier']}),
     ]
 
+    '''
     inlines = [
         AdaptorInstallInline,
     ]
+    '''
 
     list_display = ('name','id', 'created')
 

@@ -13,6 +13,7 @@ django-countries==1.5
 django-crispy-forms==1.2.8
 django-debug-toolbar==1.0.0
 django-filer==0.9.4
+django-haystack==2.1.0
 django-model-utils==2.0.0
 django-redis-sessions
 django-sekizai==0.7

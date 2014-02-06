@@ -42,6 +42,9 @@ CBApp.addInitializer(function () {
   CBApp.filteredDeviceCollection = CBApp.FilteredCollection(CBApp.deviceCollection);
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
+  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+
+  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
 
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();

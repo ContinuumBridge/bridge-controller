@@ -11,7 +11,7 @@ var backendAuth = require('../backend_auth.js');
 
 /* Bridge Controller */
 
-var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost/api/v1/' : 'http://localhost:8000/api/v1/'
+var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
 module.exports = BridgeController;
 
 function BridgeController(port){
@@ -71,13 +71,23 @@ function BridgeController(port){
             publicationAddresses.push(controllerAddress);
         });
  
-        bridgeController.redis.publish = function(message) {
+        bridgeController.redis.publishAll = function(message) {
     
+            // Ensure the message is a string
+            if (typeof message == 'object') {
+                var jsonMessage = JSON.stringify(message);
+            } else if (typeof message == 'string') {
+                var jsonMessage = message;
+            } else {
+                console.error('This message is not an object or a string', message); 
+                return;
+            }   
+
             // Publish message to each portal address
             publicationAddresses.forEach(function(publicationAddress) {
 
-                bridgeController.redis.pubClient.publish(publicationAddress, message);
-                console.log('Bridge > ', message, 'published to ',  publicationAddress);
+                bridgeController.redis.pubClient.publish(publicationAddress, jsonMessage);
+                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
             });
         }   
 
@@ -94,11 +104,12 @@ function BridgeController(port){
             message = JSON.parse(jsonMessage);
 
             //console.log('SessionID is', socket.handshake.query.sessionID);
-            var sessionID = socket.handshake.query.sessionID;
+            //var sessionID = socket.handshake.query.sessionID;
+            message.sessionID = socket.handshake.query.sessionID;
 
             if (message 
                 && message.msg == 'req'
-                && message.req == 'get'
+                && message.verb == 'get'
                 && message.uri == '/api/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
@@ -125,11 +136,11 @@ function BridgeController(port){
                     socket.emit('message', JSON.stringify(res));
                 });
             }
-            console.log('Bridge Controller message >', jsonMessage);
+            //console.log('Bridge Controller message >', jsonMessage);
             //messageJSON= JSON.stringify(message);
             //console.log('The bridge sent', message);
             //console.log('The bridge sent JSON', messageJSON);
-            bridgeController.redis.publish(JSON.stringify(message));
+            bridgeController.redis.publishAll(message);
         });
 
         console.log('Server > New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address,     address.port, subscriptionAddress, authData.email, publicationAddresses);

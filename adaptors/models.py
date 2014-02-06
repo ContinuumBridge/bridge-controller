@@ -35,7 +35,6 @@ class Adaptor(LoggedModelMixin):
         super(Adaptor, self).save(*args, **kwargs)
 
 
-'''
 class AdaptorCompatibility(LoggedModelMixin):
 
     """ Through model for an Adaptor and a Device, denotes their compatibility """
@@ -47,19 +46,20 @@ class AdaptorCompatibility(LoggedModelMixin):
         verbose_name = _('adaptor_compatibility')
         verbose_name_plural = _('adaptor_compatibilities')
         app_label = 'adaptors'
+
+
 '''
-
-
 class AdaptorInstall(LoggedModelMixin):
 
     """ Through model for an Adaptor and a DeviceInstall """
 
-    device  = models.ForeignKey(DeviceInstall)
+    device_install = models.OneToOneField(DeviceInstall, related_name='adaptor_install')
     adaptor = models.ForeignKey(Adaptor)
 
     class Meta:
         verbose_name = _('adaptor_install')
         verbose_name_plural = _('adaptor_installs')
         app_label = 'adaptors'
+'''
 
 

@@ -6,7 +6,7 @@ import factory
 
 from accounts.models import CBUser
 
-from adaptors.models import Adaptor, AdaptorInstall
+from adaptors.models import Adaptor, AdaptorCompatibility 
 from apps.models import App, AppInstall, AppDevicePermission
 from bridges.models import Bridge, BridgeControl
 from devices.models import Device, DeviceInstall
@@ -116,39 +116,7 @@ class Command(NoArgsCommand):
             model_number = '2'
         )
 
-        # Install the devices
-        class DeviceInstallFactory(factory.DjangoModelFactory):
-                FACTORY_FOR = DeviceInstall
-
-        device_install_marks_bridge_device_1 = DeviceInstallFactory(
-            bridge = marks_bridge,
-            device = device_1,
-            friendly_name = 'Tag C381',
-            mac_addr = '1C:BA:8C:20:C3:81'
-        )
-
-        device_install_marks_bridge_device_2 = DeviceInstallFactory(
-            bridge = marks_bridge,
-            device = device_2,
-            friendly_name = 'Tag 8212',
-            mac_addr = '90:59:AF:0B:82:12'
-        )
-
-        device_install_petes_bridge_device_1 = DeviceInstallFactory(
-            bridge = petes_bridge,
-            device = device_1,
-            friendly_name = 'Tag C381',
-            mac_addr = '1C:BA:8C:20:C3:81'
-        )
-
-        device_install_petes_bridge_device_2 = DeviceInstallFactory(
-            bridge = petes_bridge,
-            device = device_2,
-            friendly_name = 'Tag 8212',
-            mac_addr = '90:59:AF:0B:82:12'
-        )
-
-        # Give each device installed an adaptor
+        # Create some adaptors
         class CBAdaptorFactory(factory.DjangoModelFactory):
             FACTORY_FOR = Adaptor
             provider = "Continuum Bridge"
@@ -167,28 +135,81 @@ class Command(NoArgsCommand):
             description = "Description for Adaptor 2",
         )
 
+        # Set the compatibility of the devices and adaptors
+        class AdaptorCompatibilityFactory(factory.DjangoModelFactory):
+            FACTORY_FOR = AdaptorCompatibility
+
+        adaptor_compatibility_1 = AdaptorCompatibilityFactory(
+            device = device_1,
+            adaptor = adaptor_1,
+        )
+
+        adaptor_compatibility_1 = AdaptorCompatibilityFactory(
+            device = device_2,
+            adaptor = adaptor_2,
+        )
+
+        # Install the devices
+        class DeviceInstallFactory(factory.DjangoModelFactory):
+            FACTORY_FOR = DeviceInstall
+
+        device_install_marks_bridge_device_1 = DeviceInstallFactory(
+            adaptor = adaptor_1,
+            bridge = marks_bridge,
+            device = device_1,
+            friendly_name = 'Tag C381',
+            mac_addr = '1C:BA:8C:20:C3:81'
+        )
+
+        device_install_marks_bridge_device_2 = DeviceInstallFactory(
+            adaptor = adaptor_2,
+            bridge = marks_bridge,
+            device = device_2,
+            friendly_name = 'Tag 8212',
+            mac_addr = '90:59:AF:0B:82:12'
+        )
+
+        device_install_petes_bridge_device_1 = DeviceInstallFactory(
+            adaptor = adaptor_1,
+            bridge = petes_bridge,
+            device = device_1,
+            friendly_name = 'Tag C381',
+            mac_addr = '1C:BA:8C:20:C3:81'
+        )
+
+        device_install_petes_bridge_device_2 = DeviceInstallFactory(
+            adaptor = adaptor_2,
+            bridge = petes_bridge,
+            device = device_2,
+            friendly_name = 'Tag 8212',
+            mac_addr = '90:59:AF:0B:82:12'
+        )
+
+        # Install the adaptors with the devices
+        '''
         class AdaptorInstallFactory(factory.DjangoModelFactory):
             FACTORY_FOR = AdaptorInstall
 
         adaptor_install_1 = AdaptorInstallFactory(
-            device = device_install_marks_bridge_device_1,
+            device_install = device_install_marks_bridge_device_1,
             adaptor = adaptor_1
         )
         
         adaptor_install_2 = AdaptorInstallFactory(
-            device = device_install_marks_bridge_device_2,
+            device_install = device_install_marks_bridge_device_2,
             adaptor = adaptor_2
         )
         
         adaptor_install_3 = AdaptorInstallFactory(
-            device = device_install_petes_bridge_device_1,
+            device_install = device_install_petes_bridge_device_1,
             adaptor = adaptor_1
         )
         
         adaptor_install_4 = AdaptorInstallFactory(
-            device = device_install_petes_bridge_device_2,
+            device_install = device_install_petes_bridge_device_2,
             adaptor = adaptor_2
         )
+        '''
         
         # Give the apps permission to access the devices
         class AppDevicePermissionFactory(factory.DjangoModelFactory):
