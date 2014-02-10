@@ -109,7 +109,7 @@ function BridgeController(port){
 
             if (message 
                 && message.msg == 'req'
-                && message.verb == 'get'
+                && message.req == 'get'
                 && message.uri == '/api/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
@@ -120,7 +120,7 @@ function BridgeController(port){
                     headers: {
                         'Content-type': 'application/json',
                         'Accept': 'application/json',
-                        'X_CB_SESSIONID': sessionID
+                        'X_CB_SESSIONID': message.sessionID
                     }
                 };
 
