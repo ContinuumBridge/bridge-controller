@@ -209,7 +209,6 @@ class Command(NoArgsCommand):
             device_install = device_install_petes_bridge_device_2,
             adaptor = adaptor_2
         )
-        '''
         
         # Give the apps permission to access the devices
         class AppDevicePermissionFactory(factory.DjangoModelFactory):
@@ -246,8 +245,8 @@ class Command(NoArgsCommand):
         )
 
         AppDevicePermissionFactory(
-            app_install = appinstall_petes_bridge_app_2,
-            device_install = device_install_petes_bridge_device_1
+            app_install = appinstall_petes_bridge_app_1,
+            device_install = device_install_petes_bridge_device_2
         )
 
         AppDevicePermissionFactory(
