@@ -1,24 +1,12 @@
 
-var raygun = require('raygun');
-var raygunClient = new raygun.Client().init({ apiKey: 'jB/eb5l92ZfmjO0VbMRudg==' });
 
-var d = require('domain').create();
+var PortalController = require('./user/portal_controller.js');
 
-d.on('error', function(err){
-  console.error(err);
-  raygunClient.send(err);
-  process.exit();
-});
+portalController = new PortalController(4000);
 
-d.run(function(){
+var BridgeController = require('./bridge/bridge_controller.js');
 
-  var PortalController = require('./user/portal_controller.js');
-
-  portalController = new PortalController(4000);
-
-  var BridgeController = require('./bridge/bridge_controller.js');
-
-  bridgeController = new BridgeController(3000);
+bridgeController = new BridgeController(3000);
 
   /*
   var errorFunction = function() {
@@ -29,7 +17,6 @@ d.run(function(){
   errorFunction();
   //var t=setInterval(errorFunction,1000);
   */
-});
 
 
 /*

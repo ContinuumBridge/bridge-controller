@@ -14,10 +14,8 @@
     "node-rest-client": "~0.7.0",
     "q": "~0.9.7",
     "querystring": "~0.2.0",
-    "restler": "~3.1.0",
     "redis": "~0.9.1",
-    "socket.io": "~0.9.16",
-    "raygun": "~0.4.1"
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {},
   "optionalDependencies": {},

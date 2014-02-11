@@ -38,11 +38,11 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
       // The label is the first four letters of the mac address
       var device_install = this.model.get('device_install');
       var mac_addr = device_install.mac_addr;
-      data.label = mac_addr.substring(0,5);
+      data.label = mac_addr.substring(mac_addr.length-5, mac_addr.length-1);
       //console.log('data is', JSON.stringify(data));
       //return JSON.stringify(data);
       return data;
-    },
+    }
 
     /*
     onRender: function(){
@@ -81,12 +81,12 @@ CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
     template: '#deviceDiscoverySectionTemplate',
 
     events: {
-        'click #rescan': 'discover',
+        'click #rescan': 'discover'
         //'click #interest-button': 'interestButtonClick',
     },
 
     regions: {
-        discoveredDeviceList: '#discovered-device-list',
+        discoveredDeviceList: '#discovered-device-list'
     },
 
     onRender: function() {
@@ -101,6 +101,6 @@ CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
         window.socket.emit('message', '{"msg": "cmd", "body": "discover"}', function(data){
             console.log(data);
         }); 
-    },
+    }
 })
 
