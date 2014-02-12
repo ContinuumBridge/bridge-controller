@@ -103,9 +103,10 @@ class Command(NoArgsCommand):
         class DeviceFactory(factory.DjangoModelFactory):
             FACTORY_FOR = Device
             manufacturer_name = 'Texas Instruments'
+            method = 'btle'
 
         device_1 = DeviceFactory(
-            name = "Test Device 1",
+            name = "SensorTag",
             description = "This is a description for Test Device 1",
             model_number = '1'
         )
