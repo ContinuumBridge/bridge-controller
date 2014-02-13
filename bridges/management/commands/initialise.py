@@ -56,6 +56,26 @@ class Command(NoArgsCommand):
             user = pete
         )
 
+
+        # Create Pete and Pete's bridge and link them
+        martin = CBUser.objects.create_superuser(
+            email = 'martin.sotheran@continuumbridge.com',
+            password = 'suspensi0N',
+            first_name = 'Martin',
+            last_name = 'Sotheran',
+        )
+
+        martins_bridge = Bridge.objects.create_bridge(
+            name = "Martin's Bridge",
+            email = "ac7be885fe71409b8061d40f493eedba@continuumbridge.com",
+            password = "ABJPjbxBOzabRNCVqnGzCWcQJWZYjDKNltIhefm2uj1FSKtwgEoP62vUAdTBlZSf"
+        )
+
+        martins_bridgecontrol = BridgeControlFactory(
+            bridge = martins_bridge,
+            user = martin
+        )
+
         # Create some apps
         class CBAppFactory(factory.DjangoModelFactory):
             FACTORY_FOR = App
