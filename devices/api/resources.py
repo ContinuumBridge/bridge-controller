@@ -103,12 +103,12 @@ class DeviceResource(ModelResource):
         deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
         deserialized = self.alter_deserialized_detail_data(request, deserialized)
 
-        exclude_from_match = ['description', 'api_name']
+        include_in_match = ['name', 'manufacturer_name']
 
         # Build the item match terms
         for field, value in deserialized.iteritems():
             print "field is", field
-            if field not in exclude_from_match:
+            if field in include_in_match:
                 kwargs[field] = value 
 
         # If the object already exists then return it instead of creating a new one

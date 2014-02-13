@@ -7,7 +7,9 @@ var redis = require('socket.io/node_modules/redis'),
 
 var rest = require('restler');
 
-var backendAuth = require('../backend_auth.js');
+var backendAuth = require('../backend_auth.js'),
+    django = require('./django.js'),
+    apiRouter = require('./apiRouter.js');
 
 /* Bridge Controller */
 
@@ -102,10 +104,23 @@ function BridgeController(port){
         socket.on('message', function (jsonMessage) {
 
             message = JSON.parse(jsonMessage);
+            console.log('Session query', socket.handshake.query);
+            throw "That's it for now!";
+            //message.from = socke
+            message.sessionID = socket.handshake.query.sessionID;
 
+            switch (message.message) {
+
+                case 'request':
+                    apiRouter(message);
+                    break;
+
+                default:
+                    console.warn('=> ');
+
+            }
             //console.log('SessionID is', socket.handshake.query.sessionID);
             //var sessionID = socket.handshake.query.sessionID;
-            message.sessionID = socket.handshake.query.sessionID;
 
             if (message 
                 && message.msg == 'req'
@@ -114,7 +129,11 @@ function BridgeController(port){
 
                 console.log('Request was received');
 
+<<<<<<< HEAD
                 var djangoURL = 'http://localhost:8080/api/v1/current_bridge/bridge'
+=======
+                var djangoURL = DJANGO_URL + 'current_bridge/bridge'
+>>>>>>> dev
                 var djangoOptions = {
                     method: "get",
                     headers: {
