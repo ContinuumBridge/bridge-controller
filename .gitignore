@@ -2,6 +2,7 @@ node_modules/
 media/
 static/
 .DS_STORE
+.idea
 *.log
 *.pot
 *.pyc
