@@ -4,7 +4,10 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     initialize: function() {
-        
+
+        var bridgeControlArray = this.get('bridgeControls');
+        CBApp.currentBridge = bridgeControlArray.at(0).get('bridge');
+
         // Instantiate some BridgeControl models
         /*
         var bridgeControlArray = this.get('bridge_controls');

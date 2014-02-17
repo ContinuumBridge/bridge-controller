@@ -12,8 +12,6 @@
 		
 	<!-- Styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/list.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.theme.css">
@@ -25,7 +23,9 @@
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topcoat-mobile-light.css" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/portal.css">
-	
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
 	<!-- Scripts -->
 	<!-- cordova.js is served from localhost to ensure the correct version -->
 	<!-- <script src="http://localhost/appgyver/cordova.js"></script>
@@ -66,12 +66,24 @@
     
     <script type="text/template" id="appItemViewTemplate">
         <h4 class="list-group-item-heading"><%=name%></h4>
+        <i id="edit-button" class="icon ion-edit edit-button" data-toggle="collapse" data-target="#<%=appID%>"></i>
+        <i class="icon ion-trash-a uninstall-button"></i>
+        <div id="<%=appID%>" class="panel-collapse collapse">Test devices</div>
     </script>
 
     <script type="text/template" id="appListTemplate">
     	appListTemplate
     </script>
-    
+
+    <script type="text/template" id="appDevicePermissionItemViewTemplate">
+        <h4 class="list-group-item-heading"><%=deviceFriendlyName%></h4>
+
+        <label class="topcoat-switch onoffswitch">
+          <input type="checkbox" class="topcoat-switch__input permission-switch" id="<%=appDevicePermissionID%>" <%=permissionChecked%>>
+          <div class="topcoat-switch__toggle"></div>
+        </label>
+    </script>
+
     <script type="text/template" id="appSectionTemplate">
 		<h2>Apps</h2>
 

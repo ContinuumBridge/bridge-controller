@@ -86,6 +86,36 @@ function DjangoBackbone(djangoURL) {
         });
     });
 
+    djangoBackbone.backboneSocket.update(function(req, res) {
+
+        var that = this;
+
+        // On a backboneio create function make a post request to Django
+        console.log('Model data in controller.backboneBackend.create is', req.model);
+        console.log('SESSIONID in controller.backboneBackend.create is', req.args.headers.X_CB_SESSIONID);
+
+        var jsonData = JSON.stringify(req.model);
+
+        console.log('jsonData in controller.backboneBackend.create is', jsonData );
+        var restOptions = {
+            method: "put",
+            data: jsonData,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X_CB_SESSIONID': req.args.headers.X_CB_SESSIONID
+            }
+        };
+
+        rest.put(djangoURL, restOptions).on('complete', function(data, response) {
+
+            console.log('Data response is', data);
+            console.log('response is', response);
+            //that.updateSuccess();
+            res.end(data);
+        });
+    }),
+
     djangoBackbone.backboneSocket.delete(function(req, res) {
 
         var that = this;

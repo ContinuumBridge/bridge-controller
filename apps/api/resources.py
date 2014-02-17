@@ -3,25 +3,26 @@ from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 
 from bridges.api.abstract_resources import ThroughModelResource
-from apps.models import App, AppInstall
+from apps.models import App, AppInstall, AppDevicePermission
 
-from bridges.api.abstract_resources import ThroughModelResource
+#from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AppDevicePermissionResource(ThroughModelResource):
+class AppDevicePermissionResource(ModelResource):
 
     device_install = cb_fields.ToOneThroughField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
     app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
     
     class Meta:
-       queryset = AppInstall.objects.all()
+       queryset = AppDevicePermission.objects.all()
        authorization = Authorization()
-       #list_allowed_methods = ['get', 'post']
-       #detail_allowed_methods = ['get']
-       resource_name = 'app_device_permission' 
+       list_allowed_methods = ['get', 'post']
+       detail_allowed_methods = ['get', 'post', 'put', 'delete']
+       always_return_data = True
+       resource_name = "app_device_permission"
 
-class AppInstallResource(ThroughModelResource):
+class AppInstallResource(ModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
@@ -35,7 +36,8 @@ class AppInstallResource(ThroughModelResource):
        authorization = Authorization()
        #list_allowed_methods = ['get', 'post']
        #detail_allowed_methods = ['get']
-       resource_name = 'app_install' 
+       always_return_data = True
+       resource_name = 'app_install'
 
     '''
     def full_dehydrate(self, bundle, for_list=False):
@@ -88,5 +90,6 @@ class AppResource(ModelResource):
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
-        resource_name = 'app' 
+        always_return_data = True
+        resource_name = 'app'
 

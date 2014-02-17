@@ -10,8 +10,8 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
     onRender: function() {
         console.log('HomeLayoutView rendered', this);
 
-        CBApp.filteredAppCollection.filter(CBApp.filters.currentBridge('appInstalls'));
-        var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.filteredAppCollection }); 
+        //CBApp.filteredAppCollection.filter(CBApp.filters.currentBridge('appInstalls'));
+        var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.appInstallCollection });
         this.appSection.show(appLayoutView);
 
         //CBApp.filteredDeviceInstallCollection.filter(CBApp.filters.currentBridge('deviceInstalls'));
