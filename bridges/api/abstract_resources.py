@@ -3,7 +3,7 @@ import sys
 
 from django.utils import six
 
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ModelDeclarativeMetaclass, convert_post_to_patch
 from tastypie.authorization import Authorization
 
 from django.contrib.auth import authenticate, login, logout
@@ -83,100 +83,11 @@ class ThroughModelResource(ModelResource):
         return bundle
 
 
-class CBResourceOptions(ResourceOptions):
-
-    include_in_post_match = []
-
-class CBDeclarativeMetaclass(type):
-    def __new__(cls, name, bases, attrs):
-        attrs['base_fields'] = {}
-        declared_fields = {}
-
-        # Inherit any fields from parent(s).
-        try:
-            parents = [b for b in bases if issubclass(b, Resource)]
-            # Simulate the MRO.
-            parents.reverse()
-
-            for p in parents:
-                parent_fields = getattr(p, 'base_fields', {})
-
-                for field_name, field_object in parent_fields.items():
-                    attrs['base_fields'][field_name] = deepcopy(field_object)
-        except NameError:
-            pass
-
-        for field_name, obj in attrs.copy().items():
-            # Look for ``dehydrated_type`` instead of doing ``isinstance``,
-            # which can break down if Tastypie is re-namespaced as something
-            # else.
-            if hasattr(obj, 'dehydrated_type'):
-                field = attrs.pop(field_name)
-                declared_fields[field_name] = field
-
-        attrs['base_fields'].update(declared_fields)
-        attrs['declared_fields'] = declared_fields
-        new_class = super(CBDeclarativeMetaclass, cls).__new__(cls, name, bases, attrs)
-        opts = getattr(new_class, 'Meta', None)
-        new_class._meta = CBResourceOptions(opts)
-
-        if not getattr(new_class._meta, 'resource_name', None):
-            # No ``resource_name`` provided. Attempt to auto-name the resource.
-            class_name = new_class.__name__
-            name_bits = [bit for bit in class_name.split('Resource') if bit]
-            resource_name = ''.join(name_bits).lower()
-            new_class._meta.resource_name = resource_name
-
-        if getattr(new_class._meta, 'include_resource_uri', True):
-            if not 'resource_uri' in new_class.base_fields:
-                new_class.base_fields['resource_uri'] = fields.CharField(readonly=True)
-        elif 'resource_uri' in new_class.base_fields and not 'resource_uri' in attrs:
-            del(new_class.base_fields['resource_uri'])
-
-        for field_name, field_object in new_class.base_fields.items():
-            if hasattr(field_object, 'contribute_to_class'):
-                field_object.contribute_to_class(new_class, field_name)
-
-        return new_class
-
-class CBModelDeclarativeMetaclass(CBDeclarativeMetaclass):
-    def __new__(cls, name, bases, attrs):
-        meta = attrs.get('Meta')
-
-        if meta and hasattr(meta, 'queryset'):
-            setattr(meta, 'object_class', meta.queryset.model)
-
-        new_class = super(CBModelDeclarativeMetaclass, cls).__new__(cls, name, bases, attrs)
-        include_fields = getattr(new_class._meta, 'fields', [])
-        excludes = getattr(new_class._meta, 'excludes', [])
-        field_names = list(new_class.base_fields.keys())
-
-        for field_name in field_names:
-            if field_name == 'resource_uri':
-                continue
-            if field_name in new_class.declared_fields:
-                continue
-            if len(include_fields) and not field_name in include_fields:
-                del(new_class.base_fields[field_name])
-            if len(excludes) and field_name in excludes:
-                del(new_class.base_fields[field_name])
-
-        # Add in the new fields.
-        new_class.base_fields.update(new_class.get_fields(include_fields, excludes))
-
-        if getattr(new_class._meta, 'include_absolute_url', True):
-            if not 'absolute_url' in new_class.base_fields:
-                new_class.base_fields['absolute_url'] = fields.CharField(attribute='get_absolute_url', readonly=True)
-        elif 'absolute_url' in new_class.base_fields and not 'absolute_url' in attrs:
-            del(new_class.base_fields['absolute_url'])
-
-        return new_class
-
-
-class BaseCBModelResource(BaseModelResource):
+class CBModelResource(ModelResource):
 
     class Meta:
         resource_name = 'cb_model_resource'
+        post_match = []
 
     def post_list(self, request, **kwargs):
         """
@@ -192,34 +103,39 @@ class BaseCBModelResource(BaseModelResource):
 
 
         print "include in match is", self._meta.resource_name
+        print "include in match is", self._meta.post_match
         basic_bundle = self.build_bundle(request=request)
         print "We're in post_list"
-        print "Request is", request.body
-        print "kwargs are", kwargs
-        print "basic bundle is", basic_bundle.request
 
         deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
         deserialized = self.alter_deserialized_detail_data(request, deserialized)
         print "Deserialized is", deserialized
+        print "bundle.request.GET is", basic_bundle.request.GET
 
         # Populate search arguments
         search_fields = kwargs.copy()
         for field, value in deserialized.iteritems():
-            uri = None
-            # Assign possible URIs to uri
-            if type(value) is dict:
-                uri = value.get('resource_uri', None)
+            if field in self._meta.post_match:
 
-            # Extract the id from foreign key resource uri
-            if isinstance(uri, basestring) and field != 'resource_uri':
-                related_id = re.search('/\w*/\w*/\w*/([0-9]*)', uri)
-                if related_id and related_id.groups()[0]:
-                    search_fields[field] = int(related_id.groups()[0])
-                    print "In deserialized field is %r, value is %r, id is %r" % (field, value, related_id.groups()[0])
+                # Assign possible URIs to uri
+                if type(value) is dict:
+                    value = value.get('resource_uri', value)
 
+                # Extract the id from foreign key resource uri
+                if isinstance(value, basestring) and field != 'resource_uri':
+                    related_id = re.search('/\w*/\w*/\w*/([0-9]*)', value)
+                    if related_id and related_id.groups()[0]:
+                        search_fields[field] = int(related_id.groups()[0])
+                    else:
+                        search_fields[field] = value
+
+                print "In deserialized field is %r, value is %r, id is %r" % (field, value, related_id.groups()[0])
+
+        print "search_fields is", search_fields
         # If the object already exists then patch it instead of creating a new one
         try:
             obj = self.cached_obj_get(bundle=basic_bundle, **self.remove_api_resource_names(search_fields))
+            print 'obj is', obj
             return self.patch_detail(request, obj=obj,  **kwargs)
         except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
             sys.exc_clear()
@@ -329,7 +245,71 @@ class BaseCBModelResource(BaseModelResource):
         bundle = self.dehydrate(bundle)
         return bundle
 
+    def cached_obj_get(self, bundle, **kwargs):
+        """
+        A version of ``obj_get`` that uses the cache as a means to get
+        commonly-accessed data faster.
+        """
+        print "In cached_obj_get"
+        print "kwargs are", kwargs
+        cache_key = self.generate_cache_key('detail', **kwargs)
+        cached_bundle = self._meta.cache.get(cache_key)
+
+        if cached_bundle is None:
+            cached_bundle = self.obj_get(bundle=bundle, **kwargs)
+            self._meta.cache.set(cache_key, cached_bundle)
+
+        return cached_bundle
+
+    def obj_get(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_get``.
+
+        Takes optional ``kwargs``, which are used to narrow the query to find
+        the instance.
+        """
+        print "In obj_get"
+        print "kwargs are", kwargs
+        try:
+            object_list = self.get_object_list(bundle.request).filter(**kwargs)
+            print "object list is", object_list
+            stringified_kwargs = ', '.join(["%s=%s" % (k, v) for k, v in kwargs.items()])
+
+            if len(object_list) <= 0:
+                raise self._meta.object_class.DoesNotExist("Couldn't find an instance of '%s' which matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
+            elif len(object_list) > 1:
+                raise MultipleObjectsReturned("More than '%s' matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
+
+            bundle.obj = object_list[0]
+            self.authorized_read_detail(object_list, bundle)
+            return bundle.obj
+        except ValueError:
+            raise NotFound("Invalid resource lookup data provided (mismatched type).")
+
+    def remove_api_resource_names(self, url_dict):
+        """
+        Given a dictionary of regex matches from a URLconf, removes
+        ``api_name`` and/or ``resource_name`` if found.
+
+        This is useful for converting URLconf matches into something suitable
+        for data lookup. For example::
+
+            Model.objects.filter(**self.remove_api_resource_names(matches))
+        """
+        print "remove_api_resource_names"
+        print "url_dict is", url_dict
+        kwargs_subset = url_dict.copy()
+
+        for key in ['api_name', 'resource_name']:
+            try:
+                del(kwargs_subset[key])
+            except KeyError:
+                pass
+
+        print "kwargs_subset is", kwargs_subset
+        return kwargs_subset
+
 '''
-class CBModelResource(six.with_metaclass(CBModelDeclarativeMetaclass, BaseCBModelResource)):
+class CBModelResource(six.with_metaclass(ModelDeclarativeMetaclass, BaseCBModelResource)):
     pass
 '''
