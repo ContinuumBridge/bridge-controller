@@ -128,11 +128,8 @@ function BridgeController(port){
 
                 console.log('Request was received');
 
-<<<<<<< HEAD
-                var djangoURL = 'http://localhost:8080/api/v1/current_bridge/bridge'
-=======
                 var djangoURL = DJANGO_URL + 'current_bridge/bridge'
->>>>>>> dev
+
                 var djangoOptions = {
                     method: "get",
                     headers: {
