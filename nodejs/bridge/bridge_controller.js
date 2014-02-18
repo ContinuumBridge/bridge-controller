@@ -105,7 +105,6 @@ function BridgeController(port){
 
             message = JSON.parse(jsonMessage);
             console.log('Session query', socket.handshake.query);
-            throw "That's it for now!";
             //message.from = socke
             message.sessionID = socket.handshake.query.sessionID;
 
