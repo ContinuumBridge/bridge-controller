@@ -1,14 +1,22 @@
 
 .edit-button,
 .uninstall-button {
-  position: absolute;
-  top: 15px;
-  color: #aaa;
-  cursor: pointer;
-  right: 40px;
+    position: absolute;
+    top: 15px;
+    color: #aaa;
+    cursor: pointer;
+    right: 40px;
 }
 .uninstall-button {
-  right: 12px;
+    right: 12px;
+}
+
+.nested-item .onoffswitch {
+    position: absolute;
+    top: 8px;
+    color: #aaa;
+    cursor: pointer;
+    right: 8px;
 }
 
 .install-button {
@@ -17,3 +25,13 @@
   cursor: pointer;
   right: 10px;
 }
+
+.new-item.nested-item {
+  color: #ffffff;
+  background-color: #444;
+}
+
+.nested-list {
+  z-index: 2;
+}
+

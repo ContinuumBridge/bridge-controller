@@ -28,6 +28,7 @@ CBApp = new Marionette.Application({
 
 
 CBApp.addInitializer(function () {
+
   //router
   CBApp.controller = new CBApp.Controller();
   CBApp.router = new CBApp.Router({controller : CBApp.controller});
@@ -37,6 +38,7 @@ CBApp.addInitializer(function () {
   CBApp.filteredAppCollection = new CBApp.FilteredCollection(CBApp.appCollection);
 
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
+  CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
   CBApp.filteredDeviceCollection = CBApp.FilteredCollection(CBApp.deviceCollection);
@@ -56,7 +58,8 @@ CBApp.addInitializer(function () {
   CBApp.currentUserCollection.fetch({
     success: function() {
       // Set the current bridge (the one the user is looking at)
-      CBApp.currentBridge = CBApp.bridgeCollection.at(0);
+      console.log('currentUserCollection fetched successfully')
+      //CBApp.currentBridge = CBApp.bridgeCollection.at(0);
     }
   });
 

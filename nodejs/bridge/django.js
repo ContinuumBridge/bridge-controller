@@ -4,9 +4,11 @@ var rest = require('restler'),
 
 module.exports = djangoNode
 
-function djangoNode(uri, sessionID,  message){
+function djangoNode(message){
 
     var deferredDjangoResponse = Q.defer();
+
+    var url = message.url
 
     var djangoOptions = { 
         method: "get",
@@ -23,12 +25,8 @@ function djangoNode(uri, sessionID,  message){
 
         if (response.statusCode == 200) {
 
-            var res = {}; 
-            res.message = 'response';
-            res.uri = '/api/v1/current_bridge/bridge';
-            res.body = data;
             console.log('Data is', data);
-            deferredSessionData.resolve(res);
+            deferredSessionData.resolve(data);
         } else {
             deferredSessionData.reject('There was an error connecting to Django');
         } 

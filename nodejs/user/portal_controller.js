@@ -43,6 +43,7 @@ function PortalController(socketPort) {
 
     var appController = new djangoBackbone(DJANGO_URL + 'app/');
     var appInstallController = new djangoBackbone(DJANGO_URL + 'app_install/');
+    var appDevicePermissionController = new djangoBackbone(DJANGO_URL + 'app_device_permission/');
 
     var deviceController = new djangoBackbone(DJANGO_URL + 'device/');
     var deviceInstallController = new djangoBackbone(DJANGO_URL + 'device_install/');
@@ -57,12 +58,13 @@ function PortalController(socketPort) {
     portalController.backboneio = backboneio.listen(server, { 
         app: appController.backboneSocket,
         appInstall: appInstallController.backboneSocket,
+        appDevicePermission: appDevicePermissionController.backboneSocket,
         bridge: bridgeController.backboneSocket,
         bridgeControl: bridgeControlController.backboneSocket,
         currentUser: currentUserController.backboneSocket,
         device: deviceController.backboneSocket,
         deviceInstall: deviceInstallController.backboneSocket,
-        discoveredDevice: deviceDiscoveryController.backboneSocket,
+        discoveredDevice: deviceDiscoveryController.backboneSocket
     }); 
 
     // Authenticate the sessionid from the socket with django
