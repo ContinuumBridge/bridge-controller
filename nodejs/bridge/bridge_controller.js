@@ -129,7 +129,6 @@ function BridgeController(port){
                 console.log('Request was received');
 
                 var djangoURL = DJANGO_URL + 'current_bridge/bridge'
-
                 var djangoOptions = {
                     method: "get",
                     headers: {

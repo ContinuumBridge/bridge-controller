@@ -45,7 +45,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             }   
             */
         },
-        {   
+        {
             type: Backbone.HasMany,
             key: 'appInstalls',
             keySource: 'apps',
@@ -56,7 +56,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             includeInJSON: true,
             initializeCollection: 'appInstallCollection',
         },
-        {   
+        {
             type: Backbone.HasMany,
             key: 'deviceInstalls',
             keySource: 'devices',
