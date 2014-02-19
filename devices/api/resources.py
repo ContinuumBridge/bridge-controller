@@ -21,7 +21,7 @@ from tastypie.authorization import Authorization
 
 #from haystack.query import SearchQuerySet
 
-#from bridges.api.abstract_resources import ThroughModelResource, CBModelResource
+from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
@@ -140,7 +140,7 @@ def convert_post_to_patch(request):
     return convert_post_to_VERB(request, verb='PATCH')
 
 
-class DeviceInstallResource(ModelResource):
+class DeviceInstallResource(CBModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=True)
@@ -160,6 +160,6 @@ class DeviceInstallResource(ModelResource):
         authorization = Authorization()
         always_return_data = True
         resource_name = 'device_install'
-        include_in_match = ['name', 'manufacturer_name']
+        post_match = ['adaptor', 'bridge', 'device', 'mac_addr']
 
 

@@ -124,12 +124,12 @@ class CBModelResource(ModelResource):
                 # Extract the id from foreign key resource uri
                 if isinstance(value, basestring) and field != 'resource_uri':
                     related_id = re.search('/\w*/\w*/\w*/([0-9]*)', value)
-                    if related_id and related_id.groups()[0]:
+                    if related_id  and related_id.groups()[0]:
                         search_fields[field] = int(related_id.groups()[0])
                     else:
                         search_fields[field] = value
 
-                print "In deserialized field is %r, value is %r, id is %r" % (field, value, related_id.groups()[0])
+                #print "In deserialized field is %r, value is %r, id is %r" % (field, value, related_id.groups()[0])
 
         print "search_fields is", search_fields
         # If the object already exists then patch it instead of creating a new one
