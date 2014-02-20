@@ -15,7 +15,8 @@
     "q": "~0.9.7",
     "querystring": "~0.2.0",
     "redis": "~0.9.1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "restler": "~3.2.0"
   },
   "devDependencies": {},
   "optionalDependencies": {},

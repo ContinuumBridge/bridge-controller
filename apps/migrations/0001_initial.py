@@ -10,31 +10,31 @@ class Migration(SchemaMigration):
     depends_on = ( 
         ("bridges", "0001_initial"),
         ("devices", "0001_initial"),
-    )
+    )   
 
     def forwards(self, orm):
         # Adding model 'App'
         db.create_table(u'apps_app', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_app_created_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_app_related', null=True, to=orm['accounts.CBAuth'])),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_app_modified_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_app', null=True, to=orm['accounts.CBAuth'])),
             ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('provider', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('version', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=255)),
-            ('exe', self.gf('django.db.models.fields.URLField')(max_length=255)),
+            ('exe', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
         db.send_create_signal('apps', ['App'])
 
         # Adding model 'AppInstall'
         db.create_table(u'apps_appinstall', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_appinstall_created_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appinstall_related', null=True, to=orm['accounts.CBAuth'])),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_appinstall_modified_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appinstall', null=True, to=orm['accounts.CBAuth'])),
             ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('bridge', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['bridges.Bridge'])),
             ('app', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['apps.App'])),
@@ -44,9 +44,9 @@ class Migration(SchemaMigration):
         # Adding model 'AppDevicePermission'
         db.create_table(u'apps_appdevicepermission', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_appdevicepermission_created_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appdevicepermission_related', null=True, to=orm['accounts.CBAuth'])),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='apps_appdevicepermission_modified_by_related', null=True, to=orm['accounts.CBAuth'])),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appdevicepermission', null=True, to=orm['accounts.CBAuth'])),
             ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('device_install', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['devices.DeviceInstall'])),
             ('app_install', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['apps.AppInstall'])),
@@ -78,15 +78,30 @@ class Migration(SchemaMigration):
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"})
         },
+        'adaptors.adaptor': {
+            'Meta': {'object_name': 'Adaptor'},
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_adaptors_adaptor_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'exe': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_adaptors_adaptor'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'protocol': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'provider': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'version': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
         'apps.app': {
             'Meta': {'object_name': 'App'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_app_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_app_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'exe': ('django.db.models.fields.URLField', [], {'max_length': '255'}),
+            'exe': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_app_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_app'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'provider': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '255'}),
@@ -96,21 +111,21 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'AppDevicePermission'},
             'app_install': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.AppInstall']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_appdevicepermission_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appdevicepermission_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'device_install': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['devices.DeviceInstall']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_appdevicepermission_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_appdevicepermission'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
         },
         'apps.appinstall': {
             'Meta': {'object_name': 'AppInstall'},
             'app': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.App']"}),
             'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_appinstall_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appinstall_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'apps_appinstall_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_appinstall'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -142,24 +157,32 @@ class Migration(SchemaMigration):
         'devices.device': {
             'Meta': {'object_name': 'Device'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'devices_device_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_devices_device_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'firmware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'hardware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'manufacturer_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'method': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'model_number': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'devices_device_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_devices_device'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'software_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'system_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
         'devices.deviceinstall': {
             'Meta': {'object_name': 'DeviceInstall'},
+            'adaptor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['adaptors.Adaptor']"}),
             'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'devices_deviceinstall_created_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_devices_deviceinstall_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'device': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['devices.Device']"}),
             'friendly_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mac_addr': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'devices_deviceinstall_modified_by_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_devices_deviceinstall'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
         }
     }
 
