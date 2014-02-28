@@ -5,11 +5,11 @@ from tastypie.authorization import Authorization
 from bridges.api.abstract_resources import ThroughModelResource
 from apps.models import App, AppInstall, AppDevicePermission
 
-#from bridges.api.abstract_resources import CBModelResource
+from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AppDevicePermissionResource(ModelResource):
+class AppDevicePermissionResource(CBModelResource):
 
     device_install = cb_fields.ToOneThroughField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
     app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
@@ -21,6 +21,7 @@ class AppDevicePermissionResource(ModelResource):
        detail_allowed_methods = ['get', 'post', 'put', 'delete']
        always_return_data = True
        resource_name = "app_device_permission"
+       post_match = ['app_install', 'device_install']
 
 class AppInstallResource(ModelResource):
 
@@ -38,6 +39,7 @@ class AppInstallResource(ModelResource):
        #detail_allowed_methods = ['get']
        always_return_data = True
        resource_name = 'app_install'
+       include_in_post_match = ['name', 'manufacturer_name']
 
     '''
     def full_dehydrate(self, bundle, for_list=False):

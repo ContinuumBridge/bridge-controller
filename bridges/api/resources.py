@@ -111,7 +111,7 @@ class CurrentBridgeResource(ModelResource):
         queryset = Bridge.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
+        fields = ['id', 'email', 'name', 'date_joined', 'last_login']
         excludes = ['password', 'is_staff', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         #authorization = ReadOnlyAuthorization()

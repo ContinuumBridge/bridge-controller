@@ -3,17 +3,20 @@ CBApp.BridgeItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
     attributes : function () {
-      return {
-        // Show the bridge as active if it is the current bridge
-        class : (this.model === CBApp.currentBridge) ? 'active' : '',
-      };
+
+        console.log('name in BridgeItemView', this.model);
+        return {
+          // Show the bridge as active if it is the current bridge
+          class : (this.model === CBApp.currentBridge) ? 'active' : '',
+          name: this.model.get('name'),
+        };
     },
     template: '#bridgeItemViewTemplate',
 
     events: {
         'click': 'bridgeClick'
         //'click #interest-button': 'interestButtonClick',
-    },  
+    },
 
     bridgeClick: function() {
         CBApp.currentBridge = this.model;
