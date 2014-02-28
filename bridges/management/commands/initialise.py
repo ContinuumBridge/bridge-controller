@@ -119,6 +119,16 @@ class Command(NoArgsCommand):
             app = app_2
         )
 
+        appinstall_martins_bridge_app_1 = AppInstallFactory(
+            bridge = martins_bridge,
+            app = app_1
+        )
+
+        appinstall_martins_bridge_app_2 = AppInstallFactory(
+            bridge = martins_bridge,
+            app = app_2
+        )
+
         # Create some devices
         class DeviceFactory(factory.DjangoModelFactory):
             FACTORY_FOR = Device
@@ -203,8 +213,25 @@ class Command(NoArgsCommand):
             bridge = petes_bridge,
             device = device_2,
             friendly_name = 'Tag 8212',
+            mac_addr = '1C:BA:8C:20:C3:81'
+        )
+
+        device_install_martins_bridge_device_1 = DeviceInstallFactory(
+            adaptor = adaptor_1,
+            bridge = martins_bridge,
+            device = device_1,
+            friendly_name = 'Tag C381',
             mac_addr = '90:59:AF:0B:82:12'
         )
+
+        device_install_martins_bridge_device_2 = DeviceInstallFactory(
+            adaptor = adaptor_2,
+            bridge = martins_bridge,
+            device = device_2,
+            friendly_name = 'Tag 8212',
+            mac_addr = '90:59:AF:0B:82:12'
+        )
+
 
         # Install the adaptors with the devices
         '''
@@ -222,12 +249,12 @@ class Command(NoArgsCommand):
         )
         
         adaptor_install_3 = AdaptorInstallFactory(
-            device_install = device_install_petes_bridge_device_1,
+            device_install = device_install_martins_bridge_device_1,
             adaptor = adaptor_1
         )
         
         adaptor_install_4 = AdaptorInstallFactory(
-            device_install = device_install_petes_bridge_device_2,
+            device_install = device_install_martins_bridge_device_2,
             adaptor = adaptor_2
         )
         '''
@@ -257,24 +284,46 @@ class Command(NoArgsCommand):
         )
 
         AppDevicePermissionFactory(
-            app_install = appinstall_petes_bridge_app_1,
-            device_install = device_install_petes_bridge_device_1
+            app_install = appinstall_martins_bridge_app_1,
+            device_install = device_install_martins_bridge_device_1
         )
 
         AppDevicePermissionFactory(
-            app_install = appinstall_petes_bridge_app_2,
-            device_install = device_install_petes_bridge_device_1
+            app_install = appinstall_martins_bridge_app_2,
+            device_install = device_install_martins_bridge_device_1
         )
 
         AppDevicePermissionFactory(
-            app_install = appinstall_petes_bridge_app_1,
-            device_install = device_install_petes_bridge_device_2
+            app_install = appinstall_martins_bridge_app_1,
+            device_install = device_install_martins_bridge_device_2
         )
 
         AppDevicePermissionFactory(
-            app_install = appinstall_petes_bridge_app_2,
-            device_install = device_install_petes_bridge_device_2
+            app_install = appinstall_martins_bridge_app_2,
+            device_install = device_install_martins_bridge_device_2
         )
+
+        AppDevicePermissionFactory(
+            app_install = appinstall_martins_bridge_app_1,
+            device_install = device_install_martins_bridge_device_1
+        )
+
+        AppDevicePermissionFactory(
+            app_install = appinstall_martins_bridge_app_2,
+            device_install = device_install_martins_bridge_device_1
+        )
+
+        AppDevicePermissionFactory(
+            app_install = appinstall_martins_bridge_app_1,
+            device_install = device_install_martins_bridge_device_2
+        )
+
+        AppDevicePermissionFactory(
+            app_install = appinstall_martins_bridge_app_2,
+            device_install = device_install_martins_bridge_device_2
+        )
+
+
 
 
 
