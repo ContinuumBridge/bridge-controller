@@ -108,24 +108,30 @@ function PortalController(socketPort) {
             publicationAddresses.push(bridgeAddress);
         });
 
-        portalController.redis.publishAll = function(message) {
-            
+        portalController.redis.publish = function(address, message) {
+
             // Ensure the message is a string
             if (typeof message == 'object') {
                 var jsonMessage = JSON.stringify(message);
             } else if (typeof message == 'string') {
                 var jsonMessage = message;
             } else {
-                console.error('This message is not an object or a string', message); 
+                console.error('This message is not an object or a string', message);
                 return;
             }
+
+            portalController.redis.pubClient.publish(address, jsonMessage);
+            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
+        };
+
+        portalController.redis.publishAll = function(message) {
+
             // Publish message to each bridge address
             publicationAddresses.forEach(function(publicationAddress) {
 
-                portalController.redis.pubClient.publish(publicationAddress, jsonMessage);
-                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
+                portalController.redis.publish(publicationAddress, message);
             });
-        }
+        };
 
         socket.on('message', function (message) {
 

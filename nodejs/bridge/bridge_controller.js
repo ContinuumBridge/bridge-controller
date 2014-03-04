@@ -70,26 +70,31 @@ function BridgeController(port){
             controllerAddress = 'UID' + controller.user.id;
             publicationAddresses.push(controllerAddress);
         });
- 
-        bridgeController.redis.publishAll = function(message) {
-    
+
+        bridgeController.redis.publish = function(address, message) {
+
             // Ensure the message is a string
             if (typeof message == 'object') {
                 var jsonMessage = JSON.stringify(message);
             } else if (typeof message == 'string') {
                 var jsonMessage = message;
             } else {
-                console.error('This message is not an object or a string', message); 
+                console.error('This message is not an object or a string', message);
                 return;
-            }   
+            }
+
+            bridgeController.redis.pubClient.publish(address, jsonMessage);
+            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
+        };
+
+        bridgeController.redis.publishAll = function(message) {
 
             // Publish message to each portal address
             publicationAddresses.forEach(function(publicationAddress) {
 
-                bridgeController.redis.pubClient.publish(publicationAddress, jsonMessage);
-                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
+                bridgeController.redis.publish(publicationAddress, message);
             });
-        }   
+        };
 
         // Subscription to Redis
         bridgeController.redis.subClient.subscribe(subscriptionAddress);

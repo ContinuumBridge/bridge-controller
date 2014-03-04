@@ -4,9 +4,22 @@ $(document).ready(function(){
   socket.on('connect', function(){
 	console.log("connect");
   });
-  
-  //var entry_el = $('#comment');
-		   
+
+  socket.publish = function(message) {
+
+      if (typeof message == 'object') {
+          var jsonMessage = JSON.stringify(message);
+      } else if (typeof message == 'string') {
+          var jsonMessage = message;
+      } else {
+          console.error('This message is not an object or a string', message);
+          return;
+      }
+      socket.emit('message', jsonMessage, function(data){
+          console.log(data);
+      });
+  }
+
   socket.on('message', function(message) {
 	//Escape HTML characters
 	var data = message.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
