@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^api/user/', include(users_v1.urls)),
-    (r'^api/bridge/', include(bridges_v1.urls)),
+    (r'^api/bridge/', include(bridges_v1.urls))
 )
 
 if settings.DEBUG:
