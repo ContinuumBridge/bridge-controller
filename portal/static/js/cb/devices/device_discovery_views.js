@@ -99,8 +99,8 @@ CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
     discover: function() {
 
         var message = {};
-        message.message = "discover";
-        message.body = "start";
+        message.message = "command";
+        message.body = "discover";
         window.socket.publish(message, function(data){
             console.log(data);
         });
