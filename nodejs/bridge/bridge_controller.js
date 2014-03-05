@@ -145,8 +145,8 @@ function BridgeController(port){
             */
             console.log('A request was received');
             if (message
-                && message.msg == 'request'
-                && message.req == 'get'
+                && message.message == 'request'
+                && message.request == 'get'
                 && message.url == '/api/bridge/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
