@@ -9,7 +9,6 @@ CBApp.CommandsView = Marionette.ItemView.extend({
         'click #start': 'startClick',
         'click #stop': 'stopClick',
         'click #update': 'updateClick',
-        'click #config': 'configClick',
         'click #restart': 'restart',
         'click #reboot': 'reboot',
         'click #upgrade': 'upgrade'
@@ -52,18 +51,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
 
         var message = {};
         message.message = "command";
-        message.body = "update";
-        window.socket.publish(message, function(data){
-            console.log(data);
-        });
-
-    },
-    
-    configClick: function() {
-
-        var message = {};
-        message.message = "command";
-        message.body = "configure";
+        message.body = "update_config";
         window.socket.publish(message, function(data){
             console.log(data);
         });
