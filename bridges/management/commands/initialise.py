@@ -108,13 +108,13 @@ class Command(NoArgsCommand):
         class CBAppFactory(factory.DjangoModelFactory):
             FACTORY_FOR = App
             provider = "Continuum Bridge",
-            version = "0.0.0",
+            version = "0.0.1",
             url = "test.url.for.this.app.com",
 
         app_1 = CBAppFactory(
-            name = "UWE Test App",
-            description = "This is a description of Test App 1",
-            exe = "uwe_app.py"
+            name = "EEW Test App",
+            description = "",
+            exe = "eew_app.py"
         )
 
         app_2 = CBAppFactory(
