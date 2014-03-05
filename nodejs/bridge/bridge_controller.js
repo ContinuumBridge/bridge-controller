@@ -112,6 +112,7 @@ function BridgeController(port){
             message.source = "BID" + socket.handshake.authData.id;
             message.sessionID = socket.handshake.query.sessionID;
 
+            /*
             var response = Q.defer();
 
             response.promise.then(function(message) {
@@ -141,11 +142,11 @@ function BridgeController(port){
             //console.log('SessionID is', socket.handshake.query.sessionID);
             //var sessionID = socket.handshake.query.sessionID;
 
-            /*
-            if (message 
+            */
+            if (message
                 && message.msg == 'req'
                 && message.req == 'get'
-                && message.uri == '/api/v1/current_bridge/bridge') {
+                && message.uri == '/api/bridge/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
 
@@ -171,7 +172,6 @@ function BridgeController(port){
                     socket.emit('message', JSON.stringify(res));
                 });
             }
-             */
             bridgeController.redis.publishAll(message);
         });
 
