@@ -143,10 +143,11 @@ function BridgeController(port){
             //var sessionID = socket.handshake.query.sessionID;
 
             */
+            console.log('A request was received');
             if (message
-                && message.msg == 'req'
+                && message.msg == 'request'
                 && message.req == 'get'
-                && message.uri == '/api/bridge/v1/current_bridge/bridge') {
+                && message.url == '/api/bridge/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
 
