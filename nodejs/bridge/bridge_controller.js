@@ -103,6 +103,8 @@ function BridgeController(port){
 
             message = JSON.parse(jsonMessage);
             message.source = "BID" + socket.handshake.authData.id;
+            console.log('Session query', socket.handshake.query);
+            //message.from = socke
             message.sessionID = socket.handshake.query.sessionID;
 
             var response = Q.defer();
