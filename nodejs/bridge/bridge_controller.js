@@ -117,6 +117,7 @@ function BridgeController(port){
             response.promise.then(function(message) {
 
                 console.log('promise resolved', message);
+                socket.emit('message', JSON.stringify(message));
 
             }, function(error) {
 
