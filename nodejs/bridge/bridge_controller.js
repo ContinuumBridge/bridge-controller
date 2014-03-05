@@ -150,7 +150,7 @@ function BridgeController(port){
 
                 console.log('Request was received');
 
-                var djangoURL = DJANGO_URL + 'api/v1/current_bridge/bridge';
+                var djangoURL = DJANGO_URL + 'api/bridge/v1/current_bridge/bridge';
                 var djangoOptions = {
                     method: "get",
                     headers: {
@@ -165,8 +165,8 @@ function BridgeController(port){
                     //res.end(data);
                     console.log('Response from django for bridge data is', response);
                     res = {};
-                    res.msg = 'response';
-                    res.uri = '/api/v1/current_bridge/bridge';
+                    res.message = 'response';
+                    res.url = '/api/bridge/v1/current_bridge/bridge';
                     res.body = data;
                     console.log('Data is', data);
                     socket.emit('message', JSON.stringify(res));
