@@ -5,19 +5,18 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         appSection: '#app-section',
         deviceSection: '#device-section',
         deviceDiscoverySection: '#device-discovery-section',
-        commandPanel: '#command-panel',
+        commandPanel: '#command-panel'
     },  
     onRender: function() {
         console.log('HomeLayoutView rendered', this);
 
-        //CBApp.filteredAppCollection.filter(CBApp.filters.currentBridge('appInstalls'));
-        var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.appInstallCollection });
+        CBApp.filteredAppInstallCollection.filter(CBApp.filters.currentBridge());
+        var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.filteredAppInstallCollection });
         this.appSection.show(appLayoutView);
 
-        //CBApp.filteredDeviceInstallCollection.filter(CBApp.filters.currentBridge('deviceInstalls'));
-
         // deviceLayoutView takes the deviceInstall collection
-        var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.deviceInstallCollection }); 
+        CBApp.filteredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
+        var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.filteredDeviceInstallCollection });
         this.deviceSection.show(deviceLayoutView);
 
         //CBApp.filteredDeviceCollection.where({ name: 'Test Device 2'});

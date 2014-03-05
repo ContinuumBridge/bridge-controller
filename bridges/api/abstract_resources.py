@@ -16,6 +16,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
+from tastypie.exceptions import NotFound, BadRequest, InvalidFilterError, HydrationError, InvalidSortError, ImmediateHttpResponse, Unauthorized
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
 from tastypie.resources import DeclarativeMetaclass
 from tastypie.utils import is_valid_jsonp_callback_value, dict_strip_unicode_keys, trailing_slash
@@ -123,7 +124,7 @@ class CBModelResource(ModelResource):
 
                 # Extract the id from foreign key resource uri
                 if isinstance(value, basestring) and field != 'resource_uri':
-                    related_id = re.search('/\w*/\w*/\w*/([0-9]*)', value)
+                    related_id = re.search('/\w*/\w*/\w*/\w*/([0-9]*)', value)
                     if related_id  and related_id.groups()[0]:
                         search_fields[field] = int(related_id.groups()[0])
                     else:

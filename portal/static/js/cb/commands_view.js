@@ -12,6 +12,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
         'click #config': 'configClick',
         'click #restart': 'restart',
         'click #reboot': 'reboot',
+        'click #upgrade': 'upgrade'
     },
 
     onRender: function() {
@@ -26,52 +27,81 @@ CBApp.CommandsView = Marionette.ItemView.extend({
     },
     
     startClick: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "start"}', function(data){
+
+        var message = {};
+        message.message = "command";
+        message.body = "start";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
     
     },
     
     stopClick: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "stop"}', function(data){
+
+        var message = {};
+        message.message = "command";
+        message.body = "stop";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
-    
+
     },
     
     updateClick: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "update"}', function(data){
+
+        var message = {};
+        message.message = "command";
+        message.body = "update";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
-    
+
     },
     
     configClick: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "update_config"}', function(data){
+
+        var message = {};
+        message.message = "command";
+        message.body = "configure";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
-    
+
     },
     
     restart: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "restart"}', function(data){
+
+        var message = {};
+        message.message = "command";
+        message.body = "restart";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
-    
+
     },
     
     reboot: function() {
-    
-        window.socket.emit('message', '{"msg": "cmd", "body": "reboot"}', function(data){
+
+
+        var message = {};
+        message.message = "command";
+        message.body = "reboot";
+        window.socket.publish(message, function(data){
             console.log(data);
         });
-    
+
+
     },
 
+    upgrade: function() {
+
+        var message = {};
+        message.message = "command";
+        message.body = "upgrade";
+        window.socket.publish(message, function(data){
+            console.log(data);
+        });
+    }
 });
 

@@ -12,7 +12,7 @@ var backendAuth = require('../backend_auth.js'),
 
 /* Bridge Controller */
 
-var DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/' : 'http://localhost:8000/'
+var DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
 module.exports = BridgeController;
 
 function BridgeController(port){
@@ -34,7 +34,7 @@ function BridgeController(port){
 
                 console.log('bridgeController sessionID is:', data.query.sessionID);
                 var sessionID = data.query.sessionID;
-                var bridgeAuthURL = DJANGO_URL + 'api/v1/current_bridge/bridge/';
+                var bridgeAuthURL = DJANGO_URL + 'current_bridge/bridge/';
 
                 backendAuth(bridgeController.redis.authClient, bridgeAuthURL, sessionID).then(function(authData) {
 
@@ -99,9 +99,11 @@ function BridgeController(port){
         // Subscription to Redis
         bridgeController.redis.subClient.subscribe(subscriptionAddress);
         bridgeController.redis.subClient.on('message', function(channel, message) {
-    
-            socket.emit('message', message);
-            //console.log('Bridge received', message, 'on channel', channel); 
+
+            if (channel==subscriptionAddress) {
+                socket.emit('message', message);
+                console.log('Bridge received', message, 'on channel', channel);
+            }
         }); 
 
         socket.on('message', function (jsonMessage) {

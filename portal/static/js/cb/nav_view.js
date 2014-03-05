@@ -3,14 +3,11 @@ CBApp.BridgeItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
     attributes : function () {
-
-        console.log('name in BridgeItemView', this.model);
         return {
-          // Show the bridge as active if it is the current bridge
-          class : (this.model === CBApp.currentBridge) ? 'active' : '',
-          name: this.model.get('name'),
+          name: this.model.get('name')
         };
     },
+
     template: '#bridgeItemViewTemplate',
 
     events: {
@@ -19,7 +16,23 @@ CBApp.BridgeItemView = Marionette.ItemView.extend({
     },
 
     bridgeClick: function() {
-        CBApp.currentBridge = this.model;
+        CBApp.controller.setCurrentBridge(this.model);
+    },
+
+    modelEvents: {
+        'change': 'modelChange'
+    },
+
+    modelChange: function() {
+        console.log('modelChange fired', this.model.get('name'), this.model.get('current'));
+        this.render();
+    },
+
+    onRender: function() {
+
+        // Show the bridge as active if it is the current bridge
+        var active = this.model.get('current') ? 'active' : '';
+        $(this.el).attr('class', active);
     }
 });
 
@@ -31,8 +44,12 @@ CBApp.BridgeDropdownView = Marionette.CompositeView.extend({
     itemViewContainer: '#bridge-list',
     template: '#bridgeDropdownTemplate',
 
+    initialize: function () {
+        console.log('BridgeDropdownView Initialized');
+    },
+
     onRender : function(){
-      //console.log("DeviceListView Rendered")
+      console.log("DeviceListView Rendered")
       //this.setElement('Test Html');
     }
 });
@@ -51,7 +68,9 @@ CBApp.NavLayoutView = Marionette.Layout.extend({
 
     onRender: function() {
         console.log('NavLayoutView rendered', this);
-        var bridgeDropdownView = new CBApp.BridgeDropdownView({ collection: CBApp.bridgeCollection });
+        var bridgeDropdownView = new CBApp.BridgeDropdownView({
+            collection: CBApp.bridgeCollection
+        });
         this.navbarLeft.show(bridgeDropdownView);
     }   
 });

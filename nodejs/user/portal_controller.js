@@ -18,7 +18,7 @@ var cookie_reader = require('cookie');
 /* App Controller */
 console.log('Environment is', process.env.NODE_ENV);
 
-DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
+DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/user/v1/' : 'http://localhost:8000/api/user/v1/'
 console.log('DJANGO_URL', DJANGO_URL);
 module.exports = PortalController;
 
@@ -133,9 +133,10 @@ function PortalController(socketPort) {
             });
         };
 
-        socket.on('message', function (message) {
+        socket.on('message', function (jsonMessage) {
 
-            portalController.redis.publishAll(message);
+            var message = JSON.parse(jsonMessage);
+            portalController.redis.publish(message.destination, message);
         });
 
         // Subscription

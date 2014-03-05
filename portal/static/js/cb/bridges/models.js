@@ -28,6 +28,11 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
         */
     },
 
+    setCurrent: function(bridge) {
+
+
+    },
+
     relations: [
         {   
             type: Backbone.HasMany,
@@ -67,7 +72,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             includeInJSON: true,
             initializeCollection: 'deviceInstallCollection',
         }    
-    ],
+    ]
 }); 
 
 CBApp.BridgeCollection = Backbone.Collection.extend({
@@ -82,8 +87,24 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     parse : function(response){
         console.log('response was %s', response);
         return response.objects;
-    },
+    }
 });
+
+CBApp.getCurrentBridge = function() {
+
+    var currentBridges = CBApp.bridgeCollection.where({current: true})
+
+    if (!currentBridges[0]) console.error('There is no current bridge');
+    if (currentBridges.length > 1) console.error('There is more than one current bridge');
+
+    if (currentBridges[0] instanceof Backbone.Model) {
+        return currentBridges[0];
+    } else {
+        console.error('Could not get currentBridge, instead got', currentBridge);
+    }
+};
+
+
 
 CBApp.BridgeControl = Backbone.RelationalModel.extend({
 

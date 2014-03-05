@@ -5,7 +5,24 @@ $(document).ready(function() {
   socket.on('connect', function(){
 	console.log("connect");
   });
-  
+
+  socket.publish = function(message) {
+
+      message.destination = "BID" + CBApp.getCurrentBridge().get('id');
+      console.log('destination is', message)
+      if (typeof message == 'object') {
+          var jsonMessage = JSON.stringify(message);
+      } else if (typeof message == 'string') {
+          var jsonMessage = message;
+      } else {
+          console.error('This message is not an object or a string', message);
+          return;
+      }
+      socket.emit('message', jsonMessage, function(data){
+          console.log(data);
+      });
+  };
+
   /*var socket = window.socket = io.connect('54.200.16.244', {port: 4000});
   
   socket.on('connect', function(){
