@@ -13,7 +13,7 @@ function apiRouter(request, response){
 
     switch (url) {
 
-        case 'api/v1/current_bridge/bridge':
+        case 'api/bridge/v1/current_bridge/bridge':
             //response.reject('Rejected!');
             djangoNode(request, response);
             break;
