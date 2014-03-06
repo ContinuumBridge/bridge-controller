@@ -9,6 +9,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
         'click #start': 'startClick',
         'click #stop': 'stopClick',
         'click #update': 'updateClick',
+        'click #send-log': 'sendLog',
         'click #restart': 'restart',
         'click #reboot': 'reboot',
         'click #upgrade': 'upgrade'
@@ -57,7 +58,18 @@ CBApp.CommandsView = Marionette.ItemView.extend({
         });
 
     },
-    
+
+    sendLog: function() {
+
+        var message = {};
+        message.message = "command";
+        message.body = "send_log";
+        window.socket.publish(message, function(data){
+            console.log(data);
+        });
+
+    },
+
     restart: function() {
 
         var message = {};
