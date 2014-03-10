@@ -16,7 +16,7 @@ class App(LoggedModelMixin):
     provider = models.CharField(_("provider"), max_length = 255)
     version = models.CharField(_("version"), max_length = 255)
     url = models.URLField(_("url"), max_length = 255)
-    exe = models.URLField(_("exe"), max_length = 255)
+    exe = models.CharField(_("exe"), max_length = 255)
 
     class Meta:
         verbose_name = _('app')

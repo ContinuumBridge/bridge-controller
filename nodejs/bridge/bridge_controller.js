@@ -1,19 +1,18 @@
 
-var io = require('socket.io');
-
-var redis = require('socket.io/node_modules/redis'),
+var io = require('socket.io'),
+    redis = require('socket.io/node_modules/redis'),
     Bacon = require('baconjs').Bacon,
-    Q = require('q');
-
-var rest = require('restler');
+    Q = require('q'),
+    rest = require('restler');
 
 var backendAuth = require('../backend_auth.js'),
-    django = require('./django.js'),
-    apiRouter = require('./apiRouter.js');
+    django = require('./django_node.js'),
+    thirdPartyRouter = require('./third_party_router.js'),
+    apiRouter = require('./api_router.js');
 
 /* Bridge Controller */
 
-var DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
+var DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
 module.exports = BridgeController;
 
 function BridgeController(port){
@@ -49,7 +48,6 @@ function BridgeController(port){
                     accept('error', false);
                 });
             }
-            //return accept('error', false);
         });
     });
 
@@ -72,46 +70,69 @@ function BridgeController(port){
             controllerAddress = 'UID' + controller.user.id;
             publicationAddresses.push(controllerAddress);
         });
- 
-        bridgeController.redis.publishAll = function(message) {
-    
+
+        bridgeController.redis.publish = function(address, message) {
+
             // Ensure the message is a string
             if (typeof message == 'object') {
                 var jsonMessage = JSON.stringify(message);
             } else if (typeof message == 'string') {
                 var jsonMessage = message;
             } else {
-                console.error('This message is not an object or a string', message); 
+                console.error('This message is not an object or a string', message);
                 return;
-            }   
+            }
+
+            bridgeController.redis.pubClient.publish(address, jsonMessage);
+            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
+        };
+
+        bridgeController.redis.publishAll = function(message) {
 
             // Publish message to each portal address
             publicationAddresses.forEach(function(publicationAddress) {
 
-                bridgeController.redis.pubClient.publish(publicationAddress, jsonMessage);
-                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
+                bridgeController.redis.publish(publicationAddress, message);
             });
-        }   
+        };
 
         // Subscription to Redis
         bridgeController.redis.subClient.subscribe(subscriptionAddress);
         bridgeController.redis.subClient.on('message', function(channel, message) {
-    
-            socket.emit('message', message);
-            //console.log('Bridge received', message, 'on channel', channel); 
+
+            if (channel==subscriptionAddress) {
+                socket.emit('message', message);
+                console.log('Bridge received', message, 'on channel', channel);
+            }
         }); 
 
         socket.on('message', function (jsonMessage) {
 
             message = JSON.parse(jsonMessage);
-            console.log('Session query', socket.handshake.query);
-            //message.from = socke
+            message.source = "BID" + socket.handshake.authData.id;
             message.sessionID = socket.handshake.query.sessionID;
+
+            /*
+            var response = Q.defer();
+
+            response.promise.then(function(message) {
+
+                console.log('promise resolved', message);
+                socket.emit('message', JSON.stringify(message));
+
+            }, function(error) {
+
+                console.log('promise error', error);
+            });
 
             switch (message.message) {
 
                 case 'request':
-                    apiRouter(message);
+                    apiRouter(message, response);
+                    break;
+
+                case 'wrapper':
+                    thirdPartyRouter(message, response);
                     break;
 
                 default:
@@ -121,14 +142,16 @@ function BridgeController(port){
             //console.log('SessionID is', socket.handshake.query.sessionID);
             //var sessionID = socket.handshake.query.sessionID;
 
-            if (message 
-                && message.msg == 'req'
-                && message.req == 'get'
-                && message.uri == '/api/v1/current_bridge/bridge') {
+            */
+            console.log('A request was received');
+            if (message
+                && message.message == 'request'
+                && message.request == 'get'
+                && message.url == '/api/bridge/v1/current_bridge/bridge') {
 
                 console.log('Request was received');
 
-                var djangoURL = DJANGO_URL + 'current_bridge/bridge'
+                var djangoURL = DJANGO_URL + 'current_bridge/bridge';
                 var djangoOptions = {
                     method: "get",
                     headers: {
@@ -143,17 +166,13 @@ function BridgeController(port){
                     //res.end(data);
                     console.log('Response from django for bridge data is', response);
                     res = {};
-                    res.msg = 'response';
-                    res.uri = '/api/v1/current_bridge/bridge';
+                    res.message = 'response';
+                    res.url = '/api/bridge/v1/current_bridge/bridge';
                     res.body = data;
                     console.log('Data is', data);
                     socket.emit('message', JSON.stringify(res));
                 });
             }
-            //console.log('Bridge Controller message >', jsonMessage);
-            //messageJSON= JSON.stringify(message);
-            //console.log('The bridge sent', message);
-            //console.log('The bridge sent JSON', messageJSON);
             bridgeController.redis.publishAll(message);
         });
 

@@ -1,20 +1,13 @@
-from django.conf.urls import patterns, url, include
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
-from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
+from tastypie.resources import ModelResource
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
-from tastypie import fields
-
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
-from tastypie.resources import ObjectDoesNotExist
-from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
 from accounts.models import CBUser
 from bridges.models import BridgeControl
 
 from bridges.api import cb_fields
-from bridges.api.resources import BridgeResource, BridgeControlResource
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import CurrentUserAuthorization

@@ -8,7 +8,8 @@ from django.views.generic.base import TemplateView
 
 from django.conf import settings
 
-from bridges.api.api import v1
+from accounts.api.api import v1 as users_v1
+from bridges.api.api import v1 as bridges_v1
 
 urlpatterns = patterns('',
     # Examples:
@@ -26,7 +27,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    (r'^api/', include(v1.urls)),
+    (r'^api/user/', include(users_v1.urls)),
+    (r'^api/bridge/', include(bridges_v1.urls))
 )
 
 if settings.DEBUG:

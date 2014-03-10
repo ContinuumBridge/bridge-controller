@@ -35,16 +35,15 @@ CBApp.addInitializer(function () {
 
   //data
   CBApp.appCollection = new CBApp.AppCollection();
-  CBApp.filteredAppCollection = new CBApp.FilteredCollection(CBApp.appCollection);
 
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
+  CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
-  CBApp.filteredDeviceCollection = CBApp.FilteredCollection(CBApp.deviceCollection);
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
 
@@ -123,6 +122,16 @@ CBApp.Controller = Marionette.Controller.extend({
     });
     CBApp.portalLayout.modalsRegion.show(installDeviceModal);
     //CBApp.portalLayout.modalsRegion.show(new CBApp.InstallDeviceModal());
+  },
+  setCurrentBridge: function(bridge) {
+
+      var currentBridges = CBApp.bridgeCollection.where({current: true})
+      for (i=0; i < currentBridges.length; i++) {
+          currentBridges[i].set('current', false);
+      }
+
+      bridge.set('current', true);
+      CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
   }
   /*
   setState: function (db, collection, id) {

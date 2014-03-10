@@ -18,7 +18,7 @@ var cookie_reader = require('cookie');
 /* App Controller */
 console.log('Environment is', process.env.NODE_ENV);
 
-DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/v1/' : 'http://localhost:8000/api/v1/'
+DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/user/v1/' : 'http://localhost:8000/api/user/v1/'
 console.log('DJANGO_URL', DJANGO_URL);
 module.exports = PortalController;
 
@@ -108,28 +108,35 @@ function PortalController(socketPort) {
             publicationAddresses.push(bridgeAddress);
         });
 
-        portalController.redis.publishAll = function(message) {
-            
+        portalController.redis.publish = function(address, message) {
+
             // Ensure the message is a string
             if (typeof message == 'object') {
                 var jsonMessage = JSON.stringify(message);
             } else if (typeof message == 'string') {
                 var jsonMessage = message;
             } else {
-                console.error('This message is not an object or a string', message); 
+                console.error('This message is not an object or a string', message);
                 return;
             }
+
+            portalController.redis.pubClient.publish(address, jsonMessage);
+            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
+        };
+
+        portalController.redis.publishAll = function(message) {
+
             // Publish message to each bridge address
             publicationAddresses.forEach(function(publicationAddress) {
 
-                portalController.redis.pubClient.publish(publicationAddress, jsonMessage);
-                console.log(subscriptionAddress, '=>', publicationAddress, '    ',  jsonMessage);
+                portalController.redis.publish(publicationAddress, message);
             });
-        }
+        };
 
-        socket.on('message', function (message) {
+        socket.on('message', function (jsonMessage) {
 
-            portalController.redis.publishAll(message);
+            var message = JSON.parse(jsonMessage);
+            portalController.redis.publish(message.destination, message);
         });
 
         // Subscription

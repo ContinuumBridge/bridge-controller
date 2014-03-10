@@ -4,9 +4,9 @@ $(document).ready(function(){
   socket.on('connect', function(){
 	console.log("connect");
   });
-  
-  //var entry_el = $('#comment');
-		   
+
+
+
   socket.on('message', function(message) {
 	//Escape HTML characters
 	var data = message.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");

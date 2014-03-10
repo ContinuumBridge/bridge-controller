@@ -6,7 +6,11 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
     initialize: function() {
 
         var bridgeControlArray = this.get('bridgeControls');
-        CBApp.currentBridge = bridgeControlArray.at(0).get('bridge');
+        //CBApp.currentBridge = bridgeControlArray.at(0).get('bridge');
+
+        // Set the current bridge
+        var currentBridge = bridgeControlArray.at(0).get('bridge');
+        currentBridge.set('current', true);
 
         // Instantiate some BridgeControl models
         /*
@@ -44,7 +48,7 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
             }
             */
         }
-    ],
+    ]
 }); 
 
 CBApp.CurrentUserCollection = Backbone.Collection.extend({
@@ -59,6 +63,6 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
     parse : function(response){
         console.log('response was %s', response);
         return response.objects;
-    },
+    }
 });
 

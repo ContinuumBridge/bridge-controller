@@ -78,7 +78,7 @@ CBApp.AppView = Marionette.ItemView.extend({
 
         console.log('savedAppDevicePermissionCollection', savedAppDevicePermissionCollection);
 
-        var appDevicePermissionArray = CBApp.currentBridge.get('deviceInstalls').map(function(deviceInstall) {
+        var appDevicePermissionArray = CBApp.getCurrentBridge().get('deviceInstalls').map(function(deviceInstall) {
 
             console.log('appDevicePermission', deviceInstall.get('appDevicePermission'));
 

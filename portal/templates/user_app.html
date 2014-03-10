@@ -31,26 +31,21 @@
 	<!-- <script src="http://localhost/appgyver/cordova.js"></script>
 	<script src="components/steroids-js/steroids.js"></script> -->
 	
-    <script src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
-    <script src="{{ STATIC_URL }}js/underscore.js"></script>
-    <script src="{{ STATIC_URL }}js/socket.io.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone-relational.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone.marionette.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone.io.js"></script>
-    <script src="{{ STATIC_URL }}js/backbone.modal-bundled-min.js"></script>
-    <!--<script src="{{ STATIC_URL }}js/marionette.bossview.js"></script>-->
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}js/theme.js"></script>
-    <script src="{{ STATIC_URL }}js/svg.min.js"></script>
-    <script src="{{ STATIC_URL }}js/svg.import.min.js"></script>
-    <script src="{{ STATIC_URL }}js/humanize.js"></script>
-    <script src="{{ STATIC_URL }}js/date.js"></script>
-    <script src="{{ STATIC_URL }}js/ICanHaz.js"></script>
-    <script src="{{ STATIC_URL }}js/list.js"></script>
-    <!--<script src="{{ STATIC_URL }}js/greensock-v12-js/minified/TweenLite.min.js"></script>
-    <script src="{{ STATIC_URL }}js/greensock-v12-js/minified/plugins/CSSPlugin.min.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/jquery-1.9.1.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/jquery.cookie.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/underscore.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/socket.io.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone-relational.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.marionette.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.io.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/backbone.modal-bundled-min.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/bootstrap/bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/theme.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/ICanHaz.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/list.js"></script>
+    <!--<script src="{{ STATIC_URL }}js/vendor/greensock-v12-js/vendor/minified/TweenLite.min.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/greensock-v12-js/vendor/minified/plugins/CSSPlugin.min.js"></script>
     -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     
@@ -155,16 +150,19 @@
 		  <div id='update' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Update</button>
 		  </div>
+		  <div id='send-log' class="topcoat-button-bar__item">
+			<button class="topcoat-button-bar__button">Send Log</button>
+		  </div>
 		</div>
 	    <div class="topcoat-button-bar">
-		  <div id='config' class="topcoat-button-bar__item">
-			<button class="topcoat-button-bar__button">Config</button>
-		  </div>
 		  <div id='restart' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Restart</button>
 		  </div>
 		  <div id='reboot' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Reboot</button>
+		  </div>
+		  <div id='upgrade' class="topcoat-button-bar__item">
+			<button class="topcoat-button-bar__button">Upgrade</button>
 		  </div>
 		</div>
     	
@@ -222,7 +220,6 @@
       {% endif %}
     </script>
 
-	<!--<script src="javascripts/application.js"></script>--> 
 	<script src="{{ STATIC_URL }}js/cb/cb-backboneio.js"></script>
 	<!--<script src="{{ STATIC_URL }}js/cb/app-phonegap.js"></script>
     <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
@@ -232,7 +229,7 @@
     <script src="{{ STATIC_URL }}js/cb/views.js"></script>
     <script src="{{ STATIC_URL }}js/cb/router.js"></script>
     -->
-    
+
     <script src="{{ STATIC_URL }}js/cb/index.js"></script>
 
     <script src="{{ STATIC_URL }}js/cb/decorators.js"></script>

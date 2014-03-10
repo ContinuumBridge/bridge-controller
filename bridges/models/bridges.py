@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+from django.core.exceptions import ObjectDoesNotExist
 from uuid import uuid4
 import os
 import struct
@@ -21,11 +22,15 @@ class BridgeModelManager(BaseUserManager):
         now = timezone.now()
 
         if not email:
-            i = 0
-            bridge_id = uuid4().hex
-            email = bridge_id + '@continuumbridge.com'
-            #raise ValueError('The given email must be set')
-            
+            while True:
+                bridge_id = uuid4().hex[0:8]
+                email = bridge_id + '@continuumbridge.com'
+                try:
+                    existing_user = self.get_queryset().get(email=email)
+                except ObjectDoesNotExist:
+                    print "Bridge is unique!"
+                    break
+
         email = BridgeModelManager.normalize_email(email)
 
         if not password:

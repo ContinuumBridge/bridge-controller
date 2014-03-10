@@ -89,7 +89,7 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
     },
 
     relations: [
-        {  
+        {
             type: Backbone.HasOne,
             key: 'bridge',
             keySource: 'bridge',
@@ -98,9 +98,9 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.BridgeCollection',
             createModels: false,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeCollection',
+            initializeCollection: 'bridgeCollection'
         },  
-        {  
+        {
             type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
@@ -158,8 +158,9 @@ CBApp.DeviceInstallCollection = Backbone.Collection.extend({
     parse : function(response){
         console.log('response was %s', response);
         return response.objects;
-    },
+    }
 });
+
 
 CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
     
@@ -189,10 +190,11 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
         var adaptor = CBApp.Adaptor.findOrCreate(adaptorData);
         var device = CBApp.Device.findOrCreate(deviceData);
 
+        var currentBridge = CBApp.getCurrentBridge();
         // Instantiate the device_install model
         var deviceInstall = CBApp.DeviceInstall.findOrCreate({
                 adaptor: adaptor,
-                bridge: CBApp.currentBridge,
+                bridge: currentBridge,
                 device: device,
                 mac_addr: deviceInstallData.mac_addr
         });
