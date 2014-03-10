@@ -63,7 +63,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
 
         var message = {};
         message.message = "command";
-        message.body = "send_log";
+        message.body = "sendlog";
         window.socket.publish(message, function(data){
             console.log(data);
         });
