@@ -1,4 +1,12 @@
 
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+require('../apps/views');
+require('../devices/device_views');
+require('../devices/device_discovery_views');
+require('./commands_view');
+
 CBApp.HomeLayoutView = Marionette.Layout.extend({
     template: '#homeSectionTemplate',
     regions: {
@@ -19,9 +27,7 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.filteredDeviceInstallCollection });
         this.deviceSection.show(deviceLayoutView);
 
-        //CBApp.filteredDeviceCollection.where({ name: 'Test Device 2'});
-
-        var commandsView = new CBApp.CommandsView(); 
+        var commandsView = new CBApp.CommandsView();
         this.commandPanel.show(commandsView);
 
         var deviceDiscoveryLayoutView = new CBApp.DeviceDiscoveryLayoutView({ collection: CBApp.discoveredDeviceCollection });

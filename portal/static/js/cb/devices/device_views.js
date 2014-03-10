@@ -1,4 +1,7 @@
 
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
 CBApp.DeviceView = Marionette.ItemView.extend({
     
     tagName: 'li',

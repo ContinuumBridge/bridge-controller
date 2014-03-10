@@ -27,32 +27,15 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
 	<!-- Scripts -->
-	<!-- cordova.js is served from localhost to ensure the correct version -->
-	<!-- <script src="http://localhost/appgyver/cordova.js"></script>
-	<script src="components/steroids-js/steroids.js"></script> -->
-	
-    <script src="{{ STATIC_URL }}js/vendor/jquery-1.9.1.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/jquery.cookie.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/underscore.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/socket.io.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/backbone.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/backbone-relational.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/backbone.marionette.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/backbone.io.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/backbone.modal-bundled-min.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/bootstrap/bootstrap.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/theme.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/ICanHaz.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/list.js"></script>
-    <!--<script src="{{ STATIC_URL }}js/vendor/greensock-v12-js/vendor/minified/TweenLite.min.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/greensock-v12-js/vendor/minified/plugins/CSSPlugin.min.js"></script>
-    -->
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    
-    <!--
-	<script src="{{ STATIC_URL }}js/onerror.js"></script>
-	<script src="{{ STATIC_URL }}js/console.log.js"></script>
-    -->
+    <script type="application/javascript" charset="utf-8">
+      HOST_ADDRESS = '{{ host_address }}';
+      PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
+      {% if data %}
+      app = {loaded: true};
+      {% endif %}
+    </script>
+
+	<script src="{{ STATIC_URL }}bundle.js"></script>
 
     <script type="text/template" id="portalLayoutTemplate">
     	portalLayoutTemplate
@@ -138,8 +121,14 @@
     <script type="text/template" id="commandsTemplate">
 		<h2>Bridge Commands</h2>
 	    
-		<textarea id="commands" class="command-textarea" rows="6" ></textarea>
-		
+		<textarea id="console" class="command-textarea" rows="6" ></textarea>
+
+		<div class="input-group">
+          <input type="text" id="command-input" class="form-control">
+          <span class="input-group-btn">
+            <button id="send-button" class="btn btn-default" type="button">Send</button>
+          </span>
+        </div>
 	    <div class="topcoat-button-bar">
 		  <div id='start' class="topcoat-button-bar__item">
 			<button class="topcoat-button-bar__button">Start</button>
@@ -219,51 +208,6 @@
         </div>
     </script>
     	
-    <script type="application/javascript" charset="utf-8">
-      HOST_ADDRESS = '{{ host_address }}';
-      PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
-      {% if data %}
-      app = {loaded: true};
-      {% endif %}
-    </script>
-
-	<script src="{{ STATIC_URL }}js/cb/cb-backboneio.js"></script>
-	<!--<script src="{{ STATIC_URL }}js/cb/app-phonegap.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/command_views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/router.js"></script>
-    -->
-
-    <script src="{{ STATIC_URL }}js/cb/index.js"></script>
-
-    <script src="{{ STATIC_URL }}js/cb/decorators.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/filters.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/cb-models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/cb-views.js"></script>
-
-    <script src="{{ STATIC_URL }}js/cb/adaptors/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/apps/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/bridges/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/models.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/users/models.js"></script>
-
-    <script src="{{ STATIC_URL }}js/cb/apps/views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/device_views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/device_discovery_views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/devices/modal_views.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/commands_view.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/nav_view.js"></script>
-    <script src="{{ STATIC_URL }}js/cb/home_view.js"></script>
-
-    <script type="application/javascript" charset="utf-8">
-        $(function(){
-            CBApp.start();
-        })
-    </script>
-
 
 </head>
 <body id="app" class="pull_top">

@@ -66,6 +66,7 @@ class CurrentUserResource(ModelResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
+        print "Current user request.user.id is", request.user.id
         # Set the pk of the request to that of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id
