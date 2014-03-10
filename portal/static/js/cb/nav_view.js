@@ -54,6 +54,43 @@ CBApp.BridgeDropdownView = Marionette.CompositeView.extend({
     }
 });
 
+CBApp.NavAccountMenuView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    attributes : function () {
+        return {
+          name: this.model.get('name')
+        };
+    },
+
+    template: '#navAccountMenuTemplate',
+
+    events: {
+        'click #logout': 'bridgeClick'
+        //'click #interest-button': 'interestButtonClick',
+    },
+
+    bridgeClick: function() {
+        CBApp.controller.setCurrentBridge(this.model);
+    },
+
+    modelEvents: {
+        'change': 'modelChange'
+    },
+
+    modelChange: function() {
+        console.log('modelChange fired', this.model.get('name'), this.model.get('current'));
+        this.render();
+    },
+
+    onRender: function() {
+
+        // Show the bridge as active if it is the current bridge
+        var active = this.model.get('current') ? 'active' : '';
+        $(this.el).attr('class', active);
+    }
+});
+
 CBApp.NavLayoutView = Marionette.Layout.extend({
 
     template: '#navSectionTemplate',
@@ -61,13 +98,15 @@ CBApp.NavLayoutView = Marionette.Layout.extend({
 
     regions: {
         //bridgeDropdown: '#bridge-dropdown'
-        navbarLeft: '#navbar-left'
+        navbarLeft: '#navbar-left',
+        navbarRight: '#navbar-right'
         //bridgeDropdown: { selector: '#bridge-dropdown', regionType: CBApp.NowrapRegion }
         //bridgeList: { selector: '#bridge-list' }
     },  
 
     onRender: function() {
         console.log('NavLayoutView rendered', this);
+
         var bridgeDropdownView = new CBApp.BridgeDropdownView({
             collection: CBApp.bridgeCollection
         });

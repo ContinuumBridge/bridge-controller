@@ -183,10 +183,7 @@
             <ul id="navbar-left" class="nav navbar-nav navbar-left">
                 <li id="bridge-dropdown" class="dropdown"></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="index.html">HOME</a></li>
-                <li><a href="about-us.html">ABOUT US</a></li>
-                <li><a href="sign-in.html">Sign in</a></li>
+            <ul id="navbar-right" class="nav navbar-nav navbar-right">
             </ul>
         </div>
     </script>
@@ -196,9 +193,19 @@
         <ul id="bridge-list" class="dropdown-menu">
         </ul>
     </script>
-    
+
+
     <script type="text/template" id="bridgeItemViewTemplate">
         <a href="#"><%=name%></a>
+    </script>
+
+    <script type="text/template" id="navbarRightTemplate">
+        <li class="active"><a href="index.html">HOME</a></li>
+        <li><a href="about-us.html">ABOUT US</a></li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=name%><b class="caret"></b></a>
+        <ul id="bridge-list" class="dropdown-menu">
+            <li name="logout"><a href="#">Logout</a></li>
+        </ul>
     </script>
 
     <script type="text/template" id="homeSectionTemplate">
