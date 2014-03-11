@@ -31,6 +31,6 @@ CBApp.addInitializer(function() {
         var message = {};
         message.message = "command";
         message.body = command;
-        CBApp.publish(command);
+        CBApp.socket.publish(command);
     };
 });
