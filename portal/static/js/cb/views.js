@@ -8,10 +8,10 @@ CBApp.addInitializer(function () {
 
   CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
 
-  CBApp.navLayoutView = new CBApp.NavLayoutView();
+  CBApp.Nav.topBarLayoutView = new CBApp.Nav.TopBarLayoutView();
   CBApp.homeLayoutView = new CBApp.HomeLayoutView();
 
-  CBApp.portalLayout.navRegion.show(CBApp.navLayoutView);
+  CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarLayoutView);
   CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
 });
 

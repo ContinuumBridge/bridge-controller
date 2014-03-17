@@ -1,21 +1,24 @@
 
-var io = require('socket.io'),
-    redis = require('socket.io/node_modules/redis'),
-    Bacon = require('baconjs').Bacon,
-    Q = require('q'),
-    rest = require('restler');
+var Bacon = require('baconjs').Bacon
+    ,io = require('socket.io')
+    ,logger = require('../logger')
+    ,Q = require('q')
+    ,redis = require('redis')
+    ,rest = require('restler')
+    ;
 
-var backendAuth = require('../backend_auth.js'),
-    django = require('./django_node.js'),
-    thirdPartyRouter = require('./third_party_router.js'),
-    apiRouter = require('./api_router.js');
+var apiRouter = require('./api_router.js')
+    ,backendAuth = require('../backend_auth.js')
+    ,django = require('./django_node.js')
+    ,thirdPartyRouter = require('./third_party_router.js')
+    ;
 
 /* Bridge Controller */
 
 var DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
 module.exports = BridgeController;
 
-function BridgeController(port){
+function BridgeController(port) {
 
     var bridgeController = {};
 
@@ -32,7 +35,7 @@ function BridgeController(port){
 
             if (data && data.query && data.query.sessionID) {
 
-                console.log('bridgeController sessionID is:', data.query.sessionID);
+                logger.log('debug', 'bridgeController sessionID is:', data.query.sessionID);
                 var sessionID = data.query.sessionID;
                 var bridgeAuthURL = DJANGO_URL + 'current_bridge/bridge/';
 
@@ -40,11 +43,12 @@ function BridgeController(port){
 
                     data.authData = authData;
                     data.sessionID = sessionID;
+                    logger.log('debug', 'authData from backendAuth is', authData);
                     accept(null, true);
 
                 }, function(error) {
 
-                    console.log('backendAuth returned error:', error);
+                    logger.error(error);
                     accept('error', false);
                 });
             }
@@ -61,7 +65,7 @@ function BridgeController(port){
         var subscriptionAddress = 'BID' + authData.id;
         var publicationAddresses = new Array();
 
-        console.log('authData is', authData.controllers);
+        logger.log('debug', 'authData in on connection is', authData);
 
         // Publication to Redis
         authData.controllers.forEach(function(controller) {
@@ -84,7 +88,7 @@ function BridgeController(port){
             }
 
             bridgeController.redis.pubClient.publish(address, jsonMessage);
-            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
+            logger.info(subscriptionAddress, '=>', address, '    ',  jsonMessage);
         };
 
         bridgeController.redis.publishAll = function(message) {
@@ -112,12 +116,11 @@ function BridgeController(port){
             message.source = "BID" + socket.handshake.authData.id;
             message.sessionID = socket.handshake.query.sessionID;
 
-            /*
-            var response = Q.defer();
+            var end = Q.defer();
 
-            response.promise.then(function(message) {
+            end.promise.then(function(message) {
 
-                console.log('promise resolved', message);
+                logger.log('debug', 'promise resolved', message);
                 socket.emit('message', JSON.stringify(message));
 
             }, function(error) {
@@ -128,21 +131,22 @@ function BridgeController(port){
             switch (message.message) {
 
                 case 'request':
-                    apiRouter(message, response);
+                    apiRouter(message, end);
                     break;
 
                 case 'wrapper':
-                    thirdPartyRouter(message, response);
+                    thirdPartyRouter(message, end);
                     break;
 
                 default:
-                    console.warn('=> ');
+                    logger.warn('message.message does not match any specified', message);
+                    break;
 
-            }
+            };
             //console.log('SessionID is', socket.handshake.query.sessionID);
             //var sessionID = socket.handshake.query.sessionID;
 
-            */
+            /*
             console.log('A request was received');
             if (message
                 && message.message == 'request'
@@ -175,12 +179,14 @@ function BridgeController(port){
             }
             bridgeController.redis.publishAll(message);
         });
+        */
 
-        console.log('Server > New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address,     address.port, subscriptionAddress, authData.email, publicationAddresses);
+        logger.info('New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address, address.port, subscriptionAddress, authData.email, publicationAddresses);
 
         bridgeController.socket = socket;
     });
 
     return bridgeController;
-}
+})
+};
 

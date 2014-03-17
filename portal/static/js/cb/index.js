@@ -13,6 +13,9 @@ CBApp = new Marionette.Application({
     }
 });
 
+// Set up a "namespace" for the nav menu
+CBApp.Nav = {};
+
 CBApp.addInitializer(function () {
 
   //router

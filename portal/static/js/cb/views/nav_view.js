@@ -2,18 +2,34 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
+require('bootstrap');
+
 var CBApp = require('index');
 
-CBApp.BridgeItemView = Marionette.ItemView.extend({
+CBApp.Nav.BridgeItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
-    attributes : function () {
-        return {
-          name: this.model.get('name')
-        };
-    },
 
     template: '#bridgeItemViewTemplate',
+    /*
+    templateHelpers: function() {
+        helpers = {};
+        helpers.name = "Testing 2";
+        return helpers;
+        /*
+        name: function () {
+            console.warn('templateHelper is', this);
+            //return this.name;
+            return "Testing!";
+        }
+    },
+
+     */
+    serializeData: function(){
+        return {
+          "name": this.model.get('name')
+        }
+    },
 
     events: {
         'click': 'bridgeClick'
@@ -24,28 +40,32 @@ CBApp.BridgeItemView = Marionette.ItemView.extend({
         CBApp.controller.setCurrentBridge(this.model);
     },
 
+    /*
     modelEvents: {
         'change': 'modelChange'
     },
 
     modelChange: function() {
-        console.log('modelChange fired', this.model.get('name'), this.model.get('current'));
+        console.log('change fired', this.model.get('name'), this.model.get('current'));
         this.render();
     },
+    */
 
     onRender: function() {
 
         // Show the bridge as active if it is the current bridge
-        var active = this.model.get('current') ? 'active' : '';
-        $(this.el).attr('class', active);
+        //var active = this.model.get('current') ? 'active' : '';
+        //$(this.el).attr('class', active);
+        $(this.el).attr('class', '');
+        console.log('Bridge name is', this.model);
     }
 });
 
-CBApp.BridgeDropdownView = Marionette.CompositeView.extend({
+CBApp.Nav.BridgeDropdownView = Marionette.CompositeView.extend({
     
     tagName: 'li',
     className: 'dropdown',
-    itemView: CBApp.BridgeItemView,
+    itemView: CBApp.Nav.BridgeItemView,
     itemViewContainer: '#bridge-list',
     template: '#bridgeDropdownTemplate',
 
@@ -53,36 +73,60 @@ CBApp.BridgeDropdownView = Marionette.CompositeView.extend({
         console.log('BridgeDropdownView Initialized');
     },
 
+    collectionEvents: {
+        //'add': 'addBridge'
+    },
+
+    addBridge: function() {
+
+        CBApp.getCurrentBridge()
+        this.render();
+    },
+
     onRender : function(){
-      console.log("DeviceListView Rendered")
-      //this.setElement('Test Html');
+
+        console.log("DeviceListView Rendered")
     }
 });
 
-CBApp.NavAccountMenuView = Marionette.ItemView.extend({
+CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
 
     tagName: 'li',
-    attributes : function () {
-        return {
-          name: this.model.get('name')
-        };
-    },
+    className: 'dropdown',
 
     template: '#navAccountMenuTemplate',
 
+    attributes : function () {
+
+        return {
+            name: 'Test'
+        };
+
+        var currentUser = CBApp.getCurrentUser();
+
+        if (currentUser == false) {
+            return {
+                name: 'Test'
+            };
+        } else {
+            return {
+                name: CBApp.getCurrentUser().get('first_name')
+            };
+        }
+    },
+
+    serializeData: function(){
+        return {
+            "logout-url": "test-link"
+        }
+    },
+
     events: {
-        'click #logout': 'bridgeClick'
+        //'click #logout': 'bridgeClick'
         //'click #interest-button': 'interestButtonClick',
     },
 
-    bridgeClick: function() {
-        CBApp.controller.setCurrentBridge(this.model);
-    },
-
-    modelEvents: {
-        'change': 'modelChange'
-    },
-
+    /*
     modelChange: function() {
         console.log('modelChange fired', this.model.get('name'), this.model.get('current'));
         this.render();
@@ -90,13 +134,36 @@ CBApp.NavAccountMenuView = Marionette.ItemView.extend({
 
     onRender: function() {
 
+        //var currentUser = CBApp.getCurrentUser();
+
         // Show the bridge as active if it is the current bridge
-        var active = this.model.get('current') ? 'active' : '';
-        $(this.el).attr('class', active);
+        //var active = this.model.get('current') ? 'active' : '';
+        //$(this.el).attr('class', active);
+    }
+    */
+});
+
+CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
+
+    template: '#navRightSectionTemplate',
+    className: 'container',
+
+    regions: {
+        accountMenu: '#account-menu'
+    },
+
+    onRender: function() {
+        console.log('NavLayoutView rendered', this);
+
+        var navAccountMenuView = new CBApp.Nav.AccountMenuView({
+            collection: CBApp.currentUserCollection
+        });
+
+        this.accountMenu.show(navAccountMenuView);
     }
 });
 
-CBApp.NavLayoutView = Marionette.Layout.extend({
+CBApp.Nav.TopBarLayoutView = Marionette.Layout.extend({
 
     template: '#navSectionTemplate',
     className: 'container',
@@ -112,10 +179,16 @@ CBApp.NavLayoutView = Marionette.Layout.extend({
     onRender: function() {
         console.log('NavLayoutView rendered', this);
 
-        var bridgeDropdownView = new CBApp.BridgeDropdownView({
+        var bridgeDropdownView = new CBApp.Nav.BridgeDropdownView({
             collection: CBApp.bridgeCollection
         });
+
+        var accountMenuView = new CBApp.Nav.AccountMenuView({
+            collection: CBApp.currentUserCollection
+        });
+
         this.navbarLeft.show(bridgeDropdownView);
-    }   
+        this.navbarRight.show(accountMenuView);
+    }
 });
 

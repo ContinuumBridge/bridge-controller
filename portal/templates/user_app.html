@@ -188,13 +188,18 @@
         <a href="#"><%=name%></a>
     </script>
 
-    <script type="text/template" id="navbarRightTemplate">
-        <li class="active"><a href="index.html">HOME</a></li>
-        <li><a href="about-us.html">ABOUT US</a></li>
+    <script type="text/template" id="navAccountMenuTemplate">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=name%><b class="caret"></b></a>
         <ul id="bridge-list" class="dropdown-menu">
             <li name="logout"><a href="#">Logout</a></li>
         </ul>
+    </script>
+
+    <script type="text/template" id="navRightSectionTemplate">
+        <li class="active"><a href="index.html">HOME</a></li>
+        <li><a href="about-us.html">ABOUT US</a></li>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=name%><b class="caret"></b></a>
+        <div id="account-menu"></div>
     </script>
 
     <script type="text/template" id="homeSectionTemplate">

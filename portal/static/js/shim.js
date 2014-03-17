@@ -30,5 +30,11 @@ module.exports = {
             "backbone.babysitter":"Backbone.BabySitter",
             "underscore":"_"
         }
+    },
+    "bootstrap": {
+        "exports": "bootstrap",
+        "depends": {
+            "jquery":"$"
+        }
     }
 };

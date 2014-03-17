@@ -26,7 +26,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
 
         CBApp.socket.on('message', function(message) {
             console.log('Server >', message);
-            this.appendLine(message);
+            this.$console.appendLine(message);
         });
     },
 

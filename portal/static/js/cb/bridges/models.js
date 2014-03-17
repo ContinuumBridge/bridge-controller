@@ -92,19 +92,17 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
 
 CBApp.getCurrentBridge = function() {
 
-    var currentBridges = CBApp.bridgeCollection.where({current: true})
+    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
 
-    if (!currentBridges[0]) console.error('There is no current bridge');
-    if (currentBridges.length > 1) console.error('There is more than one current bridge');
-
-    if (currentBridges[0] instanceof Backbone.Model) {
-        return currentBridges[0];
+    if (!bridge) {
+        console.log('There is no current bridge');
+        bridge = false;
     } else {
-        console.error('Could not get currentBridge, instead got', currentBridge);
+        bridge.set({current: true});
     }
+
+    return bridge;
 };
-
-
 
 CBApp.BridgeControl = Backbone.RelationalModel.extend({
 

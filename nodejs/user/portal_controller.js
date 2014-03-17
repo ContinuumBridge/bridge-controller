@@ -1,19 +1,16 @@
 
-var http = require('http'),
-    connect = require('connect'),
-    backboneio = require('cb-backbone.io');
-    //rest = require('restler'),
-    //MemoryStore = require('connect/middleware/session/memory');
+var http = require('http')
+    ,connect = require('connect')
+    ,backboneio = require('cb-backbone.io')
+    ,redis = require('socket.io/node_modules/redis')
+    ,Bacon = require('baconjs').Bacon
+    ,cookie_reader = require('cookie')
+    ;
 
 var djangoBackbone = require('./django_backbone.js'),
     DeviceDiscovery = require('./device_discovery.js'),
     backendAuth = require('../backend_auth.js');
 
-var redis = require('socket.io/node_modules/redis'),
-    Bacon = require('baconjs').Bacon,
-    Q = require('q');
-
-var cookie_reader = require('cookie');
 
 /* App Controller */
 console.log('Environment is', process.env.NODE_ENV);
@@ -135,6 +132,8 @@ function PortalController(socketPort) {
 
         socket.on('message', function (jsonMessage) {
 
+            console.log('socket received', jsonMessage);
+            console.log('socket received', typeof(jsonMessage));
             var message = JSON.parse(jsonMessage);
             portalController.redis.publish(message.destination, message);
         });

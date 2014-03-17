@@ -18,7 +18,7 @@ class Command(NoArgsCommand):
         pete = CBUser.objects.get(email='peter.claydon@continuumbridge.com')
 
         widcombe_bridge_3 = Bridge.objects.create_bridge(
-            name = "Widcombe Bridge 1",
+            name = "Widcombe Bridge 3",
             email = "09d522f6@continuumbridge.com",
             password = "TlMbLfQzedxVlJKCe2ysB9OWK6R6IiBrUJ1MzoevlyE7svCQIDLhcM/iqrCAIJcX"
         )
