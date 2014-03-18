@@ -4,7 +4,7 @@ var rest = require('restler'),
 
 module.exports = djangoNode
 
-function djangoNode(message, response){
+function djangoNode(message, end){
 
     //var deferredDjangoResponse = Q.defer();
 
@@ -22,18 +22,12 @@ function djangoNode(message, response){
 
     var djangoURL = DJANGO_URL + message.url;
 
-    console.log('DJANGOURL is', DJANGO_URL);
-    console.log('djangoURL is', djangoURL);
     rest.get(djangoURL, djangoOptions).on('complete', function(data, djangoResponse) {
 
-        //console.log('Response from django for bridge data is', response);
-
         if (djangoResponse.statusCode == 200) {
-
-            console.log('Data is', data);
-            response.resolve(data);
+            end.resolve(data);
         } else {
-            response.reject('There was an error connecting to Django');
+            end.reject('There was an error connecting to Django', djangoResponse);
         } 
 
     });

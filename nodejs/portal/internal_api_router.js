@@ -1,14 +1,9 @@
 
-var rest = require('restler'),
-    Q = require('q');
+module.exports = internalAPIRouter;
 
-var djangoNode = require('./django_node.js');
+function internalAPIRouter(message, end){
 
-module.exports = apiRouter;
-
-function apiRouter(request, end){
-
-    console.log('apiRouter', request);
+    console.log('Portal internalAPIRouter', request);
     var url = request.url;
 
     switch (url) {
@@ -19,7 +14,5 @@ function apiRouter(request, end){
 
         default:
            end.error('The request url was not found', url);
-
     }
-
 }

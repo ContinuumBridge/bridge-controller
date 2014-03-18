@@ -1,5 +1,5 @@
 
-var PortalController = require('./user/portal_controller.js');
+var PortalController = require('./portal/portal_controller.js');
 
 portalController = new PortalController(4000);
 

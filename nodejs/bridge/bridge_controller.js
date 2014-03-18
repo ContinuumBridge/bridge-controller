@@ -116,6 +116,7 @@ function BridgeController(port) {
             message.source = "BID" + socket.handshake.authData.id;
             message.sessionID = socket.handshake.query.sessionID;
 
+            // Resolving this promise ends the request
             var end = Q.defer();
 
             end.promise.then(function(message) {
@@ -125,7 +126,8 @@ function BridgeController(port) {
 
             }, function(error) {
 
-                console.log('promise error', error);
+                logger.log('promise error', error);
+                socket.emit('message', JSON.stringify(error));
             });
 
             switch (message.message) {

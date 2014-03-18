@@ -7,10 +7,12 @@ var http = require('http')
     ,cookie_reader = require('cookie')
     ;
 
-var djangoBackbone = require('./django_backbone.js'),
-    DeviceDiscovery = require('./device_discovery.js'),
-    backendAuth = require('../backend_auth.js');
-
+var djangoBackbone = require('./django_backbone.js')
+    ,DeviceDiscovery = require('./device_discovery.js')
+    ,backendAuth = require('../backend_auth.js')
+    ,internalAPI = require('./internal_api_router.js')
+    ,MessageUtils = require('../message_utils')
+    ;
 
 /* App Controller */
 console.log('Environment is', process.env.NODE_ENV);
@@ -107,15 +109,7 @@ function PortalController(socketPort) {
 
         portalController.redis.publish = function(address, message) {
 
-            // Ensure the message is a string
-            if (typeof message == 'object') {
-                var jsonMessage = JSON.stringify(message);
-            } else if (typeof message == 'string') {
-                var jsonMessage = message;
-            } else {
-                console.error('This message is not an object or a string', message);
-                return;
-            }
+            var jsonMessage = MessageUtils.stringify(message);
 
             portalController.redis.pubClient.publish(address, jsonMessage);
             console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
@@ -132,9 +126,10 @@ function PortalController(socketPort) {
 
         socket.on('message', function (jsonMessage) {
 
-            console.log('socket received', jsonMessage);
-            console.log('socket received', typeof(jsonMessage));
             var message = JSON.parse(jsonMessage);
+            message.source = "UID" + socket.handshake.authData.id;
+            message.sessionID = socket.handshake.query.sessionID;
+
             portalController.redis.publish(message.destination, message);
         });
 
@@ -143,18 +138,12 @@ function PortalController(socketPort) {
         portalController.redis.subClient.subscribe(subscriptionAddress);
 
         portalController.onMessage = function(channel, jsonMessage) {
-            
+
+
             var message = JSON.parse(jsonMessage);
             
-            console.log('\033[2J');
-            console.log('Message is', message);
             // Discovered devices
             if (message.uri == '/api/v1/device_discovery') {
-
-                console.log('Device discovery!');
-                //console.log('message body is', message.body);
-                //console.log('socket is', socket.handshake.authData);
-                //console.log('authData is', socket.handshake.authData);
 
                 deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
                    
@@ -166,35 +155,12 @@ function PortalController(socketPort) {
                     console.error(error);
                 });
                 
-                //deviceDiscoveryController.backboneSocket.emit('test');
-                //deviceDiscoveryController.backboneSocket.emit('reset', {name: "Test"});
-                //deviceDiscoveryController.backboneSocket.emit('reset', message.body);
-                /*
-                message.body.forEach(function(discovered_device) {
-
-                    console.log('discovered_device is', discovered_device);
-                    deviceDiscoveryController.backboneSocket.emit('created', discovered_device);
-                });
-                //res.end();
-                /*
-                fs = require('fs')
-                fs.readFile(__dirname + '/discovered_devices.json', 'utf8', function (err, device_discoveries) {
-                    if (err) {
-                        return console.log(err);
-                    }   
-                    //res.end(JSON.parse(device_discoveries));
-                    //deviceDiscoveryController.backboneSocket.emit('created', JSON.parse(device_discoveries));
-                }); 
-                */
-
             } else {
 
                 // When a message is received, send it down to the portal
                 socket.emit('message', jsonMessage);
             }
         };
-
-        //portalController.redis.subClient.on('message', function(channel, jsonMessage) {
 
         // Listen for messages from redis
         portalController.redis.subClient.addListener('message', portalController.onMessage);
