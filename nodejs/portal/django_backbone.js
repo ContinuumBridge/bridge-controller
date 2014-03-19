@@ -1,5 +1,7 @@
-var backboneio = require('cb-backbone.io');
-var rest = require('restler');
+var backboneio = require('cb-backbone.io')
+    ,logger = require('./logger')
+    ,rest = require('restler')
+    ;
 //var RestClient = require('node-rest-client').Client;
 
 var cookie_reader = require('cookie');

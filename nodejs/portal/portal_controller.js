@@ -2,6 +2,7 @@
 var http = require('http')
     ,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
+    ,logger = require('./logger')
     ,redis = require('socket.io/node_modules/redis')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
@@ -9,13 +10,15 @@ var http = require('http')
 
 var djangoBackbone = require('./django_backbone.js')
     ,DeviceDiscovery = require('./device_discovery.js')
+    ,PortalBackboneIO = require('./backboneio.js')
+    ,PortalRedis = require('./redis.js')
     ,backendAuth = require('../backend_auth.js')
     ,internalAPI = require('./internal_api_router.js')
     ,MessageUtils = require('../message_utils')
     ;
 
-/* App Controller */
-console.log('Environment is', process.env.NODE_ENV);
+/* Portal Controller */
+logger.log('Environment is', process.env.NODE_ENV);
 
 DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/user/v1/' : 'http://localhost:8000/api/user/v1/'
 console.log('DJANGO_URL', DJANGO_URL);
@@ -33,137 +36,38 @@ function PortalController(socketPort) {
     );
     server.listen(4000);
 
-    portalController.fromApp = new Bacon.Bus();
-
-    portalController.redis = {};
-    portalController.redis.authClient = redis.createClient();
-    portalController.redis.subClient = redis.createClient();
-    portalController.redis.pubClient = redis.createClient();
-
-    var appController = new djangoBackbone(DJANGO_URL + 'app/');
-    var appInstallController = new djangoBackbone(DJANGO_URL + 'app_install/');
-    var appDevicePermissionController = new djangoBackbone(DJANGO_URL + 'app_device_permission/');
-
-    var deviceController = new djangoBackbone(DJANGO_URL + 'device/');
-    var deviceInstallController = new djangoBackbone(DJANGO_URL + 'device_install/');
-
-    var deviceDiscoveryController = new DeviceDiscovery();
-
-    var bridgeController = new djangoBackbone(DJANGO_URL + 'bridge/');
-    var bridgeControlController = new djangoBackbone(DJANGO_URL + 'bridge_control/');
-    var currentUserController = new djangoBackbone(DJANGO_URL + 'current_user/');
-    //var currentUserController = new djangoBackbone('http://54-194-28-63-m54ga2jjusw6.runscope.net/api/v1/current_user/');
-    // Start backbone io listening
-    portalController.backboneio = backboneio.listen(server, { 
-        app: appController.backboneSocket,
-        appInstall: appInstallController.backboneSocket,
-        appDevicePermission: appDevicePermissionController.backboneSocket,
-        bridge: bridgeController.backboneSocket,
-        bridgeControl: bridgeControlController.backboneSocket,
-        currentUser: currentUserController.backboneSocket,
-        device: deviceController.backboneSocket,
-        deviceInstall: deviceInstallController.backboneSocket,
-        discoveredDevice: deviceDiscoveryController.backboneSocket
-    }); 
-
-    // Authenticate the sessionid from the socket with django
-    portalController.backboneio.configure(function() {
-        portalController.backboneio.set('authorization', function(data, accept){
-            
-                if(data.headers.cookie){
-                // Pull out the cookies from the data
-                var cookies = cookie_reader.parse(data.headers.cookie);
-
-                var sessionID = cookies.sessionid;
-                var appAuthURL = DJANGO_URL + 'current_user/user/';
-                console.log('appAuthURL is', appAuthURL);
-
-                backendAuth(portalController.redis.authClient, appAuthURL, sessionID).then(function(authData) {
-                    console.log('backendAuth returned authData:', authData);
-                    data.authData = authData;
-                    data.sessionID = sessionID;
-                    return accept(null, true);
-                    
-                }, function(error) {
-                    console.log('backendAuth returned error:', error);
-                    return accept('error', false);
-                });
-            }
-        });
-    });
+    portalController.backboneio = new PortalBackboneIO(server);
 
     portalController.backboneio.on('connection', function (socket) {
 
         var address = socket.handshake.address;
         var authData = socket.handshake.authData;
 
-        // Publication 
-        var publicationAddresses = new Array();
+        var fromPortal = socket.fromPortal = new Bacon.Bus();
+        var toPortal = socket.toPortal = new Bacon.Bus();
 
-        authData.bridge_controls.forEach(function(bridge_control) {
+        var fromRedis = socket.fromPortal = new Bacon.Bus();
+        var toRedis = socket.toPortal = new Bacon.Bus();
 
-            // Set up an array of bridges to publish to
-            bridgeAddress = 'BID' + bridge_control.bridge.id;
-            publicationAddresses.push(bridgeAddress);
-        });
-
-        portalController.redis.publish = function(address, message) {
-
-            var jsonMessage = MessageUtils.stringify(message);
-
-            portalController.redis.pubClient.publish(address, jsonMessage);
-            console.log(subscriptionAddress, '=>', address, '    ',  jsonMessage);
-        };
-
-        portalController.redis.publishAll = function(message) {
-
-            // Publish message to each bridge address
-            publicationAddresses.forEach(function(publicationAddress) {
-
-                portalController.redis.publish(publicationAddress, message);
-            });
-        };
+        socket.redis = new PortalRedis(authData, fromRedis, toRedis);
 
         socket.on('message', function (jsonMessage) {
 
-            var message = JSON.parse(jsonMessage);
-            message.source = "UID" + socket.handshake.authData.id;
-            message.sessionID = socket.handshake.query.sessionID;
-
-            portalController.redis.publish(message.destination, message);
+            // On message from the portal put it on the fromPortal bus
+            MessageUtils.parse(jsonMessage).then(function(message) {
+                message.source = "UID" + socket.handshake.authData.id;
+                message.sessionID = socket.handshake.query.sessionID;
+                fromPortal.push(message);
+            }, function(error) {
+                logger.error(error);
+            });
         });
 
-        // Subscription
-        var subscriptionAddress = 'UID' + authData.id;
-        portalController.redis.subClient.subscribe(subscriptionAddress);
+        //portalController.onMessage = function(channel, jsonMessage) {
+        fromRedis.onValue(function(message) {
 
-        portalController.onMessage = function(channel, jsonMessage) {
-
-
-            var message = JSON.parse(jsonMessage);
-            
-            // Discovered devices
-            if (message.uri == '/api/v1/device_discovery') {
-
-                deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
-                   
-                    console.log('found devices are', foundDevices);
-                    deviceDiscoveryController.backboneSocket.emit('reset', foundDevices);
-                     
-                }, function(error) {
-                    
-                    console.error(error);
-                });
-                
-            } else {
-
-                // When a message is received, send it down to the portal
-                socket.emit('message', jsonMessage);
-            }
-        };
-
-        // Listen for messages from redis
-        portalController.redis.subClient.addListener('message', portalController.onMessage);
+            //logger.
+        });
 
         socket.on('disconnect', function () {
             
@@ -173,7 +77,6 @@ function PortalController(socketPort) {
         });
 
         console.log('Server > New user connection from %s:%s. Subscribed to %s (%s), publishing to %s', address.address, address.port, subscriptionAddress, authData.email, publicationAddresses);
-
     });
 
     return portalController;

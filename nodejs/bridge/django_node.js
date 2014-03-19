@@ -1,6 +1,8 @@
 
-var rest = require('restler'),
-    Q = require('q');
+var rest = require('restler')
+    ,logger = require('./logger')
+    Q = require('q')
+    ;
 
 module.exports = djangoNode
 

@@ -18,4 +18,13 @@ var logger = new (winston.Logger)({
   exitOnError: false
 });
 
+logger.log = function(){
+  var args = arguments;
+  if(args[2]) args[3] = args[2];
+  args[2] = {
+    "source" : "portal_controller"
+  }
+  winston.Logger.prototype.log.apply(this,args);
+}
+
 module.exports = logger;

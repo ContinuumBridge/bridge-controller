@@ -1,6 +1,8 @@
 
-var rest = require('restler'),
-    Q = require('q');
+var rest = require('restler')
+    ,logger = require('./logger')
+    ,Q = require('q')
+    ;
 
 var djangoNode = require('./django_node.js');
 
@@ -18,7 +20,7 @@ function apiRouter(request, end){
             break;
 
         default:
-           end.error('The request url was not found', url);
+           end.reject('The request url was not found', url);
 
     }
 

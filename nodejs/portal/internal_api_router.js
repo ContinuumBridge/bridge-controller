@@ -1,4 +1,6 @@
 
+var logger = require('./logger');
+
 module.exports = internalAPIRouter;
 
 function internalAPIRouter(message, end){

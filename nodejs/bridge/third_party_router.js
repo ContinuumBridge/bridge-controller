@@ -1,5 +1,8 @@
 
-var fs = require('fs');
+
+var fs = require('fs')
+    ,logger = require('./logger')
+    ;
 
 /* Routes messages to and from entities outside CB, which aren't bridges */
 
