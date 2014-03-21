@@ -29,7 +29,7 @@ CBApp.addInitializer(function() {
     };
     CBApp.socket.sendCommand = function(command) {
         var message = {};
-        message.message = "command";
+        message.type = "command";
         message.body = command;
         CBApp.socket.publish(message);
     };

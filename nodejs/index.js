@@ -1,9 +1,14 @@
 
-var PortalController = require('./portal/portal_controller.js');
+var redis = require('redis');
 
-portalController = new PortalController(4000);
+redisAuthClient = redis.createClient();
 
-var BridgeController = require('./bridge/bridge_controller.js');
+Portal = {};
+Portal.Controller = require('./portal/portal_controller.js');
+Portal.controller = new Portal.Controller(4000);
 
-bridgeController = new BridgeController(3000);
+Bridge = {};
+Bridge.Controller = require('./bridge/bridge_controller.js');
+Bridge.controller = new Bridge.Controller(3000);
+
 

@@ -3,8 +3,7 @@ var winston = require('winston')
     ,path = require('path')
     ;
 
-// Define thisBridgeRoot here so that we don't get circular dependencies loading ./env
-//var logPath = path.normalize(__dirname + '/../../thisbridge');
+/* Main logger for node */
 
 var logger = new (winston.Logger)({
   "transports": [
@@ -25,7 +24,7 @@ var logger = new (winston.Logger)({
 
 logger.log = function(){
   var args = arguments;
-  args[1] = "bridge_controller: " + args[1];
+  args[1] = "main_controller: " + args[1];
   winston.Logger.prototype.log.apply(this,args);
 }
 

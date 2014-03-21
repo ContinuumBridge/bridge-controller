@@ -6,19 +6,18 @@ var rest = require('restler')
 
 module.exports = djangoNode
 
-function djangoNode(message, end){
-
-    //var deferredDjangoResponse = Q.defer();
+function djangoNode(message, messageBus) {
 
     console.log('djangoNode', message);
-    var url = message.url
+    var url = message.get('url');
+    var sessionID = message.get('sessionID');
 
     var djangoOptions = { 
         method: "get",
         headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
-            'X_CB_SESSIONID': message.sessionID
+            'X_CB_SESSIONID': sessionID
         }
     }; 
 
@@ -26,12 +25,15 @@ function djangoNode(message, end){
 
     rest.get(djangoURL, djangoOptions).on('complete', function(data, djangoResponse) {
 
-        if (djangoResponse.statusCode == 200) {
-            end.resolve(data);
-        } else {
-            end.reject('There was an error connecting to Django', djangoResponse);
-        } 
+        message.returnToSource('django');
+        message.set('type', 'response');
 
+        if (djangoResponse.statusCode == 200) {
+            message.set('body', data);
+            messageBus.push(message);
+        } else {
+            message.set('status_code', djangoResponse.statusCode)
+            messageBus.push(message);
+        }
     });
-    return;
 }

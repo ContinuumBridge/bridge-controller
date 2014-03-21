@@ -27,7 +27,7 @@ gulp.task('default', function() {
         gulp.run('scripts');
     })
 
-    //gulp.run('node_server');
+    gulp.run('node_server');
 })
 
 

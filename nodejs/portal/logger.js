@@ -20,10 +20,7 @@ var logger = new (winston.Logger)({
 
 logger.log = function(){
   var args = arguments;
-  if(args[2]) args[3] = args[2];
-  args[2] = {
-    "source" : "portal_controller"
-  }
+  args[1] = "portal_controller: " + args[1];
   winston.Logger.prototype.log.apply(this,args);
 }
 
