@@ -146,7 +146,7 @@ class Command(NoArgsCommand):
             FACTORY_FOR = Adaptor
             provider = "Continuum Bridge"
             version = "0.0.1"
-            protocol = "other"
+            protocol = "btle"
             url = "url.for.the.adaptor.com"
             exe = "sensortagadaptor.py"
 
