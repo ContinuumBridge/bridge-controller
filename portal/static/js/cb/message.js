@@ -38,7 +38,7 @@ _.extend(Message.prototype, {
             try {
                 var attributes = JSON.parse(jsonAttributes);
             } catch (error) {
-                logger.error(error);
+                console.error(error);
             }
         } else if (typeof jsonAttributes == 'object') {
             var attributes = jsonAttributes;
