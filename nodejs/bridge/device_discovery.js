@@ -56,15 +56,15 @@ function deviceDiscovery(message) {
                 // Add the device to the array
                 if (data && data.objects && data.objects[0]) {
                     // Device has been found
-                    var device = data.objects[0];
-                    device.device = true;
+                    var deviceInstall = {};
+                    device.device_install.mac_addr = discoveredDevice.mac_addr;
+
+                    deviceInstall.device = data.objects[0];
 
                     // Add the mac address to a device_install object
-                    device.device_install = {};
-                    device.device_install.mac_addr = discoveredDevice.mac_addr;
-                    logger.log('debug', 'device has been found in Django', device);
+                    logger.log('debug', 'device has been found in Django', deviceInstall);
 
-                    devices.push(device);
+                    devices.push(deviceInstall);
                 } else {
                     // Add the mac address to a device_install object
                     discoveredDevice.device_install = {};

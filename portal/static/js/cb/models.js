@@ -29,6 +29,7 @@ CBApp.addInitializer(function () {
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 
   CBApp.discoveredDeviceCollection = new CBApp.DiscoveredDeviceCollection();
+  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
   //CBApp.discoveredDeviceCollection.fetch();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();

@@ -1,5 +1,4 @@
 
-
 CBApp.App = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
@@ -8,7 +7,8 @@ CBApp.App = Backbone.RelationalModel.extend({
         
     }
 
-}); 
+});
+
 
 CBApp.AppCollection = Backbone.Collection.extend({
 
@@ -19,13 +19,12 @@ CBApp.AppCollection = Backbone.Collection.extend({
         this.bindBackend();
 
         this.bind('backend:create', function(model) {
-            console.log('Create was called on AppCollection');
+            //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
     },
     
     parse : function(response){
-        console.log('response was %s', response);
         return response.objects;
     }
 });
@@ -38,40 +37,21 @@ CBApp.AppDevicePermission = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
-        console.log('AppDevicePermission initialized')
     },
 
     changePermission: function(permission) {
 
-        console.log('this.isNew()', this.isNew());
-        console.log('permission', permission);
         if (this.isNew() && permission) {
-            console.log('AppDevicePermission save', this.toJSON());
             this.save({wait: true,
-                       success: function() { console.log('AppDevicePermission save successful')},
+                       success: function() { console.log('verbose', 'AppDevicePermission save successful')},
                        error: function() { console.error('AppDevicePermission save unsuccessful')}});
 
         } else if (!this.isNew() && !permission) {
-            console.log('AppDevicePermission destroy', this.toJSON());
+            console.log('debug', 'AppDevicePermission destroy', this.toJSON());
             this.destroy({wait: true});
         } else {
             console.error('AppDevicePermission not saved or destroyed');
         }
-        /*
-        switch (permission) {
-            case true:
-                console.log('AppDevicePermission save')
-                this.save();
-                break;
-            case false:
-                console.log('AppDevicePermission destroy')
-                this.destroy();
-                break;
-            default:
-                console.err('AppDevicePermission not saved or destroyed');
-        }
-        */
-
     },
 
     relations: [
@@ -108,13 +88,6 @@ CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
     initialize: function() {
 
         this.bindBackend();
-
-        /*
-        this.bind('backend:create', function(model) {
-            console.log('Create was called on AppDevicePermissionCollection');
-            self.add(model);
-        });
-        */
     }
 
 });
@@ -125,16 +98,6 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
-        console.log('AppInstall initialized')
-        /*
-        // Instantiate some App models
-        var appData = this.get('app');
-        if (appData) {
-            var app = new CBApp.App(appData);
-            //app.set('app_install', this);
-            CBApp.appCollection.add(app);
-        }  
-        */
     },
 
     relations: [
@@ -202,7 +165,6 @@ CBApp.AppInstallCollection = Backbone.Collection.extend({
     },
     
     parse : function(response){
-        console.log('response was %s', response);
         return response.objects;
     }
 });

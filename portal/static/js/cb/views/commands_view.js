@@ -2,12 +2,9 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-var logger = require('logger');
-
 CBApp.CommandsView = Marionette.ItemView.extend({
     
     id: 'commands',
-    //className: 'span4',
     template: '#commandsTemplate',
 
     events: {
@@ -29,7 +26,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
         var that = this;
 
         CBApp.socket.on('message', function(message) {
-            logger.log('verbose', 'Server > ' + message);
+            console.log('Server >', message);
             that.appendLine(message);
         });
     },

@@ -16,7 +16,6 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         commandPanel: '#command-panel'
     },  
     onRender: function() {
-        console.log('HomeLayoutView rendered', this);
 
         CBApp.filteredAppInstallCollection.filter(CBApp.filters.currentBridge());
         var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.filteredAppInstallCollection });

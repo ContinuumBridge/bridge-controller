@@ -6,7 +6,6 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
     initialize: function() {
 
         var bridgeControlArray = this.get('bridgeControls');
-        //CBApp.currentBridge = bridgeControlArray.at(0).get('bridge');
 
         // Set the current bridge
         var currentBridge = bridgeControlArray.at(0).get('bridge');
@@ -61,7 +60,6 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
     },
     
     parse : function(response){
-        console.log('response was %s', response);
         return response.objects;
     }
 });
@@ -71,25 +69,12 @@ CBApp.getCurrentUser = function() {
     var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
 
     if (!user) {
-        console.log('There is no current user');
+        console.warn('There is no current user');
         user = false;
     } else {
         user.set({current: true});
     }
 
     return user;
-
-    /*
-    var users = CBApp.currentUserCollection.where({current: true})
-
-    if (!users[0]) console.error('There is no current user');
-    if (users.length > 1) console.error('There is more than one current user');
-
-    if (users[0] instanceof Backbone.Model) {
-        return users[0];
-    } else {
-        console.error('Could not get currentUser, instead got', currentBridge);
-    }
-    */
 };
 

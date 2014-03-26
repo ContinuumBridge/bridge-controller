@@ -56,9 +56,9 @@ function PortalController(socketPort) {
                 //logger.log('debug', 'discoveredDevice is', dd);
 
                 //socket.of('discoveredDevice').emit('reset', foundDevices);
-                var foundDevices = message.get('body');
-                logger.log('debug', 'found devices are', foundDevices);
-                socket.emit('discoveredDevice:reset', foundDevices);
+                var foundDeviceInstalls = message.get('body');
+                logger.log('debug', 'found devices are', foundDeviceInstalls);
+                socket.emit('discoveredDeviceInstall:reset', foundDeviceInstalls);
 
                 /*
                 portalServer.deviceDiscoveryController.findDevices(message).then(function(foundDevices) {

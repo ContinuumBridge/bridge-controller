@@ -36,10 +36,10 @@ CBApp.Controller = Marionette.Controller.extend({
     //CBApp.portalLayout.show(CBApp.deviceLayout);
     //CBApp.deviceCollection.fetch();
   },
-  installDevice: function (discoveredDevice) {
+  installDevice: function (discoveredDeviceInstall) {
     console.log('We got to the controller!');
     var installDeviceModal = new CBApp.InstallDeviceModal({
-        model: discoveredDevice,
+        model: discoveredDeviceInstall,
         install: function() {
             console.log('Install callback!');
         }

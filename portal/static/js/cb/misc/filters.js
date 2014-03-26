@@ -5,8 +5,6 @@ CBApp.filters.currentBridge = function() {
     
     return function(item) {
 
-        console.log('item in relation is', item);
-
         var relation = item.get('bridge');
 
         // Add the item to the collection if it belongs to the bridge
