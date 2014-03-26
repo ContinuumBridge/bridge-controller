@@ -6,6 +6,7 @@ var http = require('http')
     ,logger = require('./logger')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
+    ,url = require('url')
     ;
 
 var djangoBackbone = require('./django_backbone.js')
@@ -19,44 +20,38 @@ module.exports = SocketServer;
 
 function SocketServer(port) {
 
-    var server = http.createServer(connect()
-        .use(function(req, res, next) {
-            //console.log('We are using middleware!');
-            next();
-        })
-    );
-    server.listen(port);
+    var httpServer = http.createServer(connect);
+    httpServer.listen(port);
 
-    var appController = new djangoBackbone(Portal.DJANGO_URL + 'app/');
-    var appInstallController = new djangoBackbone(Portal.DJANGO_URL + 'app_install/');
-    var appDevicePermissionController = new djangoBackbone(Portal.DJANGO_URL + 'app_device_permission/');
+    var appController = this.appController = new djangoBackbone(Portal.DJANGO_URL + 'app/');
+    var appInstallController = this.appInstallController = new djangoBackbone(Portal.DJANGO_URL + 'app_install/');
+    var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(Portal.DJANGO_URL + 'app_device_permission/');
 
-    var deviceController = new djangoBackbone(Portal.DJANGO_URL + 'device/');
-    var deviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'device_install/');
+    var deviceController = this.deviceController = new djangoBackbone(Portal.DJANGO_URL + 'device/');
+    var deviceInstallController = this.deviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'device_install/');
 
-    var deviceDiscoveryController = new DeviceDiscovery();
+    var deviceDiscoveryController = this.deviceDiscoveryController = new DeviceDiscovery();
 
-    var bridgeController = new djangoBackbone(Portal.DJANGO_URL + 'bridge/');
-    var bridgeControlController = new djangoBackbone(Portal.DJANGO_URL + 'bridge_control/');
-    var currentUserController = new djangoBackbone(Portal.DJANGO_URL + 'current_user/');
+    var bridgeController = this.bridgeController = new djangoBackbone(Portal.DJANGO_URL + 'bridge/');
+    var bridgeControlController = this.bridgeControlController = new djangoBackbone(Portal.DJANGO_URL + 'bridge_control/');
+    var currentUserController = this.currentUserController = new djangoBackbone(Portal.DJANGO_URL + 'current_user/');
 
     // Start backbone io listening
-    var socketServer = backboneio.listen(server, {
-        app: appController.backboneSocket,
-        appInstall: appInstallController.backboneSocket,
-        appDevicePermission: appDevicePermissionController.backboneSocket,
-        bridge: bridgeController.backboneSocket,
-        bridgeControl: bridgeControlController.backboneSocket,
-        currentUser: currentUserController.backboneSocket,
-        device: deviceController.backboneSocket,
-        deviceInstall: deviceInstallController.backboneSocket,
+    var server = this.server = backboneio.listen(httpServer, {
+        app: appController,
+        appInstall: appInstallController,
+        appDevicePermission: appDevicePermissionController,
+        bridge: bridgeController,
+        bridgeControl: bridgeControlController,
+        currentUser: currentUserController,
+        device: deviceController,
+        deviceInstall: deviceInstallController,
         discoveredDevice: deviceDiscoveryController.backboneSocket
     });
 
-
     // Authenticate the sessionid from the socket with django
-    socketServer.configure(function() {
-        socketServer.set('authorization', function(data, accept){
+    server.configure(function() {
+        server.set('authorization', function(data, accept){
 
             if(data.headers.cookie){
                 // Pull out the cookies from the data
@@ -64,7 +59,6 @@ function SocketServer(port) {
 
                 var sessionID = cookies.sessionid;
                 var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
-                console.log('appAuthURL is', appAuthURL);
 
                 backendAuth(appAuthURL, sessionID).then(function(authData) {
                     console.log('backendAuth returned authData:', authData);
@@ -79,6 +73,4 @@ function SocketServer(port) {
             }
         });
     });
-
-    return socketServer;
 }

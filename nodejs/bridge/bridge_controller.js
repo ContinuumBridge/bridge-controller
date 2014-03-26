@@ -32,7 +32,16 @@ function BridgeController(port) {
 
     bridgeController.bridgeServer.sockets.on('connection', function (socket) {
 
-        var controllerNode = new ControllerNode(socket, bridgeController.redisClient)
+        /*
+        for(var propertyName in socket) {
+            logger.log('debug', 'In the socket: |', propertyName);
+            // propertyName is what you want
+            // you can get the value like this: myObject[propertyName]
+        }
+        */
+
+        //logger.log('debug', 'In the socket: ', socket.);
+        var controllerNode = new ControllerNode(socket, bridgeController.redisClient);
 
         controllerNode.fromRedis.onValue(function(message) {
 
@@ -51,12 +60,15 @@ function BridgeController(port) {
                     thirdPartyRouter(message, controllerNode.toBridge, controllerNode.toRedis);
                     break;
 
+                case 'status':
+                    controllerNode.toRedis.push(message);
+                    break;
+
                 default:
                     logger.warn('message.type does not match any specified', message);
                     break;
             };
         })
-
 
         var publicationAddressesString = controllerNode.redisWrapper.publicationAddresses.join(', ');
         logger.info('New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s'

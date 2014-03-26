@@ -32,6 +32,7 @@ CBApp.addInitializer(function () {
   //CBApp.discoveredDeviceCollection.fetch();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+
   CBApp.currentUserCollection.fetch({
     success: function() {
       // Set the current bridge (the one the user is looking at)

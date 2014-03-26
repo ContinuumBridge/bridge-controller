@@ -12,15 +12,10 @@ module.exports = DjangoBackbone;
 
 function DjangoBackbone(djangoURL) {
 
-    var djangoBackbone = {};
-
-    // Setup REST client
-    //djangoBackbone.djangoClient = new RestClient();
-
     // Setup backbone websockets
-    djangoBackbone.backboneSocket = backboneio.createBackend();
+    backboneSocket = backboneio.createBackend();
 
-    djangoBackbone.backboneSocket.use(function(req, res, next) {
+    backboneSocket.use(function(req, res, next) {
         
         if (req.socket.handshake.headers.cookie) {
 
@@ -38,7 +33,7 @@ function DjangoBackbone(djangoURL) {
         next(); 
     });
 
-    djangoBackbone.backboneSocket.create(function(req, res) {
+    backboneSocket.create(function(req, res) {
 
         var that = this;
 
@@ -68,7 +63,7 @@ function DjangoBackbone(djangoURL) {
         });
     }),
 
-    djangoBackbone.backboneSocket.read(function(req, res) {
+    backboneSocket.read(function(req, res) {
         
         var requestURL = (req.model.id) ? djangoURL + req.model.id : djangoURL;
 
@@ -88,7 +83,7 @@ function DjangoBackbone(djangoURL) {
         });
     });
 
-    djangoBackbone.backboneSocket.update(function(req, res) {
+    backboneSocket.update(function(req, res) {
 
         var that = this;
 
@@ -118,7 +113,7 @@ function DjangoBackbone(djangoURL) {
         });
     }),
 
-    djangoBackbone.backboneSocket.delete(function(req, res) {
+    backboneSocket.delete(function(req, res) {
 
         var that = this;
 
@@ -152,7 +147,7 @@ function DjangoBackbone(djangoURL) {
     }),
 
 
-    djangoBackbone.backboneSocket.use(backboneio.middleware.memoryStore());
+    backboneSocket.use(backboneio.middleware.memoryStore());
 
-    return djangoBackbone;
+    return backboneSocket;
 };

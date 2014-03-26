@@ -1,5 +1,6 @@
 
-var Message = require('../message');
+var Message = require('../message')
+    ,logger = require('./logger');
 
 module.exports = SocketWrapper;
 
@@ -20,7 +21,7 @@ function SocketWrapper(socket, fromPortal, toPortal) {
 
     toPortal.onValue(function(message) {
 
-        var jsonMessage = message.toJSON();
+        var jsonMessage = message.getJSON();
         socket.emit('message', jsonMessage);
     })
 };

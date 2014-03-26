@@ -26,8 +26,10 @@
   },
   "browser": {
     "backbone.marionette": "./portal/static/js/vendor/backbone.marionette.js",
+    "backbone.modal": "./portal/static/js/vendor/backbone.modal-bundled.js",
     "backbone-bundle": "./portal/static/js/vendor/backbone-bundle.js",
     "bootstrap": "./portal/static/js/vendor/bootstrap/bootstrap.js",
+    "logger": "./portal/static/js/logger.js",
     "index": "./portal/static/js/cb/index.js"
   },
   "browserify-shim": "./portal/static/js/shim.js",

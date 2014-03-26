@@ -13,23 +13,23 @@ CBApp = new Marionette.Application({
     }
 });
 
-// Set up a "namespace" for the nav menu
-CBApp.Nav = {};
-
 CBApp.addInitializer(function () {
+    CBApp.InstallDeviceModal = Backbone.Modal.extend({
 
-  //router
-  CBApp.controller = new CBApp.Controller();
-  CBApp.router = new CBApp.Router({controller : CBApp.controller});
-});
+        template: _.template($('#discovery-modal-template').html()),
+        cancelEl: '#cancel-button',
+        submitEl: '#submit-button',
 
-CBApp.on("initialize:after", function () {
-  //for routing purposes
-  Backbone.history.start();
+        submit: function() {
+            console.log('Submitted modal', this);
+            var friendlyName = this.$('#friendly-name').val();
+            this.model.installDevice(friendlyName);
+        }
+    });
 });
 
 CBApp.Controller = Marionette.Controller.extend({
-  
+
   index: function () {
     //CBApp.portalLayout.detailRegion.show(CBApp.deviceLayout);
     console.log('index');
@@ -56,6 +56,21 @@ CBApp.Controller = Marionette.Controller.extend({
       bridge.set('current', true);
       CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
   }
+});
+
+// Set up a "namespace" for the nav menu
+CBApp.Nav = {};
+
+CBApp.addInitializer(function () {
+
+  //router
+  CBApp.controller = new CBApp.Controller();
+  CBApp.router = new CBApp.Router({controller : CBApp.controller});
+});
+
+CBApp.on("initialize:after", function () {
+  //for routing purposes
+  Backbone.history.start();
 });
 
 CBApp.Router = Marionette.AppRouter.extend({

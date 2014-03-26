@@ -175,6 +175,8 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
 
         console.log('createDevice on DiscoveredDevice', this.toJSON());
 
+        var that = this;
+
         var deviceData = this.toJSON();
 
         // Separate the adaptor and device_install data
@@ -212,6 +214,7 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
 
             success : function(resp){
                 console.log('success callback');
+                that.destroy();
             },
 
             error : function(err) {

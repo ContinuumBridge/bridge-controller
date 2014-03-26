@@ -2,6 +2,8 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
+var logger = require('logger');
+
 CBApp.CommandsView = Marionette.ItemView.extend({
     
     id: 'commands',
@@ -20,13 +22,15 @@ CBApp.CommandsView = Marionette.ItemView.extend({
     },
 
     onRender: function() {
-        
+
         this.$console = this.$('#console');
         this.$commandInput = this.$('#command-input');
 
+        var that = this;
+
         CBApp.socket.on('message', function(message) {
-            console.log('Server >', message);
-            this.$console.appendLine(message);
+            logger.log('verbose', 'Server > ' + message);
+            that.appendLine(message);
         });
     },
 
@@ -60,7 +64,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
     
     updateClick: function() {
 
-        this.sendCommand('update');
+        this.sendCommand('update_config');
     },
 
     sendLog: function() {

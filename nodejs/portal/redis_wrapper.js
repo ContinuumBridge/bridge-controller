@@ -55,7 +55,7 @@ function RedisWrapper(authData, fromRedis, toRedis) {
     var publishAll = this.publishAll = function(message) {
 
         // Publish message to each allowed bridge address
-        publish(this.publicationAddresses, message);
+        publish(publicationAddresses, message);
     };
 
     toRedis.onValue(function(message) {
@@ -64,19 +64,20 @@ function RedisWrapper(authData, fromRedis, toRedis) {
     });
 
     // Subscription
-    this.subClient.subscribe(subscriptionAddress);
+    subClient.subscribe(subscriptionAddress);
 
     var onRedisMessage = function(channel, jsonMessage) {
 
         var message = new Message(jsonMessage);
+        logger.log('debug', 'onRedisMessage message is', message);
         fromRedis.push(message);
     }
     // Listen for messages from redis
-    this.subClient.addListener('message', onRedisMessage);
+    subClient.addListener('message', onRedisMessage);
 
     this.disconnect = function() {
 
-        this.subClient.removeListener('message', this.subClient.onMessage);
+        subClient.removeListener('message', onRedisMessage);
         logger.log('debug', 'Removed listener from redis subclient');
     }
 }

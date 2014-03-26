@@ -32,7 +32,6 @@ function RedisWrapper(authData, redisClient, fromRedis, toRedis) {
 
     var publish = this.publish = function(message) {
 
-        console.log('debug', 'message in publish is', message);
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var jsonMessage = message.getJSON();
@@ -55,8 +54,6 @@ function RedisWrapper(authData, redisClient, fromRedis, toRedis) {
 
     var publishAll = this.publishAll = function(message) {
 
-        logger.log('debug', 'publishAll message is', message);
-        logger.log('debug', 'publishAll publicationAddresses are', publicationAddresses);
         // Publish message to each allowed bridge address
         message.set('destination', publicationAddresses);
         publish(message);
@@ -64,7 +61,6 @@ function RedisWrapper(authData, redisClient, fromRedis, toRedis) {
 
     toRedis.onValue(function(message) {
 
-        logger.log('debug', 'redisWrapper received', message);
         publishAll(message);
     });
 
@@ -86,6 +82,6 @@ function RedisWrapper(authData, redisClient, fromRedis, toRedis) {
 
     this.disconnect = function() {
 
-        this.subClient.removeListener('message', this.subClient.onMessage);
+        this.subClient.removeListener('message', this.subClient.onRedisMessage);
     }
 }

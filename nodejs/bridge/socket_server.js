@@ -1,7 +1,9 @@
 
 var io = require('socket.io')
     ,redis = require('redis')
+    ,url = require('url')
     ;
+
 var logger = require('./logger')
     ;
 
@@ -21,7 +23,7 @@ function SocketServer(port) {
 
                 logger.log('debug', 'bridgeController sessionID is:', data.query.sessionID);
                 var sessionID = data.query.sessionID;
-                var bridgeAuthURL = Bridge.DJANGO_URL + 'current_bridge/bridge/';
+                var bridgeAuthURL = Bridge.DJANGO_URL+ 'current_bridge/bridge/';
 
                 backendAuth(bridgeAuthURL, sessionID).then(function(authData) {
 

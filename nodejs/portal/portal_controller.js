@@ -27,33 +27,61 @@ module.exports = PortalController;
 
 function PortalController(socketPort) {
 
-    this.portalServer = new SocketServer(socketPort);
+    var portalServer = this.portalServer = new SocketServer(socketPort);
 
-    this.portalServer.on('connection', function (socket) {
+    portalServer.server.on('connection', function (socket) {
+
+        logger.log('debug', 'portalServer connected:');
+
+        /*
+        for(var propertyName in socket) {
+            logger.log('debug', 'In the backboneio socket: |', propertyName, typeof(socket[propertyName]));
+            // propertyName is what you want
+            // you can get the value like this: myObject[propertyName]
+        }
+        */
+
+        //logger.log('debug', 'In the socket: ', socket.);
 
         var controllerNode = new ControllerNode(socket);
 
         controllerNode.fromRedis.onValue(function(message) {
 
+            logger.log('debug', 'controllerNode message:', message);
             // Discovered devices
-            if (message.get('url') == '/api/v1/device_discovery') {
+            var url = message.get('url');
+            if (url == '/api/bridge/v1/device_discovery' || url == '/api/bridge/v1/device_discovery/') {
 
-                this.portalServer.deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
+                //var dd = socket.of('discoveredDevice');
+                //logger.log('debug', 'discoveredDevice is', dd);
+
+                //socket.of('discoveredDevice').emit('reset', foundDevices);
+                var foundDevices = message.get('body');
+                logger.log('debug', 'found devices are', foundDevices);
+                socket.emit('discoveredDevice:reset', foundDevices);
+
+                /*
+                portalServer.deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
 
                     logger.log('debug', 'Found devices:', foundDevices);
-                    deviceDiscoveryController.backboneSocket.emit('reset', foundDevices);
+
+                    //deviceDiscoveryController.backboneSocket.emit('reset', foundDevices);
 
                 }, function(error) {
 
                     console.error(error);
                 });
-            }
+                */
+            } else {
 
-            controllerNode.toPortal.push(message);
+                logger.log('debug', 'pushing message to portal: ', message.getJSON());
+                controllerNode.toPortal.push(message);
+            }
         })
 
         controllerNode.fromPortal.onValue(function(message) {
 
+            logger.log('debug', 'sending message body down socket: ', message);
             controllerNode.toRedis.push(message);
         });
 
