@@ -4,7 +4,7 @@ var gulp = require('gulp')
     //,concat = require('gulp-concat')
     //,styl = require('gulp-styl')
     ,rename = require("gulp-rename")
-    //,nodemon = require('gulp-nodemon')
+    ,nodemon = require('gulp-nodemon')
     ;
 
 gulp.task('scripts', function() {
