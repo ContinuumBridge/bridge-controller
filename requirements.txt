@@ -9,14 +9,12 @@ django-braces==1.2.2
 django-classy-tags==0.4
 django-countries==1.5
 django-crispy-forms==1.2.8
-django-dbsettings==0.5
 #django-debug-toolbar==1.0.0
 django-filer==0.9.4
 #django-haystack==2.1.0
 django-model-utils==2.0.0
 django-redis-sessions
 django-sekizai==0.7
-django-synchro==0.5.1
 #django-tastypie==0.11.0
 -e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
