@@ -13,7 +13,6 @@ Backbone.Modal = require('backbone.modal');
 require('./backbone-relational');
 require('../cb/misc/relational-models');
 require('./backbone.io-browserify');
->>>>>>> dev
 
 module.exports = Backbone;
 
