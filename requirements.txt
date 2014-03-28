@@ -18,9 +18,9 @@ django-redis-sessions
 django-sekizai==0.7
 django-synchro==0.5.1
 #django-tastypie==0.11.0
--e git+https://github.com/ContinuumBridge/django-tastypie.git@f857902dc88cd53c8ddc377d4b880e07bfaf3d94#egg=tastypie
+-e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
-git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
+#git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
 factory_boy==2.2.1
 geopy==0.95.1
 mimeparse==0.1.3

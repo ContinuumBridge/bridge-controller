@@ -19,10 +19,11 @@ DATABASES = {
 
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
-    'django-synchro',
+    'synchro',
     'dbsettings'
 )
 
+'''
 SYNCHRO_REMOTE = 'remote'
 SYNCHRO_MODELS = (
     'my_first_app', # all models from my_first_app
@@ -31,6 +32,7 @@ SYNCHRO_MODELS = (
     'django.contrib.sites', # you may specify fully qualified name...
     'auth',                 # or just app label
 )
+'''
 
 '''
 MIDDLEWARE_CLASSES += (
