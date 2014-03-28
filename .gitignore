@@ -2,6 +2,7 @@ node_modules/
 nodejs/data/
 media/
 ./static/
+./src/
 .idea
 .DS_STORE
 .idea
