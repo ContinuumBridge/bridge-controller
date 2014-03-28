@@ -15,12 +15,27 @@
     "q": "~0.9.7",
     "querystring": "~0.2.0",
     "redis": "~0.9.1",
-    "socket.io": "~0.9.16",
-    "restler": "~3.2.0"
+    "socket.io": "~0.9.15",
+    "restler": "~3.2.0",
+    "winston": "^0.7.2"
   },
   "devDependencies": {},
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "browser": {
+    "backbone.marionette": "./portal/static/js/vendor/backbone.marionette.js",
+    "backbone.modal": "./portal/static/js/vendor/backbone.modal-bundled.js",
+    "backbone-bundle": "./portal/static/js/vendor/backbone-bundle.js",
+    "bootstrap": "./portal/static/js/vendor/bootstrap/bootstrap.js",
+    "logger": "./portal/static/js/logger.js",
+    "index": "./portal/static/js/cb/index.js"
+  },
+  "browserify-shim": "./portal/static/js/shim.js",
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
   }
 }

@@ -1,6 +1,8 @@
-var backboneio = require('cb-backbone.io');
-var rest = require('restler'),
-    Q = require('q');
+var backboneio = require('cb-backbone.io')
+    ,logger = require('./logger')
+    ,rest = require('restler')
+    ,Q = require('q')
+    ;
 //var RestClient = require('node-rest-client').Client;
 
 var cookie_reader = require('cookie');
@@ -98,7 +100,7 @@ function DeviceDiscovery() {
                     method: "get",
                     headers: {
                         'Content-type': 'application/json',
-                        'Accept': 'application/json', 
+                        'Accept': 'application/json',
                         'X_CB_SESSIONID': sessionID
                     }
                 };
@@ -107,7 +109,7 @@ function DeviceDiscovery() {
                 var queryArray = [];
 
                 matchFields.forEach(function(matchField) {
-                    
+
                     if (typeof discoveredDevice[matchField] == 'string') {
                         queryArray.push(matchField + '=' + discoveredDevice[matchField]);
                     }
@@ -118,7 +120,7 @@ function DeviceDiscovery() {
                 rest.get(deviceQueryURL, djangoOptions).on('complete', function(data, response) {
 
                     //console.log('data from django is', data.objects[0]);
-                    
+
                     // Add the device to the array
                     if (data && data.objects && data.objects[0]) {
                         // Device has been found

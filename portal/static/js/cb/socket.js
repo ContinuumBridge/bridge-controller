@@ -3,6 +3,8 @@ var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
     ;
 
+var Message = require('./message');
+
 CBApp.addInitializer(function() {
 
     CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 4000});
@@ -11,10 +13,21 @@ CBApp.addInitializer(function() {
         console.log("socket connected");
     });
 
+    CBApp.socket.on('discoveredDevice:reset', function(foundDevices){
+        /*
+        var message = new Message(foundDevices);
+        var foundDevices = message.get('body');
+         */
+        console.log('foundDevices are', foundDevices);
+        CBApp.discoveredDeviceCollection.reset(foundDevices);
+    });
+
     CBApp.socket.publish = function(message) {
 
-      message.destination = "BID" + CBApp.getCurrentBridge().get('id');
+      var destination = "BID" + CBApp.getCurrentBridge().get('id');
+      message.set('destination', destination);
       console.log('destination is', message)
+      /*
       if (typeof message == 'object') {
           var jsonMessage = JSON.stringify(message);
       } else if (typeof message == 'string') {
@@ -23,14 +36,19 @@ CBApp.addInitializer(function() {
           console.error('This message is not an object or a string', message);
           return;
       }
+      */
+      var jsonMessage = message.getJSON();
       CBApp.socket.emit('message', jsonMessage, function(data){
           console.log(data);
       });
     };
     CBApp.socket.sendCommand = function(command) {
-        var message = {};
-        message.message = "command";
-        message.body = command;
-        CBApp.publish(command);
+
+        var message = new Message({
+            type: 'command',
+            body: command
+        })
+        CBApp.socket.publish(message);
     };
 });
+

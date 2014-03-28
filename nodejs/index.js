@@ -1,28 +1,15 @@
 
+var redis = require('redis');
 
-var PortalController = require('./user/portal_controller.js');
+DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080' : 'http://localhost:8000'
 
-portalController = new PortalController(4000);
+redisAuthClient = redis.createClient();
 
-var BridgeController = require('./bridge/bridge_controller.js');
+Portal = {};
+Portal.Controller = require('./portal/portal_controller.js');
+Portal.controller = new Portal.Controller(4000);
 
-bridgeController = new BridgeController(3000);
+Bridge = {};
+Bridge.Controller = require('./bridge/bridge_controller.js');
+Bridge.controller = new Bridge.Controller(3000);
 
-  /*
-  var errorFunction = function() {
-      var err = new Error('another error');
-      raygunClient.send(err);
-      //throw err;
-  }
-  errorFunction();
-  //var t=setInterval(errorFunction,1000);
-  */
-
-
-/*
-bridgeController.bridgeMessages.onValue(function(value) { console.log('Bridge >', value);});
-
-appController.fromApp.onValue(function(value) { 
-    bridgeController.socket.emit('message', value);
-});
-*/

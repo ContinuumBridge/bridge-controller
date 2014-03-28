@@ -1,64 +1,17 @@
-(function($){
 
-	$(document).ready(function() {
-	
-		window.HomeView = Backbone.Layout.extend({
-            
-            //className: 'span4',
-            id: 'home-wrapper',
-            template: '#homeTemplate',
+var CBApp = require('index');
+require('./views/portal_view');
+require('./views/nav_view');
+require('./views/home_view');
 
+CBApp.addInitializer(function () {
 
-            events: {
-                //'click': 'eventWrapperClick',
-                //'click #interest-button': 'interestButtonClick',
-            },
+  CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
 
-            initialize: function() {
+  CBApp.Nav.topBarLayoutView = new CBApp.Nav.TopBarLayoutView();
+  CBApp.homeLayoutView = new CBApp.HomeLayoutView();
 
-                //_.bindAll(this, 'render');
+  CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarLayoutView);
+  CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
+});
 
-
-            },
-
-            beforeRender: function() {
-                
-				this.apps = this.setView('#apps', new AppsWrapperView(), true);
-				this.devices = this.setView('#devices', new DevicesWrapperView(), true);
-				this.commands = this.setView('#commands', new CommandsView(), true);
-				
-            },
-
-        });
-        
-        /*
-        window.ListView = Backbone.Layout.extend({
-            
-            tagName: 'section',
-            className: 'list',
-            template: '#eventList',
-
-            initialize: function() {
-                _.bindAll(this, 'render');
-                this.collection.bind('reset', this.render);
-                
-            },
-
-            beforeRender: function() {
-
-                collection = this.collection;
-
-                this.collection.each(function(vevent) {
-                    this.insertView(new ListVEventView({
-                        model: vevent,
-                        collection: collection,
-                    }));
-                }, this);
-            },
-
-        });
-        */
-        
-	});
-
-})(jQuery);

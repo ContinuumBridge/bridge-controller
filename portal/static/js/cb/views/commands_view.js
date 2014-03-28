@@ -20,13 +20,15 @@ CBApp.CommandsView = Marionette.ItemView.extend({
     },
 
     onRender: function() {
-        
+
         this.$console = this.$('#console');
         this.$commandInput = this.$('#command-input');
 
+        var that = this;
+
         CBApp.socket.on('message', function(message) {
             console.log('Server >', message);
-            this.appendLine(message);
+            that.appendLine(message);
         });
     },
 
@@ -60,7 +62,7 @@ CBApp.CommandsView = Marionette.ItemView.extend({
     
     updateClick: function() {
 
-        this.sendCommand('update');
+        this.sendCommand('update_config');
     },
 
     sendLog: function() {
