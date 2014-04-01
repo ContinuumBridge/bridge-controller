@@ -42,3 +42,4 @@ CBApp.addInitializer(function() {
         CBApp.socket.publish(message);
     };
 });
+

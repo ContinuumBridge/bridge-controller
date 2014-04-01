@@ -10,6 +10,7 @@ CBApp.App = Backbone.RelationalModel.extend({
 });
 
 
+
 CBApp.AppCollection = Backbone.Collection.extend({
 
     model: CBApp.App,

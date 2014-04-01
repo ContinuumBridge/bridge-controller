@@ -5,9 +5,9 @@ CBApp.Adaptor = Backbone.RelationalModel.extend({
 
     initialize: function() {
         
-    },
+    }
+});
 
-}); 
 
 CBApp.AdaptorCollection = Backbone.Collection.extend({
 
