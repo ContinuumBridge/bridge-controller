@@ -9,11 +9,7 @@ module.exports = deviceDiscovery;
 function deviceDiscovery(message) {
 
     var discoveredDevices = message.get('body');
-    /*
-    console.log('discovered devices are', discoveredDevices);
-    console.log('discovered devices type is', typeof discoveredDevices);
-    console.log('discovered devices length is', discoveredDevices.length);
-    */
+
     logger.log('debug', 'in deviceDiscovery message is', message);
     logger.log('debug', 'in deviceDiscovery body is', message.get('body'));
     logger.log('debug', 'in deviceDiscovery sessionID is', message.get('sessionID'));
@@ -51,30 +47,21 @@ function deviceDiscovery(message) {
             // Make a request to Django to get session data
             rest.get(deviceQueryURL, djangoOptions).on('complete', function(data, response) {
 
-                //console.log('data from django is', data.objects[0]);
+                var deviceInstall = {};
+                deviceInstall.mac_addr = discoveredDevice.mac_addr;
+                deviceInstall.device = data.objects[0];
 
                 // Add the device to the array
                 if (data && data.objects && data.objects[0]) {
+
                     // Device has been found
-                    var deviceInstall = {};
-                    device.device_install.mac_addr = discoveredDevice.mac_addr;
-
-                    deviceInstall.device = data.objects[0];
-
-                    // Add the mac address to a device_install object
-                    logger.log('debug', 'device has been found in Django', deviceInstall);
-
-                    devices.push(deviceInstall);
+                    deviceInstall.supported = true;
                 } else {
-                    // Add the mac address to a device_install object
-                    discoveredDevice.device_install = {};
-                    discoveredDevice.device_install.mac_addr = discoveredDevice.mac_addr;
 
                     // Device has not been found
-                    discoveredDevice.device = false;
-                    devices.push(discoveredDevice);
-                    logger.log('debug', 'device has not been found in Django', discoveredDevice);
+                    deviceInstall.supported = false;
                 }
+                devices.push(deviceInstall);
 
                 // If all the discoveredDevices have been iterated over, resolve the promise
                 if (devices.length >= discoveredDevices.length) {
