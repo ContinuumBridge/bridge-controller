@@ -24,14 +24,13 @@ CBApp.addInitializer(function () {
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
   CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
+  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
+  CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
 
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
-
-  //CBApp.discoveredDeviceCollection = new CBApp.DiscoveredDeviceCollection();
-  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  //CBApp.discoveredDeviceCollection.fetch();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
 

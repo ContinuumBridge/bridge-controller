@@ -17,11 +17,12 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
     },  
     onRender: function() {
 
+        // appLayoutView takes the filtered appInstall collection
         CBApp.filteredAppInstallCollection.filter(CBApp.filters.currentBridge());
         var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.filteredAppInstallCollection });
         this.appSection.show(appLayoutView);
 
-        // deviceLayoutView takes the deviceInstall collection
+        // deviceLayoutView takes the filtered deviceInstall collection
         CBApp.filteredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
         var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.filteredDeviceInstallCollection });
         this.deviceSection.show(deviceLayoutView);
@@ -29,7 +30,10 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         var commandsView = new CBApp.CommandsView();
         this.commandPanel.show(commandsView);
 
-        var deviceDiscoveryLayoutView = new CBApp.DeviceDiscoveryLayoutView({ collection: CBApp.discoveredDeviceCollection });
+        CBApp.filteredDiscoveredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
+        var deviceDiscoveryLayoutView = new CBApp.DeviceDiscoveryLayoutView({
+            collection: CBApp.discoveredDeviceInstallCollection
+        });
         this.deviceDiscoverySection.show(deviceDiscoveryLayoutView);
     }   
 });

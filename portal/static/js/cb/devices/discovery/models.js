@@ -37,38 +37,11 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
         var that = this;
 
-        /*
-        var device = this.get('device');
-        var deviceData = device.toJSON();
-        var deviceInstallData = this.toJSON();
-
-        // Separate the adaptor and device_install data
-        var adaptorData = deviceInstallData.adaptor_compatibility[0].adaptor;
-        delete deviceData.adaptor_compatibility;
-
-        var deviceInstallData = deviceData.device_install;
-        delete deviceData.device_install;
-
-        // Instantiate the adaptor and device models
-        var adaptor = CBApp.Adaptor.findOrCreate(adaptorData);
-        var device = CBApp.Device.findOrCreate(deviceData);
-
-        var currentBridge = CBApp.getCurrentBridge();
-
-        // Instantiate the device_install model
-        var deviceInstall = CBApp.DeviceInstall.findOrCreate({
-                adaptor: adaptor,
-                bridge: currentBridge,
-                device: device,
-                mac_addr: deviceInstallData.mac_addr
-        });
-
-        deviceInstall.set('friendly_name', friendlyName);
-        */
-
         var deviceInstallData = this.toJSON();
         var deviceInstall = CBApp.DeviceInstall.findOrCreate(deviceInstallData);
+        deviceInstall.set('friendly_name', friendlyName);
 
+        console.log('In installDevice');
         // Create the device_install model on the server
         CBApp.deviceInstallCollection.create(deviceInstall, {
 
@@ -76,6 +49,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
             success : function(resp){
 
+                console.log('device installed successfully', resp);
                 that.destroy();
             },
 
@@ -97,7 +71,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceCollection',
+            initializeCollection: 'deviceCollection'
             /*
             reverseRelation: {
                 type: Backbone.HasMany,

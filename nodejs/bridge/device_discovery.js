@@ -9,6 +9,8 @@ module.exports = deviceDiscovery;
 function deviceDiscovery(message) {
 
     var discoveredDevices = message.get('body');
+    var bridgeID = message.get('source');
+    var bridgeURL = "/api/bridge/v1/bridge/" + bridgeID.slice(3);
 
     var sessionID = message.get('sessionID');
     var discoveredDeviceInstalls = [];
@@ -44,6 +46,7 @@ function deviceDiscovery(message) {
                 var deviceInstall = {};
                 deviceInstall.mac_addr = discoveredDevice.mac_addr;
                 deviceInstall.device = data.objects[0];
+                deviceInstall.bridge = bridgeURL;
 
                 discoveredDeviceInstalls.push(deviceInstall);
 
@@ -56,7 +59,6 @@ function deviceDiscovery(message) {
                     deferredDiscoveredDeviceInstalls.resolve(message);
                 }
             });
-            console.log('deviceQueryURL is', deviceQueryURL);
         });
     } else if (sessionID) {
 

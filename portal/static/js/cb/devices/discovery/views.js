@@ -23,14 +23,9 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
       var data = {};
       data.install = this.model.get('device') ? 'Install' : 'Request an adaptor';
 
-      // The label is the first four letters of the mac address
-        /*
-      var device_install = this.model.get('device_install');
-      var mac_addr = device_install.mac_addr;
-      data.label = mac_addr.substring(mac_addr.length-5, mac_addr.length-1);
-         */
+      // The label is the last four letters of the mac address
       var macAddr = this.model.get('mac_addr');
-      data.label = mac_addr.substring(mac_addr.length-5, mac_addr.length-1);
+      data.label = macAddr.slice(macAddr.length-5);
 
       return data;
     }

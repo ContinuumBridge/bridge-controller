@@ -45,17 +45,17 @@ function PortalController(socketPort) {
 
         var controllerNode = new ControllerNode(socket);
 
-        Test.sendDevices = function(foundDeviceInstalls) {
+        Test.sendDevices = function() {
 
             var jf = require('jsonfile');
 
-            jf.readFile('test/discovered_devices.json', function(err, foundDeviceInstalls) {
+            var filePath = path.join(__dirname, '../test/discovered_devices.json');
+            jf.readFile(filePath, function(err, foundDeviceInstalls) {
                 if (err) {logger.error(err)};
                 logger.log('debug', 'Test devices from file:', util.inspect(foundDeviceInstalls));
                 socket.emit('discoveredDeviceInstall:reset', foundDeviceInstalls);
                 logger.log('debug', 'Sent test devices');
             });
-
         }
 
         controllerNode.fromRedis.onValue(function(message) {
