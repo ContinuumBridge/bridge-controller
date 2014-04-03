@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "cb-backbone.io": "~0.4.2",
+    "browserify": "3.38.0",
     "baconjs": "~0.6.22",
     "connect": "~2.7.8",
     "cookie": "~0.1.0",
+    "jsonfile": "~1.1.1",
     "node-rest-client": "~0.7.0",
     "q": "~0.9.7",
     "querystring": "~0.2.0",
@@ -19,6 +21,9 @@
     "restler": "~3.2.0",
     "winston": "^0.7.2",
     "underscore": "~1.6.0",
+    "gulp-clean": "~0.2.4",
+    "gulp-browserify": "~0.5.0",
+    "vinyl-source-stream": "0.1.1",
     "ultra-repl": "~1.0.0"
   },
   "devDependencies": {},

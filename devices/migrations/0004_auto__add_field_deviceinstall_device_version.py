@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'DeviceInstall.device_version'
         db.add_column(u'devices_deviceinstall', 'device_version',
-                      self.gf('django.db.models.fields.CharField')(default=None, max_length=255),
+                      self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
                       keep_default=False)
 
 
@@ -98,7 +98,7 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_devices_deviceinstall_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'device': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['devices.Device']"}),
-            'device_version': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'device_version': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'friendly_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mac_addr': ('django.db.models.fields.CharField', [], {'max_length': '255'}),

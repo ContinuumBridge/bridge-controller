@@ -47,7 +47,7 @@ function SocketServer(port) {
         currentUser: currentUserController,
         device: deviceController,
         deviceInstall: deviceInstallController,
-        discoveredDevice: deviceDiscoveryController.backboneSocket,
+        discoveredDevice: discoveredDeviceController.backboneSocket,
         discoveredDeviceInstall: discoveredDeviceInstallController
     });
 

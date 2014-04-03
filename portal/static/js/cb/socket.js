@@ -3,19 +3,17 @@ var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
     ;
 
-//var logger = require('logger')
 var Message = require('./message');
-
 
 CBApp.addInitializer(function() {
 
     CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 4000});
 
     CBApp.socket.on('connect', function(){
-        //logger.log('info', 'Socket connected');
+        console.log('Socket connected');
     });
 
-    CBApp.socket.on('discoveredDevice:reset', function(foundDevices){
+    CBApp.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');

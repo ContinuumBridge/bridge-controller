@@ -45,6 +45,19 @@ function PortalController(socketPort) {
 
         var controllerNode = new ControllerNode(socket);
 
+        Test.sendDevices = function(foundDeviceInstalls) {
+
+            var jf = require('jsonfile');
+
+            jf.readFile('test/discovered_devices.json', function(err, foundDeviceInstalls) {
+                if (err) {logger.error(err)};
+                logger.log('debug', 'Test devices from file:', util.inspect(foundDeviceInstalls));
+                socket.emit('discoveredDeviceInstall:reset', foundDeviceInstalls);
+                logger.log('debug', 'Sent test devices');
+            });
+
+        }
+
         controllerNode.fromRedis.onValue(function(message) {
 
             logger.log('debug', 'controllerNode message:', message);
@@ -52,26 +65,11 @@ function PortalController(socketPort) {
             var url = message.get('url');
             if (url == '/api/bridge/v1/device_discovery' || url == '/api/bridge/v1/device_discovery/') {
 
-                //var dd = socket.of('discoveredDevice');
-                //logger.log('debug', 'discoveredDevice is', dd);
-
                 //socket.of('discoveredDevice').emit('reset', foundDevices);
                 var foundDeviceInstalls = message.get('body');
                 logger.log('debug', 'found devices are', foundDeviceInstalls);
                 socket.emit('discoveredDeviceInstall:reset', foundDeviceInstalls);
 
-                /*
-                portalServer.deviceDiscoveryController.findDevices(message).then(function(foundDevices) {
-
-                    logger.log('debug', 'Found devices:', foundDevices);
-
-                    //deviceDiscoveryController.backboneSocket.emit('reset', foundDevices);
-
-                }, function(error) {
-
-                    console.error(error);
-                });
-                */
             } else {
 
                 logger.log('debug', 'pushing message to portal: ', message.getJSON());

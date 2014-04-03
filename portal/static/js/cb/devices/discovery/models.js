@@ -1,4 +1,5 @@
 
+/*
 CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
@@ -22,6 +23,7 @@ CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
         return response.objects;
     }
 });
+ */
 
 CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
@@ -96,6 +98,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
@@ -103,11 +106,12 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection',
             }
+            */
         }
     ]
 });
 
-CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
+CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
@@ -115,9 +119,8 @@ CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
     initialize: function() {
 
         var self = this;
-        /*
-        console.log('DiscoveredDeviceCollection initialised');
 
+        /*
         // Listen for reset event from the backend
         this.bind('backend:reset', function(models) {
             console.log('DiscoveredDeviceCollection reset with ', models);

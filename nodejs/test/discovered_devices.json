@@ -1,0 +1,85 @@
+[
+    {
+        "mac_addr": "99.99.99.99.99.99"
+    },
+    {
+        "mac_addr": "88.88.88.88.88.88",
+        "device": {
+            "adaptor_compatibility": [
+                {
+                    "adaptor": {
+                        "created": "2014-03-18T14:48:03.687944",
+                        "description": "Description for Adaptor 1",
+                        "exe": "sensortagadaptor.py",
+                        "id": 1,
+                        "modified": "2014-03-26T16:23:10.405213",
+                        "name": "Adaptor 1",
+                        "protocol": "btle",
+                        "provider": "Continuum Bridge",
+                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                        "url": "url.for.the.adaptor.com",
+                        "version": "0.0.1"
+                    },
+                    "created": "2014-03-18T14:48:03.706184",
+                    "device": "/api/bridge/v1/device/1/",
+                    "id": 1,
+                    "modified": "2014-03-18T14:48:03.706220",
+                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                }
+            ],
+            "created": "2014-03-18T14:48:03.670133",
+            "description": "This is a description for Test Device 1",
+            "firmware_revision": "",
+            "hardware_revision": "",
+            "id": 1,
+            "manufacturer_name": "Texas Instruments",
+            "method": "btle",
+            "model_number": "1",
+            "modified": "2014-03-18T14:48:03.670170",
+            "name": "SensorTag",
+            "resource_uri": "/api/bridge/v1/device/1/",
+            "software_revision": "",
+            "system_id": ""
+        }
+    },
+    {
+        "mac_addr": "77.77.77.77.77.77",
+        "device": {
+            "adaptor_compatibility": [
+                {
+                    "adaptor": {
+                        "created": "2014-03-18T14:48:03.687944",
+                        "description": "Description for Adaptor 1",
+                        "exe": "sensortagadaptor.py",
+                        "id": 1,
+                        "modified": "2014-03-26T16:23:10.405213",
+                        "name": "Adaptor 1",
+                        "protocol": "btle",
+                        "provider": "Continuum Bridge",
+                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                        "url": "url.for.the.adaptor.com",
+                        "version": "0.0.1"
+                    },
+                    "created": "2014-03-18T14:48:03.706184",
+                    "device": "/api/bridge/v1/device/1/",
+                    "id": 1,
+                    "modified": "2014-03-18T14:48:03.706220",
+                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                }
+            ],
+            "created": "2014-03-18T14:48:03.670133",
+            "description": "This is a description for Test Device 1",
+            "firmware_revision": "",
+            "hardware_revision": "",
+            "id": 1,
+            "manufacturer_name": "Texas Instruments",
+            "method": "btle",
+            "model_number": "1",
+            "modified": "2014-03-18T14:48:03.670170",
+            "name": "SensorTag",
+            "resource_uri": "/api/bridge/v1/device/1/",
+            "software_revision": "",
+            "system_id": ""
+        }
+    }
+]

@@ -3,8 +3,8 @@ var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
 require('../apps/views');
-require('../devices/device_views');
-require('../devices/device_discovery_views');
+require('../devices/views');
+require('../devices/discovery/views');
 require('./commands_view');
 
 CBApp.HomeLayoutView = Marionette.Layout.extend({

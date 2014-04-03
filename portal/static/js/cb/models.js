@@ -4,6 +4,7 @@ require('./adaptors/models');
 require('./apps/models');
 require('./bridges/models');
 require('./devices/models');
+require('./devices/discovery/models');
 require('./users/models');
 
 require('./misc/decorators');
@@ -28,7 +29,7 @@ CBApp.addInitializer(function () {
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 
-  CBApp.discoveredDeviceCollection = new CBApp.DiscoveredDeviceCollection();
+  //CBApp.discoveredDeviceCollection = new CBApp.DiscoveredDeviceCollection();
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
   //CBApp.discoveredDeviceCollection.fetch();
 
