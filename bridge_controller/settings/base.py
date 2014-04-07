@@ -24,10 +24,7 @@ AUTH_USER_MODEL = 'accounts.CBAuth'
 SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
 #SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
-RAYGUN_API_KEY = "jB/eb5l92ZfmjO0VbMRudg=="
-RAYGUN_API_ENABLED = True
-
-# All Auth 
+# All Auth
 ACCOUNT_AUTHENTICATION_METHOD='email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -57,6 +54,8 @@ FACEBOOK_APP_SECRET = 'b2d0fcf6fbdee2e0ac5893b77666ff50'
 
 SESSION_COOKIE_HTTPONLY = False
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 #SESSION_ENGINE = 'redis_sessions.session'
 #SESSION_REDIS_HOST = 'localhost'
 #SESSION_REDIS_PORT = 6379
@@ -83,7 +82,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hostk
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
@@ -195,6 +194,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     #'/home/bridge_controller/bridge_controller/templates',
     os.path.join(PROJECT_PATH, 'bridge_controller', "templates"),
+    os.path.join(PROJECT_PATH, 'marketing', "templates"),
 )
 
 INSTALLED_APPS = (
@@ -210,6 +210,8 @@ INSTALLED_APPS = (
     'adaptors',
     'devices',
     'portal',
+    'marketing',
+    'crispy_forms',
     'south',
     'tastypie',
     #'reversion',

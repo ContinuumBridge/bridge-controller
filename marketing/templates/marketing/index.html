@@ -1,0 +1,102 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ContinuumBridge">
+    <meta name="author" content="ContinuumBridge">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+    rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
+    rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Main jumbotron for a primary marketing message or call to action
+    -->
+    <div class="jumbotron">
+      <hr>
+      <div class="container">
+        <img src="{{ STATIC_URL }}marketing/images/continuum_bridge.jpg"
+        width="100%">
+      </div>
+      <hr>
+      <p>
+          ContinuumBridge provides an easy to use and secure managed infrastructure and an app market for the Internet of Things. We are working with lead customers consisting of service providers, device manufacturers and application developers. Please register if you would like to be kept informed.
+      </p>
+    </div>
+    <h3>
+      How can ContinuumBridge help you?&nbsp;
+    </h3>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-6">
+          <h2>
+            Consumer
+          </h2>
+          <p>
+              Inanimate objects are becoming smart. Electrical devices we bring into our homes, from thermostats and light switches to fridges and heating systems can now be connected to the internet. Our Bridge will find all of these devices, connect them securely and show you a rich variety of apps that provide you with useful and exciting services. We also look after your privacy: nobody can see or control your connected devices without your permission.
+          </p>
+          <p>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h2>
+            Service Provider
+          </h2>
+          <p>
+              With ContinuumBridge, providing services that make use of connected devices is just a matter of writing an app. Our apps live primarily on the home bridge rather than on a smart phone and can make use of any connected devices in the home. Potential services include energy management, security, e-health, assisted living and home automation, but with low barriers to creating new Internet-of-Things applications
+          </p>
+          <p>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h2>
+            Device Manufacturer
+          </h2>
+          <p>
+              The ContinuumBridge home bridge searches for new devices and asks users if they want them to become part of their network. Currently devices can be connected using Bluetooth Smart and WiFi and we will add other protocols according to demand. New devices are easily supported by creating a simple adapter. This opens your products up to a world of innovative apps that can use them and access to new and diverse markets through our app market.
+          </p>
+          <p>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h2>
+            Developer
+          </h2>
+          <p>
+              ContinuumBridge apps run on the home bridge, with user interaction via integrated web-apps and phone-apps. ContinuumBridge provides server infrastructure for the back-end and developers may also integrate with their own back-ends. The bridge takes care of connecting to devices and all communication with them is performed using a unified JSON API. ContinuumBridge is currently working with a limited number of alpha developers. Please register if you would like to be kept informed of wider releases.
+          </p>
+          <p>
+          </p>
+        </div>
+      </div>
+      <form action="." class="crispy form-group" method="post">
+        {% crispy form form.helper %}
+      </form>
+      <hr>
+      <footer>
+        <p>
+          © ContinuumBridge Ltd 2014
+        </p>
+      </footer>
+    </div>
+    <!-- /container -->
+    <!-- Bootstrap core JavaScript==================================================-
+    ->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+    </script>
+    <script src="{{ STATIC_URL }}marketing/js/bootstrap.min.js">
+    </script>
+  </body>
+
+</html>

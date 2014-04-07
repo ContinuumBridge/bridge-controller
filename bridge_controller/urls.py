@@ -11,6 +11,8 @@ from django.conf import settings
 from accounts.api.api import v1 as users_v1
 from bridges.api.api import v1 as bridges_v1
 
+from marketing.views import HomeView
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'bridge_controller.views.home', name='home'),
@@ -28,7 +30,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^api/user/', include(users_v1.urls)),
-    (r'^api/bridge/', include(bridges_v1.urls))
+    (r'^api/bridge/', include(bridges_v1.urls)),
+
+    url(r'^$', HomeView.as_view(), name='index'),
+    url(r'^success$', TemplateView.as_view(template_name='marketing/success.html'))
 )
 
 if settings.DEBUG:
