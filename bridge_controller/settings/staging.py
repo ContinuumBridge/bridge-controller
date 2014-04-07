@@ -19,21 +19,4 @@ DATABASES = {
 
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
-    'django-synchro',
-    'dbsettings'
 )
-
-SYNCHRO_REMOTE = 'remote'
-SYNCHRO_MODELS = (
-    'my_first_app', # all models from my_first_app
-    ('my_second_app', 'model1', 'model2'), # only listed models (letter case doesn't matter)
-    'my_third_app', # all models again
-    'django.contrib.sites', # you may specify fully qualified name...
-    'auth',                 # or just app label
-)
-
-'''
-MIDDLEWARE_CLASSES += (
-    'raygun_dot_io.middleware.RaygunDotIOMiddleware'
-)
-'''

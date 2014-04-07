@@ -21,11 +21,3 @@ INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
 )
 
-RAYGUN_API_KEY = "jB/eb5l92ZfmjO0VbMRudg=="
-RAYGUN_API_ENABLED = True
-
-'''
-MIDDLEWARE_CLASSES += (
-    'raygun_dot_io.middleware.RaygunDotIOMiddleware'
-)
-'''
