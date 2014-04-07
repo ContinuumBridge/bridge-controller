@@ -14,5 +14,11 @@ require('./backbone-relational');
 require('../cb/misc/relational-models');
 require('./backbone.io-browserify');
 
+var SortedMixin = require('./backbone-sorted');
+_.extend(Marionette.CollectionView.prototype, SortedMixin);
+_.extend(Marionette.CompositeView.prototype, SortedMixin);
+
 module.exports = Backbone;
+
+
 

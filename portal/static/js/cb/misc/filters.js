@@ -14,5 +14,6 @@ CBApp.filters.currentBridge = function() {
     }
 }
 
+//CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
+CBApp.filters.apiRegex = /[\w/]*([\d])/;
 
-CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;

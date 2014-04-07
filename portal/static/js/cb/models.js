@@ -29,6 +29,9 @@ CBApp.addInitializer(function () {
 
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
 
+  CBApp.messageCollection = new CBApp.MessageCollection();
+  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 

@@ -2,10 +2,33 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-CBApp.CommandsView = Marionette.ItemView.extend({
+CBApp.MessageView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: '',
+    template: require('./templates/message.html')
+})
+
+
+CBApp.MessageListView = Marionette.CollectionView.extend({
+
+    tagName: 'ul',
+    className: 'animated-list',
+    itemView: CBApp.AppView,
+
+    onRender : function(){
+
+    }
+})
+
+CBApp.MessageLayoutView = Marionette.Layout.extend({
     
     id: 'commands',
-    template: '#commandsTemplate',
+    template: require('./templates/messageSection.html'),
+
+    regions: {
+        messageList: '#message-list'
+    },
 
     events: {
         'click #send-button': 'sendCommand',
@@ -25,10 +48,6 @@ CBApp.CommandsView = Marionette.ItemView.extend({
 
         var that = this;
 
-        CBApp.socket.on('message', function(message) {
-            console.log('Server >', message);
-            that.appendLine(message);
-        });
     },
 
     appendLine: function(message) {
@@ -45,8 +64,8 @@ CBApp.CommandsView = Marionette.ItemView.extend({
             var command = this.$commandInput.val();
             this.$commandInput.value = "";
         }
+        this.collection.sendCommand(command);
         CBApp.socket.sendCommand(command);
-        this.appendLine(command);
     },
 
     startClick: function() {

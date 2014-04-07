@@ -3,7 +3,8 @@ var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
     ;
 
-var Message = require('./message');
+require('./messages/models');
+//var Message = require('./message');
 
 CBApp.addInitializer(function() {
 
@@ -27,17 +28,27 @@ CBApp.addInitializer(function() {
       var destination = "BID" + CBApp.getCurrentBridge().get('id');
       message.set('destination', destination);
       var jsonMessage = message.getJSON();
+
       CBApp.socket.emit('message', jsonMessage, function(data){
           //logger.log('verbose', 'Sent to socket ' + data);
       });
     };
-    CBApp.socket.sendCommand = function(command) {
 
-        var message = new Message({
-            type: 'command',
-            body: command
-        })
-        CBApp.socket.publish(message);
-    };
+    CBApp.socket.on('message', function(jsonString) {
+
+        try {
+            var jsonMessage = JSON.parse(jsonString);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+        var message = new Message(jsonMessage);
+
+        var date = new Date();
+        message.set('time_received', date);
+        console.log('Server >', message);
+        CBApp.messageCollection.add(message);
+        //that.appendLine(message);
+    });
 });
 

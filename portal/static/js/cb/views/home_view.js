@@ -5,7 +5,7 @@ var Backbone = require('backbone-bundle')
 require('../apps/views');
 require('../devices/views');
 require('../devices/discovery/views');
-require('./commands_view');
+require('../messages/views');
 
 CBApp.HomeLayoutView = Marionette.Layout.extend({
     template: '#homeSectionTemplate',
@@ -13,7 +13,7 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         appSection: '#app-section',
         deviceSection: '#device-section',
         deviceDiscoverySection: '#device-discovery-section',
-        commandPanel: '#command-panel'
+        messageSection: '#command-panel'
     },  
     onRender: function() {
 
@@ -27,8 +27,9 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.filteredDeviceInstallCollection });
         this.deviceSection.show(deviceLayoutView);
 
-        var commandsView = new CBApp.CommandsView();
-        this.commandPanel.show(commandsView);
+        CBApp.filteredMessageCollection.filter(CBApp.filters.currentBridge());
+        var messageLayoutView = new CBApp.MessageLayoutView({ collection: CBApp.filteredMessageCollection});
+        this.messageSection.show(messageLayoutView);
 
         CBApp.filteredDiscoveredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
         var deviceDiscoveryLayoutView = new CBApp.DeviceDiscoveryLayoutView({

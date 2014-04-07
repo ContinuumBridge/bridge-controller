@@ -19,8 +19,13 @@ gulp.task('clean', function () {
 
 gulp.task('client', function() {
 
+    var hbsfy = require('hbsfy').configure({
+        extensions: ["html"]
+    })
+
     var b = browserify();
     b.add(CLIENT_SCRIPTS + 'main.js');
+    b.transform(hbsfy);
     var bundleStream = b.bundle();
 
     var t = bundleStream
