@@ -31,7 +31,7 @@ CBApp.MessageCollection = Backbone.Collection.extend({
     sendCommand: function(command) {
 
         var time = new Date();
-        var message = new Message({
+        var message = new CBApp.Message({
             type: 'command',
             body: command,
             time_sent: time

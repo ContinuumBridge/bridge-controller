@@ -6,7 +6,7 @@ CBApp.DeviceView = Marionette.ItemView.extend({
     
     tagName: 'li',
     className: 'new-item',
-    template: '#deviceItemViewTemplate',
+    template: require('./templates/deviceInstall.html'),
 
     events: {
         'click .uninstall-button': 'uninstall',
@@ -38,7 +38,7 @@ CBApp.DeviceListView = Marionette.CollectionView.extend({
 
 CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
-    template: '#deviceSectionTemplate',
+    template: require('./templates/deviceInstallSection.html'),
 
     events: {
         'click #connect-device': 'discover',
@@ -50,7 +50,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.socket.sendCommand('discover');
+        CBApp.messageCollection.sendCommand('discover');
     },
 
     onRender: function() {

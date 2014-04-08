@@ -10,7 +10,7 @@ CBApp.Nav.BridgeItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
 
-    template: '#bridgeItemViewTemplate',
+    template: require('./templates/bridgeItem.html'),
 
     serializeData: function(){
         return {
@@ -39,7 +39,7 @@ CBApp.Nav.BridgeDropdownView = Marionette.CompositeView.extend({
     className: 'dropdown',
     itemView: CBApp.Nav.BridgeItemView,
     itemViewContainer: '#bridge-list',
-    template: '#bridgeDropdownTemplate',
+    template: require('./templates/bridgeDropdown.html'),
 
     initialize: function () {
 
@@ -65,7 +65,7 @@ CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
     tagName: 'li',
     className: 'dropdown',
 
-    template: '#navAccountMenuTemplate',
+    template: require('./templates/navAccountMenu.html'),
 
     attributes : function () {
 
@@ -100,7 +100,7 @@ CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
 
 CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
 
-    template: '#navRightSectionTemplate',
+    template: require('./templates/navRightSection.html'),
     className: 'container',
 
     regions: {
@@ -119,7 +119,7 @@ CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
 
 CBApp.Nav.TopBarLayoutView = Marionette.Layout.extend({
 
-    template: '#navSectionTemplate',
+    template: require('./templates/navSection.html'),
     className: 'container',
 
     regions: {

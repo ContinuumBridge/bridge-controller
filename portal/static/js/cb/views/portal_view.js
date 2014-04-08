@@ -3,7 +3,7 @@ var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
 CBApp.PortalLayout = Marionette.Layout.extend({
-    template: '#portalLayoutTemplate',
+    template: require('./templates/portalSection.html'),
     regions: {
       navRegion: "#nav-region",
       mainRegion: "#main-region",

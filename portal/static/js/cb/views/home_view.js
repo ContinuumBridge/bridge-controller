@@ -8,7 +8,9 @@ require('../devices/discovery/views');
 require('../messages/views');
 
 CBApp.HomeLayoutView = Marionette.Layout.extend({
-    template: '#homeSectionTemplate',
+
+    template: require('./templates/homeSection.html'),
+
     regions: {
         appSection: '#app-section',
         deviceSection: '#device-section',

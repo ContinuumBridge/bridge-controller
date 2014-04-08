@@ -1,7 +1,9 @@
 
 var CBApp = require('index');
 require('./adaptors/models');
+require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
@@ -28,6 +30,7 @@ CBApp.addInitializer(function () {
   CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
 
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
+  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
 
   CBApp.messageCollection = new CBApp.MessageCollection();
   CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);

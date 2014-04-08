@@ -9,8 +9,19 @@ CBApp.Device = Backbone.RelationalModel.extend({
     },
 
     relations: [
+        {
+            type: Backbone.HasMany,
+            key: 'adaptorCompatibility',
+            keySource: 'adaptor_compatibility',
+            keyDestination: 'adaptor_compatibility',
+            relatedModel: 'CBApp.AdaptorCompatibility',
+            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            createModels: true,
+            initializeCollection: 'adaptorCompatibilityCollection',
+            includeInJSON: true
+        }
         /*
-        {   
+        {
             type: Backbone.HasMany,
             key: 'deviceInstalls',
             //keySource: 'device_installs',
@@ -46,9 +57,13 @@ CBApp.DeviceCollection = Backbone.Collection.extend({
 CBApp.DeviceInstall = Backbone.RelationalModel.extend({
     
     idAttribute: 'id',
-    
+
     initialize: function() {
         
+
+    },
+
+    computeds: {
 
     },
 

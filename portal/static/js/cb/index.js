@@ -17,6 +17,7 @@ CBApp.addInitializer(function () {
     CBApp.InstallDeviceModal = Backbone.Modal.extend({
 
         template: _.template($('#discovery-modal-template').html()),
+        template: require('./views/templates/discoveryModal.html'),
         cancelEl: '#cancel-button',
         submitEl: '#submit-button',
 

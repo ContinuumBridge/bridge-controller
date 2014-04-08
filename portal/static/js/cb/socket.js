@@ -27,7 +27,8 @@ CBApp.addInitializer(function() {
 
       var destination = "BID" + CBApp.getCurrentBridge().get('id');
       message.set('destination', destination);
-      var jsonMessage = message.getJSON();
+      console.log('Message is', message);
+      var jsonMessage = message.toJSON();
 
       CBApp.socket.emit('message', jsonMessage, function(data){
           //logger.log('verbose', 'Sent to socket ' + data);
@@ -42,7 +43,7 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        var message = new Message(jsonMessage);
+        var message = new CBApp.Message(jsonMessage);
 
         var date = new Date();
         message.set('time_received', date);

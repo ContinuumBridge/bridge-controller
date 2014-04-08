@@ -35,3 +35,8 @@
   z-index: 2;
 }
 
+.unconfirmed {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}

@@ -38,6 +38,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         var that = this;
 
         var deviceInstallData = this.toJSON();
+        console.log('deviceInstallData is', deviceInstallData);
         var deviceInstall = CBApp.DeviceInstall.findOrCreate(deviceInstallData);
         deviceInstall.set('friendly_name', friendlyName);
 

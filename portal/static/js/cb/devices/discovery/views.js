@@ -6,7 +6,8 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
     className: 'new-item',
-    template: '#discoveredDeviceItemViewTemplate',
+    template: require('./templates/discoveredDevice.html'),
+    //template: '#discoveredDeviceItemViewTemplate',
 
     events: {
         'click': 'discoveredDeviceClick',
@@ -49,7 +50,8 @@ CBApp.DiscoveredDeviceListView = Marionette.CollectionView.extend({
 
 CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
 
-    template: '#deviceDiscoverySectionTemplate',
+    //template: '#deviceDiscoverySectionTemplate',
+    template: require('./templates/discoveredDeviceSection.html'),
 
     events: {
         'click #rescan': 'discover'
@@ -66,7 +68,7 @@ CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.socket.sendCommand('discover');
+        CBApp.messageCollection.sendCommand('discover');
     }
 })
 
