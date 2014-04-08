@@ -1,2 +1,0 @@
-cb_uwsgi_for_nginx.ini merge=ours
-cb_uwsgi_for_node.ini merge=ours
