@@ -24,6 +24,7 @@ function requestRouter(message, toBridge, toRedis){
             break;
 
         case '/api/bridge/v1/device_discovery/':
+
             deviceDiscovery(message).then(function(message) {
 
                 logger.log('debug', 'message in request_router is', message);
@@ -31,7 +32,7 @@ function requestRouter(message, toBridge, toRedis){
                 logger.log('debug', 'Pushed to redis for device discovery')
             }, function(error) {
 
-                logger.error('Error in deviceDiscovery');
+                logger.error('Error in deviceDiscovery', error);
             });
             break;
 

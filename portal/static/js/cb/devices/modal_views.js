@@ -9,7 +9,6 @@ CBApp.InstallDeviceModal = Backbone.Modal.extend({
     submitEl: '#submit-button',
 
     submit: function() {
-        console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
     }

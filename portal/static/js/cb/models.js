@@ -1,9 +1,12 @@
 
 var CBApp = require('index');
 require('./adaptors/models');
+require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
+require('./devices/discovery/models');
 require('./users/models');
 
 require('./misc/decorators');
@@ -23,13 +26,20 @@ CBApp.addInitializer(function () {
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
   CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
+  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
+  CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
+  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
+
+  CBApp.messageCollection = new CBApp.MessageCollection([
+      { body: "Test message 1", source: "BID8", destination: "UID2" },
+      { body: "Test message 2", source: "UID2", destination: "BID8" },
+  ]);
+  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
-
-  CBApp.discoveredDeviceCollection = new CBApp.DiscoveredDeviceCollection();
-  //CBApp.discoveredDeviceCollection.fetch();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
 

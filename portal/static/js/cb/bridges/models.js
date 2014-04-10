@@ -1,36 +1,17 @@
 
+//var logger = require('logger');
+
 CBApp.Bridge = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
     initialize: function() {
-        
-        /*
-        // Instantiate some AppInstall models
-        var appInstallArray = this.get('apps');
-        if (appInstallArray) {
-            for (var i = 0; i < appInstallArray.length; i++) {
-                var appInstall = new CBApp.AppInstall(appInstallArray[i]);
-                //bridgeControl.set('user', this);
-                CBApp.appInstallCollection.add(appInstall);
-            }   
-        }   
 
-        // Instantiate some DeviceInstall models
-        var deviceInstallArray = this.get('devices');
-        if (deviceInstallArray) {
-            for (var i = 0; i < deviceInstallArray.length; i++) {
-                var deviceInstall = new CBApp.DeviceInstall(deviceInstallArray[i]);
-                //bridgeControl.set('user', this);
-                CBApp.appInstallCollection.add(appInstall);
-            }   
-        } 
-        */
     },
 
-    setCurrent: function(bridge) {
+    getCBID: function() {
 
-
+        return "BID" + this.get('id');
     },
 
     relations: [
@@ -85,7 +66,6 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     },
     
     parse : function(response){
-        console.log('response was %s', response);
         return response.objects;
     }
 });
@@ -95,7 +75,7 @@ CBApp.getCurrentBridge = function() {
     var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
 
     if (!bridge) {
-        console.log('There is no current bridge');
+        //logger.log('warn', 'There is no current bridge');
         bridge = false;
     } else {
         bridge.set({current: true});
@@ -109,16 +89,7 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     initialize: function() {
-        
-        /*
-        var bridgeData = this.get('bridge');
-        console.log('bridgeData is', bridgeData);
-        if (bridgeData) {
-            var bridge = new CBApp.Bridge(bridgeData);
-            bridge.set('control', this);
-            CBApp.bridgeCollection.add(bridge);
-        }
-        */
+
     },
 
     relations: [
@@ -157,8 +128,7 @@ CBApp.BridgeControlCollection = Backbone.Collection.extend({
     },
     
     parse : function(response){
-        console.log('response was %s', response);
         return response.objects;
-    },
+    }
 });
 

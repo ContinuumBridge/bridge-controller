@@ -9,22 +9,14 @@ module.exports = deviceDiscovery;
 function deviceDiscovery(message) {
 
     var discoveredDevices = message.get('body');
-    /*
-    console.log('discovered devices are', discoveredDevices);
-    console.log('discovered devices type is', typeof discoveredDevices);
-    console.log('discovered devices length is', discoveredDevices.length);
-    */
-    logger.log('debug', 'in deviceDiscovery message is', message);
-    logger.log('debug', 'in deviceDiscovery body is', message.get('body'));
-    logger.log('debug', 'in deviceDiscovery sessionID is', message.get('sessionID'));
+    var bridgeID = message.get('source');
+    var bridgeURL = "/api/bridge/v1/bridge/" + bridgeID.slice(3);
 
     var sessionID = message.get('sessionID');
-    var devices = [];
-    var deferredDiscoveredDevice = Q.defer();
+    var discoveredDeviceInstalls = [];
+    var deferredDiscoveredDeviceInstalls = Q.defer();
 
-    console.log('X_CB_SESSIONID is', sessionID);
-
-    if(message && discoveredDevices && sessionID) {
+    if(discoveredDevices && sessionID) {
 
         discoveredDevices.forEach(function(discoveredDevice, index) {
 
@@ -51,41 +43,30 @@ function deviceDiscovery(message) {
             // Make a request to Django to get session data
             rest.get(deviceQueryURL, djangoOptions).on('complete', function(data, response) {
 
-                //console.log('data from django is', data.objects[0]);
+                var deviceInstall = {};
+                deviceInstall.mac_addr = discoveredDevice.mac_addr;
+                deviceInstall.device = data.objects[0];
+                deviceInstall.bridge = bridgeURL;
 
-                // Add the device to the array
-                if (data && data.objects && data.objects[0]) {
-                    // Device has been found
-                    var device = data.objects[0];
-                    device.device = true;
-
-                    // Add the mac address to a device_install object
-                    device.device_install = {};
-                    device.device_install.mac_addr = discoveredDevice.mac_addr;
-                    logger.log('debug', 'device has been found in Django', device);
-
-                    devices.push(device);
-                } else {
-                    // Add the mac address to a device_install object
-                    discoveredDevice.device_install = {};
-                    discoveredDevice.device_install.mac_addr = discoveredDevice.mac_addr;
-
-                    // Device has not been found
-                    discoveredDevice.device = false;
-                    devices.push(discoveredDevice);
-                    logger.log('debug', 'device has not been found in Django', discoveredDevice);
-                }
+                discoveredDeviceInstalls.push(deviceInstall);
 
                 // If all the discoveredDevices have been iterated over, resolve the promise
-                if (devices.length >= discoveredDevices.length) {
-                    console.log('devices is', devices);
-                    message.set('body', devices);
+                if (discoveredDeviceInstalls.length >= discoveredDevices.length) {
+
+                    console.log('devices is', discoveredDeviceInstalls);
+                    message.set('body', discoveredDeviceInstalls);
                     logger.log('debug', 'message at device_discovery exit is', message);
-                    deferredDiscoveredDevice.resolve(message);
+                    deferredDiscoveredDeviceInstalls.resolve(message);
                 }
             });
-            console.log('deviceQueryURL is', deviceQueryURL);
         });
+    } else if (sessionID) {
+
+        // No devices were found
+        deferredDiscoveredDeviceInstalls.resolve(message);
+    } else {
+
+        deferredDiscoveredDeviceInstalls.reject('No sessionID was provided');
     }
-    return deferredDiscoveredDevice.promise;
+    return deferredDiscoveredDeviceInstalls.promise;
 }

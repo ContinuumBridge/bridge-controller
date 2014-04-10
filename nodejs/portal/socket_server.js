@@ -30,7 +30,8 @@ function SocketServer(port) {
     var deviceController = this.deviceController = new djangoBackbone(Portal.DJANGO_URL + 'device/');
     var deviceInstallController = this.deviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'device_install/');
 
-    var deviceDiscoveryController = this.deviceDiscoveryController = new DeviceDiscovery();
+    var discoveredDeviceController = this.discoveredDeviceController = new DeviceDiscovery();
+    var discoveredDeviceInstallController = this.discoveredDeviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'discovered_device_install/');
 
     var bridgeController = this.bridgeController = new djangoBackbone(Portal.DJANGO_URL + 'bridge/');
     var bridgeControlController = this.bridgeControlController = new djangoBackbone(Portal.DJANGO_URL + 'bridge_control/');
@@ -46,7 +47,8 @@ function SocketServer(port) {
         currentUser: currentUserController,
         device: deviceController,
         deviceInstall: deviceInstallController,
-        discoveredDevice: deviceDiscoveryController.backboneSocket
+        discoveredDevice: discoveredDeviceController.backboneSocket,
+        discoveredDeviceInstall: discoveredDeviceInstallController
     });
 
     // Authenticate the sessionid from the socket with django

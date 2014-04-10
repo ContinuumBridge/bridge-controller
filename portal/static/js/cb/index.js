@@ -16,7 +16,8 @@ CBApp = new Marionette.Application({
 CBApp.addInitializer(function () {
     CBApp.InstallDeviceModal = Backbone.Modal.extend({
 
-        template: _.template($('#discovery-modal-template').html()),
+        //template: _.template($('#discovery-modal-template').html()),
+        template: require('./views/templates/discoveryModal.html'),
         cancelEl: '#cancel-button',
         submitEl: '#submit-button',
 
@@ -36,16 +37,17 @@ CBApp.Controller = Marionette.Controller.extend({
     //CBApp.portalLayout.show(CBApp.deviceLayout);
     //CBApp.deviceCollection.fetch();
   },
-  installDevice: function (discoveredDevice) {
+  installDevice: function (discoveredDeviceInstall) {
     console.log('We got to the controller!');
     var installDeviceModal = new CBApp.InstallDeviceModal({
-        model: discoveredDevice,
+        model: discoveredDeviceInstall,
         install: function() {
             console.log('Install callback!');
         }
     });
     CBApp.portalLayout.modalsRegion.show(installDeviceModal);
   },
+
   setCurrentBridge: function(bridge) {
 
       var currentBridges = CBApp.bridgeCollection.where({current: true})

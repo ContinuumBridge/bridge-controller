@@ -3,52 +3,53 @@ var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
     ;
 
-var Message = require('./message');
+require('./messages/models');
+//var Message = require('./message');
 
 CBApp.addInitializer(function() {
 
     CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 4000});
 
     CBApp.socket.on('connect', function(){
-        console.log("socket connected");
+        console.log('Socket connected');
     });
 
-    CBApp.socket.on('discoveredDevice:reset', function(foundDevices){
+    CBApp.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');
          */
         console.log('foundDevices are', foundDevices);
-        CBApp.discoveredDeviceCollection.reset(foundDevices);
+        CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
     });
 
     CBApp.socket.publish = function(message) {
 
       var destination = "BID" + CBApp.getCurrentBridge().get('id');
       message.set('destination', destination);
-      console.log('destination is', message)
-      /*
-      if (typeof message == 'object') {
-          var jsonMessage = JSON.stringify(message);
-      } else if (typeof message == 'string') {
-          var jsonMessage = message;
-      } else {
-          console.error('This message is not an object or a string', message);
-          return;
-      }
-      */
-      var jsonMessage = message.getJSON();
+      console.log('Message is', message);
+      var jsonMessage = message.toJSON();
+
       CBApp.socket.emit('message', jsonMessage, function(data){
-          console.log(data);
+          //logger.log('verbose', 'Sent to socket ' + data);
       });
     };
-    CBApp.socket.sendCommand = function(command) {
 
-        var message = new Message({
-            type: 'command',
-            body: command
-        })
-        CBApp.socket.publish(message);
-    };
+    CBApp.socket.on('message', function(jsonString) {
+
+        try {
+            var jsonMessage = JSON.parse(jsonString);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+        var message = new CBApp.Message(jsonMessage);
+
+        var date = new Date();
+        message.set('time_received', date);
+        console.log('Server >', message);
+        CBApp.messageCollection.add(message);
+        //that.appendLine(message);
+    });
 });
 
