@@ -38,7 +38,7 @@ gulp.task('watch', function() {
 })
 
 gulp.task('node_server', function () {
-    nodemon({ script: './nodejs/index.js', ext: 'html js'})
+    nodemon({ script: './nodejs/index.js', watch: './nodejs'})
     //.on('restart', ['lint'])
 })
 

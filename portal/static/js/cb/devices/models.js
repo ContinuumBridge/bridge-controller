@@ -58,12 +58,16 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
     
     idAttribute: 'id',
 
-    initialize: function() {
-        
+    computeds: {
 
+        unconfirmed: function() {
+            var isNew = this.isNew();
+            return isNew || this.hasChangedSinceLastSync;
+        }
     },
 
-    computeds: {
+    initialize: function() {
+        
 
     },
 

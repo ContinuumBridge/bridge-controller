@@ -47,6 +47,7 @@ CBApp.Controller = Marionette.Controller.extend({
     });
     CBApp.portalLayout.modalsRegion.show(installDeviceModal);
   },
+
   setCurrentBridge: function(bridge) {
 
       var currentBridges = CBApp.bridgeCollection.where({current: true})

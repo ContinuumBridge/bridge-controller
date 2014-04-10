@@ -9,8 +9,9 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
 
     },
 
-    setCurrent: function(bridge) {
+    getCBID: function() {
 
+        return "BID" + this.get('id');
     },
 
     relations: [

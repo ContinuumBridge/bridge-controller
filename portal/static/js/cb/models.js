@@ -32,7 +32,10 @@ CBApp.addInitializer(function () {
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
   CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
 
-  CBApp.messageCollection = new CBApp.MessageCollection();
+  CBApp.messageCollection = new CBApp.MessageCollection([
+      { body: "Test message 1", source: "BID8", destination: "UID2" },
+      { body: "Test message 2", source: "UID2", destination: "BID8" },
+  ]);
   CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();

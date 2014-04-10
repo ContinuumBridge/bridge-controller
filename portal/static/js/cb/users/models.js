@@ -47,8 +47,13 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
             }
             */
         }
-    ]
-}); 
+    ],
+
+    getCBID: function() {
+
+        return "UID" + this.get('id');
+    }
+});
 
 CBApp.CurrentUserCollection = Backbone.Collection.extend({
 

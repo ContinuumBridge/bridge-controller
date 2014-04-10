@@ -29,8 +29,9 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
         var deviceLayoutView = new CBApp.DeviceLayoutView({ collection: CBApp.filteredDeviceInstallCollection });
         this.deviceSection.show(deviceLayoutView);
 
-        CBApp.filteredMessageCollection.filter(CBApp.filters.currentBridge());
+        CBApp.filteredMessageCollection.filter(CBApp.filters.messageCurrentBridge());
         var messageLayoutView = new CBApp.MessageLayoutView({ collection: CBApp.filteredMessageCollection});
+        //var messageLayoutView = new CBApp.MessageLayoutView({ collection: CBApp.messageCollection});
         this.messageSection.show(messageLayoutView);
 
         CBApp.filteredDiscoveredDeviceInstallCollection.filter(CBApp.filters.currentBridge());

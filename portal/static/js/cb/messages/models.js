@@ -5,7 +5,35 @@ CBApp.Message = Backbone.RelationalModel.extend({
 
     initialize: function() {
         
+    },
+
+    getSourceID: function() {
+
+        var source = this.get('source');
+        return (typeof source === 'string') ? source : source.get('id');
+    },
+
+    getDestinationID: function() {
+
+        var destination = this.get('source');
+        return (typeof destination === 'string') ? destination : destination.get('id');
     }
+
+    /*
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'source',
+            keySource: 'source',
+            keyDestination: 'source',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: false,
+            includeInJSON: 'BID',
+            initializeCollection: 'bridgeCollection',
+        }
+    ]
+    */
 });
 
 CBApp.MessageCollection = Backbone.Collection.extend({
@@ -28,12 +56,17 @@ CBApp.MessageCollection = Backbone.Collection.extend({
         return response.objects;
     },
 
-    sendCommand: function(command) {
+    sendMessage: function(type, body) {
 
         var time = new Date();
+        var currentBridgeID = "BID" + CBApp.getCurrentBridge().get('id');
+        var currentUserID = "UID" + CBApp.getCurrentUser();
+
         var message = new CBApp.Message({
-            type: 'command',
-            body: command,
+            destination: currentBridgeID,
+            source: currentUserID,
+            type: type,
+            body: body,
             time_sent: time
         });
 

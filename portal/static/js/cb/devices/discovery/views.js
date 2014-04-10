@@ -68,7 +68,7 @@ CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.messageCollection.sendCommand('discover');
+        CBApp.messageCollection.sendMessage('command', 'discover');
     }
 })
 

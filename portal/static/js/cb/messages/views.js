@@ -4,20 +4,44 @@ var Backbone = require('backbone-bundle')
 
 CBApp.MessageView = Marionette.ItemView.extend({
 
-    tagName: 'li',
+    tagName: 'tr',
     className: '',
-    template: require('./templates/message.html')
-})
+    template: require('./templates/message.html'),
 
+    serializeData: function() {
+
+      //var bridgeID = "BID" + this.model.get('bridge').get('id');
+      var data = {};
+      var incoming = Boolean(this.model.get('time_received'));
+      data.direction = incoming ? "=>" : "<=";
+      data.remote = incoming ? this.model.get('source') : this.model.get('destination');
+      data.body = this.model.get('body');
+      return data;
+    }
+})
 
 CBApp.MessageListView = Marionette.CollectionView.extend({
 
-    tagName: 'ul',
-    className: 'animated-list',
-    itemView: CBApp.AppView,
+    id: 'messages-table',
+    tagName: 'table',
+    className: 'table-condensed table-hover table-striped',
+    itemView: CBApp.MessageView,
 
     onRender : function(){
 
+    },
+
+    onAfterItemAdded: function(itemView){
+
+        /*
+        messagesWrapper = $(this.el).parentNode;
+        if (messagesWrapper) {
+            console.log('MessageListView rendered', this.el.parentNode, messagesWrapper.scrollHeight);
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
+            console.log('item added!', messagesWrapper, messagesWrapper.scrollHeight);
+        }
+        */
+        //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
     }
 })
 
@@ -27,11 +51,12 @@ CBApp.MessageLayoutView = Marionette.Layout.extend({
     template: require('./templates/messageSection.html'),
 
     regions: {
-        messageList: '#message-list'
+        messageList: '#messages-wrapper'
     },
 
     events: {
-        'click #send-button': 'sendCommand',
+        'click #send-button': 'sendClick',
+        'keyup #command-input' : 'keyPressEventHandler',
         'click #start': 'startClick',
         'click #stop': 'stopClick',
         'click #update': 'updateClick',
@@ -46,26 +71,33 @@ CBApp.MessageLayoutView = Marionette.Layout.extend({
         this.$console = this.$('#console');
         this.$commandInput = this.$('#command-input');
 
-        var that = this;
-
+        var messageListView = new CBApp.MessageListView({ collection: this.collection });
+        this.messageList.show(messageListView);
+        this.listenTo(messageListView, 'item:added', this.scrollBottom);
     },
 
-    appendLine: function(message) {
+    scrollBottom: function() {
 
-        /* Appends a line to the console */
-        this.$console.append(message + '&#xA;');
-        this.$console.scrollTop(this.$console[0].scrollHeight);
+
     },
 
     sendCommand: function(command) {
 
-        /* Sends commands by calling CBApp.socket */
-        if (!command) {
-            var command = this.$commandInput.val();
-            this.$commandInput.value = "";
+        CBApp.messageCollection.sendMessage('command', command);
+    },
+
+    sendClick: function() {
+
+        var command = this.$commandInput.val();
+        this.$commandInput.value = "";
+        this.sendCommand(command);
+    },
+
+    keyPressEventHandler: function(event){
+
+        if(event.keyCode == 13){
+            this.sendClick();
         }
-        this.collection.sendCommand(command);
-        CBApp.socket.sendCommand(command);
     },
 
     startClick: function() {
