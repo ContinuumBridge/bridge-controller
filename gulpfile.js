@@ -42,7 +42,6 @@ gulp.task('node_server', function () {
     //.on('restart', ['lint'])
 })
 
-//gulp.task('default', ['client', 'node_server', 'watch']);
-gulp.task('default', ['client']);
+gulp.task('default', ['client', 'node_server', 'watch']);
 
 
