@@ -25433,7 +25433,7 @@ CBApp.filters.messageCurrentBridge = function() {
 }
 
 //CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
-CBApp.filters.apiRegex = /[\w/]*([\d])/;
+CBApp.filters.apiRegex = /[\w/]*([\d]{1,10})/;
 
 
 },{}],43:[function(require,module,exports){
