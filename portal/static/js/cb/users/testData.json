@@ -1,0 +1,670 @@
+{
+    "bridge_controls": [
+        {
+            "bridge": {
+                "apps": [
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.425119",
+                            "description": "",
+                            "exe": "eew_app.py",
+                            "id": 1,
+                            "modified": "2014-03-05T18:52:23.425153",
+                            "name": "EEW Test App",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/1/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/2/",
+                        "created": "2014-03-05T18:52:23.490286",
+                        "device_permissions": [
+                            {
+                                "app_install": "/api/bridge/v1/app_install/1/",
+                                "created": "2014-03-05T18:52:23.498487",
+                                "device_install": "/api/bridge/v1/device_install/1/",
+                                "id": 1,
+                                "modified": "2014-03-05T18:52:23.498522",
+                                "resource_uri": "/api/bridge/v1/app_device_permission/1/"
+                            }
+                        ],
+                        "id": 1,
+                        "modified": "2014-03-05T18:52:23.490321",
+                        "resource_uri": "/api/bridge/v1/app_install/1/"
+                    },
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.430920",
+                            "description": "This is a description of Test App 2",
+                            "exe": "uwe_app.py",
+                            "id": 2,
+                            "modified": "2014-03-05T18:52:23.430952",
+                            "name": "Test App 2",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/2/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/2/",
+                        "created": "2014-03-05T18:52:23.588517",
+                        "device_permissions": [
+                            {
+                                "app_install": "/api/bridge/v1/app_install/6/",
+                                "created": "2014-03-05T18:52:23.595225",
+                                "device_install": "/api/bridge/v1/device_install/6/",
+                                "id": 6,
+                                "modified": "2014-03-05T18:52:23.595258",
+                                "resource_uri": "/api/bridge/v1/app_device_permission/6/"
+                            }
+                        ],
+                        "id": 6,
+                        "modified": "2014-03-05T18:52:23.588550",
+                        "resource_uri": "/api/bridge/v1/app_install/6/"
+                    }
+                ],
+                "controllers": [
+                    {
+                        "bridge": "/api/bridge/v1/bridge/2/",
+                        "created": "2014-03-05T18:52:22.794663",
+                        "id": 1,
+                        "modified": "2014-03-05T18:52:22.794701",
+                        "resource_uri": "/api/bridge/v1/bridge_control/1/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.552450",
+                            "email": "mark.claydon@continuumbridge.com",
+                            "first_name": "Mark",
+                            "id": 1,
+                            "last_login": "2014-04-08T15:34:36.929313",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/1/"
+                        }
+                    }
+                ],
+                "devices": [
+                    {
+                        "adaptor": {
+                            "created": "2014-03-05T18:52:23.452379",
+                            "description": "Description for Adaptor 1",
+                            "exe": "sensortagadaptor.py",
+                            "id": 1,
+                            "modified": "2014-04-01T14:40:47.870299",
+                            "name": "Adaptor 1",
+                            "protocol": "btle",
+                            "provider": "Continuum Bridge",
+                            "resource_uri": "/api/bridge/v1/adaptor/1/",
+                            "url": "url.for.the.adaptor.com",
+                            "version": "0.0.1"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/2/",
+                        "created": "2014-03-05T18:52:23.482004",
+                        "device": {
+                            "adaptor_compatibility": [
+                                {
+                                    "adaptor": {
+                                        "created": "2014-03-05T18:52:23.452379",
+                                        "description": "Description for Adaptor 1",
+                                        "exe": "sensortagadaptor.py",
+                                        "id": 1,
+                                        "modified": "2014-04-01T14:40:47.870299",
+                                        "name": "Adaptor 1",
+                                        "protocol": "btle",
+                                        "provider": "Continuum Bridge",
+                                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                                        "url": "url.for.the.adaptor.com",
+                                        "version": "0.0.1"
+                                    },
+                                    "created": "2014-03-05T18:52:23.466839",
+                                    "device": "/api/bridge/v1/device/1/",
+                                    "id": 1,
+                                    "modified": "2014-03-05T18:52:23.466875",
+                                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                                }
+                            ],
+                            "created": "2014-03-05T18:52:23.438192",
+                            "description": "This is a description for Test Device 1",
+                            "firmware_revision": "",
+                            "hardware_revision": "",
+                            "id": 1,
+                            "manufacturer_name": "Texas Instruments",
+                            "method": "btle",
+                            "model_number": "1",
+                            "modified": "2014-03-05T18:52:23.438228",
+                            "name": "SensorTag",
+                            "resource_uri": "/api/bridge/v1/device/1/",
+                            "software_revision": "",
+                            "system_id": ""
+                        },
+                        "device_version": "",
+                        "friendly_name": "Tag C381",
+                        "id": 1,
+                        "mac_addr": "1C:BA:8C:20:C3:81",
+                        "modified": "2014-03-05T18:52:23.482041",
+                        "resource_uri": "/api/bridge/v1/device_install/1/"
+                    },
+                    {
+                        "adaptor": {
+                            "created": "2014-03-05T18:52:23.459578",
+                            "description": "Description for Adaptor 2",
+                            "exe": "sensortagadaptor.py",
+                            "id": 2,
+                            "modified": "2014-04-01T14:40:47.879663",
+                            "name": "Adaptor 2",
+                            "protocol": "btle",
+                            "provider": "Continuum Bridge",
+                            "resource_uri": "/api/bridge/v1/adaptor/2/",
+                            "url": "url.for.the.adaptor.com",
+                            "version": "0.0.1"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/2/",
+                        "created": "2014-03-05T18:52:23.583109",
+                        "device": {
+                            "adaptor_compatibility": [],
+                            "created": "2014-03-05T18:52:23.443932",
+                            "description": "This is a description for Test Device 2",
+                            "firmware_revision": "",
+                            "hardware_revision": "",
+                            "id": 2,
+                            "manufacturer_name": "Texas Instruments",
+                            "method": "btle",
+                            "model_number": "2",
+                            "modified": "2014-03-05T18:52:23.443966",
+                            "name": "Test Device 2",
+                            "resource_uri": "/api/bridge/v1/device/2/",
+                            "software_revision": "",
+                            "system_id": ""
+                        },
+                        "device_version": "",
+                        "friendly_name": "Tag Number 2",
+                        "id": 6,
+                        "mac_addr": "1C:BA:8C:22:F1:81",
+                        "modified": "2014-03-05T18:52:23.583142",
+                        "resource_uri": "/api/bridge/v1/device_install/6/"
+                    }
+                ],
+                "email": "641d0b48@continuumbridge.com",
+                "id": 2,
+                "last_login": "2014-03-05T18:52:22.692054",
+                "name": "Mark's Bridge",
+                "resource_uri": "/api/bridge/v1/current_bridge/2/"
+            },
+            "created": "2014-03-05T18:52:22.794663",
+            "id": 1,
+            "modified": "2014-03-05T18:52:22.794701",
+            "resource_uri": "",
+            "user": "/api/bridge/v1/user/1/"
+        },
+        {
+            "bridge": {
+                "apps": [
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.425119",
+                            "description": "",
+                            "exe": "eew_app.py",
+                            "id": 1,
+                            "modified": "2014-03-05T18:52:23.425153",
+                            "name": "EEW Test App",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/1/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/7/",
+                        "created": "2014-03-05T18:52:23.552091",
+                        "device_permissions": [],
+                        "id": 4,
+                        "modified": "2014-03-05T18:52:23.552124",
+                        "resource_uri": "/api/bridge/v1/app_install/4/"
+                    }
+                ],
+                "controllers": [
+                    {
+                        "bridge": "/api/bridge/v1/bridge/7/",
+                        "created": "2014-03-05T18:52:23.387414",
+                        "id": 4,
+                        "modified": "2014-03-05T18:52:23.387450",
+                        "resource_uri": "/api/bridge/v1/bridge_control/4/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.552450",
+                            "email": "mark.claydon@continuumbridge.com",
+                            "first_name": "Mark",
+                            "id": 1,
+                            "last_login": "2014-04-08T15:34:36.929313",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/1/"
+                        }
+                    },
+                    {
+                        "bridge": "/api/bridge/v1/bridge/7/",
+                        "created": "2014-03-05T18:52:23.397335",
+                        "id": 6,
+                        "modified": "2014-03-05T18:52:23.397367",
+                        "resource_uri": "/api/bridge/v1/bridge_control/6/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.800450",
+                            "email": "peter.claydon@continuumbridge.com",
+                            "first_name": "Peter",
+                            "id": 3,
+                            "last_login": "2014-04-09T11:44:27.110625",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/3/"
+                        }
+                    },
+                    {
+                        "bridge": "/api/bridge/v1/bridge/7/",
+                        "created": "2014-03-05T18:52:23.410937",
+                        "id": 8,
+                        "modified": "2014-03-05T18:52:23.410969",
+                        "resource_uri": "/api/bridge/v1/bridge_control/8/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:23.002924",
+                            "email": "martin.sotheran@continuumbridge.com",
+                            "first_name": "Martin",
+                            "id": 5,
+                            "last_login": "2014-04-06T20:07:54.079561",
+                            "last_name": "Sotheran",
+                            "resource_uri": "/api/bridge/v1/user/5/"
+                        }
+                    }
+                ],
+                "devices": [
+                    {
+                        "adaptor": {
+                            "created": "2014-03-05T18:52:23.452379",
+                            "description": "Description for Adaptor 1",
+                            "exe": "sensortagadaptor.py",
+                            "id": 1,
+                            "modified": "2014-04-01T14:40:47.870299",
+                            "name": "Adaptor 1",
+                            "protocol": "btle",
+                            "provider": "Continuum Bridge",
+                            "resource_uri": "/api/bridge/v1/adaptor/1/",
+                            "url": "url.for.the.adaptor.com",
+                            "version": "0.0.1"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/7/",
+                        "created": "2014-03-06T13:33:06.678840",
+                        "device": {
+                            "adaptor_compatibility": [
+                                {
+                                    "adaptor": {
+                                        "created": "2014-03-05T18:52:23.452379",
+                                        "description": "Description for Adaptor 1",
+                                        "exe": "sensortagadaptor.py",
+                                        "id": 1,
+                                        "modified": "2014-04-01T14:40:47.870299",
+                                        "name": "Adaptor 1",
+                                        "protocol": "btle",
+                                        "provider": "Continuum Bridge",
+                                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                                        "url": "url.for.the.adaptor.com",
+                                        "version": "0.0.1"
+                                    },
+                                    "created": "2014-03-05T18:52:23.466839",
+                                    "device": "/api/bridge/v1/device/1/",
+                                    "id": 1,
+                                    "modified": "2014-03-05T18:52:23.466875",
+                                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                                }
+                            ],
+                            "created": "2014-03-05T18:52:23.438192",
+                            "description": "This is a description for Test Device 1",
+                            "firmware_revision": "",
+                            "hardware_revision": "",
+                            "id": 1,
+                            "manufacturer_name": "Texas Instruments",
+                            "method": "btle",
+                            "model_number": "1",
+                            "modified": "2014-03-05T18:52:23.438228",
+                            "name": "SensorTag",
+                            "resource_uri": "/api/bridge/v1/device/1/",
+                            "software_revision": "",
+                            "system_id": ""
+                        },
+                        "device_version": "",
+                        "friendly_name": "Outside CP FA06",
+                        "id": 16,
+                        "mac_addr": "34:B1:F7:D4:FA:06",
+                        "modified": "2014-03-06T13:37:04.991274",
+                        "resource_uri": "/api/bridge/v1/device_install/16/"
+                    }
+                ],
+                "email": "d1a1f6af@continuumbridge.com",
+                "id": 7,
+                "last_login": "2014-03-28T10:40:19.410737",
+                "name": "Widcombe Bridge 1",
+                "resource_uri": "/api/bridge/v1/current_bridge/7/"
+            },
+            "created": "2014-03-05T18:52:23.387414",
+            "id": 4,
+            "modified": "2014-03-05T18:52:23.387450",
+            "resource_uri": "",
+            "user": "/api/bridge/v1/user/1/"
+        },
+        {
+            "bridge": {
+                "apps": [
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.425119",
+                            "description": "",
+                            "exe": "eew_app.py",
+                            "id": 1,
+                            "modified": "2014-03-05T18:52:23.425153",
+                            "name": "EEW Test App",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/1/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/8/",
+                        "created": "2014-03-05T18:52:23.571226",
+                        "device_permissions": [
+                            {
+                                "app_install": "/api/bridge/v1/app_install/5/",
+                                "created": "2014-03-05T18:52:23.576407",
+                                "device_install": "/api/bridge/v1/device_install/5/",
+                                "id": 5,
+                                "modified": "2014-03-05T18:52:23.576439",
+                                "resource_uri": "/api/bridge/v1/app_device_permission/5/"
+                            }
+                        ],
+                        "id": 5,
+                        "modified": "2014-03-05T18:52:23.571258",
+                        "resource_uri": "/api/bridge/v1/app_install/5/"
+                    }
+                ],
+                "controllers": [
+                    {
+                        "bridge": "/api/bridge/v1/bridge/8/",
+                        "created": "2014-03-05T18:52:23.392157",
+                        "id": 5,
+                        "modified": "2014-03-05T18:52:23.392190",
+                        "resource_uri": "/api/bridge/v1/bridge_control/5/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.552450",
+                            "email": "mark.claydon@continuumbridge.com",
+                            "first_name": "Mark",
+                            "id": 1,
+                            "last_login": "2014-04-08T15:34:36.929313",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/1/"
+                        }
+                    },
+                    {
+                        "bridge": "/api/bridge/v1/bridge/8/",
+                        "created": "2014-03-05T18:52:23.404219",
+                        "id": 7,
+                        "modified": "2014-03-05T18:52:23.404250",
+                        "resource_uri": "/api/bridge/v1/bridge_control/7/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.800450",
+                            "email": "peter.claydon@continuumbridge.com",
+                            "first_name": "Peter",
+                            "id": 3,
+                            "last_login": "2014-04-09T11:44:27.110625",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/3/"
+                        }
+                    },
+                    {
+                        "bridge": "/api/bridge/v1/bridge/8/",
+                        "created": "2014-03-05T18:52:23.416560",
+                        "id": 9,
+                        "modified": "2014-03-05T18:52:23.416593",
+                        "resource_uri": "/api/bridge/v1/bridge_control/9/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:23.002924",
+                            "email": "martin.sotheran@continuumbridge.com",
+                            "first_name": "Martin",
+                            "id": 5,
+                            "last_login": "2014-04-06T20:07:54.079561",
+                            "last_name": "Sotheran",
+                            "resource_uri": "/api/bridge/v1/user/5/"
+                        }
+                    }
+                ],
+                "devices": [
+                    {
+                        "adaptor": {
+                            "created": "2014-03-05T18:52:23.452379",
+                            "description": "Description for Adaptor 1",
+                            "exe": "sensortagadaptor.py",
+                            "id": 1,
+                            "modified": "2014-04-01T14:40:47.870299",
+                            "name": "Adaptor 1",
+                            "protocol": "btle",
+                            "provider": "Continuum Bridge",
+                            "resource_uri": "/api/bridge/v1/adaptor/1/",
+                            "url": "url.for.the.adaptor.com",
+                            "version": "0.0.1"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/8/",
+                        "created": "2014-03-05T18:52:23.564430",
+                        "device": {
+                            "adaptor_compatibility": [
+                                {
+                                    "adaptor": {
+                                        "created": "2014-03-05T18:52:23.452379",
+                                        "description": "Description for Adaptor 1",
+                                        "exe": "sensortagadaptor.py",
+                                        "id": 1,
+                                        "modified": "2014-04-01T14:40:47.870299",
+                                        "name": "Adaptor 1",
+                                        "protocol": "btle",
+                                        "provider": "Continuum Bridge",
+                                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                                        "url": "url.for.the.adaptor.com",
+                                        "version": "0.0.1"
+                                    },
+                                    "created": "2014-03-05T18:52:23.466839",
+                                    "device": "/api/bridge/v1/device/1/",
+                                    "id": 1,
+                                    "modified": "2014-03-05T18:52:23.466875",
+                                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                                }
+                            ],
+                            "created": "2014-03-05T18:52:23.438192",
+                            "description": "This is a description for Test Device 1",
+                            "firmware_revision": "",
+                            "hardware_revision": "",
+                            "id": 1,
+                            "manufacturer_name": "Texas Instruments",
+                            "method": "btle",
+                            "model_number": "1",
+                            "modified": "2014-03-05T18:52:23.438228",
+                            "name": "SensorTag",
+                            "resource_uri": "/api/bridge/v1/device/1/",
+                            "software_revision": "",
+                            "system_id": ""
+                        },
+                        "device_version": "",
+                        "friendly_name": "Tag C381",
+                        "id": 5,
+                        "mac_addr": "1C:BA:8C:20:C3:81",
+                        "modified": "2014-03-05T18:52:23.564464",
+                        "resource_uri": "/api/bridge/v1/device_install/5/"
+                    }
+                ],
+                "email": "d806d4ad@continuumbridge.com",
+                "id": 8,
+                "last_login": "2014-04-11T12:34:55.465107",
+                "name": "Widcombe Bridge 2",
+                "resource_uri": "/api/bridge/v1/current_bridge/8/"
+            },
+            "created": "2014-03-05T18:52:23.392157",
+            "id": 5,
+            "modified": "2014-03-05T18:52:23.392190",
+            "resource_uri": "",
+            "user": "/api/bridge/v1/user/1/"
+        },
+        {
+            "bridge": {
+                "apps": [
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.425119",
+                            "description": "",
+                            "exe": "eew_app.py",
+                            "id": 1,
+                            "modified": "2014-03-05T18:52:23.425153",
+                            "name": "EEW Test App",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/1/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/10/",
+                        "created": "2014-03-31T17:18:56.484817",
+                        "device_permissions": [
+                            {
+                                "app_install": "/api/bridge/v1/app_install/8/",
+                                "created": "2014-04-10T17:49:21.307304",
+                                "device_install": "/api/bridge/v1/device_install/50/",
+                                "id": 40,
+                                "modified": "2014-04-10T17:49:21.307359",
+                                "resource_uri": "/api/bridge/v1/app_device_permission/40/"
+                            }
+                        ],
+                        "id": 8,
+                        "modified": "2014-03-31T17:18:56.484869",
+                        "resource_uri": "/api/bridge/v1/app_install/8/"
+                    },
+                    {
+                        "app": {
+                            "created": "2014-03-05T18:52:23.425119",
+                            "description": "",
+                            "exe": "eew_app.py",
+                            "id": 1,
+                            "modified": "2014-03-05T18:52:23.425153",
+                            "name": "EEW Test App",
+                            "provider": "('Continuum Bridge',)",
+                            "resource_uri": "/api/bridge/v1/app/1/",
+                            "url": "('test.url.for.this.app.com',)",
+                            "version": "('0.0.1',)"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/10/",
+                        "created": "2014-04-11T13:13:44.273791",
+                        "device_permissions": [],
+                        "id": 11,
+                        "modified": "2014-04-11T13:13:44.273854",
+                        "resource_uri": "/api/bridge/v1/app_install/11/"
+                    }
+                ],
+                "controllers": [
+                    {
+                        "bridge": "/api/bridge/v1/bridge/10/",
+                        "created": "2014-03-18T14:55:21.230663",
+                        "id": 11,
+                        "modified": "2014-03-18T14:55:21.230699",
+                        "resource_uri": "/api/bridge/v1/bridge_control/11/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.800450",
+                            "email": "peter.claydon@continuumbridge.com",
+                            "first_name": "Peter",
+                            "id": 3,
+                            "last_login": "2014-04-09T11:44:27.110625",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/3/"
+                        }
+                    },
+                    {
+                        "bridge": "/api/bridge/v1/bridge/10/",
+                        "created": "2014-04-11T13:42:04.125923",
+                        "id": 16,
+                        "modified": "2014-04-11T13:42:04.126004",
+                        "resource_uri": "/api/bridge/v1/bridge_control/16/",
+                        "user": {
+                            "date_joined": "2014-03-05T18:52:22.552450",
+                            "email": "mark.claydon@continuumbridge.com",
+                            "first_name": "Mark",
+                            "id": 1,
+                            "last_login": "2014-04-08T15:34:36.929313",
+                            "last_name": "Claydon",
+                            "resource_uri": "/api/bridge/v1/user/1/"
+                        }
+                    }
+                ],
+                "devices": [
+                    {
+                        "adaptor": {
+                            "created": "2014-03-05T18:52:23.452379",
+                            "description": "Description for Adaptor 1",
+                            "exe": "sensortagadaptor.py",
+                            "id": 1,
+                            "modified": "2014-04-01T14:40:47.870299",
+                            "name": "Adaptor 1",
+                            "protocol": "btle",
+                            "provider": "Continuum Bridge",
+                            "resource_uri": "/api/bridge/v1/adaptor/1/",
+                            "url": "url.for.the.adaptor.com",
+                            "version": "0.0.1"
+                        },
+                        "bridge": "/api/bridge/v1/bridge/10/",
+                        "created": "2014-04-10T17:49:07.913315",
+                        "device": {
+                            "adaptor_compatibility": [
+                                {
+                                    "adaptor": {
+                                        "created": "2014-03-05T18:52:23.452379",
+                                        "description": "Description for Adaptor 1",
+                                        "exe": "sensortagadaptor.py",
+                                        "id": 1,
+                                        "modified": "2014-04-01T14:40:47.870299",
+                                        "name": "Adaptor 1",
+                                        "protocol": "btle",
+                                        "provider": "Continuum Bridge",
+                                        "resource_uri": "/api/bridge/v1/adaptor/1/",
+                                        "url": "url.for.the.adaptor.com",
+                                        "version": "0.0.1"
+                                    },
+                                    "created": "2014-03-05T18:52:23.466839",
+                                    "device": "/api/bridge/v1/device/1/",
+                                    "id": 1,
+                                    "modified": "2014-03-05T18:52:23.466875",
+                                    "resource_uri": "/api/bridge/v1/adaptor_compatibility/1/"
+                                }
+                            ],
+                            "created": "2014-03-05T18:52:23.438192",
+                            "description": "This is a description for Test Device 1",
+                            "firmware_revision": "",
+                            "hardware_revision": "",
+                            "id": 1,
+                            "manufacturer_name": "Texas Instruments",
+                            "method": "btle",
+                            "model_number": "1",
+                            "modified": "2014-03-05T18:52:23.438228",
+                            "name": "SensorTag",
+                            "resource_uri": "/api/bridge/v1/device/1/",
+                            "software_revision": "",
+                            "system_id": ""
+                        },
+                        "device_version": "",
+                        "friendly_name": "Tag F038",
+                        "id": 50,
+                        "mac_addr": "1C:BA:8C:20:F0:38",
+                        "modified": "2014-04-10T17:49:07.913365",
+                        "resource_uri": "/api/bridge/v1/device_install/50/"
+                    }
+                ],
+                "email": "007eaff8@continuumbridge.com",
+                "id": 10,
+                "last_login": "2014-04-11T13:33:37.618530",
+                "name": "cbr-10",
+                "resource_uri": "/api/bridge/v1/current_bridge/10/"
+            },
+            "created": "2014-04-11T13:42:04.125923",
+            "id": 16,
+            "modified": "2014-04-11T13:42:04.126004",
+            "resource_uri": "",
+            "user": "/api/bridge/v1/user/1/"
+        }
+    ],
+    "date_joined": "2014-03-05T18:52:22.552450",
+    "email": "mark.claydon@continuumbridge.com",
+    "first_name": "Mark",
+    "id": 1,
+    "last_login": "2014-04-08T15:34:36.929313",
+    "last_name": "Claydon",
+    "resource_uri": "/api/bridge/v1/current_user/1/"
+}
