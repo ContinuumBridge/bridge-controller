@@ -20,18 +20,25 @@ CBApp.addInitializer(function() {
         var foundDevices = message.get('body');
          */
         console.log('foundDevices are', foundDevices);
+        console.log('foundDevices are', JSON.toString(foundDevices));
+
         CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
     });
 
     CBApp.socket.publish = function(message) {
 
-      var destination = "BID" + CBApp.getCurrentBridge().get('id');
-      message.set('destination', destination);
-      console.log('Message is', message);
-      var jsonMessage = message.toJSON();
+      var self = this;
 
-      CBApp.socket.emit('message', jsonMessage, function(data){
-          //logger.log('verbose', 'Sent to socket ' + data);
+      CBApp.getCurrentBridge().then(function(currentBridge) {
+
+          var destination = "BID" + currentBridge.get('id');
+          message.set('destination', destination);
+          console.log('Message is', message);
+          var jsonMessage = message.toJSON();
+
+          CBApp.socket.emit('message', jsonMessage, function(data){
+              //logger.log('verbose', 'Sent to socket ' + data);
+          });
       });
     };
 

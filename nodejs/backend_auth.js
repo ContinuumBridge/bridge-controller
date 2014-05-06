@@ -9,7 +9,7 @@ var backendAuth = function(djangoAuthURL, sessionid) {
 
     /* backendAuth takes a sessionid and returns session information about the user and bridges they control */
 
-    logger.log('debug', 'in backendAuth djangoAuthURL is', djangoAuthURL);
+    //logger.log('debug', 'in backendAuth djangoAuthURL is', djangoAuthURL);
     var deferredSessionData = Q.defer();
 
     // Define options for Django REST Client

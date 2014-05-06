@@ -35,7 +35,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
     installDevice: function(friendlyName) {
 
-        var that = this;
+        var self = this;
 
         var deviceInstallData = this.toJSON();
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
@@ -45,8 +45,22 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         deviceInstall.set('friendly_name', friendlyName);
         deviceInstall.set('adaptor', adaptor);
 
+        console.log('deviceInstall is', deviceInstall);
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+            deviceInstall.save().then(function(result) {
+
+                CBApp.deviceInstallCollection.add(result.model);
+                console.log('deviceInstall saved successfully');
+            }, function(error) {
+
+                console.error('Error saving deviceInstall', error);
+            });
+        });
+
         console.log('In installDevice');
         // Create the device_install model on the server
+        /*
         CBApp.deviceInstallCollection.create(deviceInstall, {
 
             wait: true,
@@ -54,15 +68,15 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             success : function(resp){
 
                 console.log('device installed successfully', resp);
-                that.destroy();
+                self.destroy();
             },
 
             error : function(err) {
 
-                // this error message for dev only
                 console.error(err);
             }
         });
+        */
     },
 
     relations: [

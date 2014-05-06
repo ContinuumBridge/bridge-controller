@@ -13,9 +13,12 @@
 	<!-- Styles -->
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/list.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/led.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/notifications.css">
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.toggleswitch.css">
 	<!--<link rel="stylesheet" href="stylesheets/index.css" type="text/css" media="screen" />-->
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/animate.css" media="screen, projection">    
@@ -40,6 +43,9 @@
 </head>
 <body id="app" class="pull_top">
     <div id="nav-region"  class="navbar navbar-inverse navbar-fixed-top" role="navigation"></div>
+    <div id="notifications-region">
+        <div id="top-region"></div>
+    </div>
     <div id="modals-region"></div>
     <div id="portal-body" class="container">
         <div id="main-region"></div>

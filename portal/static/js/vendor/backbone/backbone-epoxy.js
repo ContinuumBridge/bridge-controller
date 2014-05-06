@@ -12,7 +12,7 @@
 		module.exports = factory(require("underscore"), require("backbone"));
 	} else if (typeof define === 'function' && define.amd) {
 		// Define as AMD:
-		define(["underscore", "backbone"], factory);
+		define(["../../../../.", "backbone"], factory);
 	} else {
 		// Just run it:
 		factory(root._, root.Backbone);

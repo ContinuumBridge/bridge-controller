@@ -18,6 +18,8 @@ class App(LoggedModelMixin):
     url = models.URLField(_("url"), max_length = 255)
     exe = models.CharField(_("exe"), max_length = 255)
 
+
+
     class Meta:
         verbose_name = _('app')
         verbose_name_plural = _('apps')

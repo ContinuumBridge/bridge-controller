@@ -21,6 +21,7 @@ CBApp.HomeLayoutView = Marionette.Layout.extend({
 
         // appLayoutView takes the filtered appInstall collection
         CBApp.filteredAppInstallCollection.filter(CBApp.filters.currentBridge());
+        //var appCollection = CBApp.getCurrentBridge().
         var appLayoutView = new CBApp.AppLayoutView({ collection: CBApp.filteredAppInstallCollection });
         this.appSection.show(appLayoutView);
 

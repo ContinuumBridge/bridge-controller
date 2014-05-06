@@ -10,6 +10,10 @@ CBApp.PortalLayout = Marionette.Layout.extend({
       modalsRegion: {
         selector: "#modals-region",
         regionType: Backbone.Marionette.Modals
+      },
+      notificationsRegion: {
+        selector: "#notifications-region",
+        regionType: Backbone.Marionette.Modals
       }
     }
 });

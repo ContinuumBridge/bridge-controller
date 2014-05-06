@@ -8,7 +8,11 @@ var winston = require('winston')
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({ json: false, timestamp: true, level: 'debug' }),
+    new (winston.transports.Console)({ "colorize" : true,
+                                       "level" : "debug",
+                                       "silent" : false,
+                                       "timestamp" : true,
+                                       "handleExceptions" : false }),
     //new winston.transports.File({ filename: logPath + "/node-debug.log", json: false, level: 'debug' })
   ],
   exceptionHandlers: [

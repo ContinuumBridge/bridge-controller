@@ -67,25 +67,6 @@ CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
 
     template: require('./templates/navAccountMenu.html'),
 
-    attributes : function () {
-
-        return {
-            name: 'Test'
-        };
-
-        var currentUser = CBApp.getCurrentUser();
-
-        if (currentUser == false) {
-            return {
-                name: 'Test'
-            };
-        } else {
-            return {
-                name: CBApp.getCurrentUser().get('first_name')
-            };
-        }
-    },
-
     serializeData: function(){
         return {
             "logout-url": "test-link"
@@ -107,11 +88,15 @@ CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
         accountMenu: '#account-menu'
     },
 
-    onRender: function() {
+    initialize: function() {
 
+        var currentUser = CBApp.getCurrentUser();
         var navAccountMenuView = new CBApp.Nav.AccountMenuView({
-            collection: CBApp.currentUserCollection
+            model: currentUser
         });
+    },
+
+    onRender: function() {
 
         this.accountMenu.show(navAccountMenuView);
     }

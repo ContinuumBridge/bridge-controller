@@ -16,7 +16,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     discoveredDeviceClick: function(e) {
 
         e.preventDefault();
-        CBApp.controller.installDevice(this.model);
+        CBApp.Config.controller.installDevice(this.model);
     },
 
     serializeData: function() {
@@ -25,50 +25,45 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
       data.install = this.model.get('device') ? 'Install' : 'Request an adaptor';
 
       // The label is the last four letters of the mac address
-      var macAddr = this.model.get('mac_addr');
+      var macAddr = this.model.get('mac_addr') || "";
       data.label = macAddr.slice(macAddr.length-5);
+
 
       return data;
     }
 });
 
 
-CBApp.DiscoveredDeviceListView = Marionette.CollectionView.extend({
-    
-    tagName: 'ul',
-    className: 'animated-list',
-    itemView: CBApp.DiscoveredDeviceItemView,
+CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
+    template: require('./templates/discoveredDeviceSection.html'),
+    itemView: CBApp.DiscoveredDeviceItemView,
+    itemViewContainer: '#discovered-device-list',
+
+    emptyView: CBApp.ListItemLoadingView,
+
+    events: {
+        'click #devices': 'clickDevices',
+        'click #rescan': 'clickDiscover'
+    },
+
+    /*
     initialize: function(){
 
+    },
+    */
+
+    clickDevices: function() {
+
+        CBApp.Config.controller.stopDiscoveringDevices();
+    },
+
+    clickDiscover: function() {
+
+        CBApp.Config.controller.discoverDevices();
     },
 
     onRender : function(){
 
     }
 });
-
-CBApp.DeviceDiscoveryLayoutView = Marionette.Layout.extend({
-
-    //template: '#deviceDiscoverySectionTemplate',
-    template: require('./templates/discoveredDeviceSection.html'),
-
-    events: {
-        'click #rescan': 'discover'
-    },
-
-    regions: {
-        discoveredDeviceList: '#discovered-device-list'
-    },
-
-    onRender: function() {
-        var discoveredDeviceListView = new CBApp.DiscoveredDeviceListView({ collection: this.collection });
-        this.discoveredDeviceList.show(discoveredDeviceListView);
-    },
-
-    discover: function() {
-
-        CBApp.messageCollection.sendMessage('command', 'discover');
-    }
-})
-
