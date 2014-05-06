@@ -58,19 +58,23 @@ CBApp.MessageCollection = Backbone.Collection.extend({
 
     sendMessage: function(type, body) {
 
-        var time = new Date();
-        var currentBridgeID = "BID" + CBApp.getCurrentBridge().get('id');
-        var currentUserID = "UID" + CBApp.getCurrentUser();
+        var self = this;
+        CBApp.getCurrentBridge().then(function(currentBridge) {
 
-        var message = new CBApp.Message({
-            destination: currentBridgeID,
-            source: currentUserID,
-            type: type,
-            body: body,
-            time_sent: time
+            var time = new Date();
+            var currentBridgeID = "BID" + currentBridge.get('id');
+            var currentUserID = "UID" + CBApp.currentUser.get('id');
+
+            var message = new CBApp.Message({
+                destination: currentBridgeID,
+                source: currentUserID,
+                type: type,
+                body: body,
+                time_sent: time
+            });
+
+            CBApp.socket.publish(message);
+            self.add(message);
         });
-
-        CBApp.socket.publish(message);
-        this.add(message);
     }
 });

@@ -3,10 +3,6 @@ CBApp.App = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
-    initialize: function() {
-        
-    }
-
 });
 
 

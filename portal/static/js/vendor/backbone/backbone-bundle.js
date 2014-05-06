@@ -1,30 +1,34 @@
 
-
 var Backbone = require('backbone')
     ,$ = require('jquery')
     ,_ = require('underscore')
-    ,Cocktail = require('./backbone-cocktail');
+    ,Cocktail = require('backbone-cocktail');
 
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
 
 require('./backbone.stickit');
+require('backbone-io');
+require('./backbone-trackable');
 require('backbone.marionette');
-Backbone.Modal = require('backbone.modal');
+require('backbone.marionette.subrouter');
+require('backbone.modal');
+require('./backbone-notify');
 require('./backbone-relational');
-require('../cb/misc/relational-models');
-require('./backbone.io-browserify');
+require('../../cb/misc/relational-models');
+
+var CBModelMixin = require('./backbone-cb');
+Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+
+// Required for backbone deferred
+Q = require('q');
+require('backbone-deferred');
 
 /*
-// Mix in Backbone Epoxy
-require('./backbone-epoxy');
-Cocktail.mixin(Marionette.View, Backbone.Epoxy.View);
-Cocktail.mixin(Backbone.RelationalModel, Backbone.Epoxy.Model);
-*/
-
 var TrackableModelMixin = require('./backbone-trackable');
-Cocktail.mixin(Backbone.Model, TrackableModelMixin);
+Cocktail.mixin(Backbone.Deferred.Model, TrackableModelMixin);
+*/
 
 /*
 // Mix in Backbone Sorted

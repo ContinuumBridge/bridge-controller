@@ -6,7 +6,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   position:relative;
-  list-style: none;
+  /*list-style: none;*/
   outline: 1px solid transparent;
 }
 li [class^=icon-],
@@ -16,6 +16,16 @@ li [class*=" icon-"] {
   display:block !important;
   position:absolute !important;
   float:none !important;
+}
+
+.inner-item {
+    padding: 12px;
+    list-style: none;
+}
+
+li>.list-label {
+    left: 55px;
+    list-style: none;
 }
 
 ::-webkit-input-placeholder {
@@ -217,7 +227,7 @@ button .icon-trash {
   margin: 30px auto
 }
 
-.animated-list li {
+.animated-list>li {
   z-index:1;
   font-weight: 400;
   /*box-shadow: 0 7px 0 -4px rgba(0, 0, 0, 0.2);*/
@@ -231,14 +241,16 @@ button .icon-trash {
   padding: 10px;
   padding-right: 60px;
   position: relative;
-  opacity: 0;
   word-wrap: break-word;
+  /*
+  opacity: 0;
   -webkit-transition: all .1s ease;
   -o-transition: all .1s ease;
   transition: all .1s ease
+  */
 }
 
-.animated-list li:focus {
+.animated-list>li:focus {
   outline: none;
 }
 li[contenteditable='true']{
@@ -269,7 +281,7 @@ li.new-item {
   animation: fadeIn .3s linear forwards
 }
 
-li.unconfirmed-item {
+li.disabled {
     opacity: 0.5;
     -webkit-animation: fadeSlightly .3s linear forwards;
     -o-animation: fadeSlightly .3s linear forwards;
@@ -427,5 +439,39 @@ li.removed-item {
     opacity: 0;
     -o-transform: scale(4);
     transform: scale(4)
+  }
+}
+
+/* Loading */
+.spinner {
+  /*
+
+  margin: 100px auto;
+  background-color: #333;
+  */
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 1;
+  width: 105px;
+  -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+  animation: rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes rotateplane {
+  0% { -webkit-transform: perspective(120px) }
+  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes rotateplane {
+  0% {
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+  } 50% {
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+  } 100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   }
 }

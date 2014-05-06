@@ -5,20 +5,20 @@ from .views import PortalView, TestDetailView
 
 urlpatterns = patterns('',
 
-    url(r'^$',
+    url(r'^.*$',
         PortalView.as_view(),
-        name='index'),
-
-    url(
-        regex = r'^(?P<pk>\d+)/$',
-        view = TestDetailView.as_view(),
-        name = "detail"
-    ),
+        name='index')
 
 )
 '''
 url(r'^test',
     TestView.as_view(),
-    name='test')
+    name
+url(
+    regex = r'^(?P<pk>\d+)/$',
+    view = TestDetailView.as_view(),
+    name = "detail"
+),
+='test')
 '''
 

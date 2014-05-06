@@ -90,10 +90,11 @@ class BridgeResource(ModelResource):
     class Meta:
         queryset = Bridge.objects.all()
         authorization = ReadOnlyAuthorization()
-        list_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
         resource_name = 'bridge'
 
+    '''
     def dispatch(self, request_type, request, **kwargs):
         """
         Handles the common operations (allowed HTTP method, authentication,
@@ -131,6 +132,7 @@ class BridgeResource(ModelResource):
             return http.HttpNoContent()
 
         return response
+    '''
 
 class BridgeResource(ModelResource):
 

@@ -1,5 +1,5 @@
 
-CBApp.Device = Backbone.RelationalModel.extend({
+CBApp.Device = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
     
@@ -40,7 +40,7 @@ CBApp.Device = Backbone.RelationalModel.extend({
     ]  
 }); 
 
-CBApp.DeviceCollection = Backbone.Collection.extend({
+CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
 
     model: CBApp.Device,
     backend: 'device',
@@ -54,10 +54,11 @@ CBApp.DeviceCollection = Backbone.Collection.extend({
     }
 });
 
-CBApp.DeviceInstall = Backbone.RelationalModel.extend({
+CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
+    /*
     computeds: {
 
         unconfirmed: function() {
@@ -65,15 +66,39 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
             return isNew || this.hasChangedSinceLastSync;
         }
     },
+    */
 
     initialize: function() {
-        
 
+        Backbone.Deferred.Model.prototype.initialize.apply(this);
     },
 
     uninstall: function() {
         
         this.destroy({wait: true});
+    },
+
+    getAppPermission: function(appInstall) {
+
+        if (!appInstall) {
+            console.error('getAppPermission for', this, 'requires an appInstall, given:', appInstall);
+            return void 0;
+        }
+
+        var adp = appInstall.get('devicePermissions').findUnique({deviceInstall: this});
+        if (adp) {
+            adp.set({permission: true}, {silent: true});
+            testADP = adp;
+        } else {
+            var adp = CBApp.AppDevicePermission.findOrCreate({
+                deviceInstall: this,
+                appInstall: appInstall,
+                permission: false
+            });
+        }
+        CBApp.appDevicePermissionCollection.add(adp);
+
+        return adp;
     },
 
     relations: [
@@ -86,8 +111,12 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.BridgeCollection',
             createModels: false,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeCollection'
-        },  
+            initializeCollection: 'bridgeCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'deviceInstalls'
+            }
+        },
         {
             type: Backbone.HasOne,
             key: 'device',
@@ -124,10 +153,23 @@ CBApp.DeviceInstall = Backbone.RelationalModel.extend({
                 initializeCollection: 'deviceInstallCollection',
             }
         }
+        /*
+        {
+            type: Backbone.HasMany,
+            key: 'appPermissions',
+            //keySource: '',
+            //keyDestination: 'bridge',
+            relatedModel: 'CBApp.AppDevicePermission',
+            collectionType: 'CBApp.AppDevicePermissionCollection',
+            createModels: false,
+            includeInJSON: false,
+            initializeCollection: 'appDevicePermissionCollection'
+        }
+        */
     ]
 }); 
 
-CBApp.DeviceInstallCollection = Backbone.Collection.extend({
+CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
 
     model: CBApp.DeviceInstall,
     backend: 'deviceInstall',

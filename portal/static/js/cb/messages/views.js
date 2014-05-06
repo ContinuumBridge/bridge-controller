@@ -20,15 +20,35 @@ CBApp.MessageView = Marionette.ItemView.extend({
     }
 })
 
-CBApp.MessageListView = Marionette.CollectionView.extend({
+CBApp.MessageListView = Marionette.CompositeView.extend({
 
-    id: 'messages-table',
-    tagName: 'table',
-    className: 'table-condensed table-hover table-striped',
+    template: require('./templates/messageSection.html'),
+    id: 'messages',
+    //tagName: 'table',
+    //className: 'table-condensed table-hover table-striped',
     itemView: CBApp.MessageView,
+    itemViewContainer: '#messages-table',
 
-    onRender : function(){
+    events: {
+        'click #send-button': 'clickSend',
+        'keyup #command-input' : 'keyPressEventHandler',
+        'click #start': 'clickStart',
+        'click #stop': 'clickStop',
+        'click #update': 'clickUpdate',
+        'click #send-log': 'clickSendLog',
+        'click #restart': 'clickRestart',
+        'click #reboot': 'clickReboot',
+        'click #upgrade': 'clickUpgrade'
+    },
 
+   onRender: function() {
+
+        this.$console = this.$('#console');
+        this.$commandInput = this.$('#command-input');
+
+        //var messageListView = new CBApp.MessageListView({ collection: this.collection });
+        //this.messageList.show(messageListView);
+        //this.listenTo(this.collection, 'item:added', this.scrollBottom);
     },
 
     onAfterItemAdded: function(itemView){
@@ -42,9 +62,71 @@ CBApp.MessageListView = Marionette.CollectionView.extend({
         }
         */
         //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
-    }
-})
+    },
 
+    scrollBottom: function() {
+
+        console.log('scoll bottom');
+    },
+
+    sendCommand: function(command) {
+
+        CBApp.messageCollection.sendMessage('command', command);
+    },
+
+    clickSend: function() {
+
+        var command = this.$commandInput.val();
+        this.$commandInput.value = "";
+        this.sendCommand(command);
+    },
+
+    keyPressEventHandler: function(event){
+
+        // When enter is pressed in the input, send the message
+        if(event.keyCode == 13){
+            this.clickSend();
+        }
+    },
+
+    clickStart: function() {
+
+        console.log('start clicked');
+        this.sendCommand('start');
+    },
+
+    clickStop: function() {
+
+        this.sendCommand('stop');
+    },
+
+    clickUpdate: function() {
+
+        this.sendCommand('update_config');
+    },
+
+    clickSendLog: function() {
+
+        this.sendCommand('send_log');
+    },
+
+    clickRestart: function() {
+
+        this.sendCommand('restart');
+    },
+
+    clickReboot: function() {
+
+        this.sendCommand('reboot');
+    },
+
+    clickUpgrade: function() {
+
+        this.sendCommand('upgrade');
+    }
+});
+
+/*
 CBApp.MessageLayoutView = Marionette.Layout.extend({
     
     id: 'commands',
@@ -136,3 +218,4 @@ CBApp.MessageLayoutView = Marionette.Layout.extend({
     }
 });
 
+*/

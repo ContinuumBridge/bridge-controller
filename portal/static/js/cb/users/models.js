@@ -1,32 +1,20 @@
 
-CBApp.CurrentUser = Backbone.RelationalModel.extend({
+//CBApp.CurrentUser = Backbone.RelationalModel.extend({
+CBApp.CurrentUser = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    backend: 'currentUser',
+
     initialize: function() {
 
-        var bridgeControlArray = this.get('bridgeControls');
+        //this.bindBackend();
+        //var bridgeControlArray = this.get('bridgeControls');
 
         // Set the current bridge
-        var currentBridge = bridgeControlArray.at(0).get('bridge');
-        currentBridge.set('current', true);
+        //var currentBridge = bridgeControlArray.at(0).get('bridge');
+        //currentBridge.set('current', true);
 
-        // Instantiate some BridgeControl models
-        /*
-        var bridgeControlArray = this.get('bridge_controls');
-        if (bridgeControlArray) {
-            for (var i = 0; i < bridgeControlArray.length; i++) {
-                //var bridgeControl  = new CBApp.BridgeControl(bridgeControlArray[i]);
-                var bridgeControl  = CBApp.BridgeControl.findOrCreate(bridgeControlArray[i]);
-                bridgeControl.set('user', this);
-                CBApp.bridgeControlCollection.add(bridgeControl);
-            }
-            if (CBApp.bridgeCollection.at(0)) {
-                // Set the currently selected bridge
-                CBApp.currentBridge = CBApp.bridgeCollection.at(0);
-            }
-        }
-        */
     },
 
     relations: [
@@ -55,7 +43,8 @@ CBApp.CurrentUser = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.CurrentUserCollection = Backbone.Collection.extend({
+/*
+CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
     model: CBApp.CurrentUser,
     backend: 'currentUser',
@@ -68,9 +57,13 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
         return response.objects;
     }
 });
+*/
+
+CBApp.currentUserDeferred = Q.defer();
 
 CBApp.getCurrentUser = function() {
 
+    /*
     var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
 
     if (!user) {
@@ -81,5 +74,6 @@ CBApp.getCurrentUser = function() {
     }
 
     return user;
+    */
+    return CBApp.currentUserDeferred.promise;
 };
-

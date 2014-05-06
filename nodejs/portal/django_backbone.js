@@ -1,6 +1,7 @@
 var backboneio = require('cb-backbone.io')
     ,logger = require('./logger')
     ,rest = require('restler')
+    ,util = require('util')
     ;
 //var RestClient = require('node-rest-client').Client;
 
@@ -15,12 +16,44 @@ function DjangoBackbone(djangoURL) {
     // Setup backbone websockets
     backboneSocket = backboneio.createBackend();
 
+    backboneSocket.logResponse = function(response) {
+
+        var httpVersion = util.format('HTTP/%s.%s', response.httpVersionMajor, response.httpVersionMinor);
+        logger.log('info', '"%s %s %s" %s',
+            response.req.method,
+            response.req.path,
+            httpVersion,
+            response.statusCode
+        )
+    };
+
+    backboneSocket.handleResponse = function(res, data, djangoResponse) {
+
+        if (djangoResponse) {
+            if (200 <= djangoResponse.statusCode <= 300) {
+                //that.deleteSuccess();
+                backboneSocket.logResponse(djangoResponse);
+                res.end(data);
+            } else if (djangoResponse.statusCode) {
+                backboneSocket.logResponse(djangoResponse);
+                res.end(new Error(djangoResponse.statusCode));
+            } else {
+                var error = new Error('Django did not return a status code to django_backbone')
+                log('error', error);
+                res.end(error);
+            }
+        } else {
+            var error = new Error('Something went wrong with response in django_backbone');
+            log('error', error);
+            res.end(error);
+        }
+    };
+
     backboneSocket.use(function(req, res, next) {
-        
+
         if (req.socket.handshake.headers.cookie) {
 
             cookies = cookie_reader.parse(req.socket.handshake.headers.cookie);
-            console.log('cookie is', cookies);
 
             req.args={
                 headers:{ "X_CB_SESSIONID": cookies['sessionid'] }
@@ -38,12 +71,8 @@ function DjangoBackbone(djangoURL) {
         var that = this;
 
         // On a backboneio create function make a post request to Django 
-        console.log('Model data in controller.backboneBackend.create is', req.model);
-        console.log('SESSIONID in controller.backboneBackend.create is', req.args.headers.X_CB_SESSIONID);
-
         var jsonData = JSON.stringify(req.model);
 
-        console.log('jsonData in controller.backboneBackend.create is', jsonData );
         var restOptions = {
             method: "post",
             data: jsonData,
@@ -55,17 +84,17 @@ function DjangoBackbone(djangoURL) {
         };
 
         rest.post(djangoURL, restOptions).on('complete', function(data, response) {
-            
-            console.log('Data response is', data);
-            console.log('response is', response);
-            //that.createSuccess();
-            res.end(data);
+
+            backboneSocket.handleResponse(res, data, response)
         });
     }),
 
     backboneSocket.read(function(req, res) {
-        
-        var requestURL = (req.model.id) ? djangoURL + req.model.id : djangoURL;
+
+        // Get a detail or list. Checking for bridge_controls is a hack for initial currentUser request
+        console.log('request model is', req.model);
+        var requestURL = (req.model.id) ? djangoURL + req.model.id
+            : (req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
 
         var djangoOptions = {
             method: "get",
@@ -79,7 +108,7 @@ function DjangoBackbone(djangoURL) {
         // Make a request to Django to get session data
         rest.get(requestURL, djangoOptions).on('complete', function(data, response) {
 
-            res.end(data);
+            backboneSocket.handleResponse(res, data, response)
         });
     });
 
@@ -88,12 +117,9 @@ function DjangoBackbone(djangoURL) {
         var that = this;
 
         // On a backboneio create function make a post request to Django
-        console.log('Model data in controller.backboneBackend.create is', req.model);
-        console.log('SESSIONID in controller.backboneBackend.create is', req.args.headers.X_CB_SESSIONID);
 
         var jsonData = JSON.stringify(req.model);
 
-        console.log('jsonData in controller.backboneBackend.create is', jsonData );
         var restOptions = {
             method: "put",
             data: jsonData,
@@ -106,10 +132,8 @@ function DjangoBackbone(djangoURL) {
 
         rest.put(djangoURL, restOptions).on('complete', function(data, response) {
 
-            console.log('Data response is', data);
-            console.log('response is', response);
+            backboneSocket.handleResponse(res, data, response)
             //that.updateSuccess();
-            res.end(data);
         });
     }),
 
@@ -118,8 +142,7 @@ function DjangoBackbone(djangoURL) {
         var that = this;
 
         // On a backboneio delete function make a delete request to Django 
-        console.log('Model data in controller.backboneBackend.create is', req.model);
-        console.log('Model id in controller.backboneBackend.create is', req.model.id);
+        //console.log('Model data in controller.backboneBackend.create is', req.model);
 
         // Set the URL of the item to be deleted
         var resourceURL = djangoURL + req.model.id.toString();
@@ -134,18 +157,10 @@ function DjangoBackbone(djangoURL) {
         };
 
         rest.del(resourceURL, restOptions).on('complete', function(data, response) {
-            
-            if (response && response.statusCode == 204) {
-                res.end(data);
-                //that.deleteSuccess();
-            } else if (response.statusCode) {
-                res.end(new Error(response.statusCode));
-            } else {
-                res.end(new Error('Something went wrong with delete'));
-            }
+
+            backboneSocket.handleResponse(res, data, response)
         });
     }),
-
 
     backboneSocket.use(backboneio.middleware.memoryStore());
 

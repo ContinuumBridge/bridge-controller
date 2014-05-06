@@ -26,6 +26,7 @@
   right: 10px;
 }
 
+/*
 .new-item.nested-item {
   color: #ffffff;
   background-color: #444;
@@ -34,6 +35,7 @@
 .nested-list {
   z-index: 2;
 }
+*/
 
 .unconfirmed {
   zoom: 1;
@@ -56,6 +58,10 @@
 
 #messages-table {
     width: 100%;
+}
+
+table td {
+    font-weight: 300;
 }
 
 table td.shrink {

@@ -9,7 +9,7 @@ CBApp.DeviceView = Marionette.ItemView.extend({
     template: require('./templates/deviceInstall.html'),
 
     events: {
-        'click .uninstall-button': 'uninstall',
+        'click .uninstall-button': 'uninstall'
     },
 
     /*
@@ -29,18 +29,17 @@ CBApp.DeviceView = Marionette.ItemView.extend({
           attributes: [{
             name: 'class',
             observe: 'hasChangedSinceLastSync',
-            onGet: 'getConfirmed'
-          }, {
-            name: 'readonly',
-            observe: 'isLocked'
+            onGet: 'getClass'
           }]
         }
     },
 
-    getConfirmed: function(hasChangedSinceLastSync) {
+    getClass: function(val) {
 
-        var isNew = this.model.isNew();
-        return isNew || hasChangedSinceLastSync ? 'unconfirmed-item' : 'new-item';
+        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
+        //var isNew = this.model.isNew();
+        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
+        return enabled;
     },
 
     uninstall: function() {
@@ -61,20 +60,34 @@ CBApp.DeviceView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceListView = Marionette.CollectionView.extend({
-    
-    tagName: 'ul',
-    className: 'animated-list',
+CBApp.DeviceListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/deviceInstallSection.html'),
+    //tagName: 'ul',
+    //className: 'animated-list',
     itemView: CBApp.DeviceView,
+    itemViewContainer: '#device-list',
+
+    emptyView: CBApp.ListItemLoadingView,
+
+
+    events: {
+        'click #connect-device': 'discover'
+    },
+
+    discover: function() {
+        console.log('click connect');
+        CBApp.Config.controller.discoverDevices();
+    },
 
     onRender : function() {
 
     }
 });
 
+/*
 CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
-    template: require('./templates/deviceInstallSection.html'),
 
     events: {
         'click #connect-device': 'discover',
@@ -98,4 +111,5 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
         this.deviceList.show(deviceListView);
     }
 })
+ */
 

@@ -51,6 +51,9 @@ function SocketServer(port) {
         discoveredDeviceInstall: discoveredDeviceInstallController
     });
 
+    // Set the socket io log level
+    server.set('log level', 1);
+
     // Authenticate the sessionid from the socket with django
     server.configure(function() {
         server.set('authorization', function(data, accept){
@@ -63,13 +66,14 @@ function SocketServer(port) {
                 var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
 
                 backendAuth(appAuthURL, sessionID).then(function(authData) {
-                    console.log('backendAuth returned authData:', authData);
+                    console.log('backendAuth returned authData:', authData.id);
                     data.authData = authData;
                     data.sessionID = sessionID;
+                    data.channel = authData.id;
                     return accept(null, true);
 
                 }, function(error) {
-                    console.log('backendAuth returned error:', error);
+                    //console.log('backendAuth returned error:', error);
                     return accept('error', false);
                 });
             }

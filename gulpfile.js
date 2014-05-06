@@ -1,6 +1,7 @@
 
 var gulp = require('gulp')
     ,browserify = require('browserify')
+    ,connect = require('gulp-connect')
     //,concat = require('gulp-concat')
     //,styl = require('gulp-styl')
     ,nodemon = require('gulp-nodemon')
@@ -33,6 +34,13 @@ gulp.task('client', function() {
         .pipe(gulp.dest('./build'));
 })
 
+gulp.task('connect', function() {
+  connect.server({
+    root: 'portal',
+    livereload: true
+  });
+});
+
 gulp.task('watch', function() {
     gulp.watch(CLIENT_SCRIPTS + '**', ['client']);
 })
@@ -42,6 +50,9 @@ gulp.task('node_server', function () {
     //.on('restart', ['lint'])
 })
 
+// Dev server
 gulp.task('default', ['client', 'node_server', 'watch']);
 
+// Local OSX
+//gulp.task('default', ['client', 'connect', 'watch']);
 

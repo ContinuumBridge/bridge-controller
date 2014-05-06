@@ -1,5 +1,6 @@
 
 //var logger = require('logger');
+var Q = require('q');
 
 CBApp.Bridge = Backbone.RelationalModel.extend({
 
@@ -23,7 +24,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.BridgeControlCollection',
             createModels: false,
             includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection',
+            initializeCollection: 'bridgeControlCollection'
             /*
             reverseRelation: {
                 key: 'bridge',
@@ -40,7 +41,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.AppInstallCollection',
             createModels: true,
             includeInJSON: true,
-            initializeCollection: 'appInstallCollection',
+            initializeCollection: 'appInstallCollection'
         },
         {
             type: Backbone.HasMany,
@@ -51,7 +52,7 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.DeviceInstallCollection',
             createModels: true,
             includeInJSON: true,
-            initializeCollection: 'deviceInstallCollection',
+            initializeCollection: 'deviceInstallCollection'
         }    
     ]
 }); 
@@ -70,19 +71,33 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     }
 });
 
+
 CBApp.getCurrentBridge = function() {
 
-    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    var currentBridgeDeferred = Q.defer();
 
-    if (!bridge) {
-        //logger.log('warn', 'There is no current bridge');
-        bridge = false;
-    } else {
-        bridge.set({current: true});
-    }
+    CBApp.getCurrentUser().then(function(result) {
 
-    return bridge;
-};
+        var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+
+        if (!bridge) {
+            //logger.log('warn', 'There is no current bridge');
+            bridge = false;
+        } else {
+            bridge.set({current: true});
+        }
+
+        currentBridgeDeferred.resolve(bridge);
+
+    }, function(error) {
+
+        console.log('Error fetching currentUser', error);
+        currentBridgeDeferred.reject(error);
+    });
+
+    return currentBridgeDeferred.promise;
+}
+
 
 CBApp.BridgeControl = Backbone.RelationalModel.extend({
 
@@ -102,7 +117,7 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.BridgeCollection',
             createModels: true,
             initializeCollection: 'bridgeCollection',
-            includeInJSON: true,
+            includeInJSON: true
         },
         {
             type: Backbone.HasOne,
@@ -113,9 +128,9 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             collectionType: 'CBApp.CurrentUserCollection',
             createModels: true,
             initializeCollection: 'currentUserCollection',
-            includeInJSON: true,
+            includeInJSON: true
         }
-    ],
+    ]
 }); 
 
 CBApp.BridgeControlCollection = Backbone.Collection.extend({
