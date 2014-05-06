@@ -1,6 +1,6 @@
 
 // This model (and any other model extending it) will be able to tell if it is synced with the server or not
-module.exports = TrackableModelMixin = {
+Backbone.Model = Backbone.Model.extend({
 
   initialize: function() {
     // If you extend this model, make sure to call this initialize method
@@ -15,22 +15,24 @@ module.exports = TrackableModelMixin = {
       console.log('Model Changed', event.changedAttributes());
 
       var changed = event.changedAttributes();
+      console.log('Model Changed changed:', changed.hasOwnProperty('hasChangedSinceLastSync'));
 
       if (CBApp._isInitialized && changed && !changed.hasOwnProperty('hasChangedSinceLastSync')) {
         this.set({hasChangedSinceLastSync: true});
+        test = this;
+        console.log('Model hasChangedSinceLastSync', this.get('hasChangedSinceLastSync'));
       }
   },
 
   sync: function(method, model, options) {
+    console.log('SYNC called in trackable');
     options = options || {};
     var success = options.success;
     options.success = function(resp) {
       success && success(resp);
-      model.hasChangedSinceLastSync = false;
-      model.set({hasChangedSinceLastSync: false}, {silent: true});
+      model.set({hasChangedSinceLastSync: false});
     };
-    //return Backbone.sync(method, model, options);
+    return Backbone.sync(method, model, options);
   }
-
-};
+});
 

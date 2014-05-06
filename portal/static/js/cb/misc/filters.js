@@ -1,4 +1,6 @@
 
+require('q');
+
 CBApp.filters = {};
 
 CBApp.filters.currentBridge = function() {
@@ -14,25 +16,28 @@ CBApp.filters.currentBridge = function() {
     }
 }
 
+CBApp.filters.currentBridgeMessageDeferred = function() {
 
-CBApp.filters.messageCurrentBridge = function() {
+    var iteratorDeferred = Q.defer();
 
-    return function(item) {
+    CBApp.getCurrentBridge().then(function(currentBridge) {
 
-        var source = item.get('source');
-        var destination = item.get('destination');
-        var currentBridge = CBApp.getCurrentBridge();
+        var iterator = function(item) {
 
-        if (currentBridge) {
+            var source = item.get('source');
+            var destination = item.get('destination');
 
             var currentBridgeID = currentBridge.getCBID();
             console.log('In filter. source', source, 'destination', destination, 'currentBridge', currentBridgeID);
             // Add the item to the collection if it belongs to the bridge
             if (source === currentBridgeID || destination === currentBridgeID) {
+                console.log('filter return', item);
                 return item;
             }
-        }
-    }
+        };
+        iteratorDeferred.resolve(iterator);
+    })
+    return iteratorDeferred.promise;
 }
 
 //CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;

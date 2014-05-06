@@ -7,7 +7,6 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-
         Backbone.Deferred.Model.prototype.initialize.apply(this);
     },
 

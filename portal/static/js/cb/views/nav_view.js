@@ -41,7 +41,13 @@ CBApp.Nav.BridgeDropdownView = Marionette.CompositeView.extend({
     itemViewContainer: '#bridge-list',
     template: require('./templates/bridgeDropdown.html'),
 
+    bindings: {
+        '.header-text': 'name'
+    },
+
     initialize: function () {
+
+        var self = this;
 
     },
 
@@ -51,21 +57,39 @@ CBApp.Nav.BridgeDropdownView = Marionette.CompositeView.extend({
 
     addBridge: function() {
 
-        CBApp.getCurrentBridge()
+        //CBApp.getCurrentBridge()
         this.render();
     },
 
     onRender : function(){
 
+        var self = this;
+
+        CBApp.getCurrentBridge().then(function(currentBridge){
+
+            self.model = currentBridge;
+            self.listenToOnce(self.model, 'change', self.render);
+            //self.model.bind('change', self.render);
+            self.stickit();
+        });
     }
 });
 
-CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
+CBApp.Nav.AccountDropdownView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'dropdown',
 
-    template: require('./templates/navAccountMenu.html'),
+    template: require('./templates/accountDropdown.html'),
+
+    bindings: {
+        '.header-text': 'name'
+    },
+
+    events: {
+        //'click #logout': 'bridgeClick'
+        //'click #interest-button': 'interestButtonClick',
+    },
 
     serializeData: function(){
         return {
@@ -73,12 +97,20 @@ CBApp.Nav.AccountMenuView = Marionette.ItemView.extend({
         }
     },
 
-    events: {
-        //'click #logout': 'bridgeClick'
-        //'click #interest-button': 'interestButtonClick',
+    onRender: function() {
+        /*
+        // Get rid of that pesky wrapping-div.
+        // Assumes 1 child element present in template.
+        this.$el = this.$el.children();
+        // Unwrap the element to prevent infinitely
+        // nesting elements during re-render.
+        this.$el.unwrap();
+        this.setElement(this.$el);
+        */
     }
 });
 
+/*
 CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
 
     template: require('./templates/navRightSection.html'),
@@ -101,29 +133,38 @@ CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
         this.accountMenu.show(navAccountMenuView);
     }
 });
+*/
 
-CBApp.Nav.TopBarLayoutView = Marionette.Layout.extend({
+CBApp.Nav.TopBarView = Marionette.ItemView.extend({
 
     template: require('./templates/navSection.html'),
     className: 'container',
 
+    /*
     regions: {
         navbarLeft: '#navbar-left',
-        navbarRight: '#navbar-right'
+        navbarRight: '#account-dropdown'
     },
+    */
 
     onRender: function() {
 
-        var bridgeDropdownView = new CBApp.Nav.BridgeDropdownView({
+        var $navbarLeft = this.$('#navbar-left');
+        this.bridgeDropdownView = new CBApp.Nav.BridgeDropdownView({
             collection: CBApp.bridgeCollection
         });
+        $navbarLeft.append(this.bridgeDropdownView.render().$el);
 
-        var accountMenuView = new CBApp.Nav.AccountMenuView({
+        /*
+        var $navBarRight = this.$('navbar-right');
+        this.accountDropdownView = new CBApp.Nav.AccountDropdownView({
             collection: CBApp.currentUserCollection
         });
+        $navBarRight.append(this.accountDropdownView.render().$el);
+        */
 
-        this.navbarLeft.show(bridgeDropdownView);
-        this.navbarRight.show(accountMenuView);
+        //this.navbarLeft.show(bridgeDropdownView);
+        //this.navbarRight.show(accountDropdownView);
     }
 });
 

@@ -25,7 +25,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     template: require('./templates/messageSection.html'),
     id: 'messages',
     //tagName: 'table',
-    className: 'table-condensed table-hover table-striped',
+    //className: 'table-condensed table-hover table-striped',
     itemView: CBApp.MessageView,
     itemViewContainer: '#messages-table',
 
@@ -91,6 +91,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
 
     clickStart: function() {
 
+        console.log('start clicked');
         this.sendCommand('start');
     },
 

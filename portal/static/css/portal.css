@@ -60,6 +60,10 @@
     width: 100%;
 }
 
+table td {
+    font-weight: 300;
+}
+
 table td.shrink {
     white-space:nowrap
 }

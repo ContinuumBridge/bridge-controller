@@ -7,7 +7,7 @@ CBApp.addInitializer(function () {
 
   CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
 
-  CBApp.Nav.topBarLayoutView = new CBApp.Nav.TopBarLayoutView();
+  CBApp.Nav.topBarLayoutView = new CBApp.Nav.TopBarView();
   //CBApp.homeLayoutView = new CBApp.HomeLayoutView();
 
   CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarLayoutView);

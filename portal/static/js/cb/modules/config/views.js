@@ -100,10 +100,10 @@ module.exports.Main = Marionette.Layout.extend({
             self.deviceInstallListView.delegateEvents();
             self.deviceSection.show(self.deviceInstallListView);
 
-            CBApp.filteredMessageCollection.filter(CBApp.filters.messageCurrentBridge());
+            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.collection = CBApp.filteredMessageCollection;
             self.messageListView._initialEvents();
-            self.deviceContent.delegateEvents();
+            self.messageListView.delegateEvents();
             self.messageSection.show(self.messageListView);
 
         });
@@ -134,6 +134,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
+        //CBApp.Config.controller.stopDiscoveringDevices();
     }
 });
 

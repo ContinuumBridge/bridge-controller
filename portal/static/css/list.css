@@ -281,7 +281,7 @@ li.new-item {
   animation: fadeIn .3s linear forwards
 }
 
-li.unconfirmed.new-item {
+li.disabled {
     opacity: 0.5;
     -webkit-animation: fadeSlightly .3s linear forwards;
     -o-animation: fadeSlightly .3s linear forwards;
