@@ -13,7 +13,9 @@ django-crispy-forms==1.4.0
 django-filer==0.9.4
 #django-haystack==2.1.0
 django-model-utils==2.0.0
-django-notifications-hq==0.6.2
+#django-notifications-hq==0.6.2
+-e git+https://github.com/continuumbridge/django-notifications.git@bb42f850eda449920787e07f8fa257bfdf35eb45#egg=notifications
+
 django-redis-sessions
 django-sekizai==0.7
 #django-tastypie==0.11.0

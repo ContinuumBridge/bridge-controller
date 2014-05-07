@@ -57,7 +57,7 @@ SESSION_COOKIE_HTTPONLY = False
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-SESSION_ENGINE = 'user_sessions.backends.db'
+#SESSION_ENGINE = 'user_sessions.backends.db'
 #SESSION_ENGINE = 'redis_sessions.session'
 #SESSION_REDIS_HOST = 'localhost'
 #SESSION_REDIS_PORT = 6379
@@ -215,7 +215,7 @@ INSTALLED_APPS = (
     #'allauth.socialaccount.providers.twitter',
     #'allauth.socialaccount.providers.google',
     'crispy_forms',
-    #'notifications',
+    'notifications',
     'south',
     'tastypie',
     #'reversion',
