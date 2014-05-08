@@ -1,4 +1,5 @@
-from django.views.generic.base import TemplateView
+#from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.http import Http404
 from django.template import Context
@@ -26,8 +27,8 @@ class PortalView(LoginRequiredMixin, TemplateView):
 
 
 
-class TestDetailView(DetailView):
+class EventsTestView(TemplateView):
 
-    model = Device
-    template_name = 'test.html'
+    #model = Device
+    template_name = 'event_test.html'
 

@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url('^inbox/notifications/', include(notifications.urls)),
-    #url(r'', include('user_sessions.urls', 'user_sessions'),
+    url(r'', include('user_sessions.urls', 'user_sessions')),
 
     (r'^accounts/', include('allauth.urls')),
     url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),

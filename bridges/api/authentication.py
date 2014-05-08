@@ -51,7 +51,8 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
 
     def is_authenticated(self, request, **kwargs):
 
-        from django.contrib.sessions.models import Session
+        #from django.contrib.sessions.models import Session
+        from user_sessions.models import Session
 
         sessionid =  request.META.get('HTTP_X_CB_SESSIONID') 
         if not sessionid or sessionid == 'null':
