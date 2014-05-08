@@ -1,0 +1,24 @@
+{% load telegraphy_tags %}
+{% load static %}
+<html>
+    <head>
+        <title>Simple Telegraphy API Example</title>
+        <script src='{% static "js/vendor/jquery-1.9.1.js" %}'></script>
+        {% telegraphy_scripts %}
+    </head>
+    <body>
+        <h1>Catching model events!</h1>
+        <ul id="event_catcher"> </ul>
+        <script>
+            (function (){
+                var $event_catcher = $('#event_catcher');
+                Telegraphy.register('bridges.Bridge',
+                    function (tEvent){
+                        console.log("Event", tEvent);
+                        var new_line = $('<li/>').text("New instance");
+                        $event_catcher.append(new_line);
+                    });
+            })();
+        </script>
+    </body>
+</html>

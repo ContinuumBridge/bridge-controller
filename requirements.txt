@@ -13,13 +13,16 @@ django-crispy-forms==1.4.0
 django-filer==0.9.4
 #django-haystack==2.1.0
 django-model-utils==2.0.0
-django-notifications-hq==0.6.2
+#django-notifications-hq==0.6.2
+-e git+https://github.com/continuumbridge/django-notifications.git@bb42f850eda449920787e07f8fa257bfdf35eb45#egg=notifications
+
 django-redis-sessions
 django-sekizai==0.7
 #django-tastypie==0.11.0
 -e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
 #git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
+-e git+https://github.com/ContinuumBridge/telegraphy.git@0b84d001a8b8efd2fcf68110be7be721cb465e32#egg=telegraphy
 django-user-sessions==0.1.4
 factory_boy==2.2.1
 geopy==0.95.1

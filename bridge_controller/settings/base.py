@@ -155,14 +155,14 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-     #'user_sessions.middleware.SessionMiddleware',
+    #'django.contrib.sessions.middleware.SessionMiddleware',
+    'user_sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     #'raygun_dot_io.middleware.RaygunDotIOMiddleware',
     # Uncomment the next line for simple clickjacking protection:
-     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
     # Cross domain reference
     #'pages.middleware.crossdomainxhr.XsSharing',
@@ -203,8 +203,8 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    #'user_sessions',
+    #'django.contrib.sessions',
+    'user_sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -215,9 +215,10 @@ INSTALLED_APPS = (
     #'allauth.socialaccount.providers.twitter',
     #'allauth.socialaccount.providers.google',
     'crispy_forms',
-    #'notifications',
+    'notifications',
     'south',
     'tastypie',
+    'telegraphy.contrib.django_telegraphy',
     #'reversion',
     'accounts',
     'bridges',
