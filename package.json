@@ -7,7 +7,7 @@
     "url": "git://github.com/ContinuumBridge/bridge-controller.git"
   },
   "dependencies": {
-    "cb-backbone.io": "~0.4.2",
+    "cb-backbone.io": "~0.4.3",
     "browserify": "3.38.0",
     "baconjs": "~0.6.22",
     "connect": "~2.7.8",
