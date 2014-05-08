@@ -7,8 +7,9 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/views');
-require('../../devices/views');
+//require('../../devices/views');
 require('../../devices/discovery/views');
+require('../../devices/installs/views');
 require('../../messages/views');
 
 module.exports.Main = Marionette.Layout.extend({
@@ -42,7 +43,7 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appInstallListView = new CBApp.AppListView();
-        this.deviceInstallListView = new CBApp.DeviceListView();
+        this.deviceInstallListView = new CBApp.DeviceInstallListView();
         this.deviceDiscoveryListView = new CBApp.DiscoveredDeviceListView({
             collection: CBApp.discoveredDeviceInstallCollection
         });

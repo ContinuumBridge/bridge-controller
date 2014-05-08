@@ -2,7 +2,7 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-CBApp.DeviceView = Marionette.ItemView.extend({
+CBApp.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -60,12 +60,12 @@ CBApp.DeviceView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceListView = Marionette.CompositeView.extend({
+CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/deviceInstallSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.DeviceView,
+    itemView: CBApp.DeviceInstallView,
     itemViewContainer: '#device-list',
 
     emptyView: CBApp.ListItemLoadingView,

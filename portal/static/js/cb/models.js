@@ -9,6 +9,7 @@ require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
+require('./devices/installs/models');
 require('./users/models');
 
 require('./misc/decorators');
