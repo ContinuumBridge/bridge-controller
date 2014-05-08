@@ -9,6 +9,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils import timezone
 from django.conf import settings
 
+from multiselectfield import MultiSelectField
+
 from accounts.models import CBAuth, CBUser
 from .common import LoggedModelMixin
 
@@ -51,10 +53,23 @@ class BridgeModelManager(BaseUserManager):
         bridge.save(using=self._db)
         return bridge
 
+BRIDGE_STATES = (('stopped', 'Stopped'),
+                ('starting', 'Starting'),
+                ('running', 'Running'),
+                ('error', 'Error'),
+                ('rebooting', 'Rebooting'))
+
+BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
+                     ('authorised', 'Authorised'),
+                     ('connected', 'Connected'))
+
 class Bridge(CBAuth):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
+
+    #connection = models.CharField(_("connection"), default = 'disconnected', max_length = 255, blank = True)
+    #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
 
     plaintext_password = models.CharField(_("plaintext_password"), max_length = 255)
 
