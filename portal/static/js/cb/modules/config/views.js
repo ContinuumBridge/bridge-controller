@@ -44,9 +44,7 @@ module.exports.Main = Marionette.Layout.extend({
 
         this.appInstallListView = new CBApp.AppListView();
         this.deviceInstallListView = new CBApp.DeviceInstallListView();
-        this.deviceDiscoveryListView = new CBApp.DiscoveredDeviceListView({
-            collection: CBApp.discoveredDeviceInstallCollection
-        });
+        this.deviceDiscoveryListView = new CBApp.DiscoveredDeviceListView();
 
         this.deviceContent = this.deviceInstallListView;
         //this.deviceContent = this.deviceDiscoveryListView;
@@ -59,7 +57,6 @@ module.exports.Main = Marionette.Layout.extend({
     test: function() {
         console.log('test fired!');
     },
-
 
     showDeviceDiscovery: function() {
 
@@ -99,7 +96,13 @@ module.exports.Main = Marionette.Layout.extend({
             self.deviceInstallListView.collection = deviceInstallCollection;
             self.deviceInstallListView._initialEvents();
             self.deviceInstallListView.delegateEvents();
-            self.deviceSection.show(self.deviceInstallListView);
+
+            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
+            self.discoveredDeviceInstallListView.collection = discoveredDeviceInstallCollection;
+            self.discoveredDeviceInstallListView._initialEvents();
+            self.discoveredDeviceInstallListView.delegateEvents();
+
+            self.deviceSection.show(self.deviceContent);
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.collection = CBApp.filteredMessageCollection;
@@ -135,7 +138,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        //CBApp.Config.controller.stopDiscoveringDevices();
+        CBApp.Config.controller.stopDiscoveringDevices();
     }
 });
 

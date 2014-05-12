@@ -53,7 +53,18 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'deviceInstallCollection'
-        }    
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'discoveredDeviceInstalls',
+            keySource: 'discovered_devices',
+            keyDestination: 'discovered_devices',
+            relatedModel: 'CBApp.DiscoveredDeviceInstall',
+            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            createModels: true,
+            //includeInJSON: true,
+            initializeCollection: 'discoveredDeviceInstallCollection'
+        }
     ]
 }); 
 

@@ -82,6 +82,21 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     relations: [
         {
             type: Backbone.HasOne,
+            key: 'bridge',
+            keySource: 'bridge',
+            keyDestination: 'bridge',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: false,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'discoveredDeviceInstalls'
+            }
+        },
+        {
+            type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
