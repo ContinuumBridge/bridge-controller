@@ -186,6 +186,7 @@ Backbone.RelationalModel.prototype.updateRelations = function( changedAttrs, opt
 
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
+
     /**
      * Initialize Relations present in this.relations; determine the type (HasOne/HasMany), then creates a new instance.
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).

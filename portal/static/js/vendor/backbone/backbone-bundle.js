@@ -10,7 +10,7 @@ Backbone.Wreqr = require('backbone.wreqr');
 
 require('./backbone.stickit');
 require('backbone-io');
-require('./backbone-trackable');
+require('./backbone.trackit.js');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
 require('backbone.modal');

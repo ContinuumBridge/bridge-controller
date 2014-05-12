@@ -16,6 +16,13 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.bind("change", this.changeHandler)
+
+    },
+
+    changeHandler: function(e) {
+
+        console.log('Change in device install is', e);
     },
 
     uninstall: function() {
@@ -77,7 +84,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
                 key: 'deviceInstalls',
                 collectionType: 'CBApp.DeviceInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'deviceInstallCollection',
+                initializeCollection: 'deviceInstallCollection'
             }
         },
         {  
@@ -95,7 +102,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
                 key: 'deviceInstall',
                 collectionType: 'CBApp.DeviceInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'deviceInstallCollection',
+                initializeCollection: 'deviceInstallCollection'
             }
         }
         /*

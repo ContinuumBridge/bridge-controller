@@ -34,6 +34,8 @@ module.exports = {
             model.unset('id');
         }
         if (success) success(model, resp, options);
+        // Reset trackit
+        if (model.unsavedAttributes()) model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 

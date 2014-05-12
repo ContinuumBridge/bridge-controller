@@ -7,13 +7,14 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.startTracking();
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
     },
 
     setPermission: function(permission) {
 
         // Model is out of sync, prevent further changes
-        if (this.get('hasChangedSinceLastSync')) return void 0;
+        if (this.unsavedAttributes()) return void 0;
 
         if (permission) {
             console.log('saving');
@@ -22,12 +23,10 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             this.save().then(function(result) {
 
                 console.log('save successful', result);
-                result.model.set({hasChangedSinceLastSync: false});
             }, function(error) {
 
                 console.log('save error', error);
                 //this.set('permission', false);
-                //this.set({hasChangedSinceLastSync: false}, {silent: true});
             });
 
         } else if (!this.isNew() && !permission) {
@@ -43,14 +42,12 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
         this.set('permission', false);
         this.destroyOnServer().then(function(result) {
 
-
-            result.model.set({hasChangedSinceLastSync: false});
             console.log('destroyOnServer succeeded for', result);
         }, function(error) {
 
             //this.set('permission', true);
             //this.set({hasChangedSinceLastSync: false});
-            console.error('destroyOnServer failed for', error);
+            console.error('destroyOnServer failed', error);
         });
     },
 

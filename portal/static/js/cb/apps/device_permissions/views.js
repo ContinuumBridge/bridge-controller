@@ -24,7 +24,8 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         '#permission-switch': {
           attributes: [{
             name: 'class',
-            observe: ['permission', 'hasChangedSinceLastSync'],
+            observe: ['permission', 'change'],
+            //observe: '',
             onGet: 'getSwitchClass'
           }]
         }
@@ -38,23 +39,29 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         */
     },
 
+    initialize: function() {
+
+        console.log('view model is', this.model);
+        test = this.model;
+        //this.adpModel = this.model.getAppPermission(this.appInstall);
+
+        // Proxy change events for stickit
+        var self = this;
+        this.model.on('unsavedChanges sync', function(e) {
+            self.model.trigger('change:change');
+        }, this);
+    },
+
     getSwitchClass: function(val) {
 
         console.log('getSwitchClass called', val);
         //var isNew = this.model.isNew();
         var activation = this.model.get('permission') ? 'active' : '';
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
+        var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
+        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
 
         return activation + " " + enabled;
     },
-
-    /*
-    initialize: function() {
-
-        console.log('view model is', this.model);
-        //this.adpModel = this.model.getAppPermission(this.appInstall);
-    },
-    */
 
     togglePermission: function() {
 
