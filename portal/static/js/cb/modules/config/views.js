@@ -169,6 +169,7 @@ var DevicesView = Marionette.ItemView.extend({
                 self.deviceInstallListView.render();
             }
 
+
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
             if (self.discoveredDeviceInstallListView.collection != discoveredDeviceInstallCollection) {
                 // Stop listening to old collection events

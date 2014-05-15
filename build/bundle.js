@@ -28456,13 +28456,14 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.startTracking();
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
     },
 
     setPermission: function(permission) {
 
         // Model is out of sync, prevent further changes
-        if (this.get('hasChangedSinceLastSync')) return void 0;
+        if (this.unsavedAttributes()) return void 0;
 
         if (permission) {
             console.log('saving');
@@ -28471,12 +28472,10 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             this.save().then(function(result) {
 
                 console.log('save successful', result);
-                result.model.set({hasChangedSinceLastSync: false});
             }, function(error) {
 
                 console.log('save error', error);
                 //this.set('permission', false);
-                //this.set({hasChangedSinceLastSync: false}, {silent: true});
             });
 
         } else if (!this.isNew() && !permission) {
@@ -28492,14 +28491,12 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
         this.set('permission', false);
         this.destroyOnServer().then(function(result) {
 
-
-            result.model.set({hasChangedSinceLastSync: false});
             console.log('destroyOnServer succeeded for', result);
         }, function(error) {
 
             //this.set('permission', true);
             //this.set({hasChangedSinceLastSync: false});
-            console.error('destroyOnServer failed for', error);
+            console.error('destroyOnServer failed', error);
         });
     },
 
@@ -28596,7 +28593,8 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         '#permission-switch': {
           attributes: [{
             name: 'class',
-            observe: ['permission', 'hasChangedSinceLastSync'],
+            observe: ['permission', 'change'],
+            //observe: '',
             onGet: 'getSwitchClass'
           }]
         }
@@ -28610,23 +28608,29 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         */
     },
 
+    initialize: function() {
+
+        console.log('view model is', this.model);
+        test = this.model;
+        //this.adpModel = this.model.getAppPermission(this.appInstall);
+
+        // Proxy change events for stickit
+        var self = this;
+        this.model.on('unsavedChanges sync', function(e) {
+            self.model.trigger('change:change');
+        }, this);
+    },
+
     getSwitchClass: function(val) {
 
         console.log('getSwitchClass called', val);
         //var isNew = this.model.isNew();
         var activation = this.model.get('permission') ? 'active' : '';
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
+        var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
+        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
 
         return activation + " " + enabled;
     },
-
-    /*
-    initialize: function() {
-
-        console.log('view model is', this.model);
-        //this.adpModel = this.model.getAppPermission(this.appInstall);
-    },
-    */
 
     togglePermission: function() {
 
@@ -28685,9 +28689,6 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         view.deviceInstall = item;
         // Add the app install model
         view.appInstall = this.options.appInstall;
-        // return it
-        //console.log('adp is', adp, 'deviceInstall is', item, 'appInstall is', this.options.appInstall);
-        console.log('adp is', adp.get('deviceInstall').id, adp.get('appInstall').id);
         return view;
     }
 });
@@ -28870,15 +28871,16 @@ CBApp.AppView = Marionette.ItemView.extend({
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            var appDevicePermissionListView =
+            self.appDevicePermissionListView =
                 new CBApp.AppDevicePermissionListView({
                     collection: currentBridge.get('deviceInstalls'),
                     appInstall: self.model
                 });
+            //self.appDevicePermissionListView._initialEvents();
 
             var appID = '#APPID' + self.model.get('app').get('id');
             $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(appDevicePermissionListView.render().$el);
+            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
         });
     }
 });
@@ -28896,7 +28898,7 @@ CBApp.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./device_permissions/views":23,"./templates/app.html":25,"./templates/appSection.html":26,"backbone-bundle":64,"backbone.marionette":72}],28:[function(require,module,exports){
+},{"./device_permissions/views":23,"./templates/app.html":25,"./templates/appSection.html":26,"backbone-bundle":66,"backbone.marionette":74}],28:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -28907,6 +28909,14 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
+        var deviceInstalls = this.getRelation('deviceInstalls');
+        this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
+        this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
+    },
+
+    removeDeviceInstall: function() {
+
+        console.log('Remove device install!');
     },
 
     getCBID: function() {
@@ -28952,7 +28962,18 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'deviceInstallCollection'
-        }    
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'discoveredDeviceInstalls',
+            keySource: 'discovered_devices',
+            keyDestination: 'discovered_devices',
+            relatedModel: 'CBApp.DiscoveredDeviceInstall',
+            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            createModels: true,
+            //includeInJSON: true,
+            initializeCollection: 'discoveredDeviceInstallCollection'
+        }
     ]
 }); 
 
@@ -29088,6 +29109,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         var self = this;
 
         var deviceInstallData = this.toJSON();
+        console.log('this in deviceInstall is', this);
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
 
         var deviceInstall = CBApp.DeviceInstall.findOrCreate(deviceInstallData);
@@ -29132,6 +29154,21 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     relations: [
         {
             type: Backbone.HasOne,
+            key: 'bridge',
+            keySource: 'bridge',
+            keyDestination: 'bridge',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'discoveredDeviceInstalls'
+            }
+        },
+        {
+            type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
@@ -29157,6 +29194,7 @@ CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
+
 
     initialize: function() {
 
@@ -29281,62 +29319,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/discoveredDevice.html":30,"./templates/discoveredDeviceSection.html":31,"backbone-bundle":64,"backbone.marionette":72}],33:[function(require,module,exports){
-
-CBApp.Device = Backbone.Deferred.Model.extend({
-    
-    idAttribute: 'id',
-    
-    initialize: function() {
-        
-        
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'adaptorCompatibility',
-            keySource: 'adaptor_compatibility',
-            keyDestination: 'adaptor_compatibility',
-            relatedModel: 'CBApp.AdaptorCompatibility',
-            collectionType: 'CBApp.AdaptorCompatibilityCollection',
-            createModels: true,
-            initializeCollection: 'adaptorCompatibilityCollection',
-            includeInJSON: true
-        }
-        /*
-        {
-            type: Backbone.HasMany,
-            key: 'deviceInstalls',
-            //keySource: 'device_installs',
-            //keyDestination: 'device_installs',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
-            createModels: false,
-            initializeCollection: 'deviceInstallCollection',
-            includeInJSON: true,
-            reverseRelation: {
-                key: 'device',
-                //includeInJSON: true
-            }   
-        }   
-        */
-    ]  
-}); 
-
-CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-
-    model: CBApp.Device,
-    backend: 'device',
-
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
-});
+},{"./templates/discoveredDevice.html":30,"./templates/discoveredDeviceSection.html":31,"backbone-bundle":66,"backbone.marionette":74}],33:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -29355,15 +29338,24 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.bind("change", this.changeHandler)
+
+    },
+
+    changeHandler: function(e) {
+
+        console.log('Change in device install is', e);
     },
 
     uninstall: function() {
-        
-        this.destroy({wait: true});
+
+
+        this.relationalDestroy({wait: true});
     },
 
     getAppPermission: function(appInstall) {
 
+        // Create or find a permission object between this and the given appInstall
         if (!appInstall) {
             console.error('getAppPermission for', this, 'requires an appInstall, given:', appInstall);
             return void 0;
@@ -29416,7 +29408,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
                 key: 'deviceInstalls',
                 collectionType: 'CBApp.DeviceInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'deviceInstallCollection',
+                initializeCollection: 'deviceInstallCollection'
             }
         },
         {  
@@ -29434,7 +29426,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
                 key: 'deviceInstall',
                 collectionType: 'CBApp.DeviceInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'deviceInstallCollection',
+                initializeCollection: 'deviceInstallCollection'
             }
         }
         /*
@@ -29500,7 +29492,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-CBApp.DeviceView = Marionette.ItemView.extend({
+CBApp.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -29558,12 +29550,12 @@ CBApp.DeviceView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceListView = Marionette.CompositeView.extend({
+CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/deviceInstallSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.DeviceView,
+    itemView: CBApp.DeviceInstallView,
     itemViewContainer: '#device-list',
 
     emptyView: CBApp.ListItemLoadingView,
@@ -29612,7 +29604,64 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":34,"./templates/deviceInstallSection.html":35,"backbone-bundle":64,"backbone.marionette":72}],37:[function(require,module,exports){
+},{"./templates/deviceInstall.html":34,"./templates/deviceInstallSection.html":35,"backbone-bundle":66,"backbone.marionette":74}],37:[function(require,module,exports){
+
+CBApp.Device = Backbone.Deferred.Model.extend({
+    
+    idAttribute: 'id',
+    
+    initialize: function() {
+        
+        
+    },
+
+    relations: [
+        {
+            type: Backbone.HasMany,
+            key: 'adaptorCompatibility',
+            keySource: 'adaptor_compatibility',
+            keyDestination: 'adaptor_compatibility',
+            relatedModel: 'CBApp.AdaptorCompatibility',
+            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            createModels: true,
+            initializeCollection: 'adaptorCompatibilityCollection',
+            includeInJSON: true
+        }
+        /*
+        {
+            type: Backbone.HasMany,
+            key: 'deviceInstalls',
+            //keySource: 'device_installs',
+            //keyDestination: 'device_installs',
+            relatedModel: 'CBApp.DeviceInstall',
+            collectionType: 'CBApp.DeviceInstallCollection',
+            createModels: false,
+            initializeCollection: 'deviceInstallCollection',
+            includeInJSON: true,
+            reverseRelation: {
+                key: 'device',
+                //includeInJSON: true
+            }   
+        }   
+        */
+    ]  
+}); 
+
+CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
+
+    model: CBApp.Device,
+    backend: 'device',
+
+    initialize: function() {
+        this.bindBackend();
+    },
+    
+    parse : function(response){
+        return response.objects;
+    }
+});
+
+},{}],38:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -29727,7 +29776,7 @@ CBApp.Router = Marionette.SubRouter.extend({
 });
 
 module.exports = CBApp;
-},{"backbone-bundle":64,"backbone.marionette":72}],38:[function(require,module,exports){
+},{"backbone-bundle":66,"backbone.marionette":74}],39:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -29809,7 +29858,7 @@ CBApp.MessageCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29834,7 +29883,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],40:[function(require,module,exports){
+},{"hbsfy/runtime":13}],41:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29846,7 +29895,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send-log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],41:[function(require,module,exports){
+},{"hbsfy/runtime":13}],42:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -29890,7 +29939,12 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         'click #upgrade': 'clickUpgrade'
     },
 
-   onRender: function() {
+    initialize: function() {
+
+        this.listenTo(this, 'after:item:added', this.scrollView())
+    },
+
+    onRender: function() {
 
         this.$console = this.$('#console');
         this.$commandInput = this.$('#command-input');
@@ -29900,16 +29954,15 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         //this.listenTo(this.collection, 'item:added', this.scrollBottom);
     },
 
-    onAfterItemAdded: function(itemView){
+    scrollView: function(){
 
-        /*
-        messagesWrapper = $(this.el).parentNode;
-        if (messagesWrapper) {
-            console.log('MessageListView rendered', this.el.parentNode, messagesWrapper.scrollHeight);
-            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
-            console.log('item added!', messagesWrapper, messagesWrapper.scrollHeight);
+        //messagesWrapper = $(this.el).parentNode;
+        $messagesWrapper = this.$('#messages-wrapper');
+        if ($messagesWrapper[0]) {
+            $messagesWrapper[0].scrollTop = $messagesWrapper[0].scrollHeight;
+            //$messagesWrapper.scrollTop($messagesWrapper[0].scrollHeight);
+            console.log('item added!', $messagesWrapper, $messagesWrapper.scrollHeight);
         }
-        */
         //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
     },
 
@@ -30069,7 +30122,7 @@ CBApp.MessageLayoutView = Marionette.Layout.extend({
 
 */
 
-},{"./templates/message.html":39,"./templates/messageSection.html":40,"backbone-bundle":64,"backbone.marionette":72}],42:[function(require,module,exports){
+},{"./templates/message.html":40,"./templates/messageSection.html":41,"backbone-bundle":66,"backbone.marionette":74}],43:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -30186,7 +30239,7 @@ CBApp.FilteredCollection = function(original){
 
     return filtered;
 }
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 
 require('q');
 
@@ -30233,9 +30286,25 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
 CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 
 
-},{"q":16}],44:[function(require,module,exports){
+},{"q":16}],45:[function(require,module,exports){
+
+
+
 
 Backbone.HasOne = Backbone.HasOne.extend({
+
+    initialize: function( opts ) {
+			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
+
+			var related = this.findRelated( opts );
+			this.setRelated( related );
+
+
+			// Notify new 'related' object of the new relation.
+			_.each( this.getReverseRelations(), function( relation ) {
+				relation.addRelated( this.instance, opts );
+			}, this );
+    },
 
     findRelated: function( options ) {
 
@@ -30249,13 +30318,19 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
+                //console.log('ToOne keyContents', this.keyContents);
                 var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
+                //console.log('ToOne keyContents after', this.keyContents);
 
-                var opts = _.defaults( { create: this.options.createModels }, options );
+                //console.log('ToOne relatedModel', this.relatedModel);
+                //var opts = _.defaults( { create: this.options.createModels }, options );
+                // Taken from the HasMany relation
+                var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
                 related = this.relatedModel.findOrCreate( this.keyContents, opts );
+                //console.log('ToOne related', related);
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
@@ -30270,6 +30345,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                 // ADDED If the model only has an id, fetch the rest of it
                 if (related && related.isNew()) {
+                    //console.log('ToOne isNew!');
                         related.fetch();
                 }
         }
@@ -30306,6 +30382,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
+                                //console.log('ToMany keyContents', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = CBApp.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
@@ -30366,174 +30443,172 @@ Backbone.Collection = Backbone.Collection.extend({
    }
 });
 
-/*
-CBApp.RelationalModel = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initializeRelated: function(resp, options) {
-        
-        console.log('Resp is', resp);
-        var relationsArray = this.getRelations();
-        
-        for (var i = 0; i < relationsArray.length; i++) {
-            
-            var rel = relationsArray[i];
-            var initializeCollection = rel.options.initializeCollection
-
-            if ( _.isString( initializeCollection ) ) {
-                initializeCollection = CBApp[initializeCollection];
-            }
-            
-            
-
-        }
-    },
-
-    parse: function(resp, options) {
-
-        this.initializeRelated(resp, options);
-        return resp;
-    },
-});
-Backbone.RelationalModel.prototype.updateRelations = function( changedAttrs, options ) {
-    if ( this._isInitialized && !this.isLocked() ) {
-        _.each( this._relations, function( rel ) {
-            if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
-                // Fetch data in `rel.keySource` if data got set in there, or `rel.key` otherwise
-                var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
-                    attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
-
-                // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
-                // Which can also happen before the originally intended related model has been found (`val` is null).
-                if ( rel.related !== value || ( value === null && attr === null ) ) {
-                    this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
-                }
-            }
-
-            // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-            if ( rel.keySource !== rel.key ) {
-                delete this.attributes[ rel.keySource ];
-            }
-        }, this );
-    }
-}
- */
-
-
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
+
     /**
      * Initialize Relations present in this.relations; determine the type (HasOne/HasMany), then creates a new instance.
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        console.log('initializeRelations was called');
+        //console.log('initializeRelations was called');
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
+
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
+            //console.log('Initialise relation', rel);
             Backbone.Relational.store.initializeRelation( this, rel, options );
-        }, this );
+            //this.updateRelationToSelf(rel, options);
+        }, this);
 
         this._isInitialized = true;
         this.release();
         this.processQueue();
     },
 
+    relationalDestroy: function(options) {
+
+        var success = options.success;
+        var relations = this.getRelations();
+        var self = this;
+        options.success = function(resp) {
+
+            Backbone.Relational.store.unregister(self);
+            /*
+            _.forEach(relations, function(relation) {
+                // Delete relations on other models to this model
+                self.updateRelationToSelf(relation, {destroy: true});
+            });
+            */
+            if (success) success(model, resp, options);
+        }
+        Backbone.RelationalModel.prototype.destroy.call(this, options);
+    },
+
+    updateRelationToSelf: function(rel, options) {
+
+        // Get models from the relation of the this model
+        var models = rel.related instanceof Backbone.Collection
+            ? rel.related.models : [ rel.related ];
+        if (!models[0]) {
+            // Not sure why keyContents is sometimes needed
+            console.log('rel.keyContents used', rel);
+            models = [ rel.keyContents];
+        }
+            //|| rel.keyContents;
+
+        var model;
+
+        //console.log('Models are ', models);
+        //for (i = 0; i < models.length; i++) {
+        _.forEach(models, function(model) {
+
+            // Iterate through models related to this model
+            if (model) {
+
+                // Get the relation these related models have to this model
+                var reverseRelation = model.get(rel.reverseRelation.key)
+                // If there is no reverse relation, there is nothing on any of the related models to update
+                if (!reverseRelation) return;
+
+                // Get models from the relation
+                var reverseModels = reverseRelation && reverseRelation instanceof Backbone.Collection
+                    ? reverseRelation.models : [ reverseRelation ];
+
+                // Find model representing this model (self) from reverse relation. This might be slow?
+                var reverseModel = _.findWhere(reverseModels, this.toJSON());
+                if (!reverseModel) {
+
+                    console.log('this', this.toJSON());
+                    console.log('reverseModel', reverseModels);
+                    if (reverseModels[0]) {
+                        console.log('reverseModel JSON', reverseModels[0].toJSON());
+                    }
+                }
+                //var reverseModel = (this.id) ? _.findWhere(reverseModels, {id: this.id}) :
+                //    _.findWhere(reverseModels, this.toJSON());
+
+                if (reverseModel) {
+
+                    if (options && options.destroy) {
+                        // Destroy the reverseModel if this model is being destroyed
+                        if (reverseRelation instanceof Backbone.Collection) {
+                            reverseRelation.remove(this);
+                            debugger;
+                        } else {
+                            reverseModel.destroy();
+                            debugger;
+                        }
+                    } else {
+                        // Update the reverseModel if it exists
+                        reverseModel.set(this.toJSON());
+                    }
+                } else {
+                    // Add the model to the reverse relation
+                    if (reverseRelation instanceof Backbone.Collection) {
+                        reverseRelation.add(this);
+                        //reverseRelation.models.push(this);
+                        //console.log('model', model);
+                        //console.log('rel.reverseRelation.key', rel.reverseRelation.key)
+                        //model.set(rel.reverseRelation.key, this);
+                        //reverseRelation.set(this);
+                    } else {
+
+                        // Use updateRelations: false here to stop the update recurring indefinitely, there is probs a better way?
+                        var attrs = {};
+                        attrs[rel.reverseRelation.key] = this;
+                        model.set(attrs, {skipUpdateRelations: true});
+                    }
+                }
+            }
+        }, this);
+    },
+
     updateRelations: function( changedAttrs, options ) {
+
+        // ADDED If skipUpdateRelations is true, don't update relations
+        //console.log('skipUpdateRelations', options.skipUpdateRelations);
+        if (options && options.skipUpdateRelations) return;
+        //console.log('skipUpdateRelations did not skip');
+
         if ( this._isInitialized && !this.isLocked() ) {
             _.each( this._relations, function( rel ) {
+
+                /*
+                // ADDED If the value is a uri, extract the id
+                var idArray = CBApp.filters.apiRegex.exec(value);
+                var id = (idArray && idArray[1]) ? idArray[1] : void 0;
+
+                if (id) {
+
+                    console.log('id is', id)
+                    var reverseRelation = rel.getReverseRelations(rel.related);
+                    console.log('Reverse relation is', reverseRelation);
+                    var model = rel.related.get(id);
+                }
+                */
+
                 if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
                     // Fetch data in `rel.keySource` if data got set in there, or `rel.key` otherwise
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
+                    //console.log('updateRelations value', value);
+                    //console.log('updateRelations rel', rel.related);
+                    //console.log('updateRelations comp', (rel.related !== value) );
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
-                    if ( rel.related !== value || ( value === null && attr === null ) ) {
+                    if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
+                        //console.log('updateRelations after comp', (rel.related !== value) );
                         this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
 
                         if (CBApp._isInitialized) {
-                            console.log('rel is', rel, 'value is', value);
 
-                            console.log('rel.reverseRelation.key', rel.reverseRelation.key);
-                            //var relationToModel = rel.related.get(rel.reverseRelation.key);
-                            //console.log('relationToModel ', relationToModel );
-
-                            // Get models from the relation of the this model
-                            var models = rel.related instanceof Backbone.Collection ? rel.related.models : [ rel.related ];
-
-                            var model;
-
-                            console.log('Models are ', models);
-                            for (i = 0; i < models.length; i++) {
-                                // Iterate through models related to this model
-                                model = models[i];
-
-                                console.log('Model is', model);
-                                // Get the relation these related models have to this model
-                                var reverseRelation = model.get(rel.reverseRelation.key)
-                                console.log('reverseRelation', reverseRelation);
-                                if (reverseRelation) {
-
-                                    // Get models from the relation
-                                    var reverseModels = reverseRelation && reverseRelation instanceof Backbone.Collection
-                                        ? reverseRelation.models : [ reverseRelation ];
-                                    console.log('reverseModels', reverseModels);
-
-                                    var setModel = function(models, modelToSet) {
-
-                                        // Sets a model in what
-                                    }
-                                    if (reverseModels && reverseModels[0]) {
-
-                                        var reverseModelsLength = reverseModels.length
-                                            ? reverseModels.length : 1;
-                                        console.log('reverseModelsLength', reverseModelsLength);
-                                        for (i = 0; i < reverseModelsLength; i++) {
-                                            reverseModel = reverseModels[i];
-                                            console.log('reverseModel', reverseModel);
-                                            console.log('this._isInitialized', this._isInitialized);
-                                            console.log('this.id', this.id);
-                                            //console.log('reverseModel.id', reverseModel.id);
-                                            if (reverseModel && (reverseModel.id == this.id)) {
-                                                console.log('hello!');
-                                                //reverseModel.set(this.toJSON());
-                                                break;
-                                            } else if (i  == (reverseModelsLength - 1)) {
-                                                try {
-                                                    console.log('reverseRelation.models', reverseRelation);
-                                                    reverseRelation.add(this.toJSON());
-                                                    console.log('reverseRelation after adding', reverseRelation);
-                                                    break;
-                                                } catch (e) {
-                                                    if (e instanceof TypeError) {
-                                                        console.error('typeerror', e);
-                                                        //reverseRelation.set(this.toJSON());
-                                                    } else {
-                                                        console.error(e);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
+                            this.updateRelationToSelf(rel);
                             /*
-                            // ADDED If the value is a uri, extract the id
-                            var idArray = CBApp.filters.apiRegex.exec(value);
-                            var id = (idArray && idArray[1]) ? idArray[1] : void 0;
 
-                            if (id) {
-
-                                console.log('id is', id)
-                                var reverseRelation = rel.getReverseRelations(rel.related);
-                                console.log('Reverse relation is', reverseRelation);
-                                var model = rel.related.get(id);
-                            }
                             // ADDED automatically update related models
                             if (value.id) {
 
@@ -30599,7 +30674,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
     }
     */
 });
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 
 var Q = require('q');
 
@@ -30611,6 +30686,7 @@ require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
+require('./devices/installs/models');
 require('./users/models');
 
 require('./misc/decorators');
@@ -30622,16 +30698,16 @@ CBApp.addInitializer(function () {
   CBApp.appCollection = new CBApp.AppCollection();
 
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
-  CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
+  //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+  //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
 
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
   CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
@@ -30691,7 +30767,7 @@ CBApp.addInitializer(function () {
 
 });
 
-},{"./adaptors/compatibility/models":19,"./adaptors/models":20,"./apps/device_permissions/models":21,"./apps/models":24,"./bridges/models":28,"./devices/discovery/models":29,"./devices/models":33,"./misc/decorators":42,"./misc/filters":43,"./users/models":51,"index":37,"q":16}],46:[function(require,module,exports){
+},{"./adaptors/compatibility/models":19,"./adaptors/models":20,"./apps/device_permissions/models":21,"./apps/models":24,"./bridges/models":28,"./devices/discovery/models":29,"./devices/installs/models":33,"./devices/models":37,"./misc/decorators":43,"./misc/filters":44,"./users/models":53,"index":38,"q":16}],47:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -30721,12 +30797,17 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       discoverDevices: function() {
 
           console.log('discoverDevices');
+
+          // Remove all existing discovered devices
+          CBApp.discoveredDeviceInstallCollection.forEach(function(disoveredDeviceInstall) {
+              Backbone.Relational.store.unregister(disoveredDeviceInstall);
+          });
           CBApp.messageCollection.sendMessage('command', 'discover');
-          Config.mainLayoutView.showDeviceDiscovery();
+          Config.mainLayoutView.devicesView.showDeviceDiscovery();
       },
       stopDiscoveringDevices: function() {
 
-          Config.mainLayoutView.showDeviceInstalls();
+          Config.mainLayoutView.devicesView.showDeviceInstalls();
       },
       installDevice: function(discoveredDeviceInstall) {
         var that = this;
@@ -30751,7 +30832,19 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":49}],47:[function(require,module,exports){
+},{"./views":51}],48:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"current-view\"></div>";
+  });
+
+},{"hbsfy/runtime":13}],49:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30763,7 +30856,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],48:[function(require,module,exports){
+},{"hbsfy/runtime":13}],50:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30775,7 +30868,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n    <div id=\"device-section\" class=\"col-md-6\"></div>\n</div>\n<div class=\"row\">\n    <div id=\"message-section\" class=\"col-md-6\"></div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],49:[function(require,module,exports){
+},{"hbsfy/runtime":13}],51:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -30785,8 +30878,9 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/views');
-require('../../devices/views');
+//require('../../devices/views');
 require('../../devices/discovery/views');
+require('../../devices/installs/views');
 require('../../messages/views');
 
 module.exports.Main = Marionette.Layout.extend({
@@ -30799,6 +30893,7 @@ module.exports.Main = Marionette.Layout.extend({
             regionType: CBApp.Regions.Fade
         },
         deviceSection: '#device-section',
+        discoveredDeviceSection: '#disvered-device-section',
         messageSection: '#message-section'
     },
 
@@ -30817,42 +30912,29 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        var self = this;
-
         this.appInstallListView = new CBApp.AppListView();
-        this.deviceInstallListView = new CBApp.DeviceListView();
-        this.deviceDiscoveryListView = new CBApp.DiscoveredDeviceListView({
-            collection: CBApp.discoveredDeviceInstallCollection
-        });
-
-        this.deviceContent = this.deviceInstallListView;
-        //this.deviceContent = this.deviceDiscoveryListView;
-
+        this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
 
-        this.listenTo(CBApp.discoveredDeviceInstallCollection, 'add', this.test);
+        //this.deviceInstallListView = new CBApp.DeviceInstallListView();
+        //this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
+
+        //this.deviceContent = this.deviceInstallListView;
+        //this.deviceContent = this.deviceDiscoveryListView;
+
+
+
+        //this.listenTo(CBApp.discoveredDeviceInstallCollection, 'add', this.test);
+        //this.populateViews();
     },
 
-    test: function() {
-        console.log('test fired!');
-    },
+    populateViews: function() {
+
+        var self = this;
 
 
-    showDeviceDiscovery: function() {
 
-        console.log('showDeviceDiscovery');
-        this.deviceContent = this.deviceDiscoveryListView;
-        this.deviceSection.show(this.deviceContent);
-        this.deviceContent._initialEvents();
-        this.deviceContent.delegateEvents();
-    },
-
-    showDeviceInstalls: function() {
-
-        this.deviceContent = this.deviceInstallListView;
-        this.deviceSection.show(this.deviceContent);
-        this.deviceContent._initialEvents();
-        this.deviceContent.delegateEvents();
+        //this.render();
     },
 
     onRender: function() {
@@ -30860,30 +30942,30 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appSection.show(this.appInstallListView);
-        this.deviceSection.show(this.deviceContent);
+        this.deviceSection.show(this.devicesView);
+        this.devicesView.populateViews();
         this.messageSection.show(this.messageListView);
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             self.listenToOnce(currentBridge, 'change:current', self.render);
+
             var appInstallCollection = currentBridge.get('appInstalls');
             self.appInstallListView.collection = appInstallCollection;
             self.appInstallListView._initialEvents();
             self.appInstallListView.delegateEvents();
-            self.appSection.show(self.appInstallListView);
+            self.appInstallListView.render();
+            //self.appInstallListView.delegateEvents();
+            //self.appSection.show(self.appInstallListView);
 
-            var deviceInstallCollection = currentBridge.get('deviceInstalls');
-            self.deviceInstallListView.collection = deviceInstallCollection;
-            self.deviceInstallListView._initialEvents();
-            self.deviceInstallListView.delegateEvents();
-            self.deviceSection.show(self.deviceInstallListView);
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.collection = CBApp.filteredMessageCollection;
             self.messageListView._initialEvents();
             self.messageListView.delegateEvents();
-            self.messageSection.show(self.messageListView);
-
+            self.messageListView.render();
+            //self.messageListView.delegateEvents();
+            //self.messageSection.show(self.messageListView);
         });
 
         //this.appLayoutView = new CBApp.AppLayoutView({ collection: self.appInstallCollection });
@@ -30902,6 +30984,82 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
+var DevicesView = Marionette.ItemView.extend({
+
+    template: require('./templates/devicesView.html'),
+
+    initialize: function() {
+
+        console.log('Initialise DevicesView');
+        this.deviceInstallListView = new CBApp.DeviceInstallListView();
+        this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
+        this.currentView = this.deviceInstallListView;
+
+        //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
+        this.populateViews();
+    },
+
+    showDeviceDiscovery: function() {
+
+        console.log('showDeviceDiscovery');
+        this.currentView = this.discoveredDeviceInstallListView;
+        this.render();
+    },
+
+    showDeviceInstalls: function() {
+
+        console.log('showDeviceInstalls');
+        this.currentView = this.deviceInstallListView;
+        this.render();
+    },
+
+    populateViews: function() {
+
+        var self = this;
+
+    },
+
+    render: function() {
+
+        this.$el.html(this.template());
+        this.currentView.setElement(this.$('#current-view')).render();
+        //this.$el.append(this.currentView.render().$el);
+
+        //this.$el.html(this.currentView.render().$el);
+
+        var self = this;
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            var deviceInstallCollection = currentBridge.get('deviceInstalls');
+            if (self.deviceInstallListView.collection != deviceInstallCollection) {
+                // Stop listening to old collection events
+                //self.deviceInstallListView._stopListening();
+                self.deviceInstallListView.collection = deviceInstallCollection;
+                self.deviceInstallListView._initialEvents();
+                self.deviceInstallListView.delegateEvents();
+                self.deviceInstallListView.render();
+            }
+
+
+            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
+            if (self.discoveredDeviceInstallListView.collection != discoveredDeviceInstallCollection) {
+                // Stop listening to old collection events
+                self.discoveredDeviceInstallListView._stopListening();
+                console.log('currentBridge', currentBridge);
+                console.log('discoveredDeviceInstallCollection ', discoveredDeviceInstallCollection );
+                self.discoveredDeviceInstallListView.collection = discoveredDeviceInstallCollection;
+                self.discoveredDeviceInstallListView._initialEvents();
+                self.discoveredDeviceInstallListView.delegateEvents();
+                self.discoveredDeviceInstallListView.render();
+            }
+        });
+
+        console.log('DeviceView render');
+        //this.$el.append('Test devices');
+        return this;
+    }
+})
+
 module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
     template: require('./templates/discoveryModal.html'),
@@ -30912,12 +31070,12 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        //CBApp.Config.controller.stopDiscoveringDevices();
+        CBApp.Config.controller.stopDiscoveringDevices();
     }
 });
 
 
-},{"../../apps/views":27,"../../devices/discovery/views":32,"../../devices/views":36,"../../messages/views":41,"../../views/generic_views":53,"../../views/regions":56,"./templates/discoveryModal.html":47,"./templates/main.html":48,"backbone-bundle":64,"backbone.marionette":72,"q":16}],50:[function(require,module,exports){
+},{"../../apps/views":27,"../../devices/discovery/views":32,"../../devices/installs/views":36,"../../messages/views":42,"../../views/generic_views":55,"../../views/regions":58,"./templates/devicesView.html":48,"./templates/discoveryModal.html":49,"./templates/main.html":50,"backbone-bundle":66,"backbone.marionette":74,"q":16}],52:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -30981,7 +31139,7 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":38,"backbone-bundle":64,"index":37}],51:[function(require,module,exports){
+},{"./messages/models":39,"backbone-bundle":66,"index":38}],53:[function(require,module,exports){
 
 //CBApp.CurrentUser = Backbone.RelationalModel.extend({
 CBApp.CurrentUser = Backbone.Deferred.Model.extend({
@@ -31062,7 +31220,7 @@ CBApp.getCurrentUser = function() {
     return CBApp.currentUserDeferred.promise;
 };
 
-},{}],52:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 
 var CBApp = require('index');
 require('./views/portal_view');
@@ -31080,7 +31238,7 @@ CBApp.addInitializer(function () {
 });
 
 
-},{"./views/nav_view":54,"./views/portal_view":55,"index":37}],53:[function(require,module,exports){
+},{"./views/nav_view":56,"./views/portal_view":57,"index":38}],55:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31099,7 +31257,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":60,"backbone-bundle":64,"backbone.marionette":72}],54:[function(require,module,exports){
+},{"./templates/listItemLoading.html":62,"backbone-bundle":66,"backbone.marionette":74}],56:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31272,7 +31430,7 @@ CBApp.Nav.TopBarView = Marionette.ItemView.extend({
 
 
 
-},{"./templates/accountDropdown.html":57,"./templates/bridgeDropdown.html":58,"./templates/bridgeItem.html":59,"./templates/navSection.html":61,"backbone-bundle":64,"backbone.marionette":72,"bootstrap":76,"index":37}],55:[function(require,module,exports){
+},{"./templates/accountDropdown.html":59,"./templates/bridgeDropdown.html":60,"./templates/bridgeItem.html":61,"./templates/navSection.html":63,"backbone-bundle":66,"backbone.marionette":74,"bootstrap":79,"index":38}],57:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31293,7 +31451,7 @@ CBApp.PortalLayout = Marionette.Layout.extend({
     }
 });
 
-},{"./templates/portalSection.html":62,"backbone-bundle":64,"backbone.marionette":72}],56:[function(require,module,exports){
+},{"./templates/portalSection.html":64,"backbone-bundle":66,"backbone.marionette":74}],58:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31309,7 +31467,7 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":64,"backbone.marionette":72}],57:[function(require,module,exports){
+},{"backbone-bundle":66,"backbone.marionette":74}],59:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31321,7 +31479,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "\n<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n    <div class=\"header-text\">My Account</div>\n    <b class=\"caret\"></b>\n</a>\n<ul class=\"dropdown-menu\">\n    <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n</ul>\n";
   });
 
-},{"hbsfy/runtime":13}],58:[function(require,module,exports){
+},{"hbsfy/runtime":13}],60:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31333,7 +31491,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
   });
 
-},{"hbsfy/runtime":13}],59:[function(require,module,exports){
+},{"hbsfy/runtime":13}],61:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31350,7 +31508,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],60:[function(require,module,exports){
+},{"hbsfy/runtime":13}],62:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31362,7 +31520,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],61:[function(require,module,exports){
+},{"hbsfy/runtime":13}],63:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31374,7 +31532,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a href=\"\">Dashboard</a></li>\n        <li><a href=\"\">App Store</a></li>\n        <li><a href=\"\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],62:[function(require,module,exports){
+},{"hbsfy/runtime":13}],64:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31386,7 +31544,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div id=\"main-region\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],63:[function(require,module,exports){
+},{"hbsfy/runtime":13}],65:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
 
@@ -31405,7 +31563,7 @@ require('./cb/views');
 })(jQuery);
 
 
-},{"./cb/models":45,"./cb/modules/config/config":46,"./cb/socket":50,"./cb/views":52,"index":37,"jquery-browserify":14}],64:[function(require,module,exports){
+},{"./cb/models":46,"./cb/modules/config/config":47,"./cb/socket":52,"./cb/views":54,"index":38,"jquery-browserify":14}],66:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -31418,7 +31576,7 @@ Backbone.Wreqr = require('backbone.wreqr');
 
 require('./backbone.stickit');
 require('backbone-io');
-require('./backbone-trackable');
+require('./backbone.trackit.js');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
 require('backbone.modal');
@@ -31426,9 +31584,11 @@ require('./backbone-notify');
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb');
+var CBModelMixin = require('./backbone-cb-models');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
+var CBViewsMixin = require('./backbone-cb-views');
+Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
 require('backbone-deferred');
@@ -31450,7 +31610,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":44,"./backbone-cb":65,"./backbone-notify":69,"./backbone-relational":70,"./backbone-trackable":71,"./backbone.stickit":75,"backbone":3,"backbone-cocktail":66,"backbone-deferred":67,"backbone-io":68,"backbone.babysitter":1,"backbone.marionette":72,"backbone.marionette.subrouter":73,"backbone.modal":74,"backbone.wreqr":2,"jquery":15,"q":16,"underscore":18}],65:[function(require,module,exports){
+},{"../../cb/misc/relational-models":45,"./backbone-cb-models":67,"./backbone-cb-views":68,"./backbone-notify":72,"./backbone-relational":73,"./backbone.stickit":77,"./backbone.trackit.js":78,"backbone":3,"backbone-cocktail":69,"backbone-deferred":70,"backbone-io":71,"backbone.babysitter":1,"backbone.marionette":74,"backbone.marionette.subrouter":75,"backbone.modal":76,"backbone.wreqr":2,"jquery":15,"q":16,"underscore":18}],67:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -31487,6 +31647,8 @@ module.exports = {
             model.unset('id');
         }
         if (success) success(model, resp, options);
+        // ADDED Reset trackit
+        if (model.unsavedAttributes()) model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
@@ -31524,7 +31686,6 @@ module.exports = {
       value = Backbone.Deferred.Model.prototype.save.call(this, attrs, options);
       return value;
     },
-    */
 
     mark_to_revert: function() {
       return this._revertAttributes = _.clone(this.attributes);
@@ -31537,8 +31698,39 @@ module.exports = {
         });
       }
     }
+    */
 };
-},{}],66:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
+
+
+var wrapError = function(model, options) {
+    var error = options.error;
+    options.error = function(resp) {
+      if (error) error(model, resp, options);
+      model.trigger('error', model, resp, options);
+    };
+};
+
+module.exports.RelationalCollectionView = {
+
+    _initialEvents: function() {
+        // Listen to relational events
+        console.log('_initialEvents this.collection', this.collection);
+        if (this.collection){
+            this.listenTo(this.collection, 'relational:remove', this.render);
+            //this.listenTo(this.collection, 'relational:remove', this.removeItemView);
+        }
+    },
+
+    _stopListening: function() {
+
+        // Stop listening to all events on collection
+        if (this.collection) {
+            this.stopListening(this.collection);
+        }
+    }
+};
+},{}],69:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -31641,7 +31833,7 @@ module.exports = {
 
     return Cocktail;
 }));
-},{"underscore":18}],67:[function(require,module,exports){
+},{"underscore":18}],70:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -31998,7 +32190,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],68:[function(require,module,exports){
+},{"backbone":3,"q":16}],71:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -32195,7 +32387,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":17,"underscore":18}],69:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":17,"underscore":18}],72:[function(require,module,exports){
 
 //var notify = require('notify');
 
@@ -32228,7 +32420,7 @@ _ = global._ = require("underscore");
   })(Backbone.Modal);
 
 }).call(this);
-},{}],70:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -33705,6 +33897,7 @@ _ = global._ = require("underscore");
 					Backbone.Relational.store.update( this );
 				}
 
+                console.log('attributes in set', attributes);
 				if ( attributes ) {
 					this.updateRelations( attributes, options );
 				}
@@ -34226,47 +34419,7 @@ _ = global._ = require("underscore");
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":18}],71:[function(require,module,exports){
-
-// This model (and any other model extending it) will be able to tell if it is synced with the server or not
-Backbone.Model = Backbone.Model.extend({
-
-  initialize: function() {
-    // If you extend this model, make sure to call this initialize method
-    // or add the following line to the extended model as well
-    //console.log('initialize called on trackable', this.toJSONString());
-    this.set({hasChangedSinceLastSync: false}, {silent: true});
-    //this.listenTo(this, 'change', this.modelChanged);
-    this.bind('change', this.modelChanged);
-  },
-
-  modelChanged: function(event) {
-      console.log('Model Changed', event.changedAttributes());
-
-      var changed = event.changedAttributes();
-      console.log('Model Changed changed:', changed.hasOwnProperty('hasChangedSinceLastSync'));
-
-      if (CBApp._isInitialized && changed && !changed.hasOwnProperty('hasChangedSinceLastSync')) {
-        this.set({hasChangedSinceLastSync: true});
-        test = this;
-        console.log('Model hasChangedSinceLastSync', this.get('hasChangedSinceLastSync'));
-      }
-  },
-
-  sync: function(method, model, options) {
-    console.log('SYNC called in trackable');
-    options = options || {};
-    var success = options.success;
-    options.success = function(resp) {
-      success && success(resp);
-      model.set({hasChangedSinceLastSync: false});
-    };
-    return Backbone.sync(method, model, options);
-  }
-});
-
-
-},{}],72:[function(require,module,exports){
+},{"backbone":3,"underscore":18}],74:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36732,7 +36885,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":18}],73:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":18}],75:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36845,7 +36998,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":72,"backbone":3,"underscore":18}],74:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":74,"backbone":3,"underscore":18}],76:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -37342,7 +37495,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":72,"backbone":3,"underscore":18}],75:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":74,"backbone":3,"underscore":18}],77:[function(require,module,exports){
 //
 // backbone.stickit - v0.7.0
 // The MIT License
@@ -37881,7 +38034,200 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":18}],76:[function(require,module,exports){
+},{"backbone":3,"underscore":18}],78:[function(require,module,exports){
+(function() {
+
+  // Unsaved Record Keeping
+  // ----------------------
+
+  // Collection of all models in an app that have unsaved changes.
+  var unsavedModels = [];
+
+  // If the given model has unsaved changes then add it to
+  // the `unsavedModels` collection, otherwise remove it.
+  var updateUnsavedModels = function(model) {
+    if (!_.isEmpty(model._unsavedChanges)) {
+      if (!_.findWhere(unsavedModels, {cid:model.cid})) unsavedModels.push(model);
+    } else {
+      unsavedModels = _.filter(unsavedModels, function(m) { return model.cid != m.cid; });
+    }
+  };
+
+  // Unload Handlers
+  // ---------------
+
+  // Helper which returns a prompt message for an unload handler.
+  // Uses the given function name (one of the callback names
+  // from the `model.unsaved` configuration hash) to evaluate
+  // whether a prompt is needed/returned.
+  var getPrompt = function(fnName) {
+    var prompt, args = _.rest(arguments);
+    // Evaluate and return a boolean result. The given `fn` may be a
+    // boolean value, a function, or the name of a function on the model.
+    var evaluateModelFn = function(model, fn) {
+      if (_.isBoolean(fn)) return fn;
+      return (_.isString(fn) ? model[fn] : fn).apply(model, args);
+    };
+    _.each(unsavedModels, function(model) {
+      if (!prompt && evaluateModelFn(model, model._unsavedConfig[fnName]))
+        prompt = model._unsavedConfig.prompt;
+    });
+    return prompt;
+  };
+
+  // Wrap Backbone.History.navigate so that in-app routing
+  // (`router.navigate('/path')`) can be intercepted with a
+  // confirmation if there are any unsaved models.
+  Backbone.History.prototype.navigate = _.wrap(Backbone.History.prototype.navigate, function(oldNav, fragment, options) {
+    var prompt = getPrompt('unloadRouterPrompt', fragment, options);
+    if (prompt) {
+      if (confirm(prompt + ' \n\nAre you sure you want to leave this page?')) {
+        oldNav.call(this, fragment, options);
+      }
+    } else {
+      oldNav.call(this, fragment, options);
+    }
+  });
+
+  // Create a browser unload handler which is triggered
+  // on the refresh, back, or forward button.
+  window.onbeforeunload = function(e) {
+    return getPrompt('unloadWindowPrompt', e);
+  };
+
+  // Backbone.Model API
+  // ------------------
+
+  _.extend(Backbone.Model.prototype, {
+
+    unsaved: {},
+    _trackingChanges: false,
+    _originalAttrs: {},
+    _unsavedChanges: {},
+
+    // Opt in to tracking attribute changes
+    // between saves.
+    startTracking: function() {
+      this._unsavedConfig = _.extend({}, {
+        prompt: 'You have unsaved changes!',
+        unloadRouterPrompt: false,
+        unloadWindowPrompt: false
+      }, this.unsaved || {});
+      this._trackingChanges = true;
+      this._resetTracking();
+      this._triggerUnsavedChanges();
+      return this;
+    },
+
+    // Resets the default tracking values
+    // and stops tracking attribute changes.
+    stopTracking: function() {
+      this._trackingChanges = false;
+      this._originalAttrs = {};
+      this._unsavedChanges = {};
+      this._triggerUnsavedChanges();
+      return this;
+    },
+
+    // Gets rid of accrued changes and
+    // resets state.
+    restartTracking: function() {
+      this._resetTracking();
+      this._triggerUnsavedChanges();
+      return this;
+    },
+
+    // Restores this model's attributes to
+    // their original values since tracking
+    // started, the last save, or last restart.
+    resetAttributes: function() {
+      if (!this._trackingChanges) return;
+      this.attributes = this._originalAttrs;
+      this._resetTracking();
+      this._triggerUnsavedChanges();
+      return this;
+    },
+
+    // Symmetric to Backbone's `model.changedAttributes()`,
+    // except that this returns a hash of the model's attributes that
+    // have changed since the last save, or `false` if there are none.
+    // Like `changedAttributes`, an external attributes hash can be
+    // passed in, returning the attributes in that hash which differ
+    // from the model.
+    unsavedAttributes: function(attrs) {
+      if (!attrs) return _.isEmpty(this._unsavedChanges) ? false : _.clone(this._unsavedChanges);
+      var val, changed = false, old = this._unsavedChanges;
+      for (var attr in attrs) {
+        if (_.isEqual(old[attr], (val = attrs[attr]))) continue;
+        (changed || (changed = {}))[attr] = val;
+      }
+      return changed;
+    },
+
+    _resetTracking: function() {
+      this._originalAttrs = _.clone(this.attributes);
+      this._unsavedChanges = {};
+    },
+
+    // Trigger an `unsavedChanges` event on this model,
+    // supplying the result of whether there are unsaved
+    // changes and a changed attributes hash.
+    _triggerUnsavedChanges: function() {
+      this.trigger('unsavedChanges', !_.isEmpty(this._unsavedChanges), _.clone(this._unsavedChanges), this);
+      if (this.unsaved) updateUnsavedModels(this);
+    }
+  });
+
+  // Wrap `model.set()` and update the internal
+  // unsaved changes record keeping.
+  Backbone.Model.prototype.set = _.wrap(Backbone.Model.prototype.set, function(oldSet, key, val, options) {
+    var attrs, ret;
+    if (key == null) return this;
+    // Handle both `"key", value` and `{key: value}` -style arguments.
+    if (typeof key === 'object') {
+      attrs = key;
+      options = val;
+    } else {
+      (attrs = {})[key] = val;
+    }
+    options || (options = {});
+
+    // Delegate to Backbone's set.
+    ret = oldSet.call(this, attrs, options);
+
+    if (this._trackingChanges && !options.silent && !options.trackit_silent) {
+      _.each(attrs, _.bind(function(val, key) {
+        if (_.isEqual(this._originalAttrs[key], val))
+          delete this._unsavedChanges[key];
+        else
+          this._unsavedChanges[key] = val;
+      }, this));
+      this._triggerUnsavedChanges();
+    }
+    return ret;
+  });
+
+  // Intercept `model.save()` and reset tracking/unsaved
+  // changes if it was successful.
+  Backbone.sync = _.wrap(Backbone.sync, function(oldSync, method, model, options) {
+    options || (options = {});
+
+    if (method == 'update' || method == 'create' || method == 'patch') {
+      options.success = _.wrap(options.success, _.bind(function(oldSuccess, data, textStatus, jqXHR) {
+        var ret;
+        if (oldSuccess) ret = oldSuccess.call(this, data, textStatus, jqXHR);
+        if (model._trackingChanges) {
+          model._resetTracking();
+          model._triggerUnsavedChanges();
+        }
+        return ret;
+      }, this));
+    }
+    return oldSync(method, model, options);
+  });
+
+})();
+},{}],79:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -39843,4 +40189,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[63])
+},{"jquery":15}]},{},[65])
