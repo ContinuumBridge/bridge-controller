@@ -38,6 +38,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         var self = this;
 
         var deviceInstallData = this.toJSON();
+        console.log('this in deviceInstall is', this);
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
 
         var deviceInstall = CBApp.DeviceInstall.findOrCreate(deviceInstallData);
@@ -82,6 +83,21 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     relations: [
         {
             type: Backbone.HasOne,
+            key: 'bridge',
+            keySource: 'bridge',
+            keyDestination: 'bridge',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'discoveredDeviceInstalls'
+            }
+        },
+        {
+            type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
@@ -107,6 +123,7 @@ CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
+
 
     initialize: function() {
 

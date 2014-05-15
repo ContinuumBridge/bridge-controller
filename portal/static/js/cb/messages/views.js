@@ -41,7 +41,12 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         'click #upgrade': 'clickUpgrade'
     },
 
-   onRender: function() {
+    initialize: function() {
+
+        this.listenTo(this, 'after:item:added', this.scrollView())
+    },
+
+    onRender: function() {
 
         this.$console = this.$('#console');
         this.$commandInput = this.$('#command-input');
@@ -51,16 +56,15 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         //this.listenTo(this.collection, 'item:added', this.scrollBottom);
     },
 
-    onAfterItemAdded: function(itemView){
+    scrollView: function(){
 
-        /*
-        messagesWrapper = $(this.el).parentNode;
-        if (messagesWrapper) {
-            console.log('MessageListView rendered', this.el.parentNode, messagesWrapper.scrollHeight);
-            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
-            console.log('item added!', messagesWrapper, messagesWrapper.scrollHeight);
+        //messagesWrapper = $(this.el).parentNode;
+        $messagesWrapper = this.$('#messages-wrapper');
+        if ($messagesWrapper[0]) {
+            $messagesWrapper[0].scrollTop = $messagesWrapper[0].scrollHeight;
+            //$messagesWrapper.scrollTop($messagesWrapper[0].scrollHeight);
+            console.log('item added!', $messagesWrapper, $messagesWrapper.scrollHeight);
         }
-        */
         //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
     },
 

@@ -9,6 +9,7 @@ require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
+require('./devices/installs/models');
 require('./users/models');
 
 require('./misc/decorators');
@@ -20,16 +21,16 @@ CBApp.addInitializer(function () {
   CBApp.appCollection = new CBApp.AppCollection();
 
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
-  CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
+  //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+  //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
 
   CBApp.adaptorCollection = new CBApp.AdaptorCollection();
   CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();

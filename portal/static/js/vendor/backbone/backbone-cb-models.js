@@ -34,6 +34,8 @@ module.exports = {
             model.unset('id');
         }
         if (success) success(model, resp, options);
+        // ADDED Reset trackit
+        if (model.unsavedAttributes()) model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
@@ -71,7 +73,6 @@ module.exports = {
       value = Backbone.Deferred.Model.prototype.save.call(this, attrs, options);
       return value;
     },
-    */
 
     mark_to_revert: function() {
       return this._revertAttributes = _.clone(this.attributes);
@@ -84,4 +85,5 @@ module.exports = {
         });
       }
     }
+    */
 };

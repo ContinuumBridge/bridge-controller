@@ -30,15 +30,16 @@ CBApp.AppView = Marionette.ItemView.extend({
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            var appDevicePermissionListView =
+            self.appDevicePermissionListView =
                 new CBApp.AppDevicePermissionListView({
                     collection: currentBridge.get('deviceInstalls'),
                     appInstall: self.model
                 });
+            //self.appDevicePermissionListView._initialEvents();
 
             var appID = '#APPID' + self.model.get('app').get('id');
             $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(appDevicePermissionListView.render().$el);
+            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
         });
     }
 });

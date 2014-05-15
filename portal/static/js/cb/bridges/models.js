@@ -8,6 +8,14 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
+        var deviceInstalls = this.getRelation('deviceInstalls');
+        this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
+        this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
+    },
+
+    removeDeviceInstall: function() {
+
+        console.log('Remove device install!');
     },
 
     getCBID: function() {
@@ -53,7 +61,18 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'deviceInstallCollection'
-        }    
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'discoveredDeviceInstalls',
+            keySource: 'discovered_devices',
+            keyDestination: 'discovered_devices',
+            relatedModel: 'CBApp.DiscoveredDeviceInstall',
+            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            createModels: true,
+            //includeInJSON: true,
+            initializeCollection: 'discoveredDeviceInstallCollection'
+        }
     ]
 }); 
 
