@@ -15,7 +15,7 @@ django-filer==0.9.4
 django-model-utils==2.0.0
 django-multiselectfield==0.1.2
 #django-notifications-hq==0.6.2
--e git+https://github.com/continuumbridge/django-notifications.git@bb42f850eda449920787e07f8fa257bfdf35eb45#egg=notifications
+-e git+https://github.com/continuumbridge/django-notifications.git@6a58f06cf5c8e73101e087839e1562052b7cf3c9#egg=notifications
 
 django-redis-sessions
 django-sekizai==0.7
