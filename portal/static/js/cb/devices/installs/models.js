@@ -26,12 +26,14 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     },
 
     uninstall: function() {
-        
-        this.destroy({wait: true});
+
+
+        this.relationalDestroy({wait: true});
     },
 
     getAppPermission: function(appInstall) {
 
+        // Create or find a permission object between this and the given appInstall
         if (!appInstall) {
             console.error('getAppPermission for', this, 'requires an appInstall, given:', appInstall);
             return void 0;

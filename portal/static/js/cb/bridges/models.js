@@ -8,6 +8,14 @@ CBApp.Bridge = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
+        var deviceInstalls = this.getRelation('deviceInstalls');
+        this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
+        this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
+    },
+
+    removeDeviceInstall: function() {
+
+        console.log('Remove device install!');
     },
 
     getCBID: function() {

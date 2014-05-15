@@ -27,12 +27,17 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       discoverDevices: function() {
 
           console.log('discoverDevices');
+
+          // Remove all existing discovered devices
+          CBApp.discoveredDeviceInstallCollection.forEach(function(disoveredDeviceInstall) {
+              Backbone.Relational.store.unregister(disoveredDeviceInstall);
+          });
           CBApp.messageCollection.sendMessage('command', 'discover');
-          Config.mainLayoutView.showDeviceDiscovery();
+          Config.mainLayoutView.devicesView.showDeviceDiscovery();
       },
       stopDiscoveringDevices: function() {
 
-          Config.mainLayoutView.showDeviceInstalls();
+          Config.mainLayoutView.devicesView.showDeviceInstalls();
       },
       installDevice: function(discoveredDeviceInstall) {
         var that = this;

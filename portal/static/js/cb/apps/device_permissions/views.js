@@ -120,9 +120,6 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         view.deviceInstall = item;
         // Add the app install model
         view.appInstall = this.options.appInstall;
-        // return it
-        //console.log('adp is', adp, 'deviceInstall is', item, 'appInstall is', this.options.appInstall);
-        console.log('adp is', adp.get('deviceInstall').id, adp.get('appInstall').id);
         return view;
     }
 });

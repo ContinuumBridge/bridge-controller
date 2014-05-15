@@ -18,9 +18,11 @@ require('./backbone-notify');
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb');
+var CBModelMixin = require('./backbone-cb-models');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
+var CBViewsMixin = require('./backbone-cb-views');
+Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
 require('backbone-deferred');

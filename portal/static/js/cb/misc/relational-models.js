@@ -1,5 +1,21 @@
 
+
+
+
 Backbone.HasOne = Backbone.HasOne.extend({
+
+    initialize: function( opts ) {
+			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
+
+			var related = this.findRelated( opts );
+			this.setRelated( related );
+
+
+			// Notify new 'related' object of the new relation.
+			_.each( this.getReverseRelations(), function( relation ) {
+				relation.addRelated( this.instance, opts );
+			}, this );
+    },
 
     findRelated: function( options ) {
 
@@ -13,13 +29,19 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
+                //console.log('ToOne keyContents', this.keyContents);
                 var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
+                //console.log('ToOne keyContents after', this.keyContents);
 
-                var opts = _.defaults( { create: this.options.createModels }, options );
+                //console.log('ToOne relatedModel', this.relatedModel);
+                //var opts = _.defaults( { create: this.options.createModels }, options );
+                // Taken from the HasMany relation
+                var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
                 related = this.relatedModel.findOrCreate( this.keyContents, opts );
+                //console.log('ToOne related', related);
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
@@ -34,6 +56,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                 // ADDED If the model only has an id, fetch the rest of it
                 if (related && related.isNew()) {
+                    //console.log('ToOne isNew!');
                         related.fetch();
                 }
         }
@@ -70,6 +93,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
+                                //console.log('ToMany keyContents', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = CBApp.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
@@ -130,61 +154,6 @@ Backbone.Collection = Backbone.Collection.extend({
    }
 });
 
-/*
-CBApp.RelationalModel = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initializeRelated: function(resp, options) {
-        
-        console.log('Resp is', resp);
-        var relationsArray = this.getRelations();
-        
-        for (var i = 0; i < relationsArray.length; i++) {
-            
-            var rel = relationsArray[i];
-            var initializeCollection = rel.options.initializeCollection
-
-            if ( _.isString( initializeCollection ) ) {
-                initializeCollection = CBApp[initializeCollection];
-            }
-            
-            
-
-        }
-    },
-
-    parse: function(resp, options) {
-
-        this.initializeRelated(resp, options);
-        return resp;
-    },
-});
-Backbone.RelationalModel.prototype.updateRelations = function( changedAttrs, options ) {
-    if ( this._isInitialized && !this.isLocked() ) {
-        _.each( this._relations, function( rel ) {
-            if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
-                // Fetch data in `rel.keySource` if data got set in there, or `rel.key` otherwise
-                var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
-                    attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
-
-                // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
-                // Which can also happen before the originally intended related model has been found (`val` is null).
-                if ( rel.related !== value || ( value === null && attr === null ) ) {
-                    this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
-                }
-            }
-
-            // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-            if ( rel.keySource !== rel.key ) {
-                delete this.attributes[ rel.keySource ];
-            }
-        }, this );
-    }
-}
- */
-
-
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
     /**
@@ -192,113 +161,166 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        console.log('initializeRelations was called');
+        //console.log('initializeRelations was called');
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
+
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
+            //console.log('Initialise relation', rel);
             Backbone.Relational.store.initializeRelation( this, rel, options );
-        }, this );
+            //this.updateRelationToSelf(rel, options);
+        }, this);
 
         this._isInitialized = true;
         this.release();
         this.processQueue();
     },
 
+    relationalDestroy: function(options) {
+
+        var success = options.success;
+        var relations = this.getRelations();
+        var self = this;
+        options.success = function(resp) {
+
+            Backbone.Relational.store.unregister(self);
+            debugger;
+            /*
+            _.forEach(relations, function(relation) {
+                // Delete relations on other models to this model
+                self.updateRelationToSelf(relation, {destroy: true});
+            });
+            */
+            if (success) success(model, resp, options);
+        }
+        Backbone.RelationalModel.prototype.destroy.call(this, options);
+    },
+
+    updateRelationToSelf: function(rel, options) {
+
+        // Get models from the relation of the this model
+        var models = rel.related instanceof Backbone.Collection
+            ? rel.related.models : [ rel.related ];
+        if (!models[0]) {
+            // Not sure why keyContents is sometimes needed
+            console.log('rel.keyContents used', rel);
+            models = [ rel.keyContents];
+        }
+            //|| rel.keyContents;
+
+        var model;
+
+        //console.log('Models are ', models);
+        //for (i = 0; i < models.length; i++) {
+        _.forEach(models, function(model) {
+
+            // Iterate through models related to this model
+            if (model) {
+
+                // Get the relation these related models have to this model
+                var reverseRelation = model.get(rel.reverseRelation.key)
+                // If there is no reverse relation, there is nothing on any of the related models to update
+                if (!reverseRelation) return;
+
+                // Get models from the relation
+                var reverseModels = reverseRelation && reverseRelation instanceof Backbone.Collection
+                    ? reverseRelation.models : [ reverseRelation ];
+
+                // Find model representing this model (self) from reverse relation. This might be slow?
+                var reverseModel = _.findWhere(reverseModels, this.toJSON());
+                if (!reverseModel) {
+
+                    console.log('this', this.toJSON());
+                    console.log('reverseModel', reverseModels);
+                    if (reverseModels[0]) {
+                        console.log('reverseModel JSON', reverseModels[0].toJSON());
+                    }
+                }
+                //var reverseModel = (this.id) ? _.findWhere(reverseModels, {id: this.id}) :
+                //    _.findWhere(reverseModels, this.toJSON());
+
+                if (reverseModel) {
+
+                    if (options && options.destroy) {
+                        // Destroy the reverseModel if this model is being destroyed
+                        if (reverseRelation instanceof Backbone.Collection) {
+                            reverseRelation.remove(this);
+                            debugger;
+                        } else {
+                            reverseModel.destroy();
+                            debugger;
+                        }
+                    } else {
+                        // Update the reverseModel if it exists
+                        reverseModel.set(this.toJSON());
+                    }
+                } else {
+                    // Add the model to the reverse relation
+                    if (reverseRelation instanceof Backbone.Collection) {
+                        reverseRelation.add(this);
+                        //reverseRelation.models.push(this);
+                        //console.log('model', model);
+                        //console.log('rel.reverseRelation.key', rel.reverseRelation.key)
+                        //model.set(rel.reverseRelation.key, this);
+                        //reverseRelation.set(this);
+                    } else {
+
+                        // Use updateRelations: false here to stop the update recurring indefinitely, there is probs a better way?
+                        var attrs = {};
+                        attrs[rel.reverseRelation.key] = this;
+                        model.set(attrs, {skipUpdateRelations: true});
+                    }
+                }
+            }
+        }, this);
+    },
+
     updateRelations: function( changedAttrs, options ) {
+
+        // ADDED If skipUpdateRelations is true, don't update relations
+        //console.log('skipUpdateRelations', options.skipUpdateRelations);
+        if (options && options.skipUpdateRelations) return;
+        //console.log('skipUpdateRelations did not skip');
+
         if ( this._isInitialized && !this.isLocked() ) {
             _.each( this._relations, function( rel ) {
+
+                /*
+                // ADDED If the value is a uri, extract the id
+                var idArray = CBApp.filters.apiRegex.exec(value);
+                var id = (idArray && idArray[1]) ? idArray[1] : void 0;
+
+                if (id) {
+
+                    console.log('id is', id)
+                    var reverseRelation = rel.getReverseRelations(rel.related);
+                    console.log('Reverse relation is', reverseRelation);
+                    var model = rel.related.get(id);
+                }
+                */
+
                 if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
                     // Fetch data in `rel.keySource` if data got set in there, or `rel.key` otherwise
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
+                    //console.log('updateRelations value', value);
+                    //console.log('updateRelations rel', rel.related);
+                    //console.log('updateRelations comp', (rel.related !== value) );
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
-                    if ( rel.related !== value || ( value === null && attr === null ) ) {
+                    if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
+                        //console.log('updateRelations after comp', (rel.related !== value) );
                         this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
 
                         if (CBApp._isInitialized) {
-                            console.log('rel is', rel, 'value is', value);
 
-                            console.log('rel.reverseRelation.key', rel.reverseRelation.key);
-                            //var relationToModel = rel.related.get(rel.reverseRelation.key);
-                            //console.log('relationToModel ', relationToModel );
-
-                            // Get models from the relation of the this model
-                            var models = rel.related instanceof Backbone.Collection ? rel.related.models : [ rel.related ];
-
-                            var model;
-
-                            console.log('Models are ', models);
-                            for (i = 0; i < models.length; i++) {
-                                // Iterate through models related to this model
-                                model = models[i];
-
-                                console.log('Model is', model);
-                                // Get the relation these related models have to this model
-                                var reverseRelation = model.get(rel.reverseRelation.key)
-                                console.log('reverseRelation', reverseRelation);
-                                if (reverseRelation) {
-
-                                    // Get models from the relation
-                                    var reverseModels = reverseRelation && reverseRelation instanceof Backbone.Collection
-                                        ? reverseRelation.models : [ reverseRelation ];
-                                    console.log('reverseModels', reverseModels);
-
-                                    var setModel = function(models, modelToSet) {
-
-                                        // Sets a model in what
-                                    }
-                                    if (reverseModels && reverseModels[0]) {
-
-                                        var reverseModelsLength = reverseModels.length
-                                            ? reverseModels.length : 1;
-                                        console.log('reverseModelsLength', reverseModelsLength);
-                                        for (i = 0; i < reverseModelsLength; i++) {
-                                            reverseModel = reverseModels[i];
-                                            console.log('reverseModel', reverseModel);
-                                            console.log('this._isInitialized', this._isInitialized);
-                                            console.log('this.id', this.id);
-                                            //console.log('reverseModel.id', reverseModel.id);
-                                            if (reverseModel && (reverseModel.id == this.id)) {
-                                                console.log('hello!');
-                                                //reverseModel.set(this.toJSON());
-                                                break;
-                                            } else if (i  == (reverseModelsLength - 1)) {
-                                                try {
-                                                    console.log('reverseRelation.models', reverseRelation);
-                                                    reverseRelation.add(this.toJSON());
-                                                    console.log('reverseRelation after adding', reverseRelation);
-                                                    break;
-                                                } catch (e) {
-                                                    if (e instanceof TypeError) {
-                                                        console.error('typeerror', e);
-                                                        //reverseRelation.set(this.toJSON());
-                                                    } else {
-                                                        console.error(e);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
+                            this.updateRelationToSelf(rel);
                             /*
-                            // ADDED If the value is a uri, extract the id
-                            var idArray = CBApp.filters.apiRegex.exec(value);
-                            var id = (idArray && idArray[1]) ? idArray[1] : void 0;
 
-                            if (id) {
-
-                                console.log('id is', id)
-                                var reverseRelation = rel.getReverseRelations(rel.related);
-                                console.log('Reverse relation is', reverseRelation);
-                                var model = rel.related.get(id);
-                            }
                             // ADDED automatically update related models
                             if (value.id) {
 
