@@ -187,7 +187,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         options.success = function(resp) {
 
             Backbone.Relational.store.unregister(self);
-            debugger;
             /*
             _.forEach(relations, function(relation) {
                 // Delete relations on other models to this model

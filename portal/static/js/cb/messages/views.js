@@ -53,14 +53,12 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
 
     onAfterItemAdded: function(itemView){
 
-        /*
         messagesWrapper = $(this.el).parentNode;
         if (messagesWrapper) {
             console.log('MessageListView rendered', this.el.parentNode, messagesWrapper.scrollHeight);
             messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
             console.log('item added!', messagesWrapper, messagesWrapper.scrollHeight);
         }
-        */
         //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
     },
 

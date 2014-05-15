@@ -82,6 +82,7 @@ module.exports.Main = Marionette.Layout.extend({
             var appInstallCollection = currentBridge.get('appInstalls');
             self.appInstallListView.collection = appInstallCollection;
             self.appInstallListView._initialEvents();
+            self.appInstallListView.delegateEvents();
             self.appInstallListView.render();
             //self.appInstallListView.delegateEvents();
             //self.appSection.show(self.appInstallListView);
@@ -89,6 +90,7 @@ module.exports.Main = Marionette.Layout.extend({
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.collection = CBApp.filteredMessageCollection;
             self.messageListView._initialEvents();
+            self.messageListView.delegateEvents();
             self.messageListView.render();
             //self.messageListView.delegateEvents();
             //self.messageSection.show(self.messageListView);

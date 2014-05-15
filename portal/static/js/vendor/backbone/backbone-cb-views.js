@@ -15,6 +15,7 @@ module.exports.RelationalCollectionView = {
         console.log('_initialEvents this.collection', this.collection);
         if (this.collection){
             this.listenTo(this.collection, 'relational:remove', this.render);
+            //this.listenTo(this.collection, 'relational:remove', this.removeItemView);
         }
     },
 
