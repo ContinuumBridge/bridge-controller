@@ -87,6 +87,7 @@ module.exports.Main = Marionette.Layout.extend({
             //self.appInstallListView.delegateEvents();
             //self.appSection.show(self.appInstallListView);
 
+
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.collection = CBApp.filteredMessageCollection;
             self.messageListView._initialEvents();
@@ -171,7 +172,7 @@ var DevicesView = Marionette.ItemView.extend({
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
             if (self.discoveredDeviceInstallListView.collection != discoveredDeviceInstallCollection) {
                 // Stop listening to old collection events
-                //self.discoveredDeviceInstallListView._stopListening();
+                self.discoveredDeviceInstallListView._stopListening();
                 console.log('currentBridge', currentBridge);
                 console.log('discoveredDeviceInstallCollection ', discoveredDeviceInstallCollection );
                 self.discoveredDeviceInstallListView.collection = discoveredDeviceInstallCollection;
