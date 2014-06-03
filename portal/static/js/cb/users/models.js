@@ -43,22 +43,6 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
     }
 });
 
-/*
-CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
-
-    model: CBApp.CurrentUser,
-    backend: 'currentUser',
-
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
-});
-*/
-
 CBApp.currentUserDeferred = Q.defer();
 
 CBApp.getCurrentUser = function() {

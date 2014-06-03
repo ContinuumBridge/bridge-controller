@@ -42,7 +42,6 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         var adp = appInstall.get('devicePermissions').findUnique({deviceInstall: this});
         if (adp) {
             adp.set({permission: true}, {silent: true});
-            testADP = adp;
         } else {
             var adp = CBApp.AppDevicePermission.findOrCreate({
                 deviceInstall: this,

@@ -5,6 +5,8 @@ var CBApp = require('index');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/installs/models');
+require('./apps/licences/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
@@ -23,6 +25,8 @@ CBApp.addInitializer(function () {
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
   //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+
+  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
@@ -54,7 +58,7 @@ CBApp.addInitializer(function () {
       console.log('currentUser fetched successfully', currentUser);
       setTimeout(function() {
           CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(currentUser);
+          CBApp.currentUserDeferred.resolve(currentUser.model);
           console.log('App initialised');
       }, 500);
 

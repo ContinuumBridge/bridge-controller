@@ -12,9 +12,46 @@ CBApp.AppView = Marionette.ItemView.extend({
 
     events: {
         //'click': 'eventWrapperClick',
-        //'click #interest-button': 'interestButtonClick',
+        'click .inc': 'incrementInstallsPermitted',
+        'click .dec': 'decrementInstallsPermitted'
     },
 
+
+
+    initialize: function() {
+        // Proxy change events for stickit
+        var self = this;
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            console.log('currentUser in app view is', currentUser);
+            console.log('self in app view is', self);
+            // Create or find a licence, then bind to it
+            self.licence = CBApp.AppLicence.findOrCreate({
+                app: self.model,
+                user: currentUser
+            });
+            CBApp.appLicenceCollection.add(self.licence);
+            console.log('Licence in app view 2 is', self);
+
+            var licenceBindings = {
+                '.installs-permitted': {
+                  attributes: [{
+                    name: 'disabled',
+                    observe: ['installs_permitted', 'change'],
+                    onGet: 'getDisabled'
+                  }]
+                }
+            };
+
+            self.stickit(self.licence, licenceBindings);
+        });
+
+        this.model.on('unsavedChanges sync', function(e) {
+            self.model.trigger('change:change');
+        }, this);
+    },
+    /*
     serializeData: function() {
 
       var data = {};
@@ -23,24 +60,41 @@ CBApp.AppView = Marionette.ItemView.extend({
       data.appID = "APPID" + app.get('id');
       return data;
     },
+    */
+    incrementInstallsPermitted: function() {
+
+        this.licence.changeInstallsPermitted(1);
+    },
+
+    decrementInstallsPermitted: function() {
+
+        this.licence.changeInstallsPermitted(-1);
+    },
+
+    getDisabled: function() {
+
+        return this.licence.unsavedAttributes() ? true : false;
+    },
 
     onRender : function(){
 
         var self = this;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            self.appDevicePermissionListView =
-                new CBApp.AppDevicePermissionListView({
-                    collection: currentBridge.get('deviceInstalls'),
-                    appInstall: self.model
-                });
-            //self.appDevicePermissionListView._initialEvents();
+        /*
+        self.appDevicePermissionListView =
+            new CBApp.AppDevicePermissionListView({
+                collection: currentBridge.get('deviceInstalls'),
+                appInstall: self.model
+            });
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
 
             var appID = '#APPID' + self.model.get('app').get('id');
             $appDevicePermissionList = self.$(appID);
             $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
         });
+         */
     }
 });
 
@@ -51,6 +105,16 @@ CBApp.AppListView = Marionette.CompositeView.extend({
     itemViewContainer: '#app-list',
 
     emptyView: CBApp.ListItemLoadingView,
+
+    /*
+    buildItemView: function(item, ItemViewType, itemViewOptions){
+
+        var options = _.extend({model: item}, itemViewOptions);
+        var view = new ItemViewType(options);
+        //view.licence = "test";
+        return view;
+    },
+    */
 
     onRender : function(){
 

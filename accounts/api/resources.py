@@ -6,7 +6,9 @@ from tastypie.resources import ModelResource, convert_post_to_put, convert_post_
 
 from accounts.models import CBUser
 from bridges.models import BridgeControl
+from apps.models import AppLicence
 
+from apps.api.resources import AppLicenceResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api.abstract_resources import ThroughModelResource
@@ -32,6 +34,10 @@ class CurrentUserResource(ModelResource):
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
                     null=True, readonly=True, nonmodel=True)
+
+    app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
+                     attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
+                     null=True, readonly=True, nonmodel=True)
 
     class Meta:
         resource_name = 'current_user'

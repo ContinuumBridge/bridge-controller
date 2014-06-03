@@ -6,7 +6,7 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/views');
+require('../../apps/installs/views');
 //require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
@@ -41,7 +41,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppListView();
+        this.appInstallListView = new CBApp.AppInstallListView();
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
 
