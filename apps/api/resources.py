@@ -32,6 +32,10 @@ class AppLicenceResource(PostMatchMixin, ModelResource):
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
     #installs_permitted = fields.IntegerField()
 
+    installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
+                                                      attribute=lambda bundle: bundle.obj.appinstall_set, full=True,
+                                                      null=True, readonly=True, nonmodel=True)
+
     class Meta:
        queryset = AppLicence.objects.all()
        #authorization = UserObjectsOnlyAuthorization()
@@ -47,7 +51,8 @@ class AppInstallResource(ModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    
+    licence = cb_fields.ToOneThroughField('apps.api.resources.AppLicenceResource', 'applicence', full=True)
+
     device_permissions = cb_fields.ToManyThroughField(AppDevicePermissionResource,
                     attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,
                    null=True, readonly=True, nonmodel=True)

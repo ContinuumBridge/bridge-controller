@@ -53,6 +53,7 @@ class AppInstall(LoggedModelMixin):
 
     bridge = models.ForeignKey(Bridge)
     app = models.ForeignKey(App)
+    licence = models.ForeignKey(AppLicence)
 
     class Meta:
         verbose_name = _('app_install')
