@@ -24,6 +24,18 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
         console.log('config index');
       },
+      showAppLicences: function() {
+
+        var installAppModal = new ConfigViews.InstallAppModal({
+            /*
+            //model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+            */
+        });
+        CBApp.portalLayout.modalsRegion.show(installAppModal);
+      },
       discoverDevices: function() {
 
           console.log('discoverDevices');

@@ -13,6 +13,7 @@ require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
 require('./users/models');
+require('./users/current/models');
 
 require('./misc/decorators');
 require('./misc/filters');
@@ -48,12 +49,17 @@ CBApp.addInitializer(function () {
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 
+  CBApp.userCollection = new CBApp.UserCollection();
 
-  CBApp.currentUser = new CBApp.CurrentUser();
-  //CBApp.currentUserDeferred.then(function(result) {
+  //CBApp.u = new CBApp.U();
+  //CBApp.u.fetch();
+
+  CBApp.currentUser = new CBApp.LoggedInUser();
+  //CBApp.currentUser.fetch();
+
+  //CBApp.currentUser = new CBApp.CurrentUser();
 
   CBApp.currentUser.fetch().then(function(currentUser) {
-
 
       console.log('currentUser fetched successfully', currentUser);
       setTimeout(function() {

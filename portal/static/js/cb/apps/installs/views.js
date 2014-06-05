@@ -52,6 +52,15 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
     emptyView: CBApp.ListItemLoadingView,
 
+    events: {
+        'click #install-apps': 'showLicences'
+    },
+
+    showLicences: function() {
+        console.log('click showLicences');
+        CBApp.Config.controller.showAppLicences();
+    },
+
     onRender : function(){
 
     }

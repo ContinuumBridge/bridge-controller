@@ -7,7 +7,7 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/installs/views');
-//require('../../devices/views');
+require('../../apps/licences/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
@@ -119,7 +119,6 @@ var DevicesView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        console.log('Initialise DevicesView');
         this.deviceInstallListView = new CBApp.DeviceInstallListView();
         this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
         this.currentView = this.deviceInstallListView;
@@ -169,7 +168,6 @@ var DevicesView = Marionette.ItemView.extend({
                 self.deviceInstallListView.render();
             }
 
-
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
             if (self.discoveredDeviceInstallListView.collection != discoveredDeviceInstallCollection) {
                 // Stop listening to old collection events
@@ -188,6 +186,33 @@ var DevicesView = Marionette.ItemView.extend({
         return this;
     }
 })
+
+
+module.exports.InstallAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/installAppModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    initialize: function() {
+
+        this.licenceListView = new CBApp.AppLicenceListView({ collection: CBApp.appLicenceCollection });
+    },
+
+    onRender: function() {
+
+        //this.licenceListView.setElement(this.$('#licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+        return this;
+    },
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
 
 module.exports.InstallDeviceModal = Backbone.Modal.extend({
 

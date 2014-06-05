@@ -42,8 +42,8 @@ class CurrentUserResource(ModelResource):
     class Meta:
         resource_name = 'current_user'
         queryset = CBUser.objects.all()
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
-        excludes = ['password', 'is_staff', 'is_superuser']
+        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_staff']
+        excludes = ['password', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()
 
@@ -73,7 +73,7 @@ class CurrentUserResource(ModelResource):
         self.throttle_check(request)
 
         print "Current user request.user.id is", request.user.id
-        # Set the pk of the request to that of the logged in user
+        # ADDED Set the pk of the request to that of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id
 

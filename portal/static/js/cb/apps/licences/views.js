@@ -6,7 +6,7 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
-    template: require('./templates/app.html'),
+    template: require('./templates/licence.html'),
 
     events: {
         //'click': 'eventWrapperClick',
@@ -21,9 +21,9 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
 CBApp.AppLicenceListView = Marionette.CompositeView.extend({
 
-    template: require('./templates/appSection.html'),
-    itemView: CBApp.AppView,
-    itemViewContainer: '#app-list',
+    template: require('./templates/licenceSection.html'),
+    itemView: CBApp.AppLicenceView,
+    itemViewContainer: '#licence-list',
 
     emptyView: CBApp.ListItemLoadingView,
 

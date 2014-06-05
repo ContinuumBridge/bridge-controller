@@ -3,9 +3,11 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    /*
     defaults: {
-        installsPermitted: 0,
+        installs_permitted: 0,
     },
+    */
 
     relations: [
         {
@@ -23,10 +25,32 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
                 key: 'appLicence'
             }
         },
+        {
+            type: Backbone.HasOne,
+            key: 'user',
+            keySource: 'user',
+            keyDestination: 'user',
+            relatedModel: 'CBApp.CurrentUser',
+            collectionType: 'CBApp.CurrentUserCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri'
+            /*
+            modelBuilder: {
+                'user': CBApp.User,
+                'currentUser': CBApp.CurrentUser
+            }
+            //initializeCollection: 'userCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appLicence'
+            }
+            */
+        },
     ],
 
     initialize: function() {
 
+        console.log('initialize AppLicence');
         this.startTracking();
     },
 
@@ -37,8 +61,10 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
         if (installsPermitted < 0) return void 0;
         this.set('installs_permitted', installsPermitted);
         if (installsPermitted == 0) {
+            console.log('destroyOnServer app licence');
             this.destroyOnServer();
         } else {
+            console.log('save app licence');
             this.save().then(function(result) {
                 console.log('licence save successful', result);
             }, function(error) {

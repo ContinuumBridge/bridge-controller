@@ -114,10 +114,12 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                         initializeCollection.add(model);
                                 }
 
+                                /*
                                 // ADDED If the model only has an id, fetch the rest of it
                                 if (model && model.isNew()) {
                                         model.fetch();
                                 }
+                                */
                         }
 
                         model && toAdd.push( model );
@@ -161,15 +163,16 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        //console.log('initializeRelations was called');
+        console.log('initializeRelations was called', options);
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
-
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
-            //console.log('Initialise relation', rel);
+            console.log('Initialise relation', rel);
+            console.log('Initialise relation this', this);
+            console.log('Initialise relation options', options);
             Backbone.Relational.store.initializeRelation( this, rel, options );
             //this.updateRelationToSelf(rel, options);
         }, this);
@@ -346,42 +349,5 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 }
             }, this );
         }
-    }
-
-    /*
-    updateRelations: function(changedAttrs, options) {
-        if ( this._isInitialized && !this.isLocked() ) {
-            _.each( this._relations || [], function( rel ) {
-                if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
-                    // Update from data in `rel.keySource` if set, or `rel.key` otherwise
-                    var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ]
-                        ,attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
-
-                    if ( rel.related !== value || ( value === null && attr === null )) {
-                        this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
-
-                        /*
-                        // ADDED automatically update related models
-                        _.each(val, function (data) {
-                            console.log('data is', data);
-                            var model = rel.related.get(data.id);
-                            if (model) {
-                                model.set(data);
-                            } else {
-                                rel.related.add(data);
-                            }
-                        });
-                        */
-                        /*
-                    }
-                }
-
-                // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-                if ( rel.keySource !== rel.key ) {
-                    delete this.attributes[ rel.keySource ];
-                }
-            }, this );
-        }
-    }
-    */
+    },
 });

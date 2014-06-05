@@ -1,10 +1,13 @@
 
-//CBApp.CurrentUser = Backbone.RelationalModel.extend({
-CBApp.CurrentUser = Backbone.Deferred.Model.extend({
+CBApp.User = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    backend: 'currentUser',
+    /*
+    subModelTypes: {
+		'testcurrentUser': 'CBApp.CurrentUser'
+	},
+    */
 
     initialize: function() {
 
@@ -17,6 +20,7 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
 
     },
 
+    /*
     relations: [
         {
             type: Backbone.HasMany,
@@ -28,14 +32,9 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection',
-            /*
-            reverseRelation: {
-                key: 'current_user',
-                includeInJSON: true
-            }
-            */
-        }
+        },
     ],
+    */
 
     getCBID: function() {
 
@@ -43,21 +42,16 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
     }
 });
 
-CBApp.currentUserDeferred = Q.defer();
+CBApp.UserCollection = Backbone.Collection.extend({
 
-CBApp.getCurrentUser = function() {
+    model: CBApp.User,
+    backend: 'user',
 
-    /*
-    var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
+    initialize: function() {
+        //this.bindBackend();
+    },
 
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
+    parse : function(response){
+        return response.objects;
     }
-
-    return user;
-    */
-    return CBApp.currentUserDeferred.promise;
-};
+});

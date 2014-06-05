@@ -26,16 +26,34 @@ CBApp.AppView = Marionette.ItemView.extend({
 
             console.log('currentUser in app view is', currentUser);
             console.log('self in app view is', self);
+
             // Create or find a licence, then bind to it
+            var licence = CBApp.appLicenceCollection.findWhere({
+                app: self.model,
+                user: currentUser
+            });
+
+            self.licence = licence || new CBApp.AppLicence({
+                                                    app: self.model,
+                                                    user: currentUser
+                                                });
+
+            /*
             self.licence = CBApp.AppLicence.findOrCreate({
                 app: self.model,
                 user: currentUser
             });
+            */
+
             CBApp.appLicenceCollection.add(self.licence);
             console.log('Licence in app view 2 is', self);
 
             var licenceBindings = {
                 '.installs-permitted': {
+                  observe: ['installs_permitted'],
+                  onGet: function(installsPermitted) {
+                      return installsPermitted;
+                  },
                   attributes: [{
                     name: 'disabled',
                     observe: ['installs_permitted', 'change'],
@@ -96,6 +114,11 @@ CBApp.AppView = Marionette.ItemView.extend({
         });
          */
     }
+});
+
+CBApp.InstallAppView = CBApp.AppView.extend({
+
+    template: require('./templates/installApp.html'),
 });
 
 CBApp.AppListView = Marionette.CompositeView.extend({

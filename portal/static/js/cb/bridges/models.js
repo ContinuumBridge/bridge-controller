@@ -143,10 +143,10 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.CurrentUser',
-            collectionType: 'CBApp.CurrentUserCollection',
-            createModels: true,
-            initializeCollection: 'currentUserCollection',
+            relatedModel: 'CBApp.User',
+            collectionType: 'CBApp.UserCollection',
+            createModels: false,
+            initializeCollection: 'userCollection',
             includeInJSON: true
         }
     ]

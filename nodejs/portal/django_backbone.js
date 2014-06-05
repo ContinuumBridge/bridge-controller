@@ -91,10 +91,10 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.read(function(req, res) {
 
-        // Get a detail or list. Checking for bridge_controls is a hack for initial currentUser request
+        // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
         console.log('request model is', req.model);
         var requestURL = (req.model.id) ? djangoURL + req.model.id
-            : (req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
+            : (req.model.app_licences) ? djangoURL + 'user': djangoURL;
 
         var djangoOptions = {
             method: "get",
