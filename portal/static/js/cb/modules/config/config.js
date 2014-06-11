@@ -40,8 +40,6 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
           Config.mainLayoutView.devicesView.showDeviceInstalls();
       },
       installDevice: function(discoveredDeviceInstall) {
-        var that = this;
-        console.log('We got to the controller!');
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
             model: discoveredDeviceInstall,
             installDevice: function(friendlyName) {
