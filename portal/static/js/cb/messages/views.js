@@ -41,9 +41,14 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         'click #upgrade': 'clickUpgrade'
     },
 
+    collectionEvents: {
+        "relational:reset": "scrollView"
+    },
+
     initialize: function() {
 
-        this.listenTo(this, 'after:item:added', this.scrollView())
+        console.log('Collection in MessageListView', this);
+        //this.listenTo(this.collection, 'after:item:added', this.scrollView())
     },
 
     onRender: function() {
@@ -58,12 +63,13 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
 
     scrollView: function(){
 
+        console.log('scrollView item added!');
         //messagesWrapper = $(this.el).parentNode;
         $messagesWrapper = this.$('#messages-wrapper');
         if ($messagesWrapper[0]) {
             $messagesWrapper[0].scrollTop = $messagesWrapper[0].scrollHeight;
             //$messagesWrapper.scrollTop($messagesWrapper[0].scrollHeight);
-            console.log('item added!', $messagesWrapper, $messagesWrapper.scrollHeight);
+            console.log('item added!', $messagesWrapper[0], $messagesWrapper[0].scrollHeight);
         }
         //this.el.parentNode.scrollTop(this.el.parentNode.scrollHeight);
     },

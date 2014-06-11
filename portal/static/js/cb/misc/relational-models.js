@@ -145,13 +145,16 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
 Backbone.Collection = Backbone.Collection.extend({
 
-   findUnique: function(attrs) {
+    findUnique: function(attrs) {
 
-       // Returns a model after verifying the uniqueness of the attributes
-       models = this.where(attrs);
-       if(models.length > 1) { console.warn(attrs, 'is not unique') }
-       return models[0] || void 0;
-   }
+        // Returns a model after verifying the uniqueness of the attributes
+        models = this.where(attrs);
+        if(models.length > 1) { console.warn(attrs, 'is not unique') }
+        return models[0] || void 0;
+    },
+
+    
+
 });
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
