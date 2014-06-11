@@ -33,7 +33,7 @@ class AppLicenceResource(PostMatchMixin, ModelResource):
     #installs_permitted = fields.IntegerField()
 
     installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
-                                                      attribute=lambda bundle: bundle.obj.appinstall_set, full=True,
+                                                      attribute=lambda bundle: bundle.obj.get_installs() or bundle.obj.appinstall_set, full=False,
                                                       null=True, readonly=True, nonmodel=True)
 
     class Meta:
@@ -51,7 +51,7 @@ class AppInstallResource(ModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    licence = cb_fields.ToOneThroughField('apps.api.resources.AppLicenceResource', 'applicence', full=True)
+    licence = cb_fields.ToOneThroughField('apps.api.resources.AppLicenceResource', 'licence', full=True)
 
     device_permissions = cb_fields.ToManyThroughField(AppDevicePermissionResource,
                     attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,
@@ -60,8 +60,8 @@ class AppInstallResource(ModelResource):
     class Meta:
        queryset = AppInstall.objects.all()
        authorization = Authorization()
-       #list_allowed_methods = ['get', 'post']
-       #detail_allowed_methods = ['get']
+       list_allowed_methods = ['get', 'post']
+       detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
        always_return_data = True
        resource_name = 'app_install'
        include_in_post_match = ['name', 'manufacturer_name']

@@ -93,11 +93,11 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
-                                //console.log('ToMany keyContents', attributes);
+                                //console.log('ToMany keyContents attributes', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = CBApp.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
-                                        this.attributes = { id: idArray[1] };
+                                        attributes = { id: idArray[1] };
                                 }
 
                                 // If `merge` is true, update models here, instead of during update.
@@ -147,13 +147,20 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
 Backbone.Collection = Backbone.Collection.extend({
 
-   findUnique: function(attrs) {
+    findUnique: function(attrs) {
 
-       // Returns a model after verifying the uniqueness of the attributes
-       models = this.where(attrs);
-       if(models.length > 1) { console.warn(attrs, 'is not unique') }
-       return models[0] || void 0;
-   }
+        // Returns a model after verifying the uniqueness of the attributes
+        models = this.where(attrs);
+        if(models.length > 1) { console.warn(attrs, 'is not unique') }
+        return models[0] || void 0;
+    },
+
+    findOrCreate: function(attributes) {
+
+        var model = this.findUnique(attributes) || this.create(attributes);
+
+        return model;
+    }
 });
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
@@ -170,7 +177,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
-            console.log('Initialise relation', rel);
+            console.log('Initialise relation', rel.key);
             console.log('Initialise relation this', this);
             console.log('Initialise relation options', options);
             Backbone.Relational.store.initializeRelation( this, rel, options );
@@ -206,11 +213,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // Get models from the relation of the this model
         var models = rel.related instanceof Backbone.Collection
             ? rel.related.models : [ rel.related ];
+        if (!models) return;
+        /*
         if (!models[0]) {
             // Not sure why keyContents is sometimes needed
             console.log('rel.keyContents used', rel);
             models = [ rel.keyContents];
         }
+        */
             //|| rel.keyContents;
 
         var model;

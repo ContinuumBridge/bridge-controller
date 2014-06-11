@@ -2,6 +2,9 @@
 var Q = require('q');
 
 var CBApp = require('index');
+
+require('./components/buttons');
+
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
@@ -54,11 +57,28 @@ CBApp.addInitializer(function () {
   //CBApp.u = new CBApp.U();
   //CBApp.u.fetch();
 
-  CBApp.currentUser = new CBApp.LoggedInUser();
+
+  //CBApp.currentUser = new CBApp.LoggedInUser();
+  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection(CBApp.currentUser);
+  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+  CBApp.currentUserCollection.fetch().then(function() {
+
+      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+      setTimeout(function() {
+          CBApp._isInitialized = true;
+          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+      }, 500);
+
+  }, function(error) {
+
+      CBApp.currentUserDeferred.reject(error);
+      console.error('currentUser could not be fetched', error);
+  });
   //CBApp.currentUser.fetch();
 
   //CBApp.currentUser = new CBApp.CurrentUser();
 
+    /*
   CBApp.currentUser.fetch().then(function(currentUser) {
 
       console.log('currentUser fetched successfully', currentUser);
@@ -73,6 +93,7 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+     */
 
     /*
   CBApp.currentUserDeferred.then(function(result) {

@@ -3,6 +3,8 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
+    backend: 'appInstall',
+
     initialize: function() {
 
     },
@@ -16,7 +18,7 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
             relatedModel: 'CBApp.Bridge',
             collectionType: 'CBApp.BridgeCollection',
             createModels: true,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
         },
         {   
@@ -27,7 +29,7 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
             relatedModel: 'CBApp.App',
             collectionType: 'CBApp.AppCollection',
             createModels: true,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
@@ -45,7 +47,7 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
             relatedModel: 'CBApp.AppDevicePermission',
             collectionType: 'CBApp.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -58,9 +60,20 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
                 initializeCollection: 'appInstallCollection'
             }
             */
-        }
+        },
+        {
+            type: Backbone.HasOne,
+            key: 'licence',
+            keySource: 'licence',
+            keyDestination: 'licence',
+            relatedModel: 'CBApp.AppLicence',
+            collectionType: 'CBApp.AppLicenceCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appLicenceCollection',
+        },
     ]
-}); 
+});
 
 CBApp.AppInstallCollection = Backbone.Collection.extend({
 

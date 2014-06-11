@@ -74,16 +74,17 @@ CBApp.getCurrentUser = function() {
 //CBApp.U = Backbone.Deferred.Model.extend({
 
 //CBApp.CurrentUser = CBApp.User.extend({
-CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
+//CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
+CBApp.LoggedInUser = CBApp.User.extend({
 
     idAttribute: 'id',
 
     backend: 'currentUser',
-    /*
+
     defaults: {
-        type: 'currentUser'
+        type: 'loggedInUser'
     },
-    */
+
     //partOfModel: CBApp.User,
 
     initialize: function() {
@@ -94,10 +95,26 @@ CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
         // Set the current bridge
         //var currentBridge = bridgeControlArray.at(0).get('bridge');
         //currentBridge.set('current', true);
+        /*
+        this.listenTo(this, 'all', function(name) {
+            console.log('EVENT currentUser', name);
+        })
+        */
 
     },
 
     relations: [
+        {
+            type: Backbone.HasMany,
+            key: 'bridgeControls',
+            keySource: 'bridge_controls',
+            keyDestination: 'bridge_controls',
+            relatedModel: 'CBApp.BridgeControl',
+            collectionType: 'CBApp.BridgeControlCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeControlCollection'
+        },
         {
             type: Backbone.HasMany,
             key: 'appLicences',
@@ -110,27 +127,16 @@ CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
             //includeInJSON: false,
             initializeCollection: 'appLicenceCollection'
         },
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeControlCollection'
-        }
     ]
 });
 
 CBApp.CurrentUserCollection = Backbone.Collection.extend({
 
-    model: CBApp.CurrentUser,
+    model: CBApp.LoggedInUser,
     backend: 'currentUser',
 
     initialize: function() {
-        //this.bindBackend();
+        this.bindBackend();
     },
 
     parse : function(response){

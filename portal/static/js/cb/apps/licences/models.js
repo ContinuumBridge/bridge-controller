@@ -22,16 +22,28 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
-                key: 'appLicence'
+                key: 'appLicence',
+                includeInJSON: 'resource_uri'
             }
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'installs',
+            keySource: 'installs',
+            keyDestination: 'installs',
+            relatedModel: 'CBApp.AppInstall',
+            collectionType: 'CBApp.AppInstallCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appInstallCollection'
         },
         {
             type: Backbone.HasOne,
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.CurrentUser',
-            collectionType: 'CBApp.CurrentUserCollection',
+            relatedModel: 'CBApp.User',
+            collectionType: 'CBApp.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
             /*
@@ -45,13 +57,51 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
                 key: 'appLicence'
             }
             */
-        },
+        }
     ],
 
     initialize: function() {
 
         console.log('initialize AppLicence');
         this.startTracking();
+    },
+
+    toggleInstall: function(bridge) {
+        /* Installs or uninstalls the app on the given bridge */
+
+        this.get('app').toggleInstalled(bridge, this);
+
+        //var bridgeInstall = this.getInstall(bridge);
+        //if (!bridgeInstall) this.get('app').install(bridge);
+
+    },
+
+    getInstall: function(bridge) {
+        /* Gets the install for this licence and the given bridge */
+
+        var licenceInstalls = this.get('installs');
+        return licenceInstalls.findWhere({
+            bridge: bridge
+        });
+    },
+
+    testIfInstalled: function(bridge) {
+        /* Tests if this licence is in use on the given bridge */
+
+        var bridgeInstall = this.getInstall(bridge);
+        // Return if the licence is installed
+        return !!bridgeInstall || false;
+    },
+
+    getInstallsRemaining: function() {
+
+        /* How many more installs can the user make */
+
+        var installs = this.get('installs');
+        console.log('Number of installs', installs);
+        var installs_permitted = this.get('installs_permitted');
+
+        return installs_permitted - installs.length;
     },
 
     setInstallsPermitted: function(installsPermitted) {
@@ -83,7 +133,9 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
     }
 });
 
-CBApp.AppLicenceCollection = Backbone.Collection.extend({
+//var QueryEngine = require('query-engine');
+//CBApp.AppLicenceCollection = Backbone.Collection.extend({
+CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.AppLicence,
     backend: 'appLicence',
@@ -97,8 +149,9 @@ CBApp.AppLicenceCollection = Backbone.Collection.extend({
             self.add(model);
         });
         */
+        CBApp.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
     parse : function(response){
         return response.objects;
     }

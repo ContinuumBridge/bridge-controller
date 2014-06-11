@@ -1,12 +1,17 @@
 
-CBApp.User = Backbone.Deferred.Model.extend({
+//CBApp.User = Backbone.Deferred.Model.extend({
+CBApp.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
-    /*
     subModelTypes: {
-		'testcurrentUser': 'CBApp.CurrentUser'
+		'loggedInUser': 'CBApp.LoggedInUser',
 	},
+
+    /*
+    defaults: {
+        type: 'user'
+    },
     */
 
     initialize: function() {
@@ -19,22 +24,6 @@ CBApp.User = Backbone.Deferred.Model.extend({
         //currentBridge.set('current', true);
 
     },
-
-    /*
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection',
-        },
-    ],
-    */
 
     getCBID: function() {
 

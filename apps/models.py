@@ -46,6 +46,12 @@ class AppLicence(LoggedModelMixin):
         verbose_name_plural = _('app_licence')
         app_label = 'apps'
 
+    def get_installs(self):
+        installs = []
+        for install in self.appinstall_set.filter():
+            installs.append(install)
+        return installs
+
 
 class AppInstall(LoggedModelMixin):
     

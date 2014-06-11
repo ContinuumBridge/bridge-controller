@@ -2,7 +2,59 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
+require('../components/numbers');
 require('./device_permissions/views');
+
+CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
+
+    initialize: function() {
+
+    },
+
+    getDisabled: function() {
+
+        return this.model.unsavedAttributes() ? true : false;
+    },
+
+    getContent: function() {
+
+        console.log('InstallsPermittedField getContent');
+        return this.model.get('installs_permitted');
+    },
+
+    increment: function() {
+
+        this.model.changeInstallsPermitted(1);
+    },
+
+    decrement: function() {
+
+        this.model.changeInstallsPermitted(-1);
+    },
+
+    /*
+    remove: function() {
+
+        CBApp.Components.InstallsPermittedField.prototype.remove.apply(this);
+    },
+    */
+
+    setModel: function(model) {
+
+        this.undelegateEvents();
+        this.model = model;
+        this.delegateEvents();
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+            this.listenTo(this.model, 'all', function(name) {
+                console.log('EVENT licence', name);
+            })
+        }
+    }
+});
 
 CBApp.AppView = Marionette.ItemView.extend({
 
@@ -12,20 +64,15 @@ CBApp.AppView = Marionette.ItemView.extend({
 
     events: {
         //'click': 'eventWrapperClick',
-        'click .inc': 'incrementInstallsPermitted',
-        'click .dec': 'decrementInstallsPermitted'
     },
-
-
 
     initialize: function() {
         // Proxy change events for stickit
         var self = this;
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        this.installsPermittedField = new CBApp.Components.InstallsPermittedField();
 
-            console.log('currentUser in app view is', currentUser);
-            console.log('self in app view is', self);
+        CBApp.getCurrentUser().then(function(currentUser) {
 
             // Create or find a licence, then bind to it
             var licence = CBApp.appLicenceCollection.findWhere({
@@ -38,16 +85,12 @@ CBApp.AppView = Marionette.ItemView.extend({
                                                     user: currentUser
                                                 });
 
-            /*
-            self.licence = CBApp.AppLicence.findOrCreate({
-                app: self.model,
-                user: currentUser
-            });
-            */
-
             CBApp.appLicenceCollection.add(self.licence);
-            console.log('Licence in app view 2 is', self);
 
+            self.installsPermittedField.setModel(self.licence);
+
+            self.render();
+            /*
             var licenceBindings = {
                 '.installs-permitted': {
                   observe: ['installs_permitted'],
@@ -63,42 +106,19 @@ CBApp.AppView = Marionette.ItemView.extend({
             };
 
             self.stickit(self.licence, licenceBindings);
+            */
         });
 
         this.model.on('unsavedChanges sync', function(e) {
             self.model.trigger('change:change');
         }, this);
     },
-    /*
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "APPID" + app.get('id');
-      return data;
-    },
-    */
-    incrementInstallsPermitted: function() {
-
-        this.licence.changeInstallsPermitted(1);
-    },
-
-    decrementInstallsPermitted: function() {
-
-        this.licence.changeInstallsPermitted(-1);
-    },
-
-    getDisabled: function() {
-
-        return this.licence.unsavedAttributes() ? true : false;
-    },
 
     onRender : function(){
 
         var self = this;
 
-
+        this.installsPermittedField.setElement(this.$('.input-group')).render();
         /*
         self.appDevicePermissionListView =
             new CBApp.AppDevicePermissionListView({

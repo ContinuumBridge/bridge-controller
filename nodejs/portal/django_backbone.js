@@ -94,7 +94,8 @@ function DjangoBackbone(djangoURL) {
         // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
         console.log('request model is', req.model);
         var requestURL = (req.model.id) ? djangoURL + req.model.id
-            : (req.model.app_licences) ? djangoURL + 'user': djangoURL;
+            //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
+            : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
         var djangoOptions = {
             method: "get",
@@ -114,15 +115,19 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.update(function(req, res) {
 
-        var that = this;
+        var self = this;
 
-        // On a backboneio create function make a post request to Django
+        var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
+
+        // On a backboneio create function make a put request to Django
 
         var jsonData = JSON.stringify(req.model);
 
+        console.log('jsonData is', jsonData);
+
         var restOptions = {
-            method: "put",
-            data: jsonData,
+            method: "patch",
+            //data: 'test',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -130,7 +135,7 @@ function DjangoBackbone(djangoURL) {
             }
         };
 
-        rest.put(djangoURL, restOptions).on('complete', function(data, response) {
+        rest.json(requestURL, req.model, restOptions, 'patch').on('complete', function(data, response) {
 
             backboneSocket.handleResponse(res, data, response)
             //that.updateSuccess();

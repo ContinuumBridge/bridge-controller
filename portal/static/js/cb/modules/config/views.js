@@ -187,7 +187,6 @@ var DevicesView = Marionette.ItemView.extend({
     }
 })
 
-
 module.exports.InstallAppModal = Backbone.Modal.extend({
 
     template: require('./templates/installAppModal.html'),
@@ -196,14 +195,30 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
 
     initialize: function() {
 
-        this.licenceListView = new CBApp.AppLicenceListView({ collection: CBApp.appLicenceCollection });
+        var self = this;
+        this.licenceListView = licenceListView =  new CBApp.AppLicenceListView();
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            //licenceCollection = CBApp.appLicenceCollection.findAllLive();
+            /*
+            licenceCollection.setFilter('currentBridge', function(model, searchString) {
+
+                var pass = (model.get('bridge') == currentBridge);
+                return pass;
+            });
+            */
+            //self.licenceListView.setupCollection(licenceCollection);
+            console.log('promise in app modal initialize');
+            self.licenceListView.setupCollection(CBApp.appLicenceCollection);
+        });
     },
 
     onRender: function() {
 
         //this.licenceListView.setElement(this.$('#licence-section')).render();
         this.$('.licence-section').html(this.licenceListView.render().$el);
-        return this;
+        //return this;
     },
 
     submit: function() {
