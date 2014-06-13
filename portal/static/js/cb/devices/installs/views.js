@@ -12,17 +12,6 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
         'click .uninstall-button': 'uninstall'
     },
 
-    /*
-    computeds: {
-        opacity: function() {
-            //return this.model.
-        },
-        label: function() {
-            return this.model.get('friendly_name');
-        }
-    },
-    */
-
     bindings: {
         '.list-group-item-heading': 'friendly_name',
         ':el': {
@@ -49,14 +38,6 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
     onRender: function() {
         this.stickit();
     }
-    /*
-    serializeData: function() {
-
-      var data = {}; 
-      data.label = this.model.get('friendly_name');
-      return data;
-    }
-    */
 });
 
 
@@ -66,17 +47,16 @@ CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
     //tagName: 'ul',
     //className: 'animated-list',
     itemView: CBApp.DeviceInstallView,
-    itemViewContainer: '#device-list',
+    itemViewContainer: '.device-list',
 
     emptyView: CBApp.ListItemLoadingView,
 
 
     events: {
-        'click #connect-device': 'discover'
+        'click .discover-devices-button': 'discoverDevices'
     },
 
-    discover: function() {
-        console.log('click connect');
+    discoverDevices: function() {
         CBApp.Config.controller.discoverDevices();
     },
 

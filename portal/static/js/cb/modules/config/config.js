@@ -5,6 +5,16 @@ var ConfigViews = require('./views');
 CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Config ran!');
+
+    Config.Router = Marionette.SubRouter.extend({
+        appRoutes: {
+          "": "index",
+          "bridges/:id": "showBridge",
+          //"config/bridge/:bridge": "config",
+          "install_device": "installDevice"
+        }
+    });
+
     Config.addInitializer(function() {
 
         //router
@@ -17,16 +27,17 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     Config.Controller = Marionette.Controller.extend({
 
-      index: function () {
+      index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        console.log('mainLayoutView', Config.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
         CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
-        console.log('config index');
       },
-      discoverDevices: function() {
 
-          console.log('discoverDevices');
+      showBridge: function(id) {
+
+          //Config.execute("set:active:header", "Configure Bridge")
+      },
+
+      discoverDevices: function() {
 
           // Remove all existing discovered devices
           CBApp.discoveredDeviceInstallCollection.forEach(function(disoveredDeviceInstall) {
@@ -42,20 +53,9 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       installDevice: function(discoveredDeviceInstall) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
             model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
         });
         CBApp.portalLayout.modalsRegion.show(installDeviceModal);
       }
     });
 
-    Config.Router = Marionette.SubRouter.extend({
-
-        appRoutes: {
-          "": "index",
-          //"config/bridge/:bridge": "config",
-          "install_device": "installDevice"
-        }
-    });
 });

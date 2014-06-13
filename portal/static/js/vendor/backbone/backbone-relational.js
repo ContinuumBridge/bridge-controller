@@ -1474,7 +1474,7 @@
 					Backbone.Relational.store.update( this );
 				}
 
-                console.log('attributes in set', attributes);
+                console.log('attributes in set', JSON.stringify(attributes));
 				if ( attributes ) {
 					this.updateRelations( attributes, options );
 				}

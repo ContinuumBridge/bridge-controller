@@ -39,7 +39,7 @@ function DjangoBackbone(djangoURL) {
                 res.end(new Error(djangoResponse.statusCode));
             } else {
                 var error = new Error('Django did not return a status code to django_backbone')
-                log('error', error);
+                console.log('error', error);
                 res.end(error);
             }
         } else {

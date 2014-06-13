@@ -5,6 +5,7 @@ var CBApp = require('index');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/installs/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');

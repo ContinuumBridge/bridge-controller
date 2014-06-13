@@ -5,6 +5,10 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    defaults: {
+        permission: false
+    },
+
     initialize: function() {
 
         this.startTracking();
@@ -66,18 +70,9 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             keyDestination: 'device_install',
             relatedModel: 'CBApp.DeviceInstall',
             collectionType: 'CBApp.DeviceInstallCollection',
-            //createModels: true,
+            createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection',
-            reverseRelation: {
-                //type: Backbone.HasMany,
-                key: 'appPermissions',
-                collectionType: 'CBApp.AppDevicePermissionCollection',
-                /*
-                includeInJSON: false,
-                 */
-                initializeCollection: 'appDevicePermissionCollection'
-            }
+            initializeCollection: 'deviceInstallCollection'
         },
         {
             type: Backbone.HasOne,

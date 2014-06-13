@@ -6,7 +6,7 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/views');
+require('../../apps/installs/views');
 //require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
@@ -41,29 +41,14 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppListView();
+        this.appInstallListView = new CBApp.AppInstallListView();
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
-
-        //this.deviceInstallListView = new CBApp.DeviceInstallListView();
-        //this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
-
-        //this.deviceContent = this.deviceInstallListView;
-        //this.deviceContent = this.deviceDiscoveryListView;
-
-
-
-        //this.listenTo(CBApp.discoveredDeviceInstallCollection, 'add', this.test);
-        //this.populateViews();
     },
 
     populateViews: function() {
 
         var self = this;
-
-
-
-        //this.render();
     },
 
     onRender: function() {
@@ -80,36 +65,13 @@ module.exports.Main = Marionette.Layout.extend({
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
             var appInstallCollection = currentBridge.get('appInstalls');
-            self.appInstallListView.collection = appInstallCollection;
-            self.appInstallListView._initialEvents();
-            self.appInstallListView.delegateEvents();
-            self.appInstallListView.render();
-            //self.appInstallListView.delegateEvents();
-            //self.appSection.show(self.appInstallListView);
+            console.log('appInstallCollection', appInstallCollection );
+            self.appInstallListView.setCollection(appInstallCollection);
 
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection);
-            //self.messageListView.collection = CBApp.filteredMessageCollection;
-            //self.messageListView._initialEvents();
-            //self.messageListView.delegateEvents();
-            //self.messageListView.render();
-            //self.messageListView.delegateEvents();
-            //self.messageSection.show(self.messageListView);
         });
-
-        //this.appLayoutView = new CBApp.AppLayoutView({ collection: self.appInstallCollection });
-        // deviceLayoutView takes the filtered deviceInstall collection
-        //CBApp.filteredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
-
-        /*
-
-        CBApp.filteredDiscoveredDeviceInstallCollection.filter(CBApp.filters.currentBridge());
-        var deviceDiscoveryLayoutView = new CBApp.DeviceDiscoveryLayoutView({
-            collection: CBApp.discoveredDeviceInstallCollection
-        });
-        this.deviceDiscoverySection.show(deviceDiscoveryLayoutView);
-        */
     }
 
 });
@@ -120,25 +82,21 @@ var DevicesView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        console.log('Initialise DevicesView');
         this.deviceInstallListView = new CBApp.DeviceInstallListView();
         this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
         this.currentView = this.deviceInstallListView;
 
         //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
-        this.populateViews();
     },
 
     showDeviceDiscovery: function() {
 
-        console.log('showDeviceDiscovery');
         this.currentView = this.discoveredDeviceInstallListView;
         this.render();
     },
 
     showDeviceInstalls: function() {
 
-        console.log('showDeviceInstalls');
         this.currentView = this.deviceInstallListView;
         this.render();
     },
@@ -155,37 +113,18 @@ var DevicesView = Marionette.ItemView.extend({
         this.currentView.setElement(this.$('#current-view')).render();
         //this.$el.append(this.currentView.render().$el);
 
-        //this.$el.html(this.currentView.render().$el);
-
         var self = this;
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
-            if (self.deviceInstallListView.collection != deviceInstallCollection) {
-                // Stop listening to old collection events
-                //self.deviceInstallListView._stopListening();
-                self.deviceInstallListView.collection = deviceInstallCollection;
-                self.deviceInstallListView._initialEvents();
-                self.deviceInstallListView.delegateEvents();
-                self.deviceInstallListView.render();
-            }
-
+            self.deviceInstallListView.setCollection(deviceInstallCollection);
+            self.deviceInstallListView.render();
 
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
-            if (self.discoveredDeviceInstallListView.collection != discoveredDeviceInstallCollection) {
-                // Stop listening to old collection events
-                self.discoveredDeviceInstallListView._stopListening();
-                console.log('currentBridge', currentBridge);
-                console.log('discoveredDeviceInstallCollection ', discoveredDeviceInstallCollection );
-                self.discoveredDeviceInstallListView.collection = discoveredDeviceInstallCollection;
-                self.discoveredDeviceInstallListView._initialEvents();
-                self.discoveredDeviceInstallListView.delegateEvents();
-                self.discoveredDeviceInstallListView.render();
-            }
+            self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
+            self.discoveredDeviceInstallListView.render();
         });
 
-        console.log('DeviceView render');
-        //this.$el.append('Test devices');
         return this;
     }
 })

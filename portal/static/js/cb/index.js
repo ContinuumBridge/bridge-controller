@@ -85,6 +85,15 @@ CBApp.addInitializer(function () {
   });
 });
 
+CBApp.navigate = function(route,  options){
+  options || (options = {});
+  Backbone.history.navigate(route, options);
+};
+
+CBApp.getCurrentRoute = function(){
+  return Backbone.history.fragment
+};
+
 CBApp.on("initialize:after", function () {
   //for routing purposes
   if(Backbone.history) {
@@ -92,8 +101,9 @@ CBApp.on("initialize:after", function () {
       Backbone.history.start({pushState: true});
 
       console.log('Backbone.history.fragment', Backbone.history.fragment);
-      if (Backbone.history.fragment === "") {
-          Backbone.history.navigate('index');
+      if (this.getCurrentRoute() === "") {
+          CBApp.trigger('config');
+          //Backbone.history.navigate('index');
 
       }
   } else {
@@ -109,6 +119,10 @@ CBApp.Router = Marionette.SubRouter.extend({
     'config/:slug': 'config'
     //"config/bridge/:bridge": "config",
   }
+});
+
+CBApp.reqres.setHandler("bridge:entities", function(){
+    return API.getContactEntities();
 });
 
 module.exports = CBApp;

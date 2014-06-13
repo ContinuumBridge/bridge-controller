@@ -1,4 +1,13 @@
 
+
+
+.card-heading,
+.card-subheading {
+    padding-top: 4px;
+}
+.card-subheading {
+    padding-left: 80%;
+}
 .edit-button,
 .uninstall-button {
     position: absolute;

@@ -14,7 +14,8 @@ module.exports.RelationalCollectionView = {
         // Listen to relational events
         console.log('_initialEvents this.collection', this.collection);
         if (this.collection){
-            this.listenTo(this.collection, "add", this.addChildView);
+            //this.listenTo(this.collection, "add", this.addChildView);
+            this.listenTo(this.collection, "add", this.render);
             this.listenTo(this.collection, "remove", this.removeItemView);
             this.listenTo(this.collection, "reset", this.render);
 
@@ -31,13 +32,18 @@ module.exports.RelationalCollectionView = {
     },
 
     setCollection: function(collection) {
-        this.undelegateEvents();
-        this.collection = collection;
-        this.listenTo(this.collection, 'all', function(name) {
-            console.log('EVENT setcollection', name);
-        })
-        this._initialEvents();
-        this.delegateEvents();
-        this.render();
+
+        if (this.collection != collection) {
+
+            this.undelegateEvents();
+            this.collection = collection;
+            /*
+            this.listenTo(this.collection, 'all', function(name) {
+                console.log('EVENT setcollection', name);
+            })
+            */
+            this._initialEvents();
+            this.delegateEvents();
+        }
     }
 };

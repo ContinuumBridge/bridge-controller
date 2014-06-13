@@ -1,81 +1,72 @@
 
+require('../../components/switches');
+
+CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
+
+    template: require('../../components/templates/switch.html'),
+
+    getActivation: function() {
+
+        return this.model.get('permission') ? 'active' : '';
+    },
+
+    onClick: function() {
+
+        this.model.togglePermission();
+    },
+
+    onRender: function() {
+        this.stickit();
+    }
+});
+
 CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'inner-item',
     template: require('./templates/devicePermission.html'),
 
-    events: {
-        'click': 'togglePermission'
-        //'change input.permission-switch': 'permissionSwitch',
-    },
-
-    bindings: {
-        //'#device-name': 'test'
-        /*
-        '#device-name': [{
-            observe: 'hasChangedSinceLastSync',
-            onGet: function(value) {
-                return 'test';
-                this.model.get('deviceInstall').get('friendly_name')
-            }
-        }]
-        */
-        '#permission-switch': {
-          attributes: [{
-            name: 'class',
-            observe: ['permission', 'change'],
-            //observe: '',
-            onGet: 'getSwitchClass'
-          }]
-        }
-        /*
-
-            observe: 'friendly_name',
-            onGet: function(value) {
-                console.log('value in onGet is', value);
-                this.getAppPermission.get('')
-            }
-        */
-    },
-
     initialize: function() {
 
+        var self = this;
+
+        this.permissionSwitch = new CBApp.Components.PermissionSwitch({
+            model: this.model
+        });
+
         console.log('view model is', this.model);
-        test = this.model;
         //this.adpModel = this.model.getAppPermission(this.appInstall);
 
         // Proxy change events for stickit
-        var self = this;
         this.model.on('unsavedChanges sync', function(e) {
             self.model.trigger('change:change');
         }, this);
     },
 
+    /*
     getSwitchClass: function(val) {
 
         console.log('getSwitchClass called', val);
         //var isNew = this.model.isNew();
         var activation = this.model.get('permission') ? 'active' : '';
-        var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
+        //var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
         //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
 
         return activation + " " + enabled;
     },
+    */
 
     togglePermission: function() {
 
         console.log('togglePermission was called');
         //var adp = this.deviceInstall.getAppPermission();
-        this.model.togglePermission();
     },
 
     onRender: function() {
-        this.stickit();
+
+        console.log('render AppDevicePermissionView', this);
         this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
-        //this.stickit(this.model, {'#device-name': 'test'});
-        console.log('deviceInstall is', this.deviceInstall);
-        //this.addBinding(this.deviceInstall, '#device-name', 'friendly_name');
+        this.permissionSwitch.setElement(this.$('.permission-switch')).render();
     }
     /*
     permissionSwitch: function(e) {
@@ -106,10 +97,26 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
     tagName: 'ul',
     className: '',
     itemView: CBApp.AppDevicePermissionView,
+    //template: require('./templates/devicePermissionSection.html'),
 
-    buildItemView: function(item, ItemViewType, itemViewOptions){
+
+    initialize: function(options) {
+
+        this.appInstall = options.appInstall;
+    },
+
+    buildItemView: function(deviceInstall, ItemViewType, itemViewOptions){
+
+        //if (deviceInstall.isNew()) return void 0;
+        console.log('buildItemView', deviceInstall);
         // Create or fetch an app device permission
-        var adp = item.getAppPermission(this.options.appInstall);
+        //var adp = deviceInstall.getAppPermission(this.appInstall);
+        var adp = CBApp.appDevicePermissionCollection.findOrCreate({
+            appInstall: this.appInstall,
+            deviceInstall: deviceInstall
+        });
+
+        console.log('adp is', adp);
         // build the final list of options for the item view type
         var options = _.extend({
             model: adp
@@ -117,9 +124,9 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         // create the item view instance
         var view = new ItemViewType(options);
         // Add the device install model
-        view.deviceInstall = item;
+        view.deviceInstall = deviceInstall;
         // Add the app install model
-        view.appInstall = this.options.appInstall;
+        view.appInstall = this.appInstall;
         return view;
     }
 });

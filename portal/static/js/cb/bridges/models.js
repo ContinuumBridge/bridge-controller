@@ -2,7 +2,7 @@
 //var logger = require('logger');
 var Q = require('q');
 
-CBApp.Bridge = Backbone.RelationalModel.extend({
+CBApp.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
