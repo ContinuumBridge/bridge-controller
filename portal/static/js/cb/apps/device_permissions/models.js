@@ -22,8 +22,6 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         if (permission) {
             console.log('saving');
-            CBApp.testModel = this;
-            this.set('permission', true);
             this.save().then(function(result) {
 
                 console.log('save successful', result);
@@ -33,7 +31,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
                 //this.set('permission', false);
             });
 
-        } else if (!this.isNew() && !permission) {
+        } else if (!permission) {
             console.log('disallowAll');
             this.disallowAll();
         } else {
@@ -43,14 +41,12 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     disallowAll: function() {
 
-        this.set('permission', false);
+        //this.set('permission', false);
         this.destroyOnServer().then(function(result) {
 
             console.log('destroyOnServer succeeded for', result);
         }, function(error) {
 
-            //this.set('permission', true);
-            //this.set({hasChangedSinceLastSync: false});
             console.error('destroyOnServer failed', error);
         });
     },
@@ -58,7 +54,8 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
     togglePermission: function() {
 
         //var currentPermission = this.isNew() ? false : true;
-        var currentPermission = this.get('permission');
+        var currentPermission = !this.isNew();
+            //this.get('permission');
         this.setPermission(!currentPermission);
     },
 

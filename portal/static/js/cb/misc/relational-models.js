@@ -153,14 +153,16 @@ Backbone.Collection = Backbone.Collection.extend({
         return models[0] || void 0;
     },
 
-    findOrCreate: function(attributes) {
+    findOrAdd: function(attributes, options) {
 
+        options = options ? _.clone(options) : {};
         console.log('findOrCreate', attributes);
-        var model = this.findUnique(attributes) || this.create(attributes);
+        var model = this.findUnique(attributes) ||
+            new this.model(attributes, options);
+        //this.create(attributes);
 
         this.add(model);
 
-        console.log('findOrCreate model is', model);
         return model;
     }
 });

@@ -7,7 +7,7 @@ CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
 
     getActivation: function() {
 
-        return this.model.get('permission') ? 'active' : '';
+        return this.model.isNew() ? '' : 'active';
     },
 
     onClick: function() {
@@ -111,7 +111,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         console.log('buildItemView', deviceInstall);
         // Create or fetch an app device permission
         //var adp = deviceInstall.getAppPermission(this.appInstall);
-        var adp = CBApp.appDevicePermissionCollection.findOrCreate({
+        var adp = CBApp.appDevicePermissionCollection.findOrAdd({
             appInstall: this.appInstall,
             deviceInstall: deviceInstall
         });

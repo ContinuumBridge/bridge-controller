@@ -35,15 +35,15 @@ module.exports.RelationalCollectionView = {
 
         if (this.collection != collection) {
 
-            this.undelegateEvents();
             this.collection = collection;
             /*
             this.listenTo(this.collection, 'all', function(name) {
                 console.log('EVENT setcollection', name);
             })
             */
+            console.log('setCollection called', this);
             this._initialEvents();
-            this.delegateEvents();
         }
+        this.delegateEvents();
     }
 };

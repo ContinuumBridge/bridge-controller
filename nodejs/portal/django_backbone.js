@@ -114,14 +114,15 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.update(function(req, res) {
 
-        var that = this;
-
         // On a backboneio create function make a post request to Django
 
+        var requestURL = (req.model.id) ? djangoURL + req.model.id.toString() + "/" : djangoURL;
+        //var resourceURL = djangoURL + req.model.id.toString();
+        console.log('requestURL in update is', requestURL, req);
         var jsonData = JSON.stringify(req.model);
 
         var restOptions = {
-            method: "put",
+            method: "patch",
             data: jsonData,
             headers: {
                 'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ function DjangoBackbone(djangoURL) {
             }
         };
 
-        rest.put(djangoURL, restOptions).on('complete', function(data, response) {
+        rest.json(requestURL, req.model, restOptions, 'patch').on('complete', function(data, response) {
 
             backboneSocket.handleResponse(res, data, response)
             //that.updateSuccess();

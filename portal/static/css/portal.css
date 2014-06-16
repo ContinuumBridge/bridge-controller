@@ -1,6 +1,9 @@
 
 
 
+.card-heading {
+    float: left;
+}
 .card-heading,
 .card-subheading {
     padding-top: 4px;
