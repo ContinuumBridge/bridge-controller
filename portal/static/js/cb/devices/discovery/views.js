@@ -39,9 +39,9 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     //template: '#discoveredDeviceItemViewTemplate',
 
     bindings: {
-        '.device-mac-addr': {
-            observe: 'mac_addr',
-            onGet: 'formatMacAddr'
+        '.device-address': {
+            observe: ['mac_addr', 'address'],
+            onGet: 'formatAddress'
         }
     },
 
@@ -52,9 +52,11 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
         });
     },
 
-    formatMacAddr: function(macAddr) {
+    formatAddress: function(address) {
 
-        return macAddr.slice(macAddr.length-5);
+        // Retain backwards compatibility with using mac_addr
+        var addr = address[0] || address[1];
+        return addr.slice(addr.length-5);
     },
 
     onRender: function() {
