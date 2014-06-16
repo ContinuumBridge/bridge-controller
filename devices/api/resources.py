@@ -43,7 +43,7 @@ class DeviceResource(ModelResource):
         detail_allowed_methods = ['get']
         filtering = {
             'name': ALL,
-            'method': ALL,
+            'protocol': ALL,
             'manufacturer_name': ALL,
             'hardware_revision': ALL,
             'firmware_revision': ALL,
