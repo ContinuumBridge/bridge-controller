@@ -15,6 +15,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
         'click .uninstall-button': 'uninstall'
     },
 
+
     initialize: function() {
 
         this.appDevicePermissionListView =

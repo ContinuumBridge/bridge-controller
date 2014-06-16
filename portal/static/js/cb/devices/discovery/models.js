@@ -47,10 +47,11 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         //this.set('adaptor', adaptor);
 
         // Find if a device install already exists, otherwise create a one blank (to avoid instantiating relations now)
+        var address = this.get('mac_addr') || this.get('address');
         var deviceInstallData = {
             bridge: this.get('bridge').get('resource_uri'),
             device: this.get('device').get('resource_uri'),
-            mac_addr: this.get('mac_addr')
+            address: address
         };
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
         console.log('adaptor in installDevice is', adaptor);
@@ -59,7 +60,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             || new CBApp.DeviceInstall({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
-                mac_addr: this.get('mac_addr'),
+                address: address,
                 adaptor: adaptor.resource_uri,
                 friendly_name: friendlyName
             });
