@@ -160,6 +160,6 @@ class DeviceInstallResource(CBModelResource):
         authorization = Authorization()
         always_return_data = True
         resource_name = 'device_install'
-        post_match = ['adaptor', 'bridge', 'device', 'mac_addr']
+        post_match = ['adaptor', 'bridge', 'device', 'address']
 
 

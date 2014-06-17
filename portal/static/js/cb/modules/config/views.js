@@ -57,7 +57,7 @@ module.exports.Main = Marionette.Layout.extend({
 
         this.appSection.show(this.appInstallListView);
         this.deviceSection.show(this.devicesView);
-        this.devicesView.populateViews();
+        this.devicesView.render();
         this.messageSection.show(this.messageListView);
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
@@ -67,10 +67,12 @@ module.exports.Main = Marionette.Layout.extend({
             var appInstallCollection = currentBridge.get('appInstalls');
             console.log('appInstallCollection', appInstallCollection );
             self.appInstallListView.setCollection(appInstallCollection);
+            self.appInstallListView.render();
 
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection);
+            self.messageListView.render();
         });
     }
 
@@ -114,16 +116,21 @@ var DevicesView = Marionette.ItemView.extend({
         //this.$el.append(this.currentView.render().$el);
 
         var self = this;
+
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
-            self.deviceInstallListView.render();
+            //self.deviceInstallListView.render();
 
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
             self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
-            self.discoveredDeviceInstallListView.render();
+            //self.discoveredDeviceInstallListView.render();
+
+            self.currentView.setElement(this.$('#current-view')).render();
         });
+
+        //self.currentView.render();
 
         return this;
     }

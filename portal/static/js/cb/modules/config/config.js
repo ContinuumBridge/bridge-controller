@@ -39,10 +39,19 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       discoverDevices: function() {
 
-          // Remove all existing discovered devices
-          CBApp.discoveredDeviceInstallCollection.forEach(function(disoveredDeviceInstall) {
-              Backbone.Relational.store.unregister(disoveredDeviceInstall);
+          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+              Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
+          /*
+          CBApp.getCurrentBridge().then(function(currentBridge) {
+
+              // Remove all existing discovered devices
+              var collection = currentBridge.get('discoveredDeviceInstalls');
+              collection.forEach(function(discoveredDeviceInstall) {
+                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
+              });
+          });
+          */
           CBApp.messageCollection.sendMessage('command', 'discover');
           Config.mainLayoutView.devicesView.showDeviceDiscovery();
       },

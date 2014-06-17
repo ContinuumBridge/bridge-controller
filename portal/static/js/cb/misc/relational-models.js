@@ -156,7 +156,7 @@ Backbone.Collection = Backbone.Collection.extend({
     findOrAdd: function(attributes, options) {
 
         options = options ? _.clone(options) : {};
-        console.log('findOrCreate', attributes);
+        console.log('findOrAdd', attributes);
         var model = this.findUnique(attributes) ||
             new this.model(attributes, options);
         //this.create(attributes);

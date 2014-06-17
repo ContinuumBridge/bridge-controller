@@ -473,6 +473,10 @@
 		checkId: function( model, id ) {
 			var coll = this.getCollection( model ),
 				duplicate = coll && coll.get( id );
+            CBApp.testCollection = coll;
+            CBApp.testModel = model;
+            CBApp.testId = id;
+            console.log('checkId coll, duplicate', coll, duplicate);
 
 			if ( duplicate && model !== duplicate ) {
 				if ( Backbone.Relational.showWarnings && typeof console !== 'undefined' ) {
@@ -1455,9 +1459,11 @@
 			}
 
 			try {
+                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
+                console.log('checkId id, newId', id, newId);
 				// Check if we're not setting a duplicate id before actually calling `set`.
 				Backbone.Relational.store.checkId( this, newId );
 

@@ -29330,8 +29330,6 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             address: address
         };
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
-        console.log('adaptor in installDevice is', adaptor);
-        console.log('adaptor resource_uri in installDevice is', adaptor.resource_uri);
         var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
             || new CBApp.DeviceInstall({
                 bridge: this.get('bridge'),
@@ -29347,7 +29345,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             adaptor: adaptor.resource_uri,
             friendly_name: friendlyName
         });
-        console.log('deviceInstallData is', JSON.stringify(deviceInstallData));
+        console.log('deviceInstall is', deviceInstall.toJSON());
         // Add to the deviceInstall collection, to save with backbone io
         CBApp.deviceInstallCollection.add(deviceInstall);
         deviceInstall.save().then(function(result) {
@@ -30731,7 +30729,7 @@ Backbone.Collection = Backbone.Collection.extend({
     findOrAdd: function(attributes, options) {
 
         options = options ? _.clone(options) : {};
-        console.log('findOrCreate', attributes);
+        console.log('findOrAdd', attributes);
         var model = this.findUnique(attributes) ||
             new this.model(attributes, options);
         //this.create(attributes);
@@ -31112,10 +31110,19 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       discoverDevices: function() {
 
-          // Remove all existing discovered devices
-          CBApp.discoveredDeviceInstallCollection.forEach(function(disoveredDeviceInstall) {
-              Backbone.Relational.store.unregister(disoveredDeviceInstall);
+          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+              Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
+          /*
+          CBApp.getCurrentBridge().then(function(currentBridge) {
+
+              // Remove all existing discovered devices
+              var collection = currentBridge.get('discoveredDeviceInstalls');
+              collection.forEach(function(discoveredDeviceInstall) {
+                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
+              });
+          });
+          */
           CBApp.messageCollection.sendMessage('command', 'discover');
           Config.mainLayoutView.devicesView.showDeviceDiscovery();
       },
@@ -31229,7 +31236,7 @@ module.exports.Main = Marionette.Layout.extend({
 
         this.appSection.show(this.appInstallListView);
         this.deviceSection.show(this.devicesView);
-        this.devicesView.populateViews();
+        this.devicesView.render();
         this.messageSection.show(this.messageListView);
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
@@ -31239,10 +31246,12 @@ module.exports.Main = Marionette.Layout.extend({
             var appInstallCollection = currentBridge.get('appInstalls');
             console.log('appInstallCollection', appInstallCollection );
             self.appInstallListView.setCollection(appInstallCollection);
+            self.appInstallListView.render();
 
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection);
+            self.messageListView.render();
         });
     }
 
@@ -31286,16 +31295,21 @@ var DevicesView = Marionette.ItemView.extend({
         //this.$el.append(this.currentView.render().$el);
 
         var self = this;
+
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
-            self.deviceInstallListView.render();
+            //self.deviceInstallListView.render();
 
             var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
             self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
-            self.discoveredDeviceInstallListView.render();
+            //self.discoveredDeviceInstallListView.render();
+
+            self.currentView.setElement(this.$('#current-view')).render();
         });
+
+        //self.currentView.render();
 
         return this;
     }
@@ -31342,6 +31356,11 @@ CBApp.addInitializer(function() {
         console.log('foundDevices are', JSON.toString(foundDevices));
 
         CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+            // Trigger reset for the GUI
+            var collection = currentBridge.get('discoveredDeviceInstalls');
+            collection.trigger('reset');
+        });
     });
 
     CBApp.socket.publish = function(message) {
@@ -31954,6 +31973,7 @@ module.exports.RelationalCollectionView = {
             this.listenTo(this.collection, "reset", this.render);
 
             this.listenTo(this.collection, 'relational:remove', this.render);
+            this.listenTo(this.collection, 'relational:add', this.render);
         }
     },
 
@@ -31967,14 +31987,13 @@ module.exports.RelationalCollectionView = {
 
     setCollection: function(collection) {
 
+        this.undelegateEvents();
         if (this.collection != collection) {
 
             this.collection = collection;
-            /*
             this.listenTo(this.collection, 'all', function(name) {
                 console.log('EVENT setcollection', name);
             })
-            */
             console.log('setCollection called', this);
             this._initialEvents();
         }
@@ -33147,6 +33166,10 @@ _ = global._ = require("underscore");
 		checkId: function( model, id ) {
 			var coll = this.getCollection( model ),
 				duplicate = coll && coll.get( id );
+            CBApp.testCollection = coll;
+            CBApp.testModel = model;
+            CBApp.testId = id;
+            console.log('checkId coll, duplicate', coll, duplicate);
 
 			if ( duplicate && model !== duplicate ) {
 				if ( Backbone.Relational.showWarnings && typeof console !== 'undefined' ) {
@@ -34129,9 +34152,11 @@ _ = global._ = require("underscore");
 			}
 
 			try {
+                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
+                console.log('checkId id, newId', id, newId);
 				// Check if we're not setting a duplicate id before actually calling `set`.
 				Backbone.Relational.store.checkId( this, newId );
 
