@@ -5,9 +5,11 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    /*
     defaults: {
         permission: false
     },
+    */
 
     initialize: function() {
 
@@ -22,6 +24,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         if (permission) {
             console.log('saving');
+            this.set('permission', true);
             this.save().then(function(result) {
 
                 console.log('save successful', result);
@@ -33,6 +36,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         } else if (!permission) {
             console.log('disallowAll');
+            this.set('permission', false);
             this.disallowAll();
         } else {
             console.error('AppDevicePermission not saved or destroyed');

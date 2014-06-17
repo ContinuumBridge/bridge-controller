@@ -115,6 +115,10 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
             appInstall: this.appInstall,
             deviceInstall: deviceInstall
         });
+        // Set the permission field depending on whether the model is new or not
+        var permission = adp.isNew() ? false : true;
+        adp.set('permission', permission);
+        adp.restartTracking();
 
         console.log('adp is', adp);
         // build the final list of options for the item view type

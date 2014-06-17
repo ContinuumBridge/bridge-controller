@@ -28454,9 +28454,11 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    /*
     defaults: {
         permission: false
     },
+    */
 
     initialize: function() {
 
@@ -28471,6 +28473,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         if (permission) {
             console.log('saving');
+            this.set('permission', true);
             this.save().then(function(result) {
 
                 console.log('save successful', result);
@@ -28482,6 +28485,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         } else if (!permission) {
             console.log('disallowAll');
+            this.set('permission', false);
             this.disallowAll();
         } else {
             console.error('AppDevicePermission not saved or destroyed');
@@ -28676,6 +28680,10 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
             appInstall: this.appInstall,
             deviceInstall: deviceInstall
         });
+        // Set the permission field depending on whether the model is new or not
+        var permission = adp.isNew() ? false : true;
+        adp.set('permission', permission);
+        adp.restartTracking();
 
         console.log('adp is', adp);
         // build the final list of options for the item view type
@@ -33166,10 +33174,6 @@ _ = global._ = require("underscore");
 		checkId: function( model, id ) {
 			var coll = this.getCollection( model ),
 				duplicate = coll && coll.get( id );
-            CBApp.testCollection = coll;
-            CBApp.testModel = model;
-            CBApp.testId = id;
-            console.log('checkId coll, duplicate', coll, duplicate);
 
 			if ( duplicate && model !== duplicate ) {
 				if ( Backbone.Relational.showWarnings && typeof console !== 'undefined' ) {
@@ -34156,7 +34160,6 @@ _ = global._ = require("underscore");
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
-                console.log('checkId id, newId', id, newId);
 				// Check if we're not setting a duplicate id before actually calling `set`.
 				Backbone.Relational.store.checkId( this, newId );
 
