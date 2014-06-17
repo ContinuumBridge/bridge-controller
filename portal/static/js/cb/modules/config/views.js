@@ -71,7 +71,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection);
+            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
             self.messageListView.render();
         });
     }

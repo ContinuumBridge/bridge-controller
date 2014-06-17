@@ -31258,7 +31258,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection);
+            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
             self.messageListView.render();
         });
     }
@@ -31993,15 +31993,18 @@ module.exports.RelationalCollectionView = {
         }
     },
 
-    setCollection: function(collection) {
+    setCollection: function(collection, force) {
 
         this.undelegateEvents();
-        if (this.collection != collection) {
+        // If force is true, rebind events anyway
+        if (this.collection != collection || force) {
 
             this.collection = collection;
+            /*
             this.listenTo(this.collection, 'all', function(name) {
                 console.log('EVENT setcollection', name);
             })
+            */
             console.log('setCollection called', this);
             this._initialEvents();
         }
