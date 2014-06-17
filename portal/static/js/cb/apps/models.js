@@ -3,9 +3,55 @@ CBApp.App = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
+    /*
+    relations: [
+        {
+            type: Backbone.HasMany,
+            key: 'appInstalls',
+            collectionType: 'CBApp.AppInstallCollection',
+            includeInJSON: false,
+            initializeCollection: 'appInstallCollection'
+        }
+    ],
+    */
+    toggleInstalled: function(bridge, licence) {
+
+        console.log('toggleInstalled');
+        var install = this.getInstall(bridge);
+
+        if (install.isNew()) {
+            console.log('saving app install', install);
+            install.set('licence', licence);
+            install.save();
+        } else if (install) {
+            console.log('destroying app install', install);
+            install.unset('licence');
+            install.destroyOnServer();
+        } else {
+            console.warn('There is no install in App toggleInstalled', this);
+        }
+    },
+
+    getInstall: function(bridge) {
+
+        var appInstall = CBApp.appInstallCollection.findOrCreate({
+            app: this,
+            bridge: bridge
+        });
+
+        console.log('appInstall in getInstall is', appInstall);
+
+        return appInstall;
+    },
+
+    install: function(bridge, licence) {
+
+    },
+
+    uninstall: function(bridge) {
+
+    }
 });
-
-
 
 CBApp.AppCollection = Backbone.Collection.extend({
 
@@ -19,83 +65,6 @@ CBApp.AppCollection = Backbone.Collection.extend({
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
-});
-
-CBApp.AppInstall = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initialize: function() {
-
-    },
-
-    relations: [
-        {   
-            type: Backbone.HasOne,
-            key: 'bridge',
-            keySource: 'bridge',
-            keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeCollection',
-        },
-        {   
-            type: Backbone.HasOne,
-            key: 'app',
-            keySource: 'app',
-            keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'appCollection',
-            reverseRelation: {
-                type: Backbone.HasMany,
-                key: 'appInstalls',
-                collectionType: 'CBApp.AppInstallCollection',
-                includeInJSON: false,
-                initializeCollection: 'appInstallCollection',
-            }   
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'devicePermissions',
-            keySource: 'device_permissions',
-            keyDestination: 'device_permissions',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'appDevicePermissionCollection'
-            /*
-            reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appInstall',
-                keySource: 'app_install',
-                keyDestination: 'app_install',
-                collectionType: 'CBApp.AppInstallCollection',
-                includeInJSON: 'resource_uri',
-                initializeCollection: 'appInstallCollection'
-            }
-            */
-        }
-    ]
-}); 
-
-CBApp.AppInstallCollection = Backbone.Collection.extend({
-
-    model: CBApp.AppInstall,
-    backend: 'appInstall',
-
-    initialize: function() {
-        this.bindBackend();
     },
     
     parse : function(response){

@@ -29,7 +29,7 @@ function deviceDiscovery(message) {
                 }
             };
 
-            var matchFields = ['name','manufacturer_name'];
+            var matchFields = ['name', 'method'];
             var queryArray = [];
 
             matchFields.forEach(function(matchField) {

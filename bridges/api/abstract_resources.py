@@ -84,7 +84,10 @@ class ThroughModelResource(ModelResource):
         return bundle
 
 
-class CBModelResource(ModelResource):
+#class CBModelResource(ModelResource):
+
+
+class PostMatchMixin(object):
 
     class Meta:
         resource_name = 'cb_model_resource'
@@ -159,6 +162,7 @@ class CBModelResource(ModelResource):
             updated_bundle = self.alter_detail_data_to_serialize(request, updated_bundle)
             return self.create_response(request, updated_bundle, response_class=http.HttpCreated, location=location)
 
+
     def patch_detail(self, request, obj=None,  **kwargs):
         """
         Updates a resource in-place.
@@ -202,113 +206,6 @@ class CBModelResource(ModelResource):
             bundle = self.alter_detail_data_to_serialize(request, bundle)
             return self.create_response(request, bundle, response_class=http.HttpAccepted)
 
-    def full_dehydrate(self, bundle, for_list=False):
-        """
-        Given a bundle with an object instance, extract the information from it
-        to populate the resource.
-        """
-        use_in = ['all', 'list' if for_list else 'detail']
-
-        # Dehydrate each field.
-        for field_name, field_object in self.fields.items():
-            # If it's not for use in this mode, skip
-            field_use_in = getattr(field_object, 'use_in', 'all')
-            if callable(field_use_in):
-                if not field_use_in(bundle):
-                    continue
-            else:
-                if field_use_in not in use_in:
-                    continue
-
-            # A touch leaky but it makes URI resolution work.
-            if getattr(field_object, 'dehydrated_type', None) == 'related':
-                field_object.api_name = self._meta.api_name
-                field_object.resource_name = self._meta.resource_name
-
-            bundle.data[field_name] = field_object.dehydrate(bundle, for_list=for_list)
-
-            # Check for an optional method to do further dehydration.
-            method = getattr(self, "dehydrate_%s" % field_name, None)
-
-            if method:
-                bundle.data[field_name] = method(bundle)
-            '''
-            # Dehydrate ids of related resources if they have them and append them to the ToMany level
-            if 'dehydrate_id' in dir(field_object) and callable(field_object.dehydrate_id):
-                print "Field object is callable"
-                bundle.data['%s_id' % field_name] = field_object.dehydrate_id(bundle)
-            '''
-
-        if hasattr(self, 'instance'):
-            # Add the through model id to the bundle
-            bundle.data['id'] = self.instance.id
-
-        bundle = self.dehydrate(bundle)
-        return bundle
-
-    def cached_obj_get(self, bundle, **kwargs):
-        """
-        A version of ``obj_get`` that uses the cache as a means to get
-        commonly-accessed data faster.
-        """
-        print "In cached_obj_get"
-        print "kwargs are", kwargs
-        cache_key = self.generate_cache_key('detail', **kwargs)
-        cached_bundle = self._meta.cache.get(cache_key)
-
-        if cached_bundle is None:
-            cached_bundle = self.obj_get(bundle=bundle, **kwargs)
-            self._meta.cache.set(cache_key, cached_bundle)
-
-        return cached_bundle
-
-    def obj_get(self, bundle, **kwargs):
-        """
-        A ORM-specific implementation of ``obj_get``.
-
-        Takes optional ``kwargs``, which are used to narrow the query to find
-        the instance.
-        """
-        print "In obj_get"
-        print "kwargs are", kwargs
-        try:
-            object_list = self.get_object_list(bundle.request).filter(**kwargs)
-            print "object list is", object_list
-            stringified_kwargs = ', '.join(["%s=%s" % (k, v) for k, v in kwargs.items()])
-
-            if len(object_list) <= 0:
-                raise self._meta.object_class.DoesNotExist("Couldn't find an instance of '%s' which matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
-            elif len(object_list) > 1:
-                raise MultipleObjectsReturned("More than '%s' matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
-
-            bundle.obj = object_list[0]
-            self.authorized_read_detail(object_list, bundle)
-            return bundle.obj
-        except ValueError:
-            raise NotFound("Invalid resource lookup data provided (mismatched type).")
-
-    def remove_api_resource_names(self, url_dict):
-        """
-        Given a dictionary of regex matches from a URLconf, removes
-        ``api_name`` and/or ``resource_name`` if found.
-
-        This is useful for converting URLconf matches into something suitable
-        for data lookup. For example::
-
-            Model.objects.filter(**self.remove_api_resource_names(matches))
-        """
-        print "remove_api_resource_names"
-        print "url_dict is", url_dict
-        kwargs_subset = url_dict.copy()
-
-        for key in ['api_name', 'resource_name']:
-            try:
-                del(kwargs_subset[key])
-            except KeyError:
-                pass
-
-        print "kwargs_subset is", kwargs_subset
-        return kwargs_subset
 
 '''
 class CBModelResource(six.with_metaclass(ModelDeclarativeMetaclass, BaseCBModelResource)):

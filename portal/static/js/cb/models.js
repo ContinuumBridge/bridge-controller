@@ -2,15 +2,21 @@
 var Q = require('q');
 
 var CBApp = require('index');
+
+require('./components/buttons');
+
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/installs/models');
+require('./apps/licences/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
 require('./users/models');
+require('./users/current/models');
 
 require('./misc/decorators');
 require('./misc/filters');
@@ -23,6 +29,8 @@ CBApp.addInitializer(function () {
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
   //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+
+  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
@@ -44,17 +52,39 @@ CBApp.addInitializer(function () {
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 
+  CBApp.userCollection = new CBApp.UserCollection();
 
-  CBApp.currentUser = new CBApp.CurrentUser();
-  //CBApp.currentUserDeferred.then(function(result) {
+  //CBApp.u = new CBApp.U();
+  //CBApp.u.fetch();
 
+
+  //CBApp.currentUser = new CBApp.LoggedInUser();
+  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection(CBApp.currentUser);
+  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+  CBApp.currentUserCollection.fetch().then(function() {
+
+      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+      setTimeout(function() {
+          CBApp._isInitialized = true;
+          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+      }, 500);
+
+  }, function(error) {
+
+      CBApp.currentUserDeferred.reject(error);
+      console.error('currentUser could not be fetched', error);
+  });
+  //CBApp.currentUser.fetch();
+
+  //CBApp.currentUser = new CBApp.CurrentUser();
+
+    /*
   CBApp.currentUser.fetch().then(function(currentUser) {
-
 
       console.log('currentUser fetched successfully', currentUser);
       setTimeout(function() {
           CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(currentUser);
+          CBApp.currentUserDeferred.resolve(currentUser.model);
           console.log('App initialised');
       }, 500);
 
@@ -63,6 +93,7 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+     */
 
     /*
   CBApp.currentUserDeferred.then(function(result) {

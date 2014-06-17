@@ -11,16 +11,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
     },
 
     bindings: {
-        //'#device-name': 'test'
-        /*
-        '#device-name': [{
-            observe: 'hasChangedSinceLastSync',
-            onGet: function(value) {
-                return 'test';
-                this.model.get('deviceInstall').get('friendly_name')
-            }
-        }]
-        */
         '#permission-switch': {
           attributes: [{
             name: 'class',
@@ -29,14 +19,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
             onGet: 'getSwitchClass'
           }]
         }
-        /*
-
-            observe: 'friendly_name',
-            onGet: function(value) {
-                console.log('value in onGet is', value);
-                this.getAppPermission.get('')
-            }
-        */
     },
 
     initialize: function() {

@@ -6,8 +6,8 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/views');
-//require('../../devices/views');
+require('../../apps/installs/views');
+require('../../apps/licences/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
@@ -41,7 +41,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppListView();
+        this.appInstallListView = new CBApp.AppInstallListView();
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
 
@@ -119,7 +119,6 @@ var DevicesView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        console.log('Initialise DevicesView');
         this.deviceInstallListView = new CBApp.DeviceInstallListView();
         this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
         this.currentView = this.deviceInstallListView;
@@ -188,6 +187,48 @@ var DevicesView = Marionette.ItemView.extend({
         return this;
     }
 })
+
+module.exports.InstallAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/installAppModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    initialize: function() {
+
+        var self = this;
+        this.licenceListView = licenceListView =  new CBApp.AppLicenceListView();
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            //licenceCollection = CBApp.appLicenceCollection.findAllLive();
+            /*
+            licenceCollection.setFilter('currentBridge', function(model, searchString) {
+
+                var pass = (model.get('bridge') == currentBridge);
+                return pass;
+            });
+            */
+            //self.licenceListView.setupCollection(licenceCollection);
+            console.log('promise in app modal initialize');
+            self.licenceListView.setupCollection(CBApp.appLicenceCollection);
+        });
+    },
+
+    onRender: function() {
+
+        //this.licenceListView.setElement(this.$('#licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+        //return this;
+    },
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
 
 module.exports.InstallDeviceModal = Backbone.Modal.extend({
 

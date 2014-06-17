@@ -13,8 +13,11 @@ require('backbone-io');
 require('./backbone.trackit.js');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
+require('./backbone-bossview');
 require('backbone.modal');
+
 require('./backbone-notify');
+
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
@@ -25,6 +28,9 @@ var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
+
+QueryEngine = require('query-engine');
+
 require('backbone-deferred');
 
 /*

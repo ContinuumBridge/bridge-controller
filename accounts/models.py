@@ -137,6 +137,12 @@ class CBUser(CBAuth):
             bridge_controls.append(bridge_control)
         return bridge_controls
 
+    def get_app_licences(self):
+        app_licences = []
+        for app_licence in self.applicence_set.filter():
+            app_licences.append(app_licence)
+        return app_licences
+
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.pk)
 

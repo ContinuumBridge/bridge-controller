@@ -10,9 +10,6 @@ CBApp = new Marionette.Application({
     navInstallDevice: function() {
         CBApp.router.navigate("install_device", true);
         console.log('navInstallDevice coming through');
-    },
-    config: function() {
-
     }
 });
 
@@ -49,6 +46,10 @@ CBApp.Controller = Marionette.Controller.extend({
   config: function(slug) {
       console.log('config in main Controller', slug);
       CBApp.Config.router.navigate(slug);
+  },
+  store: function(slug) {
+      console.log('store in main Controller', slug);
+      CBApp.Store.router.navigate(slug);
   },
   showNotification: function(text) {
     console.log('We got to the notification controller!');
@@ -106,7 +107,8 @@ CBApp.Router = Marionette.SubRouter.extend({
   //controller: CBApp.Controller,
   appRoutes: {
     '': 'index',
-    'config/:slug': 'config'
+    'config/:slug': 'config',
+    'store/:slug': 'store'
     //"config/bridge/:bridge": "config",
   }
 });
