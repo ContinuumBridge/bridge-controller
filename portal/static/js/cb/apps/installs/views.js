@@ -12,7 +12,16 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     events: {
         //'click': 'eventWrapperClick',
-        //'click #interest-button': 'interestButtonClick',
+        'click .uninstall-button': 'uninstall'
+    },
+
+
+    initialize: function() {
+
+        this.appDevicePermissionListView =
+            new CBApp.AppDevicePermissionListView({
+                appInstall: this.model
+            });
     },
 
     serializeData: function() {
@@ -24,22 +33,35 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
       return data;
     },
 
+    uninstall: function() {
+
+        console.log('uninstall in install view', this.model);
+        this.model.uninstall();
+    },
+
     onRender : function(){
 
+        console.log('AppInstallView render', this);
         var self = this;
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            self.appDevicePermissionListView =
-                new CBApp.AppDevicePermissionListView({
-                    collection: currentBridge.get('deviceInstalls'),
-                    appInstall: self.model
-                });
-            //self.appDevicePermissionListView._initialEvents();
+            console.log('AppInstallView promise render', self);
 
-            var appID = '#APPID' + self.model.get('app').get('id');
-            $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
+            var deviceInstalls = currentBridge.get('deviceInstalls');
+            console.log('AppInstallView promise render 2', deviceInstalls);
+            self.appDevicePermissionListView.setCollection(deviceInstalls);
+            var $appConfig = self.$('.app-config');
+            console.log('AppInstallView promise render 3', $appConfig);
+            //var appID = '#APPID' + self.model.get('app').get('id');
+            //$appDevicePermissionList = self.$(appID);
+            //var content = self.appDevicePermissionListView.render().$el;
+            console.log('AppInstallView promise render 4');
+            //$appConfig.html(content);
+            self.appDevicePermissionListView.setElement($appConfig).render();
+            console.log('AppInstallView promise render 5');
+            console.log('AppInstallView promise render 6', self.appDevicePermissionListView);
+            //$appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
         });
     }
 });
@@ -48,7 +70,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appInstallSection.html'),
     itemView: CBApp.AppInstallView,
-    itemViewContainer: '#app-list',
+    itemViewContainer: '.app-list',
 
     emptyView: CBApp.ListItemLoadingView,
 

@@ -1,5 +1,5 @@
 
-CBApp.AppInstall = Backbone.RelationalModel.extend({
+CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -7,6 +7,14 @@ CBApp.AppInstall = Backbone.RelationalModel.extend({
 
     initialize: function() {
 
+    },
+
+    uninstall: function() {
+
+        console.log('uninstalling AppInstall', this);
+        this.relationalDestroy().then(function(model, response, options) {
+            console.log('AppInstall successfully destroyed', model, response, options);
+        });
     },
 
     relations: [

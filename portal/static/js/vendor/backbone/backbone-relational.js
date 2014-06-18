@@ -1455,6 +1455,7 @@
 			}
 
 			try {
+                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
@@ -1474,7 +1475,7 @@
 					Backbone.Relational.store.update( this );
 				}
 
-                console.log('attributes in set', attributes);
+                console.log('attributes in set', JSON.stringify(attributes));
 				if ( attributes ) {
 					this.updateRelations( attributes, options );
 				}

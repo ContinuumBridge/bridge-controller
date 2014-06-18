@@ -44,7 +44,7 @@ class DeviceResource(ModelResource):
         detail_allowed_methods = ['get']
         filtering = {
             'name': ALL,
-            'method': ALL,
+            'protocol': ALL,
             'manufacturer_name': ALL,
             'hardware_revision': ALL,
             'firmware_revision': ALL,
@@ -161,6 +161,6 @@ class DeviceInstallResource(PostMatchMixin, ModelResource):
         authorization = Authorization()
         always_return_data = True
         resource_name = 'device_install'
-        post_match = ['adaptor', 'bridge', 'device', 'mac_addr']
+        post_match = ['adaptor', 'bridge', 'device', 'address']
 
 

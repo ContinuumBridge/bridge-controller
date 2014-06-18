@@ -2,6 +2,35 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
+require('../../components/buttons');
+
+CBApp.Components.InstallButton = CBApp.Components.Button.extend({
+
+    template: require('./templates/installButton.html'),
+
+    extraClass: "install-button",
+
+    initialize: function() {
+
+    },
+
+    onClick: function(e) {
+
+        e.preventDefault();
+        CBApp.Config.controller.installDevice(this.model);
+    },
+
+    getContent: function() {
+
+        return this.model.get('device') ? 'Install' : 'Request an adaptor';
+    },
+
+    onRender: function() {
+
+        this.stickit();
+    }
+});
+
 CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
@@ -9,28 +38,47 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     template: require('./templates/discoveredDevice.html'),
     //template: '#discoveredDeviceItemViewTemplate',
 
-    events: {
-        'click': 'discoveredDeviceClick',
+    bindings: {
+        '.device-address': {
+            observe: ['mac_addr', 'address'],
+            onGet: 'formatAddress'
+        }
     },
 
-    discoveredDeviceClick: function(e) {
+    initialize: function() {
 
-        e.preventDefault();
-        CBApp.Config.controller.installDevice(this.model);
+        this.installButton = new CBApp.Components.InstallButton({
+            model: this.model
+        });
     },
 
+    formatAddress: function(address) {
+
+        // Retain backwards compatibility with using mac_addr
+        var addr = address[0] || address[1];
+        return addr.slice(addr.length-5);
+    },
+
+    onRender: function() {
+
+        this.stickit();
+        var device = this.model.get('device');
+        this.stickit(device, {'.device-name': 'name'});
+
+        this.installButton.setElement(this.$('.install-button')).render();
+    },
+
+    /*
     serializeData: function() {
 
       var data = {};
       data.install = this.model.get('device') ? 'Install' : 'Request an adaptor';
-
       // The label is the last four letters of the mac address
       var macAddr = this.model.get('mac_addr') || "";
       data.label = macAddr.slice(macAddr.length-5);
-
-
       return data;
     }
+    */
 });
 
 

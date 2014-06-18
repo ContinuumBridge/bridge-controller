@@ -14,7 +14,7 @@ class Device(LoggedModelMixin):
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), blank = True)
 
-    method = models.CharField(_("method"), max_length = 255, blank = True)
+    protocol = models.CharField(_("protocol"), max_length = 255, blank = True)
 
     manufacturer_name = models.CharField(_("manufacturer_name"), max_length = 255, blank = True)
     hardware_revision = models.CharField(_("hardware_revision"), max_length = 255, blank = True)
@@ -42,7 +42,7 @@ class Device(LoggedModelMixin):
 class DeviceInstall(LoggedModelMixin):
     
     friendly_name = models.CharField(_("friendly_name"), max_length = 255, blank=True)
-    mac_addr = models.CharField(_("mac_addr"), max_length = 255)
+    address = models.CharField(_("address"), max_length = 255)
     device_version = models.CharField(_("device_version"), max_length = 255, blank=True)
 
     adaptor = models.ForeignKey('adaptors.Adaptor')

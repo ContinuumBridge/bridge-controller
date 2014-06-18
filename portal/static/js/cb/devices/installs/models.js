@@ -39,7 +39,13 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             return void 0;
         }
 
-        var adp = appInstall.get('devicePermissions').findUnique({deviceInstall: this});
+        //var adp = appInstall.get('devicePermissions').findOrCreate({deviceInstall: this});
+        var adp = CBApp.appInstallCollection.findOrCreate({
+            appInstall: appInstall,
+            deviceInstall: this
+        });
+
+        /*
         if (adp) {
             adp.set({permission: true}, {silent: true});
         } else {
@@ -50,6 +56,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             });
         }
         CBApp.appDevicePermissionCollection.add(adp);
+        */
 
         return adp;
     },

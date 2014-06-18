@@ -23,6 +23,11 @@ CBApp.addInitializer(function() {
         console.log('foundDevices are', JSON.toString(foundDevices));
 
         CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+            // Trigger reset for the GUI
+            var collection = currentBridge.get('discoveredDeviceInstalls');
+            collection.trigger('reset');
+        });
     });
 
     CBApp.socket.publish = function(message) {

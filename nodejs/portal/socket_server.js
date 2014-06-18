@@ -28,9 +28,11 @@ function SocketServer(port) {
     //var appInstallController = this.appInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net/');
     var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(Portal.DJANGO_URL + 'app_device_permission/');
     var appLicenceController = this.appLicenceController = new djangoBackbone(Portal.DJANGO_URL + 'app_licence/');
+    //var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
 
     var deviceController = this.deviceController = new djangoBackbone(Portal.DJANGO_URL + 'device/');
     var deviceInstallController = this.deviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'device_install/');
+    //var deviceInstallController = this.deviceInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
 
     var discoveredDeviceController = this.discoveredDeviceController = new DeviceDiscovery();
     var discoveredDeviceInstallController = this.discoveredDeviceInstallController = new djangoBackbone(Portal.DJANGO_URL + 'discovered_device_install/');

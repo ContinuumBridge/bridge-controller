@@ -5,6 +5,12 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    /*
+    defaults: {
+        permission: false
+    },
+    */
+
     initialize: function() {
 
         this.startTracking();
@@ -18,7 +24,6 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
         if (permission) {
             console.log('saving');
-            CBApp.testModel = this;
             this.set('permission', true);
             this.save().then(function(result) {
 
@@ -29,8 +34,9 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
                 //this.set('permission', false);
             });
 
-        } else if (!this.isNew() && !permission) {
+        } else if (!permission) {
             console.log('disallowAll');
+            this.set('permission', false);
             this.disallowAll();
         } else {
             console.error('AppDevicePermission not saved or destroyed');
@@ -39,14 +45,12 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     disallowAll: function() {
 
-        this.set('permission', false);
+        //this.set('permission', false);
         this.destroyOnServer().then(function(result) {
 
             console.log('destroyOnServer succeeded for', result);
         }, function(error) {
 
-            //this.set('permission', true);
-            //this.set({hasChangedSinceLastSync: false});
             console.error('destroyOnServer failed', error);
         });
     },
@@ -54,7 +58,8 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
     togglePermission: function() {
 
         //var currentPermission = this.isNew() ? false : true;
-        var currentPermission = this.get('permission');
+        var currentPermission = !this.isNew();
+            //this.get('permission');
         this.setPermission(!currentPermission);
     },
 
@@ -66,18 +71,9 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             keyDestination: 'device_install',
             relatedModel: 'CBApp.DeviceInstall',
             collectionType: 'CBApp.DeviceInstallCollection',
-            //createModels: true,
+            createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection',
-            reverseRelation: {
-                //type: Backbone.HasMany,
-                key: 'appPermissions',
-                collectionType: 'CBApp.AppDevicePermissionCollection',
-                /*
-                includeInJSON: false,
-                 */
-                initializeCollection: 'appDevicePermissionCollection'
-            }
+            initializeCollection: 'deviceInstallCollection'
         },
         {
             type: Backbone.HasOne,

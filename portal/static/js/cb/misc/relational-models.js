@@ -148,16 +148,21 @@ Backbone.HasMany = Backbone.HasMany.extend({
 Backbone.Collection = Backbone.Collection.extend({
 
     findUnique: function(attrs) {
-
         // Returns a model after verifying the uniqueness of the attributes
         models = this.where(attrs);
         if(models.length > 1) { console.warn(attrs, 'is not unique') }
         return models[0] || void 0;
     },
 
-    findOrCreate: function(attributes) {
+    findOrAdd: function(attributes, options) {
 
-        var model = this.findUnique(attributes) || this.create(attributes);
+        options = options ? _.clone(options) : {};
+        console.log('findOrAdd', attributes);
+        var model = this.findUnique(attributes) ||
+            new this.model(attributes, options);
+        //this.create(attributes);
+
+        this.add(model);
 
         return model;
     }
@@ -190,6 +195,8 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
     },
 
     relationalDestroy: function(options) {
+
+        options = options ? _.clone(options) : {};
 
         var success = options.success;
         var relations = this.getRelations();
@@ -232,6 +239,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
             // Iterate through models related to this model
             if (model) {
 
+                console.log('model in updateRelationsToSelf is', model);
                 // Get the relation these related models have to this model
                 var reverseRelation = model.get(rel.reverseRelation.key)
                 // If there is no reverse relation, there is nothing on any of the related models to update
@@ -245,7 +253,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 var reverseModel = _.findWhere(reverseModels, this.toJSON());
                 if (!reverseModel) {
 
-                    console.log('this', this.toJSON());
+                    console.log('this in updateRelationsToSelf', this.toJSON());
                     console.log('reverseModel', reverseModels);
                     if (reverseModels[0]) {
                         console.log('reverseModel JSON', reverseModels[0].toJSON());

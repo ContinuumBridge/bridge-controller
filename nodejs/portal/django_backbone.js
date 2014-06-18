@@ -39,7 +39,7 @@ function DjangoBackbone(djangoURL) {
                 res.end(new Error(djangoResponse.statusCode));
             } else {
                 var error = new Error('Django did not return a status code to django_backbone')
-                log('error', error);
+                console.log('error', error);
                 res.end(error);
             }
         } else {
@@ -115,19 +115,19 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.update(function(req, res) {
 
-        var self = this;
+        //var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
+        // On a backboneio create function make a post request to Django
 
-        var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
-
-        // On a backboneio create function make a put request to Django
-
+        var requestURL = (req.model.id) ? djangoURL + req.model.id.toString() + "/" : djangoURL;
+        //var resourceURL = djangoURL + req.model.id.toString();
+        console.log('requestURL in update is', requestURL, req);
         var jsonData = JSON.stringify(req.model);
 
         console.log('jsonData is', jsonData);
 
         var restOptions = {
             method: "patch",
-            //data: 'test',
+            data: jsonData,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
