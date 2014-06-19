@@ -17,10 +17,20 @@ module.exports = {
       return jsonAttributes;
     },
 
+    save: function() {
+
+        console.log('save mixin');
+        // ADDED Set isGhost to false, indicating the model is being instantiated on server
+        this.set('isGhost', false);
+    },
+
     destroyOnServer: function(options) {
       options = options ? _.clone(options) : {};
       var model = this;
       var success = options.success;
+
+      // ADDED Set isGhost to true, indicating the model is being deleted on server
+      this.set('isGhost', true);
 
       //var destroy = function() {
       //  model.trigger('destroy', model, model.collection, options);
@@ -87,3 +97,6 @@ module.exports = {
     }
     */
 };
+
+
+

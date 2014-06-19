@@ -4,7 +4,7 @@ var Backbone = require('backbone-bundle')
 
 require('../../components/buttons');
 
-CBApp.Components.InstallButton = CBApp.Components.Button.extend({
+CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
 
     template: require('./templates/installButton.html'),
 
@@ -47,7 +47,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.installButton = new CBApp.Components.InstallButton({
+        this.installButton = new CBApp.Components.DeviceInstallButton({
             model: this.model
         });
     },

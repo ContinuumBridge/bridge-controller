@@ -4,17 +4,20 @@ var Backbone = require('backbone-bundle')
 
 require('../../components/buttons');
 
-CBApp.Components.InstallButton = CBApp.Components.Button.extend({
+CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
 
-    className: 'btn btn-default install-button',
+    //className: 'btn btn-default install-button',
+
+    extraClass: "install-button",
 
     template: require('./templates/button.html'),
 
+
     initialize: function() {
 
-        this.model.set('content', 'initial content');
     },
 
+    /*
     getEnabled: function(val) {
 
         console.log('getEnabled called', val);
@@ -24,41 +27,45 @@ CBApp.Components.InstallButton = CBApp.Components.Button.extend({
 
         return enabled;
     },
+    */
 
     getContent: function() {
 
         var self = this;
-        console.log('in getContent', this.bindings);
+        console.log('in getContent');
 
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        if (this.appInstall && this.bridge) {
+            console.log('in getContent appInstall');
 
-            console.log('getInstallButtonContent');
-            var isInstalled = self.model.testIfInstalled(currentBridge);
-            console.log('isInstalled is', isInstalled );
-            //var isInstalled = true;
-            var content = isInstalled ? 'Uninstall' : 'Install';
-            self.model.set('content', content);
-        });
+            // Trigger change events on the model, to cause the view to update
+            this.listenTo(this.bridge, 'change:relational', function() {
+                this.model.trigger('change:relational');
+            });
 
-        return self.model.get('content');
-        //return "Test button";
+            var isInstalled = this.appInstall.isNew() ? 'Install' : 'Uninstall';
+        }
+
+        return isInstalled || '...';
     },
 
     onClick: function() {
 
         var self = this;
         console.log('onClick');
+        this.appInstall.toggleInstalled();
+        /*
         CBApp.getCurrentBridge().then(function(currentBridge){
             console.log('onClick promise');
             self.model.toggleInstall(currentBridge);
             console.log('onClick promise 2');
         });
+        */
     },
 
     onRender: function() {
 
 
-        console.log('render InstallButton');
+        console.log('render InstallButton' , this.model);
         this.stickit();
 
         //this.$('.install-component').html(this.render().$el);
@@ -73,7 +80,7 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
     events: {
         //'click': 'eventWrapperClick',
-        'click .install-button': 'toggleCurrentInstall'
+        //'click .install-button': 'toggleCurrentInstall'
     },
 
     bindings: {
@@ -95,9 +102,21 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
         this.app = this.model.get('app');
         console.log('app in initialize is', this.app, this);
 
-        this.installButton = new CBApp.Components.InstallButton({
+        this.installButton = new CBApp.Components.AppInstallButton({
             model: this.model
         });
+
+        CBApp.getCurrentBridge().then(function(currentBridge){
+
+            self.installButton.bridge = currentBridge;
+            self.installButton.appInstall = CBApp.appInstallCollection.findOrAdd({
+                app: self.app,
+                bridge: currentBridge,
+                licence: self.model
+            });
+            self.installButton.model.trigger('change');
+            console.log('appInstall in appLicenceView');
+        }).done();
     },
 
     toggleCurrentInstall: function() {
@@ -113,11 +132,15 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
         var self = this;
 
+        console.log('AppLicenceView render', this);
         this.stickit();
         this.stickit(this.app, this.appBindings);
 
-        this.installButton.setElement(this.$('.install-component')).render();
-        //this.$('.install-component').html(this.installButton.render().$el);
+        var $installComponent = this.$('.install-component');
+        console.log('installComponent', $installComponent);
+        $installComponent.html(this.installButton.render().$el);
+        //this.installButton.setElement($installComponent).render();
+        //this.installButton.setElement(this.$('.install-component')).render();
     }
 });
 

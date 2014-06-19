@@ -21,16 +21,18 @@ require('./backbone-notify');
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb-models');
+var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 var CBViewsMixin = require('./backbone-cb-views');
+Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
 
 QueryEngine = require('query-engine');
 
+require('./backbone-cb-model');
 require('backbone-deferred');
 
 /*

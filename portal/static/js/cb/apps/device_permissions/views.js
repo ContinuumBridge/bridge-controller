@@ -43,19 +43,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         }, this);
     },
 
-    /*
-    getSwitchClass: function(val) {
-
-        console.log('getSwitchClass called', val);
-        //var isNew = this.model.isNew();
-        var activation = this.model.get('permission') ? 'active' : '';
-        //var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
-        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
-
-        return activation + " " + enabled;
-    },
-    */
-
     togglePermission: function() {
 
         console.log('togglePermission was called');
@@ -68,28 +55,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
         this.permissionSwitch.setElement(this.$('.permission-switch')).render();
     }
-    /*
-    permissionSwitch: function(e) {
-
-        var $permissionSwitch = $(e.currentTarget);
-        var val = $permissionSwitch[0].checked;
-
-        this.model.changePermission(val);
-    },
-
-    serializeData: function() {
-
-      var deviceFriendlyName = this.model.get('deviceInstall').get('friendly_name');
-      //var permission = this.model.get('id') ? 'checked' : '';
-      var id = this.model.get('id') || this.model.cid;
-      //this.model.set('appDevicePermissionID', "ADPID" + id);
-      var tmpl_data = _.extend(this.model.toJSON(), {deviceFriendlyName: deviceFriendlyName,
-                                                     permissionChecked: this.model.get('id') ? 'checked' : '',
-                                                     appDevicePermissionID: 'ADPID' + id });
-
-      return tmpl_data;
-    }
-    */
 });
 
 CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
@@ -98,7 +63,6 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
     className: '',
     itemView: CBApp.AppDevicePermissionView,
     //template: require('./templates/devicePermissionSection.html'),
-
 
     initialize: function(options) {
 

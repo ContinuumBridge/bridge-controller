@@ -9,12 +9,29 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
     },
 
+    install: function() {
+
+        console.log('installing AppInstall');
+        this.save().then(function() {
+            console.log('AppInstall successfully saved');
+        });
+    },
+
     uninstall: function() {
 
         console.log('uninstalling AppInstall', this);
-        this.relationalDestroy().then(function(model, response, options) {
+        this.destroyOnServer().then(function(model, response, options) {
             console.log('AppInstall successfully destroyed', model, response, options);
         });
+    },
+
+    toggleInstalled: function() {
+
+        if(this.isNew()) {
+            this.install();
+        } else {
+            this.uninstall();
+        }
     },
 
     relations: [

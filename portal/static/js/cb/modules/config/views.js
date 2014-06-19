@@ -148,27 +148,18 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         var self = this;
         this.licenceListView = licenceListView =  new CBApp.AppLicenceListView();
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-
-            //licenceCollection = CBApp.appLicenceCollection.findAllLive();
-            /*
-            licenceCollection.setFilter('currentBridge', function(model, searchString) {
-
-                var pass = (model.get('bridge') == currentBridge);
-                return pass;
-            });
-            */
-            //self.licenceListView.setupCollection(licenceCollection);
-            console.log('promise in app modal initialize');
-            self.licenceListView.setupCollection(CBApp.appLicenceCollection);
-        });
     },
 
     onRender: function() {
 
-        //this.licenceListView.setElement(this.$('#licence-section')).render();
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            console.log('promise in app modal initialize');
+            var licenceCollection = currentUser.get('appLicences');
+            self.licenceListView.setCollection(licenceCollection);
+            self.licenceListView.render();
+        }).done();
         this.$('.licence-section').html(this.licenceListView.render().$el);
-        //return this;
     },
 
     submit: function() {

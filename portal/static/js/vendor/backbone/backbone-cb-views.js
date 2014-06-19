@@ -8,6 +8,18 @@ var wrapError = function(model, options) {
     };
 };
 
+module.exports.ItemView = {
+
+    setModel: function(model) {
+
+        if (this.model != model) {
+            this.undelegateEvents();
+            this.model = model;
+            this.delegateEvents();
+        }
+    }
+}
+
 module.exports.RelationalCollectionView = {
 
     _initialEvents: function() {
@@ -23,6 +35,7 @@ module.exports.RelationalCollectionView = {
         }
     },
 
+    /*
     setupCollection: function(collection) {
 
         console.log('setupCollection', collection);
@@ -33,6 +46,7 @@ module.exports.RelationalCollectionView = {
         this.render();
         console.log('setupCollection after render');
     },
+    */
 
     _stopListening: function() {
 
