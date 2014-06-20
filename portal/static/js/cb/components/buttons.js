@@ -19,7 +19,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
                 observe: ['change', 'change:relational'],
                 onGet: 'getClass'
             }],
-            observe: ['change', 'change:relational', 'content'],
+            observe: ['change', 'change:relational', 'isGhost'],
             onGet: 'getContent'
         }
     },

@@ -100,13 +100,14 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 });
 
-CBApp.AppInstallCollection = Backbone.Collection.extend({
+CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.AppInstall,
     backend: 'appInstall',
 
     initialize: function() {
         this.bindBackend();
+        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

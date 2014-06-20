@@ -17,12 +17,6 @@ module.exports = {
       return jsonAttributes;
     },
 
-    save: function() {
-
-        console.log('save mixin');
-        // ADDED Set isGhost to false, indicating the model is being instantiated on server
-        this.set('isGhost', false);
-    },
 
     destroyOnServer: function(options) {
       options = options ? _.clone(options) : {};

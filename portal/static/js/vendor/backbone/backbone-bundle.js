@@ -13,7 +13,7 @@ require('backbone-io');
 require('./backbone.trackit.js');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
-require('./backbone-bossview');
+//require('./backbone-bossview');
 require('backbone.modal');
 
 require('./backbone-notify');

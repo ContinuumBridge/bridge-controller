@@ -8,7 +8,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
 
     //className: 'btn btn-default install-button',
 
-    extraClass: "install-button",
+    extraClass: "app-install-button",
 
     template: require('./templates/button.html'),
 
@@ -34,15 +34,10 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
         var self = this;
         console.log('in getContent');
 
-        if (this.appInstall && this.bridge) {
+        if (this.model) {
             console.log('in getContent appInstall');
 
-            // Trigger change events on the model, to cause the view to update
-            this.listenTo(this.bridge, 'change:relational', function() {
-                this.model.trigger('change:relational');
-            });
-
-            var isInstalled = this.appInstall.isNew() ? 'Install' : 'Uninstall';
+            var isInstalled = this.model.get('isGhost') ? 'Install' : 'Uninstall';
         }
 
         return isInstalled || '...';
@@ -52,7 +47,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
 
         var self = this;
         console.log('onClick');
-        this.appInstall.toggleInstalled();
+        this.model.toggleInstalled();
         /*
         CBApp.getCurrentBridge().then(function(currentBridge){
             console.log('onClick promise');
@@ -66,7 +61,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
 
 
         console.log('render InstallButton' , this.model);
-        this.stickit();
+        //this.stickit();
 
         //this.$('.install-component').html(this.render().$el);
     }
@@ -84,15 +79,18 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
     },
 
     bindings: {
-        '.installs-permitted': 'installs_permitted',
-        '.installs-remaining': {
-            observe: 'change:relational',
-            onGet: 'getInstallsRemaining'
-        }
+        '.installs-permitted': 'installs_permitted'
     },
 
     appBindings: {
         '.app-name': 'name'
+    },
+
+    appInstallBindings: {
+        '.installs-remaining': {
+            observe: 'change',
+            onGet: 'getInstallsRemaining'
+        }
     },
 
     initialize: function() {
@@ -102,20 +100,24 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
         this.app = this.model.get('app');
         console.log('app in initialize is', this.app, this);
 
-        this.installButton = new CBApp.Components.AppInstallButton({
-            model: this.model
-        });
+        this.installButton = new CBApp.Components.AppInstallButton();
 
         CBApp.getCurrentBridge().then(function(currentBridge){
 
             self.installButton.bridge = currentBridge;
-            self.installButton.appInstall = CBApp.appInstallCollection.findOrAdd({
+            self.appInstall = CBApp.appInstallCollection.findOrAdd({
                 app: self.app,
                 bridge: currentBridge,
                 licence: self.model
             });
-            self.installButton.model.trigger('change');
-            console.log('appInstall in appLicenceView');
+            // Trigger change events on the model, to cause the view to update
+            self.listenTo(self.appInstall, 'all', function(e) {
+                console.log('event on appInstall', e);
+            });
+
+            self.installButton.setModel(self.appInstall);
+            self.installButton.stickit();
+
         }).done();
     },
 
@@ -136,10 +138,12 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
         this.stickit();
         this.stickit(this.app, this.appBindings);
 
+        if (this.appInstall) this.stickit(this.appInstall, this.appInstallBindings);
+
         var $installComponent = this.$('.install-component');
         console.log('installComponent', $installComponent);
-        $installComponent.html(this.installButton.render().$el);
-        //this.installButton.setElement($installComponent).render();
+        //$installComponent.html(this.installButton.render().$el);
+        this.installButton.setElement($installComponent).render();
         //this.installButton.setElement(this.$('.install-component')).render();
     }
 });

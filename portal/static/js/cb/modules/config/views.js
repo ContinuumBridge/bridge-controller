@@ -66,15 +66,18 @@ module.exports.Main = Marionette.Layout.extend({
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
             var appInstallCollection = currentBridge.get('appInstalls');
-            console.log('appInstallCollection', appInstallCollection );
-            self.appInstallListView.setCollection(appInstallCollection);
-            self.appInstallListView.render();
+            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
+            //liveAppInstallCollection.setQuery({isGhost: false});
 
+            console.log('liveAppInstallCollection', liveAppInstallCollection );
+            self.appInstallListView.setCollection(liveAppInstallCollection);
+            self.appInstallListView.render();
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection);
             self.messageListView.render();
-        });
+        }).done();
     }
 
 });
