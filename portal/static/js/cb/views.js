@@ -1,7 +1,7 @@
 
 var CBApp = require('index');
 require('./views/portal_view');
-require('./views/nav_view');
+require('./navigation/views');
 
 CBApp.addInitializer(function () {
 

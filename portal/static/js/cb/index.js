@@ -43,11 +43,11 @@ CBApp.Controller = Marionette.Controller.extend({
     //CBApp.portalLayout.show(CBApp.deviceLayout);
     //CBApp.deviceCollection.fetch();
   },
-  config: function(slug) {
+  showConfig: function(slug) {
       console.log('config in main Controller', slug);
       CBApp.Config.router.navigate(slug);
   },
-  store: function(slug) {
+  showStore: function(slug) {
       console.log('store in main Controller', slug);
       CBApp.Store.router.navigate(slug);
   },
@@ -117,14 +117,21 @@ CBApp.Router = Marionette.SubRouter.extend({
   //controller: CBApp.Controller,
   appRoutes: {
     '': 'index',
-    'config/:slug': 'config',
-    'store/:slug': 'store'
+    'config/:slug': 'showConfig',
+    'store/:slug': 'showStore'
     //"config/bridge/:bridge": "config",
   }
 });
 
-CBApp.reqres.setHandler("bridge:entities", function(){
-    return API.getContactEntities();
+CBApp.reqres.setHandler("config:show", function(){
+    CBApp.navigate('config/');
+    CBApp.controller.showConfig();
+});
+
+CBApp.reqres.setHandler("store:show", function(){
+    console.log('show store');
+    CBApp.navigate('store/');
+    CBApp.controller.showStore();
 });
 
 module.exports = CBApp;

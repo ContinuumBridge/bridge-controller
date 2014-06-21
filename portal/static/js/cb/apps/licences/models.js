@@ -98,10 +98,14 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
         /* How many more installs can the user make */
 
         var installs = this.get('installs');
-        console.log('Number of installs', installs);
+        // Count the installs which are live and ghosts
+        var counts = installs.countBy(function(install) {
+            return install.get('isGhost') ? 'ghost' : 'live';
+        });
         var installs_permitted = this.get('installs_permitted');
+        var count = counts.live || 0;
 
-        return installs_permitted - installs.length;
+        return installs_permitted - count;
     },
 
     setInstallsPermitted: function(installsPermitted) {

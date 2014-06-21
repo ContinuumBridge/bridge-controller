@@ -88,7 +88,7 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
     appInstallBindings: {
         '.installs-remaining': {
-            observe: 'change',
+            observe: ['change', 'change:relational', 'isGhost'],
             onGet: 'getInstallsRemaining'
         }
     },
@@ -115,18 +115,19 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
                 console.log('event on appInstall', e);
             });
 
+            self.stickit(self.appInstall, self.appInstallBindings);
+
             self.installButton.setModel(self.appInstall);
             self.installButton.stickit();
-
+            //self.render();
         }).done();
-    },
-
-    toggleCurrentInstall: function() {
-
     },
 
     getInstallsRemaining: function() {
 
+        //return "Test ir";
+        console.log('getInstallsRemaining');
+        console.log('getInstallsRemaining model', this.appInstall);
         return this.model.getInstallsRemaining();
     },
 
@@ -138,7 +139,8 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
         this.stickit();
         this.stickit(this.app, this.appBindings);
 
-        if (this.appInstall) this.stickit(this.appInstall, this.appInstallBindings);
+        if (this.appInstall) {
+        }
 
         var $installComponent = this.$('.install-component');
         console.log('installComponent', $installComponent);

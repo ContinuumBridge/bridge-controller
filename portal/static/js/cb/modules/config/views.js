@@ -146,15 +146,26 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     cancelEl: '#cancel-button',
     submitEl: '#submit-button',
 
+    events: {
+        'click .store-button': 'clickStore'
+    },
+
     initialize: function() {
 
         var self = this;
-        this.licenceListView = licenceListView =  new CBApp.AppLicenceListView();
+        this.licenceListView = new CBApp.AppLicenceListView();
 
+    },
+
+    clickStore: function() {
+
+        CBApp.request('store:show');
+        //CBApp.Controller.store();
     },
 
     onRender: function() {
 
+        var self = this;
         CBApp.getCurrentUser().then(function(currentUser) {
 
             console.log('promise in app modal initialize');
@@ -162,6 +173,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
             self.licenceListView.setCollection(licenceCollection);
             self.licenceListView.render();
         }).done();
+        //this.licenceListView.setElement(this.$('licence-section')).render();
         this.$('.licence-section').html(this.licenceListView.render().$el);
     },
 
