@@ -29338,7 +29338,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             address: address
         };
         var adaptorData = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
-        var adaptor = new CBApp.Adaptor(adaptorData);
+        var adaptor = CBApp.adaptorCollection.findOrAdd(adaptorData);
         console.log('discovery adaptor is', adaptor);
         console.log('discovery device is', this.get('device'));
         var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
