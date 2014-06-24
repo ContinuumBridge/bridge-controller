@@ -48,7 +48,6 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         /*
         if (adp) {
             adp.set({permission: true}, {silent: true});
-            testADP = adp;
         } else {
             var adp = CBApp.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
@@ -130,10 +129,11 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }); 
 
-CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.DeviceInstall,
-    backend: 'deviceInstall',
+    //backend: 'deviceInstall',
 
     initialize: function() {
         var self = this;
@@ -141,8 +141,9 @@ CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
         this.bind('backend:create', function(model) {
             self.add(model);
         });
+        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
     parse : function(response){
         return response.objects;
     }

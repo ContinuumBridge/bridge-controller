@@ -10,45 +10,32 @@ CBApp = new Marionette.Application({
     navInstallDevice: function() {
         CBApp.router.navigate("install_device", true);
         console.log('navInstallDevice coming through');
-    },
-    config: function() {
-
     }
 });
 
 CBApp._isInitialized = false;
 
-/*
-CBApp.addInitializer(function () {
-    CBApp.InstallDeviceModal = Backbone.Modal.extend({
+// Set the PortalLayout here to avoid requirement recursions
+CBApp.PortalLayout = require('./views/portal_view');
 
-        template: require('./views/templates/discoveryModal.html'),
-        cancelEl: '#cancel-button',
-        submitEl: '#submit-button',
-
-        submit: function() {
-            console.log('Submitted modal', this);
-            var friendlyName = this.$('#friendly-name').val();
-            this.model.installDevice(friendlyName);
-        }
-    });
-});
-*/
-
-//require('./views/notifications/views');
 CBApp.Controller = Marionette.Controller.extend({
 
   index: function () {
-    //CBApp.homeLayoutView = new CBApp.HomeLayoutView();
-    //CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
-    //CBApp.portalLayout.detailRegion.show(CBApp.deviceLayout);
     console.log('index');
-    //CBApp.portalLayout.show(CBApp.deviceLayout);
-    //CBApp.deviceCollection.fetch();
   },
-  config: function(slug) {
+  showConfig: function(slug) {
       console.log('config in main Controller', slug);
-      CBApp.Config.router.navigate(slug);
+      //CBApp.Config.router.navigate(slug);
+      CBApp.portalLayout.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'config');
+      CBApp.Config.trigger('config:show', slug);
+  },
+  showStore: function(slug) {
+      console.log('store in main Controller', slug);
+      CBApp.portalLayout.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'store');
+      CBApp.Store.trigger('store:show', slug);
+      //CBApp.Store.router.navigate(slug);
   },
   showNotification: function(text) {
     console.log('We got to the notification controller!');
@@ -72,9 +59,6 @@ CBApp.Controller = Marionette.Controller.extend({
   }
 });
 
-// Set up a "namespace" for the nav menu
-CBApp.Nav = {};
-
 CBApp.addInitializer(function () {
 
   //router
@@ -95,14 +79,21 @@ CBApp.getCurrentRoute = function(){
 };
 
 CBApp.on("initialize:after", function () {
+
+  CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
+  CBApp.Nav.topBarView = new CBApp.Nav.TopBarView();
+  CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarView);
+
+
   //for routing purposes
   if(Backbone.history) {
 
       Backbone.history.start({pushState: true});
+                              //root: '/portal'});
 
       console.log('Backbone.history.fragment', Backbone.history.fragment);
       if (this.getCurrentRoute() === "") {
-          CBApp.trigger('config');
+          CBApp.request('config:show');
           //Backbone.history.navigate('index');
 
       }
@@ -116,13 +107,21 @@ CBApp.Router = Marionette.SubRouter.extend({
   //controller: CBApp.Controller,
   appRoutes: {
     '': 'index',
-    'config/:slug': 'config'
+    'config(/:slug)': 'showConfig',
+    'store(/:slug)': 'showStore'
     //"config/bridge/:bridge": "config",
   }
 });
 
-CBApp.reqres.setHandler("bridge:entities", function(){
-    return API.getContactEntities();
+CBApp.reqres.setHandler("config:show", function(){
+    //CBApp.navigate('config/');
+    CBApp.controller.showConfig();
+});
+
+CBApp.reqres.setHandler("store:show", function(){
+    console.log('show store');
+    //CBApp.navigate('store/');
+    CBApp.controller.showStore();
 });
 
 module.exports = CBApp;

@@ -16,18 +16,30 @@ CBApp.Components.NumberField = Marionette.ItemView.extend({
         '.bfh-number': {
             attributes: [{
                 name: 'disabled',
-                observe: ['installs_permitted', 'change'],
+                //observe: ['change', 'change:relational', 'installs_permitted'],
+                modelEvents: ['change'],
                 onGet: 'getDisabled'
             }],
-            observe: ['change', 'change:relational', 'installs_permitted'],
+            observe: ['installs_permitted'],
+            events: ['change'],
             onGet: 'getContent'
         }
     },
 
+    /*
     getClass: function() {
 
         var enabled = this.getEnabled() || "";
 
         return "form-control bfh-number app-form-input installs-permitted" + enabled;
+    },
+    */
+
+    getDisabled: function(val) {
+
+        console.log('numbers getDisabled');
+        //testModel = this.model;
+        //return this.model.unsavedAttributes() ? true : false;
+        return false;
     }
-})
+});

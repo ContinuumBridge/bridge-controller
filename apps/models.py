@@ -5,6 +5,7 @@ from django.conf import settings
 
 from django.utils import timezone
 
+from accounts.models import CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
@@ -18,8 +19,6 @@ class App(LoggedModelMixin):
     url = models.URLField(_("url"), max_length = 255)
     exe = models.CharField(_("exe"), max_length = 255)
 
-
-
     class Meta:
         verbose_name = _('app')
         verbose_name_plural = _('apps')
@@ -32,7 +31,27 @@ class App(LoggedModelMixin):
            
         self.modified = timezone.now()
         super(App, self).save(*args, **kwargs)
-    
+
+class AppLicence(LoggedModelMixin):
+
+    """ Through model for a User and an App """
+
+    user = models.ForeignKey(CBUser)
+    app = models.ForeignKey(App)
+    # How many times is the user allowed to install the app on their bridges
+    installs_permitted = models.IntegerField(_("installs_permitted"))
+
+    class Meta:
+        verbose_name = _('app_licence')
+        verbose_name_plural = _('app_licence')
+        app_label = 'apps'
+
+    def get_installs(self):
+        installs = []
+        for install in self.appinstall_set.filter():
+            installs.append(install)
+        return installs
+
 
 class AppInstall(LoggedModelMixin):
     
@@ -40,6 +59,7 @@ class AppInstall(LoggedModelMixin):
 
     bridge = models.ForeignKey(Bridge)
     app = models.ForeignKey(App)
+    licence = models.ForeignKey(AppLicence)
 
     class Meta:
         verbose_name = _('app_install')

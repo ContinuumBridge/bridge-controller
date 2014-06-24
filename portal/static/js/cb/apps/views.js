@@ -11,11 +11,6 @@ CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
 
     },
 
-    getDisabled: function() {
-
-        return this.model.unsavedAttributes() ? true : false;
-    },
-
     getContent: function() {
 
         console.log('InstallsPermittedField getContent');
@@ -37,7 +32,6 @@ CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
 
         CBApp.Components.InstallsPermittedField.prototype.remove.apply(this);
     },
-    */
 
     setModel: function(model) {
 
@@ -45,13 +39,15 @@ CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
         this.model = model;
         this.delegateEvents();
     },
+    */
 
     onRender: function() {
         if (this.model) {
             this.stickit();
+            console.log('InstallsPermitted stickit', this.model);
             this.listenTo(this.model, 'all', function(name) {
                 console.log('EVENT licence', name);
-            })
+            });
         }
     }
 });

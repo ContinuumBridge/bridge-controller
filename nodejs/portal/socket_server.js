@@ -25,7 +25,9 @@ function SocketServer(port) {
 
     var appController = this.appController = new djangoBackbone(Portal.DJANGO_URL + 'app/');
     var appInstallController = this.appInstallController = new djangoBackbone(Portal.DJANGO_URL + 'app_install/');
+    //var appInstallController = this.appInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net/');
     var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(Portal.DJANGO_URL + 'app_device_permission/');
+    var appLicenceController = this.appLicenceController = new djangoBackbone(Portal.DJANGO_URL + 'app_licence/');
     //var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
 
     var deviceController = this.deviceController = new djangoBackbone(Portal.DJANGO_URL + 'device/');
@@ -44,6 +46,7 @@ function SocketServer(port) {
         app: appController,
         appInstall: appInstallController,
         appDevicePermission: appDevicePermissionController,
+        appLicence: appLicenceController,
         bridge: bridgeController,
         bridgeControl: bridgeControlController,
         currentUser: currentUserController,

@@ -40,13 +40,15 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     ]  
 }); 
 
-CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
+//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
+CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.Device,
     backend: 'device',
 
     initialize: function() {
         this.bindBackend();
+        CBApp.DeviceCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

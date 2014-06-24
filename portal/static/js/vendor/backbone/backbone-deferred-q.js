@@ -340,6 +340,7 @@
 
     return Collection;
 
-  })(Backbone.Collection);
+      // ADDED Changed Backbone.Collection to QueryEngine.QueryCollection
+  })(QueryEngine.QueryCollection);
 
 }).call(this);

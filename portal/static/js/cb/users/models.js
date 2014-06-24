@@ -1,10 +1,18 @@
 
-//CBApp.CurrentUser = Backbone.RelationalModel.extend({
-CBApp.CurrentUser = Backbone.Deferred.Model.extend({
+//CBApp.User = Backbone.Deferred.Model.extend({
+CBApp.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
-    backend: 'currentUser',
+    subModelTypes: {
+		'loggedInUser': 'CBApp.LoggedInUser',
+	},
+
+    /*
+    defaults: {
+        type: 'user'
+    },
+    */
 
     initialize: function() {
 
@@ -17,63 +25,22 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
 
     },
 
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection',
-            /*
-            reverseRelation: {
-                key: 'current_user',
-                includeInJSON: true
-            }
-            */
-        }
-    ],
-
     getCBID: function() {
 
         return "UID" + this.get('id');
     }
 });
 
-/*
-CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
+CBApp.UserCollection = Backbone.Collection.extend({
 
-    model: CBApp.CurrentUser,
-    backend: 'currentUser',
+    model: CBApp.User,
+    backend: 'user',
 
     initialize: function() {
-        this.bindBackend();
+        //this.bindBackend();
     },
-    
+
     parse : function(response){
         return response.objects;
     }
 });
-*/
-
-CBApp.currentUserDeferred = Q.defer();
-
-CBApp.getCurrentUser = function() {
-
-    /*
-    var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
-
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
-    }
-
-    return user;
-    */
-    return CBApp.currentUserDeferred.promise;
-};

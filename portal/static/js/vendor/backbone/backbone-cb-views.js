@@ -8,11 +8,22 @@ var wrapError = function(model, options) {
     };
 };
 
+module.exports.ItemView = {
+
+    setModel: function(model) {
+
+        if (this.model != model) {
+            this.undelegateEvents();
+            this.model = model;
+            this.delegateEvents();
+        }
+    }
+}
+
 module.exports.RelationalCollectionView = {
 
     _initialEvents: function() {
         // Listen to relational events
-        console.log('_initialEvents this.collection', this.collection);
         if (this.collection){
             //this.listenTo(this.collection, "add", this.addChildView);
             this.listenTo(this.collection, "add", this.render);
@@ -23,6 +34,19 @@ module.exports.RelationalCollectionView = {
             this.listenTo(this.collection, 'relational:add', this.render);
         }
     },
+
+    /*
+    setupCollection: function(collection) {
+
+        console.log('setupCollection', collection);
+        this.collection = collection;
+        this._initialEvents();
+        this.delegateEvents();
+        console.log('setupCollection after de');
+        this.render();
+        console.log('setupCollection after render');
+    },
+    */
 
     _stopListening: function() {
 

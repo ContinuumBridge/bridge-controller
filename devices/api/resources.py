@@ -21,10 +21,11 @@ from tastypie.authorization import Authorization
 
 #from haystack.query import SearchQuerySet
 
-from bridges.api.abstract_resources import CBModelResource
+#from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
+from bridges.api.abstract_resources import PostMatchMixin
 from devices.models import Device, DeviceInstall
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
@@ -140,7 +141,7 @@ def convert_post_to_patch(request):
     return convert_post_to_VERB(request, verb='PATCH')
 
 
-class DeviceInstallResource(CBModelResource):
+class DeviceInstallResource(PostMatchMixin, ModelResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=True)

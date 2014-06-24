@@ -9,12 +9,29 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
     },
 
+    install: function() {
+
+        console.log('installing AppInstall');
+        this.save().then(function() {
+            console.log('AppInstall successfully saved');
+        });
+    },
+
     uninstall: function() {
 
         console.log('uninstalling AppInstall', this);
-        this.relationalDestroy().then(function(model, response, options) {
+        this.destroyOnServer().then(function(model, response, options) {
             console.log('AppInstall successfully destroyed', model, response, options);
         });
+    },
+
+    toggleInstalled: function() {
+
+        if(this.isNew()) {
+            this.install();
+        } else {
+            this.uninstall();
+        }
     },
 
     relations: [
@@ -83,13 +100,14 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 });
 
-CBApp.AppInstallCollection = Backbone.Collection.extend({
+CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.AppInstall,
     backend: 'appInstall',
 
     initialize: function() {
         this.bindBackend();
+        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

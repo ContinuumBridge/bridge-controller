@@ -91,10 +91,11 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.read(function(req, res) {
 
-        // Get a detail or list. Checking for bridge_controls is a hack for initial currentUser request
+        // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
         console.log('request model is', req.model);
         var requestURL = (req.model.id) ? djangoURL + req.model.id
-            : (req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
+            //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
+            : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
         var djangoOptions = {
             method: "get",
@@ -114,12 +115,15 @@ function DjangoBackbone(djangoURL) {
 
     backboneSocket.update(function(req, res) {
 
+        //var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
         // On a backboneio create function make a post request to Django
 
         var requestURL = (req.model.id) ? djangoURL + req.model.id.toString() + "/" : djangoURL;
         //var resourceURL = djangoURL + req.model.id.toString();
         console.log('requestURL in update is', requestURL, req);
         var jsonData = JSON.stringify(req.model);
+
+        console.log('jsonData is', jsonData);
 
         var restOptions = {
             method: "patch",

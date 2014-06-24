@@ -7,6 +7,7 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/installs/views');
+require('../../apps/licences/views');
 //require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
@@ -65,15 +66,18 @@ module.exports.Main = Marionette.Layout.extend({
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
             var appInstallCollection = currentBridge.get('appInstalls');
-            console.log('appInstallCollection', appInstallCollection );
-            self.appInstallListView.setCollection(appInstallCollection);
-            self.appInstallListView.render();
+            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
+            //liveAppInstallCollection.setQuery({isGhost: false});
 
+            console.log('liveAppInstallCollection', liveAppInstallCollection );
+            self.appInstallListView.setCollection(liveAppInstallCollection);
+            self.appInstallListView.render();
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
             self.messageListView.render();
-        });
+        }).done();
     }
 
 });
@@ -135,6 +139,52 @@ var DevicesView = Marionette.ItemView.extend({
         return this;
     }
 })
+
+module.exports.InstallAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/installAppModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    events: {
+        'click .store-button': 'clickStore'
+    },
+
+
+    initialize: function() {
+
+        var self = this;
+        this.licenceListView = new CBApp.AppLicenceListView();
+
+    },
+
+    clickStore: function() {
+
+        CBApp.request('store:show');
+        //CBApp.Controller.store();
+    },
+
+    onRender: function() {
+
+        var self = this;
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            console.log('promise in app modal initialize');
+            var licenceCollection = currentUser.get('appLicences');
+            self.licenceListView.setCollection(licenceCollection);
+            self.licenceListView.render();
+        }).done();
+        //this.licenceListView.setElement(this.$('licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+    },
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
 
 module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
