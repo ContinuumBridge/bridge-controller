@@ -150,6 +150,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         'click .store-button': 'clickStore'
     },
 
+
     initialize: function() {
 
         var self = this;

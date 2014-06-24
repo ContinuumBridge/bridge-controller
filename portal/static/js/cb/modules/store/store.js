@@ -17,12 +17,19 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
 
     Store.Controller = Marionette.Controller.extend({
 
+      /*
       index: function () {
         Store.mainLayoutView = new StoreViews.Main();
         console.log('mainLayoutView', Store.mainLayoutView);
         console.log('portalLayout', CBApp.portalLayout);
         CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
         console.log('config index');
+      },
+      */
+      showStore: function() {
+
+          Store.mainLayoutView = new StoreViews.Main();
+          CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -40,8 +47,14 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     Store.Router = Marionette.SubRouter.extend({
 
         appRoutes: {
-          "": "index",
+          "": "showStore",
           //"config/bridge/:bridge": "config",
         }
+    });
+
+    Store.on('store:show', function(){
+        console.log('show store');
+        Store.controller.showStore();
+        Store.router.navigate('');
     });
 });

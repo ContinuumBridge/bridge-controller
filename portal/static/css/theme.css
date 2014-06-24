@@ -52,6 +52,7 @@ header {
       text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
       opacity: .6;
       filter: alpha(opacity=60);
+      cursor: pointer;
       -webkit-transition: all .2s linear;
       -moz-transition: all .2s linear;
       transition: all .2s linear;
@@ -62,6 +63,11 @@ header {
         opacity: 1;
         filter: alpha(opacity=100); }
     .navbar.navbar-inverse .nav > li.active > a {
+      color: #fff;
+      opacity: 1;
+      filter: alpha(opacity=100);
+      background-color: transparent; }
+    .navbar.navbar-inverse .nav > li.selected > a {
       color: #fff;
       opacity: 1;
       filter: alpha(opacity=100);

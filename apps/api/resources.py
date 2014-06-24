@@ -41,7 +41,7 @@ class AppLicenceResource(PostMatchMixin, ModelResource):
        #authorization = UserObjectsOnlyAuthorization()
        authorization = Authorization()
        list_allowed_methods = ['get', 'post']
-       detail_allowed_methods = ['get', 'post', 'put', 'delete']
+       detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
        always_return_data = True
        resource_name = 'app_licence'
        post_match = ['app', 'user']

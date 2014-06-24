@@ -86,7 +86,7 @@
         // ADDED
         navigate: function(fragment, options) {
             // Add a trailing slash if required
-            var trailingSlash = (this.createTrailingSlashRoutes && fragment.slice(-1) != '/')
+            var trailingSlash = (this.createTrailingSlashRoutes && fragment && fragment.slice(-1) != '/')
                 ? '/' : '';
             // Append the prefix
             var qualifiedFragment = this.prefix + fragment + trailingSlash;
