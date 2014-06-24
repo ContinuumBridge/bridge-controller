@@ -189,7 +189,7 @@
 
 }));
 
-},{"backbone":3,"underscore":18}],2:[function(require,module,exports){
+},{"backbone":3,"underscore":20}],2:[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.2.1
@@ -620,7 +620,7 @@ Wreqr.radio = (function(Wreqr){
 
 }));
 
-},{"backbone":3,"underscore":18}],3:[function(require,module,exports){
+},{"backbone":3,"underscore":20}],3:[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -3576,6 +3576,8 @@ Wreqr.radio = (function(Wreqr){
 }).call(this);
 
 },{}],5:[function(require,module,exports){
+
+},{}],6:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3637,7 +3639,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -3670,7 +3672,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":7,"./handlebars/exception":8,"./handlebars/runtime":9,"./handlebars/safe-string":10,"./handlebars/utils":11}],7:[function(require,module,exports){
+},{"./handlebars/base":8,"./handlebars/exception":9,"./handlebars/runtime":10,"./handlebars/safe-string":11,"./handlebars/utils":12}],8:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -3851,7 +3853,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":8,"./utils":11}],8:[function(require,module,exports){
+},{"./exception":9,"./utils":12}],9:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -3880,7 +3882,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -4018,7 +4020,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":7,"./exception":8,"./utils":11}],10:[function(require,module,exports){
+},{"./base":8,"./exception":9,"./utils":12}],11:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -4030,7 +4032,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -4107,15 +4109,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":10}],12:[function(require,module,exports){
+},{"./safe-string":11}],13:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":6}],13:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":7}],14:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":12}],14:[function(require,module,exports){
+},{"handlebars/runtime":13}],15:[function(require,module,exports){
 // Uses Node, AMD or browser globals to create a module.
 
 // If you want something that will work in other stricter CommonJS environments,
@@ -13449,7 +13451,7 @@ return jQuery;
 
 })( window ); }));
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.0
  * http://jquery.com/
@@ -22562,7 +22564,7 @@ return jQuery;
 
 }));
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -24503,7 +24505,1699 @@ return Q;
 });
 
 }).call(this,require("/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":5}],17:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":6}],18:[function(require,module,exports){
+(function() {
+  var Backbone, Criteria, Hash, Pill, Query, QueryCollection, queryEngine, util, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __slice = [].slice,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  Backbone = this.Backbone || (typeof window !== "undefined" && window !== null ? window.Backbone : void 0) || ((function() {
+    try {
+      return typeof require === "function" ? require('backbone') : void 0;
+    } catch (_error) {}
+  })()) || ((function() {
+    try {
+      return typeof require === "function" ? require('exoskeleton') : void 0;
+    } catch (_error) {}
+  })()) || null;
+
+  util = {
+    toString: function(value) {
+      return Object.prototype.toString.call(value);
+    },
+    isPlainObject: function(value) {
+      return util.isObject(value) && value.__proto__ === Object.prototype;
+    },
+    isObject: function(value) {
+      return value && typeof value === 'object';
+    },
+    isError: function(value) {
+      return value instanceof Error;
+    },
+    isDate: function(value) {
+      return util.toString(value) === '[object Date]';
+    },
+    isArguments: function(value) {
+      return util.toString(value) === '[object Arguments]';
+    },
+    isFunction: function(value) {
+      return util.toString(value) === '[object Function]';
+    },
+    isRegExp: function(value) {
+      return util.toString(value) === '[object RegExp]';
+    },
+    isArray: function(value) {
+      if (Array.isArray != null) {
+        return Array.isArray(value);
+      } else {
+        return util.toString(value) === '[object Array]';
+      }
+    },
+    isNumber: function(value) {
+      return typeof value === 'number' || util.toString(value) === '[object Number]';
+    },
+    isString: function(value) {
+      return typeof value === 'string' || util.toString(value) === '[object String]';
+    },
+    isBoolean: function(value) {
+      return value === true || value === false || util.toString(value) === '[object Boolean]';
+    },
+    isNull: function(value) {
+      return value === null;
+    },
+    isUndefined: function(value) {
+      return typeof value === 'undefined';
+    },
+    isDefined: function(value) {
+      return typeof value !== 'undefined';
+    },
+    isEmpty: function(value) {
+      return value != null;
+    },
+    isObjectEmpty: function(object) {
+      var empty, key, value;
+      empty = true;
+      for (key in object) {
+        if (!__hasProp.call(object, key)) continue;
+        value = object[key];
+        empty = false;
+        break;
+      }
+      return empty;
+    },
+    isComparable: function(value) {
+      return util.isNumber(value) || util.isDate(value);
+    },
+    isEqual: function(value1, value2) {
+      return JSON.stringify(value1) === JSON.stringify(value2);
+    },
+    clone: function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return util.shallowExtendPlainObjects.apply(util, [{}].concat(__slice.call(args)));
+    },
+    extend: function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return util.shallowExtendPlainObjects.apply(util, args);
+    },
+    shallowExtendPlainObjects: function() {
+      var key, obj, objs, target, value, _i, _len;
+      target = arguments[0], objs = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      for (_i = 0, _len = objs.length; _i < _len; _i++) {
+        obj = objs[_i];
+        obj || (obj = {});
+        for (key in obj) {
+          if (!__hasProp.call(obj, key)) continue;
+          value = obj[key];
+          target[key] = value;
+        }
+      }
+      return target;
+    },
+    get: function(obj, key) {
+      var result;
+      if (obj.get != null) {
+        result = obj.get(key);
+      } else {
+        result = obj[key];
+      }
+      return result;
+    },
+    safeRegex: function(str) {
+      if (str === false) {
+        return 'false';
+      } else if (str === true) {
+        return 'true';
+      } else if (str === null) {
+        return 'null';
+      } else {
+        return (str || '').replace('(.)', '\\$1');
+      }
+    },
+    createRegex: function(str) {
+      return new RegExp(str, 'ig');
+    },
+    createSafeRegex: function(str) {
+      return util.createRegex(util.safeRegex(str));
+    },
+    toArray: function(value) {
+      var item, key, result, valueExists;
+      result = [];
+      valueExists = typeof value !== 'undefined';
+      if (valueExists) {
+        if (util.isArray(value)) {
+          result = value.slice();
+        } else if (util.isObject(value)) {
+          for (key in value) {
+            if (!__hasProp.call(value, key)) continue;
+            item = value[key];
+            result.push(item);
+          }
+        } else {
+          result.push(value);
+        }
+      }
+      return result;
+    },
+    toArrayGroup: function(value) {
+      var item, key, obj, result, valueExists;
+      result = [];
+      valueExists = typeof value !== 'undefined';
+      if (valueExists) {
+        if (util.isArray(value)) {
+          result = value.slice();
+        } else if (util.isObject(value)) {
+          for (key in value) {
+            if (!__hasProp.call(value, key)) continue;
+            item = value[key];
+            obj = {};
+            obj[key] = item;
+            result.push(obj);
+          }
+        } else {
+          result.push(value);
+        }
+      }
+      return result;
+    },
+    generateComparator: function(input) {
+      var generateFunction;
+      generateFunction = function(comparator) {
+        if (!comparator) {
+          return null;
+        } else if (util.isFunction(comparator)) {
+          return comparator;
+        } else if (util.isArray(comparator)) {
+          return function(a, b) {
+            var comparison, key, value, _i, _len;
+            comparison = 0;
+            for (key = _i = 0, _len = comparator.length; _i < _len; key = ++_i) {
+              value = comparator[key];
+              comparison = generateFunction(value)(a, b);
+              if (comparison) {
+                return comparison;
+              }
+            }
+            return comparison;
+          };
+        } else if (util.isObject(comparator)) {
+          return function(a, b) {
+            var aValue, bValue, comparison, key, value;
+            comparison = 0;
+            for (key in comparator) {
+              if (!__hasProp.call(comparator, key)) continue;
+              value = comparator[key];
+              aValue = util.get(a, key);
+              bValue = util.get(b, key);
+              if (aValue === bValue) {
+                comparison = 0;
+              } else if (aValue < bValue) {
+                comparison = -1;
+              } else if (aValue > bValue) {
+                comparison = 1;
+              }
+              if (value === -1) {
+                comparison *= -1;
+              }
+              if (comparison) {
+                return comparison;
+              }
+            }
+            return comparison;
+          };
+        } else {
+          throw new Error('Unknown comparator type');
+        }
+      };
+      return generateFunction(input);
+    }
+  };
+
+  Hash = (function(_super) {
+    __extends(Hash, _super);
+
+    function Hash(value) {
+      var item, key, _i, _len;
+      value = util.toArray(value);
+      for (key = _i = 0, _len = value.length; _i < _len; key = ++_i) {
+        item = value[key];
+        this.push(item);
+      }
+    }
+
+    Hash.prototype.hasIn = function(options) {
+      var value, _i, _len;
+      options = util.toArray(options);
+      for (_i = 0, _len = this.length; _i < _len; _i++) {
+        value = this[_i];
+        if (__indexOf.call(options, value) >= 0) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    Hash.prototype.hasAll = function(options) {
+      var empty, pass, value, _i, _len;
+      options = util.toArray(options);
+      empty = true;
+      pass = true;
+      for (_i = 0, _len = this.length; _i < _len; _i++) {
+        value = this[_i];
+        empty = false;
+        if (__indexOf.call(options, value) < 0) {
+          pass = false;
+        }
+      }
+      if (empty) {
+        pass = false;
+      }
+      return pass;
+    };
+
+    Hash.prototype.isSame = function(options) {
+      var pass;
+      options = util.toArray(options);
+      pass = this.sort().join() === options.sort().join();
+      return pass;
+    };
+
+    return Hash;
+
+  })(Array);
+
+  if (Backbone == null) {
+    QueryCollection = null;
+  } else {
+    QueryCollection = (function(_super) {
+      __extends(QueryCollection, _super);
+
+      function QueryCollection() {
+        this.onParentReset = __bind(this.onParentReset, this);
+        this.onParentAdd = __bind(this.onParentAdd, this);
+        this.onParentRemove = __bind(this.onParentRemove, this);
+        this.onParentChange = __bind(this.onParentChange, this);
+        this.onChange = __bind(this.onChange, this);
+        _ref = QueryCollection.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      QueryCollection.prototype.model = Backbone.Model;
+
+      QueryCollection.prototype.initialize = function(models, options) {
+        var key, me, value, _ref1;
+        me = this;
+        if (this.options == null) {
+          this.options = {};
+        }
+        _ref1 = Criteria.prototype;
+        for (key in _ref1) {
+          if (!__hasProp.call(_ref1, key)) continue;
+          value = _ref1[key];
+          if (this[key] == null) {
+            this[key] = value;
+          }
+        }
+        if (this.comparator != null) {
+          this.setComparator(this.comparator);
+        }
+        this.applyCriteriaOptions(options);
+        if (options != null) {
+          if (options.parentCollection != null) {
+            this.options.parentCollection = options.parentCollection;
+          }
+          if (options.live != null) {
+            this.options.live = options.live;
+          }
+          this.live();
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.getComparator = function() {
+        return this.comparator;
+      };
+
+      QueryCollection.prototype.setComparator = function(comparator) {
+        comparator = util.generateComparator(comparator);
+        this.comparator = comparator;
+        return this;
+      };
+
+      QueryCollection.prototype.createChildCollection = function(models, options) {
+        var collection;
+        options || (options = {});
+        options.parentCollection = this;
+        if (options.collection == null) {
+          options.collection = this.collection || QueryCollection;
+        }
+        if (options.comparator == null) {
+          options.comparator = options.collection.prototype.comparator || this.comparator;
+        }
+        collection = new options.collection(models, options);
+        return collection;
+      };
+
+      QueryCollection.prototype.createLiveChildCollection = function(models, options) {
+        var collection;
+        options || (options = {});
+        options.live = true;
+        collection = this.createChildCollection(models, options);
+        return collection;
+      };
+
+      QueryCollection.prototype.hasParentCollection = function() {
+        return this.options.parentCollection != null;
+      };
+
+      QueryCollection.prototype.getParentCollection = function() {
+        return this.options.parentCollection;
+      };
+
+      QueryCollection.prototype.setParentCollection = function(parentCollection, skipCheck) {
+        if (!skipCheck && this.options.parentCollection === parentCollection) {
+          return this;
+        }
+        this.options.parentCollection = parentCollection;
+        this.live();
+        return this;
+      };
+
+      QueryCollection.prototype.hasModel = function(model) {
+        var exists, _ref1, _ref2;
+        model || (model = {});
+        if ((model.id != null) && this.get(model.id)) {
+          exists = true;
+        } else if ((model.cid != null) && ((_ref1 = (_ref2 = this._byCid) != null ? _ref2[model.cid] : void 0) != null ? _ref1 : this.get(model.cid))) {
+          exists = true;
+        } else {
+          exists = false;
+        }
+        return exists;
+      };
+
+      QueryCollection.prototype.safeRemove = function(model) {
+        var exists;
+        exists = this.hasModel(model);
+        if (exists) {
+          this.remove(model);
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.safeAdd = function(model) {
+        var exists;
+        exists = this.hasModel(model);
+        if (!exists) {
+          this.add(model);
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.sortCollection = function(comparator) {
+        if (comparator) {
+          comparator = util.generateComparator(comparator);
+          this.models.sort(comparator);
+        } else {
+          comparator = this.getComparator();
+          if (comparator) {
+            this.models.sort(comparator);
+          } else {
+            throw new Error('You need a comparator to sort');
+          }
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.sortArray = function(comparator) {
+        var arr;
+        arr = this.toJSON();
+        if (comparator) {
+          comparator = util.generateComparator(comparator);
+          arr.sort(comparator);
+        } else {
+          comparator = this.getComparator();
+          if (comparator) {
+            arr.sort(comparator);
+          } else {
+            throw new Error('You need a comparator to sort');
+          }
+        }
+        return arr;
+      };
+
+      QueryCollection.prototype.findAll = function() {
+        var args, collection, comparator, criteriaOptions, paging, query;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (args.length) {
+          if (args.length === 1 && args[0] instanceof Criteria) {
+            criteriaOptions = args[0].options;
+          } else {
+            query = args[0], comparator = args[1], paging = args[2];
+            criteriaOptions = {
+              comparator: comparator,
+              paging: paging,
+              queries: {
+                find: query
+              }
+            };
+          }
+        } else {
+          criteriaOptions = null;
+        }
+        collection = this.createChildCollection([], criteriaOptions).query();
+        return collection;
+      };
+
+      QueryCollection.prototype.findAllLive = function() {
+        var args, collection, comparator, criteriaOptions, paging, query;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (args.length) {
+          if (args.length === 1 && args[0] instanceof Criteria) {
+            criteriaOptions = args[0].options;
+          } else {
+            query = args[0], comparator = args[1], paging = args[2];
+            criteriaOptions = {
+              comparator: comparator,
+              paging: paging,
+              queries: {
+                find: query
+              }
+            };
+          }
+        } else {
+          criteriaOptions = null;
+        }
+        collection = this.createLiveChildCollection([], criteriaOptions).query();
+        return collection;
+      };
+
+      QueryCollection.prototype.findOne = function() {
+        var args, comparator, criteriaOptions, paging, passed, query;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (args.length) {
+          if (args.length === 1 && args[0] instanceof Criteria) {
+            criteriaOptions = args[0].options;
+          } else {
+            query = args[0], comparator = args[1], paging = args[2];
+            criteriaOptions = {
+              comparator: comparator,
+              paging: paging,
+              queries: {
+                find: query
+              }
+            };
+          }
+        } else {
+          criteriaOptions = null;
+        }
+        passed = this.testModels(this.models, criteriaOptions);
+        if ((passed != null ? passed.length : void 0) !== 0) {
+          return passed[0];
+        } else {
+          return null;
+        }
+      };
+
+      QueryCollection.prototype.query = function() {
+        var args, criteria, passed;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (args.length === 1) {
+          if (args[0] instanceof Criteria) {
+            criteria = args[0].options;
+          } else {
+            criteria = {
+              paging: args[0]
+            };
+          }
+        }
+        passed = this.queryModels(criteria);
+        this.reset(passed);
+        return this;
+      };
+
+      QueryCollection.prototype.queryModels = function() {
+        var args, collection, criteriaOptions, models, passed;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        criteriaOptions = this.extractCriteriaOptions.apply(this, args);
+        collection = this.getParentCollection() || this;
+        models = collection.models;
+        passed = this.testModels(models, criteriaOptions);
+        return passed;
+      };
+
+      QueryCollection.prototype.queryArray = function() {
+        var args, model, passed, result, _i, _len;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        result = [];
+        passed = this.queryModels.apply(this, args);
+        for (_i = 0, _len = passed.length; _i < _len; _i++) {
+          model = passed[_i];
+          result.push(model.toJSON());
+        }
+        return result;
+      };
+
+      QueryCollection.prototype.live = function(enabled) {
+        var parentCollection;
+        if (enabled == null) {
+          enabled = this.options.live;
+        }
+        this.options.live = enabled;
+        if (enabled) {
+          this.on('change', this.onChange);
+        } else {
+          this.off('change', this.onChange);
+        }
+        parentCollection = this.getParentCollection();
+        if (parentCollection != null) {
+          if (enabled) {
+            parentCollection.on('change', this.onParentChange);
+            parentCollection.on('remove', this.onParentRemove);
+            parentCollection.on('add', this.onParentAdd);
+            parentCollection.on('reset', this.onParentReset);
+          } else {
+            parentCollection.off('change', this.onParentChange);
+            parentCollection.off('remove', this.onParentRemove);
+            parentCollection.off('add', this.onParentAdd);
+            parentCollection.off('reset', this.onParentReset);
+          }
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.add = function(models, options) {
+        var model, passedModels, _i, _len;
+        options = options ? util.clone(options) : {};
+        models = util.isArray(models) ? models.slice() : [models];
+        passedModels = [];
+        for (_i = 0, _len = models.length; _i < _len; _i++) {
+          model = models[_i];
+          model = this._prepareModel(model, options);
+          if (model && this.test(model)) {
+            passedModels.push(model);
+          }
+        }
+        Backbone.Collection.prototype.add.apply(this, [passedModels, options]);
+        return this;
+      };
+
+      QueryCollection.prototype.create = function(model, options) {
+        options = options ? util.clone(options) : {};
+        model = this._prepareModel(model, options);
+        if (model && this.test(model)) {
+          Backbone.Collection.prototype.create.apply(this, [model, options]);
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.onChange = function(model) {
+        var pass;
+        if (this.getPaging()) {
+          return this.query();
+        }
+        pass = this.test(model);
+        if (!pass) {
+          this.safeRemove(model);
+        } else {
+          if (this.comparator) {
+            this.sortCollection();
+          }
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.onParentChange = function(model) {
+        var pass;
+        if (this.getPaging()) {
+          return this.query();
+        }
+        pass = this.test(model) && this.getParentCollection().hasModel(model);
+        if (pass) {
+          this.safeAdd(model);
+        } else {
+          this.safeRemove(model);
+        }
+        return this;
+      };
+
+      QueryCollection.prototype.onParentRemove = function(model) {
+        if (this.getPaging()) {
+          return this.query();
+        }
+        this.safeRemove(model);
+        return this;
+      };
+
+      QueryCollection.prototype.onParentAdd = function(model) {
+        if (this.getPaging()) {
+          return this.query();
+        }
+        this.safeAdd(model);
+        return this;
+      };
+
+      QueryCollection.prototype.onParentReset = function(model) {
+        this.reset(this.getParentCollection().models);
+        return this;
+      };
+
+      return QueryCollection;
+
+    })(Backbone.Collection);
+  }
+
+  Criteria = (function() {
+    function Criteria() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      this.applyCriteriaOptions = __bind(this.applyCriteriaOptions, this);
+      this.applyCriteriaOptions.apply(this, args);
+      this;
+    }
+
+    Criteria.prototype.extractCriteriaOptions = function() {
+      var args, comparator, criteriaOptions, paging, query;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (args.length === 1) {
+        if (args[0] instanceof Criteria) {
+          criteriaOptions = args[0].options;
+        } else if (args[0]) {
+          criteriaOptions = args[0];
+        } else {
+          criteriaOptions = null;
+        }
+      } else if (args.length > 1) {
+        query = args[0], comparator = args[1], paging = args[2];
+        criteriaOptions = {
+          queries: {
+            find: query || null
+          },
+          comparator: comparator,
+          paging: paging
+        };
+      } else {
+        criteriaOptions = null;
+      }
+      return criteriaOptions;
+    };
+
+    Criteria.prototype.applyCriteriaOptions = function() {
+      var args, criteriaOptions, _base, _base1, _base2, _base3, _base4, _base5;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (this.options == null) {
+        this.options = {};
+      }
+      if ((_base = this.options).filters == null) {
+        _base.filters = {};
+      }
+      if ((_base1 = this.options).queries == null) {
+        _base1.queries = {};
+      }
+      if ((_base2 = this.options).pills == null) {
+        _base2.pills = {};
+      }
+      if ((_base3 = this.options).paging == null) {
+        _base3.paging = null;
+      }
+      if ((_base4 = this.options).searchString == null) {
+        _base4.searchString = null;
+      }
+      if ((_base5 = this.options).comparator == null) {
+        _base5.comparator = null;
+      }
+      criteriaOptions = this.extractCriteriaOptions.apply(this, args);
+      if (criteriaOptions) {
+        if (criteriaOptions.filters != null) {
+          this.setFilters(criteriaOptions.filters);
+        }
+        if (criteriaOptions.queries != null) {
+          this.setQueries(criteriaOptions.queries);
+        }
+        if (criteriaOptions.pills != null) {
+          this.setPills(criteriaOptions.pills);
+        }
+        if (criteriaOptions.paging != null) {
+          this.setPaging(criteriaOptions.paging);
+        }
+        if (criteriaOptions.searchString != null) {
+          this.setSearchString(criteriaOptions.searchString);
+        }
+        if (criteriaOptions.comparator != null) {
+          this.setComparator(criteriaOptions.comparator);
+        }
+      }
+      return this;
+    };
+
+    Criteria.prototype.getPaging = function() {
+      return this.options.paging;
+    };
+
+    Criteria.prototype.setPaging = function(paging) {
+      paging = util.extend(this.getPaging() || {}, paging || {});
+      paging.page || (paging.page = null);
+      paging.limit || (paging.limit = null);
+      paging.offset || (paging.offset = null);
+      if (paging.page || paging.limit || paging.offset) {
+        this.options.paging = paging;
+      } else {
+        this.options.paging = null;
+      }
+      return this;
+    };
+
+    Criteria.prototype.getComparator = function() {
+      return this.options.comparator;
+    };
+
+    Criteria.prototype.setComparator = function(comparator) {
+      comparator = util.generateComparator(comparator);
+      this.options.comparator = comparator;
+      return this;
+    };
+
+    Criteria.prototype.getFilter = function(key) {
+      return this.options.filters[key];
+    };
+
+    Criteria.prototype.getFilters = function() {
+      return this.options.filters;
+    };
+
+    Criteria.prototype.setFilters = function(filters) {
+      var key, value;
+      filters || (filters = {});
+      for (key in filters) {
+        if (!__hasProp.call(filters, key)) continue;
+        value = filters[key];
+        this.setFilter(key, value);
+      }
+      return this;
+    };
+
+    Criteria.prototype.setFilter = function(name, value) {
+      var filters;
+      if (typeof value === 'undefined') {
+        throw new Error('QueryCollection::setFilter was called without both arguments');
+      }
+      filters = this.options.filters;
+      if (value != null) {
+        filters[name] = value;
+      } else if (filters[name] != null) {
+        delete filters[name];
+      }
+      return this;
+    };
+
+    Criteria.prototype.getQuery = function(key) {
+      return this.options.queries[key];
+    };
+
+    Criteria.prototype.getQueries = function() {
+      return this.options.queries;
+    };
+
+    Criteria.prototype.setQueries = function(queries) {
+      var key, value;
+      queries || (queries = {});
+      for (key in queries) {
+        if (!__hasProp.call(queries, key)) continue;
+        value = queries[key];
+        this.setQuery(key, value);
+      }
+      return this;
+    };
+
+    Criteria.prototype.setQuery = function(name, value) {
+      var queries;
+      if (typeof value === 'undefined') {
+        throw new Error('QueryCollection::setQuery was called without both arguments');
+      }
+      queries = this.options.queries;
+      if (value != null) {
+        if (!(value instanceof Query)) {
+          value = new Query(value);
+        }
+        queries[name] = value;
+      } else if (queries[name] != null) {
+        delete queries[name];
+      }
+      return this;
+    };
+
+    Criteria.prototype.getPill = function(key) {
+      return this.options.pills[key];
+    };
+
+    Criteria.prototype.getPills = function() {
+      return this.options.pills;
+    };
+
+    Criteria.prototype.setPills = function(pills) {
+      var key, value;
+      pills || (pills = {});
+      for (key in pills) {
+        if (!__hasProp.call(pills, key)) continue;
+        value = pills[key];
+        this.setPill(key, value);
+      }
+      return this;
+    };
+
+    Criteria.prototype.setPill = function(name, value) {
+      var pills, searchString;
+      if (typeof value === 'undefined') {
+        throw new Error('QueryCollection::setPill was called without both arguments');
+      }
+      pills = this.getPills();
+      searchString = this.getSearchString();
+      if (value != null) {
+        if (!(value instanceof Pill)) {
+          value = new Pill(value);
+        }
+        if (searchString) {
+          value.setSearchString(searchString);
+        }
+        pills[name] = value;
+      } else if (pills[name] != null) {
+        delete pills[name];
+      }
+      return this;
+    };
+
+    Criteria.prototype.getCleanedSearchString = function() {
+      return this.options.cleanedSearchString;
+    };
+
+    Criteria.prototype.getSearchString = function() {
+      return this.options.searchString;
+    };
+
+    Criteria.prototype.setSearchString = function(searchString) {
+      var cleanedSearchString, pill, pillName, pills;
+      pills = this.options.pills;
+      cleanedSearchString = searchString;
+      for (pillName in pills) {
+        if (!__hasProp.call(pills, pillName)) continue;
+        pill = pills[pillName];
+        cleanedSearchString = pill.setSearchString(cleanedSearchString);
+      }
+      this.options.searchString = searchString;
+      this.options.cleanedSearchString = cleanedSearchString;
+      return this;
+    };
+
+    Criteria.prototype.test = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return this.testModel.apply(this, args);
+    };
+
+    Criteria.prototype.testModel = function(model, criteriaOptions) {
+      var passed;
+      if (criteriaOptions == null) {
+        criteriaOptions = {};
+      }
+      passed = this.testQueries(model, criteriaOptions.queries) && this.testFilters(model, criteriaOptions.filters) && this.testPills(model, criteriaOptions.pills);
+      return passed;
+    };
+
+    Criteria.prototype.testModels = function(models, criteriaOptions) {
+      var comparator, finish, me, model, paging, pass, passed, start, _i, _len;
+      if (criteriaOptions == null) {
+        criteriaOptions = {};
+      }
+      me = this;
+      passed = [];
+      paging = criteriaOptions.paging, comparator = criteriaOptions.comparator;
+      if (paging == null) {
+        paging = this.getPaging();
+      }
+      if (comparator != null) {
+        if (comparator) {
+          comparator = util.generateComparator(comparator);
+        }
+      } else {
+        comparator = this.getComparator();
+      }
+      for (_i = 0, _len = models.length; _i < _len; _i++) {
+        model = models[_i];
+        pass = me.testModel(model, criteriaOptions);
+        if (pass) {
+          passed.push(model);
+        }
+      }
+      if (comparator) {
+        passed.sort(comparator);
+      }
+      if (paging) {
+        start = paging.offset || 0;
+        if ((paging.limit != null) && paging.limit > 0) {
+          start = start + paging.limit * ((paging.page || 1) - 1);
+          finish = start + paging.limit;
+          passed = passed.slice(start, finish);
+        } else if (start) {
+          passed = passed.slice(start);
+        }
+      }
+      return passed;
+    };
+
+    Criteria.prototype.testQueries = function(model, queries) {
+      var passed, query, queryName;
+      passed = true;
+      if (queries == null) {
+        queries = this.getQueries();
+      }
+      if (queries) {
+        for (queryName in queries) {
+          if (!__hasProp.call(queries, queryName)) continue;
+          query = queries[queryName];
+          if (!(query instanceof Query)) {
+            query = new Query(query);
+            queries[queryName] = query;
+          }
+          if (query.test(model) === false) {
+            passed = false;
+            return false;
+          }
+        }
+      }
+      return passed;
+    };
+
+    Criteria.prototype.testFilters = function(model, filters) {
+      var cleanedSearchString, filter, filterName, passed;
+      passed = true;
+      cleanedSearchString = this.getCleanedSearchString();
+      if (filters == null) {
+        filters = this.getFilters();
+      }
+      if (filters) {
+        for (filterName in filters) {
+          if (!__hasProp.call(filters, filterName)) continue;
+          filter = filters[filterName];
+          if (filter(model, cleanedSearchString) === false) {
+            passed = false;
+            return false;
+          }
+        }
+      }
+      return passed;
+    };
+
+    Criteria.prototype.testPills = function(model, pills) {
+      var passed, pill, pillName, searchString;
+      passed = true;
+      searchString = this.getSearchString();
+      if (pills == null) {
+        pills = this.getPills();
+      }
+      if ((searchString != null) && pills) {
+        for (pillName in pills) {
+          if (!__hasProp.call(pills, pillName)) continue;
+          pill = pills[pillName];
+          if (!(pill instanceof Pill)) {
+            pill = new Pill(query);
+            pill.setSearchString(searchString);
+            pills[pillName] = pill;
+          }
+          if (pill.test(model) === false) {
+            passed = false;
+            return false;
+          }
+        }
+      }
+      return passed;
+    };
+
+    return Criteria;
+
+  })();
+
+  Pill = (function() {
+    Pill.prototype.callback = null;
+
+    Pill.prototype.regex = null;
+
+    Pill.prototype.prefixes = null;
+
+    Pill.prototype.searchString = null;
+
+    Pill.prototype.values = null;
+
+    Pill.prototype.logicalOperator = 'OR';
+
+    function Pill(pill) {
+      var prefix, regexString, safePrefixes, safePrefixesStr, _i, _len, _ref1;
+      pill || (pill = {});
+      this.callback = pill.callback;
+      this.prefixes = pill.prefixes;
+      if (pill.logicalOperator != null) {
+        this.logicalOperator = pill.logicalOperator;
+      }
+      safePrefixes = [];
+      _ref1 = this.prefixes;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        prefix = _ref1[_i];
+        safePrefixes.push(util.safeRegex(prefix));
+      }
+      safePrefixesStr = safePrefixes.join('|');
+      regexString = "(" + safePrefixesStr + ")\\s*('[^']+'|\\\"[^\\\"]+\\\"|[^'\\\"\\s]\\S*)";
+      this.regex = util.createRegex(regexString);
+      this;
+    }
+
+    Pill.prototype.setSearchString = function(searchString) {
+      var cleanedSearchString, match, value, values;
+      cleanedSearchString = searchString;
+      values = [];
+      while (match = this.regex.exec(searchString)) {
+        value = match[2].trim().replace(/(^['"]\s*|\s*['"]$)/g, '');
+        switch (value) {
+          case 'true':
+          case 'TRUE':
+            value = true;
+            break;
+          case 'false':
+          case 'FALSE':
+            value = false;
+            break;
+          case 'null':
+          case 'NULL':
+            value = null;
+        }
+        values.push(value);
+        cleanedSearchString = cleanedSearchString.replace(match[0], '').trim();
+      }
+      this.searchString = searchString;
+      this.values = values;
+      return cleanedSearchString;
+    };
+
+    Pill.prototype.test = function(model) {
+      var pass, value, _i, _j, _len, _len1, _ref1, _ref2, _ref3;
+      if ((_ref1 = this.values) != null ? _ref1.length : void 0) {
+        if (this.logicalOperator === 'OR') {
+          pass = false;
+          _ref2 = this.values;
+          for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+            value = _ref2[_i];
+            pass = this.callback(model, value);
+            if (pass) {
+              break;
+            }
+          }
+        } else if (this.logicalOperator === 'AND') {
+          pass = false;
+          _ref3 = this.values;
+          for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
+            value = _ref3[_j];
+            pass = this.callback(model, value);
+            if (!pass) {
+              break;
+            }
+          }
+        } else {
+          throw new Error('Unkown logical operator type');
+        }
+      } else {
+        pass = null;
+      }
+      return pass;
+    };
+
+    return Pill;
+
+  })();
+
+  Query = (function() {
+    Query.prototype.source = null;
+
+    Query.prototype.compiledSelectors = null;
+
+    Query.prototype.selectors = {
+      '$or': {
+        compile: function(opts) {
+          var queries, query, queryGroup, querySource, _i, _len;
+          queries = [];
+          queryGroup = util.toArrayGroup(opts.selectorValue);
+          if (!queryGroup.length) {
+            throw new Error("Query called with an empty " + selectorName + " statement");
+          }
+          for (_i = 0, _len = queryGroup.length; _i < _len; _i++) {
+            querySource = queryGroup[_i];
+            query = new Query(querySource);
+            queries.push(query);
+          }
+          return {
+            queries: queries
+          };
+        },
+        test: function(opts) {
+          var query, _i, _len, _ref1;
+          _ref1 = opts.queries;
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            query = _ref1[_i];
+            if (query.test(opts.model)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$nor': {
+        compile: function(opts) {
+          return opts.selector('$or', opts);
+        },
+        test: function(opts) {
+          return !opts.selector('$or', opts);
+        }
+      },
+      '$and': {
+        compile: function(opts) {
+          return opts.selector('$or', opts);
+        },
+        test: function(opts) {
+          var query, _i, _len, _ref1;
+          _ref1 = opts.queries;
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            query = _ref1[_i];
+            if (query.test(opts.model) === false) {
+              return false;
+            }
+          }
+          return true;
+        }
+      },
+      '$not': {
+        compile: function(opts) {
+          return opts.selector('$and', opts);
+        },
+        test: function(opts) {
+          return !opts.selector('$and', opts);
+        }
+      },
+      'string': {
+        test: function(opts) {
+          return opts.modelValueExists && opts.modelValue === opts.selectorValue;
+        }
+      },
+      'number': {
+        test: function(opts) {
+          return opts.selector('string', opts);
+        }
+      },
+      'boolean': {
+        test: function(opts) {
+          return opts.selector('string', opts);
+        }
+      },
+      'array': {
+        test: function(opts) {
+          return opts.modelValueExists && (new Hash(opts.modelValue)).isSame(opts.selectorValue);
+        }
+      },
+      'date': {
+        test: function(opts) {
+          return opts.modelValueExists && opts.modelValue.toString() === opts.selectorValue.toString();
+        }
+      },
+      'regexp': {
+        test: function(opts) {
+          return opts.modelValueExists && opts.selectorValue.test(opts.modelValue);
+        }
+      },
+      'null': {
+        test: function(opts) {
+          return opts.modelValue === opts.selectorValue;
+        }
+      },
+      'model': {
+        test: function(opts) {
+          var _ref1, _ref2;
+          return (((_ref1 = opts.modelValue) != null ? _ref1.cid : void 0) || opts.modelValue) === (((_ref2 = opts.selectorValue) != null ? _ref2.cid : void 0) || opts.selectorValue);
+        }
+      },
+      'collection': {
+        test: function(opts) {
+          return opts.modelValue === opts.selectorValue;
+        }
+      },
+      '$beginsWith': {
+        test: function(opts) {
+          var beginsWithParts, beginsWithValue, _i, _len;
+          if (opts.selectorValue && opts.modelValueExists && util.isString(opts.modelValue)) {
+            beginsWithParts = util.toArray(opts.selectorValue);
+            for (_i = 0, _len = beginsWithParts.length; _i < _len; _i++) {
+              beginsWithValue = beginsWithParts[_i];
+              if (opts.modelValue.substr(0, beginsWithValue.length) === beginsWithValue) {
+                return true;
+                break;
+              }
+            }
+          }
+          return false;
+        }
+      },
+      '$startsWith': {
+        test: function(opts) {
+          return opts.selector('$beginsWith', opts);
+        }
+      },
+      '$endsWith': {
+        test: function(opts) {
+          var endsWithParts, endsWithValue, _i, _len;
+          if (opts.selectorValue && opts.modelValueExists && util.isString(opts.modelValue)) {
+            endsWithParts = util.toArray(opts.selectorValue);
+            for (_i = 0, _len = endsWithParts.length; _i < _len; _i++) {
+              endsWithValue = endsWithParts[_i];
+              if (opts.modelValue.substr(endsWithValue.length * -1) === endsWithValue) {
+                return true;
+                break;
+              }
+            }
+          }
+          return false;
+        }
+      },
+      '$finishesWith': {
+        test: function(opts) {
+          return opts.selector('$endsWith', opts);
+        }
+      },
+      '$all': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && opts.modelValueExists) {
+            if ((new Hash(opts.modelValue)).hasAll(opts.selectorValue)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$in': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && opts.modelValueExists) {
+            if ((new Hash(opts.modelValue)).hasIn(opts.selectorValue) || (new Hash(opts.selectorValue)).hasIn(opts.modelValue)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$nin': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && opts.modelValueExists) {
+            if ((new Hash(opts.modelValue)).hasIn(opts.selectorValue) === false && (new Hash(opts.selectorValue)).hasIn(opts.modelValue) === false) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$has': {
+        test: function(opts) {
+          if (opts.modelValueExists) {
+            if ((new Hash(opts.modelValue)).hasIn(opts.selectorValue)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$hasAll': {
+        test: function(opts) {
+          if (opts.modelValueExists) {
+            if ((new Hash(opts.modelValue)).hasIn(opts.selectorValue)) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$size': {
+        test: function(opts) {
+          if (opts.modelValue.length != null) {
+            if (opts.modelValue.length === opts.selectorValue) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$length': {
+        test: function(opts) {
+          return opts.selector('$size', opts);
+        }
+      },
+      '$type': {
+        test: function(opts) {
+          if (typeof opts.modelValue === opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$like': {
+        test: function(opts) {
+          if (util.isString(opts.modelValue) && opts.modelValue.toLowerCase().indexOf(opts.selectorValue.toLowerCase()) !== -1) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$likeSensitive': {
+        test: function(opts) {
+          if (util.isString(opts.modelValue) && opts.modelValue.indexOf(opts.selectorValue) !== -1) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$exists': {
+        test: function(opts) {
+          if (opts.selectorValue === opts.modelValueExists) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$mod': {
+        test: function(opts) {
+          var $mod;
+          if (opts.modelValueExists) {
+            $mod = opts.selectorValue;
+            if (!util.isArray($mod)) {
+              $mod = [$mod];
+            }
+            if ($mod.length === 1) {
+              $mod.push(0);
+            }
+            if ((opts.modelValue % $mod[0]) === $mod[1]) {
+              return true;
+            }
+          }
+          return false;
+        }
+      },
+      '$eq': {
+        test: function(opts) {
+          if (util.isEqual(opts.modelValue, opts.selectorValue)) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$equal': {
+        test: function(opts) {
+          return opts.selector('$eq', opts);
+        }
+      },
+      '$ne': {
+        test: function(opts) {
+          if (opts.modelValue !== opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$lt': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.modelValue < opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$gt': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.modelValue > opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$bt': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.selectorValue[0] < opts.modelValue && opts.modelValue < opts.selectorValue[1]) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$lte': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.modelValue <= opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$gte': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.modelValue >= opts.selectorValue) {
+            return true;
+          }
+          return false;
+        }
+      },
+      '$bte': {
+        test: function(opts) {
+          if ((opts.selectorValue != null) && util.isComparable(opts.modelValue) && opts.selectorValue[0] <= opts.modelValue && opts.modelValue <= opts.selectorValue[1]) {
+            return true;
+          }
+          return false;
+        }
+      }
+    };
+
+    function Query(source) {
+      if (source == null) {
+        source = {};
+      }
+      this.source = source;
+      this.compileQuery();
+    }
+
+    Query.prototype.compileSelector = function(selectorName, selectorOpts) {
+      var compileOpts, compiledSelector, key, opts, query, selector, selectors, value;
+      if (selectorOpts == null) {
+        selectorOpts = {};
+      }
+      query = this;
+      selectors = this.selectors;
+      opts = {
+        selectorName: selectorName
+      };
+      selector = selectors[selectorName];
+      if (!selector) {
+        throw new Error("Couldn't find the selector " + selectorName);
+      }
+      for (key in selectorOpts) {
+        if (!__hasProp.call(selectorOpts, key)) continue;
+        value = selectorOpts[key];
+        opts[key] = value;
+      }
+      if (selector.compile != null) {
+        opts.selector = function(selectorName, opts) {
+          return selectors[selectorName].compile(opts);
+        };
+        compileOpts = selector.compile(opts);
+        for (key in compileOpts) {
+          if (!__hasProp.call(compileOpts, key)) continue;
+          value = compileOpts[key];
+          opts[key] = value;
+        }
+      }
+      opts.selector = function(selectorName, opts) {
+        return selectors[selectorName].test(opts);
+      };
+      compiledSelector = {
+        opts: opts,
+        test: selector.test
+      };
+      return compiledSelector;
+    };
+
+    Query.prototype.testCompiledSelector = function(compiledSelector, model) {
+      var match, opts, test;
+      opts = compiledSelector.opts;
+      test = compiledSelector.test;
+      opts.model = model;
+      opts.modelValue = util.get(opts.model, opts.fieldName);
+      opts.modelId = util.get(opts.model, 'id');
+      opts.modelValueExists = typeof opts.modelValue !== 'undefined';
+      if (!opts.modelValueExists) {
+        opts.modelValue = false;
+      }
+      match = test(opts);
+      return match;
+    };
+
+    Query.prototype.compileQuery = function() {
+      var advancedSelectorName, advancedSelectorValue, compiledSelector, compiledSelectors, fieldName, query, selectorValue, _ref1;
+      query = this;
+      compiledSelectors = [];
+      _ref1 = this.source;
+      for (fieldName in _ref1) {
+        if (!__hasProp.call(_ref1, fieldName)) continue;
+        selectorValue = _ref1[fieldName];
+        if (fieldName === '$or' || fieldName === '$nor' || fieldName === '$and' || fieldName === '$not') {
+          compiledSelector = this.compileSelector(fieldName, {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isString(selectorValue)) {
+          compiledSelector = this.compileSelector('string', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isNumber(selectorValue)) {
+          compiledSelector = this.compileSelector('number', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isBoolean(selectorValue)) {
+          compiledSelector = this.compileSelector('boolean', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isArray(selectorValue)) {
+          compiledSelector = this.compileSelector('array', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isDate(selectorValue)) {
+          compiledSelector = this.compileSelector('date', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isRegExp(selectorValue)) {
+          compiledSelector = this.compileSelector('regexp', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isNull(selectorValue)) {
+          compiledSelector = this.compileSelector('null', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (selectorValue instanceof Backbone.Model) {
+          compiledSelector = this.compileSelector('model', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (selectorValue instanceof Backbone.Collection) {
+          compiledSelector = this.compileSelector('collection', {
+            fieldName: fieldName,
+            selectorValue: selectorValue
+          });
+          compiledSelectors.push(compiledSelector);
+        } else if (util.isObject(selectorValue)) {
+          for (advancedSelectorName in selectorValue) {
+            if (!__hasProp.call(selectorValue, advancedSelectorName)) continue;
+            advancedSelectorValue = selectorValue[advancedSelectorName];
+            compiledSelector = this.compileSelector(advancedSelectorName, {
+              fieldName: fieldName,
+              selectorValue: advancedSelectorValue
+            });
+            compiledSelectors.push(compiledSelector);
+          }
+        }
+      }
+      this.compiledSelectors = compiledSelectors;
+      return this;
+    };
+
+    Query.prototype.test = function(model) {
+      var compiledSelector, match, _i, _len, _ref1;
+      match = true;
+      _ref1 = this.compiledSelectors;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        compiledSelector = _ref1[_i];
+        match = this.testCompiledSelector(compiledSelector, model);
+        if (match === false) {
+          break;
+        }
+      }
+      return match;
+    };
+
+    return Query;
+
+  })();
+
+  queryEngine = {
+    safeRegex: util.safeRegex,
+    createRegex: util.createRegex,
+    createSafeRegex: util.createSafeRegex,
+    generateComparator: util.generateComparator,
+    toArray: util.toArray,
+    util: util,
+    Backbone: Backbone,
+    Hash: Hash,
+    QueryCollection: QueryCollection,
+    Criteria: Criteria,
+    Query: Query,
+    Pill: Pill,
+    setQuerySelector: function(selectorHandle, selectorObject) {
+      if (selectorObject != null) {
+        Query.prototype.selectors[selectorHandle] = selectorObject;
+      } else {
+        delete Query.prototype.selectors[selectorHandle];
+      }
+      return this;
+    },
+    testModels: function() {
+      var args, criteria, models, result;
+      models = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      models = util.toArray(models);
+      criteria = (function(func, args, ctor) {
+        ctor.prototype = func.prototype;
+        var child = new ctor, result = func.apply(child, args);
+        return Object(result) === result ? result : child;
+      })(Criteria, args, function(){});
+      result = criteria.testModels(models);
+      return result;
+    },
+    createCollection: function(models, options) {
+      var collection;
+      models = util.toArray(models);
+      collection = new QueryCollection(models, options);
+      return collection;
+    },
+    createLiveCollection: function(models, options) {
+      var collection;
+      models = util.toArray(models);
+      collection = new QueryCollection(models, options).live(true);
+      return collection;
+    }
+  };
+
+  if (typeof module !== "undefined" && module !== null) {
+    module.exports = queryEngine;
+  } else {
+    this.QueryEngine = this.queryEngine = queryEngine;
+  }
+
+}).call(this);
+
+},{"backbone":5,"exoskeleton":5}],19:[function(require,module,exports){
 /*! Socket.IO.js build:0.9.16, development. Copyright(c) 2011 LearnBoost <dev@learnboost.com> MIT Licensed */
 
 var io = ('undefined' === typeof module ? {} : module.exports);
@@ -28377,9 +30071,9 @@ if (typeof define === "function" && define.amd) {
   define([], function () { return io; });
 }
 })();
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 module.exports=require(4)
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 
 CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
@@ -28419,7 +30113,7 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 });
 
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 
 CBApp.Adaptor = Backbone.RelationalModel.extend({
 
@@ -28446,7 +30140,7 @@ CBApp.AdaptorCollection = Backbone.Collection.extend({
 });
 
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
@@ -28550,7 +30244,7 @@ CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
 
 });
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -28562,7 +30256,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"permission-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
   });
 
-},{"hbsfy/runtime":13}],23:[function(require,module,exports){
+},{"hbsfy/runtime":14}],25:[function(require,module,exports){
 
 require('../../components/switches');
 
@@ -28608,19 +30302,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         }, this);
     },
 
-    /*
-    getSwitchClass: function(val) {
-
-        console.log('getSwitchClass called', val);
-        //var isNew = this.model.isNew();
-        var activation = this.model.get('permission') ? 'active' : '';
-        //var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
-        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
-
-        return activation + " " + enabled;
-    },
-    */
-
     togglePermission: function() {
 
         console.log('togglePermission was called');
@@ -28633,28 +30314,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
         this.permissionSwitch.setElement(this.$('.permission-switch')).render();
     }
-    /*
-    permissionSwitch: function(e) {
-
-        var $permissionSwitch = $(e.currentTarget);
-        var val = $permissionSwitch[0].checked;
-
-        this.model.changePermission(val);
-    },
-
-    serializeData: function() {
-
-      var deviceFriendlyName = this.model.get('deviceInstall').get('friendly_name');
-      //var permission = this.model.get('id') ? 'checked' : '';
-      var id = this.model.get('id') || this.model.cid;
-      //this.model.set('appDevicePermissionID', "ADPID" + id);
-      var tmpl_data = _.extend(this.model.toJSON(), {deviceFriendlyName: deviceFriendlyName,
-                                                     permissionChecked: this.model.get('id') ? 'checked' : '',
-                                                     appDevicePermissionID: 'ADPID' + id });
-
-      return tmpl_data;
-    }
-    */
 });
 
 CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
@@ -28663,7 +30322,6 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
     className: '',
     itemView: CBApp.AppDevicePermissionView,
     //template: require('./templates/devicePermissionSection.html'),
-
 
     initialize: function(options) {
 
@@ -28701,7 +30359,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
 });
 
 
-},{"../../components/switches":32,"../../components/templates/switch.html":33,"./templates/devicePermission.html":22}],24:[function(require,module,exports){
+},{"../../components/switches":44,"../../components/templates/switch.html":46,"./templates/devicePermission.html":24}],26:[function(require,module,exports){
 
 CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
@@ -28713,12 +30371,29 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
     },
 
+    install: function() {
+
+        console.log('installing AppInstall');
+        this.save().then(function() {
+            console.log('AppInstall successfully saved');
+        });
+    },
+
     uninstall: function() {
 
         console.log('uninstalling AppInstall', this);
-        this.relationalDestroy().then(function(model, response, options) {
+        this.destroyOnServer().then(function(model, response, options) {
             console.log('AppInstall successfully destroyed', model, response, options);
         });
+    },
+
+    toggleInstalled: function() {
+
+        if(this.isNew()) {
+            this.install();
+        } else {
+            this.uninstall();
+        }
     },
 
     relations: [
@@ -28787,13 +30462,14 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 });
 
-CBApp.AppInstallCollection = Backbone.Collection.extend({
+CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.AppInstall,
     backend: 'appInstall',
 
     initialize: function() {
         this.bindBackend();
+        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -28802,7 +30478,7 @@ CBApp.AppInstallCollection = Backbone.Collection.extend({
 });
 
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -28827,7 +30503,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],26:[function(require,module,exports){
+},{"hbsfy/runtime":14}],28:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -28836,10 +30512,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h2>Apps</h2>\n\n<div class=\"table animated-list app-list\"></div>\n<div id=\"install-apps\"  class=\"topcoat-button--cta center full\">Install Apps</div></br>\n";
+  return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"install-apps\"  class=\"topcoat-button--cta center full\">Install Apps</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],27:[function(require,module,exports){
+},{"hbsfy/runtime":14}],29:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -28856,7 +30532,6 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
         //'click': 'eventWrapperClick',
         'click .uninstall-button': 'uninstall'
     },
-
 
     initialize: function() {
 
@@ -28888,22 +30563,10 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            console.log('AppInstallView promise render', self);
-
             var deviceInstalls = currentBridge.get('deviceInstalls');
-            console.log('AppInstallView promise render 2', deviceInstalls);
             self.appDevicePermissionListView.setCollection(deviceInstalls);
             var $appConfig = self.$('.app-config');
-            console.log('AppInstallView promise render 3', $appConfig);
-            //var appID = '#APPID' + self.model.get('app').get('id');
-            //$appDevicePermissionList = self.$(appID);
-            //var content = self.appDevicePermissionListView.render().$el;
-            console.log('AppInstallView promise render 4');
-            //$appConfig.html(content);
             self.appDevicePermissionListView.setElement($appConfig).render();
-            console.log('AppInstallView promise render 5');
-            console.log('AppInstallView promise render 6', self.appDevicePermissionListView);
-            //$appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
         });
     }
 });
@@ -28930,7 +30593,378 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":23,"./templates/appInstall.html":25,"./templates/appInstallSection.html":26,"backbone-bundle":72,"backbone.marionette":80}],28:[function(require,module,exports){
+},{"../device_permissions/views":25,"./templates/appInstall.html":27,"./templates/appInstallSection.html":28,"backbone-bundle":90,"backbone.marionette":99}],30:[function(require,module,exports){
+
+CBApp.AppLicence = Backbone.Deferred.Model.extend({
+
+    idAttribute: 'id',
+
+    /*
+    defaults: {
+        installs_permitted: 0,
+    },
+    */
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'app',
+            keySource: 'app',
+            keyDestination: 'app',
+            relatedModel: 'CBApp.App',
+            collectionType: 'CBApp.AppCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appLicence',
+                includeInJSON: 'resource_uri'
+            }
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'installs',
+            keySource: 'installs',
+            keyDestination: 'installs',
+            relatedModel: 'CBApp.AppInstall',
+            collectionType: 'CBApp.AppInstallCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appInstallCollection'
+        },
+        {
+            type: Backbone.HasOne,
+            key: 'user',
+            keySource: 'user',
+            keyDestination: 'user',
+            relatedModel: 'CBApp.User',
+            collectionType: 'CBApp.UserCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri'
+            /*
+            modelBuilder: {
+                'user': CBApp.User,
+                'currentUser': CBApp.CurrentUser
+            }
+            //initializeCollection: 'userCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appLicence'
+            }
+            */
+        }
+    ],
+
+    initialize: function() {
+
+        console.log('initialize AppLicence');
+        this.startTracking();
+    },
+
+    toggleInstall: function(bridge) {
+        /* Installs or uninstalls the app on the given bridge */
+
+        this.get('app').toggleInstalled(bridge, this);
+
+        //var bridgeInstall = this.getInstall(bridge);
+        //if (!bridgeInstall) this.get('app').install(bridge);
+
+    },
+
+    getInstall: function(bridge) {
+        /* Gets the install for this licence and the given bridge */
+
+        var licenceInstalls = this.get('installs');
+        return licenceInstalls.findWhere({
+            bridge: bridge
+        });
+    },
+
+    testIfInstalled: function(bridge) {
+        /* Tests if this licence is in use on the given bridge */
+
+        var bridgeInstall = this.getInstall(bridge);
+        // Return if the licence is installed
+        return !!bridgeInstall || false;
+    },
+
+    getInstallsRemaining: function() {
+
+        /* How many more installs can the user make */
+
+        var installs = this.get('installs');
+        // Count the installs which are live and ghosts
+        var counts = installs.countBy(function(install) {
+            return install.get('isGhost') ? 'ghost' : 'live';
+        });
+        var installs_permitted = this.get('installs_permitted');
+        var count = counts.live || 0;
+
+        return installs_permitted - count;
+    },
+
+    setInstallsPermitted: function(installsPermitted) {
+
+        console.log('setInstallsPermitted', installsPermitted);
+        // Set the new installs_permitted and destroy on server if it is zero
+        if (installsPermitted < 0) return void 0;
+        this.set('installs_permitted', installsPermitted);
+        if (installsPermitted == 0) {
+            console.log('destroyOnServer app licence');
+            this.destroyOnServer();
+        } else {
+            console.log('save app licence');
+            this.save().then(function(result) {
+                console.log('licence save successful', result);
+            }, function(error) {
+                console.warn('licence save error', error);
+            });
+        }
+    },
+
+    changeInstallsPermitted: function(increment) {
+
+        // Work out what the new installs_permitted should be
+        console.log('installs permitted', this.get('installs_permitted'));
+        console.log('increment', increment);
+        var installsPermitted = this.get('installs_permitted') + increment;
+        this.setInstallsPermitted(installsPermitted);
+    }
+});
+
+//var QueryEngine = require('query-engine');
+//CBApp.AppLicenceCollection = Backbone.Collection.extend({
+CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
+
+    model: CBApp.AppLicence,
+    backend: 'appLicence',
+
+    initialize: function() {
+        this.bindBackend();
+
+        /*
+        this.bind('backend:create', function(model) {
+            //logger.log('debug', 'AppCollection create', model);
+            self.add(model);
+        });
+        */
+        CBApp.AppLicenceCollection.__super__.initialize.apply(this, arguments);
+    },
+
+    parse : function(response){
+        return response.objects;
+    }
+});
+
+},{}],31:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "Test Install Button";
+  });
+
+},{"hbsfy/runtime":14}],32:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<td class=\"app-name\">\n    App Name\n</td>\n<td class=\"installs-permitted\">\n    Installs permitted\n</td>\n<td class=\"installs-remaining\">\n    Installs remaining\n</td>\n<td>\n    <div class=\"install-component\"></div>\n</td>\n";
+  });
+
+},{"hbsfy/runtime":14}],33:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h4>My Licences</h4>\n\n<table class=\"table\">\n    <thead>\n        <td class=\"col-md-6\">\n            <div class=\"list-group-item-heading app-name\">App Name</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-permitted\">Installs permitted</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-remaining\">Installs remaining</div>\n        </td>\n        <td class=\"col-md-2\">\n        </td>\n    </thead>\n    <tbody>\n\n    </tbody>\n</table>\n";
+  });
+
+},{"hbsfy/runtime":14}],34:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+require('../../components/buttons');
+
+CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
+
+    //className: 'btn btn-default install-button',
+
+    extraClass: "app-install-button",
+
+    template: require('./templates/button.html'),
+
+
+    initialize: function() {
+
+    },
+
+    /*
+    getEnabled: function(val) {
+
+        console.log('getEnabled called', val);
+        //var isNew = this.model.isNew();
+        var enabled = this.model.unsavedAttributes() ? '' : 'disabled';
+        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
+
+        return enabled;
+    },
+    */
+
+    getContent: function() {
+
+        var self = this;
+        console.log('in getContent');
+
+        if (this.model) {
+            console.log('in getContent appInstall');
+
+            var isInstalled = this.model.get('isGhost') ? 'Install' : 'Uninstall';
+        }
+
+        return isInstalled || '...';
+    },
+
+    onClick: function() {
+
+        var self = this;
+        console.log('onClick');
+        this.model.toggleInstalled();
+        /*
+        CBApp.getCurrentBridge().then(function(currentBridge){
+            console.log('onClick promise');
+            self.model.toggleInstall(currentBridge);
+            console.log('onClick promise 2');
+        });
+        */
+    },
+
+    onRender: function() {
+
+
+        console.log('render InstallButton' , this.model);
+        //this.stickit();
+
+        //this.$('.install-component').html(this.render().$el);
+    }
+});
+
+CBApp.AppLicenceView = Marionette.ItemView.extend({
+
+    tagName: 'tr',
+    //className: 'row',
+    template: require('./templates/licence.html'),
+
+    events: {
+        //'click': 'eventWrapperClick',
+        //'click .install-button': 'toggleCurrentInstall'
+    },
+
+    bindings: {
+        '.installs-permitted': 'installs_permitted'
+    },
+
+    appBindings: {
+        '.app-name': 'name'
+    },
+
+    appInstallBindings: {
+        '.installs-remaining': {
+            observe: ['change', 'change:relational', 'isGhost'],
+            onGet: 'getInstallsRemaining'
+        }
+    },
+
+    initialize: function() {
+
+        var self = this;
+
+        this.app = this.model.get('app');
+        console.log('app in initialize is', this.app, this);
+
+        this.installButton = new CBApp.Components.AppInstallButton();
+
+        CBApp.getCurrentBridge().then(function(currentBridge){
+
+            self.installButton.bridge = currentBridge;
+            self.appInstall = CBApp.appInstallCollection.findOrAdd({
+                app: self.app,
+                bridge: currentBridge,
+                licence: self.model
+            });
+            // Trigger change events on the model, to cause the view to update
+            self.listenTo(self.appInstall, 'all', function(e) {
+                console.log('event on appInstall', e);
+            });
+
+            self.stickit(self.appInstall, self.appInstallBindings);
+
+            self.installButton.setModel(self.appInstall);
+            self.installButton.stickit();
+            //self.render();
+        }).done();
+    },
+
+    getInstallsRemaining: function() {
+
+        //return "Test ir";
+        console.log('getInstallsRemaining');
+        console.log('getInstallsRemaining model', this.appInstall);
+        return this.model.getInstallsRemaining();
+    },
+
+    onRender : function() {
+
+        var self = this;
+
+        console.log('AppLicenceView render', this);
+        this.stickit();
+        this.stickit(this.app, this.appBindings);
+
+        if (this.appInstall) {
+        }
+
+        var $installComponent = this.$('.install-component');
+        console.log('installComponent', $installComponent);
+        //$installComponent.html(this.installButton.render().$el);
+        this.installButton.setElement($installComponent).render();
+        //this.installButton.setElement(this.$('.install-component')).render();
+    }
+});
+
+CBApp.AppLicenceListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/licenceSection.html'),
+    itemView: CBApp.AppLicenceView,
+    //itemViewContainer: 'tbody',
+
+    emptyView: CBApp.ListItemLoadingView,
+
+    appendHtml: function(collectionView, itemView){
+        collectionView.$("tbody").append(itemView.el);
+    },
+
+    onRender : function(){
+
+        console.log('AppLicenceListView', this.collection);
+    }
+});
+
+},{"../../components/buttons":41,"./templates/button.html":31,"./templates/licence.html":32,"./templates/licenceSection.html":33,"backbone-bundle":90,"backbone.marionette":99}],35:[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -29006,7 +31040,220 @@ CBApp.AppCollection = Backbone.Collection.extend({
 });
 
 
-},{}],29:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<h4 class=\"list-group-item-heading\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<div class=\"app-form-label\">My Licences</div>\n<div class=\"input-group\">\n</div>\n<div id=\"";
+  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"panel-collapse collapse\">Test devices</div>\n\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":14}],37:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Apps</h2>\n\n<div id=\"app-list\" class=\"table animated-list\"></div>\n";
+  });
+
+},{"hbsfy/runtime":14}],38:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<h4 class=\"list-group-item-heading\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n\n\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":14}],39:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+require('../components/numbers');
+require('./device_permissions/views');
+
+CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
+
+    initialize: function() {
+
+    },
+
+    getContent: function() {
+
+        console.log('InstallsPermittedField getContent');
+        return this.model.get('installs_permitted');
+    },
+
+    increment: function() {
+
+        this.model.changeInstallsPermitted(1);
+    },
+
+    decrement: function() {
+
+        this.model.changeInstallsPermitted(-1);
+    },
+
+    /*
+    remove: function() {
+
+        CBApp.Components.InstallsPermittedField.prototype.remove.apply(this);
+    },
+
+    setModel: function(model) {
+
+        this.undelegateEvents();
+        this.model = model;
+        this.delegateEvents();
+    },
+    */
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+            console.log('InstallsPermitted stickit', this.model);
+            this.listenTo(this.model, 'all', function(name) {
+                console.log('EVENT licence', name);
+            });
+        }
+    }
+});
+
+CBApp.AppView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: 'new-item',
+    template: require('./templates/app.html'),
+
+    events: {
+        //'click': 'eventWrapperClick',
+    },
+
+    initialize: function() {
+        // Proxy change events for stickit
+        var self = this;
+
+        this.installsPermittedField = new CBApp.Components.InstallsPermittedField();
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            // Create or find a licence, then bind to it
+            var licence = CBApp.appLicenceCollection.findWhere({
+                app: self.model,
+                user: currentUser
+            });
+
+            self.licence = licence || new CBApp.AppLicence({
+                                                    app: self.model,
+                                                    user: currentUser
+                                                });
+
+            CBApp.appLicenceCollection.add(self.licence);
+
+            self.installsPermittedField.setModel(self.licence);
+
+            self.render();
+            /*
+            var licenceBindings = {
+                '.installs-permitted': {
+                  observe: ['installs_permitted'],
+                  onGet: function(installsPermitted) {
+                      return installsPermitted;
+                  },
+                  attributes: [{
+                    name: 'disabled',
+                    observe: ['installs_permitted', 'change'],
+                    onGet: 'getDisabled'
+                  }]
+                }
+            };
+
+            self.stickit(self.licence, licenceBindings);
+            */
+        });
+
+        this.model.on('unsavedChanges sync', function(e) {
+            self.model.trigger('change:change');
+        }, this);
+    },
+
+    onRender : function(){
+
+        var self = this;
+
+        this.installsPermittedField.setElement(this.$('.input-group')).render();
+        /*
+        self.appDevicePermissionListView =
+            new CBApp.AppDevicePermissionListView({
+                collection: currentBridge.get('deviceInstalls'),
+                appInstall: self.model
+            });
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            var appID = '#APPID' + self.model.get('app').get('id');
+            $appDevicePermissionList = self.$(appID);
+            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
+        });
+         */
+    }
+});
+
+CBApp.InstallAppView = CBApp.AppView.extend({
+
+    template: require('./templates/installApp.html'),
+});
+
+CBApp.AppListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/appSection.html'),
+    itemView: CBApp.AppView,
+    itemViewContainer: '#app-list',
+
+    emptyView: CBApp.ListItemLoadingView,
+
+    /*
+    buildItemView: function(item, ItemViewType, itemViewOptions){
+
+        var options = _.extend({model: item}, itemViewOptions);
+        var view = new ItemViewType(options);
+        //view.licence = "test";
+        return view;
+    },
+    */
+
+    onRender : function(){
+
+    }
+});
+
+},{"../components/numbers":43,"./device_permissions/views":25,"./templates/app.html":36,"./templates/appSection.html":37,"./templates/installApp.html":38,"backbone-bundle":90,"backbone.marionette":99}],40:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -29152,10 +31399,10 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.CurrentUser',
-            collectionType: 'CBApp.CurrentUserCollection',
+            relatedModel: 'CBApp.User',
+            collectionType: 'CBApp.UserCollection',
             createModels: true,
-            initializeCollection: 'currentUserCollection',
+            initializeCollection: 'userCollection',
             includeInJSON: true
         }
     ]
@@ -29176,7 +31423,7 @@ CBApp.BridgeControlCollection = Backbone.Collection.extend({
 });
 
 
-},{"q":16}],30:[function(require,module,exports){
+},{"q":17}],41:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -29198,11 +31445,10 @@ CBApp.Components.Button = Marionette.ItemView.extend({
                 observe: ['change', 'change:relational'],
                 onGet: 'getClass'
             }],
-            observe: ['change', 'change:relational', 'content'],
+            observe: ['change', 'change:relational', 'isGhost'],
             onGet: 'getContent'
         }
     },
-
     /*
     getTemplate: function() {
 
@@ -29225,12 +31471,59 @@ CBApp.Components.Button = Marionette.ItemView.extend({
         return enabled;
     }
 });
-},{"./components":31,"backbone-bundle":72,"backbone.marionette":80}],31:[function(require,module,exports){
+
+},{"./components":42,"backbone-bundle":90,"backbone.marionette":99}],42:[function(require,module,exports){
 
 CBApp.Components = {};
 
 
-},{}],32:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
+
+require('./components');
+
+CBApp.Components.NumberField = Marionette.ItemView.extend({
+
+    tagName: 'button',
+
+    template: require('./templates/numberField.html'),
+
+    events: {
+        'click .inc': 'increment',
+        'click .dec': 'decrement'
+    },
+
+    bindings: {
+        '.bfh-number': {
+            attributes: [{
+                name: 'disabled',
+                //observe: ['change', 'change:relational', 'installs_permitted'],
+                modelEvents: ['change'],
+                onGet: 'getDisabled'
+            }],
+            observe: ['installs_permitted'],
+            events: ['change'],
+            onGet: 'getContent'
+        }
+    },
+
+    /*
+    getClass: function() {
+
+        var enabled = this.getEnabled() || "";
+
+        return "form-control bfh-number app-form-input installs-permitted" + enabled;
+    },
+    */
+
+    getDisabled: function(val) {
+
+        console.log('numbers getDisabled');
+        //testModel = this.model;
+        //return this.model.unsavedAttributes() ? true : false;
+        return false;
+    }
+});
+},{"./components":42,"./templates/numberField.html":45}],44:[function(require,module,exports){
 
 
 var Backbone = require('backbone-bundle')
@@ -29269,7 +31562,19 @@ CBApp.Components.Switch = Marionette.ItemView.extend({
         return "left theme-green animate toggle-switch " + activation + " " + enabled;
     }
 })
-},{"./components":31,"./templates/switch.html":33,"backbone-bundle":72,"backbone.marionette":80}],33:[function(require,module,exports){
+},{"./components":42,"./templates/switch.html":46,"backbone-bundle":90,"backbone.marionette":99}],45:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<input type=\"text\" class=\"form-control bfh-number app-form-input installs-permitted\">\n<span class=\"input-group-addon bfh-number-btn inc\"><span class=\"glyphicon glyphicon-chevron-up\"></span></span>\n<span class=\"input-group-addon bfh-number-btn dec\"><span class=\"glyphicon glyphicon-chevron-down\"></span></span>\n";
+  });
+
+},{"hbsfy/runtime":14}],46:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29281,7 +31586,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],34:[function(require,module,exports){
+},{"hbsfy/runtime":14}],47:[function(require,module,exports){
 
 /*
 CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
@@ -29337,6 +31642,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             device: this.get('device').get('resource_uri'),
             address: address
         };
+
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
         var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
             || new CBApp.DeviceInstall({
@@ -29464,7 +31770,7 @@ CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 });
 
 
-},{}],35:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29476,7 +31782,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"card-heading h4 device-name\"></div>\n<div class=\"card-subheading h4 small device-address\"></div>\n<div class=\"install-button\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],36:[function(require,module,exports){
+},{"hbsfy/runtime":14}],49:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29488,16 +31794,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Device Discovery</h2>\n\n<div id=\"discovered-device-list\" class=\"animated-list\"></div>\n<div id=\"devices\" class=\"topcoat-button--cta\">Show Devices</div>\n<div id=\"rescan\" class=\"topcoat-button--cta\">Rescan</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],37:[function(require,module,exports){
-module.exports=require(33)
-},{"hbsfy/runtime":13}],38:[function(require,module,exports){
+},{"hbsfy/runtime":14}],50:[function(require,module,exports){
+module.exports=require(46)
+},{"hbsfy/runtime":14}],51:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
 require('../../components/buttons');
 
-CBApp.Components.InstallButton = CBApp.Components.Button.extend({
+CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
 
     template: require('./templates/installButton.html'),
 
@@ -29540,7 +31846,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.installButton = new CBApp.Components.InstallButton({
+        this.installButton = new CBApp.Components.DeviceInstallButton({
             model: this.model
         });
     },
@@ -29609,7 +31915,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":30,"./templates/discoveredDevice.html":35,"./templates/discoveredDeviceSection.html":36,"./templates/installButton.html":37,"backbone-bundle":72,"backbone.marionette":80}],39:[function(require,module,exports){
+},{"../../components/buttons":41,"./templates/discoveredDevice.html":48,"./templates/discoveredDeviceSection.html":49,"./templates/installButton.html":50,"backbone-bundle":90,"backbone.marionette":99}],52:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -29660,7 +31966,6 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         /*
         if (adp) {
             adp.set({permission: true}, {silent: true});
-            testADP = adp;
         } else {
             var adp = CBApp.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
@@ -29742,10 +32047,11 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }); 
 
-CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.DeviceInstall,
-    backend: 'deviceInstall',
+    //backend: 'deviceInstall',
 
     initialize: function() {
         var self = this;
@@ -29753,14 +32059,15 @@ CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
         this.bind('backend:create', function(model) {
             self.add(model);
         });
+        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
     parse : function(response){
         return response.objects;
     }
 });
 
-},{}],40:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29772,7 +32079,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],41:[function(require,module,exports){
+},{"hbsfy/runtime":14}],54:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -29784,7 +32091,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Devices</h2>\n\n<div class=\"animated-list device-list\"></div>\n<div class=\"topcoat-button--cta center full discover-devices-button\">Connect to a Device</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],42:[function(require,module,exports){
+},{"hbsfy/runtime":14}],55:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -29881,7 +32188,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":40,"./templates/deviceInstallSection.html":41,"backbone-bundle":72,"backbone.marionette":80}],43:[function(require,module,exports){
+},{"./templates/deviceInstall.html":53,"./templates/deviceInstallSection.html":54,"backbone-bundle":90,"backbone.marionette":99}],56:[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -29924,13 +32231,15 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     ]  
 }); 
 
-CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
+//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
+CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.Device,
     backend: 'device',
 
     initialize: function() {
         this.bindBackend();
+        CBApp.DeviceCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -29938,7 +32247,7 @@ CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
     }
 });
 
-},{}],44:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -29951,45 +32260,32 @@ CBApp = new Marionette.Application({
     navInstallDevice: function() {
         CBApp.router.navigate("install_device", true);
         console.log('navInstallDevice coming through');
-    },
-    config: function() {
-
     }
 });
 
 CBApp._isInitialized = false;
 
-/*
-CBApp.addInitializer(function () {
-    CBApp.InstallDeviceModal = Backbone.Modal.extend({
+// Set the PortalLayout here to avoid requirement recursions
+CBApp.PortalLayout = require('./views/portal_view');
 
-        template: require('./views/templates/discoveryModal.html'),
-        cancelEl: '#cancel-button',
-        submitEl: '#submit-button',
-
-        submit: function() {
-            console.log('Submitted modal', this);
-            var friendlyName = this.$('#friendly-name').val();
-            this.model.installDevice(friendlyName);
-        }
-    });
-});
-*/
-
-//require('./views/notifications/views');
 CBApp.Controller = Marionette.Controller.extend({
 
   index: function () {
-    //CBApp.homeLayoutView = new CBApp.HomeLayoutView();
-    //CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
-    //CBApp.portalLayout.detailRegion.show(CBApp.deviceLayout);
     console.log('index');
-    //CBApp.portalLayout.show(CBApp.deviceLayout);
-    //CBApp.deviceCollection.fetch();
   },
-  config: function(slug) {
+  showConfig: function(slug) {
       console.log('config in main Controller', slug);
-      CBApp.Config.router.navigate(slug);
+      //CBApp.Config.router.navigate(slug);
+      CBApp.portalLayout.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'config');
+      CBApp.Config.trigger('config:show', slug);
+  },
+  showStore: function(slug) {
+      console.log('store in main Controller', slug);
+      CBApp.portalLayout.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'store');
+      CBApp.Store.trigger('store:show', slug);
+      //CBApp.Store.router.navigate(slug);
   },
   showNotification: function(text) {
     console.log('We got to the notification controller!');
@@ -30013,9 +32309,6 @@ CBApp.Controller = Marionette.Controller.extend({
   }
 });
 
-// Set up a "namespace" for the nav menu
-CBApp.Nav = {};
-
 CBApp.addInitializer(function () {
 
   //router
@@ -30036,14 +32329,21 @@ CBApp.getCurrentRoute = function(){
 };
 
 CBApp.on("initialize:after", function () {
+
+  CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
+  CBApp.Nav.topBarView = new CBApp.Nav.TopBarView();
+  CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarView);
+
+
   //for routing purposes
   if(Backbone.history) {
 
       Backbone.history.start({pushState: true});
+                              //root: '/portal'});
 
       console.log('Backbone.history.fragment', Backbone.history.fragment);
       if (this.getCurrentRoute() === "") {
-          CBApp.trigger('config');
+          CBApp.request('config:show');
           //Backbone.history.navigate('index');
 
       }
@@ -30057,17 +32357,25 @@ CBApp.Router = Marionette.SubRouter.extend({
   //controller: CBApp.Controller,
   appRoutes: {
     '': 'index',
-    'config/:slug': 'config'
+    'config(/:slug)': 'showConfig',
+    'store(/:slug)': 'showStore'
     //"config/bridge/:bridge": "config",
   }
 });
 
-CBApp.reqres.setHandler("bridge:entities", function(){
-    return API.getContactEntities();
+CBApp.reqres.setHandler("config:show", function(){
+    //CBApp.navigate('config/');
+    CBApp.controller.showConfig();
+});
+
+CBApp.reqres.setHandler("store:show", function(){
+    console.log('show store');
+    //CBApp.navigate('store/');
+    CBApp.controller.showStore();
 });
 
 module.exports = CBApp;
-},{"backbone-bundle":72,"backbone.marionette":80}],45:[function(require,module,exports){
+},{"./views/portal_view":85,"backbone-bundle":90,"backbone.marionette":99}],58:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -30149,7 +32457,7 @@ CBApp.MessageCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],46:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30174,7 +32482,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],47:[function(require,module,exports){
+},{"hbsfy/runtime":14}],60:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30186,7 +32494,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send-log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],48:[function(require,module,exports){
+},{"hbsfy/runtime":14}],61:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -30414,7 +32722,7 @@ CBApp.MessageLayoutView = Marionette.Layout.extend({
 
 */
 
-},{"./templates/message.html":46,"./templates/messageSection.html":47,"backbone-bundle":72,"backbone.marionette":80}],49:[function(require,module,exports){
+},{"./templates/message.html":59,"./templates/messageSection.html":60,"backbone-bundle":90,"backbone.marionette":99}],62:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -30531,7 +32839,7 @@ CBApp.FilteredCollection = function(original){
 
     return filtered;
 }
-},{}],50:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 
 require('q');
 
@@ -30578,7 +32886,7 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
 CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 
 
-},{"q":16}],51:[function(require,module,exports){
+},{"q":17}],64:[function(require,module,exports){
 
 
 
@@ -30674,11 +32982,11 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
-                                //console.log('ToMany keyContents', attributes);
+                                //console.log('ToMany keyContents attributes', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = CBApp.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
-                                        this.attributes = { id: idArray[1] };
+                                        attributes = { id: idArray[1] };
                                 }
 
                                 // If `merge` is true, update models here, instead of during update.
@@ -30695,10 +33003,12 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                         initializeCollection.add(model);
                                 }
 
+                                /*
                                 // ADDED If the model only has an id, fetch the rest of it
                                 if (model && model.isNew()) {
                                         model.fetch();
                                 }
+                                */
                         }
 
                         model && toAdd.push( model );
@@ -30727,7 +33037,6 @@ Backbone.HasMany = Backbone.HasMany.extend({
 Backbone.Collection = Backbone.Collection.extend({
 
     findUnique: function(attrs) {
-
         // Returns a model after verifying the uniqueness of the attributes
         models = this.where(attrs);
         if(models.length > 1) { console.warn(attrs, 'is not unique') }
@@ -30755,15 +33064,16 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        //console.log('initializeRelations was called');
+        console.log('initializeRelations was called', options);
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
-
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
-            //console.log('Initialise relation', rel);
+            console.log('Initialise relation', rel.key);
+            console.log('Initialise relation this', this);
+            console.log('Initialise relation options', options);
             Backbone.Relational.store.initializeRelation( this, rel, options );
             //this.updateRelationToSelf(rel, options);
         }, this);
@@ -30799,11 +33109,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // Get models from the relation of the this model
         var models = rel.related instanceof Backbone.Collection
             ? rel.related.models : [ rel.related ];
+        if (!models) return;
+        /*
         if (!models[0]) {
             // Not sure why keyContents is sometimes needed
             console.log('rel.keyContents used', rel);
             models = [ rel.keyContents];
         }
+        */
             //|| rel.keyContents;
 
         var model;
@@ -30943,60 +33256,28 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 }
             }, this );
         }
-    }
-
-    /*
-    updateRelations: function(changedAttrs, options) {
-        if ( this._isInitialized && !this.isLocked() ) {
-            _.each( this._relations || [], function( rel ) {
-                if ( !changedAttrs || ( rel.keySource in changedAttrs || rel.key in changedAttrs ) ) {
-                    // Update from data in `rel.keySource` if set, or `rel.key` otherwise
-                    var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ]
-                        ,attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
-
-                    if ( rel.related !== value || ( value === null && attr === null )) {
-                        this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
-
-                        /*
-                        // ADDED automatically update related models
-                        _.each(val, function (data) {
-                            console.log('data is', data);
-                            var model = rel.related.get(data.id);
-                            if (model) {
-                                model.set(data);
-                            } else {
-                                rel.related.add(data);
-                            }
-                        });
-                        */
-                        /*
-                    }
-                }
-
-                // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-                if ( rel.keySource !== rel.key ) {
-                    delete this.attributes[ rel.keySource ];
-                }
-            }, this );
-        }
-    }
-    */
+    },
 });
-},{}],52:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 
 var Q = require('q');
 
 var CBApp = require('index');
+
+require('./components/buttons');
+
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
 require('./apps/installs/models');
+require('./apps/licences/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
 require('./users/models');
+require('./users/current/models');
 
 require('./misc/decorators');
 require('./misc/filters');
@@ -31009,6 +33290,8 @@ CBApp.addInitializer(function () {
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
   //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+
+  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
@@ -31030,17 +33313,39 @@ CBApp.addInitializer(function () {
   CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
   CBApp.bridgeCollection = new CBApp.BridgeCollection();
 
+  CBApp.userCollection = new CBApp.UserCollection();
 
-  CBApp.currentUser = new CBApp.CurrentUser();
-  //CBApp.currentUserDeferred.then(function(result) {
+  //CBApp.u = new CBApp.U();
+  //CBApp.u.fetch();
 
+
+  //CBApp.currentUser = new CBApp.LoggedInUser();
+  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection(CBApp.currentUser);
+  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+  CBApp.currentUserCollection.fetch().then(function() {
+
+      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+      setTimeout(function() {
+          CBApp._isInitialized = true;
+          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+      }, 500);
+
+  }, function(error) {
+
+      CBApp.currentUserDeferred.reject(error);
+      console.error('currentUser could not be fetched', error);
+  });
+  //CBApp.currentUser.fetch();
+
+  //CBApp.currentUser = new CBApp.CurrentUser();
+
+    /*
   CBApp.currentUser.fetch().then(function(currentUser) {
-
 
       console.log('currentUser fetched successfully', currentUser);
       setTimeout(function() {
           CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(currentUser);
+          CBApp.currentUserDeferred.resolve(currentUser.model);
           console.log('App initialised');
       }, 500);
 
@@ -31049,6 +33354,7 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+     */
 
     /*
   CBApp.currentUserDeferred.then(function(result) {
@@ -31076,7 +33382,7 @@ CBApp.addInitializer(function () {
 
 });
 
-},{"./adaptors/compatibility/models":19,"./adaptors/models":20,"./apps/device_permissions/models":21,"./apps/installs/models":24,"./apps/models":28,"./bridges/models":29,"./devices/discovery/models":34,"./devices/installs/models":39,"./devices/models":43,"./misc/decorators":49,"./misc/filters":50,"./users/models":59,"index":44,"q":16}],53:[function(require,module,exports){
+},{"./adaptors/compatibility/models":21,"./adaptors/models":22,"./apps/device_permissions/models":23,"./apps/installs/models":26,"./apps/licences/models":30,"./apps/models":35,"./bridges/models":40,"./components/buttons":41,"./devices/discovery/models":47,"./devices/installs/models":52,"./devices/models":56,"./misc/decorators":62,"./misc/filters":63,"./users/current/models":81,"./users/models":82,"index":57,"q":17}],66:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -31087,8 +33393,8 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
-          "": "index",
-          "bridges/:id": "showBridge",
+          //"": "showConfig",
+          ":id": "showBridge",
           //"config/bridge/:bridge": "config",
           "install_device": "installDevice"
         }
@@ -31110,12 +33416,24 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         Config.mainLayoutView = new ConfigViews.Main();
         CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
       },
+      showBridge: function(bridgeID) {
 
-      showBridge: function(id) {
-
-          //Config.execute("set:active:header", "Configure Bridge")
+          console.log('showBridge bridgeID is', bridgeID);
+          Config.mainLayoutView = new ConfigViews.Main();
+          CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
       },
+      showAppLicences: function() {
 
+        var installAppModal = new ConfigViews.InstallAppModal({
+            /*
+            //model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+            */
+        });
+        CBApp.portalLayout.modalsRegion.show(installAppModal);
+      },
       discoverDevices: function() {
 
           CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
@@ -31146,9 +33464,16 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       }
     });
 
+    Config.on('config:show', function(bridgeID){
+        console.log('show config');
+        Config.controller.showBridge(bridgeID);
+        var slug = bridgeID || "";
+        console.log('slug in config config:show is', slug);
+        Config.router.navigate(slug);
+    });
 });
 
-},{"./views":57}],54:[function(require,module,exports){
+},{"./views":71}],67:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31160,7 +33485,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div id=\"current-view\"></div>";
   });
 
-},{"hbsfy/runtime":13}],55:[function(require,module,exports){
+},{"hbsfy/runtime":14}],68:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31172,7 +33497,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],56:[function(require,module,exports){
+},{"hbsfy/runtime":14}],69:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"bbm-modal__topbar\">\n    <h3 class=\"bbm-modal__title\">Install App</h3>\n</div>\n<div class=\"bbm-modal__section\">\n    <div class=\"licence-section\"></div>\n</div>\n<div class=\"bbm-modal__bottombar\">\n    <a href=\"#\" class=\"bbm-button store-button\">App Store</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
+  });
+
+},{"hbsfy/runtime":14}],70:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31184,7 +33521,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n    <div id=\"device-section\" class=\"col-md-6\"></div>\n</div>\n<div class=\"row\">\n    <div id=\"message-section\" class=\"col-md-6\"></div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],57:[function(require,module,exports){
+},{"hbsfy/runtime":14}],71:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -31194,6 +33531,7 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/installs/views');
+require('../../apps/licences/views');
 //require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
@@ -31252,15 +33590,18 @@ module.exports.Main = Marionette.Layout.extend({
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
             var appInstallCollection = currentBridge.get('appInstalls');
-            console.log('appInstallCollection', appInstallCollection );
-            self.appInstallListView.setCollection(appInstallCollection);
-            self.appInstallListView.render();
+            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
+            //liveAppInstallCollection.setQuery({isGhost: false});
 
+            console.log('liveAppInstallCollection', liveAppInstallCollection );
+            self.appInstallListView.setCollection(liveAppInstallCollection);
+            self.appInstallListView.render();
 
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
             self.messageListView.render();
-        });
+        }).done();
     }
 
 });
@@ -31323,6 +33664,52 @@ var DevicesView = Marionette.ItemView.extend({
     }
 })
 
+module.exports.InstallAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/installAppModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    events: {
+        'click .store-button': 'clickStore'
+    },
+
+
+    initialize: function() {
+
+        var self = this;
+        this.licenceListView = new CBApp.AppLicenceListView();
+
+    },
+
+    clickStore: function() {
+
+        CBApp.request('store:show');
+        //CBApp.Controller.store();
+    },
+
+    onRender: function() {
+
+        var self = this;
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            console.log('promise in app modal initialize');
+            var licenceCollection = currentUser.get('appLicences');
+            self.licenceListView.setCollection(licenceCollection);
+            self.licenceListView.render();
+        }).done();
+        //this.licenceListView.setElement(this.$('licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+    },
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
+
 module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
     template: require('./templates/discoveryModal.html'),
@@ -31338,7 +33725,384 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":27,"../../devices/discovery/views":38,"../../devices/installs/views":42,"../../messages/views":48,"../../views/generic_views":61,"../../views/regions":64,"./templates/devicesView.html":54,"./templates/discoveryModal.html":55,"./templates/main.html":56,"backbone-bundle":72,"backbone.marionette":80,"q":16}],58:[function(require,module,exports){
+},{"../../apps/installs/views":29,"../../apps/licences/views":34,"../../devices/discovery/views":51,"../../devices/installs/views":55,"../../messages/views":61,"../../views/generic_views":84,"../../views/regions":86,"./templates/devicesView.html":67,"./templates/discoveryModal.html":68,"./templates/installAppModal.html":69,"./templates/main.html":70,"backbone-bundle":90,"backbone.marionette":99,"q":17}],72:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
+
+    require('bootstrap');
+
+    Nav.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+    });
+
+    Nav.Controller = Marionette.Controller.extend({
+        activateSection: function(section) {
+            console.log('activateSection', section);
+            CBApp.Nav.topBarView.activateSection(section);
+        }
+    });
+
+    Nav.BridgeItemView = Marionette.ItemView.extend({
+
+        tagName: 'li',
+
+        template: require('./templates/bridgeItem.html'),
+
+        serializeData: function(){
+            return {
+              "name": this.model.get('name')
+            }
+        },
+
+        events: {
+            'click': 'bridgeClick'
+        },
+
+        bridgeClick: function() {
+            CBApp.controller.setCurrentBridge(this.model);
+        },
+
+        onRender: function() {
+
+            // Show the bridge as active if it is the current bridge
+            $(this.el).attr('class', '');
+        }
+    });
+
+    Nav.BridgeDropdownView = Marionette.CompositeView.extend({
+
+        tagName: 'li',
+        className: 'dropdown',
+        itemView: CBApp.Nav.BridgeItemView,
+        itemViewContainer: '#bridge-list',
+        template: require('./templates/bridgeDropdown.html'),
+
+        bindings: {
+            '.header-text': 'name'
+        },
+
+        initialize: function () {
+
+            var self = this;
+
+        },
+
+        collectionEvents: {
+            //'add': 'addBridge'
+        },
+
+        addBridge: function() {
+
+            //CBApp.getCurrentBridge()
+            this.render();
+        },
+
+        onRender : function(){
+
+            var self = this;
+
+            CBApp.getCurrentBridge().then(function(currentBridge){
+
+                self.model = currentBridge;
+                self.listenToOnce(self.model, 'change', self.render);
+                //self.model.bind('change', self.render);
+                self.stickit();
+            });
+        }
+    });
+
+    Nav.AccountDropdownView = Marionette.ItemView.extend({
+
+        tagName: 'li',
+        className: 'dropdown',
+
+        template: require('./templates/accountDropdown.html'),
+
+        bindings: {
+            '.header-text': 'name'
+        },
+
+        events: {
+            //'click #logout': 'bridgeClick'
+            //'click #interest-button': 'interestButtonClick',
+        },
+
+        serializeData: function(){
+            return {
+                "logout-url": "test-link"
+            }
+        },
+
+        onRender: function() {
+            // Get rid of that pesky wrapping-div.
+            // Assumes 1 child element present in template.
+            //this.$el = this.$el.children();
+            // Unwrap the element to prevent infinitely
+            // nesting elements during re-render.
+            //this.$el.unwrap();
+            //this.setElement(this.$el);
+        }
+    });
+
+    Nav.TopBarView = Marionette.ItemView.extend({
+
+        template: require('./templates/navSection.html'),
+        className: 'container',
+
+        events: {
+            'click .dashboard': 'navigate',
+            'click .store': 'navigate',
+            'click .config': 'navigate'
+        },
+
+        navigate: function(e) {
+            console.log('navigate', e.target.className);
+            var navEvent = e.target.className + ':show';
+            console.log('navigate', navEvent);
+            //console.log('navigate', e.target.className);
+            CBApp.request(navEvent);
+        },
+
+        activateSection: function(section) {
+
+            var $section = this.$('.' + section);
+            console.log('activateSection section', section);
+        },
+
+        onRender: function() {
+
+            var $navbarLeft = this.$('#navbar-left');
+            this.bridgeDropdownView = new Nav.BridgeDropdownView({
+                collection: CBApp.bridgeCollection
+            });
+            $navbarLeft.append(this.bridgeDropdownView.render().$el);
+
+            //this.navbarLeft.show(bridgeDropdownView);
+            //this.navbarRight.show(accountDropdownView);
+        }
+    });
+
+    Nav.on('section:activate', function(section){
+
+        console.log('navigation section activate', section);
+        Nav.controller.activateSection(section);
+    });
+});
+
+},{"./templates/accountDropdown.html":73,"./templates/bridgeDropdown.html":74,"./templates/bridgeItem.html":75,"./templates/navSection.html":76,"backbone-bundle":90,"backbone.marionette":99,"bootstrap":104}],73:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "\n<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n    <div class=\"header-text\">My Account</div>\n    <b class=\"caret\"></b>\n</a>\n<ul class=\"dropdown-menu\">\n    <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n</ul>\n";
+  });
+
+},{"hbsfy/runtime":14}],74:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
+  });
+
+},{"hbsfy/runtime":14}],75:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<a href=\"#\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":14}],76:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
+  });
+
+},{"hbsfy/runtime":14}],77:[function(require,module,exports){
+
+
+var StoreViews = require('./views');
+
+CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
+
+    console.log('Store ran!');
+    Store.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+        this.router = new this.Router('portal/store/', {
+            controller : this.controller,
+            createTrailingSlashRoutes: true
+        });
+    });
+
+    Store.Controller = Marionette.Controller.extend({
+
+      /*
+      index: function () {
+        Store.mainLayoutView = new StoreViews.Main();
+        console.log('mainLayoutView', Store.mainLayoutView);
+        console.log('portalLayout', CBApp.portalLayout);
+        CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
+        console.log('config index');
+      },
+      */
+      showStore: function() {
+
+          Store.mainLayoutView = new StoreViews.Main();
+          CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
+      },
+      licenseApp: function(discoveredDeviceInstall) {
+        var that = this;
+        console.log('We got to the controller!');
+        var installDeviceModal = new ConfigViews.InstallDeviceModal({
+            model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+        });
+        CBApp.portalLayout.modalsRegion.show(installDeviceModal);
+      }
+    });
+
+    Store.Router = Marionette.SubRouter.extend({
+
+        appRoutes: {
+          "": "showStore",
+          //"config/bridge/:bridge": "config",
+        }
+    });
+
+    Store.on('store:show', function(){
+        console.log('show store');
+        Store.controller.showStore();
+        Store.router.navigate('');
+    });
+});
+
+},{"./views":79}],78:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
+  });
+
+},{"hbsfy/runtime":14}],79:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette')
+    ,Q = require('q');
+
+require('../../views/generic_views');
+require('../../views/regions');
+
+require('../../apps/views');
+
+module.exports.Main = Marionette.Layout.extend({
+
+    template: require('./templates/main.html'),
+
+    regions: {
+        appSection: {
+            selector: '#app-section',
+            regionType: CBApp.Regions.Fade
+        }
+    },
+
+    initialize: function() {
+
+        this.appListView = new CBApp.AppListView({
+                                    collection: CBApp.appCollection
+                                });
+
+        CBApp.appCollection.fetch();
+    },
+
+    populateViews: function() {
+
+        var self = this;
+        //this.render();
+    },
+
+    onRender: function() {
+
+        var self = this;
+
+        this.appSection.show(this.appListView);
+
+        /*
+        CBApp.appCollection.fetch().then(function(appCollection) {
+
+            console.log('appCollection fetched', appCollection);
+        });
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            self.listenToOnce(currentBridge, 'change:current', self.render);
+
+            var appCollection = currentBridge.get('appInstalls');
+            self.appInstallListView.collection = appInstallCollection;
+            self.appInstallListView._initialEvents();
+            self.appInstallListView.delegateEvents();
+            self.appInstallListView.render();
+            //self.appInstallListView.delegateEvents();
+            //self.appSection.show(self.appInstallListView);
+        });
+        */
+    }
+
+});
+
+/*
+module.exports.LicenseAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/discoveryModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
+*/
+
+},{"../../apps/views":39,"../../views/generic_views":84,"../../views/regions":86,"./templates/main.html":78,"backbone-bundle":90,"backbone.marionette":99,"q":17}],80:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -31407,14 +34171,19 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":45,"backbone-bundle":72,"index":44}],59:[function(require,module,exports){
+},{"./messages/models":58,"backbone-bundle":90,"index":57}],81:[function(require,module,exports){
 
-//CBApp.CurrentUser = Backbone.RelationalModel.extend({
-CBApp.CurrentUser = Backbone.Deferred.Model.extend({
+require('../models');
+
+//CBApp.CurrentUser = Backbone.Deferred.Model.extend({
+/*
+CBApp.CurrentUser = CBApp.User.extend({
 
     idAttribute: 'id',
 
     backend: 'currentUser',
+
+    //partOfModel: CBApp.User,
 
     initialize: function() {
 
@@ -31430,6 +34199,18 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
     relations: [
         {
             type: Backbone.HasMany,
+            key: 'appLicences',
+            keySource: 'app_licences',
+            keyDestination: 'app_licences',
+            relatedModel: 'CBApp.AppLicence',
+            collectionType: 'CBApp.AppLicenceCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            //includeInJSON: false,
+            initializeCollection: 'appLicenceCollection'
+        },
+        {
+            type: Backbone.HasMany,
             key: 'bridgeControls',
             keySource: 'bridge_controls',
             keyDestination: 'bridge_controls',
@@ -31437,35 +34218,10 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
             collectionType: 'CBApp.BridgeControlCollection',
             createModels: true,
             includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection',
-            /*
-            reverseRelation: {
-                key: 'current_user',
-                includeInJSON: true
-            }
-            */
+            initializeCollection: 'bridgeControlCollection'
         }
-    ],
+    ]
 
-    getCBID: function() {
-
-        return "UID" + this.get('id');
-    }
-});
-
-/*
-CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
-
-    model: CBApp.CurrentUser,
-    backend: 'currentUser',
-
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
 });
 */
 
@@ -31488,25 +34244,147 @@ CBApp.getCurrentUser = function() {
     return CBApp.currentUserDeferred.promise;
 };
 
-},{}],60:[function(require,module,exports){
+//CBApp.U = Backbone.RelationalModel.extend({
+//CBApp.U = Backbone.Deferred.Model.extend({
+
+//CBApp.CurrentUser = CBApp.User.extend({
+//CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
+CBApp.LoggedInUser = CBApp.User.extend({
+
+    idAttribute: 'id',
+
+    backend: 'currentUser',
+
+    defaults: {
+        type: 'loggedInUser'
+    },
+
+    //partOfModel: CBApp.User,
+
+    initialize: function() {
+
+        //this.bindBackend();
+        //var bridgeControlArray = this.get('bridgeControls');
+
+        // Set the current bridge
+        //var currentBridge = bridgeControlArray.at(0).get('bridge');
+        //currentBridge.set('current', true);
+        /*
+        this.listenTo(this, 'all', function(name) {
+            console.log('EVENT currentUser', name);
+        })
+        */
+
+    },
+
+    relations: [
+        {
+            type: Backbone.HasMany,
+            key: 'bridgeControls',
+            keySource: 'bridge_controls',
+            keyDestination: 'bridge_controls',
+            relatedModel: 'CBApp.BridgeControl',
+            collectionType: 'CBApp.BridgeControlCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeControlCollection'
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'appLicences',
+            keySource: 'app_licences',
+            keyDestination: 'app_licences',
+            relatedModel: 'CBApp.AppLicence',
+            collectionType: 'CBApp.AppLicenceCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            //includeInJSON: false,
+            initializeCollection: 'appLicenceCollection'
+        },
+    ]
+});
+
+CBApp.CurrentUserCollection = Backbone.Collection.extend({
+
+    model: CBApp.LoggedInUser,
+    backend: 'currentUser',
+
+    initialize: function() {
+        this.bindBackend();
+    },
+
+    parse : function(response){
+        return response.objects;
+    }
+});
+
+},{"../models":82}],82:[function(require,module,exports){
+
+//CBApp.User = Backbone.Deferred.Model.extend({
+CBApp.User = Backbone.RelationalModel.extend({
+
+    idAttribute: 'id',
+
+    subModelTypes: {
+		'loggedInUser': 'CBApp.LoggedInUser',
+	},
+
+    /*
+    defaults: {
+        type: 'user'
+    },
+    */
+
+    initialize: function() {
+
+        //this.bindBackend();
+        //var bridgeControlArray = this.get('bridgeControls');
+
+        // Set the current bridge
+        //var currentBridge = bridgeControlArray.at(0).get('bridge');
+        //currentBridge.set('current', true);
+
+    },
+
+    getCBID: function() {
+
+        return "UID" + this.get('id');
+    }
+});
+
+CBApp.UserCollection = Backbone.Collection.extend({
+
+    model: CBApp.User,
+    backend: 'user',
+
+    initialize: function() {
+        //this.bindBackend();
+    },
+
+    parse : function(response){
+        return response.objects;
+    }
+});
+
+},{}],83:[function(require,module,exports){
 
 var CBApp = require('index');
-require('./views/portal_view');
-require('./views/nav_view');
+//require('./views/portal_view');
+//require('./modules/nav/nav');
 
 CBApp.addInitializer(function () {
 
-  CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
+  //CBApp.portalLayout = new CBApp.PortalLayout({ el: "#app" });
 
-  CBApp.Nav.topBarLayoutView = new CBApp.Nav.TopBarView();
+  //CBApp.Nav.topBarView = new CBApp.Nav.TopBarView();
   //CBApp.homeLayoutView = new CBApp.HomeLayoutView();
 
-  CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarLayoutView);
+  //CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarView);
   //CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
 });
 
 
-},{"./views/nav_view":62,"./views/portal_view":63,"index":44}],61:[function(require,module,exports){
+},{"index":57}],84:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31525,185 +34403,12 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":68,"backbone-bundle":72,"backbone.marionette":80}],62:[function(require,module,exports){
+},{"./templates/listItemLoading.html":87,"backbone-bundle":90,"backbone.marionette":99}],85:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-require('bootstrap');
-
-var CBApp = require('index');
-
-CBApp.Nav.BridgeItemView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-
-    template: require('./templates/bridgeItem.html'),
-
-    serializeData: function(){
-        return {
-          "name": this.model.get('name')
-        }
-    },
-
-    events: {
-        'click': 'bridgeClick'
-    },
-
-    bridgeClick: function() {
-        CBApp.controller.setCurrentBridge(this.model);
-    },
-
-    onRender: function() {
-
-        // Show the bridge as active if it is the current bridge
-        $(this.el).attr('class', '');
-    }
-});
-
-CBApp.Nav.BridgeDropdownView = Marionette.CompositeView.extend({
-    
-    tagName: 'li',
-    className: 'dropdown',
-    itemView: CBApp.Nav.BridgeItemView,
-    itemViewContainer: '#bridge-list',
-    template: require('./templates/bridgeDropdown.html'),
-
-    bindings: {
-        '.header-text': 'name'
-    },
-
-    initialize: function () {
-
-        var self = this;
-
-    },
-
-    collectionEvents: {
-        //'add': 'addBridge'
-    },
-
-    addBridge: function() {
-
-        //CBApp.getCurrentBridge()
-        this.render();
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        CBApp.getCurrentBridge().then(function(currentBridge){
-
-            self.model = currentBridge;
-            self.listenToOnce(self.model, 'change', self.render);
-            //self.model.bind('change', self.render);
-            self.stickit();
-        });
-    }
-});
-
-CBApp.Nav.AccountDropdownView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'dropdown',
-
-    template: require('./templates/accountDropdown.html'),
-
-    bindings: {
-        '.header-text': 'name'
-    },
-
-    events: {
-        //'click #logout': 'bridgeClick'
-        //'click #interest-button': 'interestButtonClick',
-    },
-
-    serializeData: function(){
-        return {
-            "logout-url": "test-link"
-        }
-    },
-
-    onRender: function() {
-        /*
-        // Get rid of that pesky wrapping-div.
-        // Assumes 1 child element present in template.
-        this.$el = this.$el.children();
-        // Unwrap the element to prevent infinitely
-        // nesting elements during re-render.
-        this.$el.unwrap();
-        this.setElement(this.$el);
-        */
-    }
-});
-
-/*
-CBApp.Nav.RightLayoutView = Marionette.Layout.extend({
-
-    template: require('./templates/navRightSection.html'),
-    className: 'container',
-
-    regions: {
-        accountMenu: '#account-menu'
-    },
-
-    initialize: function() {
-
-        var currentUser = CBApp.getCurrentUser();
-        var navAccountMenuView = new CBApp.Nav.AccountMenuView({
-            model: currentUser
-        });
-    },
-
-    onRender: function() {
-
-        this.accountMenu.show(navAccountMenuView);
-    }
-});
-*/
-
-CBApp.Nav.TopBarView = Marionette.ItemView.extend({
-
-    template: require('./templates/navSection.html'),
-    className: 'container',
-
-    /*
-    regions: {
-        navbarLeft: '#navbar-left',
-        navbarRight: '#account-dropdown'
-    },
-    */
-
-    onRender: function() {
-
-        var $navbarLeft = this.$('#navbar-left');
-        this.bridgeDropdownView = new CBApp.Nav.BridgeDropdownView({
-            collection: CBApp.bridgeCollection
-        });
-        $navbarLeft.append(this.bridgeDropdownView.render().$el);
-
-        /*
-        var $navBarRight = this.$('navbar-right');
-        this.accountDropdownView = new CBApp.Nav.AccountDropdownView({
-            collection: CBApp.currentUserCollection
-        });
-        $navBarRight.append(this.accountDropdownView.render().$el);
-        */
-
-        //this.navbarLeft.show(bridgeDropdownView);
-        //this.navbarRight.show(accountDropdownView);
-    }
-});
-
-
-
-},{"./templates/accountDropdown.html":65,"./templates/bridgeDropdown.html":66,"./templates/bridgeItem.html":67,"./templates/navSection.html":69,"backbone-bundle":72,"backbone.marionette":80,"bootstrap":85,"index":44}],63:[function(require,module,exports){
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
-CBApp.PortalLayout = Marionette.Layout.extend({
+module.exports = Marionette.Layout.extend({
     template: require('./templates/portalSection.html'),
     regions: {
       navRegion: "#nav-region",
@@ -31719,7 +34424,7 @@ CBApp.PortalLayout = Marionette.Layout.extend({
     }
 });
 
-},{"./templates/portalSection.html":70,"backbone-bundle":72,"backbone.marionette":80}],64:[function(require,module,exports){
+},{"./templates/portalSection.html":88,"backbone-bundle":90,"backbone.marionette":99}],86:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31735,62 +34440,9 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":72,"backbone.marionette":80}],65:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "\n<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n    <div class=\"header-text\">My Account</div>\n    <b class=\"caret\"></b>\n</a>\n<ul class=\"dropdown-menu\">\n    <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n</ul>\n";
-  });
-
-},{"hbsfy/runtime":13}],66:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
-  });
-
-},{"hbsfy/runtime":13}],67:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<a href=\"#\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":13}],68:[function(require,module,exports){
-module.exports=require(33)
-},{"hbsfy/runtime":13}],69:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a href=\"\">Dashboard</a></li>\n        <li><a href=\"\">App Store</a></li>\n        <li><a href=\"\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
-  });
-
-},{"hbsfy/runtime":13}],70:[function(require,module,exports){
+},{"backbone-bundle":90,"backbone.marionette":99}],87:[function(require,module,exports){
+module.exports=require(46)
+},{"hbsfy/runtime":14}],88:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31802,16 +34454,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div id=\"main-region\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],71:[function(require,module,exports){
+},{"hbsfy/runtime":14}],89:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
 
 var CBApp = require('index');
 require('./cb/modules/config/config');
+require('./cb/modules/store/store');
+require('./cb/modules/nav/nav');
 require('./cb/socket');
 require('./cb/models');
 require('./cb/views');
-
 
 (function($){
 	$(document).ready(function() {
@@ -31821,7 +34474,7 @@ require('./cb/views');
 })(jQuery);
 
 
-},{"./cb/models":52,"./cb/modules/config/config":53,"./cb/socket":58,"./cb/views":60,"index":44,"jquery-browserify":14}],72:[function(require,module,exports){
+},{"./cb/models":65,"./cb/modules/config/config":66,"./cb/modules/nav/nav":72,"./cb/modules/store/store":77,"./cb/socket":80,"./cb/views":83,"index":57,"jquery-browserify":15}],90:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -31837,18 +34490,26 @@ require('backbone-io');
 require('./backbone.trackit.js');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
+//require('./backbone-bossview');
 require('backbone.modal');
+
 require('./backbone-notify');
+
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb-models');
+var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 var CBViewsMixin = require('./backbone-cb-views');
+Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
+
+QueryEngine = require('query-engine');
+
+require('./backbone-cb-model');
 require('backbone-deferred');
 
 /*
@@ -31868,7 +34529,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":51,"./backbone-cb-models":73,"./backbone-cb-views":74,"./backbone-notify":78,"./backbone-relational":79,"./backbone.stickit":83,"./backbone.trackit.js":84,"backbone":3,"backbone-cocktail":75,"backbone-deferred":76,"backbone-io":77,"backbone.babysitter":1,"backbone.marionette":80,"backbone.marionette.subrouter":81,"backbone.modal":82,"backbone.wreqr":2,"jquery":15,"q":16,"underscore":18}],73:[function(require,module,exports){
+},{"../../cb/misc/relational-models":64,"./backbone-cb-model":92,"./backbone-cb-model-mixin":91,"./backbone-cb-views":93,"./backbone-notify":97,"./backbone-relational":98,"./backbone.stickit":102,"./backbone.trackit.js":103,"backbone":3,"backbone-cocktail":94,"backbone-deferred":95,"backbone-io":96,"backbone.babysitter":1,"backbone.marionette":99,"backbone.marionette.subrouter":100,"backbone.modal":101,"backbone.wreqr":2,"jquery":16,"q":17,"query-engine":18,"underscore":20}],91:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -31888,10 +34549,14 @@ module.exports = {
       return jsonAttributes;
     },
 
+
     destroyOnServer: function(options) {
       options = options ? _.clone(options) : {};
       var model = this;
       var success = options.success;
+
+      // ADDED Set isGhost to true, indicating the model is being deleted on server
+      this.set('isGhost', true);
 
       //var destroy = function() {
       //  model.trigger('destroy', model, model.collection, options);
@@ -31958,7 +34623,58 @@ module.exports = {
     }
     */
 };
-},{}],74:[function(require,module,exports){
+
+
+
+
+},{}],92:[function(require,module,exports){
+
+var OriginalModel = Backbone.RelationalModel;
+
+var CBModel = OriginalModel.extend({
+
+    constructor: function(attributes, options) {
+
+        var args = Array.prototype.slice.call(arguments);
+        var attrs = args[0] || {};
+        // Set a model to be a ghost if it has not been instantiated on the server
+        attrs.isGhost = attrs[ this.idAttribute ] ? false : true;
+        //Backbone.RelationalModel.prototype.constructor.apply(this, arguments);
+        args[0] = attrs;
+        OriginalModel.apply(this, args);
+    },
+
+    save: function(key, val, options) {
+
+        console.log('save cb');
+        // Copied from Backbone source
+        var attrs, method, xhr, attributes = this.attributes;
+        if (key == null || typeof key === 'object') {
+            attrs = key;
+            options = val;
+        } else {
+            (attrs = {})[key] = val;
+        }
+
+        options = _.extend({validate: true}, options);
+
+        var success = options.success;
+        options.success = function(model, resp, options) {
+          // ADDED If this model saved successfully it is not a ghost
+          model.set('isGhost', false);
+          if (success) success(model, resp, options);
+        };
+
+        var args = Array.prototype.slice.call(arguments);
+        // ADDED Set isGhost to false, indicating the model is being instantiated on server
+        this.set('isGhost', false);
+        OriginalModel.prototype.save.apply(this, args);
+    }
+
+});
+
+Backbone.RelationalModel = CBModel;
+},{}],93:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -31969,11 +34685,22 @@ var wrapError = function(model, options) {
     };
 };
 
+module.exports.ItemView = {
+
+    setModel: function(model) {
+
+        if (this.model != model) {
+            this.undelegateEvents();
+            this.model = model;
+            this.delegateEvents();
+        }
+    }
+}
+
 module.exports.RelationalCollectionView = {
 
     _initialEvents: function() {
         // Listen to relational events
-        console.log('_initialEvents this.collection', this.collection);
         if (this.collection){
             //this.listenTo(this.collection, "add", this.addChildView);
             this.listenTo(this.collection, "add", this.render);
@@ -31984,6 +34711,19 @@ module.exports.RelationalCollectionView = {
             this.listenTo(this.collection, 'relational:add', this.render);
         }
     },
+
+    /*
+    setupCollection: function(collection) {
+
+        console.log('setupCollection', collection);
+        this.collection = collection;
+        this._initialEvents();
+        this.delegateEvents();
+        console.log('setupCollection after de');
+        this.render();
+        console.log('setupCollection after render');
+    },
+    */
 
     _stopListening: function() {
 
@@ -32011,7 +34751,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],75:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -32114,7 +34854,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":18}],76:[function(require,module,exports){
+},{"underscore":20}],95:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -32462,7 +35202,8 @@ Q = global.Q = require("q");
 
     return Collection;
 
-  })(Backbone.Collection);
+      // ADDED Changed Backbone.Collection to QueryEngine.QueryCollection
+  })(QueryEngine.QueryCollection);
 
 }).call(this);
 
@@ -32471,7 +35212,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],77:[function(require,module,exports){
+},{"backbone":3,"q":17}],96:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -32668,7 +35409,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":17,"underscore":18}],78:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":19,"underscore":20}],97:[function(require,module,exports){
 
 //var notify = require('notify');
 
@@ -32701,7 +35442,7 @@ _ = global._ = require("underscore");
   })(Backbone.Modal);
 
 }).call(this);
-},{}],79:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -34179,7 +36920,6 @@ _ = global._ = require("underscore");
 					Backbone.Relational.store.update( this );
 				}
 
-                console.log('attributes in set', JSON.stringify(attributes));
 				if ( attributes ) {
 					this.updateRelations( attributes, options );
 				}
@@ -34701,7 +37441,7 @@ _ = global._ = require("underscore");
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":18}],80:[function(require,module,exports){
+},{"backbone":3,"underscore":20}],99:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -37167,7 +39907,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":18}],81:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":20}],100:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -37262,7 +40002,7 @@ _ = global._ = require("underscore");
         // ADDED
         navigate: function(fragment, options) {
             // Add a trailing slash if required
-            var trailingSlash = (this.createTrailingSlashRoutes && fragment.slice(-1) != '/')
+            var trailingSlash = (this.createTrailingSlashRoutes && fragment && fragment.slice(-1) != '/')
                 ? '/' : '';
             // Append the prefix
             var qualifiedFragment = this.prefix + fragment + trailingSlash;
@@ -37280,7 +40020,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":80,"backbone":3,"underscore":18}],82:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":99,"backbone":3,"underscore":20}],101:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -37777,170 +40517,235 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":80,"backbone":3,"underscore":18}],83:[function(require,module,exports){
-//
-// backbone.stickit - v0.7.0
-// The MIT License
-// Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com> 
-//
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":99,"backbone":3,"underscore":20}],102:[function(require,module,exports){
+// Backbone.Stickit v0.8.0, MIT Licensed
+// Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
+
 (function (factory) {
 
   // Set up Stickit appropriately for the environment. Start with AMD.
-  if (typeof define === 'function' && define.amd)
-    define(['../../../../.', 'backbone'], factory);
+  if (typeof define === 'function' && define.amd) {
+    define(['underscore', 'backbone', 'exports'], factory);
+  }
 
   // Next for Node.js or CommonJS.
-  else if (typeof exports === 'object')
-    factory(require('underscore'), require('backbone'));
+  else if (typeof exports === 'object') {
+    factory(require('underscore'), require('backbone'), exports);
+  }
 
   // Finally, as a browser global.
-  else
-    factory(_, Backbone);
+  else {
+    factory(_, Backbone, {});
+  }
 
-}(function (_, Backbone) {
+}(function (_, Backbone, Stickit) {
 
-  // Backbone.Stickit Namespace
+  // Stickit Namespace
   // --------------------------
 
-  Backbone.Stickit = {
+  Stickit._handlers = [];
 
-    _handlers: [],
-
-    addHandler: function(handlers) {
-      // Fill-in default values.
-      handlers = _.map(_.flatten([handlers]), function(handler) {
-        return _.extend({
-          updateModel: true,
-          updateView: true,
-          updateMethod: 'text'
-        }, handler);
+  Stickit.addHandler = function(handlers) {
+    // Fill-in default values.
+    handlers = _.map(_.flatten([handlers]), function(handler) {
+      return _.defaults({}, handler, {
+        updateModel: true,
+        updateView: true,
+        updateMethod: 'text'
       });
-      this._handlers = this._handlers.concat(handlers);
-    }
+    });
+    this._handlers = this._handlers.concat(handlers);
   };
 
   // Backbone.View Mixins
   // --------------------
 
-  _.extend(Backbone.View.prototype, {
+  Stickit.ViewMixin = {
 
     // Collection of model event bindings.
-    //   [{model,event,fn}, ...]
+    //   [{model,event,fn,config}, ...]
     _modelBindings: null,
 
     // Unbind the model and event bindings from `this._modelBindings` and
     // `this.$el`. If the optional `model` parameter is defined, then only
     // delete bindings for the given `model` and its corresponding view events.
-    unstickit: function(model) {
-      var models = [];
-      _.each(this._modelBindings, function(binding, i) {
-        if (model && binding.model !== model) return false;
+    unstickit: function(model, bindingSelector) {
+
+      // Support passing a bindings hash in place of bindingSelector.
+      if (_.isObject(bindingSelector)) {
+        _.each(bindingSelector, function(v, selector) {
+          this.unstickit(model, selector);
+        }, this);
+        return;
+      }
+
+      var models = [], destroyFns = [], bindings = _.clone(this._modelBindings);
+      _.each(bindings, function(binding, i) {
+        if (model && binding.model !== model) return;
+        if (bindingSelector && binding.config.selector != bindingSelector) return;
+
         binding.model.off(binding.event, binding.fn);
+        destroyFns.push(binding.config._destroy);
         models.push(binding.model);
         delete this._modelBindings[i];
       }, this);
 
       // Trigger an event for each model that was unbound.
       _.invoke(_.uniq(models), 'trigger', 'stickit:unstuck', this.cid);
+
+      // Call `_destroy` on a unique list of the binding callbacks.
+      _.each(_.uniq(destroyFns), function(fn) { fn.call(this); }, this);
+
       // Cleanup the null values.
       this._modelBindings = _.compact(this._modelBindings);
 
-      this.$el.off('.stickit' + (model ? '.' + model.cid : ''));
+      this.$el.off('.stickit' + (model ? '.' + model.cid : ''), bindingSelector);
     },
 
-    // Using `this.bindings` configuration or the `optionalBindingsConfig`, binds `this.model`
-    // or the `optionalModel` to elements in the view.
+    // Initilize Stickit bindings for the view. Subsequent binding additions
+    // can either call `stickit` with the new bindings, or add them directly
+    // with `addBinding`. Both arguments to `stickit` are optional.
     stickit: function(optionalModel, optionalBindingsConfig) {
       var model = optionalModel || this.model,
-        namespace = '.stickit.' + model.cid,
-        bindings = optionalBindingsConfig || _.result(this, "bindings") || {};
+          bindings = optionalBindingsConfig || _.result(this, "bindings") || {};
 
       this._modelBindings || (this._modelBindings = []);
-      this.unstickit(model);
 
-      // Iterate through the selectors in the bindings configuration and configure
-      // the various options for each field.
-      _.each(bindings, function(v, selector) {
-        var $el, options, modelAttr, config,
-          binding = bindings[selector] || {},
-          bindId = _.uniqueId();
-
-        // Support ':el' selector - special case selector for the view managed delegate.
-        $el = selector === ':el' ? this.$el : this.$(selector);
-
-        // Fail fast if the selector didn't match an element.
-        if (!$el.length) return;
-
-        // Allow shorthand setting of model attributes - `'selector':'observe'`.
-        if (_.isString(binding)) binding = {observe:binding};
-
-        // Handle case where `observe` is in the form of a function.
-        if (_.isFunction(binding.observe)) binding.observe = binding.observe.call(this);
-
-        config = getConfiguration($el, binding);
-
-        modelAttr = config.observe;
-
-        // Create the model set options with a unique `bindId` so that we
-        // can avoid double-binding in the `change:attribute` event handler.
-        config.bindId = bindId;
-        // Add a reference to the view for handlers of stickitChange events
-        config.view = this;
-        options = _.extend({stickitChange:config}, config.setOptions);
-
-        initializeAttributes(this, $el, config, model, modelAttr);
-
-        initializeVisible(this, $el, config, model, modelAttr);
-
-        if (modelAttr) {
-          // Setup one-way, form element to model, bindings.
-          _.each(config.events, function(type) {
-            var event = type + namespace;
-            var method = function(event) {
-              var val = config.getVal.call(this, $el, event, config, _.rest(arguments));
-              // Don't update the model if false is returned from the `updateModel` configuration.
-              if (evaluateBoolean(this, config.updateModel, val, event, config))
-                setAttr(model, modelAttr, val, options, this, config);
-            };
-            method = _.bind(method, this);
-            if (selector === ':el') this.$el.on(event, method);
-            else this.$el.on(event, selector, method);
-          }, this);
-
-          // Setup a `change:modelAttr` observer to keep the view element in sync.
-          // `modelAttr` may be an array of attributes or a single string value.
-          _.each(_.flatten([modelAttr]), function(attr) {
-            observeModelEvent(model, this, 'change:'+attr, function(model, val, options) {
-              var changeId = options && options.stickitChange && options.stickitChange.bindId || null;
-              if (changeId !== bindId)
-                updateViewBindEl(this, $el, config, getAttr(model, modelAttr, config, this), model);
-            });
-          }, this);
-
-          updateViewBindEl(this, $el, config, getAttr(model, modelAttr, config, this), model, true);
-        }
-
-        model.once('stickit:unstuck', function(cid) {
-          if (cid === this.cid) applyViewFn(this, config.destroy, $el, model, config);
-        }, this);
-
-        // After each binding is setup, call the `initialize` callback.
-        applyViewFn(this, config.initialize, $el, model, config);
-      }, this);
+      // Add bindings in bulk using `addBinding`.
+      this.addBinding(model, bindings);
 
       // Wrap `view.remove` to unbind stickit model and dom events.
       var remove = this.remove;
-      this.remove = function() {
-        var ret = this;
-        this.unstickit();
-        if (remove) ret = remove.apply(this, _.rest(arguments));
-        return ret;
+      if (!remove.stickitWrapped) {
+        this.remove = function() {
+          var ret = this;
+          this.unstickit();
+          if (remove) ret = remove.apply(this, arguments);
+          return ret;
+        };
+      }
+      this.remove.stickitWrapped = true;
+      return this;
+    },
+
+    // Add a single Stickit binding or a hash of bindings to the model. If
+    // `optionalModel` is ommitted, will default to the view's `model` property.
+    addBinding: function(optionalModel, selector, binding) {
+      var model = optionalModel || this.model,
+          namespace = '.stickit.' + model.cid,
+          binding = binding || {};
+
+      // Support jQuery-style {key: val} event maps.
+      if (_.isObject(selector)) {
+        var bindings = selector;
+        _.each(bindings, function(val, key) {
+          this.addBinding(model, key, val);
+        }, this);
+        return;
+      }
+
+      // Special case the ':el' selector to use the view's this.$el.
+      var $el = selector === ':el' ? this.$el : this.$(selector);
+
+      // Clear any previous matching bindings.
+      this.unstickit(model, selector);
+
+      // Fail fast if the selector didn't match an element.
+      if (!$el.length) return;
+
+      // Allow shorthand setting of model attributes - `'selector':'observe'`.
+      if (_.isString(binding)) binding = {observe: binding};
+
+      // Handle case where `observe` is in the form of a function.
+      if (_.isFunction(binding.observe)) binding.observe = binding.observe.call(this);
+
+      // Find all matching Stickit handlers that could apply to this element
+      // and store in a config object.
+      var config = getConfiguration($el, binding);
+
+      // The attribute we're observing in our config.
+      var modelAttr = config.observe;
+
+      // Store needed properties for later.
+      config.selector = selector;
+      config.view = this;
+
+      // Create the model set options with a unique `bindId` so that we
+      // can avoid double-binding in the `change:attribute` event handler.
+      var bindId = config.bindId = _.uniqueId();
+
+      // Add a reference to the view for handlers of stickitChange events
+      var options = _.extend({stickitChange: config}, config.setOptions);
+
+      // Add a `_destroy` callback to the configuration, in case `destroy`
+      // is a named function and we need a unique function when unsticking.
+      config._destroy = function() {
+        applyViewFn.call(this, config.destroy, $el, model, config);
       };
+
+      initializeAttributes($el, config, model, modelAttr);
+      initializeVisible($el, config, model, modelAttr);
+      initializeClasses($el, config, model, modelAttr);
+
+      if (modelAttr) {
+        // Setup one-way (input element -> model) bindings.
+        _.each(config.events, function(type) {
+          var eventName = type + namespace;
+          var listener = function(event) {
+            var val = applyViewFn.call(this, config.getVal, $el, event, config, slice.call(arguments, 1));
+
+            // Don't update the model if false is returned from the `updateModel` configuration.
+            var currentVal = evaluateBoolean(config.updateModel, val, event, config);
+            if (currentVal) setAttr(model, modelAttr, val, options, config);
+          };
+          var sel = selector === ':el'? '' : selector;
+          this.$el.on(eventName, sel, _.bind(listener, this));
+        }, this);
+
+        // Setup a `change:modelAttr` observer to keep the view element in sync.
+        // `modelAttr` may be an array of attributes or a single string value.
+        _.each(_.flatten([modelAttr]), function(attr) {
+          observeModelEvent(model, 'change:' + attr, config, function(model, val, options) {
+            var changeId = options && options.stickitChange && options.stickitChange.bindId;
+            if (changeId !== bindId) {
+              var currentVal = getAttr(model, modelAttr, config);
+              updateViewBindEl($el, config, currentVal, model);
+            }
+          });
+        });
+
+        var currentVal = getAttr(model, modelAttr, config);
+        updateViewBindEl($el, config, currentVal, model, true);
+      }
+
+      // ADDED Update the element when any of the modelEvents are triggered
+      console.log('stickit config is', config);
+      if(config.modelEvents) {
+        _.each(config.modelEvents, function(modelEvent) {
+            console.log('modelEvent is', modelEvent);
+            observeModelEvent(model, modelEvent, config, function(model, val, options) {
+                var changeId = options && options.stickitChange && options.stickitChange.bindId;
+                console.log('observeModelEvent changeId', changeId);
+                if (changeId !== bindId) {
+                  var currentVal = getAttr(model, modelAttr, config);
+                  updateViewBindEl($el, config, currentVal, model);
+                  console.log('changeId !== bindId');
+                }
+            });
+        });
+      }
+
+      // After each binding is setup, call the `initialize` callback.
+      applyViewFn.call(this, config.initialize, $el, model, config);
     }
-  });
+  };
+
+  _.extend(Backbone.View.prototype, Stickit.ViewMixin);
 
   // Helpers
   // -------
+
+  var slice = [].slice;
 
   // Evaluates the given `path` (in object/dot-notation) relative to the given
   // `obj`. If the path is null/undefined, then the given `obj` is returned.
@@ -37952,37 +40757,43 @@ _ = global._ = require("underscore");
 
   // If the given `fn` is a string, then view[fn] is called, otherwise it is
   // a function that should be executed.
-  var applyViewFn = function(view, fn) {
-    if (fn) return (_.isString(fn) ? evaluatePath(view,fn) : fn).apply(view, _.rest(arguments, 2));
+  var applyViewFn = function(fn) {
+    fn = _.isString(fn) ? evaluatePath(this, fn) : fn;
+    if (fn) return (fn).apply(this, slice.call(arguments, 1));
   };
-
-  var getSelectedOption = function($select) { return $select.find('option').not(function(){ return !this.selected; }); };
 
   // Given a function, string (view function reference), or a boolean
   // value, returns the truthy result. Any other types evaluate as false.
-  var evaluateBoolean = function(view, reference) {
-    if (_.isBoolean(reference)) return reference;
-    else if (_.isFunction(reference) || _.isString(reference))
-      return applyViewFn.apply(this, arguments);
+  // The first argument must be `reference` and the last must be `config`, but
+  // middle arguments can be variadic.
+  var evaluateBoolean = function(reference, val, config) {
+    if (_.isBoolean(reference)) {
+      return reference;
+    } else if (_.isFunction(reference) || _.isString(reference)) {
+      var view = _.last(arguments).view;
+      return applyViewFn.apply(view, arguments);
+    }
     return false;
   };
 
   // Setup a model event binding with the given function, and track the event
   // in the view's _modelBindings.
-  var observeModelEvent = function(model, view, event, fn) {
+  var observeModelEvent = function(model, event, config, fn) {
+    var view = config.view;
     model.on(event, fn, view);
-    view._modelBindings.push({model:model, event:event, fn:fn});
+    view._modelBindings.push({model:model, event:event, fn:fn, config:config});
   };
 
   // Prepares the given `val`ue and sets it into the `model`.
-  var setAttr = function(model, attr, val, options, context, config) {
-    var value = {};
-    if (config.onSet)
-      val = applyViewFn(context, config.onSet, val, config);
+  var setAttr = function(model, attr, val, options, config) {
+    var value = {}, view = config.view;
+    if (config.onSet) {
+      val = applyViewFn.call(view, config.onSet, val, config);
+    }
 
-    if (config.set)
-      applyViewFn(context, config.set, attr, val, options, config);
-    else {
+    if (config.set) {
+      applyViewFn.call(view, config.set, attr, val, options, config);
+    } else {
       value[attr] = val;
       // If `observe` is defined as an array and `onSet` returned
       // an array, then map attributes to their values.
@@ -37999,39 +40810,40 @@ _ = global._ = require("underscore");
   // Returns the given `attr`'s value from the `model`, escaping and
   // formatting if necessary. If `attr` is an array, then an array of
   // respective values will be returned.
-  var getAttr = function(model, attr, config, context) {
-    var val,
-      retrieveVal = function(field) {
-        return model[config.escape ? 'escape' : 'get'](field);
-      },
-      sanitizeVal = function(val) {
-        return val == null ? '' : val;
-      };
-    val = _.isArray(attr) ? _.map(attr, retrieveVal) : retrieveVal(attr);
-    if (config.onGet) val = applyViewFn(context, config.onGet, val, config);
+  var getAttr = function(model, attr, config) {
+    var view = config.view;
+    var retrieveVal = function(field) {
+      return model[config.escape ? 'escape' : 'get'](field);
+    };
+    var sanitizeVal = function(val) {
+      return val == null ? '' : val;
+    };
+    var val = _.isArray(attr) ? _.map(attr, retrieveVal) : retrieveVal(attr);
+    if (config.onGet) val = applyViewFn.call(view, config.onGet, val, config);
     return _.isArray(val) ? _.map(val, sanitizeVal) : sanitizeVal(val);
   };
 
   // Find handlers in `Backbone.Stickit._handlers` with selectors that match
   // `$el` and generate a configuration by mixing them in the order that they
   // were found with the given `binding`.
-  var getConfiguration = Backbone.Stickit.getConfiguration = function($el, binding) {
+  var getConfiguration = Stickit.getConfiguration = function($el, binding) {
     var handlers = [{
       updateModel: false,
       updateMethod: 'text',
       update: function($el, val, m, opts) { if ($el[opts.updateMethod]) $el[opts.updateMethod](val); },
       getVal: function($el, e, opts) { return $el[opts.updateMethod](); }
     }];
-    handlers = handlers.concat(_.filter(Backbone.Stickit._handlers, function(handler) {
+    handlers = handlers.concat(_.filter(Stickit._handlers, function(handler) {
       return $el.is(handler.selector);
     }));
     handlers.push(binding);
+
+    // Merge handlers into a single config object. Last props in wins.
     var config = _.extend.apply(_, handlers);
+
     // `updateView` is defaulted to false for configutrations with
     // `visible`; otherwise, `updateView` is defaulted to true.
-    if (config.visible && !_.has(config, 'updateView')) config.updateView = false;
-    else if (!_.has(config, 'updateView')) config.updateView = true;
-    delete config.selector;
+    if (!_.has(config, 'updateView')) config.updateView = !config.visible;
     return config;
   };
 
@@ -38045,27 +40857,56 @@ _ = global._ = require("underscore");
   //       onGet: function(modelAttrVal, modelAttrName) { ... }
   //     }, ...]
   //
-  var initializeAttributes = function(view, $el, config, model, modelAttr) {
-    var props = ['autofocus', 'autoplay', 'async', 'checked', 'controls', 'defer', 'disabled', 'hidden', 'indeterminate', 'loop', 'multiple', 'open', 'readonly', 'required', 'scoped', 'selected'];
+  var initializeAttributes = function($el, config, model, modelAttr) {
+    var props = ['autofocus', 'autoplay', 'async', 'checked', 'controls',
+      'defer', 'disabled', 'hidden', 'indeterminate', 'loop', 'multiple',
+      'open', 'readonly', 'required', 'scoped', 'selected'];
+
+    var view = config.view;
 
     _.each(config.attributes || [], function(attrConfig) {
-      var lastClass = '', observed, updateAttr;
       attrConfig = _.clone(attrConfig);
-      observed = attrConfig.observe || (attrConfig.observe = modelAttr),
-      updateAttr = function() {
-        var updateType = _.indexOf(props, attrConfig.name, true) > -1 ? 'prop' : 'attr',
-          val = getAttr(model, observed, attrConfig, view);
+      attrConfig.view = view;
+
+      var lastClass = '';
+      var observed = attrConfig.observe || (attrConfig.observe = modelAttr);
+      var updateAttr = function() {
+        var updateType = _.contains(props, attrConfig.name) ? 'prop' : 'attr',
+            val = getAttr(model, observed, attrConfig);
+
         // If it is a class then we need to remove the last value and add the new.
         if (attrConfig.name === 'class') {
           $el.removeClass(lastClass).addClass(val);
           lastClass = val;
+        } else {
+          $el[updateType](attrConfig.name, val);
         }
-        else $el[updateType](attrConfig.name, val);
       };
+
       _.each(_.flatten([observed]), function(attr) {
-        observeModelEvent(model, view, 'change:' + attr, updateAttr);
+        observeModelEvent(model, 'change:' + attr, config, updateAttr);
       });
+
+      // Initialize the matched element's state.
       updateAttr();
+    });
+  };
+
+  var initializeClasses = function($el, config, model, modelAttr) {
+    _.each(config.classes || [], function(classConfig, name) {
+      if (_.isString(classConfig)) classConfig = {observe: classConfig};
+      classConfig.view = config.view;
+
+      var observed = classConfig.observe;
+      var updateClass = function() {
+        var val = getAttr(model, observed, classConfig);
+        $el.toggleClass(name, !!val);
+      };
+
+      _.each(_.flatten([observed]), function(attr) {
+        observeModelEvent(model, 'change:' + attr, config, updateClass);
+      });
+      updateClass();
     });
   };
 
@@ -38078,24 +40919,33 @@ _ = global._ = require("underscore");
   //     visible: true, // or function(val, options) {}
   //     visibleFn: function($el, isVisible, options) {} // optional handler
   //
-  var initializeVisible = function(view, $el, config, model, modelAttr) {
+  var initializeVisible = function($el, config, model, modelAttr) {
     if (config.visible == null) return;
+    var view = config.view;
+
     var visibleCb = function() {
       var visible = config.visible,
           visibleFn = config.visibleFn,
-          val = getAttr(model, modelAttr, config, view),
+          val = getAttr(model, modelAttr, config),
           isVisible = !!val;
+
       // If `visible` is a function then it should return a boolean result to show/hide.
-      if (_.isFunction(visible) || _.isString(visible)) isVisible = !!applyViewFn(view, visible, val, config);
+      if (_.isFunction(visible) || _.isString(visible)) {
+        isVisible = !!applyViewFn.call(view, visible, val, config);
+      }
+
       // Either use the custom `visibleFn`, if provided, or execute the standard show/hide.
-      if (visibleFn) applyViewFn(view, visibleFn, $el, isVisible, config);
-      else {
+      if (visibleFn) {
+        applyViewFn.call(view, visibleFn, $el, isVisible, config);
+      } else {
         $el.toggle(isVisible);
       }
     };
+
     _.each(_.flatten([modelAttr]), function(attr) {
-      observeModelEvent(model, view, 'change:' + attr, visibleCb);
+      observeModelEvent(model, 'change:' + attr, config, visibleCb);
     });
+
     visibleCb();
   };
 
@@ -38106,16 +40956,17 @@ _ = global._ = require("underscore");
   //     updateView: true, // defaults to true
   //     afterUpdate: function($el, val, options) {} // optional callback
   //
-  var updateViewBindEl = function(view, $el, config, val, model, isInitializing) {
-    if (!evaluateBoolean(view, config.updateView, val, config)) return;
-    applyViewFn(view, config.update, $el, val, model, config);
-    if (!isInitializing) applyViewFn(view, config.afterUpdate, $el, val, config);
+  var updateViewBindEl = function($el, config, val, model, isInitializing) {
+    var view = config.view;
+    if (!evaluateBoolean(config.updateView, val, config)) return;
+    applyViewFn.call(view, config.update, $el, val, model, config);
+    if (!isInitializing) applyViewFn.call(view, config.afterUpdate, $el, val, config);
   };
 
   // Default Handlers
   // ----------------
 
-  Backbone.Stickit.addHandler([{
+  Stickit.addHandler([{
     selector: '[contenteditable="true"]',
     updateMethod: 'html',
     events: ['input', 'change']
@@ -38150,7 +41001,7 @@ _ = global._ = require("underscore");
         val || (val = []);
         $el.each(function(i, el) {
           var checkbox = Backbone.$(el);
-          var checked = _.indexOf(val, checkbox.val()) > -1;
+          var checked = _.contains(val, checkbox.val());
           checkbox.prop('checked', checked);
         });
       } else {
@@ -38230,15 +41081,29 @@ _ = global._ = require("underscore");
             if (!_.isArray(optionVal) && !_.isObject(optionVal)) option.val(optionVal);
           };
 
-          if (obj === '__default__')
-            fillOption(selectConfig.defaultOption.label, selectConfig.defaultOption.value);
-          else
-            fillOption(evaluatePath(obj, selectConfig.labelPath), evaluatePath(obj, selectConfig.valuePath));
+          var text, val;
+          if (obj === '__default__') {
+            text = fieldVal.label,
+            val = fieldVal.value;
+          } else {
+            text = evaluatePath(obj, selectConfig.labelPath),
+            val = evaluatePath(obj, selectConfig.valuePath);
+          }
+          fillOption(text, val);
 
           // Determine if this option is selected.
-          if (!isMultiple && optionVal != null && fieldVal != null && optionVal === fieldVal || (_.isObject(fieldVal) && _.isEqual(optionVal, fieldVal)))
+          var isSelected = function() {
+            if (!isMultiple && optionVal != null && fieldVal != null && optionVal === fieldVal) {
+              return true;
+            } else if (_.isObject(fieldVal) && _.isEqual(optionVal, fieldVal)) {
+              return true;
+            }
+            return false;
+          };
+
+          if (isSelected()) {
             option.prop('selected', true);
-          else if (isMultiple && _.isArray(fieldVal)) {
+          } else if (isMultiple && _.isArray(fieldVal)) {
             _.each(fieldVal, function(val) {
               if (_.isObject(val)) val = evaluatePath(val, selectConfig.valuePath);
               if (val === optionVal || (_.isObject(val) && _.isEqual(optionVal, val)))
@@ -38250,25 +41115,60 @@ _ = global._ = require("underscore");
         });
       };
 
-      $el.html('');
+      $el.find('*').remove();
 
       // The `list` configuration is a function that returns the options list or a string
       // which represents the path to the list relative to `window` or the view/`this`.
-      var evaluate = function(view, list) {
+      if (_.isString(list)) {
         var context = window;
-        if (list.indexOf('this.') === 0) context = view;
+        if (list.indexOf('this.') === 0) context = this;
         list = list.replace(/^[a-z]*\.(.+)$/, '$1');
-        return evaluatePath(context, list);
-      };
-      if (_.isString(list)) optList = evaluate(this, list);
-      else if (_.isFunction(list)) optList = applyViewFn(this, list, $el, options);
-      else optList = list;
+        optList = evaluatePath(context, list);
+      } else if (_.isFunction(list)) {
+        optList = applyViewFn.call(this, list, $el, options);
+      } else {
+        optList = list;
+      }
 
       // Support Backbone.Collection and deserialize.
-      if (optList instanceof Backbone.Collection) optList = optList.toJSON();
+      if (optList instanceof Backbone.Collection) {
+        var collection = optList;
+        var refreshSelectOptions = function() {
+          var currentVal = getAttr(model, options.observe, options);
+          applyViewFn.call(this, options.update, $el, currentVal, model, options);
+        };
+        // We need to call this function after unstickit and after an update so we don't end up
+        // with multiple listeners doing the same thing
+        var removeCollectionListeners = function() {
+          collection.off('add remove reset sort', refreshSelectOptions);
+        };
+        var removeAllListeners = function() {
+          removeCollectionListeners();
+          collection.off('stickit:selectRefresh');
+          model.off('stickit:selectRefresh');
+        };
+        // Remove previously set event listeners by triggering a custom event
+        collection.trigger('stickit:selectRefresh');
+        collection.once('stickit:selectRefresh', removeCollectionListeners, this);
+
+        // Listen to the collection and trigger an update of the select options
+        collection.on('add remove reset sort', refreshSelectOptions, this);
+
+        // Remove the previous model event listener
+        model.trigger('stickit:selectRefresh');
+        model.once('stickit:selectRefresh', function() {
+          model.off('stickit:unstuck', removeAllListeners);
+        });
+        // Remove collection event listeners once this binding is unstuck
+        model.once('stickit:unstuck', removeAllListeners, this);
+        optList = optList.toJSON();
+      }
 
       if (selectConfig.defaultOption) {
-        addSelectOptions(["__default__"], $el);
+        var option = _.isFunction(selectConfig.defaultOption) ?
+          selectConfig.defaultOption.call(this, $el, options) :
+          selectConfig.defaultOption;
+        addSelectOptions(["__default__"], $el, option);
       }
 
       if (_.isArray(optList)) {
@@ -38298,25 +41198,32 @@ _ = global._ = require("underscore");
           opt[selectConfig.labelPath] = optList[i];
           opts.push(opt);
         }
-        addSelectOptions(_.sortBy(opts, selectConfig.comparator || selectConfig.labelPath), $el, val);
+        opts = _.sortBy(opts, selectConfig.comparator || selectConfig.labelPath);
+        addSelectOptions(opts, $el, val);
       }
     },
     getVal: function($el) {
-      var val;
+      var selected = $el.find('option:selected');
+
       if ($el.prop('multiple')) {
-        val = Backbone.$(getSelectedOption($el).map(function() {
-          return Backbone.$(this).data('stickit_bind_val');
-        })).get();
+        return _.map(selected, function(el) {
+          return Backbone.$(el).data('stickit_bind_val');
+        });
       } else {
-        val = getSelectedOption($el).data('stickit_bind_val');
+        return selected.data('stickit_bind_val');
       }
-      return val;
     }
   }]);
 
+
+  // Export onto Backbone object
+  Backbone.Stickit = Stickit;
+
+  return Backbone.Stickit;
+
 }));
 
-},{"backbone":3,"underscore":18}],84:[function(require,module,exports){
+},{"backbone":3,"underscore":20}],103:[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -38509,7 +41416,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -40471,4 +43378,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[71])
+},{"jquery":16}]},{},[89])

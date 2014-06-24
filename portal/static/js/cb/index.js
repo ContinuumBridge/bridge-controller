@@ -84,6 +84,7 @@ CBApp.on("initialize:after", function () {
   CBApp.Nav.topBarView = new CBApp.Nav.TopBarView();
   CBApp.portalLayout.navRegion.show(CBApp.Nav.topBarView);
 
+
   //for routing purposes
   if(Backbone.history) {
 
