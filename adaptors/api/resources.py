@@ -1,16 +1,17 @@
 from tastypie.resources import ModelResource 
 from tastypie.authorization import Authorization
 
-from bridges.api.abstract_resources import ThroughModelResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource
 from bridges.api import cb_fields
 
 from adaptors.models import Adaptor, AdaptorCompatibility
+from bridges.api.authentication import HTTPHeaderSessionAuthentication
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AdaptorResource(ModelResource):
+class AdaptorResource(CBResource):
 
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = Adaptor.objects.all()
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
@@ -22,7 +23,7 @@ class AdaptorDeviceCompatibilityResource(ThroughModelResource):
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=False)
     adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
-    class Meta:
+    class Meta(ThroughModelResource.Meta):
         queryset = AdaptorCompatibility.objects.all()
         authorization = Authorization()
         #list_allowed_methods = ['get', 'post']

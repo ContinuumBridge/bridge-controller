@@ -25,23 +25,24 @@ from tastypie.authorization import Authorization
 from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
-from bridges.api.abstract_resources import PostMatchMixin
+from bridges.api.abstract_resources import PostMatchMixin, CBResource, ThroughModelResource
 from devices.models import Device, DeviceInstall
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class DeviceResource(ModelResource):
+class DeviceResource(CBResource):
 
     adaptor_compatibility = cb_fields.ToManyThroughField(AdaptorDeviceCompatibilityResource, 
                     attribute=lambda bundle: bundle.obj.get_adaptor_compatibility() or bundle.obj.adaptorcompatibility_set, full=True,
                     null=True, readonly=True, nonmodel=True)
 
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = Device.objects.all()
         always_return_data = True
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
+        resource_name = 'device'
         filtering = {
             'name': ALL,
             'protocol': ALL,
@@ -52,41 +53,7 @@ class DeviceResource(ModelResource):
             'model_number': ALL,
             'system_id': ALL,
         }
-    '''
-    def prepend_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_search'), name="api_get_search"),
-        ]
 
-    def get_search(self, request, **kwargs):
-        self.method_check(request, allowed=['get'])
-        self.is_authenticated(request)
-        self.throttle_check(request)
-
-        # Do the query.
-        sqs = SearchQuerySet().models(Device).load_all().auto_query(request.GET.get('q', ''))
-        paginator = Paginator(sqs, 20)
-
-        try:
-            page = paginator.page(int(request.GET.get('page', 1)))
-        except InvalidPage:
-            raise Http404("Sorry, no results on that page.")
-
-        objects = []
-
-        for result in page.object_list:
-            bundle = self.build_bundle(obj=result.object, request=request)
-            bundle = self.full_dehydrate(bundle)
-            objects.append(bundle)
-
-        object_list = {
-            'objects': objects,
-        }
-
-        self.log_throttled_access(request)
-        return self.create_response(request, object_list)
-
-    '''
     def post_list(self, request, **kwargs):
         """
         Creates a new resource/object with the provided data.
@@ -141,22 +108,13 @@ def convert_post_to_patch(request):
     return convert_post_to_VERB(request, verb='PATCH')
 
 
-class DeviceInstallResource(PostMatchMixin, ModelResource):
+class DeviceInstallResource(PostMatchMixin, CBResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=True)
     adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
-    '''
-    adaptor_install = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorInstallResource', 
-                    attribute=lambda bundle: bundle.obj.get_adaptor_install() or bundle.obj.adaptorinstall_set,
-                    full=True, null=True)
-    adaptor_install = cb_fields.ToManyThroughField(AdaptorInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_adaptor_install() or bundle.obj.adaptorinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-    '''
-
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = DeviceInstall.objects.all()
         authorization = Authorization()
         always_return_data = True

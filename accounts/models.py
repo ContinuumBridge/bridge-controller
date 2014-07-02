@@ -11,6 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.http import urlquote
 
+from polymorphic import PolymorphicModel
+
 from allauth.socialaccount.providers import registry
 from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.providers.oauth.provider import OAuthProvider

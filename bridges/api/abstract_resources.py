@@ -34,9 +34,16 @@ from accounts.api.authorization import CurrentUserAuthorization
 
 from bridges.api import cb_fields
 
-class ThroughModelResource(ModelResource):
+class CBResource(ModelResource):
 
     class Meta:
+        authentication = HTTPHeaderSessionAuthentication()
+        resource_name = 'cb_resource'
+
+
+class ThroughModelResource(CBResource):
+
+    class Meta(CBResource.Meta):
         resource_name = 'through_model_resource'
 
     def full_dehydrate(self, bundle, for_list=False):
