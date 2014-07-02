@@ -25,7 +25,7 @@ from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
-from bridges.api.abstract_resources import PostMatchMixin, CBResource, ThroughModelResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource
 from devices.models import Device, DeviceInstall
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
