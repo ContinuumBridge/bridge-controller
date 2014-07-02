@@ -27,17 +27,17 @@ from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api import cb_fields
-from bridges.api.abstract_resources import ThroughModelResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource
 
 # For test
 from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
 
-class BridgeControlResource(ThroughModelResource):
+class BridgeControlResource(CBResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
 
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
         authorization = Authorization()
         #list_allowed_methods = ['get', 'post']
@@ -73,68 +73,7 @@ class BridgeControlResource(ThroughModelResource):
 
 #class BridgeControlResource(BridgeControlResource):
 
-
-class BridgeResource(ModelResource):
-
-    '''
-    apps = cb_fields.ToManyThroughField(AppInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-    '''
-
-
-    class Meta:
-        queryset = Bridge.objects.all()
-        authorization = ReadOnlyAuthorization()
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
-        resource_name = 'bridge'
-
-    '''
-    def dispatch(self, request_type, request, **kwargs):
-        """
-        Handles the common operations (allowed HTTP method, authentication,
-        throttling, method lookup) surrounding most CRUD interactions.
-        """
-        allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
-
-        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
-            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
-
-        request_method = self.method_check(request, allowed=allowed_methods)
-        method = getattr(self, "%s_%s" % (request_method, request_type), None)
-
-        if method is None:
-            raise ImmediateHttpResponse(response=http.HttpNotImplemented())
-
-        self.is_authenticated(request)
-        self.throttle_check(request)
-
-        # Set the pk of the request to that of the logged in bridge
-        if request_type == 'detail':
-            kwargs['pk'] = request.user.id
-
-        # All clear. Process the request.
-        request = convert_post_to_put(request)
-        response = method(request, **kwargs)
-
-        # Add the throttled request.
-        self.log_throttled_access(request)
-
-        # If what comes back isn't a ``HttpResponse``, assume that the
-        # request was accepted and that some action occurred. This also
-        # prevents Django from freaking out.
-        if not isinstance(response, HttpResponse):
-            return http.HttpNoContent()
-
-        return response
-    '''
-
-class BridgeResource(ModelResource):
+class BridgeResource(CBResource):
 
     '''
     apps = cb_fields.ToManyThroughField(AppInstallResource,
@@ -147,7 +86,7 @@ class BridgeResource(ModelResource):
     '''
 
 
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         authorization = ReadOnlyAuthorization()
         list_allowed_methods = ['get', 'post']
@@ -193,7 +132,7 @@ class BridgeResource(ModelResource):
         return response
 
 
-class CurrentBridgeResource(ModelResource):
+class CurrentBridgeResource(CBResource):
     
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
                     attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
@@ -207,7 +146,7 @@ class CurrentBridgeResource(ModelResource):
                     attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
 
-    class Meta:
+    class Meta(CBResource.Meta):
         resource_name = 'current_bridge'
         queryset = Bridge.objects.all()
         list_allowed_methods = ['get']

@@ -9,7 +9,7 @@ from bridges.models import BridgeControl
 
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import ThroughModelResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource
 from accounts.api.authorization import CurrentUserAuthorization
 
 class UserBridgeControlResource(ThroughModelResource):
@@ -17,7 +17,7 @@ class UserBridgeControlResource(ThroughModelResource):
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.CurrentBridgeResource', 'bridge', full=True)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
 
-    class Meta:
+    class Meta(ThroughModelResource.Meta):
         queryset = BridgeControl.objects.all()
         authorization = Authorization()
         #list_allowed_methods = ['get', 'post']
@@ -25,15 +25,13 @@ class UserBridgeControlResource(ThroughModelResource):
         resource_name = 'user_bridge_control'
 
 
-class CurrentUserResource(ModelResource):
-
-    #bridge_control = fields.ToManyField(UserBridgeControlResource, 'bridge_control', full=True)
+class CurrentUserResource(CBResource):
 
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
                     null=True, readonly=True, nonmodel=True)
 
-    class Meta:
+    class Meta(CBResource.Meta):
         resource_name = 'current_user'
         queryset = CBUser.objects.all()
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
@@ -87,9 +85,9 @@ class CurrentUserResource(ModelResource):
         return response
 
 
-class UserResource(ModelResource):
+class UserResource(CBResource):
 
-    class Meta:
+    class Meta(CBResource.Meta):
         resource_name = 'user'
         queryset = CBUser.objects.all()
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
