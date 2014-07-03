@@ -9,12 +9,15 @@ from bridges.api.abstract_resources import CBModelResource
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AppDevicePermissionResource(CBModelResource):
+from apps.api.authorization import AppInstallAuthorization
+from bridges.api.abstract_resources import CBResource, ThroughModelResource
+
+class AppDevicePermissionResource(CBResource):
 
     device_install = cb_fields.ToOneThroughField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
     app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
     
-    class Meta:
+    class Meta(CBResource.Meta):
        queryset = AppDevicePermission.objects.all()
        authorization = Authorization()
        list_allowed_methods = ['get', 'post']
@@ -23,7 +26,7 @@ class AppDevicePermissionResource(CBModelResource):
        resource_name = "app_device_permission"
        post_match = ['app_install', 'device_install']
 
-class AppInstallResource(ModelResource):
+class AppInstallResource(CBResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
@@ -32,7 +35,7 @@ class AppInstallResource(ModelResource):
                     attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,
                    null=True, readonly=True, nonmodel=True)
 
-    class Meta:
+    class Meta(CBResource.Meta):
        queryset = AppInstall.objects.all()
        authorization = Authorization()
        #list_allowed_methods = ['get', 'post']
@@ -85,9 +88,9 @@ class AppInstallResource(ModelResource):
         return bundle
     '''
 
-class AppResource(ModelResource):
+class AppResource(CBResource):
 
-    class Meta:
+    class Meta(CBResource.Meta):
         queryset = App.objects.all()
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
