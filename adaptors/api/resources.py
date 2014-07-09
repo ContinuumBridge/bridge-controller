@@ -14,8 +14,8 @@ class AdaptorResource(CBResource):
     class Meta(CBResource.Meta):
         queryset = Adaptor.objects.all()
         authorization = Authorization()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
+        list_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
         resource_name = 'adaptor'
 
 
