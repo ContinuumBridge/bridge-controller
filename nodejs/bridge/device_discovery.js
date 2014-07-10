@@ -40,11 +40,13 @@ function deviceDiscovery(message) {
             });
             var deviceQueryURL = Bridge.DJANGO_URL + "device/" + '?' + queryArray.join('&');
 
+            var address = discoveredDevice.address || discoveredDevice.mac_addr;
+            console.log('discovered address is', address);
             // Make a request to Django to get session data
             rest.get(deviceQueryURL, djangoOptions).on('complete', function(data, response) {
 
                 var deviceInstall = {};
-                deviceInstall.mac_addr = discoveredDevice.mac_addr;
+                deviceInstall.address = address;
                 deviceInstall.device = data.objects[0];
                 deviceInstall.bridge = bridgeURL;
 

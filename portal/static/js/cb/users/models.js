@@ -4,7 +4,15 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    backend: 'currentUser',
+    subModelTypes: {
+		'currentUser': 'CBApp.CurrentUser',
+	},
+
+    /*
+    defaults: {
+        type: 'user'
+    },
+    */
 
     initialize: function() {
 
@@ -41,7 +49,7 @@ CBApp.CurrentUser = Backbone.Deferred.Model.extend({
 
         return "UID" + this.get('id');
     }
-});
+}, { modelType: "user" });
 
 /*
 CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({

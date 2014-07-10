@@ -7,6 +7,8 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/installs/views');
+require('../../apps/licences/views');
+require('../../bridges/views');
 //require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
@@ -18,12 +20,12 @@ module.exports.Main = Marionette.Layout.extend({
 
     regions: {
         appSection: {
-            selector: '#app-section',
+            selector: '.app-section',
             regionType: CBApp.Regions.Fade
         },
-        deviceSection: '#device-section',
-        discoveredDeviceSection: '#disvered-device-section',
-        messageSection: '#message-section'
+        deviceSection: '.device-section',
+        messageSection: '.message-section',
+        bridgeSection: '.bridge-section'
     },
 
     bindings: {
@@ -42,6 +44,8 @@ module.exports.Main = Marionette.Layout.extend({
     initialize: function() {
 
         this.appInstallListView = new CBApp.AppInstallListView();
+        this.bridgeView = new CBApp.BridgeListView();
+        // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
     },
@@ -59,6 +63,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.deviceSection.show(this.devicesView);
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
+        this.bridgeSection.show(this.bridgeView);
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
@@ -73,7 +78,12 @@ module.exports.Main = Marionette.Layout.extend({
             CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
             self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
             self.messageListView.render();
-        });
+
+            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            console.log('bridgeCollection is', bridgeCollection);
+            self.bridgeView.setCollection(bridgeCollection);
+            self.bridgeView.render();
+        }).done();
     }
 
 });
@@ -112,7 +122,7 @@ var DevicesView = Marionette.ItemView.extend({
     render: function() {
 
         this.$el.html(this.template());
-        this.currentView.setElement(this.$('#current-view')).render();
+        this.currentView.setElement(this.$('.current-view')).render();
         //this.$el.append(this.currentView.render().$el);
 
         var self = this;
@@ -127,7 +137,7 @@ var DevicesView = Marionette.ItemView.extend({
             self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
             //self.discoveredDeviceInstallListView.render();
 
-            self.currentView.setElement(this.$('#current-view')).render();
+            self.currentView.setElement(this.$('.current-view')).render();
         });
 
         //self.currentView.render();

@@ -87,7 +87,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             initializeCollection: 'appInstallCollection'
         }
     ]
-});
+}, { modelType: "appDevicePermission" });
 
 CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
 

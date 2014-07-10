@@ -3,16 +3,18 @@ from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
 
 from bridges.api.abstract_resources import ThroughModelResource
-from apps.models import App, AppInstall, AppDevicePermission
-
-from bridges.api.abstract_resources import CBModelResource
+from accounts.api.authorization import UserObjectsOnlyAuthorization
+from apps.models import App, AppInstall, AppDevicePermission, AppLicence
+from apps.api.authorization import AppInstallAuthorization
+#from bridges.api.abstract_resources import CBModelResource
+from bridges.api.abstract_resources import PostMatchMixin
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-from apps.api.authorization import AppInstallAuthorization
 from bridges.api.abstract_resources import CBResource, ThroughModelResource
+from bridges.api.authorization import BridgeObjectsOnlyAuthorization
 
-class AppDevicePermissionResource(CBResource):
+class AppDevicePermissionResource(PostMatchMixin, CBResource):
 
     device_install = cb_fields.ToOneThroughField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
     app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
@@ -26,6 +28,28 @@ class AppDevicePermissionResource(CBResource):
        resource_name = "app_device_permission"
        post_match = ['app_install', 'device_install']
 
+
+class AppLicenceResource(PostMatchMixin, CBResource):
+
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+    #installs_permitted = fields.IntegerField()
+
+    installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
+                                                      attribute=lambda bundle: bundle.obj.get_installs() or bundle.obj.appinstall_set, full=False,
+                                                      null=True, readonly=True, nonmodel=True)
+
+    class Meta(CBResource.Meta):
+       queryset = AppLicence.objects.all()
+       #authorization = UserObjectsOnlyAuthorization()
+       authorization = Authorization()
+       list_allowed_methods = ['get', 'post']
+       detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+       always_return_data = True
+       resource_name = 'app_licence'
+       post_match = ['app', 'user']
+
+
 class AppInstallResource(CBResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
@@ -37,9 +61,10 @@ class AppInstallResource(CBResource):
 
     class Meta(CBResource.Meta):
        queryset = AppInstall.objects.all()
-       authorization = Authorization()
-       #list_allowed_methods = ['get', 'post']
-       #detail_allowed_methods = ['get']
+       authorization = AppInstallAuthorization()
+       #authorization = BridgeObjectsOnlyAuthorization()
+       list_allowed_methods = ['get', 'post']
+       detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
        always_return_data = True
        resource_name = 'app_install'
        include_in_post_match = ['name', 'manufacturer_name']

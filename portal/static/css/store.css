@@ -1,0 +1,11 @@
+
+
+.app-form-label {
+    float: left;
+}
+
+.form-control.app-form-input {
+    width: 45%;
+    float: left;
+}
+

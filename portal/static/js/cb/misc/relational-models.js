@@ -184,6 +184,13 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         _.each( this.relations || [], function( rel ) {
             //console.log('Initialise relation', rel);
             Backbone.Relational.store.initializeRelation( this, rel, options );
+
+            //this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
+            this.listenTo(this, 'all', function(event) {
+
+                //var name = this.collection ? this.collection.backend ? this.collection.backend.name : "" : "";
+                console.log('EVENT', event, ' on ', this);
+            });
             //this.updateRelationToSelf(rel, options);
         }, this);
 
@@ -234,9 +241,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
             // Iterate through models related to this model
             if (model) {
 
-                console.log('model in updateRelationsToSelf is', model);
+                //console.log('model in updateRelationsToSelf related to ', this.collection.backend.name, ' is ', model.toJSON());
                 // Get the relation these related models have to this model
-                var reverseRelation = model.get(rel.reverseRelation.key)
+                var plural = rel.related instanceof Backbone.Collection ? "" : "s";
+                var selfType = this.constructor.modelType + plural;
+                var reverseRelation = model.get(selfType);
+                console.log('selfType is', selfType, reverseRelation);
+                console.log('reverseRelation key is', rel.reverseRelation.key);
+                console.log('reverseRelation is', reverseRelation);
                 // If there is no reverse relation, there is nothing on any of the related models to update
                 if (!reverseRelation) return;
 
@@ -244,21 +256,22 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 var reverseModels = reverseRelation && reverseRelation instanceof Backbone.Collection
                     ? reverseRelation.models : [ reverseRelation ];
 
-                // Find model representing this model (self) from reverse relation. This might be slow?
+                // Find model representing this model (self) from reverse relation.
                 var reverseModel = _.findWhere(reverseModels, this.toJSON());
                 if (!reverseModel) {
 
                     console.log('this in updateRelationsToSelf', this.toJSON());
                     console.log('reverseModel', reverseModels);
+                    /*
                     if (reverseModels[0]) {
                         console.log('reverseModel JSON', reverseModels[0].toJSON());
                     }
+                    */
                 }
-                //var reverseModel = (this.id) ? _.findWhere(reverseModels, {id: this.id}) :
-                //    _.findWhere(reverseModels, this.toJSON());
 
                 if (reverseModel) {
 
+                    console.log('reverseModel is', reverseModel);
                     if (options && options.destroy) {
                         // Destroy the reverseModel if this model is being destroyed
                         if (reverseRelation instanceof Backbone.Collection) {
@@ -275,6 +288,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 } else {
                     // Add the model to the reverse relation
                     if (reverseRelation instanceof Backbone.Collection) {
+                        console.log('updateRelationsToSelf reverseRelation is collection', reverseRelation, this);
                         reverseRelation.add(this);
                         //reverseRelation.models.push(this);
                         //console.log('model', model);
@@ -284,6 +298,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     } else {
 
                         // Use updateRelations: false here to stop the update recurring indefinitely, there is probs a better way?
+                        console.log('updateRelationsToSelf reverseRelation is not a collection', reverseRelation, this);
                         var attrs = {};
                         attrs[rel.reverseRelation.key] = this;
                         model.set(attrs, {skipUpdateRelations: true});

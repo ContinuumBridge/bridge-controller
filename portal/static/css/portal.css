@@ -11,25 +11,6 @@
 .card-subheading {
     padding-left: 80%;
 }
-.edit-button,
-.uninstall-button {
-    position: absolute;
-    top: 15px;
-    color: #aaa;
-    cursor: pointer;
-    right: 40px;
-}
-.uninstall-button {
-    right: 12px;
-}
-
-.nested-item .onoffswitch {
-    position: absolute;
-    top: 8px;
-    color: #aaa;
-    cursor: pointer;
-    right: 8px;
-}
 
 .install-button {
   position: absolute;

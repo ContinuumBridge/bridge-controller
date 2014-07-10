@@ -48,7 +48,7 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             relatedModel: 'CBApp.AppInstall',
             collectionType: 'CBApp.AppInstallCollection',
             createModels: true,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
         },
         {
@@ -59,7 +59,7 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             relatedModel: 'CBApp.DeviceInstall',
             collectionType: 'CBApp.DeviceInstallCollection',
             createModels: true,
-            includeInJSON: true,
+            includeInJSON: 'resource_uri',
             initializeCollection: 'deviceInstallCollection'
         },
         {
@@ -74,7 +74,7 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             initializeCollection: 'discoveredDeviceInstallCollection'
         }
     ]
-}); 
+}, { modelType: "bridge" });
 
 CBApp.BridgeCollection = Backbone.Collection.extend({
 
@@ -164,5 +164,5 @@ CBApp.BridgeControlCollection = Backbone.Collection.extend({
     parse : function(response){
         return response.objects;
     }
-});
+}, { modelType: "bridgeControl" });
 

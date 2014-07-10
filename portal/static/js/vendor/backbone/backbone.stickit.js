@@ -144,9 +144,25 @@
           if (cid === this.cid) applyViewFn(this, config.destroy, $el, model, config);
         }, this);
 
-        // After each binding is setup, call the `initialize` callback.
-        applyViewFn(this, config.initialize, $el, model, config);
-      }, this);
+      console.log('stickit binding', binding);
+      // Find all matching Stickit handlers that could apply to this element
+      // and store in a config object.
+      var config = getConfiguration($el, binding);
+      console.log('stickit config', config);
+
+      // The attribute we're observing in our config.
+      var modelAttr = config.observe;
+
+      // Store needed properties for later.
+      config.selector = selector;
+      config.view = this;
+
+      // Create the model set options with a unique `bindId` so that we
+      // can avoid double-binding in the `change:attribute` event handler.
+      var bindId = config.bindId = _.uniqueId();
+
+      // Add a reference to the view for handlers of stickitChange events
+      var options = _.extend({stickitChange: config}, config.setOptions);
 
       // Wrap `view.remove` to unbind stickit model and dom events.
       var remove = this.remove;
@@ -156,6 +172,101 @@
         if (remove) ret = remove.apply(this, _.rest(arguments));
         return ret;
       };
+
+      initializeAttributes($el, config, model, modelAttr);
+      initializeVisible($el, config, model, modelAttr);
+      initializeClasses($el, config, model, modelAttr);
+
+      if (modelAttr) {
+        // Setup one-way (input element -> model) bindings.
+        _.each(config.events, function(type) {
+          var eventName = type + namespace;
+          var listener = function(event) {
+            var val = applyViewFn.call(this, config.getVal, $el, event, config, slice.call(arguments, 1));
+
+            // Don't update the model if false is returned from the `updateModel` configuration.
+            var currentVal = evaluateBoolean(config.updateModel, val, event, config);
+            if (currentVal) setAttr(model, modelAttr, val, options, config);
+          };
+          var sel = selector === ':el'? '' : selector;
+          this.$el.on(eventName, sel, _.bind(listener, this));
+        }, this);
+
+        // Setup a `change:modelAttr` observer to keep the view element in sync.
+        // `modelAttr` may be an array of attributes or a single string value.
+        _.each(_.flatten([modelAttr]), function(attr) {
+
+          observeModelEvent(model, 'change:' + attr, config, function(model, val, options) {
+            var changeId = options && options.stickitChange && options.stickitChange.bindId;
+            if (changeId !== bindId) {
+              var currentVal = getAttr(model, modelAttr, config);
+              updateViewBindEl($el, config, currentVal, model);
+            }
+          });
+        });
+
+        /*
+        // ADDED Update the element when any of the modelEvents are triggered
+        if(config.modelEvents) {
+            _.each(_.flatten([config.modelEvents]), function(modelEvent) {
+                var val;
+                observeModelEvent(model, modelEvent, config, function(model, val, options) {
+                    var changeId = options && options.stickitChange && options.stickitChange.bindId;
+                    if (changeId !== bindId) {
+                      var currentVal = getAttr(model, modelAttr, config);
+                      updateViewBindEl($el, config, currentVal, model);
+                    }
+                });
+                var sanitizeVal = function(val) {
+                    return val == null ? '' : val;
+                };
+                var view = config.view;
+                if (config.onGet) val = applyViewFn.call(view, config.onGet, val, config);
+                return _.isArray(val) ? _.map(val, sanitizeVal) : sanitizeVal(val);
+            });
+        }
+        */
+
+        var currentVal = getAttr(model, modelAttr, config);
+        updateViewBindEl($el, config, currentVal, model, true);
+      }
+
+      /*
+      // ADDED Update the element when any of the modelEvents are triggered
+      console.log('stickit config is', config);
+      if(config.modelEvents) {
+        _.each(config.modelEvents, function(modelEvent) {
+            console.log('modelEvent is', modelEvent);
+            /*
+            var updateAttr = function() {
+              var updateType = _.contains(props, config.name) ? 'prop' : 'attr',
+                  val = getAttr(model, observed, config);
+
+              // If it is a class then we need to remove the last value and add the new.
+              if (attrConfig.name === 'class') {
+                $el.removeClass(lastClass).addClass(val);
+                lastClass = val;
+              } else {
+                $el[updateType](attrConfig.name, val);
+              }
+            };
+
+            observeModelEvent(model, modelEvent, config, function(model, val, options) {
+                var changeId = options && options.stickitChange && options.stickitChange.bindId;
+                console.log('observeModelEvent changeId', changeId);
+                console.log('observeModelEvent bindId', bindId);
+                if (changeId !== bindId) {
+                  var currentVal = getAttr(model, modelAttr, config);
+                  console.log('changeId !== bindId', currentVal);
+                  updateViewBindEl($el, config, currentVal, model);
+                }
+            });
+        });
+      }
+      */
+
+      // After each binding is setup, call the `initialize` callback.
+      applyViewFn.call(this, config.initialize, $el, model, config);
     }
   });
 
@@ -189,7 +300,11 @@
 
   // Setup a model event binding with the given function, and track the event
   // in the view's _modelBindings.
-  var observeModelEvent = function(model, view, event, fn) {
+  var observeModelEvent = function(model, event, config, fn) {
+    var view = config.view;
+    console.log('observeModelEvent model', model);
+    console.log('observeModelEvent event', event);
+    console.log('observeModelEvent config', config);
     model.on(event, fn, view);
     view._modelBindings.push({model:model, event:event, fn:fn});
   };
@@ -219,16 +334,26 @@
   // Returns the given `attr`'s value from the `model`, escaping and
   // formatting if necessary. If `attr` is an array, then an array of
   // respective values will be returned.
-  var getAttr = function(model, attr, config, context) {
-    var val,
-      retrieveVal = function(field) {
-        return model[config.escape ? 'escape' : 'get'](field);
-      },
-      sanitizeVal = function(val) {
-        return val == null ? '' : val;
-      };
-    val = _.isArray(attr) ? _.map(attr, retrieveVal) : retrieveVal(attr);
-    if (config.onGet) val = applyViewFn(context, config.onGet, val, config);
+  var getAttr = function(model, attr, config) {
+    var view = config.view;
+    var retrieveVal = function(field) {
+      console.log('model', model);
+      console.log('field', field);
+      /*
+      console.log('model[config.escape]', model[config.escape ? 'escape' : 'get'](field));
+      console.log('model escape', model['escape'](attr));
+      console.log('model get', model['get'](attr));
+      */
+      return model[config.escape ? 'escape' : 'get'](field);
+    };
+    var sanitizeVal = function(val) {
+      return val == null ? '' : val;
+    };
+    // ADDED Check for attr
+    console.log('getAttr attr is', attr);
+
+    if(attr) var val = _.isArray(attr) ? _.map(attr, retrieveVal) : retrieveVal(attr);
+    if (config.onGet) val = applyViewFn.call(view, config.onGet, val || '', config);
     return _.isArray(val) ? _.map(val, sanitizeVal) : sanitizeVal(val);
   };
 
@@ -242,11 +367,22 @@
       update: function($el, val, m, opts) { if ($el[opts.updateMethod]) $el[opts.updateMethod](val); },
       getVal: function($el, e, opts) { return $el[opts.updateMethod](); }
     }];
-    handlers = handlers.concat(_.filter(Backbone.Stickit._handlers, function(handler) {
+    var handlers2 = $.extend(true, {}, handlers);
+    console.log('stickit handlers 1', handlers2);
+    handlers = handlers.concat(_.filter(Stickit._handlers, function(handler) {
+      console.log('handlers', $el.is(handler.selector), handler);
       return $el.is(handler.selector);
     }));
+    var handlers3 = $.extend(true, {}, handlers);
+    console.log('stickit handlers 3', handlers3);
     handlers.push(binding);
+    var handlers4 = $.extend(true, {}, handlers);
+    console.log('stickit handlers 4', handlers4);
+
+    // Merge handlers into a single config object. Last props in wins.
     var config = _.extend.apply(_, handlers);
+    console.log('stickit handlers 4 config', config);
+
     // `updateView` is defaulted to false for configutrations with
     // `visible`; otherwise, `updateView` is defaulted to true.
     if (config.visible && !_.has(config, 'updateView')) config.updateView = false;
@@ -271,10 +407,16 @@
     _.each(config.attributes || [], function(attrConfig) {
       var lastClass = '', observed, updateAttr;
       attrConfig = _.clone(attrConfig);
-      observed = attrConfig.observe || (attrConfig.observe = modelAttr),
-      updateAttr = function() {
-        var updateType = _.indexOf(props, attrConfig.name, true) > -1 ? 'prop' : 'attr',
-          val = getAttr(model, observed, attrConfig, view);
+      attrConfig.view = view;
+
+      var lastClass = '';
+      var observed = attrConfig.observe || (attrConfig.observe = modelAttr);
+      // ADDED Get modelEvents from the config
+      var modelEvents = attrConfig.modelEvents || {};
+      var updateAttr = function() {
+        var updateType = _.contains(props, attrConfig.name) ? 'prop' : 'attr',
+            val = getAttr(model, observed, attrConfig);
+
         // If it is a class then we need to remove the last value and add the new.
         if (attrConfig.name === 'class') {
           $el.removeClass(lastClass).addClass(val);
@@ -285,6 +427,13 @@
       _.each(_.flatten([observed]), function(attr) {
         observeModelEvent(model, view, 'change:' + attr, updateAttr);
       });
+
+      // ADDED Update the attr on each of the modelEvents
+      _.each(_.flatten([modelEvents]), function(modelEvent) {
+          observeModelEvent(model, modelEvent, config, updateAttr);
+      });
+
+      // Initialize the matched element's state.
       updateAttr();
     });
   };

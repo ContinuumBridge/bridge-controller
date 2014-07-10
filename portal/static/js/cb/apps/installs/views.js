@@ -18,6 +18,10 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     initialize: function() {
 
+        this.staffView = new CBApp.StaffAppInstallView({
+            model: this.model,
+        });
+        this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
             new CBApp.AppDevicePermissionListView({
                 appInstall: this.model
@@ -44,25 +48,61 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
         console.log('AppInstallView render', this);
         var self = this;
 
+        this.staffView.setElement(this.$('.staff-panel')).render();
+
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            console.log('AppInstallView promise render', self);
-
+            console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
             console.log('AppInstallView promise render 2', deviceInstalls);
             self.appDevicePermissionListView.setCollection(deviceInstalls);
-            var $appConfig = self.$('.app-config');
-            console.log('AppInstallView promise render 3', $appConfig);
-            //var appID = '#APPID' + self.model.get('app').get('id');
-            //$appDevicePermissionList = self.$(appID);
-            //var content = self.appDevicePermissionListView.render().$el;
-            console.log('AppInstallView promise render 4');
-            //$appConfig.html(content);
+            var $appConfig = self.$('.user-panel');
+            console.log('$appConfig is', $appConfig);
             self.appDevicePermissionListView.setElement($appConfig).render();
-            console.log('AppInstallView promise render 5');
-            console.log('AppInstallView promise render 6', self.appDevicePermissionListView);
-            //$appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
-        });
+        }).done();
+    }
+});
+
+
+CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+
+    tagName: 'table',
+    template: require('./templates/staffAppInstall.html'),
+
+    bindings: {
+        '.app-install-id': 'id'
+        /*
+        {
+            observe: [],
+            onGet: function() {
+                return "AppInstall ID: " + this.model.get('id');
+            }
+        }
+        */
+    },
+
+    licenceOwnerBindings: {
+        '.licence-owner': 'first_name',
+        '.licence-owner-id': 'id'
+        /*
+            {
+            observe: [],
+            onGet: function() {
+                //return this.model.get('licence').get('id');
+                return "Licence owner: " + this.licenceOwner.get('first_name')
+                    + " (" + this.licenceOwner.get('id') + ")";
+            }
+        }
+        */
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+        }
+        if (this.licenceOwner) {
+            this.stickit(this.licenceOwner, this.licenceOwnerBindings);
+        }
     }
 });
 

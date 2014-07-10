@@ -9,6 +9,7 @@ class Migration(SchemaMigration):
 
     needed_by = (
         ("socialaccount", "0001_initial"),
+        ("user_sessions", "0001_initial"),
     )
 
     def forwards(self, orm):

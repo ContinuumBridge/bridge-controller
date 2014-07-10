@@ -16,10 +16,12 @@ CBApp.Components.Button = Marionette.ItemView.extend({
         ':el': {
             attributes: [{
                 name: 'class',
-                observe: ['change', 'change:relational'],
+                observe: ['isGhost'],
+                modelEvents: ['change', 'change:relational', 'unsavedChanges'],
                 onGet: 'getClass'
             }],
-            observe: ['change', 'change:relational', 'content'],
+            observe: ['isGhost'],
+            modelEvents: ['change', 'change:relational', 'unsavedChanges'],
             onGet: 'getContent'
         }
     },
@@ -36,6 +38,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
 
         var enabled = this.getEnabled() || "";
         var extraClass = this.extraClass || "";
+        console.log('Button getClass', enabled);
 
         return "btn btn-default " + enabled + " " + extraClass;
     },
@@ -43,6 +46,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     getEnabled: function(val) {
 
         var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
+        console.log('Button getEnabled', this.model.unsavedAttributes());
         return enabled;
     }
 });

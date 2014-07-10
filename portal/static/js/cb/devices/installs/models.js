@@ -128,7 +128,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
         */
     ]
-}); 
+}, { modelType: "deviceInstall" });
 
 CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
 

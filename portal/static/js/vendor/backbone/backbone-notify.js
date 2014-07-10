@@ -15,11 +15,14 @@
       throw new Error("Backbone Modal is not defined. Please include the latest version from http://documentcloud.github.com/awkward/backbone.modal/blob/master/backbone.modal-bundled.js");
   }
 
-  Backbone.Notification = (function(_super) {
+  Backbone.Notify = {};
+  Backbone.Notify.Notification = (function(_super) {
 
     __extends(Notification, _super);
 
     Notification.prototype.prefix = 'bbn';
+
+    Notification.prototype.template = require('./templates/notification.html');
 
     function Notification() {
       Backbone.Modal.prototype.constructor.apply(this, this.args);
@@ -30,3 +33,21 @@
   })(Backbone.Modal);
 
 }).call(this);
+
+Backbone.Notify.Error = Backbone.Notify.Notification.extend({
+
+    template: require('./templates/error.html'),
+    cancelEl: '#close-button',
+
+    bindings: {
+        '.name': 'name',
+        '.message': 'message',
+        '.response': 'response'
+    },
+
+    onRender: function() {
+
+        console.log('ErrorNotification model is', this);
+        this.stickit();
+    }
+});

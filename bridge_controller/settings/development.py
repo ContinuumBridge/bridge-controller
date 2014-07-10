@@ -7,7 +7,7 @@ SERVER_ADDRESS = '54.194.73.211'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'development',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'development',
@@ -17,6 +17,22 @@ DATABASES = {
     }
 }
 
+'''
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'development',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': 'development',
+        'PASSWORD': 'ALWbBfEADrmrPc3',
+        'HOST': 'development-2.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '5432',                      # Set to empty string for default.
+    }
+'''
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development

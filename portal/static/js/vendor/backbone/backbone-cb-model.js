@@ -32,6 +32,8 @@ var CBModel = OriginalModel.extend({
         options.success = function(model, resp, options) {
           // ADDED If this model saved successfully it is not a ghost
           model.set('isGhost', false);
+          model.restartTracking();
+          model.trigger('change');
           if (success) success(model, resp, options);
         };
 

@@ -2,19 +2,22 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-CBApp = new Marionette.Application({
-    navHome: function () {
-        CBApp.router.navigate("", true);
-        console.log('navHome');
-    },
-    navInstallDevice: function() {
-        CBApp.router.navigate("install_device", true);
-        console.log('navInstallDevice coming through');
-    },
-    config: function() {
+CBApp = new Marionette.Application();
 
+CBApp.addRegions({
+    navRegion: "#nav-region",
+    mainRegion: "#main-region",
+    modalsRegion: {
+      selector: "#modals-region",
+      regionType: Backbone.Marionette.Modals
+    },
+    notificationsRegion: {
+      selector: "#notifications-region",
+      regionType: Backbone.Marionette.Modals
     }
 });
+
+//CBApp.template = require('./views/templates/cbApp.html');
 
 CBApp._isInitialized = false;
 
@@ -48,17 +51,17 @@ CBApp.Controller = Marionette.Controller.extend({
   },
   config: function(slug) {
       console.log('config in main Controller', slug);
-      CBApp.Config.router.navigate(slug);
+      //CBApp.Config.router.navigate(slug);
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'config');
+      CBApp.Config.trigger('config:show', slug);
   },
-  showNotification: function(text) {
-    console.log('We got to the notification controller!');
-    var notification = new CBApp.Notifications.Persistent({
-        //model: discoveredDeviceInstall,
-        install: function() {
-            console.log('Install callback!');
-        }
-    });
-    CBApp.portalLayout.notificationsRegion.show(notification);
+  showStore: function(slug) {
+      console.log('store in main Controller', slug);
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('section:activate', 'store');
+      CBApp.Store.trigger('store:show', slug);
+      //CBApp.Store.router.navigate(slug);
   },
   setCurrentBridge: function(bridge) {
 
@@ -68,7 +71,6 @@ CBApp.Controller = Marionette.Controller.extend({
       }
 
       bridge.set('current', true);
-      //CBApp.portalLayout.mainRegion.show(CBApp.homeLayoutView);
   }
 });
 
@@ -95,6 +97,9 @@ CBApp.getCurrentRoute = function(){
 };
 
 CBApp.on("initialize:after", function () {
+
+  CBApp.Nav.trigger('topbar:show');
+
   //for routing purposes
   if(Backbone.history) {
 

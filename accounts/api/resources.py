@@ -31,6 +31,10 @@ class CurrentUserResource(CBResource):
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
                     null=True, readonly=True, nonmodel=True)
 
+    app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
+                     attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
+                     null=True, readonly=True, nonmodel=True)
+
     class Meta(CBResource.Meta):
         resource_name = 'current_user'
         queryset = CBUser.objects.all()

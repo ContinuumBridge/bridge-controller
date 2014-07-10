@@ -6,7 +6,18 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     backend: 'appInstall',
 
     initialize: function() {
+        this.startTracking();
+    },
 
+    install: function() {
+
+        console.log('installing AppInstall');
+        this.save().then(function() {
+            console.log('AppInstall successfully saved');
+        }, function(error) {
+            console.log('Error installing', error);
+            CBApp.Notifications.trigger('error:show', error);
+        }).done();
     },
 
     uninstall: function() {
@@ -81,7 +92,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             initializeCollection: 'appLicenceCollection',
         },
     ]
-});
+}, { modelType: "appInstall" });
 
 CBApp.AppInstallCollection = Backbone.Collection.extend({
 

@@ -27,6 +27,7 @@
   overflow-x: auto;
   overflow-y: scroll; }
   .bbm-wrapper * {
+    list-style: none;
     box-sizing: border-box; }
 
 .bbm-modal {
