@@ -40,6 +40,9 @@ class CBResource(ModelResource):
         authentication = HTTPHeaderSessionAuthentication()
         resource_name = 'cb_resource'
 
+    def unauthorized_result(self, exception):
+        # ADDED return the exception rather than a generic HttpUnauthorized
+        raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
 class ThroughModelResource(CBResource):
 

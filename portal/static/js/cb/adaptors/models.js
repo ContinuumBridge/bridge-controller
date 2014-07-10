@@ -6,7 +6,7 @@ CBApp.Adaptor = Backbone.RelationalModel.extend({
     initialize: function() {
         
     }
-});
+}, { modelType: "adaptor" });
 
 
 CBApp.AdaptorCollection = Backbone.Collection.extend({

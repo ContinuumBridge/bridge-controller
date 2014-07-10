@@ -5,7 +5,7 @@ CBApp.User = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     subModelTypes: {
-		'loggedInUser': 'CBApp.LoggedInUser',
+		'currentUser': 'CBApp.CurrentUser',
 	},
 
     /*
@@ -29,7 +29,7 @@ CBApp.User = Backbone.RelationalModel.extend({
 
         return "UID" + this.get('id');
     }
-});
+}, { modelType: "user" });
 
 CBApp.UserCollection = Backbone.Collection.extend({
 

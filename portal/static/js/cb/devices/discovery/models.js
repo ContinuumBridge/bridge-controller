@@ -64,6 +64,12 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
                 friendly_name: friendlyName
             });
 
+        /*
+        var deviceInstall = CBApp.deviceInstallCollection.findOrAdd({
+
+        });
+        */
+
 
         // Add the optional data in for saving
         deviceInstallData = _.defaults(deviceInstallData, {
@@ -154,7 +160,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         }
         */
     ]
-});
+}, { modelType: "discoveredDeviceInstall" });
 
 CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 

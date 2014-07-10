@@ -17,6 +17,10 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     initialize: function() {
 
+        this.staffView = new CBApp.StaffAppInstallView({
+            model: this.model,
+        });
+        this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
             new CBApp.AppDevicePermissionListView({
                 appInstall: this.model
@@ -43,13 +47,60 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
         console.log('AppInstallView render', this);
         var self = this;
 
+        this.staffView.setElement(this.$('.staff-panel')).render();
+
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
+            console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
             self.appDevicePermissionListView.setCollection(deviceInstalls);
-            var $appConfig = self.$('.app-config');
+            var $appConfig = self.$('.user-panel');
+            console.log('$appConfig is', $appConfig);
             self.appDevicePermissionListView.setElement($appConfig).render();
-        });
+        }).done();
+    }
+});
+
+
+CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+
+    tagName: 'table',
+    template: require('./templates/staffAppInstall.html'),
+
+    bindings: {
+        '.app-install-id': 'id'
+        /*
+        {
+            observe: [],
+            onGet: function() {
+                return "AppInstall ID: " + this.model.get('id');
+            }
+        }
+        */
+    },
+
+    licenceOwnerBindings: {
+        '.licence-owner': 'first_name',
+        '.licence-owner-id': 'id'
+        /*
+            {
+            observe: [],
+            onGet: function() {
+                //return this.model.get('licence').get('id');
+                return "Licence owner: " + this.licenceOwner.get('first_name')
+                    + " (" + this.licenceOwner.get('id') + ")";
+            }
+        }
+        */
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+        }
+        if (this.licenceOwner) {
+            this.stickit(this.licenceOwner, this.licenceOwnerBindings);
+        }
     }
 });
 

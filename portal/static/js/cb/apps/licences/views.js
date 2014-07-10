@@ -37,10 +37,14 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
         if (this.model) {
             console.log('in getContent appInstall');
 
-            var isInstalled = this.model.get('isGhost') ? 'Install' : 'Uninstall';
+            var isInstalled = this.model.get('isGhost')
+                ? 'Install' : 'Uninstall';
+
+            var isInstalling = this.model.unsavedAttributes()
+                ? '' : '';
         }
 
-        return isInstalled || '...';
+        return isInstalled + isInstalling || '...';
     },
 
     onClick: function() {
@@ -98,7 +102,6 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
         var self = this;
 
         this.app = this.model.get('app');
-        console.log('app in initialize is', this.app, this);
 
         this.installButton = new CBApp.Components.AppInstallButton();
 

@@ -135,7 +135,7 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
         var installsPermitted = this.get('installs_permitted') + increment;
         this.setInstallsPermitted(installsPermitted);
     }
-});
+}, { modelType: "appLicence" });
 
 //var QueryEngine = require('query-engine');
 //CBApp.AppLicenceCollection = Backbone.Collection.extend({

@@ -6,13 +6,14 @@ from tastypie.authorization import Authorization
 from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import UserObjectsOnlyAuthorization
 from apps.models import App, AppInstall, AppDevicePermission, AppLicence
+from apps.api.authorization import AppInstallAuthorization
 #from bridges.api.abstract_resources import CBModelResource
 from bridges.api.abstract_resources import PostMatchMixin
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-from apps.api.authorization import AppInstallAuthorization
 from bridges.api.abstract_resources import CBResource, ThroughModelResource
+from bridges.api.authorization import BridgeObjectsOnlyAuthorization
 
 class AppDevicePermissionResource(PostMatchMixin, CBResource):
 
@@ -63,6 +64,7 @@ class AppInstallResource(CBResource):
     class Meta(CBResource.Meta):
        queryset = AppInstall.objects.all()
        authorization = AppInstallAuthorization()
+       #authorization = BridgeObjectsOnlyAuthorization()
        list_allowed_methods = ['get', 'post']
        detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
        always_return_data = True

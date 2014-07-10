@@ -5,6 +5,8 @@ from django.conf import settings
 
 from django.utils import timezone
 
+from tastypie.exceptions import Unauthorized
+
 from accounts.models import CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
@@ -65,6 +67,9 @@ class AppInstall(LoggedModelMixin):
         verbose_name = _('app_install')
         verbose_name_plural = _('app_installs')
         app_label = 'apps'
+
+    #def clean(self, user):
+
 
     def get_device_permissions(self):
         device_permissions = []

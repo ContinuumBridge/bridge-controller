@@ -127,13 +127,13 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
         */
     ]
-}); 
+}, { modelType: "deviceInstall" });
 
 //CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
 CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.DeviceInstall,
-    //backend: 'deviceInstall',
+    backend: 'deviceInstall',
 
     initialize: function() {
         var self = this;

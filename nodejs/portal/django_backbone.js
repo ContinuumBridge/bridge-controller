@@ -16,30 +16,34 @@ function DjangoBackbone(djangoURL) {
     // Setup backbone websockets
     backboneSocket = backboneio.createBackend();
 
-    backboneSocket.logResponse = function(response) {
+    backboneSocket.formatLog = function(response) {
 
         var httpVersion = util.format('HTTP/%s.%s', response.httpVersionMajor, response.httpVersionMinor);
-        logger.log('info', '"%s %s %s" %s',
-            response.req.method,
-            response.req.path,
-            httpVersion,
-            response.statusCode
-        )
+        return util.format('"%s %s %s" %s', response.req.method, response.req.path, httpVersion, response.statusCode);
     };
+
+    function DjangoError(message, response) {
+        this.name = "DjangoError";
+        this.message = (message || "");
+        this.response = (response || "");
+    }
+    DjangoError.prototype = Error.prototype;
 
     backboneSocket.handleResponse = function(res, data, djangoResponse) {
 
         if (djangoResponse) {
-            if (200 <= djangoResponse.statusCode <= 300) {
-                //that.deleteSuccess();
-                backboneSocket.logResponse(djangoResponse);
+            if (200 <= djangoResponse.statusCode && djangoResponse.statusCode <= 300) {
+
+                logger.log('info', backboneSocket.formatLog(djangoResponse));
                 res.end(data);
             } else if (djangoResponse.statusCode) {
-                backboneSocket.logResponse(djangoResponse);
-                res.end(new Error(djangoResponse.statusCode));
+
+                var error = new DjangoError(backboneSocket.formatLog(djangoResponse), djangoResponse.rawEncoded)
+                logger.log('warn', error);
+                res.error(error);
             } else {
                 var error = new Error('Django did not return a status code to django_backbone')
-                console.log('error', error);
+                logger.log('error', error);
                 res.end(error);
             }
         } else {

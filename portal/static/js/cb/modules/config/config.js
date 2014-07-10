@@ -29,25 +29,27 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
+        CBApp.mainRegion.show(Config.mainLayoutView);
       },
       showBridge: function(bridgeID) {
 
           console.log('showBridge bridgeID is', bridgeID);
           Config.mainLayoutView = new ConfigViews.Main();
-          CBApp.portalLayout.mainRegion.show(Config.mainLayoutView);
+          var bridge = CBApp.bridgeCollection.get(bridgeID);
+          if (bridge) CBApp.setCurrentBridge(bridge);
+          CBApp.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
-        var installAppModal = new ConfigViews.InstallAppModal({
+        var installAppModal = new ConfigViews.InstallAppModal();
             /*
             //model: discoveredDeviceInstall,
             installDevice: function(friendlyName) {
                 console.log('Install callback!');
             }
             */
-        });
-        CBApp.portalLayout.modalsRegion.show(installAppModal);
+
+        CBApp.modalsRegion.show(installAppModal);
       },
       discoverDevices: function() {
 
@@ -75,14 +77,14 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
             model: discoveredDeviceInstall,
         });
-        CBApp.portalLayout.modalsRegion.show(installDeviceModal);
+        CBApp.modalsRegion.show(installDeviceModal);
       }
     });
 
     Config.on('config:show', function(bridgeID){
         console.log('show config');
-        Config.controller.showBridge(bridgeID);
         var slug = bridgeID || "";
+        Config.controller.showBridge(bridgeID);
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
     });

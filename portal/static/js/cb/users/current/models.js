@@ -75,7 +75,7 @@ CBApp.getCurrentUser = function() {
 
 //CBApp.CurrentUser = CBApp.User.extend({
 //CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
-CBApp.LoggedInUser = CBApp.User.extend({
+CBApp.CurrentUser = CBApp.User.extend({
 
     idAttribute: 'id',
 
@@ -128,11 +128,11 @@ CBApp.LoggedInUser = CBApp.User.extend({
             initializeCollection: 'appLicenceCollection'
         },
     ]
-});
+}, { modelType: "currentUser" });
 
 CBApp.CurrentUserCollection = Backbone.Collection.extend({
 
-    model: CBApp.LoggedInUser,
+    model: CBApp.CurrentUser,
     backend: 'currentUser',
 
     initialize: function() {

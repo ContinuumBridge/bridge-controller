@@ -11,11 +11,11 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 
-from accounts.models import CBAuth, CBUser
+from accounts.models import CBAuth, CBUser, PolymorphicBaseUserManager
 from .common import LoggedModelMixin
 
 
-class BridgeModelManager(BaseUserManager):
+class BridgeModelManager(PolymorphicBaseUserManager):
 
     def create_bridge(self, email=None, password=None, **extra_fields):
         """ 
@@ -65,13 +65,15 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
 
 class Bridge(CBAuth):
 
-    name = models.CharField(_("name"), max_length = 255)
-    description = models.TextField(_("description"), null = True, blank = True)
+    name = models.CharField(_('name'), max_length = 255)
+    description = models.TextField(_('description'), null = True, blank = True)
 
-    #connection = models.CharField(_("connection"), default = 'disconnected', max_length = 255, blank = True)
+    #connected = models.BooleanField(_('connected'), default = False)
+    #ip = models.GenericIPAddressField(_('ip'))
+
     #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
 
-    plaintext_password = models.CharField(_("plaintext_password"), max_length = 255)
+    plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
 
     '''
     created = models.DateTimeField(_("created"), 

@@ -44,10 +44,40 @@ CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
     onRender: function() {
         if (this.model) {
             this.stickit();
-            console.log('InstallsPermitted stickit', this.model);
-            this.listenTo(this.model, 'all', function(name) {
-                console.log('EVENT licence', name);
-            });
+        }
+    }
+});
+
+CBApp.StaffAppView = Marionette.ItemView.extend({
+
+    tagName: 'table',
+    template: require('./templates/staffApp.html'),
+
+    bindings: {
+        '.app-id': {
+            observe: [],
+            onGet: function() {
+                return "App ID: " + this.model.get('id');
+            }
+        }
+    },
+
+    licenceBindings: {
+        '.licence-id': {
+            observe: [],
+            onGet: function() {
+                //return this.model.get('licence').get('id');
+                return "Licence ID: " + this.licence.get('id');
+            }
+        }
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+        }
+        if (this.licence) {
+            this.stickit(this.licence, this.licenceBindings);
         }
     }
 });
@@ -67,6 +97,7 @@ CBApp.AppView = Marionette.ItemView.extend({
         var self = this;
 
         this.installsPermittedField = new CBApp.Components.InstallsPermittedField();
+        this.staffView = new CBApp.StaffAppView();
 
         CBApp.getCurrentUser().then(function(currentUser) {
 
@@ -78,11 +109,14 @@ CBApp.AppView = Marionette.ItemView.extend({
 
             self.licence = licence || new CBApp.AppLicence({
                                                     app: self.model,
-                                                    user: currentUser
+                                                    user: currentUser,
+                                                    installs_permitted: 0
                                                 });
 
             CBApp.appLicenceCollection.add(self.licence);
 
+            self.staffView.licence = self.licence;
+            self.staffView.setModel(self.model);
             self.installsPermittedField.setModel(self.licence);
 
             self.render();
@@ -114,7 +148,8 @@ CBApp.AppView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.installsPermittedField.setElement(this.$('.input-group')).render();
+        this.staffView.setElement(this.$('.staff-panel')).render();
+        this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
         /*
         self.appDevicePermissionListView =
             new CBApp.AppDevicePermissionListView({
@@ -141,7 +176,7 @@ CBApp.AppListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appSection.html'),
     itemView: CBApp.AppView,
-    itemViewContainer: '#app-list',
+    itemViewContainer: '.app-list',
 
     emptyView: CBApp.ListItemLoadingView,
 

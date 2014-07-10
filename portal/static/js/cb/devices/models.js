@@ -37,8 +37,8 @@ CBApp.Device = Backbone.Deferred.Model.extend({
             }   
         }   
         */
-    ]  
-}); 
+    ]
+}, { modelType: "device" });
 
 //CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
 CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({

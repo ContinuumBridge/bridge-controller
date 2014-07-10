@@ -29,7 +29,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
       showStore: function() {
 
           Store.mainLayoutView = new StoreViews.Main();
-          CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
+          CBApp.mainRegion.show(Store.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -40,7 +40,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.portalLayout.modalsRegion.show(installDeviceModal);
+        CBApp.modalsRegion.show(installDeviceModal);
       }
     });
 

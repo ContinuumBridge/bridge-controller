@@ -13,9 +13,15 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
     });
 
     Nav.Controller = Marionette.Controller.extend({
-        activateSection: function(section) {
-            console.log('activateSection', section);
-            CBApp.Nav.topBarView.activateSection(section);
+
+        showTopbar: function() {
+
+            Nav.topbarView = new Nav.TopbarView();
+            CBApp.navRegion.show(Nav.topbarView);
+        },
+        activateTopbar: function(section) {
+            console.log('activateTopbar', section);
+            Nav.topbarView.activateSection(section);
         }
     });
 
@@ -121,7 +127,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         }
     });
 
-    Nav.TopBarView = Marionette.ItemView.extend({
+    Nav.TopbarView = Marionette.ItemView.extend({
 
         template: require('./templates/navSection.html'),
         className: 'container',
@@ -159,9 +165,15 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         }
     });
 
-    Nav.on('section:activate', function(section){
+    Nav.on('topbar:show', function() {
+
+        Nav.controller.showTopbar();
+    });
+
+    Nav.on('topbar:activate', function(section){
 
         console.log('navigation section activate', section);
-        Nav.controller.activateSection(section);
+        Nav.controller.activateTopbar(section);
     });
+
 });

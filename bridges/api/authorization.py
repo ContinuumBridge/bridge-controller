@@ -45,43 +45,56 @@ class BridgeObjectsOnlyAuthorization(Authorization):
     """
     Allow interaction with objects associated with the logged-in bridge, or the bridges of the logged-in user.
     """
-    def read_list(self, object_list, bundle):
-        # This assumes a ``QuerySet`` from ``ModelResource``.
-        print "UserBridgeObjectsOnlyAuthorization bridge", bundle.request.user
-        user = CBAuth.objects.get(email=bundle.request.user)
+
+    def get_bridges(self, bundle):
+        requester = CBAuth.objects.get(email=bundle.request.user)
         bridges = []
+        print "Requester is", requester
         try:
             # Assume user is a human and get bridges associated with it
-            bridge_controls = user.bridgecontrol_set.filter()
+            bridge_controls = requester.bridgecontrol_set.filter()
+            print "Bridge controls are", bridge_controls
             for bridge_control in bridge_controls:
                 bridges.append(bridge_control.bridge)
         except AttributeError:
             # User is a bridge
-            bridges.append(user)
+            print "Bridge is", requester
+            bridges.append(requester)
+        return bridges
 
+    def read_list(self, object_list, bundle):
+        # This assumes a ``QuerySet`` from ``ModelResource``.
+        bridges = self.get_bridges(bundle)
+        print "Bridges are", bridges
+        print "object_list is", object_list
+        print "filtered objects are", object_list.filter(bridge__in=bridges)
         return object_list.filter(bridge__in=bridges)
 
     def read_detail(self, object_list, bundle):
         # Is the requested object associated with a bridge owned by the user?
+        '''
         print "UserBridgeObjectsOnlyAuthorization object_list", object_list
         user = CBUser.objects.get(email=bundle.request.user)
         bridge_controls = user.bridgecontrol_set.filter()
         bridges = []
         for bridge_control in bridge_controls:
             bridges.append(bridge_control.bridge)
-        filtered = object_list.filter(bridge__in=bridges)
-        if filtered:
-            return True
-        else:
-            return False
-        #return bundle.obj.user == bundle.request.user
+        '''
+        associated_objects = object_list.filter(bridge__in=self.get_bridges(bundle))
+        return associated_objects.exists()
 
     def create_list(self, object_list, bundle):
         # Assuming they're auto-assigned to ``user``.
         return object_list
 
     def create_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
+        bridge = bundle.obj.bridge
+        requester_bridges = self.get_bridges(bundle)
+        # Ensure the bridge is controlled by the requester
+        if not bridge in requester_bridges:
+            raise Unauthorized("You must control the bridge associated with this object")
+        return True
+        #return bundle.obj.user == bundle.request.user
 
     def update_list(self, object_list, bundle):
         allowed = []
@@ -101,4 +114,9 @@ class BridgeObjectsOnlyAuthorization(Authorization):
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
-        raise Unauthorized("Sorry, no deletes.")
+        bridge = bundle.obj.bridge
+        requester_bridges = self.get_bridges(bundle)
+        # Ensure the bridge is controlled by the requester
+        if not bridge in requester_bridges:
+            raise Unauthorized("You must control the bridge associated with this object")
+        return True

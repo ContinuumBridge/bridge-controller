@@ -51,7 +51,7 @@ CBApp.App = Backbone.RelationalModel.extend({
     uninstall: function(bridge) {
 
     }
-});
+}, { modelType: "app" });
 
 CBApp.AppCollection = Backbone.Collection.extend({
 
