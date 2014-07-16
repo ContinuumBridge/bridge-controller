@@ -1,8 +1,9 @@
 
-from tastypie.authorization import Authorization
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
 from accounts.models import CBAuth, CBUser
+from bridges.models import BridgeControl
 
 class UserObjectsOnlyAuthorization(Authorization):
     def read_list(self, object_list, bundle):
@@ -120,3 +121,50 @@ class BridgeObjectsOnlyAuthorization(Authorization):
         if not bridge in requester_bridges:
             raise Unauthorized("You must control the bridge associated with this object")
         return True
+
+
+class CurrentBridgeAuthorization(BridgeObjectsOnlyAuthorization):
+    """
+    Authorization class for BridgeResource
+    """
+
+    def read_list(self, object_list, bundle):
+        # This assumes a ``QuerySet`` from ``ModelResource``.
+        return object_list.filter(id=bundle.request.user.id)
+
+    def read_detail(self, object_list, bundle):
+        return bundle.obj.id == bundle.request.user.id
+
+    def create_list(self, object_list, bundle):
+        # Assuming they're auto-assigned to ``user``.
+        return object_list
+
+    def create_detail(self, object_list, bundle):
+        MAX_NUM_BRIDGES = 8
+        bridge = bundle.obj
+        requester = CBAuth.objects.get(email=bundle.request.user)
+        bridge_count = requester.bridgecontrol_set.count()
+        if bridge_count >= MAX_NUM_BRIDGES:
+            raise Unauthorized("You may create %d bridges, you have created %d", MAX_NUM_BRIDGES, bridge_count)
+        bridge_control = BridgeControl(bridge=bridge, user=requester)
+        return True
+        #return bundle.obj.user == bundle.request.user
+
+    def update_list(self, object_list, bundle):
+        raise Unauthorized("Sorry, no list updates on this resource.")
+
+    def update_detail(self, object_list, bundle):
+        bridges = self.get_bridges(bundle)
+        if not bundle.obj in bridges:
+            raise Unauthorized("You must control or be the bridge you are trying to update.")
+        return True
+
+    def delete_list(self, object_list, bundle):
+        raise Unauthorized("Sorry, no list deletes on this resource.")
+
+    def delete_detail(self, object_list, bundle):
+        bridges = self.get_bridges(bundle)
+        if not bundle.obj in bridges:
+            raise Unauthorized("You must control or be the bridge you are trying to delete.")
+        return True
+

@@ -16,6 +16,9 @@ from accounts.api.authorization import CurrentUserAuthorization
 
 class UserBridgeControlResource(ThroughModelResource):
 
+    """
+    BridgeControl resource presented to a logged in user
+    """
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.CurrentBridgeResource', 'bridge', full=True)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
 
