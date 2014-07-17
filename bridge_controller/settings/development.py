@@ -36,4 +36,24 @@ GRAPH_MODELS = {
 
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
+    # Django Wiki
+    'django_notify',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
 )
+
+# For django-wiki Django < 1.7
+SOUTH_MIGRATION_MODULES = {
+    'django_nyt': 'django_nyt.south_migrations',
+    'wiki': 'wiki.south_migrations',
+    'images': 'wiki.plugins.images.south_migrations',
+    #'notifications': 'wiki.plugins.notifications.south_migrations',
+    'attachments': 'wiki.plugins.attachments.south_migrations',
+}
+
