@@ -216,7 +216,7 @@ INSTALLED_APPS = (
     #'allauth.socialaccount.providers.google',
     'crispy_forms',
     'django_extensions',
-    'notifications',
+    #'notifications',
     'polymorphic',
     'django.contrib.contenttypes',
     'south',
