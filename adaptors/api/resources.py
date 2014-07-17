@@ -15,7 +15,7 @@ class AdaptorResource(CBResource):
         queryset = Adaptor.objects.all()
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
+        detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
 
 
 class AdaptorDeviceCompatibilityResource(ThroughModelResource):
