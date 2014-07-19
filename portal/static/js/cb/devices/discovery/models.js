@@ -60,7 +60,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
-                adaptor: adaptor.resource_uri,
+                adaptor: adaptor,
                 friendly_name: friendlyName
             });
 

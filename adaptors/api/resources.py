@@ -16,6 +16,7 @@ class AdaptorResource(CBResource):
         authorization = Authorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
+        resource_name = 'adaptor'
 
 
 class AdaptorDeviceCompatibilityResource(ThroughModelResource):
