@@ -11,51 +11,20 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 
-from accounts.models import CBAuth, CBUser, PolymorphicBaseUserManager
-#from clients.models import ClientModelManager
+from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
+from clients.models import ClientModelManager
 from .common import LoggedModelMixin
 
 
-class BridgeModelManager(PolymorphicBaseUserManager):
+class BridgeModelManager(ClientModelManager):
 
-    def create_bridge(self, email=None, password=None, **extra_fields):
+    def create_bridge(self, email=None, password=None, save=False, **extra_fields):
 
-        '''
-        """ 
-        Creates and saves a User with the given email and password.
         """
-        now = timezone.now()
-
-        if not email:
-            while True:
-                bridge_id = uuid4().hex[0:8]
-                email = bridge_id + '@continuumbridge.com'
-                try:
-                    existing_user = self.get_queryset().get(email=email)
-                except ObjectDoesNotExist:
-                    print "Bridge is unique!"
-                    break
-
-        email = BridgeModelManager.normalize_email(email)
-
-        if not password:
-            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-            i = 0
-            password = ''
-            while i < 64:
-                new_letter = alphabet[struct.unpack("<L", os.urandom(4))[0] % 64]
-                password += new_letter
-                i += 1
-                
-        bridge = self.model(email=email, plaintext_password=password,
-                          is_active=True, is_staff=False, is_superuser=False,
-                          last_login=now, 
-                          #created=now, 
-                          **extra_fields)
-        bridge.set_password(password)
-        bridge.save(using=self._db)
-        return bridge
-        '''
+        Creates and saves a Bridge with the given email and password.
+        """
+        # Call create_client on the parent class
+        return super(BridgeModelManager, self).create_client(email, password, save=save, **extra_fields)
 
 BRIDGE_STATES = (('stopped', 'Stopped'),
                 ('starting', 'Starting'),

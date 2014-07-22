@@ -7,30 +7,30 @@ var Bacon = require('baconjs').Bacon
     ;
 
 var requestRouter = require('./request_router.js')
-    ,backendAuth = require('../backend_auth.js')
-    ,ControllerNode = require('./controller_node')
+    ,backendAuth = require('../../backend_auth.js')
+    ,Connection = require('./connection/connection')
     ,django = require('./django_node.js')
-    ,MessageUtils = require('../message_utils.js')
+    ,MessageUtils = require('../../message_utils.js')
     ,RedisClient = require('./redis_client')
     ,SocketServer = require('./socket_server')
     ,thirdPartyRouter = require('./third_party_router.js')
     ;
 
-/* Bridge Controller */
+/* Controller */
 
-Bridge.DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
+//Bridge.DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
 
-module.exports = BridgeController;
+module.exports = Controller;
 
-function BridgeController(port) {
+function Controller(port, djangoURL) {
 
-    var bridgeController = {};
+    var self = this;
 
-    bridgeController.bridgeServer = new SocketServer(port);
+    this.socketServer = new SocketServer(port);
 
-    bridgeController.redisClient = new RedisClient();
+    this.redisClient = new RedisClient();
 
-    bridgeController.bridgeServer.sockets.on('connection', function (socket) {
+    this.socketServer.sockets.on('connection', function (socket) {
 
         /*
         for(var propertyName in socket) {
@@ -41,14 +41,14 @@ function BridgeController(port) {
         */
 
         //logger.log('debug', 'In the socket: ', socket.);
-        var controllerNode = new ControllerNode(socket, bridgeController.redisClient);
+        var connection = new Connection(socket, self.redisClient);
 
-        controllerNode.fromRedis.onValue(function(message) {
+        connection.fromRedis.onValue(function(message) {
 
-            controllerNode.toBridge.push(message);
+            connection.toBridge.push(message);
         });
 
-        controllerNode.fromBridge.onValue(function(message) {
+        connection.fromBridge.onValue(function(message) {
 
             switch (message.get('type')) {
 
@@ -75,9 +75,7 @@ function BridgeController(port) {
             ,controllerNode.address.address, controllerNode.address.port, controllerNode.redisWrapper.subscriptionAddress
             ,controllerNode.authData.email, publicationAddressesString);
 
-        bridgeController.socket = socket;
+        this.socket = socket;
     });
-
-    return bridgeController;
 };
 

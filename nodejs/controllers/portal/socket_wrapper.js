@@ -1,5 +1,5 @@
 
-var Message = require('../message')
+var Message = require('../../message')
     ,logger = require('./logger');
 
 module.exports = SocketWrapper;

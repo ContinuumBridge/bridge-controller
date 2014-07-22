@@ -1,7 +1,7 @@
 
 var rest = require('restler')
     ,logger = require('./logger')
-    ,Message = require('../message')
+    ,Message = require('../../message')
     ,Q = require('q')
     ;
 

@@ -15,6 +15,7 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 
 from accounts.api.api import v1 as users_v1
 from bridges.api.api import v1 as bridges_v1
+from clients.api.api import v1 as clients_v1
 
 from marketing.views import HomeView
 
@@ -45,6 +46,8 @@ urlpatterns = patterns('',
 
     (r'^api/user/', include(users_v1.urls)),
     (r'^api/bridge/', include(bridges_v1.urls)),
+    (r'^api/client/', include(clients_v1.urls)),
+
 
     url(r'^$', HomeView.as_view(), name='index'),
     url(r'^success$', TemplateView.as_view(template_name='marketing/success.html'))

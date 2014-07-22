@@ -7,8 +7,8 @@ module.exports = SocketWrapper;
 
 function SocketWrapper(socket, fromClient, toClient) {
 
-    this.toBridge = toClient;
-    this.fromBridge = fromClient;
+    this.toClient= toClient;
+    this.fromClient = fromClient;
     this.socket = socket;
 
     socket.on('message', function (jsonMessage) {

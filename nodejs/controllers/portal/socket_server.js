@@ -11,9 +11,9 @@ var http = require('http')
 
 var djangoBackbone = require('./django_backbone.js')
     ,DeviceDiscovery = require('./device_discovery.js')
-    ,backendAuth = require('../backend_auth.js')
+    ,backendAuth = require('../../backend_auth.js')
     ,internalAPI = require('./internal_api_router.js')
-    ,MessageUtils = require('../message_utils')
+    ,MessageUtils = require('../../message_utils')
     ;
 
 module.exports = SocketServer;

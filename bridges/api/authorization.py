@@ -50,16 +50,13 @@ class BridgeObjectsOnlyAuthorization(Authorization):
     def get_bridges(self, bundle):
         requester = CBAuth.objects.get(email=bundle.request.user)
         bridges = []
-        print "Requester is", requester
         try:
             # Assume user is a human and get bridges associated with it
             bridge_controls = requester.bridgecontrol_set.filter()
-            print "Bridge controls are", bridge_controls
             for bridge_control in bridge_controls:
                 bridges.append(bridge_control.bridge)
         except AttributeError:
             # User is a bridge
-            print "Bridge is", requester
             bridges.append(requester)
         return bridges
 
@@ -168,3 +165,68 @@ class CurrentBridgeAuthorization(BridgeObjectsOnlyAuthorization):
             raise Unauthorized("You must control or be the bridge you are trying to delete.")
         return True
 
+def get_bridges(bundle):
+    requester = CBAuth.objects.get(email=bundle.request.user)
+    bridges = []
+    try:
+        # Assume user is a human and get bridges associated with it
+        bridge_controls = requester.bridgecontrol_set.filter()
+        for bridge_control in bridge_controls:
+            bridges.append(bridge_control.bridge)
+    except AttributeError:
+        # User is a bridge
+        bridges.append(requester)
+    return bridges
+
+class BridgeAuthorization(ReadOnlyAuthorization):
+    """
+    Authorization for accessing Bridge objects
+    """
+
+    def create_list(self, object_list, bundle):
+        raise Unauthorized("You may only create one bridge at a time")
+        #return object_list
+
+    def create_detail(self, object_list, bundle):
+        #bridge = bundle.obj.bridge
+        requester = CBAuth.objects.get(email=bundle.request.user)
+        if not isinstance(requester, CBUser):
+            raise Unauthorized("You must be logged in as a user to create a bridge")
+        return True
+
+    def delete_list(self, object_list, bundle):
+        # Sorry user, no deletes for you!)
+        raise Unauthorized("You may only delete one bridge at a time.")
+
+    def delete_detail(self, object_list, bundle):
+        bridge = bundle.obj
+        requester_bridges = get_bridges(bundle)
+        # Ensure the bridge is controlled by the requester
+        if not bridge in requester_bridges:
+            raise Unauthorized("You must control a bridge to delete it")
+        return True
+
+
+class AuthAuthorization(ReadOnlyAuthorization):
+    """
+    Authorization resource used to login clients, bridges and users
+    """
+    def read_list(self, object_list, bundle):
+        # This assumes a ``QuerySet`` from ``ModelResource``.
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def read_detail(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def create_list(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+        #return object_list
+
+    def create_detail(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def delete_list(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def delete_detail(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")

@@ -12,14 +12,25 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser, PolymorphicBaseUserManager
-from bridges.models import LoggedModelMixin
-
+from bridges.models.common import LoggedModelMixin
 
 class ClientModelManager(PolymorphicBaseUserManager):
 
-    def create_client(self, email=None, password=None, **extra_fields):
+    def generate_password(self):
+
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+        i = 0
+        password = ''
+        while i < 64:
+            new_letter = alphabet[struct.unpack("<L", os.urandom(4))[0] % 64]
+            password += new_letter
+            i += 1
+        return password
+
+
+    def create_client(self, email=None, password=None, save=False, **extra_fields):
         """ 
-        Creates and saves a client with the given email and password.
+        Creates and saves a Client with the given email and password.
         """
         now = timezone.now()
 
@@ -36,21 +47,15 @@ class ClientModelManager(PolymorphicBaseUserManager):
         email = ClientModelManager.normalize_email(email)
 
         if not password:
-            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-            i = 0
-            password = ''
-            while i < 64:
-                new_letter = alphabet[struct.unpack("<L", os.urandom(4))[0] % 64]
-                password += new_letter
-                i += 1
-                
+            password = self.generate_password()
         client = self.model(email=email, plaintext_password=password,
                           is_active=True, is_staff=False, is_superuser=False,
                           last_login=now, 
                           #created=now, 
                           **extra_fields)
         client.set_password(password)
-        client.save(using=self._db)
+        if save:
+            client.save(using=self._db)
         return client
 
 

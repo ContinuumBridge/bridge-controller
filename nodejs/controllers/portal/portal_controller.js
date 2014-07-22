@@ -13,9 +13,9 @@ var djangoBackbone = require('./django_backbone.js')
     ,ControllerNode = require('./controller_node.js')
     ,SocketServer = require('./socket_server.js')
     ,RedisWrapper = require('./redis_wrapper.js')
-    ,backendAuth = require('../backend_auth.js')
+    ,backendAuth = require('../../backend_auth.js')
     ,internalAPI = require('./internal_api_router.js')
-    ,MessageUtils = require('../message_utils')
+    ,MessageUtils = require('../../message_utils')
     ;
 
 /* Portal Controller */

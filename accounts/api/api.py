@@ -1,14 +1,16 @@
 from tastypie.api import Api
-from accounts.api.resources import UserResource, CurrentUserResource
+from accounts.api.resources import UserResource, CurrentUserResource, UserAuthResource
 from apps.api.resources import AppResource, AppInstallResource, AppDevicePermissionResource, AppLicenceResource
+from bridges.api.resources import BridgeResource
 from devices.api.resources import DeviceResource, DeviceInstallResource
 from adaptors.api.resources import AdaptorResource, AdaptorDeviceCompatibilityResource
 #from bridges.api.bridge_resources import CurrentBridgeResource, BridgeControlResource, BridgeAuthResource
-from .bridge_resources import BridgeControlResource, BridgeResource
+from .bridge_resources import BridgeControlResource
 
 v1 = Api("v1")
 v1.register(UserResource())
 v1.register(CurrentUserResource())
+v1.register(UserAuthResource())
 
 v1.register(AdaptorResource())
 v1.register(AdaptorDeviceCompatibilityResource())

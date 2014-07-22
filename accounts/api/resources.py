@@ -11,7 +11,7 @@ from apps.models import AppLicence
 from apps.api.resources import AppLicenceResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import CBResource, ThroughModelResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource
 from accounts.api.authorization import CurrentUserAuthorization
 
 class UserBridgeControlResource(ThroughModelResource):
@@ -47,6 +47,10 @@ class CurrentUserResource(CBResource):
         excludes = ['password', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()
+
+    def dehydrate(self, bundle):
+        bundle.data['cbid'] = "UID" + str(bundle.obj.id)
+        return bundle
 
     def get_bridge_controls(self):
         bridge_controls = []
@@ -103,3 +107,12 @@ class UserResource(CBResource):
         authentication = HTTPHeaderSessionAuthentication()
         authorization = ReadOnlyAuthorization()
 
+
+class UserAuthResource(AuthResource):
+
+    """ Allows bridges to login and logout """
+
+    class Meta(AuthResource.Meta):
+        queryset = CBUser.objects.all()
+        fields = ['first_name', 'last_name', 'email']
+        resource_name = 'user_auth'
