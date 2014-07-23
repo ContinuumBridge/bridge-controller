@@ -3,6 +3,8 @@ from bridge_controller.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ENVIRONMENT = 'production'
+
 SERVER_ADDRESS = '54.194.28.63'
 
 DATABASES = {
