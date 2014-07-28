@@ -3,6 +3,8 @@ var rest = require('restler'),
     logger = require('./logger')
     Q = require('q');
 
+var Errors = require('./errors');
+
 /* Backend Authentication */
 
 var backendAuth = function(djangoAuthURL, sessionid) {
@@ -26,11 +28,21 @@ var backendAuth = function(djangoAuthURL, sessionid) {
     rest.get(djangoAuthURL, djangoAuthOptions).on('complete', function(data, response) {
 
         // If the response was good, return the session data
-        if (response && response.statusCode == 200) {
+        if (response) {
 
-            deferredSessionData.resolve(data);
+            if (response.statusCode == 200) {
+
+                deferredSessionData.resolve(data);
+            }
+            if (response.statusCode = 404) {
+                var error = new Errors.Unauthorized('Authorization with Django failed');
+                logger.log('unauthorized', error);
+                deferredSessionData.reject(error);
+            }
         } else {
-            deferredSessionData.reject('There was an error connecting to Django', response);
+            var error = new Errors.DjangoError(response)
+            logger.log('django_error', error);
+            deferredSessionData.reject(error);
         }
     });
 

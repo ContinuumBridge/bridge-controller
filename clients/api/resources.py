@@ -76,7 +76,7 @@ class ClientAuthResource(AuthResource):
 
     class Meta(AuthResource.Meta):
         queryset = Client.objects.all()
-        authorization = Authorization()
+        #authorization = Authorization()
         fields = ['name','email']
         resource_name = 'client_auth'
 

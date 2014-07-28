@@ -7,13 +7,15 @@ var io = require('socket.io')
 //var logger = require('./logger')
     //;
 
-var backendAuth = require('../../backend_auth.js');
+var backendAuth = require('../../backendAuth.js');
 
-module.exports = SocketServer;
+module.exports = SocketIOServer;
 
-function SocketServer(port, authURL) {
+function SocketIOServer(server, port, djangoURL) {
 
     var socketServer = io.listen(port);
+
+    socketServer.parent = server;
 
     socketServer.configure(function() {
 
@@ -21,9 +23,9 @@ function SocketServer(port, authURL) {
 
             if (data && data.query && data.query.sessionID) {
 
-                logger.log('debug', 'bridgeController sessionID is:', data.query.sessionID);
+                socketServer.parent.logger.log('debug', 'bridgeController sessionID is:', data.query.sessionID);
                 var sessionID = data.query.sessionID;
-                //var bridgeAuthURL = Bridge.DJANGO_URL + 'current_bridge/bridge/';
+                var authURL = djangoURL + 'current_bridge/bridge/';
 
                 backendAuth(authURL, sessionID).then(function(authData) {
 
@@ -40,6 +42,20 @@ function SocketServer(port, authURL) {
             }
         });
     });
+
+    socketServer.getConnectionData = function(socket) {
+
+        if (!socket.connectionData) {
+
+            var authData = socket.handshake.authData;
+            socket.connectionData = {
+                subscriptionAddress: authData.cbid,
+                sessionid: socket.handshake.sessionid
+            }
+            socket.connectionData.publicationAddresses = new Array();
+        }
+        return controllerData;
+    };
 
     return socketServer;
 }

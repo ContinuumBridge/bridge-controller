@@ -1,16 +1,27 @@
 
+var rest = require('restler')
+    ,logger = require('./logger')
+    ,Message = require('../../message')
+    ,Q = require('q')
+    ;
 
-module.exports = legacyRouter;
+var deviceDiscovery = require('./deviceDiscovery')
+    ;
 
-function legacyRouter(message, toBridge, toRedis){
 
-    logger.log('debug', 'legacyRouter message:', message);
+var Router = function(connection) {
+    this.connection = connection;
+}
+
+Router.prototype.send = function(message){
+
+    logger.log('debug', 'requestRouter message:', message);
     var url = message.get('url');
 
     switch (url) {
 
         case '/api/bridge/v1/current_bridge/bridge':
-            djangoNode(message, toBridge);
+            //djangoNode(message);
             logger.log('debug', 'Request to django for current_bridge')
             break;
 
@@ -19,7 +30,7 @@ function legacyRouter(message, toBridge, toRedis){
             deviceDiscovery(message).then(function(message) {
 
                 logger.log('debug', 'message in request_router is', message);
-                toRedis.push(message);
+                this.connection.toRedis.push(message);
                 logger.log('debug', 'Pushed to redis for device discovery')
             }, function(error) {
 
@@ -29,6 +40,7 @@ function legacyRouter(message, toBridge, toRedis){
 
         default:
             logger.warn('The requested URL was not found', url);
-            toRedis.push(message);
+            this.connection.toRedis.push(message);
     }
 }
+module.exports = Router;

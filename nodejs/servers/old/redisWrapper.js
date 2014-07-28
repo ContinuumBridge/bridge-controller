@@ -8,10 +8,10 @@ var http = require('http')
     ,cookie_reader = require('cookie')
     ;
 
-var backendAuth = require('../backend_auth.js')
+var backendAuth = require('../../backend_auth.js')
     //,internalAPI = require('./internal_api_router.js')
-    ,Message = require('../message')
-    ,MessageUtils = require('../message_utils')
+    ,Message = require('../../message')
+    ,MessageUtils = require('../../message_utils')
     ;
 
 module.exports = RedisWrapper;
@@ -71,12 +71,6 @@ function RedisWrapper(authData, redisClient, fromRedis, toRedis) {
 
         var message = new Message(jsonMessage);
         fromRedis.push(message);
-        /*
-         if (channel==subscriptionAddress) {
-         socket.emit('message', message);
-         console.log('Bridge received', message, 'on channel', channel);
-         }
-         */
     }
     this.subClient.addListener('message', onRedisMessage);
 
