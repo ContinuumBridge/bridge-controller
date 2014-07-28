@@ -1,16 +1,33 @@
 
+
 var winston = require('winston')
     ,path = require('path')
     ;
 
 var Logger = require('../../logger');
 
-var logger = new Logger();
+winston.loggers.add('client', {
+    "console": {
+      "level": "debug",
+      "levels": Logger.levels,
+      "colorize": true,
+      "label": "client",
+      "silent": false,
+      "timestamp": true,
+      "handleExceptions": true,
+      "exitOnError": false
+    }
+    /*
+    "transports": [
+        new (winston.transports.Console)({ json: false, timestamp: true }),
+        //new winston.transports.File({ filename: logPath + "/node-exceptions.log", json: false })
+    ]
+    */
+});
+/*
+});
+*/
 
-logger.log = function(){
-    var args = arguments;
-    args[1] = "client_controller: " + args[1];
-    winston.Logger.prototype.log.apply(this,args);
-}
+var logger = winston.loggers.get('client');
 
 module.exports = logger;

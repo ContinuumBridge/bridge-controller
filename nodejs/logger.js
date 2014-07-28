@@ -5,7 +5,9 @@ var winston = require('winston')
 
 /* Main logger for node */
 
-var logLevels = {
+var Logger = {};
+
+Logger.logLevels = {
     levels: {
         silly: 0,
         input: 1,
@@ -38,6 +40,9 @@ var logLevels = {
     }
 };
 
+module.exports = Logger;
+
+/*
 var Logger = function() {
 
     var logger = new (winston.Logger)({
@@ -59,8 +64,7 @@ var Logger = function() {
     console.log('Logger is', logger);
     return logger;
 };
-
-module.exports = Logger;
+*/
 
 /*
 logger.log = function(){

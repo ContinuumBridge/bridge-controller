@@ -2,13 +2,31 @@
 var winston = require('winston')
     ,path = require('path')
     ;
-/*
-// Define thisBridgeRoot here so that we don't get circular dependencies loading ./env
-//var logPath = path.normalize(__dirname + '/../../thisbridge');
-*/
 
 var Logger = require('../../logger');
 
+winston.loggers.add('bridge_controller', {
+    console: {
+      level: 'debug',
+      levels: Logger.levels,
+      colorize: 'true',
+      label: 'bridge controller',
+      silent : false,
+      timestamp : true,
+      handleExceptions : false
+    },
+    "exceptionHandlers": [
+        //new (winston.transports.Console)({ json: false, timestamp: true })
+        new winston.transports.File({ filename: logPath + "/node-exceptions.log", json: false })
+    ],
+    "exitOnError": false
+  });
+
+var logger = winston.loggers.get('bridge_controller');
+
+module.exports = logger;
+
+/*
 var logger = new Logger();
 
 logger.log = function(){
@@ -16,8 +34,6 @@ logger.log = function(){
   args[1] = "bridge_controller: " + args[1];
   Logger.prototype.log.apply(this,args);
 }
-
-module.exports = logger;
 
 /*
 var logger = new (winston.Logger)({
