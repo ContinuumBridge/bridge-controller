@@ -10,9 +10,9 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
+var ClientConnection = function(socket, djangoURL) {
 
-var BridgeConnection = function(socket, djangoURL) {
-
+    logger.log('debug', 'In client connection');
     var self = this;
     this.socket = socket;
     this.logger = logger;
@@ -20,6 +20,7 @@ var BridgeConnection = function(socket, djangoURL) {
 
     this.getConfig().then(function(config) {
 
+        logger.log('debug', 'Config is', config);
         self.config = config;
 
         self.django = new Django(self);
@@ -32,14 +33,14 @@ var BridgeConnection = function(socket, djangoURL) {
     });
 };
 
-BridgeConnection.prototype = new Connection();
+ClientConnection.prototype = new Connection();
 
-BridgeConnection.prototype.disconnect = function(error) {
+ClientConnection.prototype.disconnect = function(error) {
 
     logger.log('info', 'Disconnect was called');
 }
 
-BridgeConnection.prototype.router = function(message) {
+ClientConnection.prototype.router = function(message) {
 
     var destination = message.get('destination');
 

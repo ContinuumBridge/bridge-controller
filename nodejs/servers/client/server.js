@@ -13,8 +13,10 @@ var ClientServer = function(port, djangoURL) {
     var authURL = djangoURL + 'current_client/client/';
     this.socketServer = new SocketIOServer(this, authURL, port);
 
+    /*
     this.socketServer.sockets.on('connection', function (socket) {
 
+        logger.log('debug', 'In socketServer connection');
         //var connection = new BridgeConnection(socket, router, self.redisClient);
 
         socket.connectionData = self.socketServer.getConnectionData(socket);
@@ -26,6 +28,7 @@ var ClientServer = function(port, djangoURL) {
             ,controllerNode.address.address, controllerNode.address.port, controllerNode.redisWrapper.subscriptionAddress
             ,controllerNode.authData.email, publicationAddressesString);
     });
+    */
 };
 
 ClientServer.prototype = new Server();

@@ -11,6 +11,7 @@ module.exports = Connection;
 
 function Connection(socket, router, redisClient) {
 
+    console.log('In Connection');
     var self = this;
 }
 
