@@ -52,6 +52,29 @@ class CBResource(ModelResource):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
+class LoggedInResource(CBResource):
+
+    class Meta(CBResource.Meta):
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
+        excludes = ['password', 'is_staff', 'is_superuser']
+        authentication = HTTPHeaderSessionAuthentication()
+        authorization = CurrentUserAuthorization()
+
+    def dispatch_detail(self, request, **kwargs):
+        """
+        A view for handling the various HTTP methods (GET/POST/PUT/DELETE) on
+        a single resource.
+
+        Relies on ``Resource.dispatch`` for the heavy-lifting.
+        """
+        # ADDED Set the pk of the request to that of the logged in user
+        kwargs['pk'] = request.user.id
+        print "kwargs pk is", kwargs['pk'], "Request user id", request.user.id
+
+        return self.dispatch('detail', request, **kwargs)
+
+
 class ThroughModelResource(CBResource):
 
     class Meta(CBResource.Meta):

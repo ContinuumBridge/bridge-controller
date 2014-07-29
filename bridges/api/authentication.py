@@ -15,7 +15,7 @@ from tastypie.compat import User, username_field
 
 from tastypie.authentication import BasicAuthentication
 
-from accounts.models import CBUser
+from accounts.models import CBUser, CBAuth
 from bridges.models import Bridge
 
 try:
@@ -61,14 +61,11 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
         s = Session.objects.get(pk=sessionid)
 
         if '_auth_user_id' in s.get_decoded():
-            # Look up the id first as a User, then as a Bridge
+
             try:
-                u = CBUser.objects.get(id=s.get_decoded()['_auth_user_id'])
-            except CBUser.DoesNotExist:
-                try:
-                    u = Bridge.objects.get(id=s.get_decoded()['_auth_user_id'])
-                except Bridge.DoesNotExist:
-                    return self._unauthorized()
+                u = CBAuth.objects.get(id=s.get_decoded()['_auth_user_id'])
+            except CBAuth.DoesNotExist:
+                return self._unauthorized()
 
             request.user = u
             return True

@@ -11,7 +11,7 @@ var backendAuth = require('../../backendAuth.js');
 
 module.exports = SocketIOServer;
 
-function SocketIOServer(server, port, djangoURL) {
+function SocketIOServer(server, authURL, port) {
 
     var socketServer = io.listen(port);
 
@@ -23,9 +23,9 @@ function SocketIOServer(server, port, djangoURL) {
 
             if (data && data.query && data.query.sessionID) {
 
-                socketServer.parent.logger.log('debug', 'bridgeController sessionID is:', data.query.sessionID);
+                socketServer.parent.logger.log('debug', 'sessionID is:', data.query);
                 var sessionID = data.query.sessionID;
-                var authURL = djangoURL + 'current_bridge/bridge/';
+                //var authURL = djangoURL + 'current_bridge/bridge/';
 
                 backendAuth(authURL, sessionID).then(function(authData) {
 

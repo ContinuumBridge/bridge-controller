@@ -1,6 +1,6 @@
 
 var rest = require('restler'),
-    logger = require('./logger')
+    //logger = require('./logger')
     Q = require('q');
 
 var Errors = require('./errors');
@@ -36,12 +36,12 @@ var backendAuth = function(djangoAuthURL, sessionid) {
             }
             if (response.statusCode = 404) {
                 var error = new Errors.Unauthorized('Authorization with Django failed');
-                logger.log('unauthorized', error);
+                //logger.log('unauthorized', error);
                 deferredSessionData.reject(error);
             }
         } else {
             var error = new Errors.DjangoError(response)
-            logger.log('django_error', error);
+            //logger.log('django_error', error);
             deferredSessionData.reject(error);
         }
     });

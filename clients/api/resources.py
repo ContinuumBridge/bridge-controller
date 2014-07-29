@@ -27,7 +27,7 @@ from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource
 
 from clients.models import Client, ClientControl
 
@@ -41,7 +41,7 @@ class ClientResource(CBResource):
         resource_name = 'client'
 
 
-class CurrentClientResource(CBResource):
+class CurrentClientResource(LoggedInResource):
 
     '''
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
@@ -57,22 +57,15 @@ class CurrentClientResource(CBResource):
                     null=True, readonly=True, nonmodel=True)
     '''
 
-    class Meta(CBResource.Meta):
-        resource_name = 'current_client'
+    class Meta(LoggedInResource.Meta):
         queryset = Client.objects.all()
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
         fields = ['id', 'email', 'name', 'date_joined', 'last_login']
-        excludes = ['password', 'is_staff', 'is_superuser']
-        authentication = HTTPHeaderSessionAuthentication()
-        #authorization = ReadOnlyAuthorization()
-        authorization = CurrentUserAuthorization()
         resource_name = 'current_client'
 
 
 class ClientAuthResource(AuthResource):
 
-    """ Allows bridges to login and logout """
+    """ Allows clients to login and logout """
 
     class Meta(AuthResource.Meta):
         queryset = Client.objects.all()

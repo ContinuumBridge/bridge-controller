@@ -3,6 +3,8 @@ var winston = require('winston')
     ,path = require('path')
     ;
 
+var Errors = require('./errors');
+
 /* Main logger for node */
 
 var Logger = {};
@@ -39,6 +41,15 @@ Logger.logLevels = {
         error: 'red'
     }
 };
+
+Logger.logError = function(error) {
+
+    if (error instanceof Errors.Unauthorized) {
+        this.log('unauthorized', error);
+    } else if (error instanceof Errors.DjangoError) {
+        this.log('django_error', error);
+    }
+}
 
 module.exports = Logger;
 

@@ -6,12 +6,12 @@ var winston = require('winston')
 
 var Logger = require('../../logger');
 
-winston.loggers.add('client', {
+winston.loggers.add('client_controller', {
     "console": {
       "level": "debug",
       "levels": Logger.levels,
       "colorize": true,
-      "label": "client",
+      "label": "client controller",
       "silent": false,
       "timestamp": true,
       "handleExceptions": true,
@@ -28,6 +28,6 @@ winston.loggers.add('client', {
 });
 */
 
-var logger = winston.loggers.get('client');
+var logger = winston.loggers.get('client_controller');
 
 module.exports = logger;

@@ -10,7 +10,8 @@ var ClientServer = function(port, djangoURL) {
 
     this.logger = logger;
 
-    this.socketServer = new SocketIOServer(this, port, djangoURL);
+    var authURL = djangoURL + 'current_client/client/';
+    this.socketServer = new SocketIOServer(this, authURL, port);
 
     this.socketServer.sockets.on('connection', function (socket) {
 
