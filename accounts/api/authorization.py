@@ -6,8 +6,8 @@ class CurrentUserAuthorization(Authorization):
 
     def read_list(self, object_list, bundle):
         # This assumes a ``QuerySet`` from ``ModelResource``.
-        raise Unauthorized("You may only GET details.")
-        #return object_list.filter(id=bundle.request.user.id)
+        #raise Unauthorized("You may only GET details.")
+        return object_list.filter(id=bundle.request.user.id)
 
     def read_detail(self, object_list, bundle):
         # Is the requested object owned by the user?
