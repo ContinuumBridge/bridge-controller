@@ -50,24 +50,18 @@ _.extend(Message.prototype, {
         this.set(attributes, options);
     },
 
-    return: function(source, data) {
+    returnToSource: function(source) {
 
-        this.set('body', data);
         // Switches the original source to the destination
         var src = source || "";
-        var newDestination = this.get('source') || "";
-        var newSource = src || this.get('destination');
-        this.set('destination', newDestination);
-        this.set('source', newSource);
+        var prevSource = this.get('source') || "";
+        this.set('destination', prevSource);
+        this.set('source', src);
     },
 
-    /*
     returnError: function(error) {
 
-        this.set('body', error);
-        this.returnToSource()
     },
-    */
 
     // Get the value of an attribute.
     get: function(attr) {
