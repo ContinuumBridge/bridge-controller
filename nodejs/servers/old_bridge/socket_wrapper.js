@@ -1,6 +1,6 @@
 
 var logger = require('./logger')
-    ,Message = require('../message')
+    ,Message = require('../../message')
     ;
 
 module.exports = SocketWrapper;

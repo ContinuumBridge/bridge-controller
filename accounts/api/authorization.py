@@ -6,13 +6,14 @@ class CurrentUserAuthorization(Authorization):
 
     def read_list(self, object_list, bundle):
         # This assumes a ``QuerySet`` from ``ModelResource``.
-        #return object_list.filter(user=bundle.request.user)
-        return object_list.filter(id=bundle.request.user.id)
-        #return object_list.filter(first_name='Ellie')
+        raise Unauthorized("You may only GET details.")
+        #return object_list.filter(id=bundle.request.user.id)
 
     def read_detail(self, object_list, bundle):
         # Is the requested object owned by the user?
         #return bundle.obj.user == bundle.request.user
+        print "Request user is", bundle.request.user
+        print "Obj id", bundle.obj.id, "Request id", bundle.request.user.id
         return bundle.obj.id == bundle.request.user.id
 
     def create_list(self, object_list, bundle):

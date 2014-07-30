@@ -122,3 +122,7 @@ class DeviceInstallResource(PostMatchMixin, CBResource):
         post_match = ['adaptor', 'bridge', 'device', 'address']
 
 
+    def dehydrate(self, bundle):
+        # Prevent a cbid being added
+        return bundle
+

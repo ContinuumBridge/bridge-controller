@@ -71,7 +71,7 @@ class BridgeControlResource(ThroughModelResource):
             return ''
     '''
 
-
+'''
 class BridgeResource(CBResource):
 
     class Meta(CBResource.Meta):
@@ -118,6 +118,7 @@ class BridgeResource(CBResource):
             return http.HttpNoContent()
 
         return response
+'''
 
 
 '''

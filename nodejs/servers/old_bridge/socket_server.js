@@ -7,7 +7,7 @@ var io = require('socket.io')
 var logger = require('./logger')
     ;
 
-var backendAuth = require('../backend_auth.js');
+var backendAuth = require('../../backend_auth.js');
 
 module.exports = SocketServer;
 

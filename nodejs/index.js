@@ -6,14 +6,34 @@ var fs = require('fs')
 
 DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080' : 'http://localhost:8000'
 
-redisAuthClient = redis.createClient();
+//redisAuthClient = redis.createClient();
 
+/*
 Portal = {};
-Portal.Controller = require('./portal/portal_controller.js');
+Portal.Controller = require('./controllers/portal/portal_controller.js');
 Portal.controller = new Portal.Controller(4000);
+*/
 
+//var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
+//var ClientController = new Controller(3500, clientDjangoURL, clientRouter);
+/*
+Client = {};
+Client.Controller = require('./controllers/client/client_controller.js');
+Client.controller = new Client.Controller(3500);
+
+var bridgeDjangoURL = DJANGO_URL + '/api/bridge/v1/';
 Bridge = {};
-Bridge.Controller = require('./bridge/bridge_controller.js');
-Bridge.controller = new Bridge.Controller(3000);
+Bridge.Server = require('./servers/bridge/server');
+Bridge.server = new Bridge.Server(3000, bridgeDjangoURL);
+*/
 
-Test = {};
+var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
+Client = {};
+Client.Server = require('./servers/client/server');
+Client.server = new Client.Server(3500, clientDjangoURL);
+
+/*
+ var BridgeController = new BridgeServer(3000, bridgeDjangoURL);
+Bridge.Controller = require('./controllers/bridge/bridge_controller.js');
+Bridge.controller = new Bridge.Controller(3000);
+*/

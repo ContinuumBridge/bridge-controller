@@ -8,10 +8,10 @@ var http = require('http')
     ,cookie_reader = require('cookie')
     ;
 
-var backendAuth = require('../backend_auth.js')
+var backendAuth = require('../../backend_auth.js')
     //,internalAPI = require('./internal_api_router.js')
-    ,Message = require('../message')
-    ,MessageUtils = require('../message_utils')
+    ,Message = require('../../message')
+    ,MessageUtils = require('../../message_utils')
     ;
 
 module.exports = RedisWrapper;

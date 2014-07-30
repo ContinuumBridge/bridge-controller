@@ -7,10 +7,10 @@ var Bacon = require('baconjs').Bacon
     ;
 
 var requestRouter = require('./request_router.js')
-    ,backendAuth = require('../backend_auth.js')
+    ,backendAuth = require('../../backend_auth.js')
     ,ControllerNode = require('./controller_node')
     ,django = require('./django_node.js')
-    ,MessageUtils = require('../message_utils.js')
+    ,MessageUtils = require('../../message_utils.js')
     ,RedisClient = require('./redis_client')
     ,SocketServer = require('./socket_server')
     ,thirdPartyRouter = require('./third_party_router.js')

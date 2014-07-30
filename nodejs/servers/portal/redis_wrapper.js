@@ -10,9 +10,9 @@ var http = require('http')
 
 var djangoBackbone = require('./django_backbone.js')
     ,DeviceDiscovery = require('./device_discovery.js')
-    ,backendAuth = require('../backend_auth.js')
+    ,backendAuth = require('../../backend_auth.js')
     ,internalAPI = require('./internal_api_router.js')
-    ,Message = require('../message');
+    ,Message = require('../../message');
     ;
 
 module.exports = RedisWrapper;

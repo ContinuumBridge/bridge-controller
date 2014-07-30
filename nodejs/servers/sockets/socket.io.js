@@ -1,0 +1,61 @@
+
+var io = require('socket.io')
+    ,redis = require('redis')
+    ,url = require('url')
+    ;
+
+//var logger = require('./logger')
+    //;
+
+var backendAuth = require('../../backendAuth.js');
+
+module.exports = SocketIOServer;
+
+function SocketIOServer(server, authURL, port) {
+
+    var socketServer = io.listen(port);
+
+    socketServer.parent = server;
+
+    socketServer.configure(function() {
+
+        socketServer.set('authorization', function(data, accept){
+
+            if (data && data.query && data.query.sessionID) {
+
+                socketServer.parent.logger.log('debug', 'sessionID is:', data.query.sessionID);
+                var sessionID = data.query.sessionID;
+                //var authURL = djangoURL + 'current_bridge/bridge/';
+
+                backendAuth(authURL, sessionID).then(function(authData) {
+
+                    console.log('Auth success', authData);
+                    data.authData = authData;
+                    data.sessionID = sessionID;
+                    //logger.log('debug', 'authData from backendAuth is', authData);
+                    accept(null, true);
+
+                }, function(error) {
+
+                    console.log('Auth error', error);
+                    logger.error(error);
+                    accept('error', false);
+                });
+            }
+        });
+    });
+
+    socketServer.getConnectionData = function(socket) {
+
+        console.log('sessionid is', socket.handshake);
+        var authData = socket.handshake.authData;
+        var connectionData = {
+            subscriptionAddress: authData.cbid,
+            sessionID: socket.handshake.sessionID
+        }
+        console.log('connection data is', connectionData);
+        return connectionData;
+    };
+
+    return socketServer;
+}

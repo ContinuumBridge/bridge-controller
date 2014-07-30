@@ -50,6 +50,8 @@ class AppLicenceResource(PostMatchMixin, CBResource):
        resource_name = 'app_licence'
        post_match = ['app', 'user']
 
+    def dehydrate(self, bundle):
+        return bundle
 
 class AppInstallResource(CBResource):
 
@@ -71,6 +73,8 @@ class AppInstallResource(CBResource):
        resource_name = 'app_install'
        include_in_post_match = ['name', 'manufacturer_name']
 
+    def dehydrate(self, bundle):
+        return bundle
     '''
     def full_dehydrate(self, bundle, for_list=False):
         """ 

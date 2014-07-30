@@ -29,8 +29,9 @@ from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
 from bridges.models import Bridge, BridgeControl
 
-from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from accounts.api.authorization import CurrentUserAuthorization
+from bridges.api.authentication import HTTPHeaderSessionAuthentication
+from bridges.api.authorization import AuthAuthorization
 
 from bridges.api import cb_fields
 
@@ -38,11 +39,67 @@ class CBResource(ModelResource):
 
     class Meta:
         authentication = HTTPHeaderSessionAuthentication()
+        always_return_data = True
         resource_name = 'cb_resource'
+
+    def dehydrate(self, bundle):
+        # Get the prefix by concatenating the first letter of the model name with "ID"
+        prefix = self.__class__.__name__[0] + "ID"
+        bundle.data['cbid'] = prefix + str(bundle.obj.id)
+        return bundle
 
     def unauthorized_result(self, exception):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
+
+class LoggedInResource(CBResource):
+
+    class Meta(CBResource.Meta):
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
+        excludes = ['password', 'is_staff', 'is_superuser']
+        authentication = HTTPHeaderSessionAuthentication()
+        authorization = CurrentUserAuthorization()
+
+    def dispatch(self, request_type, request, **kwargs):
+        """
+        Handles the common operations (allowed HTTP method, authentication,
+        throttling, method lookup) surrounding most CRUD interactions.
+        """
+        allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
+
+        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
+            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
+
+        request_method = self.method_check(request, allowed=allowed_methods)
+        method = getattr(self, "%s_%s" % (request_method, request_type), None)
+
+        if method is None:
+            raise ImmediateHttpResponse(response=http.HttpNotImplemented())
+
+        self.is_authenticated(request)
+        self.throttle_check(request)
+
+        # ADDED Set the request pk to the id of the logged in user
+        if request_type == 'detail':
+            kwargs['pk'] = request.user.id
+
+        # All clear. Process the request.
+        request = convert_post_to_put(request)
+        response = method(request, **kwargs)
+
+        # Add the throttled request.
+        self.log_throttled_access(request)
+
+        # If what comes back isn't a ``HttpResponse``, assume that the
+        # request was accepted and that some action occurred. This also
+        # prevents Django from freaking out.
+        if not isinstance(response, HttpResponse):
+            return http.HttpNoContent()
+
+        return response
+
+
 
 class ThroughModelResource(CBResource):
 
@@ -221,3 +278,54 @@ class PostMatchMixin(object):
 class CBModelResource(six.with_metaclass(ModelDeclarativeMetaclass, BaseCBModelResource)):
     pass
 '''
+
+class AuthResource(ModelResource):
+
+    class Meta:
+        authorization = AuthAuthorization()
+        fields = ['first_name', 'last_name', 'email']
+        allowed_methods = ['get', 'post']
+
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/login%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('login'), name="api_login"),
+            url(r'^(?P<resource_name>%s)/logout%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('logout'), name='api_logout'),
+        ]
+
+    def login(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+
+        data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+
+        email = data.get('email', '')
+        password = data.get('password', '')
+
+        client = authenticate(email=email, password=password)
+        if client:
+            if client.is_active:
+                login(request, client)
+                return self.create_response(request, {
+                    'success': True
+                })
+            else:
+                return self.create_response(request, {
+                    'success': False,
+                    'reason': 'disabled',
+                    }, HttpForbidden )
+        else:
+            return self.create_response(request, {
+                'success': False,
+                'reason': 'incorrect',
+                }, HttpUnauthorized )
+
+    def logout(self, request, **kwargs):
+        self.method_check(request, allowed=['get', 'post'])
+        if request.user and request.user.is_authenticated():
+            logout(request)
+            return self.create_response(request, { 'success': True })
+        else:
+            return self.create_response(request, { 'success': False }, HttpUnauthorized)
