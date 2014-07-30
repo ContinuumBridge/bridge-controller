@@ -54,7 +54,7 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
         #from django.contrib.sessions.models import Session
         from user_sessions.models import Session
 
-        sessionid =  request.META.get('HTTP_X_CB_SESSIONID') 
+        sessionid =  request.META.get('HTTP_X_CB_SESSIONID')
         if not sessionid or sessionid == 'null':
             sessionid = request.COOKIES['sessionid']
 

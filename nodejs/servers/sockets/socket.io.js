@@ -23,12 +23,13 @@ function SocketIOServer(server, authURL, port) {
 
             if (data && data.query && data.query.sessionID) {
 
-                socketServer.parent.logger.log('debug', 'sessionID is:', data.query);
+                socketServer.parent.logger.log('debug', 'sessionID is:', data.query.sessionID);
                 var sessionID = data.query.sessionID;
                 //var authURL = djangoURL + 'current_bridge/bridge/';
 
                 backendAuth(authURL, sessionID).then(function(authData) {
 
+                    console.log('Auth success', authData);
                     data.authData = authData;
                     data.sessionID = sessionID;
                     //logger.log('debug', 'authData from backendAuth is', authData);
@@ -36,6 +37,7 @@ function SocketIOServer(server, authURL, port) {
 
                 }, function(error) {
 
+                    console.log('Auth error', error);
                     logger.error(error);
                     accept('error', false);
                 });
@@ -45,16 +47,14 @@ function SocketIOServer(server, authURL, port) {
 
     socketServer.getConnectionData = function(socket) {
 
-        if (!socket.connectionData) {
-
-            var authData = socket.handshake.authData;
-            socket.connectionData = {
-                subscriptionAddress: authData.cbid,
-                sessionid: socket.handshake.sessionid
-            }
-            socket.connectionData.publicationAddresses = new Array();
+        console.log('sessionid is', socket.handshake);
+        var authData = socket.handshake.authData;
+        var connectionData = {
+            subscriptionAddress: authData.cbid,
+            sessionID: socket.handshake.sessionID
         }
-        return controllerData;
+        console.log('connection data is', connectionData);
+        return connectionData;
     };
 
     return socketServer;

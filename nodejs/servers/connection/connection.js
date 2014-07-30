@@ -7,10 +7,9 @@ var Django = require('../django')
     ,redis = require('socket.io/node_modules/redis')
     ;
 
-module.exports = Connection;
-
 function Connection(socket, router, redisClient) {
 
+    console.log('In Connection');
     var self = this;
 }
 
@@ -76,6 +75,7 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('message', function (jsonMessage) {
 
+        console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
         message.set('source', "BID" + socket.handshake.authData.id);
         message.set('sessionID', socket.handshake.query.sessionID);
@@ -167,12 +167,17 @@ Connection.prototype.unauthorizedResult = function(message, exception) {
     //this.clientBu
 }
 
+/*
 Connection.prototype.getConfig = function(socket) {
 
 }
+*/
 
 Connection.prototype.getAddress = function(socket) {
 
     var address = socket.handshake.address;
     return address;
 }
+
+module.exports = Connection;
+

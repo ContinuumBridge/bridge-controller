@@ -61,18 +61,44 @@ class LoggedInResource(CBResource):
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()
 
-    def dispatch_detail(self, request, **kwargs):
+    def dispatch(self, request_type, request, **kwargs):
         """
-        A view for handling the various HTTP methods (GET/POST/PUT/DELETE) on
-        a single resource.
-
-        Relies on ``Resource.dispatch`` for the heavy-lifting.
+        Handles the common operations (allowed HTTP method, authentication,
+        throttling, method lookup) surrounding most CRUD interactions.
         """
-        # ADDED Set the pk of the request to that of the logged in user
-        kwargs['pk'] = request.user.id
-        print "kwargs pk is", kwargs['pk'], "Request user id", request.user.id
+        allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
 
-        return self.dispatch('detail', request, **kwargs)
+        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
+            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
+
+        request_method = self.method_check(request, allowed=allowed_methods)
+        method = getattr(self, "%s_%s" % (request_method, request_type), None)
+
+        if method is None:
+            raise ImmediateHttpResponse(response=http.HttpNotImplemented())
+
+        self.is_authenticated(request)
+        self.throttle_check(request)
+
+        # ADDED Set the request pk to the id of the logged in user
+        if request_type == 'detail':
+            kwargs['pk'] = request.user.id
+
+        # All clear. Process the request.
+        request = convert_post_to_put(request)
+        response = method(request, **kwargs)
+
+        # Add the throttled request.
+        self.log_throttled_access(request)
+
+        # If what comes back isn't a ``HttpResponse``, assume that the
+        # request was accepted and that some action occurred. This also
+        # prevents Django from freaking out.
+        if not isinstance(response, HttpResponse):
+            return http.HttpNoContent()
+
+        return response
+
 
 
 class ThroughModelResource(CBResource):

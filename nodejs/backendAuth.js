@@ -7,20 +7,21 @@ var Errors = require('./errors');
 
 /* Backend Authentication */
 
-var backendAuth = function(djangoAuthURL, sessionid) {
+var backendAuth = function(djangoAuthURL, sessionID) {
 
     /* backendAuth takes a sessionid and returns session information about the user and bridges they control */
 
     //logger.log('debug', 'in backendAuth djangoAuthURL is', djangoAuthURL);
     var deferredSessionData = Q.defer();
 
+    console.log('backendAuth sessionID is:', sessionID)
     // Define options for Django REST Client
     var djangoAuthOptions = {
         method: "get",
         headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
-            'X_CB_SESSIONID': sessionid
+            'X_CB_SESSIONID': sessionID
         }
     };
 

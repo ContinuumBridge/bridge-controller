@@ -15,9 +15,12 @@ var ClientServer = function(port, djangoURL) {
 
     this.socketServer.sockets.on('connection', function (socket) {
 
+        logger.log('debug', 'In socketServer connection');
         //var connection = new BridgeConnection(socket, router, self.redisClient);
 
         socket.connectionData = self.socketServer.getConnectionData(socket);
+
+        console.log('Socket connection data', socket.connectionData);
 
         var connection = new ClientConnection(socket, djangoURL);
 
