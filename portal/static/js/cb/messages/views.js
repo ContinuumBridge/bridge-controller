@@ -36,6 +36,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         'click #stop': 'clickStop',
         'click #update': 'clickUpdate',
         'click #send-log': 'clickSendLog',
+        'click #z-exclude': 'clickZExclude',
         'click #restart': 'clickRestart',
         'click #reboot': 'clickReboot',
         'click #upgrade': 'clickUpgrade'
@@ -92,6 +93,11 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
         if(event.keyCode == 13){
             this.clickSend();
         }
+    },
+
+    clickZExclude: function() {
+
+        this.sendCommand('z-exclude');
     },
 
     clickStart: function() {

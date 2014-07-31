@@ -11,7 +11,7 @@ from apps.models import AppLicence
 from apps.api.resources import AppLicenceResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
 
 class UserBridgeControlResource(ThroughModelResource):
@@ -30,7 +30,7 @@ class UserBridgeControlResource(ThroughModelResource):
         resource_name = 'user_bridge_control'
 
 
-class CurrentUserResource(CBResource):
+class CurrentUserResource(LoggedInResource):
 
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
@@ -40,13 +40,10 @@ class CurrentUserResource(CBResource):
                      attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
                      null=True, readonly=True, nonmodel=True)
 
-    class Meta(CBResource.Meta):
+    class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'
         queryset = CBUser.objects.all()
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_staff']
-        excludes = ['password', 'is_superuser']
-        authentication = HTTPHeaderSessionAuthentication()
-        authorization = CurrentUserAuthorization()
 
     def dehydrate(self, bundle):
         bundle.data['cbid'] = "UID" + str(bundle.obj.id)
@@ -58,6 +55,7 @@ class CurrentUserResource(CBResource):
             bridge_controls.append(bridge_control)
         return bridge_controls
 
+    '''
     def dispatch(self, request_type, request, **kwargs):
         """
         Handles the common operations (allowed HTTP method, authentication,
@@ -96,6 +94,7 @@ class CurrentUserResource(CBResource):
             return http.HttpNoContent()
 
         return response
+    '''
 
 
 class UserResource(CBResource):

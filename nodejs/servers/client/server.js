@@ -13,6 +13,7 @@ var ClientServer = function(port, djangoURL) {
     var authURL = djangoURL + 'current_client/client/';
     this.socketServer = new SocketIOServer(this, authURL, port);
 
+    /*
     this.socketServer.sockets.on('connection', function (socket) {
 
         logger.log('debug', 'In socketServer connection');
@@ -29,6 +30,7 @@ var ClientServer = function(port, djangoURL) {
             ,controllerNode.address.address, controllerNode.address.port, controllerNode.redisWrapper.subscriptionAddress
             ,controllerNode.authData.email, publicationAddressesString);
     });
+    */
 };
 
 ClientServer.prototype = new Server();
