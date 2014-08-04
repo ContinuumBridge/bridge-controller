@@ -7,8 +7,6 @@ admin.autodiscover()
 from django.views.generic.base import TemplateView
 
 from django.conf import settings
-from django_nyt.urls import get_pattern as get_nyt_pattern
-from wiki.urls import get_pattern as get_wiki_pattern
 
 from accounts.api.api import v1 as users_v1
 from bridges.api.api import v1 as bridges_v1
@@ -29,9 +27,6 @@ urlpatterns = patterns('',
 
     (r'^accounts/', include('allauth.urls')),
     url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
-
-    (r'^notifications/', get_nyt_pattern()),
-    (r'^wiki/', get_wiki_pattern()),
 
     (r'^portal/', include('portal.urls')),
 
