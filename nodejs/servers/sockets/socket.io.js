@@ -23,38 +23,55 @@ function SocketIOServer(server, authURL, port) {
 
             if (data && data.query && data.query.sessionID) {
 
+                console.log('data in socketServer is', data);
                 socketServer.parent.logger.log('debug', 'sessionID is:', data.query.sessionID);
-                var sessionID = data.query.sessionID;
-                //var authURL = djangoURL + 'current_bridge/bridge/';
+                var protoConfig = {
+                    sessionID: data.query.sessionID,
+                    address: data.address
+                }
+                socketServer.getConnectionConfig(authURL, protoConfig).then(function(config) {
 
-                backendAuth(authURL, sessionID).then(function(authData) {
-
-                    console.log('Auth success', authData);
-                    data.authData = authData;
-                    data.sessionID = sessionID;
-                    //logger.log('debug', 'authData from backendAuth is', authData);
+                    console.log('Auth success, config is', config);
+                    data.config = config;
+                    data.config.address = data.address
                     accept(null, true);
-
                 }, function(error) {
 
-                    console.log('Auth error', error);
-                    logger.error(error);
+                    socketServer.parent.logger.error(error);
                     accept('error', false);
                 });
             }
         });
     });
 
-    socketServer.getConnectionData = function(socket) {
+    socketServer.getConnectionConfig = function(authURL, oldConfig) {
 
-        console.log('sessionid is', socket.handshake);
-        var authData = socket.handshake.authData;
-        var connectionData = {
-            subscriptionAddress: authData.cbid,
-            sessionID: socket.handshake.sessionID
-        }
-        console.log('connection data is', connectionData);
-        return connectionData;
+        var deferredConfig = Q.defer();
+
+        backendAuth(authURL, oldConfig.sessionID).then(function(authData) {
+
+            if (authData.controllers) {
+                var publicationAddresses = new Array();
+                authData.controllers.forEach(function(controller) {
+                    publicationAddresses.push(controller.user.cbid)
+                });
+            }
+
+            var config = {
+                sessionID: oldConfig.sessionID,
+                subscriptionAddress: authData.cbid,
+                publicationAddresses: publicationAddresses,
+                address: oldConfig.address
+            }
+
+            deferredConfig.resolve(config);
+
+        }, function(error) {
+
+            deferredConfig.reject(error);
+        });
+
+        return deferredConfig.promise;
     };
 
     return socketServer;

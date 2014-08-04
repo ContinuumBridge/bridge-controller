@@ -13,24 +13,20 @@ var ClientServer = function(port, djangoURL) {
     var authURL = djangoURL + 'current_client/client/';
     this.socketServer = new SocketIOServer(this, authURL, port);
 
-    /*
     this.socketServer.sockets.on('connection', function (socket) {
 
-        logger.log('debug', 'In socketServer connection');
-        //var connection = new BridgeConnection(socket, router, self.redisClient);
+        logger.log('debug', 'In socketServer connection', socket.handshake.config);
 
-        socket.connectionData = self.socketServer.getConnectionData(socket);
-
-        console.log('Socket connection data', socket.connectionData);
+        socket.getConfig = function() {
+            var config = socket.config || socket.handshake.config;
+            return self.socketServer.getConnectionConfig(authURL, config);
+        };
 
         var connection = new ClientConnection(socket, djangoURL);
 
-        var publicationAddressesString = controllerNode.redisWrapper.publicationAddresses.join(', ');
-        logger.info('New client connection from %s:%s. Subscribed to %s (%s), publishing to %s'
-            ,controllerNode.address.address, controllerNode.address.port, controllerNode.redisWrapper.subscriptionAddress
-            ,controllerNode.authData.email, publicationAddressesString);
+        logger.log('debug', 'connection config', connection.config);
+
     });
-    */
 };
 
 ClientServer.prototype = new Server();

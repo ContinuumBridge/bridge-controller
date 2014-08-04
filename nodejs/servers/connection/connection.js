@@ -13,51 +13,6 @@ function Connection(socket, router, redisClient) {
     var self = this;
 }
 
-Connection.prototype.getConfig = function() {
-
-    var deferredConfig = Q.defer();
-
-    this.getAuthData().then(function(authData) {
-
-        var publicationAddresses = new Array();
-        authData.controllers.forEach(function(controller) {
-            publicationAddresses.push(controller.user.cbid)
-        });
-
-        var config = {
-            subscriptionAddress: authData.cbid,
-            publicationAddresses: publicationAddresses
-        }
-        deferredConfig.resolve(config);
-    });
-    return deferredConfig;
-}
-
-Connection.prototype.getAuthData = function() {
-
-    /* Get authentication data for the connection, returns a deferred */
-
-    var self = this;
-    var deferredAuthData = Q.defer();
-
-    if (!this.config) {
-        // This is the first time getAuthData is called since connection, use the initial authData
-        deferredAuthData.resolve(this.socket.handshake.authData);
-    }
-
-    var sessionID = this.socket.handshake.sessionID;
-    if (!authData) {
-        var authURL = djangoURL + 'current_bridge/bridge/';
-        backendAuth(authURL, sessionID).then(function(data) {
-
-            deferredAuthData.resolve(data);
-        }, function(error) {
-            self.disconnect(error);
-        });
-    }
-    return deferredAuthData;
-}
-
 Connection.prototype.setupBuses = function() {
 
     this.fromClient = new Bacon.Bus();
@@ -71,6 +26,8 @@ Connection.prototype.setupBuses = function() {
 
 Connection.prototype.setupSocket = function() {
 
+    var self = this;
+
     var socket = this.socket;
 
     socket.on('message', function (jsonMessage) {
@@ -80,7 +37,7 @@ Connection.prototype.setupSocket = function() {
         message.set('source', "BID" + socket.handshake.authData.id);
         message.set('sessionID', socket.handshake.query.sessionID);
 
-        fromClient.push(message);
+        self.fromClient.push(message);
     });
 
     this.toClient.onValue(function(message) {
@@ -165,18 +122,6 @@ Connection.prototype.unauthorizedResult = function(message, exception) {
 
     message.returnError();
     //this.clientBu
-}
-
-/*
-Connection.prototype.getConfig = function(socket) {
-
-}
-*/
-
-Connection.prototype.getAddress = function(socket) {
-
-    var address = socket.handshake.address;
-    return address;
 }
 
 module.exports = Connection;
