@@ -2,13 +2,12 @@
 var Server = require('../server');
 var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
-var logger = require('./logger');
+
+logger = require('./logger');
 
 var BridgeServer = function(port, djangoURL) {
 
     var self = this;
-
-    this.logger = logger;
 
     this.socketServer = new SocketIOServer(this, port, djangoURL);
 
@@ -16,7 +15,11 @@ var BridgeServer = function(port, djangoURL) {
 
         //var connection = new BridgeConnection(socket, router, self.redisClient);
 
-        socket.connectionData = self.socketServer.getConnectionData(socket);
+        socket.getConfig = function() {
+            var config = socket.config || socket.handshake.config;
+            return self.socketServer.getConnectionConfig(authURL, config);
+        };
+        //socket.connectionData = self.socketServer.getConnectionData(socket);
 
         var connection = new BridgeConnection(socket, djangoURL);
 

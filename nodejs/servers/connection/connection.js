@@ -34,7 +34,7 @@ Connection.prototype.setupSocket = function() {
 
         console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
-        message.set('source', "BID" + socket.handshake.authData.id);
+        //message.set('source', "BID" + socket.handshake.authData.id);
         message.set('sessionID', socket.handshake.query.sessionID);
 
         self.fromClient.push(message);

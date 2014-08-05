@@ -23,9 +23,9 @@ logger.log('Environment is', process.env.NODE_ENV);
 
 Portal.DJANGO_URL = process.env.NODE_ENV == 'production' ? 'http://localhost:8080/api/user/v1/' : 'http://localhost:8000/api/user/v1/'
 
-module.exports = PortalController;
+module.exports = PortalServer;
 
-function PortalController(socketPort) {
+function PortalServer(socketPort) {
 
     var portalServer = this.portalServer = new SocketServer(socketPort);
 
@@ -33,30 +33,7 @@ function PortalController(socketPort) {
 
         logger.log('debug', 'portalServer connected:');
 
-        /*
-        for(var propertyName in socket) {
-            logger.log('debug', 'In the backboneio socket: |', propertyName, typeof(socket[propertyName]));
-            // propertyName is what you want
-            // you can get the value like this: myObject[propertyName]
-        }
-        */
-
-        //logger.log('debug', 'In the socket: ', socket.);
-
         var controllerNode = new ControllerNode(socket);
-
-        Test.sendDevices = function() {
-
-            var jf = require('jsonfile');
-
-            var filePath = path.join(__dirname, '../test/discovered_devices.json');
-            jf.readFile(filePath, function(err, foundDeviceInstalls) {
-                if (err) {logger.error(err)};
-                logger.log('debug', 'Test devices from file:', util.inspect(foundDeviceInstalls));
-                socket.emit('discoveredDeviceInstall:reset', foundDeviceInstalls);
-                logger.log('debug', 'Sent test devices');
-            });
-        }
 
         controllerNode.fromRedis.onValue(function(message) {
 

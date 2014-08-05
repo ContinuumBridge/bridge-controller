@@ -1,5 +1,4 @@
 var backboneio = require('cb-backbone.io')
-    ,logger = require('./logger')
     ,rest = require('restler')
     ,util = require('util')
     ;

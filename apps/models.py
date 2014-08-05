@@ -34,6 +34,18 @@ class App(LoggedModelMixin):
         self.modified = timezone.now()
         super(App, self).save(*args, **kwargs)
 
+
+class AppAuthorship(LoggedModelMixin):
+
+    user = models.ForeignKey(CBUser)
+    app = models.ForeignKey(App)
+
+    class Meta:
+        verbose_name = _('app_authorship')
+        verbose_name_plural = _('app_authorship')
+        app_label = 'apps'
+
+
 class AppLicence(LoggedModelMixin):
 
     """ Through model for a User and an App """

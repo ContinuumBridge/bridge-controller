@@ -8,7 +8,7 @@ var Django = function(connection) {
     this.connection = connection;
 };
 
-Django.prototype.request = function(request, djangoURL) {
+Django.prototype.request = function(request) {
 
     var deferred = Q.defer();
 
@@ -21,7 +21,7 @@ Django.prototype.request = function(request, djangoURL) {
         }
     };
 
-    var requestURL = djangoURL + request.url;
+    var requestURL = this.connection.config.djangoURL + request.url;
 
     rest.get(requestURL, djangoOptions).on('complete', function(data, djangoResponse) {
 
@@ -39,15 +39,11 @@ Django.prototype.request = function(request, djangoURL) {
     return deferred.promise;
 }
 
-Django.prototype.authRequest = function(message, connection) {
-
-}
-
 Django.prototype.messageRequest = function(message, connection) {
 
     var requestData = message.get('body');
 
-    request(requestData, connection.djangoURL).then(function(data) {
+    this.request(requestData).then(function(data) {
         // Success
         message.return('cb', data);
         connection.router(message);

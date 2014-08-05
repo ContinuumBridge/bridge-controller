@@ -29,7 +29,7 @@ from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
 from bridges.models import Bridge, BridgeControl
 
-from accounts.api.authorization import CurrentUserAuthorization
+from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api.authorization import AuthAuthorization
 
@@ -51,6 +51,18 @@ class CBResource(ModelResource):
     def unauthorized_result(self, exception):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
+
+
+class UserObjectsResource(CBResource):
+
+    """ Allows API access to objects which have the logged in user in their user field """
+
+    class Meta(CBResource.Meta):
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+        authentication = HTTPHeaderSessionAuthentication()
+        authorization = UserObjectsOnlyAuthorization()
+
 
 class LoggedInResource(CBResource):
 

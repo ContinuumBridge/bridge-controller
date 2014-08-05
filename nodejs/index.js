@@ -8,10 +8,15 @@ DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080' : 
 
 //redisAuthClient = redis.createClient();
 
+Portal = require('./servers/portal/portal.js');
+var portalDjangoURL = DJANGO_URL + '/api/user/v1/';
+portal = new Portal(4000, portalDjangoURL);
+
 /*
-Portal = {};
-Portal.Controller = require('./controllers/portal/portal_controller.js');
-Portal.controller = new Portal.Controller(4000);
+var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
+Client = {};
+Client.Server = require('./servers/client/server');
+Client.server = new Client.Server(3500, clientDjangoURL);
 */
 
 //var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
@@ -26,11 +31,6 @@ Bridge = {};
 Bridge.Server = require('./servers/bridge/server');
 Bridge.server = new Bridge.Server(3000, bridgeDjangoURL);
 */
-
-var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
-Client = {};
-Client.Server = require('./servers/client/server');
-Client.server = new Client.Server(3500, clientDjangoURL);
 
 /*
  var BridgeController = new BridgeServer(3000, bridgeDjangoURL);

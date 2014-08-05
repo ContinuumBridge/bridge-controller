@@ -1,50 +1,44 @@
 
-var io = require('socket.io')
-    ,redis = require('redis')
-    ,url = require('url')
-    ;
-
-//var logger = require('./logger')
-    //;
+var cookie_reader = require('cookie');
 
 var backendAuth = require('../../backendAuth.js');
 
-module.exports = SocketIOServer;
+function SocketServer() {
 
-function SocketIOServer(authURL, port, logger) {
+}
+
+SocketServer.prototype.setupAuthorization = function(socketServer) {
 
     var self = this;
+    // Authenticate the sessionid from the socket with django
+    socketServer.configure(function() {
 
-    this.socketServer = io.listen(port);
+        socketServer.set('authorization', function(data, accept){
 
-    this.socketServer.configure(function() {
-
-        self.socketServer.set('authorization', function(data, accept){
-
-            if (data && data.query && data.query.sessionID) {
-
-                //socketServer.parent.logger.log('debug', 'sessionID is:', data.query.sessionID);
-                // Set up a proto config, pass it to getConnectionConfig to get full config
+            if(data && data.headers && data.headers.cookie) {
+                // Pull out the cookies from the data
+                var cookies = cookie_reader.parse(data.headers.cookie);
+                var sessionID = cookies.sessionid || data.query.sessionID;
+                //var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
                 var protoConfig = {
-                    sessionID: data.query.sessionID,
+                    sessionID: sessionID,
                     address: data.address
                 }
-                socketServer.getConnectionConfig(authURL, protoConfig).then(function(config) {
-
-                    console.log('Auth success, config is', config);
+                self.getConnectionConfig(self.config.authURL, protoConfig).then(function(config) {
                     data.config = config;
                     data.config.address = data.address
+                    logger.log('debug', 'getConnectionConfig response', config);
                     accept(null, true);
                 }, function(error) {
 
-                    socketServer.parent.logger.error(error);
                     accept('error', false);
                 });
-            }
+            };
         });
     });
+}
 
-    socketServer.getConnectionConfig = function(authURL, oldConfig) {
+SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
 
         var deferredConfig = Q.defer();
 
@@ -61,9 +55,11 @@ function SocketIOServer(authURL, port, logger) {
                 sessionID: oldConfig.sessionID,
                 subscriptionAddress: authData.cbid,
                 publicationAddresses: publicationAddresses,
-                address: oldConfig.address
+                address: oldConfig.address,
+                email: authData.email
             }
 
+            //data.config.address = data.address
             deferredConfig.resolve(config);
 
         }, function(error) {
@@ -72,7 +68,6 @@ function SocketIOServer(authURL, port, logger) {
         });
 
         return deferredConfig.promise;
-    };
-
-    return socketServer;
 }
+
+module.exports = SocketServer;

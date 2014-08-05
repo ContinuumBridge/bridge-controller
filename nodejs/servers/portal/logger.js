@@ -3,29 +3,27 @@ var winston = require('winston')
     ,path = require('path')
     ;
 
-// Define thisBridgeRoot here so that we don't get circular dependencies loading ./env
-//var logPath = path.normalize(__dirname + '/../../thisbridge');
+var Logger = require('../../logger');
 
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({ "colorize" : true,
-                                       "level" : "debug",
-                                       "silent" : false,
-                                       "timestamp" : true,
-                                       "handleExceptions" : false }),
-    //new winston.transports.File({ filename: logPath + "/node-debug.log", json: false, level: 'debug' })
-  ],
-  exceptionHandlers: [
-    new (winston.transports.Console)({ json: false, timestamp: true }),
-    //new winston.transports.File({ filename: logPath + "/node-exceptions.log", json: false })
-  ],
-  exitOnError: false
+winston.loggers.add('portal', {
+    "console": {
+      "level": "debug",
+      "levels": Logger.levels,
+      "colorize": true,
+      "label": "portal",
+      "silent": false,
+      "timestamp": true,
+      "handleExceptions": true,
+      "exitOnError": false
+    }
+    /*
+    "transports": [
+        new (winston.transports.Console)({ json: false, timestamp: true }),
+        //new winston.transports.File({ filename: logPath + "/node-exceptions.log", json: false })
+    ]
+    */
 });
 
-logger.log = function(){
-  var args = arguments;
-  args[1] = "portal_controller: " + args[1];
-  winston.Logger.prototype.log.apply(this,args);
-}
+var logger = winston.loggers.get('portal');
 
 module.exports = logger;
