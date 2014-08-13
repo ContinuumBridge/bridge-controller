@@ -29,7 +29,7 @@ from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
 from bridges.models import Bridge, BridgeControl
 
-from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization
+from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization, ClientObjectsOnlyAuthorization
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api.authorization import AuthAuthorization
 
@@ -63,6 +63,18 @@ class UserObjectsResource(CBResource):
         authentication = HTTPHeaderSessionAuthentication()
         authorization = UserObjectsOnlyAuthorization()
 
+
+class ClientObjectsResource(CBResource):
+
+    """ Allows API access to objects which have the logged in client in their client field """
+
+    class Meta(CBResource.Meta):
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+        authentication = HTTPHeaderSessionAuthentication()
+        authorization = ClientObjectsOnlyAuthorization()
+
+        #authorization = UserObjectsOnlyAuthorization()
 
 class LoggedInResource(CBResource):
 

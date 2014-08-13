@@ -6,11 +6,12 @@ var rest = require('restler')
     ;
 
 var deviceDiscovery = require('./deviceDiscovery')
-    Router = require('../router')
+    Router = require('../connection/router')
     ;
 
 var PortalRouter = function(connection) {
 
+    logger.log('debug', 'In PortalRouter');
     this.connection = connection;
     this.django = connection.django;
 
@@ -53,4 +54,4 @@ send = function(message){
     }
 }
 */
-module.exports = Router;
+module.exports = PortalRouter;

@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from tastypie.exceptions import Unauthorized
 
-from accounts.models import CBUser
+from accounts.models import CBAuth, CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
@@ -43,6 +43,16 @@ class AppAuthorship(LoggedModelMixin):
     class Meta:
         verbose_name = _('app_authorship')
         verbose_name_plural = _('app_authorship')
+        app_label = 'apps'
+
+class AppConnection(LoggedModelMixin):
+
+    client = models.ForeignKey(CBAuth)
+    app = models.ForeignKey(App)
+
+    class Meta:
+        verbose_name = _('app_connection')
+        verbose_name_plural = _('app_connection')
         app_label = 'apps'
 
 

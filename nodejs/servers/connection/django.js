@@ -39,18 +39,20 @@ Django.prototype.request = function(request) {
     return deferred.promise;
 }
 
-Django.prototype.messageRequest = function(message, connection) {
+Django.prototype.messageRequest = function(message) {
+
+    var self = this;
 
     var requestData = message.get('body');
 
     this.request(requestData).then(function(data) {
         // Success
         message.return('cb', data);
-        connection.router(message);
+        self.connection.router(message);
     }, function(error) {
         // Error
         message.return('cb', error);
-        connection.router(message);
+        self.connection.router(message);
     });
 };
 

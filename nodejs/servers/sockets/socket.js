@@ -13,33 +13,43 @@ SocketServer.prototype.setupAuthorization = function(socketServer) {
     // Authenticate the sessionid from the socket with django
     socketServer.configure(function() {
 
-        socketServer.set('authorization', function(data, accept){
+        socketServer.set('authorization', function(data, accept) {
+
+            var sessionID;
 
             if(data && data.headers && data.headers.cookie) {
                 // Pull out the cookies from the data
                 var cookies = cookie_reader.parse(data.headers.cookie);
-                var sessionID = cookies.sessionid || data.query.sessionID;
-                //var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
-                var protoConfig = {
-                    sessionID: sessionID,
-                    address: data.address
-                }
-                self.getConnectionConfig(self.config.authURL, protoConfig).then(function(config) {
-                    data.config = config;
-                    data.config.address = data.address
-                    logger.log('debug', 'getConnectionConfig response', config);
-                    accept(null, true);
-                }, function(error) {
+                sessionID = cookies.sessionid;
+            }
+            if(data && data.query && data.query.sessionID) {
+                console.log('data.query is', data);
+                sessionID = data.query.sessionID;
+            }
 
-                    accept('error', false);
-                });
-            };
+            //var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
+            var protoConfig = {
+                sessionID: sessionID,
+                address: data.address
+            }
+            console.log('protoConfig', protoConfig);
+            console.log('authURL', self.config);
+            self.getConnectionConfig(self.config.authURL, protoConfig).then(function(config) {
+                data.config = config;
+                data.config.address = data.address;
+                console.log('getConnectionConfig response', config);
+                accept(null, true);
+            }, function(error) {
+
+                accept('error', false);
+            });
         });
     });
 }
 
 SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
 
+        console.log('oldConfig', oldConfig);
         var deferredConfig = Q.defer();
 
         backendAuth(authURL, oldConfig.sessionID).then(function(authData) {

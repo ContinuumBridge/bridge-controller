@@ -5,25 +5,27 @@ var winston = require('winston')
 
 var Logger = require('../../logger');
 
-winston.loggers.add('bridge_controller', {
-    "console": {
-      "level": "debug",
-      "levels": Logger.levels,
-      "colorize": true,
-      "label": "bridge controller",
-      "silent": false,
-      "timestamp": true,
-      "handleExceptions": true,
-      "exitOnError": false
-    }
-    /*
-    "transports": [
-        new (winston.transports.Console)({ json: false, timestamp: true }),
-        //new winston.transports.File({ filename: logPath + "/node-exceptions.log", json: false })
-    ]
-    */
+winston.setLevels(Logger.levels.levels);
+winston.addColors(Logger.levels.colors);
+
+var consoleTransport = new (winston.transports.Console)({
+    level: 'debug',
+    colorize:true,
+    label: "bridge",
+    silent: false,
+    timestamp: true
 });
 
-var logger = winston.loggers.get('bridge_controller');
+var logger = new (winston.Logger)({
+    level: 'debug',
+    colorize:true,
+    label: "bridge",
+    silent: false,
+    timestamp: true,
+    levels: Logger.levels.levels,
+    transports: [
+        consoleTransport
+    ]
+});
 
 module.exports = logger;

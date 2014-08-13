@@ -5,20 +5,20 @@ var DjangoError = require('../../errors').DjangoError;
 
 var Connection = require('../connection/connection')
     ,Router = require('./router')
-    ,Django = require('../django.js')
+    ,Django = require('../connection/django.js')
     ,logger = require('./logger')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-
-var BridgeConnection = function(socket, djangoURL) {
+var BridgeConnection = function(socket, serverConfig) {
 
     var self = this;
     this.socket = socket;
     this.logger = logger;
-    this.djangoURL = djangoURL;
 
-    this.getConfig().then(function(config) {
+    this.serverConfig = serverConfig;
+
+    socket.getConfig().then(function(config) {
 
         self.config = config;
 
@@ -29,27 +29,14 @@ var BridgeConnection = function(socket, djangoURL) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
-    });
+
+        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
+        logger.log('info', 'New portal connection from %s:%s. Subscribed to %s (%s), publishing to %s'
+            ,config.address.address, config.address.port, config.subscriptionAddress
+            ,config.email, publicationAddressesString);
+    }).done();
 };
 
 BridgeConnection.prototype = new Connection();
 
-BridgeConnection.prototype.disconnect = function(error) {
-
-    logger.log('info', 'Disconnect was called');
-}
-
-BridgeConnection.prototype.router = function(message) {
-
-    var destination = message.get('destination');
-
-    switch (destination) {
-
-        case 'cb':
-            djangoNode(message, connection.toClient);
-            logger.log('debug', 'Request to django')
-            break;
-
-
-    }
-}
+module.exports = BridgeConnection;

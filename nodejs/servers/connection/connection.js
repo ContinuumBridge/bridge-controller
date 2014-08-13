@@ -2,15 +2,16 @@
 
 var Bacon = require('baconjs').Bacon;
 
-var Django = require('../django')
+var Message = require('../../message')
     ,authorization = require('./authorization')
-    ,redis = require('socket.io/node_modules/redis')
+    ,redis = require('node-redis')
     ;
 
 function Connection(socket, router, redisClient) {
 
-    console.log('In Connection');
-    var self = this;
+    this.redis = {
+        pub: redis.createClient()
+    };
 }
 
 Connection.prototype.setupBuses = function() {
@@ -32,49 +33,52 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('message', function (jsonMessage) {
 
-        console.log('Message is ', jsonMessage);
+        //console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
         //message.set('source', "BID" + socket.handshake.authData.id);
         message.set('sessionID', socket.handshake.query.sessionID);
 
-        self.fromClient.push(message);
+        self.router.dispatch(message);
+        //this.redis.pub.push(message);
     });
 
     this.toClient.onValue(function(message) {
 
-        var jsonMessage = message.getJSON();
+        var jsonMessage = message.toJSONString();
         socket.emit('message', jsonMessage);
     });
 };
 
 Connection.prototype.setupRedis = function() {
 
+    var self = this;
+
     var subscriptionAddress = this.config.subscriptionAddress;
     var publicationAddresses = this.config.publicationAddresses;
 
-    var publish = this.publish = function(message) {
+    var publish = function(message) {
 
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
-        var jsonMessage = message.getJSON();
+        var jsonMessage = message.toJSONString();
 
         if (typeof destination == 'string') {
 
             console.log('debug', 'destination is a string')
-            redisClient.pub.publish(destination, jsonMessage)
+            self.redis.pub.publish(destination, jsonMessage)
         } else if (destination instanceof Array) {
 
             console.log('debug', 'destination is an array')
             destination.forEach(function(address) {
                 console.log('debug', 'address is', address)
-                redisClient.pub.publish(address, jsonMessage);
+                self.redis.pub.publish(address, jsonMessage);
             }, this);
         }
 
         this.logger.log('message', subscriptionAddress, '=>', destination, '    ',  jsonMessage);
     };
 
-    var publishAll = this.publishAll = function(message) {
+    var publishAll = function(message) {
 
         // Publish message to each allowed bridge address
         message.set('destination', publicationAddresses);
@@ -83,22 +87,26 @@ Connection.prototype.setupRedis = function() {
 
     this.toRedis.onValue(function(message) {
 
-        publishAll(message);
+        publish(message);
+        //publishAll(message);
     });
 
+    var message = new Message({ destination: 'BID2'});
+    publish(message);
+
     // Subscription to Redis
-    this.subClient = redis.createClient();
-    this.subClient.subscribe(subscriptionAddress);
+    this.redis.sub = redis.createClient();
+    this.redis.sub.subscribe(subscriptionAddress);
     var onRedisMessage = function(channel, jsonMessage) {
 
         var message = new Message(jsonMessage);
         fromRedis.push(message);
     }
-    this.subClient.addListener('message', onRedisMessage);
+    this.redis.sub.addListener('message', onRedisMessage);
 
     this.disconnect = function() {
 
-        this.subClient.removeListener('message', this.subClient.onRedisMessage);
+        this.redis.sub.removeListener('message', this.redis.sub.onRedisMessage);
     }
 }
 
@@ -109,12 +117,13 @@ Connection.prototype.setupRouting = function() {
     this.fromRedis.onValue(function(message) {
 
         // Forward messages from redis to the client
-        self.toClient.push(message);
+        //self.toClient.push(message);
+        self.router.dispatch(message)
     });
 
     this.fromClient.onValue(function(message) {
 
-        self.router(message);
+        self.router.dispatch(message);
     });
 }
 

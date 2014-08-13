@@ -8,12 +8,14 @@ var rest = require('restler')
 var deviceDiscovery = require('./deviceDiscovery')
     ;
 
-
-var Router = function(connection) {
+var BridgeRouter = function(connection) {
     this.connection = connection;
 }
 
-Router.prototype.send = function(message){
+module.exports = BridgeRouter;
+
+/*
+BridgeRouter.prototype.send = function(message){
 
     logger.log('debug', 'requestRouter message:', message);
     var url = message.get('url');
@@ -43,4 +45,5 @@ Router.prototype.send = function(message){
             this.connection.toRedis.push(message);
     }
 }
-module.exports = Router;
+*/
+

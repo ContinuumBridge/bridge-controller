@@ -26,8 +26,12 @@ _.extend(Message.prototype, {
     // initialization logic.
     initialize: function(){},
 
-    // Return a copy of the model's `attributes` object.
-    getJSON: function(options) {
+    toJSON: function(options) {
+      return _.clone(this.attributes);
+    },
+
+    // Return a copy of the model's `attributes` object as a string.
+    toJSONString: function(options) {
 
       var jsonAttributes = JSON.stringify(_.clone(this.attributes));
       return jsonAttributes;

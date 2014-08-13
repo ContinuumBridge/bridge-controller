@@ -9,7 +9,7 @@ var Errors = require('./errors');
 
 var Logger = {};
 
-Logger.logLevels = {
+Logger.levels = {
     levels: {
         silly: 0,
         input: 1,
@@ -17,9 +17,9 @@ Logger.logLevels = {
         prompt: 3,
         debug: 4,
         message: 5,
-        authorization: 6,
-        django_error: 7,
-        message_error: 8,
+        django_error: 6,
+        message_error: 7,
+        authorization: 8,
         info: 9,
         help: 10,
         warn: 11,
@@ -33,8 +33,8 @@ Logger.logLevels = {
         debug: 'blue',
         message: 'grey',
         message_error: 'yellow',
-        authorization: 'purple',
         django_error: 'orange',
+        authorization: 'magenta',
         info: 'green',
         help: 'cyan',
         warn: 'orange',
@@ -50,6 +50,7 @@ Logger.logError = function(error) {
         this.log('django_error', error);
     }
 }
+
 
 module.exports = Logger;
 

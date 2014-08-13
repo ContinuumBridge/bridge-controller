@@ -4,14 +4,18 @@ var ClientConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var logger = require('./logger');
 
-var ClientServer = function(port, djangoURL) {
+var Client = function(port, djangoURL) {
 
     var self = this;
 
-    this.logger = logger;
+    this.config = {
+        port: port,
+        djangoURL: djangoURL,
+        authURL: djangoURL + 'current_client/client/'
+    }
 
-    var authURL = djangoURL + 'current_client/client/';
-    this.socketServer = new SocketIOServer(this, authURL, port);
+    //var authURL = djangoURL + 'current_client/client/';
+    this.socketServer = new SocketIOServer(this.config);
 
     this.socketServer.sockets.on('connection', function (socket) {
 
@@ -19,7 +23,7 @@ var ClientServer = function(port, djangoURL) {
 
         socket.getConfig = function() {
             var config = socket.config || socket.handshake.config;
-            return self.socketServer.getConnectionConfig(authURL, config);
+            return self.socketServer.getConnectionConfig(self.config.authURL, config);
         };
 
         var connection = new ClientConnection(socket, djangoURL);
@@ -29,7 +33,7 @@ var ClientServer = function(port, djangoURL) {
     });
 };
 
-ClientServer.prototype = new Server();
+//Client.prototype = new Server();
 
-module.exports = ClientServer;
+module.exports = Client;
 

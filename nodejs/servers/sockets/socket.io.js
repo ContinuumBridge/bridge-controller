@@ -4,75 +4,31 @@ var io = require('socket.io')
     ,url = require('url')
     ;
 
-//var logger = require('./logger')
-    //;
+var SocketServer = require('./socket');
 
 var backendAuth = require('../../backendAuth.js');
 
-module.exports = SocketIOServer;
-
-function SocketIOServer(authURL, port, logger) {
+function SocketIOServer(config) {
 
     var self = this;
+    this.config = config;
 
-    this.socketServer = io.listen(port);
+    console.log('debug', 'config is', config);
+    //var socketServer = io.listen(config.port);
+    var httpServer = require('http').createServer();
+    var socketServer = require('socket.io')(httpServer);
+    httpServer.listen(config.port);
 
-    this.socketServer.configure(function() {
+    // Set the socket io log level
+    socketServer.set('log level', 1);
 
-        self.socketServer.set('authorization', function(data, accept){
-
-            if (data && data.query && data.query.sessionID) {
-
-                //socketServer.parent.logger.log('debug', 'sessionID is:', data.query.sessionID);
-                // Set up a proto config, pass it to getConnectionConfig to get full config
-                var protoConfig = {
-                    sessionID: data.query.sessionID,
-                    address: data.address
-                }
-                socketServer.getConnectionConfig(authURL, protoConfig).then(function(config) {
-
-                    console.log('Auth success, config is', config);
-                    data.config = config;
-                    data.config.address = data.address
-                    accept(null, true);
-                }, function(error) {
-
-                    socketServer.parent.logger.error(error);
-                    accept('error', false);
-                });
-            }
-        });
-    });
-
-    socketServer.getConnectionConfig = function(authURL, oldConfig) {
-
-        var deferredConfig = Q.defer();
-
-        backendAuth(authURL, oldConfig.sessionID).then(function(authData) {
-
-            if (authData.controllers) {
-                var publicationAddresses = new Array();
-                authData.controllers.forEach(function(controller) {
-                    publicationAddresses.push(controller.user.cbid)
-                });
-            }
-
-            var config = {
-                sessionID: oldConfig.sessionID,
-                subscriptionAddress: authData.cbid,
-                publicationAddresses: publicationAddresses,
-                address: oldConfig.address
-            }
-
-            deferredConfig.resolve(config);
-
-        }, function(error) {
-
-            deferredConfig.reject(error);
-        });
-
-        return deferredConfig.promise;
-    };
+    this.setupAuthorization(socketServer);
+    socketServer.getConnectionConfig = this.getConnectionConfig;
 
     return socketServer;
 }
+
+SocketIOServer.prototype = new SocketServer();
+
+module.exports = SocketIOServer;
+

@@ -39,6 +39,15 @@ class AppAuthorshipResource(UserObjectsResource):
         queryset = AppAuthorship.objects.all()
         resource_name = 'app_authorship'
 
+class AppAuthorshipResource(UserObjectsResource):
+
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+
+    class Meta(UserObjectsResource.Meta):
+        queryset = AppAuthorship.objects.all()
+        resource_name = 'app_authorship'
+
 
 class AppLicenceResource(PostMatchMixin, CBResource):
 

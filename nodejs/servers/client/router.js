@@ -5,11 +5,19 @@ var rest = require('restler')
     ,Q = require('q')
     ;
 
+var Router = require('../connection/router');
 
-var Router = function(connection) {
+var ClientRouter = function(connection) {
     this.connection = connection;
+    this.django = connection.django;
+
+    this.setupRoutes();
 }
 
+ClientRouter.prototype = new Router();
+
+module.exports = ClientRouter;
+/*
 Router.prototype.send = function(message){
 
     logger.log('debug', 'requestRouter message:', message);
@@ -27,4 +35,4 @@ Router.prototype.send = function(message){
             this.connection.toRedis.push(message);
     }
 }
-module.exports = Router;
+*/
