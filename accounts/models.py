@@ -159,4 +159,9 @@ class CBUser(CBAuth):
         "Returns the short name for the user."
         return self.first_name
 
+    def get_cbid(self):
+        prefix = self.__class__.__name__[0] + "ID"
+        return prefix + str(self.id)
+
+
 

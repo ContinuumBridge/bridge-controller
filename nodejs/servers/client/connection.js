@@ -20,30 +20,31 @@ var ClientConnection = function(socket, serverConfig) {
     //this.djangoURL = djangoURL;
 
     logger.log('debug', 'socket.address is', Object.keys(socket));
+    logger.log('debug', 'socket.config is', socket.config);
     //this.config = socket.handshake.config;
-    socket.getConfig().then(function(config) {
+    //socket.getConfig().then(function(config) {
 
-        self.config = config;
+    var config = this.config = socket.config;
 
-        //var publicationAddresses = config.publicationAddresses || [];
-        //var publicationAddressesString = publicationAddresses.join(', ');
+    //var publicationAddresses = config.publicationAddresses || [];
+    //var publicationAddressesString = publicationAddresses.join(', ');
 
-        // Router and django must be defined
-        self.django = new Django(self);
-        self.router = new Router(self);
+    // Router and django must be defined
+    self.django = new Django(self);
+    self.router = new Router(self);
 
-        self.setupBuses();
-        /*
-        self.setupSocket();
-        self.setupRedis();
-        self.setupRouting();
-        */
+    self.setupBuses();
+    /*
+    self.setupSocket();
+    self.setupRedis();
+    self.setupRouting();
+    */
 
-        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.info('New client connection from %s:%s. Subscribed to %s (%s), publishing to %s'
-            ,config.address.address, config.address.port, config.subscriptionAddress
-            ,config.email, publicationAddressesString);
-    }).done();
+    var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
+    logger.info('New client connection from %s:%s. Subscribed to %s (%s), publishing to %s'
+        ,config.address.address, config.address.port, config.subscriptionAddress
+        ,config.email, publicationAddressesString);
+    //}).done();
 
 };
 

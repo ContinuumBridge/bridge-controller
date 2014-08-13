@@ -38,3 +38,9 @@ class LoggedModelMixin(models.Model):
     class Meta:
         abstract = True
 
+    def get_cbid(self):
+        # Get the prefix by concatenating the first letter of the model name with "ID"
+        #prefix = self.__class__.__name__[0] + "ID"
+        prefix = self.__class__.__name__[0] + "ID"
+        return prefix + str(self.id)
+

@@ -19,10 +19,12 @@ var Client = function(port, djangoURL) {
 
     this.socketServer.sockets.on('connection', function (socket) {
 
-        logger.log('debug', 'In socketServer connection', socket.handshake.config);
+        logger.log('debug', 'In socketServer connection handshake', socket.handshake);
 
+        logger.log('debug', 'In socketServer connection config', socket.config);
         socket.getConfig = function() {
-            var config = socket.config || socket.handshake.config;
+            var config = socket.config;
+                //|| socket.handshake.config;
             return self.socketServer.getConnectionConfig(self.config.authURL, config);
         };
 

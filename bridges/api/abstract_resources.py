@@ -44,8 +44,8 @@ class CBResource(ModelResource):
 
     def dehydrate(self, bundle):
         # Get the prefix by concatenating the first letter of the model name with "ID"
-        prefix = self.__class__.__name__[0] + "ID"
-        bundle.data['cbid'] = prefix + str(bundle.obj.id)
+        #prefix = self.__class__.__name__[0] + "ID"
+        bundle.data['cbid'] = bundle.obj.get_cbid()
         return bundle
 
     def unauthorized_result(self, exception):

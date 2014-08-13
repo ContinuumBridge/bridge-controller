@@ -1,13 +1,44 @@
 
 var cookie_reader = require('cookie');
 
-var backendAuth = require('../../backendAuth.js');
+var backendAuth = require('../../backendAuth.js')
+    ,Errors = require('../../errors')
+    ;
 
 function SocketServer() {
 
 }
 
 SocketServer.prototype.setupAuthorization = function(socketServer) {
+
+    var self = this;
+
+    socketServer.use(function(socket, next) {
+
+        console.log('socket request is', socket.handshake.query.sessionID);
+        if(socket.handshake && socket.handshake.query && socket.handshake.query.sessionID) {
+            var protoConfig = {
+                sessionID: socket.handshake.query.sessionID
+            }
+        } else {
+            next(new Errors.Unauthorized('No sessionID was provided'));
+        }
+        console.log('protoConfig', protoConfig);
+        console.log('authURL', self.config);
+        self.getConnectionConfig(self.config.authURL, protoConfig).then(function(config) {
+            socket.config = config;
+            socket.config.address = socket.handshake.address | "";
+            console.log('getConnectionConfig response', config);
+            next();
+        }, function(error) {
+
+            console.log(error);
+            next(error);
+        });
+    });
+}
+
+SocketServer.prototype.setupLegacyAuthorization = function(socketServer) {
 
     var self = this;
     // Authenticate the sessionid from the socket with django
@@ -27,7 +58,6 @@ SocketServer.prototype.setupAuthorization = function(socketServer) {
                 sessionID = data.query.sessionID;
             }
 
-            //var appAuthURL = Portal.DJANGO_URL + 'current_user/user/';
             var protoConfig = {
                 sessionID: sessionID,
                 address: data.address
@@ -49,35 +79,35 @@ SocketServer.prototype.setupAuthorization = function(socketServer) {
 
 SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
 
-        console.log('oldConfig', oldConfig);
-        var deferredConfig = Q.defer();
+    console.log('oldConfig', oldConfig);
+    var deferredConfig = Q.defer();
 
-        backendAuth(authURL, oldConfig.sessionID).then(function(authData) {
+    backendAuth(authURL, oldConfig.sessionID).then(function(authData) {
 
-            if (authData.controllers) {
-                var publicationAddresses = new Array();
-                authData.controllers.forEach(function(controller) {
-                    publicationAddresses.push(controller.user.cbid)
-                });
-            }
+        var publicationAddresses = new Array();
+        if (authData.controllers) {
+            authData.controllers.forEach(function(controller) {
+                publicationAddresses.push(controller.user.cbid)
+            });
+        }
 
-            var config = {
-                sessionID: oldConfig.sessionID,
-                subscriptionAddress: authData.cbid,
-                publicationAddresses: publicationAddresses,
-                address: oldConfig.address,
-                email: authData.email
-            }
+        var config = {
+            sessionID: oldConfig.sessionID,
+            subscriptionAddress: authData.cbid,
+            publicationAddresses: publicationAddresses,
+            address: oldConfig.address,
+            email: authData.email
+        }
 
-            //data.config.address = data.address
-            deferredConfig.resolve(config);
+        //data.config.address = data.address
+        deferredConfig.resolve(config);
 
-        }, function(error) {
+    }, function(error) {
 
-            deferredConfig.reject(error);
-        });
+        deferredConfig.reject(error);
+    });
 
-        return deferredConfig.promise;
+    return deferredConfig.promise;
 }
 
 module.exports = SocketServer;

@@ -46,7 +46,7 @@ class CurrentUserResource(LoggedInResource):
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_staff']
 
     def dehydrate(self, bundle):
-        bundle.data['cbid'] = "UID" + str(bundle.obj.id)
+        bundle.data['cbid'] = bundle.obj.get_cbid()
         return bundle
 
     def get_bridge_controls(self):
