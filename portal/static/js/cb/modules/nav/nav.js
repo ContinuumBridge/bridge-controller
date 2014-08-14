@@ -19,6 +19,10 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
             Nav.topbarView = new Nav.TopbarView();
             CBApp.navRegion.show(Nav.topbarView);
         },
+        deactivateTopbar: function() {
+            console.log('deactivateTopbar');
+            Nav.topbarView.deactivateSections();
+        },
         activateTopbar: function(section) {
             console.log('activateTopbar', section);
             Nav.topbarView.activateSection(section);
@@ -94,48 +98,23 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         }
     });
 
-    Nav.AccountDropdownView = Marionette.ItemView.extend({
-
-        tagName: 'li',
-        className: 'dropdown',
-
-        template: require('./templates/accountDropdown.html'),
-
-        bindings: {
-            '.header-text': 'name'
-        },
-
-        events: {
-            //'click #logout': 'bridgeClick'
-            //'click #interest-button': 'interestButtonClick',
-        },
-
-        serializeData: function(){
-            return {
-                "logout-url": "test-link"
-            }
-        },
-
-        onRender: function() {
-            // Get rid of that pesky wrapping-div.
-            // Assumes 1 child element present in template.
-            //this.$el = this.$el.children();
-            // Unwrap the element to prevent infinitely
-            // nesting elements during re-render.
-            //this.$el.unwrap();
-            //this.setElement(this.$el);
-        }
-    });
-
     Nav.TopbarView = Marionette.ItemView.extend({
 
         template: require('./templates/navSection.html'),
         className: 'container',
 
+        ui: {
+            dashboard: '.dashboard',
+            store: '.store',
+            config: '.config',
+            developer: '.developer'
+        },
+
         events: {
-            'click .dashboard': 'navigate',
-            'click .store': 'navigate',
-            'click .config': 'navigate'
+            'click @ui.dashboard': 'navigate',
+            'click @ui.store': 'navigate',
+            'click @ui.config': 'navigate',
+            'click @ui.developer': 'navigate'
         },
 
         navigate: function(e) {
@@ -148,8 +127,17 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         activateSection: function(section) {
 
-            var $section = this.$('.' + section);
-            console.log('activateSection section', section);
+            this.deactivateAll();
+            var $section = this.ui[section];
+            if ($section) $section.addClass('active');
+        },
+
+        deactivateAll: function() {
+
+            console.log('In deactivateSections, this.ui', this.ui);
+            _.each(this.ui, function($section) {
+                $section.removeClass('active');
+            });
         },
 
         onRender: function() {
@@ -172,7 +160,6 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
     Nav.on('topbar:activate', function(section){
 
-        console.log('navigation section activate', section);
         Nav.controller.activateTopbar(section);
     });
 

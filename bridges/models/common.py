@@ -7,7 +7,8 @@ class LoggedModelMixin(models.Model):
     class Meta:
         verbose_name = _('logged_model_mixin')
         verbose_name_plural = _('logged_model_mixin')
-        app_label = 'clippings'
+        abstract = True
+        app_label = 'bridges'
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
@@ -35,10 +36,17 @@ class LoggedModelMixin(models.Model):
         blank=True
     )   
 
-    class Meta:
-        abstract = True
 
-    def get_cbid(self):
+class CBIDModelMixin(models.Model):
+
+    class Meta:
+        verbose_name = _('logged_model_mixin')
+        verbose_name_plural = _('logged_model_mixin')
+        abstract = True
+        app_label = 'bridges'
+
+    @property
+    def cbid(self):
         # Get the prefix by concatenating the first letter of the model name with "ID"
         #prefix = self.__class__.__name__[0] + "ID"
         prefix = self.__class__.__name__[0] + "ID"

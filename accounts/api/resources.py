@@ -11,7 +11,7 @@ from apps.models import AppLicence
 from apps.api.resources import AppLicenceResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource
+from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
 
 class UserBridgeControlResource(ThroughModelResource):
@@ -30,7 +30,7 @@ class UserBridgeControlResource(ThroughModelResource):
         resource_name = 'user_bridge_control'
 
 
-class CurrentUserResource(LoggedInResource):
+class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
@@ -43,11 +43,8 @@ class CurrentUserResource(LoggedInResource):
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'
         queryset = CBUser.objects.all()
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_staff']
+        fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login', 'is_staff']
 
-    def dehydrate(self, bundle):
-        bundle.data['cbid'] = bundle.obj.get_cbid()
-        return bundle
 
     def get_bridge_controls(self):
         bridge_controls = []
@@ -55,61 +52,20 @@ class CurrentUserResource(LoggedInResource):
             bridge_controls.append(bridge_control)
         return bridge_controls
 
-    '''
-    def dispatch(self, request_type, request, **kwargs):
-        """
-        Handles the common operations (allowed HTTP method, authentication,
-        throttling, method lookup) surrounding most CRUD interactions.
-        """
-        allowed_methods = getattr(self._meta, "%s_allowed_methods" % request_type, None)
 
-        if 'HTTP_X_HTTP_METHOD_OVERRIDE' in request.META:
-            request.method = request.META['HTTP_X_HTTP_METHOD_OVERRIDE']
-
-        request_method = self.method_check(request, allowed=allowed_methods)
-        method = getattr(self, "%s_%s" % (request_method, request_type), None)
-
-        if method is None:
-            raise ImmediateHttpResponse(response=http.HttpNotImplemented())
-
-        self.is_authenticated(request)
-        self.throttle_check(request)
-
-        print "Current user request.user.id is", request.user.id
-        # ADDED Set the pk of the request to that of the logged in user
-        if request_type == 'detail':
-            kwargs['pk'] = request.user.id
-
-        # All clear. Process the request.
-        request = convert_post_to_put(request)
-        response = method(request, **kwargs)
-
-        # Add the throttled request.
-        self.log_throttled_access(request)
-
-        # If what comes back isn't a ``HttpResponse``, assume that the
-        # request was accepted and that some action occurred. This also
-        # prevents Django from freaking out.
-        if not isinstance(response, HttpResponse):
-            return http.HttpNoContent()
-
-        return response
-    '''
-
-
-class UserResource(CBResource):
+class UserResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         resource_name = 'user'
         queryset = CBUser.objects.all()
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
+        fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = ReadOnlyAuthorization()
 
 
 class UserAuthResource(AuthResource):
 
-    """ Allows bridges to login and logout """
+    """ Allows users to login and logout """
 
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()

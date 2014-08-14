@@ -2,7 +2,6 @@
 var http = require('http')
     ,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
-    ,redis = require('socket.io/node_modules/redis')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
     ,url = require('url')
@@ -61,7 +60,7 @@ function BackboneIOServer(config) {
     // Set the socket io log level
     socketServer.set('log level', 1);
 
-    this.setupAuthorization(socketServer);
+    this.setupLegacyAuthorization(socketServer);
     socketServer.getConnectionConfig = this.getConnectionConfig;
 
     return socketServer;

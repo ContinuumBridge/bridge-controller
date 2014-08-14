@@ -9,10 +9,10 @@ from tastypie.exceptions import Unauthorized
 
 from accounts.models import CBAuth, CBUser
 from bridges.models import Bridge
-from bridges.models.common import LoggedModelMixin
+from bridges.models.common import LoggedModelMixin, CBIDModelMixin
 from devices.models import Device, DeviceInstall
 
-class App(LoggedModelMixin):
+class App(LoggedModelMixin, CBIDModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
@@ -35,15 +35,19 @@ class App(LoggedModelMixin):
         super(App, self).save(*args, **kwargs)
 
 
-class AppAuthorship(LoggedModelMixin):
+class AppOwnership(LoggedModelMixin):
 
     user = models.ForeignKey(CBUser)
     app = models.ForeignKey(App)
 
     class Meta:
-        verbose_name = _('app_authorship')
-        verbose_name_plural = _('app_authorship')
+        verbose_name = _('app_ownership')
+        verbose_name_plural = _('app_ownership')
         app_label = 'apps'
+
+    @property
+    def cbid(self):
+        return ""
 
 class AppConnection(LoggedModelMixin):
 
@@ -55,6 +59,9 @@ class AppConnection(LoggedModelMixin):
         verbose_name_plural = _('app_connection')
         app_label = 'apps'
 
+    @property
+    def cbid(self):
+        return ""
 
 class AppLicence(LoggedModelMixin):
 
@@ -76,6 +83,9 @@ class AppLicence(LoggedModelMixin):
             installs.append(install)
         return installs
 
+    @property
+    def cbid(self):
+        return ""
 
 class AppInstall(LoggedModelMixin):
     
@@ -92,12 +102,17 @@ class AppInstall(LoggedModelMixin):
 
     #def clean(self, user):
 
-
     def get_device_permissions(self):
         device_permissions = []
         for device_permission in self.appdevicepermission_set.filter():
             device_permissions.append(device_permission)
         return device_permissions
+
+    @property
+    def cbid(self):
+        app_id = "AID" + str(self.app.id)
+        bridge_id = "BID" + str(self.bridge.id)
+        return bridge_id + "/" + app_id
 
 class AppDevicePermission(LoggedModelMixin):
 
@@ -109,4 +124,7 @@ class AppDevicePermission(LoggedModelMixin):
         verbose_name_plural = _('app_device_permissions')
         app_label = 'apps'
 
+    @property
+    def cbid(self):
+        return ""
 

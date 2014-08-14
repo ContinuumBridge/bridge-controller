@@ -5,14 +5,14 @@ from tastypie.authorization import Authorization
 
 from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import UserObjectsOnlyAuthorization
-from apps.models import App, AppInstall, AppDevicePermission, AppLicence, AppAuthorship
+from apps.models import App, AppInstall, AppDevicePermission, AppLicence, AppOwnership, AppConnection
 from apps.api.authorization import AppInstallAuthorization
 #from bridges.api.abstract_resources import CBModelResource
 from bridges.api.abstract_resources import PostMatchMixin
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, UserObjectsResource
+from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, UserObjectsResource
 from bridges.api.authorization import BridgeObjectsOnlyAuthorization
 
 class AppDevicePermissionResource(PostMatchMixin, CBResource):
@@ -30,23 +30,23 @@ class AppDevicePermissionResource(PostMatchMixin, CBResource):
        post_match = ['app_install', 'device_install']
 
 
-class AppAuthorshipResource(UserObjectsResource):
+class AppConnectionResource(UserObjectsResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
 
     class Meta(UserObjectsResource.Meta):
-        queryset = AppAuthorship.objects.all()
-        resource_name = 'app_authorship'
+        queryset = AppConnection.objects.all()
+        resource_name = 'app_connection'
 
-class AppAuthorshipResource(UserObjectsResource):
+class AppOwnershipResource(UserObjectsResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
 
     class Meta(UserObjectsResource.Meta):
-        queryset = AppAuthorship.objects.all()
-        resource_name = 'app_authorship'
+        queryset = AppOwnership.objects.all()
+        resource_name = 'app_ownership'
 
 
 class AppLicenceResource(PostMatchMixin, CBResource):
@@ -72,7 +72,7 @@ class AppLicenceResource(PostMatchMixin, CBResource):
     def dehydrate(self, bundle):
         return bundle
 
-class AppInstallResource(CBResource):
+class AppInstallResource(CBResource, CBIDResourceMixin):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
@@ -92,12 +92,8 @@ class AppInstallResource(CBResource):
        resource_name = 'app_install'
        include_in_post_match = ['name', 'manufacturer_name']
 
-    def dehydrate(self, bundle):
 
-        bundle.data['cbid'] = bundle.obj.get_cbid()
-        return bundle
-
-class AppResource(CBResource):
+class AppResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         queryset = App.objects.all()

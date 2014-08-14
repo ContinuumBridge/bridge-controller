@@ -6,7 +6,8 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/views');
+//require('../../apps/storeViews');
+var AppViews = require('./apps/views');
 
 module.exports.Main = Marionette.Layout.extend({
 
@@ -21,7 +22,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appListView = new CBApp.AppListView({
+        this.appListView = new AppViews.AppListView({
                                     collection: CBApp.appCollection
                                 });
 

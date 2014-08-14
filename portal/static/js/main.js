@@ -3,6 +3,7 @@ var $ = require('jquery-browserify');
 
 var CBApp = require('index');
 require('./cb/modules/config/config');
+require('./cb/modules/developer/developer');
 require('./cb/modules/store/store');
 require('./cb/modules/nav/nav');
 require('./cb/modules/notifications/notifications');

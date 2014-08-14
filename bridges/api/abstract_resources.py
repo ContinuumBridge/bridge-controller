@@ -42,15 +42,25 @@ class CBResource(ModelResource):
         always_return_data = True
         resource_name = 'cb_resource'
 
+    '''
     def dehydrate(self, bundle):
         # Get the prefix by concatenating the first letter of the model name with "ID"
         #prefix = self.__class__.__name__[0] + "ID"
         bundle.data['cbid'] = bundle.obj.get_cbid()
         return bundle
+    '''
 
     def unauthorized_result(self, exception):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
+
+
+class CBIDResourceMixin(ModelResource):
+
+    cbid = fields.CharField(attribute='cbid', readonly=True)
+
+    class Meta:
+        resource_name = 'cbid_resource_mixin'
 
 
 class UserObjectsResource(CBResource):
@@ -122,7 +132,6 @@ class LoggedInResource(CBResource):
             return http.HttpNoContent()
 
         return response
-
 
 
 class ThroughModelResource(CBResource):

@@ -30,18 +30,19 @@ CBApp.Controller = Marionette.Controller.extend({
     console.log('index');
   },
   showConfig: function(slug) {
-      console.log('config in main Controller', slug);
-      //CBApp.Config.router.navigate(slug);
       CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('section:activate', 'config');
+      CBApp.Nav.trigger('topbar:activate', 'config');
       CBApp.Config.trigger('config:show', slug);
   },
-  showStore: function(slug) {
-      console.log('store in main Controller', slug);
+  showDeveloper: function(slug) {
       CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('section:activate', 'store');
+      CBApp.Nav.trigger('topbar:activate', '');
+      CBApp.Developer.trigger('developer:show', slug);
+  },
+  showStore: function(slug) {
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('topbar:activate', 'store');
       CBApp.Store.trigger('store:show', slug);
-      //CBApp.Store.router.navigate(slug);
   },
   setCurrentBridge: function(bridge) {
 
@@ -96,23 +97,23 @@ CBApp.on("initialize:after", function () {
 
 CBApp.Router = Marionette.SubRouter.extend({
 
-  //controller: CBApp.Controller,
   appRoutes: {
     '': 'index',
     'config(/:slug)': 'showConfig',
+    'developer(/:slug)': 'showDeveloper',
     'store(/:slug)': 'showStore'
-    //"config/bridge/:bridge": "config",
   }
 });
 
 CBApp.reqres.setHandler("config:show", function(){
-    //CBApp.navigate('config/');
     CBApp.controller.showConfig();
 });
 
+CBApp.reqres.setHandler("developer:show", function(){
+    CBApp.controller.showDeveloper();
+});
+
 CBApp.reqres.setHandler("store:show", function(){
-    console.log('show store');
-    //CBApp.navigate('store/');
     CBApp.controller.showStore();
 });
 

@@ -76,7 +76,8 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
         "Returns the short name for the user."
         return self.email
 
-    def get_cbid(self):
+    @property
+    def cbid(self):
         prefix = self.__class__.__name__[0] + "ID"
         return prefix + str(self.id)
 
@@ -162,5 +163,9 @@ class CBUser(CBAuth):
     def get_short_name(self):
         "Returns the short name for the user."
         return self.first_name
+
+    @property
+    def cbid(self):
+        return "UID" + str(self.id)
 
 

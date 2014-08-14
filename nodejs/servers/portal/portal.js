@@ -1,6 +1,4 @@
 
-var redis = require('socket.io/node_modules/redis');
-
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
 

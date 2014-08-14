@@ -169,9 +169,11 @@ class CurrentBridgeResource(LoggedInResource):
         queryset = Bridge.objects.all()
         fields = ['id', 'email', 'name', 'date_joined', 'last_login']
 
+    '''
     def dehydrate(self, bundle):
         bundle.data['cbid'] = "BID" + str(bundle.obj.id)
         return bundle
+    '''
 
 
 class BridgeAuthResource(AuthResource):

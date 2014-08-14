@@ -4,6 +4,7 @@ var gulp = require('gulp')
     ,connect = require('gulp-connect')
     //,concat = require('gulp-concat')
     //,styl = require('gulp-styl')
+    ,livereload = require('gulp-livereload')
     ,nodemon = require('gulp-nodemon')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
@@ -31,7 +32,9 @@ gulp.task('client', function() {
 
     var t = bundleStream
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build'))
+        // Refresh browser
+        .pipe(livereload());
 })
 
 gulp.task('connect', function() {

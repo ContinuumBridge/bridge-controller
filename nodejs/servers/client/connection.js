@@ -34,11 +34,9 @@ var ClientConnection = function(socket, serverConfig) {
     self.router = new Router(self);
 
     self.setupBuses();
-    /*
     self.setupSocket();
     self.setupRedis();
     self.setupRouting();
-    */
 
     var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
     logger.info('New client connection from %s:%s. Subscribed to %s (%s), publishing to %s'
