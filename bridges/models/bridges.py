@@ -12,7 +12,7 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
-from clients.models import ClientModelManager
+from clients.models import ClientModelManager, AuthKeyMixin
 from .common import LoggedModelMixin
 
 
@@ -36,7 +36,7 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
                      ('authorised', 'Authorised'),
                      ('connected', 'Connected'))
 
-class Bridge(CBAuth):
+class Bridge(CBAuth, AuthKeyMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
@@ -82,15 +82,11 @@ class Bridge(CBAuth):
         super(Bridge, self).save(*args, **kwargs)
 
     def get_full_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in between.
-        """
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+        return self.name
 
     def get_short_name(self):
         "Returns the short name for the user."
-        return self.first_name
+        return self.name
 
     def get_apps(self):
         apps = []

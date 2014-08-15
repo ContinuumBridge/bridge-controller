@@ -14,6 +14,8 @@ from multiselectfield import MultiSelectField
 from accounts.models import CBAuth, CBUser, PolymorphicBaseUserManager
 from bridges.models.common import LoggedModelMixin
 
+from .abstract import AuthKeyMixin
+
 class ClientModelManager(PolymorphicBaseUserManager):
 
     def generate_password(self):
@@ -59,12 +61,12 @@ class ClientModelManager(PolymorphicBaseUserManager):
         return client
 
 
-class Client(CBAuth):
+class Client(CBAuth, AuthKeyMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
 
-    plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
+    plaintext_key = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = ClientModelManager()
 

@@ -43,7 +43,7 @@ class PolymorphicBaseUserManager(PolymorphicManager):
 
 class AuthKeyMixin(PolymorphicModel):
 
-    key = models.CharField(_('password'), max_length=128)
+    key = models.CharField(_('key'), max_length=128, default="")
 
     class Meta:
         abstract = True

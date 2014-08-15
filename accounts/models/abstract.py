@@ -47,6 +47,7 @@ class PolymorphicBaseUserManager(PolymorphicManager):
 @python_2_unicode_compatible
 class PolymorphicAbstractBaseUser(PolymorphicModel):
 
+    password = models.CharField(_('password'), max_length=128)
     last_login = models.DateTimeField(_('last login'), default=timezone.now)
 
     is_active = True

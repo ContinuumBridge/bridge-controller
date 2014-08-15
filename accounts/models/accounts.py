@@ -18,7 +18,7 @@ from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.providers.oauth.provider import OAuthProvider
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
-from .abstract import PolymorphicAbstractBaseUser, PolymorphicBaseUserManager
+from .abstract import PolymorphicAbstractBaseUser, PolymorphicBaseUserManager, AuthPasswordMixin
 #from bridges.models import Bridge
 
 class CBAuthManager(PolymorphicBaseUserManager):
@@ -108,7 +108,7 @@ class CBUserManager(PolymorphicBaseUserManager):
         return u
 
 
-class CBUser(CBAuth):
+class CBUser(CBAuth, AuthPasswordMixin):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
