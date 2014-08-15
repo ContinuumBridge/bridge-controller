@@ -66,7 +66,7 @@ class Client(CBAuth, AuthKeyMixin):
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
 
-    plaintext_key = models.CharField(_('plaintext_password'), max_length = 255)
+    #plaintext_key = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = ClientModelManager()
 
@@ -120,7 +120,7 @@ class Client(CBAuth, AuthKeyMixin):
 class ClientControl(LoggedModelMixin):
     
     class Meta:
-        verbose_name = _('client')
+        verbose_name = _('clientcontrol')
         verbose_name_plural = _('clientcontrols')
         app_label = 'clients'
 

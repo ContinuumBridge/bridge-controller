@@ -109,9 +109,12 @@ class CBUserManager(PolymorphicBaseUserManager):
 
 
 class CBUser(CBAuth, AuthPasswordMixin):
+#class CBUser(CBAuth):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
+
+    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 

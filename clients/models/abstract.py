@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import (
 
 from polymorphic import PolymorphicModel, PolymorphicManager
 
+
 # Copied from django.contrib.auth.models, modified to be polymorphic
 class PolymorphicBaseUserManager(PolymorphicManager):
 
@@ -41,15 +42,17 @@ class PolymorphicBaseUserManager(PolymorphicManager):
         return self.get(**{self.model.USERNAME_FIELD: username})
 
 
-class AuthKeyMixin(PolymorphicModel):
+class AuthKeyMixin(models.Model):
 
     key = models.CharField(_('key'), max_length=128, default="")
+    plaintext_key = models.CharField(_('plaintext_key'), max_length=128, default="")
 
     class Meta:
         abstract = True
 
     def set_password(self, raw_password):
         self.key = make_password(raw_password)
+        self.plaintext_key = raw_password
 
     def check_password(self, raw_password):
         """
