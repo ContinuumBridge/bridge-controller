@@ -12,19 +12,11 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
-from clients.models import ClientModelManager, AuthKeyMixin
+from clients.models.abstract import AuthKeyMixin
+
 from .common import LoggedModelMixin
+from .manager import BridgeModelManager
 
-
-class BridgeModelManager(ClientModelManager):
-
-    def create_bridge(self, email=None, password=None, save=False, **extra_fields):
-
-        """
-        Creates and saves a Bridge with the given email and password.
-        """
-        # Call create_client on the parent class
-        return super(BridgeModelManager, self).create_client(email, password, save=save, **extra_fields)
 
 BRIDGE_STATES = (('stopped', 'Stopped'),
                 ('starting', 'Starting'),
@@ -46,23 +38,7 @@ class Bridge(CBAuth, AuthKeyMixin):
 
     #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
 
-    plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
-
-    '''
-    created = models.DateTimeField(_("created"), 
-        auto_now_add=True, editable=False)
-
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
-        null = True, verbose_name=_("created_by"), 
-        related_name="created_bridges")
-
-    modified = models.DateTimeField(_("modified"),
-        auto_now=True, editable=False,)
-
-    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
-        null = True, verbose_name=_("modified_by"), 
-        related_name="modified_bridges)")
-    '''
+    #plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = BridgeModelManager()
 

@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
-        for bridge in orm['bridges.Bridge'].objects.all():
-            bridge.key = bridge.password
-            bridge.plaintext_key= bridge.plaintext_password
-            bridge.save()
+        # Deleting field 'CBUser.temp_password'
+        db.delete_column(u'accounts_cbuser', 'temp_password')
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Adding field 'CBUser.temp_password'
+        db.add_column(u'accounts_cbuser', 'temp_password',
+                      self.gf('django.db.models.fields.CharField')(default='', max_length=128),
+                      keep_default=False)
+
 
     models = {
         'accounts.cbauth': {
@@ -27,7 +29,6 @@ class Migration(DataMigration):
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'polymorphic_accounts.cbauth_set'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"})
         },
@@ -37,7 +38,8 @@ class Migration(DataMigration):
             u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'})
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -80,5 +82,4 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['bridges']
-    symmetrical = True
+    complete_apps = ['accounts']

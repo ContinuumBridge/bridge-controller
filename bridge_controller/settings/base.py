@@ -258,10 +258,10 @@ AUTHENTICATION_BACKENDS = (
     #'userena.backends.UserenaAuthenticationBackend',
     #'guardian.backends.ObjectPermissionBackend',
     #'django_facebook.auth_backends.FacebookBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'clients.authentication.ClientBackend',
+    'django.contrib.auth.backends.ModelBackend'
     # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
-    
+    #"allauth.account.auth_backends.AuthenticationBackend",
 )
 
 LANGUAGES = [

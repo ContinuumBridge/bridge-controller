@@ -7,40 +7,16 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
-    depends_on = (
-        ("accounts", "0010_auto__add_field_cbauth_uid"),
-    )
-
     def forwards(self, orm):
-        # Adding model 'Client'
-        db.create_table(u'clients_client', (
-            (u'cbauth_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['accounts.CBAuth'], unique=True, primary_key=True)),
-            ('key', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('plaintext_key', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('clients', ['Client'])
-
-        # Adding model 'ClientControl'
-        db.create_table(u'clients_clientcontrol', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_clients_clientcontrol_related', null=True, to=orm['accounts.CBAuth'])),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_clients_clientcontrol', null=True, to=orm['accounts.CBAuth'])),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['clients.Client'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBUser'])),
-        ))
-        db.send_create_signal('clients', ['ClientControl'])
+        # Adding field 'Bridge.uid'
+        db.add_column(u'bridges_bridge', 'uid',
+                      self.gf('django.db.models.fields.CharField')(default='', blank=True, max_length=8),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Client'
-        db.delete_table(u'clients_client')
-
-        # Deleting model 'ClientControl'
-        db.delete_table(u'clients_clientcontrol')
+        # Deleting field 'Bridge.uid'
+        db.delete_column(u'bridges_bridge', 'uid')
 
 
     models = {
@@ -54,7 +30,6 @@ class Migration(SchemaMigration):
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'polymorphic_accounts.cbauth_set'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
-            'uid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '8'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"})
         },
         'accounts.cbuser': {
@@ -83,9 +58,10 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Bridge', '_ormbases': ['accounts.CBAuth']},
             u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'key': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'key': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '128'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'plaintext_key': ('django.db.models.fields.CharField', [], {'max_length': '128'})
+            'plaintext_key': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '128'}),
+            'uid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '8'})
         },
         'bridges.bridgecontrol': {
             'Meta': {'object_name': 'BridgeControl'},
@@ -97,24 +73,6 @@ class Migration(SchemaMigration):
             'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_bridges_bridgecontrol'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBUser']"})
         },
-        'clients.client': {
-            'Meta': {'object_name': 'Client', '_ormbases': ['accounts.CBAuth']},
-            u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'key': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'plaintext_key': ('django.db.models.fields.CharField', [], {'max_length': '128'})
-        },
-        'clients.clientcontrol': {
-            'Meta': {'object_name': 'ClientControl'},
-            'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['clients.Client']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_clients_clientcontrol_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_clients_clientcontrol'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBUser']"})
-        },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -124,4 +82,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['clients']
+    complete_apps = ['bridges']

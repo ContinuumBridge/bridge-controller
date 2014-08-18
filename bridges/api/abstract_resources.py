@@ -316,7 +316,7 @@ class AuthResource(ModelResource):
 
     class Meta:
         authorization = AuthAuthorization()
-        fields = ['first_name', 'last_name', 'email']
+        #fields = ['first_name', 'last_name', 'email']
         allowed_methods = ['get', 'post']
 
     def override_urls(self):
@@ -334,10 +334,16 @@ class AuthResource(ModelResource):
 
         data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
 
-        email = data.get('email', '')
-        password = data.get('password', '')
+        try:
+            # Try to log in a user
+            email = data['email']
+            password = data['password']
+            client = authenticate(email=email, password=password)
+        except KeyError:
+            # Otherwise try to log in a bridge or client
+            key = data.get('key', '')
+            client = authenticate(key=key)
 
-        client = authenticate(email=email, password=password)
         if client:
             if client.is_active:
                 login(request, client)
