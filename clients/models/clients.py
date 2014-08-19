@@ -6,12 +6,13 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models.auth import CBAuth
+from bridges.models.common import CBIDModelMixin
 
 from .manager import ClientModelManager
 from .abstract import AuthKeyMixin
 
 
-class Client(CBAuth, AuthKeyMixin):
+class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)

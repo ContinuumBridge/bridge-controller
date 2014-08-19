@@ -56,6 +56,9 @@ Connection.prototype.setupRedis = function() {
     var subscriptionAddress = this.config.subscriptionAddress;
     var publicationAddresses = this.config.publicationAddresses;
 
+    console.log('subscriptionAddress', subscriptionAddress);
+    console.log('publicationAddresses', publicationAddresses);
+
     var publish = function(message) {
 
         // When a message appears on the bus, publish it

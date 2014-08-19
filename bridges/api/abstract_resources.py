@@ -7,8 +7,8 @@ from tastypie.resources import ModelResource, ModelDeclarativeMetaclass, convert
 from tastypie.authorization import Authorization
 
 from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden
 from django.conf.urls import url
+from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.utils import trailing_slash
 
 from django.conf.urls import patterns, url, include
@@ -347,9 +347,13 @@ class AuthResource(ModelResource):
         if client:
             if client.is_active:
                 login(request, client)
-                return self.create_response(request, {
-                    'success': True
-                })
+                bundle = self._meta.data_resource.build_bundle(obj=client)
+                bundle = self._meta.data_resource.full_dehydrate(bundle)
+                bundle = self.alter_detail_data_to_serialize(request, bundle)
+                return self.create_response(request, bundle)
+                #return self.create_response(request, {
+                #    'success': True
+                #})
             else:
                 return self.create_response(request, {
                     'success': False,
