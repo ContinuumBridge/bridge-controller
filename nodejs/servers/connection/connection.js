@@ -4,15 +4,16 @@ var Bacon = require('baconjs').Bacon;
 
 var Message = require('../../message')
     ,authorization = require('./authorization')
-    ,redis = require('node-redis')
+    ,redis = require('redis')
+    ,util = require('util')
     ;
 
 function Connection() {
 
-    this.redis = {
-        pub: redis.createClient()
-    };
 }
+
+var EventEmitter = require('events').EventEmitter;
+util.inherits(Connection, EventEmitter);
 
 Connection.prototype.setupBuses = function() {
 
@@ -44,10 +45,18 @@ Connection.prototype.setupSocket = function() {
         //this.redis.pub.push(message);
     });
 
-    this.toClient.onValue(function(message) {
+    var unsubscribeToClient = this.toClient.onValue(function(message) {
 
         var jsonMessage = message.toJSONString();
         socket.emit('message', jsonMessage);
+    });
+
+    socket.on('disconnect', function() {
+        logger.log('info', 'Disconnected');
+        unsubscribeToClient();
+        self.emit('disconnect')
+        socket.removeListener('message');
+        socket.removeListener('disconnect');
     });
 };
 
@@ -61,8 +70,11 @@ Connection.prototype.setupRedis = function() {
     console.log('subscriptionAddress', subscriptionAddress);
     console.log('publicationAddresses', publicationAddresses);
 
+    var redisPub = redis.createClient();
+
     var publish = function(message) {
 
+        logger.log('debug', 'Publish redis message', message.toJSON());
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var jsonMessage = message.toJSONString();
@@ -70,13 +82,13 @@ Connection.prototype.setupRedis = function() {
         if (typeof destination == 'string') {
 
             console.log('debug', 'destination is a string')
-            self.redis.pub.publish(destination, jsonMessage)
+            redisPub.publish(destination, jsonMessage)
         } else if (destination instanceof Array) {
 
             console.log('debug', 'destination is an array')
             destination.forEach(function(address) {
                 console.log('debug', 'address is', address)
-                self.redis.pub.publish(address, jsonMessage);
+                redisPub.publish(address, jsonMessage);
             }, this);
         }
 
@@ -91,29 +103,38 @@ Connection.prototype.setupRedis = function() {
         publish(message);
     };
 
-    this.toRedis.onValue(function(message) {
+    var unsubscribeToRedis = this.toRedis.onValue(function(message) {
 
         publish(message);
         //publishAll(message);
     });
 
-    var message = new Message({ destination: 'BID2'});
-    publish(message);
+    //var message = new Message({ destination: 'BID2'});
+    //publish(message);
 
     // Subscription to Redis
-    this.redis.sub = redis.createClient();
-    this.redis.sub.subscribe(subscriptionAddress);
-    var onRedisMessage = function(channel, jsonMessage) {
+    var redisSub = redis.createClient();
+    logger.log('debug', subscriptionAddress);
+    redisSub.subscribe(subscriptionAddress);
+    redisSub.on('message', function(channel, jsonMessage) {
 
+        logger.log('debug', 'Redis received ', jsonMessage);
         var message = new Message(jsonMessage);
-        self.fromRedis.push(message);
-    }
-    this.redis.sub.addListener('message', onRedisMessage);
+        //logger.log('debug', 'Redis received', message.toJSON());
+        //self.fromRedis.push(message);
+    });
 
     this.disconnect = function() {
 
-        this.redis.sub.removeListener('message', this.redis.sub.onRedisMessage);
+        //redisSub.removeListener('message', onRedisMessage);
+        redisSub.unsubscribe();
+        unsubscribeToRedis();
     }
+    this.on('disconnect', function() {
+        self.disconnect();
+        self.removeListener('disconnect');
+    });
+
 }
 
 Connection.prototype.setupRouting = function() {

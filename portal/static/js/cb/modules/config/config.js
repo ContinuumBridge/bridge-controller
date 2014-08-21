@@ -66,7 +66,17 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               });
           });
           */
-          CBApp.messageCollection.sendMessage('command', 'discover');
+          CBApp.getCurrentBridge().then(function(currentBridge) {
+              var destination = currentBridge.get('cbid');
+              var message = new CBApp.Message({
+                  body: {
+                      command: 'discover',
+                      destination: destination
+                  }
+              });
+              CBApp.messageCollection.sendMessage(message);
+          });
+
           Config.mainLayoutView.devicesView.showDeviceDiscovery();
       },
       stopDiscoveringDevices: function() {
