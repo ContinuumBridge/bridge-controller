@@ -34,6 +34,7 @@ class App(LoggedModelMixin, CBIDModelMixin):
         self.modified = timezone.now()
         super(App, self).save(*args, **kwargs)
 
+'''
 
 class AppOwnership(LoggedModelMixin):
 
@@ -59,11 +60,7 @@ class AppConnection(LoggedModelMixin):
         verbose_name_plural = _('app_connection')
         app_label = 'apps'
 
-    '''
-    @property
-    def cbid(self):
-        return ""
-    '''
+'''
 
 class AppLicence(LoggedModelMixin):
 

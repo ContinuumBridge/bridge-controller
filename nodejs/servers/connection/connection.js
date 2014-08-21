@@ -7,7 +7,7 @@ var Message = require('../../message')
     ,redis = require('node-redis')
     ;
 
-function Connection(socket, router, redisClient) {
+function Connection() {
 
     this.redis = {
         pub: redis.createClient()
@@ -37,8 +37,10 @@ Connection.prototype.setupSocket = function() {
         var message = new Message(jsonMessage);
         //message.set('source', "BID" + socket.handshake.authData.id);
         message.set('sessionID', socket.handshake.query.sessionID);
+        logger.log('debug', 'socket message config', self.config);
 
-        self.router.dispatch(message);
+        self.fromClient.push(message);
+        //self.router.dispatch(message);
         //this.redis.pub.push(message);
     });
 
@@ -78,7 +80,8 @@ Connection.prototype.setupRedis = function() {
             }, this);
         }
 
-        this.logger.log('message', subscriptionAddress, '=>', destination, '    ',  jsonMessage);
+        logger.log('debug', 'Message config', self.config);
+        logger.log('message', subscriptionAddress, '=>', destination, '    ',  jsonMessage);
     };
 
     var publishAll = function(message) {
@@ -103,7 +106,7 @@ Connection.prototype.setupRedis = function() {
     var onRedisMessage = function(channel, jsonMessage) {
 
         var message = new Message(jsonMessage);
-        fromRedis.push(message);
+        self.fromRedis.push(message);
     }
     this.redis.sub.addListener('message', onRedisMessage);
 
@@ -121,11 +124,13 @@ Connection.prototype.setupRouting = function() {
 
         // Forward messages from redis to the client
         //self.toClient.push(message);
-        self.router.dispatch(message)
+        //self.router.dispatch(message)
     });
 
+    logger.log('debug', 'setupRoutes config', self.config);
     this.fromClient.onValue(function(message) {
 
+        logger.log('debug', 'fromClient config', self.config)
         self.router.dispatch(message);
     });
 }
@@ -133,7 +138,6 @@ Connection.prototype.setupRouting = function() {
 Connection.prototype.unauthorizedResult = function(message, exception) {
 
     message.returnError();
-    //this.clientBu
 }
 
 module.exports = Connection;

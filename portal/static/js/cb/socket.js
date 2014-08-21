@@ -8,7 +8,7 @@ require('./messages/models');
 
 CBApp.addInitializer(function() {
 
-    CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 4000});
+    CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 9415});
 
     CBApp.socket.on('connect', function(){
         console.log('Socket connected');

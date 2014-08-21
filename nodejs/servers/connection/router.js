@@ -5,8 +5,7 @@ var crossroads = require('crossroads')
 
 var Router = function() {
 
-    this.ignoreState = true;
-
+    /*
     var rules = {
         appID: /AID[0-9]+/,
         bridgeID: /BID[0-9]+/,
@@ -14,25 +13,39 @@ var Router = function() {
         userID: /UID[0-9]+/,
         cbAddress: /\/?[A-Z]ID[0-9]+.+/
     }
+    */
 }
 
-Router.prototype = crossroads.create();
+//Router.prototype = crossroads.create();
 
 Router.prototype.setupRoutes = function() {
 
     var self = this;
 
-    var subscriptionAddress = this.connection.config.subscriptionAddress;
+    var router = this.router = crossroads.create();
+    router.ignoreState = true;
 
+    var connection = this.connection;
+    var subscriptionAddress = connection.config.subscriptionAddress;
+
+    logger.log('debug', 'Router setupRoutes config', self.connection.config);
     // Capture destinations matching the client on this connection
+    /*
     var clientRoute = subscriptionAddress + ":slug";
-    this.addRoute(clientRoute, function(message) {
+    router.addRoute(clientRoute, function(message) {
 
         logger.log('debug', 'Matched clientRoute', message);
-        self.connection.toClient.push(message);
+        //self.connection.toClient.push(message);
     });
 
-    var cbAddressRoute = this.addRoute('{cbAddress}', function(message) {
+    */
+    var cbAddressRoute = router.addRoute('{cbAddress}', function(message) {
+
+        // Return if this is the client route
+        var clientRoute = new RegExp(subscriptionAddress + '(.+)?');
+        logger.log('debug', 'clientRoute is', clientRoute);
+        var destination = message.get('destination');
+        if (destination.match(clientRoute)) return;
 
         logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
@@ -42,13 +55,13 @@ Router.prototype.setupRoutes = function() {
         cbAddress: /\/?[A-Z]ID[0-9]+(.+)?/
     }
 
-    this.addRoute('cb', function(message) {
+    router.addRoute('cb', function(message) {
 
         logger.log('debug', 'Matched cb', message);
-        //self.connection.django.messageRequest(message);
+        self.connection.django.messageRequest(message);
     });
 
-    this.addRoute('broadcast', function(message) {
+    router.addRoute('broadcast', function(message) {
 
         // Test if the message came from the client. Inbound or outbound
         var clientRegex = new RegExp(subscriptionAddress + '.+', 'g');
@@ -63,7 +76,7 @@ Router.prototype.setupRoutes = function() {
     });
 
     //this.bypassed.add(console.log, console);
-    this.bypassed.add(function(message) {
+    router.bypassed.add(function(message) {
         logger.log('message_error', 'Route not matched', message.toJSON());
     });
 
@@ -77,11 +90,12 @@ Router.prototype.setupRoutes = function() {
 Router.prototype.dispatch = function(message) {
 
     logger.log('debug', 'Dispatch message', message);
+    logger.log('debug', 'Dispatch message config', this.connection.config);
 
     // Authorization could sit here?
 
     var destination = message.get('destination');
-    this.parse('BID2', [ message ]);
+    this.router.parse(destination, [ message ]);
 }
 
 /*

@@ -69,6 +69,7 @@ class ClientAuthResource(AuthResource):
 
     class Meta(AuthResource.Meta):
         queryset = Client.objects.all()
+        # Resource used to send data on successful login
         data_resource = CurrentClientResource()
         #authorization = Authorization()
         fields = ['name','email']

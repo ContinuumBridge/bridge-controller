@@ -29,6 +29,8 @@ var logger = new (winston.Logger)({
         consoleTransport
     ]
 });
+
+module.exports = logger;
 //logger.setLevels(Logger.levels);
 //logger.addColors(Logger.levels.colors);
 
@@ -76,4 +78,3 @@ var logger = winston.loggers.get('portal');
 //logger.log('info', 'testing the logger');
 //logger.log('authorization', 'testing the logger');
 
-module.exports = logger;

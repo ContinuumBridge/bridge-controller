@@ -10,8 +10,6 @@ var deviceDiscovery = require('./deviceDiscovery')
     ;
 
 var PortalRouter = function(connection) {
-
-    logger.log('debug', 'In PortalRouter');
     this.connection = connection;
     this.django = connection.django;
 

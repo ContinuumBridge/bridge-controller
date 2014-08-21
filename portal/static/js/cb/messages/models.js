@@ -17,8 +17,13 @@ CBApp.Message = Backbone.RelationalModel.extend({
 
         var destination = this.get('source');
         return (typeof destination === 'string') ? destination : destination.get('id');
-    }
+    },
 
+    toJSONString: function(options) {
+
+      var jsonAttributes = JSON.stringify(_.clone(this.attributes));
+      return jsonAttributes;
+    },
     /*
     relations: [
         {
@@ -56,25 +61,19 @@ CBApp.MessageCollection = Backbone.Collection.extend({
         return response.objects;
     },
 
-    sendMessage: function(type, body) {
+    sendMessage: function(message) {
 
+        console.log('sendMessage', message);
         var self = this;
-        CBApp.getCurrentBridge().then(function(currentBridge) {
 
-            var time = new Date();
-            var currentBridgeID = "BID" + currentBridge.get('id');
-            var currentUserID = "UID" + CBApp.currentUser.get('id');
+        var time = new Date();
+        var currentUserID = CBApp.currentUser.get('cbid');
+        message.set('source', currentUserID);
+        message.set('time_sent', time);
 
-            var message = new CBApp.Message({
-                destination: currentBridgeID,
-                source: currentUserID,
-                type: type,
-                body: body,
-                time_sent: time
-            });
+        console.log('publishMessage', message.toJSON());
 
-            CBApp.socket.publish(message);
-            self.add(message);
-        });
+        CBApp.socket.publish(message);
+        this.add(message);
     }
 });

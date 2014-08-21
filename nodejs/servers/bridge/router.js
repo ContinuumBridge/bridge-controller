@@ -6,11 +6,17 @@ var rest = require('restler')
     ;
 
 var deviceDiscovery = require('./deviceDiscovery')
+    Router = require('../connection/router')
     ;
 
 var BridgeRouter = function(connection) {
     this.connection = connection;
+    this.django = connection.django;
+
+    this.setupRoutes();
 }
+
+BridgeRouter.prototype = new Router();
 
 module.exports = BridgeRouter;
 

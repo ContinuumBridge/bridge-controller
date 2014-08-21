@@ -30,7 +30,7 @@ from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 from bridges.api.authorization import BridgeAuthorization
 
 from bridges.models import Bridge
@@ -48,48 +48,19 @@ class BridgeControlResource(CBResource):
         #detail_allowed_methods = ['get']
         resource_name = 'bridge_control'
 
-    def dehydrate(self, bundle):
-        # Prevent a cbid being added
-        return bundle
-    '''
-    def get_resource_uri(self, bundle_or_obj=None, url_name='api_dispatch_list'):
-        """
-        Handles generating a resource URI.
 
-        If the ``bundle_or_obj`` argument is not provided, it builds the URI
-        for the list endpoint.
-
-        If the ``bundle_or_obj`` argument is provided, it builds the URI for
-        the detail endpoint.
-
-        Return the generated URI. If that URI can not be reversed (not found
-        in the URLconf), it will return an empty string.
-        """
-        if bundle_or_obj is not None:
-            url_name = 'api_dispatch_detail'
-
-        try:
-            print "In get_resouce_uri url_name", url_name
-            print "In get_resouce_uri bundle_or_obj", bundle_or_obj
-            print "In get_resouce_uri resource_uri_kwargs", self.resource_uri_kwargs(bundle_or_obj)
-            print "In get_resouce_uri", self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
-            return self._build_reverse_url(url_name, kwargs=self.resource_uri_kwargs(bundle_or_obj))
-        except NoReverseMatch:
-            return ''
-    '''
-
-#class BridgeControlResource(BridgeControlResource):
-
-class BridgeResource(CBResource):
+class BridgeResource(CBResource, CBIDResourceMixin):
 
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         authorization = BridgeAuthorization()
-        excludes = ['plaintext_password', 'is_staff', 'is_superuser']
+        excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
+        fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
         resource_name = 'bridge'
+
 
     def obj_create(self, bundle, **kwargs):
         """
@@ -150,7 +121,7 @@ class BridgeResource(CBResource):
         return bundle
 
 
-class CurrentBridgeResource(LoggedInResource):
+class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
     
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
                     attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
@@ -167,7 +138,8 @@ class CurrentBridgeResource(LoggedInResource):
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_bridge'
         queryset = Bridge.objects.all()
-        fields = ['id', 'email', 'name', 'date_joined', 'last_login']
+        #fields = ['id', 'email', 'name', 'date_joined', 'last_login']
+        excludes = ['key', 'plaintext_key']
 
     '''
     def dehydrate(self, bundle):
@@ -182,6 +154,8 @@ class BridgeAuthResource(AuthResource):
 
     class Meta(AuthResource.Meta):
         queryset = Bridge.objects.all()
+        # Resource used to send data on successful login
+        data_resource = CurrentBridgeResource()
         fields = ['first_name', 'last_name', 'email']
         resource_name = 'bridge_auth'
 

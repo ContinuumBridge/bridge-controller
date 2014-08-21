@@ -31,7 +31,7 @@ var BridgeConnection = function(socket, serverConfig) {
         self.setupRouting();
 
         var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.log('info', 'New portal connection from %s:%s. Subscribed to %s (%s), publishing to %s'
+        logger.log('info', 'New bridge connection from %s:%s. Subscribed to %s (%s), publishing to %s'
             ,config.address.address, config.address.port, config.subscriptionAddress
             ,config.email, publicationAddressesString);
     }).done();

@@ -347,6 +347,7 @@ class AuthResource(ModelResource):
         if client:
             if client.is_active:
                 login(request, client)
+                # Return the client's data
                 bundle = self._meta.data_resource.build_bundle(obj=client)
                 bundle = self._meta.data_resource.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)
