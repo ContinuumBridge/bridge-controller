@@ -8,7 +8,12 @@ module.exports = deviceDiscovery;
 
 function deviceDiscovery(message) {
 
-    var discoveredDevices = message.get('body');
+    var body = message.get('body');
+    var discoveredDevices = body.body;
+    if (!discoveredDevices) {
+        logger.log('message_error', 'Device discovery was not given any devices', message);
+        return;
+    }
     var bridgeID = message.get('source');
     var bridgeURL = "/api/bridge/v1/bridge/" + bridgeID.slice(3);
 

@@ -47,34 +47,6 @@ function DeviceDiscovery() {
 
         console.log('deviceDiscovery read');
 
-        /*
-        fs = require('fs')
-        fs.readFile(__dirname + '/discovered_devices.json', 'utf8', function (err, device_discoveries) {
-            if (err) {
-                return console.log(err);
-            }   
-            //resp = {}; 
-            //resp.msg = "resp";
-            //resp.body = JSON.parse(test_config);
-            res.end(JSON.parse(device_discoveries));
-        }); 
-        */
-
-        /*
-        var djangoOptions = {
-            method: "get",
-            headers: {
-                'Content-type': 'application/json',
-                'Accept': 'application/json', 
-            }
-        };
-
-        // Make a request to Django to get session data
-        rest.get(djangoURL, djangoOptions).on('complete', function(data, response) {
-
-            res.end(data);
-        });
-        */
     });
 
     deviceDiscovery.findDevices = function(message) {

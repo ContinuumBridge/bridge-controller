@@ -121,7 +121,7 @@ Connection.prototype.setupRedis = function() {
         logger.log('debug', 'Redis received ', jsonMessage);
         var message = new Message(jsonMessage);
         //logger.log('debug', 'Redis received', message.toJSON());
-        //self.fromRedis.push(message);
+        self.fromRedis.push(message);
     });
 
     this.disconnect = function() {
@@ -132,7 +132,7 @@ Connection.prototype.setupRedis = function() {
     }
     this.on('disconnect', function() {
         self.disconnect();
-        self.removeListener('disconnect');
+        //self.removeListener('disconnect');
     });
 
 }
@@ -145,7 +145,7 @@ Connection.prototype.setupRouting = function() {
 
         // Forward messages from redis to the client
         //self.toClient.push(message);
-        //self.router.dispatch(message)
+        self.router.dispatch(message)
     });
 
     logger.log('debug', 'setupRoutes config', self.config);

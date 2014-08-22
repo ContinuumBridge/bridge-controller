@@ -39,6 +39,7 @@ Router.prototype.setupRoutes = function() {
     });
 
     */
+
     var cbAddressRoute = router.addRoute('{cbAddress}', function(message) {
 
 
@@ -53,7 +54,11 @@ Router.prototype.setupRoutes = function() {
     router.addRoute('cb', function(message) {
 
         logger.log('debug', 'Matched cb', message);
-        self.connection.django.messageRequest(message);
+        if (self.matchCB) {
+            self.matchCB(message)
+        } else {
+            self.connection.django.messageRequest(message);
+        }
     });
 
     /*
@@ -93,7 +98,7 @@ Router.prototype.dispatch = function(message) {
     var destination = message.get('destination');
 
     // Check if this is the client route
-    var clientRoute = new RegExp(this.connection.config.subscriptionAddress.subscriptionAddress + '(.+)?');
+    var clientRoute = new RegExp(this.connection.config.subscriptionAddress + '(.+)?');
     logger.log('debug', 'clientRoute is', clientRoute);
     var destination = message.get('destination');
     if (destination.match(clientRoute)) {

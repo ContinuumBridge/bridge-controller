@@ -18,6 +18,29 @@ var BridgeRouter = function(connection) {
 
 BridgeRouter.prototype = new Router();
 
+
+BridgeRouter.prototype.matchCB = function(message) {
+
+    var self = this;
+
+    var body = message.get('body');
+    if (body.url && body.url == '/api/bridge/v1/device_discovery/') {
+
+        // Special case for device discovery
+        deviceDiscovery(message).then(function(message) {
+
+            logger.log('debug', 'message in request_router is', message);
+            toRedis.push(message);
+            logger.log('debug', 'Pushed to redis for device discovery')
+        }, function(error) {
+
+            logger.error('Error in deviceDiscovery', error);
+        });
+    } else {
+        self.connection.django.messageRequest(message);
+    }
+}
+
 module.exports = BridgeRouter;
 
 /*
