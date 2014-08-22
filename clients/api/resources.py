@@ -27,7 +27,7 @@ from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource
+from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 
 from clients.models import Client, ClientControl
 
@@ -41,7 +41,7 @@ class ClientResource(CBResource):
         resource_name = 'client'
 
 
-class CurrentClientResource(LoggedInResource):
+class CurrentClientResource(LoggedInResource, CBIDResourceMixin):
 
     '''
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
@@ -59,7 +59,7 @@ class CurrentClientResource(LoggedInResource):
 
     class Meta(LoggedInResource.Meta):
         queryset = Client.objects.all()
-        fields = ['id', 'email', 'name', 'date_joined', 'last_login']
+        fields = ['id', 'cbid', 'name', 'date_joined', 'last_login']
         resource_name = 'current_client'
 
 
@@ -69,6 +69,8 @@ class ClientAuthResource(AuthResource):
 
     class Meta(AuthResource.Meta):
         queryset = Client.objects.all()
+        # Resource used to send data on successful login
+        data_resource = CurrentClientResource()
         #authorization = Authorization()
         fields = ['name','email']
         resource_name = 'client_auth'

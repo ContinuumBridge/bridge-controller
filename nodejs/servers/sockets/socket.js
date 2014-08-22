@@ -93,6 +93,8 @@ SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
             });
         }
 
+        console.log('authData is', authData);
+
         var config = {
             sessionID: oldConfig.sessionID,
             subscriptionAddress: authData.cbid,

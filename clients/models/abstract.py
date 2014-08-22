@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import (
 
 from polymorphic import PolymorphicModel, PolymorphicManager
 
+
 # Copied from django.contrib.auth.models, modified to be polymorphic
 class PolymorphicBaseUserManager(PolymorphicManager):
 
@@ -41,32 +42,52 @@ class PolymorphicBaseUserManager(PolymorphicManager):
         return self.get(**{self.model.USERNAME_FIELD: username})
 
 
-class AuthKeyMixin(PolymorphicModel):
+class AuthKeyMixin(models.Model):
 
-    key = models.CharField(_('key'), max_length=128, default="")
+    #uid = models.CharField(_('uid'), max_length = 8, unique = True)
+
+    key = models.CharField(_('key'), max_length=128)
+    plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
 
     class Meta:
         abstract = True
 
-    def set_password(self, raw_password):
-        self.key = make_password(raw_password)
+    def set_key(self, raw_key):
+        self.key = make_password(raw_key)
+        self.plaintext_key = raw_key
 
-    def check_password(self, raw_password):
+    def set_password(self, raw_password):
+        # For compatibility
+        self.set_key(raw_password)
+
+    def check_key(self, raw_key):
         """
         Returns a boolean of whether the raw_password was correct. Handles
         hashing formats behind the scenes.
         """
-        def setter(raw_password):
-            self.set_password(raw_password)
+        def setter(raw_key):
+            self.set_key(raw_key)
             self.save(update_fields=["key"])
-        return check_password(raw_password, self.key, setter)
+        return check_password(raw_key, self.key, setter)
 
-    def set_unusable_password(self):
+    def check_password(self, raw_password):
+        # For compatibility
+        return self.check_key(raw_password)
+
+    def set_unusable_key(self):
         # Sets a value that will never be a valid hash
         self.key = make_password(None)
 
-    def has_usable_password(self):
+    def set_unusable_password(self):
+        # For compatibility
+        self.set_unusable_password()
+
+    def has_usable_key(self):
         return is_password_usable(self.key)
+
+    def has_usable_password(self):
+        # For compatibility
+        return self.has_unusable_password()
 
     def get_session_auth_hash(self):
         """

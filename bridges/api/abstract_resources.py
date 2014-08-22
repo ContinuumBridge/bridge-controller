@@ -7,8 +7,8 @@ from tastypie.resources import ModelResource, ModelDeclarativeMetaclass, convert
 from tastypie.authorization import Authorization
 
 from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden
 from django.conf.urls import url
+from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.utils import trailing_slash
 
 from django.conf.urls import patterns, url, include
@@ -316,7 +316,7 @@ class AuthResource(ModelResource):
 
     class Meta:
         authorization = AuthAuthorization()
-        fields = ['first_name', 'last_name', 'email']
+        #fields = ['first_name', 'last_name', 'email']
         allowed_methods = ['get', 'post']
 
     def override_urls(self):
@@ -334,16 +334,27 @@ class AuthResource(ModelResource):
 
         data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
 
-        email = data.get('email', '')
-        password = data.get('password', '')
+        try:
+            # Try to log in a user
+            email = data['email']
+            password = data['password']
+            client = authenticate(email=email, password=password)
+        except KeyError:
+            # Otherwise try to log in a bridge or client
+            key = data.get('key', '')
+            client = authenticate(key=key)
 
-        client = authenticate(email=email, password=password)
         if client:
             if client.is_active:
                 login(request, client)
-                return self.create_response(request, {
-                    'success': True
-                })
+                # Return the client's data
+                bundle = self._meta.data_resource.build_bundle(obj=client)
+                bundle = self._meta.data_resource.full_dehydrate(bundle)
+                bundle = self.alter_detail_data_to_serialize(request, bundle)
+                return self.create_response(request, bundle)
+                #return self.create_response(request, {
+                #    'success': True
+                #})
             else:
                 return self.create_response(request, {
                     'success': False,

@@ -21,9 +21,11 @@ var PortalConnection = function(socket, serverConfig) {
 
         self.config = config;
 
+        console.log('Portal config is', config);
         // Router and django must be defined
         self.django = new Django(self);
         self.router = new Router(self);
+
 
         self.setupBuses();
         self.setupSocket();

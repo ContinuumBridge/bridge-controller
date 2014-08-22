@@ -1,11 +1,12 @@
 import sys
 
+from uuid import uuid4
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_syncdb
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from django.contrib.auth.models import BaseUserManager,\
-    PermissionsMixin, AbstractBaseUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -18,68 +19,9 @@ from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.providers.oauth.provider import OAuthProvider
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
-from .abstract import PolymorphicAbstractBaseUser, PolymorphicBaseUserManager, AuthPasswordMixin
+from .abstract import PolymorphicBaseUserManager, AuthPasswordMixin
+from .auth import CBAuth
 #from bridges.models import Bridge
-
-class CBAuthManager(PolymorphicBaseUserManager):
-
-    def create_user(self, email, password=None, **extra_fields):
-        """
-        Creates and saves a User with the given email and password.
-        """
-        now = timezone.now()
-        if not email:
-            raise ValueError('The given email must be set')
-        email = CBUserManager.normalize_email(email)
-        user = self.model(email=email,
-                          is_staff=False, is_active=True, is_superuser=False,
-                          last_login=now, date_joined=now, **extra_fields)
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password, **extra_fields):
-        u = self.create_user(email, password, **extra_fields)
-        u.is_staff = True
-        u.is_active = True
-        u.is_superuser = True
-        u.save(using=self._db)
-        return u
-
-class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
-
-    email = models.EmailField(_('email address'), unique=True)
-    is_active = models.BooleanField(_('active'), default=True,
-        help_text=_('Designates whether this user should be treated as '
-                    'active. Unselect this instead of deleting accounts.'))
-    is_staff = models.BooleanField(_('staff status'), default=False,
-        help_text=_('Designates whether the user can log into this admin '
-                    'site.'))
-    objects = CBAuthManager()
-
-    USERNAME_FIELD = 'email'
-
-    class Meta:
-        #db_table = 'auth_user'
-        verbose_name = _('cb_auth')
-        verbose_name_plural = _('cb_auths')
-        app_label = 'accounts'
-
-    def get_full_name(self):
-        """
-        Returns the email.
-        """
-        return self.email
-
-    def get_short_name(self):
-        "Returns the short name for the user."
-        return self.email
-
-    @property
-    def cbid(self):
-        prefix = self.__class__.__name__[0] + "ID"
-        return prefix + str(self.id)
 
 class CBUserManager(PolymorphicBaseUserManager):
 
@@ -89,9 +31,18 @@ class CBUserManager(PolymorphicBaseUserManager):
         """
         now = timezone.now()
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError('An email must be provided')
         email = CBUserManager.normalize_email(email)
-        user = self.model(email=email,
+
+        while True:
+            uid = uuid4().hex[0:8]
+            try:
+                existing_bridge = CBAuth.objects.get(uid=uid)
+            except ObjectDoesNotExist:
+                print "User uid is unique!"
+                break
+
+        user = self.model(email=email, uid=uid,
                           is_staff=False, is_active=True, is_superuser=False,
                           last_login=now, date_joined=now, **extra_fields)
 
@@ -113,20 +64,9 @@ class CBUser(CBAuth, AuthPasswordMixin):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
 
+    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
+
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
-    '''
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
-        null = True, verbose_name=_("created_by"), 
-        related_name="created_cb_users")
-
-    modified = models.DateTimeField(_("modified"),
-        auto_now=True, editable=False,)
-
-    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, 
-        null = True, verbose_name=_("modified_by"), 
-        related_name="modified_cb_users)")
-    '''
 
     bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
 

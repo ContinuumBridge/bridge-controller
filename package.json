@@ -33,7 +33,7 @@
     "q": "~0.9.7",
     "query-engine": "^1.5.7",
     "querystring": "~0.2.0",
-    "redis": "~0.9.1",
+    "redis": "^0.12.1",
     "restler": "~3.2.2",
     "socket.io": "^1.0.6",
     "socket.io-client": "~0.9.15",

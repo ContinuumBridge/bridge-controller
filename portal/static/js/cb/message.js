@@ -25,8 +25,12 @@ _.extend(Message.prototype, {
     // initialization logic.
     initialize: function(){},
 
+    toJSON: function(options) {
+      return _.clone(this.attributes);
+    },
+
     // Return a copy of the model's `attributes` object.
-    getJSON: function(options) {
+    toJSONString: function(options) {
 
       var jsonAttributes = JSON.stringify(_.clone(this.attributes));
       return jsonAttributes;
@@ -129,9 +133,9 @@ _.extend(Message.prototype, {
 
 })
 
-/*
 // Underscore methods that we want to implement on the Model.
-var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit'];
+// Added defaults
+var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'defults'];
 
 // Mix in each Underscore method as a proxy to `Model#attributes`.
 _.each(modelMethods, function(method) {
@@ -142,8 +146,6 @@ _.each(modelMethods, function(method) {
       return _[method].apply(_, args);
     };
 });
-
-*/
 
 /*
 m = new Message({

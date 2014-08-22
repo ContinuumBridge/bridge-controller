@@ -5,7 +5,7 @@ from tastypie.authorization import Authorization
 
 from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import UserObjectsOnlyAuthorization
-from apps.models import App, AppInstall, AppDevicePermission, AppLicence, AppOwnership, AppConnection
+from apps.models import App, AppInstall, AppDevicePermission, AppLicence#, AppOwnership, AppConnection
 from apps.api.authorization import AppInstallAuthorization
 #from bridges.api.abstract_resources import CBModelResource
 from bridges.api.abstract_resources import PostMatchMixin
@@ -30,6 +30,7 @@ class AppDevicePermissionResource(PostMatchMixin, CBResource):
        post_match = ['app_install', 'device_install']
 
 
+'''
 class AppConnectionResource(UserObjectsResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
@@ -47,6 +48,7 @@ class AppOwnershipResource(UserObjectsResource):
     class Meta(UserObjectsResource.Meta):
         queryset = AppOwnership.objects.all()
         resource_name = 'app_ownership'
+'''
 
 
 class AppLicenceResource(PostMatchMixin, CBResource):

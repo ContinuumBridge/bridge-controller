@@ -20,6 +20,7 @@ var Portal = function(port, djangoURL) {
 
         socket.getConfig = function() {
             var config = socket.config || socket.handshake.config;
+            console.log('getConfig ran');
             return self.socketServer.getConnectionConfig(self.config.authURL, config);
         };
 

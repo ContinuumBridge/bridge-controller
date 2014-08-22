@@ -6,10 +6,39 @@ var rest = require('restler')
     ;
 
 var deviceDiscovery = require('./deviceDiscovery')
+    Router = require('../connection/router')
     ;
 
 var BridgeRouter = function(connection) {
     this.connection = connection;
+    this.django = connection.django;
+
+    this.setupRoutes();
+}
+
+BridgeRouter.prototype = new Router();
+
+
+BridgeRouter.prototype.matchCB = function(message) {
+
+    var self = this;
+
+    var body = message.get('body');
+    if (body.url && body.url == '/api/bridge/v1/device_discovery/') {
+
+        // Special case for device discovery
+        deviceDiscovery(message).then(function(message) {
+
+            logger.log('debug', 'message in request_router is', message);
+            toRedis.push(message);
+            logger.log('debug', 'Pushed to redis for device discovery')
+        }, function(error) {
+
+            logger.error('Error in deviceDiscovery', error);
+        });
+    } else {
+        self.connection.django.messageRequest(message);
+    }
 }
 
 module.exports = BridgeRouter;
