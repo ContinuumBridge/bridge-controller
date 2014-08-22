@@ -27,6 +27,7 @@ Router.prototype.setupRoutes = function() {
 
     var connection = this.connection;
     var subscriptionAddress = connection.config.subscriptionAddress;
+    var publicationAddresses = connection.config.publicationAddresses;
 
     logger.log('debug', 'Router setupRoutes config', self.connection.config);
     // Capture destinations matching the client on this connection
@@ -61,21 +62,11 @@ Router.prototype.setupRoutes = function() {
         }
     });
 
-    /*
     router.addRoute('broadcast', function(message) {
 
-        // Test if the message came from the client. Inbound or outbound
-        var clientRegex = new RegExp(subscriptionAddress + '.+', 'g');
-        var source = message.get('source');
-        if (clientRegex.test(source)) {
-
-            self.connection.toRedis.push(message);
-        } else {
-
-            self.connection.toClient.push(message);
-        }
+        message.set('destination', publicationAddresses);
+        self.connection.toRedis.push(message);
     });
-    */
     //this.bypassed.add(console.log, console);
     router.bypassed.add(function(message) {
         logger.log('message_error', 'Route not matched', message.toJSON());

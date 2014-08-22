@@ -20,7 +20,7 @@ CBApp.MessageView = Marionette.ItemView.extend({
       data.remote = incoming ? this.model.get('source') : this.model.get('destination');
       var body = this.model.get('body');
       // Check if this is a command
-      data.body = body instanceof Object ? body.command : body;
+      data.body = body instanceof Object ? body.command | body.status : body;
       return data;
     }
 })
