@@ -37,6 +37,7 @@ Connection.prototype.setupSocket = function() {
         //console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
         //message.set('source', "BID" + socket.handshake.authData.id);
+        logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
         logger.log('debug', 'socket message config', self.config);
 
@@ -55,8 +56,8 @@ Connection.prototype.setupSocket = function() {
         logger.log('info', 'Disconnected');
         unsubscribeToClient();
         self.emit('disconnect')
-        socket.removeListener('message');
-        socket.removeListener('disconnect');
+        socket.removeAllListeners('message');
+        socket.removeAllListeners('disconnect');
     });
 };
 

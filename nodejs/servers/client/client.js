@@ -4,13 +4,15 @@ var ClientConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var logger = require('./logger');
 
-var Client = function(port, djangoURL) {
+var Client = function(port, djangoRootURL) {
 
     var self = this;
 
+    var djangoURL = djangoRootURL + '/api/client/v1/';
     this.config = {
         port: port,
         djangoURL: djangoURL,
+        djangoRootURL: djangoRootURL,
         authURL: djangoURL + 'current_client/client/'
     }
 

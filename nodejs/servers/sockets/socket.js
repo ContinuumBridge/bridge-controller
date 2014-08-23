@@ -81,6 +81,8 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer) {
 
 SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
 
+    var self = this;
+
     console.log('oldConfig', oldConfig);
     var deferredConfig = Q.defer();
 
@@ -93,14 +95,16 @@ SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
             });
         }
 
-        console.log('authData is', authData);
+        console.log('djangoURL is', self.config);
 
         var config = {
             sessionID: oldConfig.sessionID,
             subscriptionAddress: authData.cbid,
             publicationAddresses: publicationAddresses,
             address: oldConfig.address,
-            email: authData.email
+            email: authData.email,
+            djangoURL: self.config.djangoURL,
+            djangoRootURL: self.config.djangoRootURL
         }
 
         //data.config.address = data.address
@@ -109,7 +113,7 @@ SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
     }, function(error) {
 
         deferredConfig.reject(error);
-    });
+    }).done();
 
     return deferredConfig.promise;
 }

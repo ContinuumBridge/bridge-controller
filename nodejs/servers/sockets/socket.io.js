@@ -20,9 +20,10 @@ function SocketIOServer(config) {
     httpServer.listen(config.port);
 
     // Set the socket io log level
-    socketServer.set('log level', 1);
+    //socketServer.set('log level', 1);
 
     this.setupAuthorization(socketServer);
+    socketServer.config = config;
     socketServer.getConnectionConfig = this.getConnectionConfig;
 
     return socketServer;
