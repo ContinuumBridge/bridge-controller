@@ -32,17 +32,16 @@ var backendAuth = function(djangoAuthURL, sessionID) {
         if (response) {
 
             if (response.statusCode == 200) {
-
                 deferredSessionData.resolve(data);
-            }
-            if (response.statusCode = 404) {
+            } else if (response.statusCode = 404) {
                 var error = new Errors.Unauthorized('Authorization with Django failed');
-                //logger.log('unauthorized', error);
                 deferredSessionData.reject(error);
+            } else {
+                var error = new Errors.DjangoError(response);
+                deferred.reject(error);
             }
         } else {
             var error = new Errors.DjangoError(response)
-            //logger.log('django_error', error);
             deferredSessionData.reject(error);
         }
     });

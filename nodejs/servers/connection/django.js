@@ -3,37 +3,48 @@ var rest = require('restler')
     Q = require('q')
     ;
 
+var Errors = require('../../errors');
+
 var Django = function(connection) {
 
     this.connection = connection;
 };
 
-Django.prototype.request = function(request) {
+Django.prototype.request = function(request, sessionID) {
 
+    console.log('Django request', request);
     var deferred = Q.defer();
 
+    var verb = request.verb.toLowerCase() || "get";
     var djangoOptions = {
-        method: "get",
+        method: verb,
         headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
-            'X_CB_SESSIONID': request.sessionID
+            'X_CB_SESSIONID': sessionID
         }
     };
 
-    var requestURL = this.connection.config.djangoURL + request.url;
+    var requestURL = this.connection.config.djangoRootURL + request.url;
 
-    rest.get(requestURL, djangoOptions).on('complete', function(data, djangoResponse) {
+    console.log('Django request', requestURL);
 
-        //message.set('type', 'response');
+    rest.get(requestURL, djangoOptions).on('complete', function(data, response) {
 
-        if (djangoResponse.statusCode == 200) {
-            message.set('body', data);
-            //message.set('status_code', djangoResponse.statusCode)
-            deferred.resolve(message);
+        if (response && response.statusCode) {
+            //console.log('Django response', response);
+            if (response.statusCode == 200) {
+                deferred.resolve(data);
+            } else if (response.statusCode == 404) {
+                var error = new Errors.Unauthorized('Authorization with Django failed');
+                deferred.reject(error);
+            } else {
+                var error = new Errors.DjangoError(response);
+                deferred.reject(error);
+            }
         } else {
-            //message.set('status_code', djangoResponse.statusCode)
-            deferred.reject(message);
+            var error = new Errors.DjangoError(response)
+            deferred.reject(error);
         }
     });
     return deferred.promise;
@@ -44,15 +55,19 @@ Django.prototype.messageRequest = function(message) {
     var self = this;
 
     var requestData = message.get('body');
+    var sessionID = message.get('sessionID');
 
-    this.request(requestData).then(function(data) {
+    this.request(requestData, sessionID).then(function(data) {
         // Success
-        message.return('cb', data);
-        self.connection.router(message);
+        message.set('body', data);
+        message.return('cb');
+        logger.log('debug', 'Returning message', message.toJSONString());
+        self.connection.router.dispatch(message);
     }, function(error) {
         // Error
-        message.return('cb', error);
-        self.connection.router(message);
+        message.set('body', error);
+        message.return('cb');
+        self.connection.router.dispatch(message);
     });
 };
 

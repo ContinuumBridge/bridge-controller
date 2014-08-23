@@ -32595,7 +32595,7 @@ CBApp.MessageView = Marionette.ItemView.extend({
       data.remote = incoming ? this.model.get('source') : this.model.get('destination');
       var body = this.model.get('body');
       // Check if this is a command
-      data.body = body instanceof Object ? body.command | body.status : body;
+      data.body = body instanceof Object ? body.command || body.status : body;
       return data;
     }
 })
@@ -32610,12 +32610,12 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     itemViewContainer: '#messages-table',
 
     events: {
-        'click #send-button': 'clickCommand',
+        'click #send-button': 'clickSend',
         'keyup #command-input' : 'keyPressEventHandler',
         'click #start': 'clickCommand',
         'click #stop': 'clickCommand',
-        'click #update': 'clickCommand',
-        'click #send-log': 'clickCommand',
+        'click #update_config': 'clickCommand',
+        'click #send_log': 'clickCommand',
         'click #z-exclude': 'clickCommand',
         'click #restart': 'clickCommand',
         'click #reboot': 'clickCommand',
@@ -33428,9 +33428,9 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               var destination = currentBridge.get('cbid');
               var message = new CBApp.Message({
                   body: {
-                      command: 'discover',
-                      destination: destination
-                  }
+                      command: 'discover'
+                  },
+                  destination: destination
               });
               CBApp.messageCollection.sendMessage(message);
           });

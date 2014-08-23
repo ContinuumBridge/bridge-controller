@@ -91,7 +91,7 @@ Router.prototype.dispatch = function(message) {
     // Check if this is the client route
     var clientRoute = new RegExp(this.connection.config.subscriptionAddress + '(.+)?');
     logger.log('debug', 'clientRoute is', clientRoute);
-    var destination = message.get('destination');
+    var destination = String(message.get('destination'));
     if (destination.match(clientRoute)) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);

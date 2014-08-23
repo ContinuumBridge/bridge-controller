@@ -5,12 +5,14 @@ var SocketIOServer = require('../sockets/socket.io');
 
 logger = require('./logger');
 
-var Bridge = function(port, djangoURL) {
+var Bridge = function(port, djangoRootURL) {
 
     var self = this;
 
+    var djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.config = {
         port: port,
+        djangoRootURL: djangoRootURL,
         djangoURL: djangoURL,
         authURL: djangoURL + 'current_bridge/bridge/'
     }
