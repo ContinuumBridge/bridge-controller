@@ -54,9 +54,9 @@ _.extend(Message.prototype, {
         this.set(attributes, options);
     },
 
-    return: function(source, data) {
+    return: function(source) {
 
-        this.set('body', data);
+        //this.set('body', data);
         // Switches the original source to the destination
         var src = source || "";
         var newDestination = this.get('source') || "";

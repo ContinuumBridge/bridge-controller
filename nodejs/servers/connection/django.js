@@ -59,12 +59,15 @@ Django.prototype.messageRequest = function(message) {
 
     this.request(requestData, sessionID).then(function(data) {
         // Success
-        message.return('cb', data);
-        self.connection.router(message);
+        message.set('body', data);
+        message.return('cb');
+        logger.log('debug', 'Returning message', message.toJSONString());
+        self.connection.router.dispatch(message);
     }, function(error) {
         // Error
-        message.return('cb', error);
-        self.connection.router(message);
+        message.set('body', error);
+        message.return('cb');
+        self.connection.router.dispatch(message);
     });
 };
 
