@@ -4,12 +4,14 @@ var BackboneIOServer = require('../sockets/backbone.io');
 
 logger = require('./logger');
 
-var Portal = function(port, djangoURL) {
+var Portal = function(port, djangoRootURL) {
 
     var self = this;
 
+    var djangoURL = djangoRootURL + '/api/user/v1/';
     this.config = {
         port: port,
+        djangoRootURL: djangoRootURL,
         djangoURL: djangoURL,
         authURL: djangoURL + 'current_user/user/'
     }
