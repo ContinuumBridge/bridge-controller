@@ -70,9 +70,9 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               var destination = currentBridge.get('cbid');
               var message = new CBApp.Message({
                   body: {
-                      command: 'discover',
-                      destination: destination
-                  }
+                      command: 'discover'
+                  },
+                  destination: destination
               });
               CBApp.messageCollection.sendMessage(message);
           });

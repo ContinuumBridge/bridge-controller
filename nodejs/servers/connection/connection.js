@@ -89,7 +89,7 @@ Connection.prototype.setupRedis = function() {
             console.log('debug', 'destination is an array')
             destination.forEach(function(address) {
                 console.log('debug', 'address is', address)
-                redisPub.publish(address, jsonMessage);
+                redisPub.publish(String(address), jsonMessage);
             }, this);
         }
 

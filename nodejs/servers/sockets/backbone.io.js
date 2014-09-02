@@ -61,6 +61,7 @@ function BackboneIOServer(config) {
     socketServer.set('log level', 1);
 
     this.setupLegacyAuthorization(socketServer);
+    socketServer.config = config;
     socketServer.getConnectionConfig = this.getConnectionConfig;
 
     return socketServer;
