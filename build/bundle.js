@@ -30231,6 +30231,85 @@ CBApp.AdaptorCollection = Backbone.Collection.extend({
 
 },{}],22:[function(require,module,exports){
 
+CBApp.AppConnection = Backbone.Deferred.Model.extend({
+
+    idAttribute: 'id',
+
+    backend: 'appConnection',
+
+    initialize: function() {
+        this.startTracking();
+    },
+
+    relations: [
+        {   
+            type: Backbone.HasOne,
+            key: 'bridge',
+            keySource: 'bridge',
+            keyDestination: 'bridge',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeCollection',
+        },
+        {   
+            type: Backbone.HasOne,
+            key: 'app',
+            keySource: 'app',
+            keyDestination: 'app',
+            relatedModel: 'CBApp.App',
+            collectionType: 'CBApp.AppCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'appConnections',
+                collectionType: 'CBApp.AppConnectionCollection',
+                includeInJSON: false,
+                initializeCollection: 'appConnectionCollection'
+            }   
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'devicePermissions',
+            keySource: 'device_permissions',
+            keyDestination: 'device_permissions',
+            relatedModel: 'CBApp.AppDevicePermission',
+            collectionType: 'CBApp.AppDevicePermissionCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appDevicePermissionCollection'
+        },
+        {
+            type: Backbone.HasOne,
+            key: 'licence',
+            keySource: 'licence',
+            keyDestination: 'licence',
+            relatedModel: 'CBApp.AppLicence',
+            collectionType: 'CBApp.AppLicenceCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appLicenceCollection',
+        },
+    ]
+}, { modelType: "appConnection" });
+
+CBApp.AppConnectionCollection = QueryEngine.QueryCollection.extend({
+
+    model: CBApp.AppConnection,
+    backend: 'appConnection',
+
+    initialize: function() {
+        this.bindBackend();
+        CBApp.AppConnectionCollection.__super__.initialize.apply(this, arguments);
+    }
+});
+
+
+},{}],23:[function(require,module,exports){
+
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
@@ -30333,7 +30412,7 @@ CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
 
 });
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30345,7 +30424,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"permission-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
   });
 
-},{"hbsfy/runtime":13}],24:[function(require,module,exports){
+},{"hbsfy/runtime":13}],25:[function(require,module,exports){
 
 require('../../components/switches');
 
@@ -30448,7 +30527,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
 });
 
 
-},{"../../components/switches":44,"../../components/templates/switch.html":46,"./templates/devicePermission.html":23}],25:[function(require,module,exports){
+},{"../../components/switches":50,"../../components/templates/switch.html":52,"./templates/devicePermission.html":24}],26:[function(require,module,exports){
 
 CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
@@ -30570,7 +30649,7 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30595,7 +30674,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],27:[function(require,module,exports){
+},{"hbsfy/runtime":13}],28:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30607,7 +30686,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"install-apps\"  class=\"topcoat-button--cta center full\">Install Apps</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],28:[function(require,module,exports){
+},{"hbsfy/runtime":13}],29:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30619,7 +30698,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table \">\n    <tr>\n        <td class=\"col-md-4 panel-item\">\n            AppInstall ID: <span class=\"app-install-id\"></span>\n        </td>\n        <td class=\"col-md-8 panel-item\">\n            Licence Owner: <span class=\"licence-owner\"></span> (ID: <span class=\"licence-owner-id\"></span>)\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],29:[function(require,module,exports){
+},{"hbsfy/runtime":13}],30:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -30654,7 +30733,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
       var data = {};
       var app = this.model.get('app');
       data.name = app.get('name');
-      data.appID = "APPID" + app.get('id');
+      data.appID = "AID" + app.get('id');
       return data;
     },
 
@@ -30748,7 +30827,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":24,"./templates/appInstall.html":26,"./templates/appInstallSection.html":27,"./templates/staffAppInstall.html":28,"backbone-bundle":96,"backbone.marionette":105}],30:[function(require,module,exports){
+},{"../device_permissions/views":25,"./templates/appInstall.html":27,"./templates/appInstallSection.html":28,"./templates/staffAppInstall.html":29,"backbone-bundle":102,"backbone.marionette":111}],31:[function(require,module,exports){
 
 CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -30912,7 +30991,7 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30924,7 +31003,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "Test Install Button";
   });
 
-},{"hbsfy/runtime":13}],32:[function(require,module,exports){
+},{"hbsfy/runtime":13}],33:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30936,7 +31015,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<td class=\"app-name\">\n    App Name\n</td>\n<td class=\"installs-permitted\">\n    Installs permitted\n</td>\n<td class=\"installs-remaining\">\n    Installs remaining\n</td>\n<td>\n    <div class=\"install-component\"></div>\n</td>\n";
   });
 
-},{"hbsfy/runtime":13}],33:[function(require,module,exports){
+},{"hbsfy/runtime":13}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30948,7 +31027,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4>My Licences</h4>\n\n<table class=\"table\">\n    <thead>\n        <td class=\"col-md-6\">\n            <div class=\"list-group-item-heading app-name\">App Name</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-permitted\">Installs permitted</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-remaining\">Installs remaining</div>\n        </td>\n        <td class=\"col-md-2\">\n        </td>\n    </thead>\n    <tbody>\n\n    </tbody>\n</table>\n";
   });
 
-},{"hbsfy/runtime":13}],34:[function(require,module,exports){
+},{"hbsfy/runtime":13}],35:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31122,7 +31201,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":41,"./templates/button.html":31,"./templates/licence.html":32,"./templates/licenceSection.html":33,"backbone-bundle":96,"backbone.marionette":105}],35:[function(require,module,exports){
+},{"../../components/buttons":47,"./templates/button.html":32,"./templates/licence.html":33,"./templates/licenceSection.html":34,"backbone-bundle":102,"backbone.marionette":111}],36:[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -31198,7 +31277,199 @@ CBApp.AppCollection = Backbone.Collection.extend({
 });
 
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
+
+CBApp.AppOwnership = Backbone.Deferred.Model.extend({
+
+    idAttribute: 'id',
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'app',
+            keySource: 'app',
+            keyDestination: 'app',
+            relatedModel: 'CBApp.App',
+            collectionType: 'CBApp.AppCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'appCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appOwnership',
+                includeInJSON: 'resource_uri'
+            }
+        },
+        {
+            type: Backbone.HasOne,
+            key: 'user',
+            keySource: 'user',
+            keyDestination: 'user',
+            relatedModel: 'CBApp.User',
+            collectionType: 'CBApp.UserCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri'
+            /*
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appLicence'
+            }
+            */
+        }
+    ],
+
+    initialize: function() {
+
+        console.log('initialize AppOwnership');
+        this.startTracking();
+    },
+
+    removeOwnership: function(user) {
+
+        //this.get('app').toggleInstalled(bridge, this);
+    }
+}, { modelType: "appOwnership" });
+
+CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+
+    model: CBApp.AppOwnership,
+    backend: 'appOwnership',
+
+    initialize: function() {
+        this.bindBackend();
+
+        CBApp.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
+    },
+
+    parse : function(response){
+        return response.objects;
+    }
+});
+
+},{}],38:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h4 class=\"app-name list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div class=\"panel-collapse collapse app-config\">\n    <li class=\"user-panel inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>";
+  });
+
+},{"hbsfy/runtime":13}],39:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"create-app\"  class=\"topcoat-button--cta center full\">Create App</div></br>\n";
+  });
+
+},{"hbsfy/runtime":13}],40:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+require('../../components/buttons');
+
+CBApp.AppOwnershipView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: 'new-item',
+    template: require('./templates/ownership.html'),
+
+    events: {
+        //'click': 'eventWrapperClick',
+        //'click .install-button': 'toggleCurrentInstall'
+    },
+
+    bindings: {
+        '.installs-permitted': 'installs_permitted'
+    },
+
+    appBindings: {
+        '.app-name': 'name',
+        '.edit-button': {
+            attributes: [{
+                name: 'data-target',
+                observe: 'cbid'
+            }]
+        },
+        '.app-config': {
+            attributes: [{
+                name: 'id',
+                observe: 'cbid'
+            }]
+        }
+    },
+
+    appOwnershipBindings: {
+        '.installs-remaining': {
+            observe: ['change', 'change:relational', 'isGhost'],
+            onGet: 'getInstallsRemaining'
+        }
+    },
+
+    initialize: function() {
+
+        var self = this;
+
+        this.app = this.model.get('app');
+
+        CBApp.getCurrentBridge().then(function(currentBridge){
+
+            /*
+            self.installButton.bridge = currentBridge;
+            self.appInstall = CBApp.appInstallCollection.findOrAdd({
+                app: self.app,
+                bridge: currentBridge,
+                licence: self.model
+            });
+            // Trigger change events on the model, to cause the view to update
+            self.listenTo(self.appInstall, 'all', function(e) {
+                console.log('event on appInstall', e);
+            });
+
+            self.stickit(self.appInstall, self.appInstallBindings);
+
+            self.installButton.setModel(self.appInstall);
+            self.installButton.stickit();
+             */
+            //self.render();
+        }).done();
+    },
+
+    onRender : function() {
+
+        var self = this;
+
+        console.log('AppOwnershipView render', this);
+        this.stickit();
+        //this.stickit(this.app, this.appBindings);
+    }
+});
+
+
+CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/ownershipSection.html'),
+    itemView: CBApp.AppOwnershipView,
+    itemViewContainer: '.app-list',
+
+    emptyView: CBApp.ListItemLoadingView,
+
+    onRender : function(){
+
+        console.log('AppLicenceListView', this.collection);
+    }
+});
+
+},{"../../components/buttons":47,"./templates/ownership.html":38,"./templates/ownershipSection.html":39,"backbone-bundle":102,"backbone.marionette":111}],41:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -31368,7 +31639,7 @@ CBApp.BridgeControlCollection = Backbone.Collection.extend({
 }, { modelType: "bridgeControl" });
 
 
-},{"q":16}],37:[function(require,module,exports){
+},{"q":16}],42:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31385,7 +31656,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],38:[function(require,module,exports){
+},{"hbsfy/runtime":13}],43:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31397,7 +31668,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],39:[function(require,module,exports){
+},{"hbsfy/runtime":13}],44:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31409,7 +31680,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge name:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-name\">\n        </td>\n    </tr>\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge ID:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],40:[function(require,module,exports){
+},{"hbsfy/runtime":13}],45:[function(require,module,exports){
 
 
 CBApp.StaffBridgeView = Marionette.ItemView.extend({
@@ -31499,7 +31770,99 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":37,"./templates/bridgeSection.html":38,"./templates/staffBridge.html":39}],41:[function(require,module,exports){
+},{"./templates/bridge.html":42,"./templates/bridgeSection.html":43,"./templates/staffBridge.html":44}],46:[function(require,module,exports){
+
+CBApp.Client = Backbone.Deferred.Model.extend({
+    
+    idAttribute: 'id',
+
+    /*
+    computeds: {
+
+        unconfirmed: function() {
+            var isNew = this.isNew();
+            return isNew || this.hasChangedSinceLastSync;
+        }
+    },
+    */
+
+    initialize: function() {
+
+        Backbone.Deferred.Model.prototype.initialize.apply(this);
+    },
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'bridge',
+            keySource: 'bridge',
+            keyDestination: 'bridge',
+            relatedModel: 'CBApp.Bridge',
+            collectionType: 'CBApp.BridgeCollection',
+            createModels: false,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'bridgeCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'deviceInstalls'
+            }
+        },
+        {
+            type: Backbone.HasOne,
+            key: 'device',
+            keySource: 'device',
+            keyDestination: 'device',
+            relatedModel: 'CBApp.Device',
+            collectionType: 'CBApp.DeviceCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'deviceCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'deviceInstalls',
+                collectionType: 'CBApp.DeviceInstallCollection',
+                includeInJSON: false,
+                initializeCollection: 'deviceInstallCollection'
+            }
+        },
+        {  
+            type: Backbone.HasOne,
+            key: 'adaptor',
+            keySource: 'adaptor',
+            keyDestination: 'adaptor',
+            relatedModel: 'CBApp.Adaptor',
+            collectionType: 'CBApp.AdaptorCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'adaptorCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'deviceInstall',
+                collectionType: 'CBApp.DeviceInstallCollection',
+                includeInJSON: false,
+                initializeCollection: 'deviceInstallCollection'
+            }
+        }
+    ]
+}, { modelType: "client" });
+
+//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+CBApp.ClientCollection = QueryEngine.QueryCollection.extend({
+
+    model: CBApp.Client,
+    backend: 'client',
+
+    initialize: function() {
+        var self = this;
+
+        this.bind('backend:create', function(model) {
+            self.add(model);
+        });
+        CBApp.ClientCollection.__super__.initialize.apply(this, arguments);
+    }
+});
+
+},{}],47:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31552,12 +31915,12 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     }
 });
 
-},{"./components":42,"backbone-bundle":96,"backbone.marionette":105}],42:[function(require,module,exports){
+},{"./components":48,"backbone-bundle":102,"backbone.marionette":111}],48:[function(require,module,exports){
 
 CBApp.Components = {};
 
 
-},{}],43:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 
 require('./components');
 
@@ -31603,7 +31966,7 @@ CBApp.Components.NumberField = Marionette.ItemView.extend({
         return false;
     }
 });
-},{"./components":42,"./templates/numberField.html":45}],44:[function(require,module,exports){
+},{"./components":48,"./templates/numberField.html":51}],50:[function(require,module,exports){
 
 
 var Backbone = require('backbone-bundle')
@@ -31642,7 +32005,7 @@ CBApp.Components.Switch = Marionette.ItemView.extend({
         return "left theme-green animate toggle-switch " + activation + " " + enabled;
     }
 })
-},{"./components":42,"./templates/switch.html":46,"backbone-bundle":96,"backbone.marionette":105}],45:[function(require,module,exports){
+},{"./components":48,"./templates/switch.html":52,"backbone-bundle":102,"backbone.marionette":111}],51:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31654,7 +32017,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<input type=\"text\" class=\"form-control bfh-number app-form-input installs-permitted\">\n<span class=\"input-group-addon bfh-number-btn inc\"><span class=\"glyphicon glyphicon-chevron-up\"></span></span>\n<span class=\"input-group-addon bfh-number-btn dec\"><span class=\"glyphicon glyphicon-chevron-down\"></span></span>\n";
   });
 
-},{"hbsfy/runtime":13}],46:[function(require,module,exports){
+},{"hbsfy/runtime":13}],52:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31666,7 +32029,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],47:[function(require,module,exports){
+},{"hbsfy/runtime":13}],53:[function(require,module,exports){
 
 /*
 CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
@@ -31856,7 +32219,7 @@ CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 });
 
 
-},{}],48:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31868,7 +32231,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"card-heading h4 device-name\"></div>\n<div class=\"card-subheading h4 small device-address\"></div>\n<div class=\"install-button\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],49:[function(require,module,exports){
+},{"hbsfy/runtime":13}],55:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31880,9 +32243,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Device Discovery</h2>\n\n<div id=\"discovered-device-list\" class=\"animated-list\"></div>\n<div id=\"devices\" class=\"topcoat-button--cta\">Show Devices</div>\n<div id=\"rescan\" class=\"topcoat-button--cta\">Rescan</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],50:[function(require,module,exports){
-module.exports=require(46)
-},{"hbsfy/runtime":13}],51:[function(require,module,exports){
+},{"hbsfy/runtime":13}],56:[function(require,module,exports){
+module.exports=require(52)
+},{"hbsfy/runtime":13}],57:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32001,7 +32364,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":41,"./templates/discoveredDevice.html":48,"./templates/discoveredDeviceSection.html":49,"./templates/installButton.html":50,"backbone-bundle":96,"backbone.marionette":105}],52:[function(require,module,exports){
+},{"../../components/buttons":47,"./templates/discoveredDevice.html":54,"./templates/discoveredDeviceSection.html":55,"./templates/installButton.html":56,"backbone-bundle":102,"backbone.marionette":111}],58:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -32153,7 +32516,7 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],53:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32165,7 +32528,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],54:[function(require,module,exports){
+},{"hbsfy/runtime":13}],60:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32177,7 +32540,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Devices</h2>\n\n<div class=\"animated-list device-list\"></div>\n<div class=\"topcoat-button--cta center full discover-devices-button\">Connect to a Device</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],55:[function(require,module,exports){
+},{"hbsfy/runtime":13}],61:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32274,7 +32637,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":53,"./templates/deviceInstallSection.html":54,"backbone-bundle":96,"backbone.marionette":105}],56:[function(require,module,exports){
+},{"./templates/deviceInstall.html":59,"./templates/deviceInstallSection.html":60,"backbone-bundle":102,"backbone.marionette":111}],62:[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -32333,7 +32696,7 @@ CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],57:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32454,7 +32817,7 @@ CBApp.reqres.setHandler("store:show", function(){
 });
 
 module.exports = CBApp;
-},{"./views/portal_view":92,"backbone-bundle":96,"backbone.marionette":105}],58:[function(require,module,exports){
+},{"./views/portal_view":98,"backbone-bundle":102,"backbone.marionette":111}],64:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -32535,7 +32898,7 @@ CBApp.MessageCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],59:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32560,7 +32923,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],60:[function(require,module,exports){
+},{"hbsfy/runtime":13}],66:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32572,7 +32935,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update_config' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send_log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n  <div id='z-exclude' class=\"topcoat-button-bar__item\">\n      <button class=\"topcoat-button-bar__button\">Z Exclude</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],61:[function(require,module,exports){
+},{"hbsfy/runtime":13}],67:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32680,7 +33043,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/message.html":59,"./templates/messageSection.html":60,"backbone-bundle":96,"backbone.marionette":105}],62:[function(require,module,exports){
+},{"./templates/message.html":65,"./templates/messageSection.html":66,"backbone-bundle":102,"backbone.marionette":111}],68:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -32797,7 +33160,7 @@ CBApp.FilteredCollection = function(original){
 
     return filtered;
 }
-},{}],63:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 
 require('q');
 
@@ -32844,7 +33207,7 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
 CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 
 
-},{"q":16}],64:[function(require,module,exports){
+},{"q":16}],70:[function(require,module,exports){
 
 
 
@@ -33231,7 +33594,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         }
     },
 });
-},{}],65:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 
 var Q = require('q');
 
@@ -33242,10 +33605,13 @@ require('./components/buttons');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/connections/models');
 require('./apps/installs/models');
 require('./apps/licences/models');
+require('./apps/ownerships/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
+require('./clients/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
@@ -33260,11 +33626,15 @@ CBApp.addInitializer(function () {
   //data
   CBApp.appCollection = new CBApp.AppCollection();
 
+  CBApp.appConnectionCollection = new CBApp.AppConnectionCollection();
+
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
   //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
+
+  CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
@@ -33355,7 +33725,7 @@ CBApp.addInitializer(function () {
 
 });
 
-},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/device_permissions/models":22,"./apps/installs/models":25,"./apps/licences/models":30,"./apps/models":35,"./bridges/models":36,"./components/buttons":41,"./devices/discovery/models":47,"./devices/installs/models":52,"./devices/models":56,"./misc/decorators":62,"./misc/filters":63,"./users/current/models":89,"./users/models":90,"index":57,"q":16}],66:[function(require,module,exports){
+},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":23,"./apps/installs/models":26,"./apps/licences/models":31,"./apps/models":36,"./apps/ownerships/models":37,"./bridges/models":41,"./clients/models":46,"./components/buttons":47,"./devices/discovery/models":53,"./devices/installs/models":58,"./devices/models":62,"./misc/decorators":68,"./misc/filters":69,"./users/current/models":95,"./users/models":96,"index":63,"q":16}],72:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -33458,7 +33828,7 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":71}],67:[function(require,module,exports){
+},{"./views":77}],73:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33470,7 +33840,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"current-view\"></div>";
   });
 
-},{"hbsfy/runtime":13}],68:[function(require,module,exports){
+},{"hbsfy/runtime":13}],74:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33482,7 +33852,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],69:[function(require,module,exports){
+},{"hbsfy/runtime":13}],75:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33494,7 +33864,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n    <h3 class=\"bbm-modal__title\">Install App</h3>\n</div>\n<div class=\"bbm-modal__section\">\n    <div class=\"licence-section\"></div>\n</div>\n<div class=\"bbm-modal__bottombar\">\n    <a href=\"#\" class=\"bbm-button store-button\">App Store</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],70:[function(require,module,exports){
+},{"hbsfy/runtime":13}],76:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33506,7 +33876,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"device-section col-md-6\"></div>\n</div>\n<div class=\"row\">\n    <div class=\"message-section col-md-6\"></div>\n    <div class=\"bridge-section col-md-6\"></div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],71:[function(require,module,exports){
+},{"hbsfy/runtime":13}],77:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -33719,7 +34089,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":29,"../../apps/licences/views":34,"../../bridges/views":40,"../../devices/discovery/views":51,"../../devices/installs/views":55,"../../messages/views":61,"../../views/generic_views":91,"../../views/regions":93,"./templates/devicesView.html":67,"./templates/discoveryModal.html":68,"./templates/installAppModal.html":69,"./templates/main.html":70,"backbone-bundle":96,"backbone.marionette":105,"q":16}],72:[function(require,module,exports){
+},{"../../apps/installs/views":30,"../../apps/licences/views":35,"../../bridges/views":45,"../../devices/discovery/views":57,"../../devices/installs/views":61,"../../messages/views":67,"../../views/generic_views":97,"../../views/regions":99,"./templates/devicesView.html":73,"./templates/discoveryModal.html":74,"./templates/installAppModal.html":75,"./templates/main.html":76,"backbone-bundle":102,"backbone.marionette":111,"q":16}],78:[function(require,module,exports){
 
 
 var DeveloperViews = require('./views');
@@ -33772,7 +34142,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
     });
 });
 
-},{"./views":74}],73:[function(require,module,exports){
+},{"./views":80}],79:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33784,7 +34154,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],74:[function(require,module,exports){
+},{"hbsfy/runtime":13}],80:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -33793,54 +34163,63 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/installs/views');
-require('../../apps/licences/views');
-require('../../bridges/views');
-//require('../../devices/views');
-require('../../devices/discovery/views');
-require('../../devices/installs/views');
-require('../../messages/views');
+require('../../apps/ownerships/views');
+
+//var AppViews = require('./apps/views');
 
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
     regions: {
+        appSection: '.app-section',
         clientSection: '.client-section',
     },
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppInstallListView();
+        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.appOwnershipCollection.fetch({
+                data: {
+                    'test': 'Test!'
+                }
+            });
+        }).done();
+        /*
         this.bridgeView = new CBApp.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
-    },
-
-    populateViews: function() {
-
-        var self = this;
+        */
     },
 
     onRender: function() {
 
         var self = this;
 
-        this.appSection.show(this.appInstallListView);
+        this.appSection.show(this.appOwnershipListView);
+        /*
         this.deviceSection.show(this.devicesView);
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
+         */
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        CBApp.getCurrentUser().then(function(currentUser) {
 
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
+            //self.listenToOnce(currentBridge, 'change:current', self.render);
+            var appOwnershipCollection = currentUser.get('appOwnerships');
+            self.appOwnershipListView.setCollection(appOwnershipCollection);
+            self.appOwnershipListView.render();
+            console.log('Developer getCurrentUser', appOwnershipCollection)
+            /*
             var appInstallCollection = currentBridge.get('appInstalls');
             var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
             //liveAppInstallCollection.setQuery({isGhost: false});
+            /*
 
             console.log('liveAppInstallCollection', liveAppInstallCollection );
             self.appInstallListView.setCollection(liveAppInstallCollection);
@@ -33854,6 +34233,7 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
+             */
         }).done();
     }
 
@@ -33922,7 +34302,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 */
 
-},{"../../apps/installs/views":29,"../../apps/licences/views":34,"../../bridges/views":40,"../../devices/discovery/views":51,"../../devices/installs/views":55,"../../messages/views":61,"../../views/generic_views":91,"../../views/regions":93,"./templates/main.html":73,"backbone-bundle":96,"backbone.marionette":105,"q":16}],75:[function(require,module,exports){
+},{"../../apps/ownerships/views":40,"../../views/generic_views":97,"../../views/regions":99,"./templates/main.html":79,"backbone-bundle":102,"backbone.marionette":111,"q":16}],81:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34090,7 +34470,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
 });
 
-},{"./templates/bridgeDropdown.html":76,"./templates/bridgeItem.html":77,"./templates/navSection.html":78,"backbone-bundle":96,"backbone.marionette":105,"bootstrap":112}],76:[function(require,module,exports){
+},{"./templates/bridgeDropdown.html":82,"./templates/bridgeItem.html":83,"./templates/navSection.html":84,"backbone-bundle":102,"backbone.marionette":111,"bootstrap":118}],82:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34102,7 +34482,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
   });
 
-},{"hbsfy/runtime":13}],77:[function(require,module,exports){
+},{"hbsfy/runtime":13}],83:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34119,7 +34499,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],78:[function(require,module,exports){
+},{"hbsfy/runtime":13}],84:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34128,10 +34508,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li name=\"developer\"><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
+  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],79:[function(require,module,exports){
+},{"hbsfy/runtime":13}],85:[function(require,module,exports){
 
 CBApp.Notification = Backbone.Deferred.Model.extend({
 
@@ -34156,7 +34536,7 @@ CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],80:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34208,7 +34588,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
     });
 });
 
-},{"./models":79,"backbone-bundle":96,"backbone.marionette":105}],81:[function(require,module,exports){
+},{"./models":85,"backbone-bundle":102,"backbone.marionette":111}],87:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34229,7 +34609,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],82:[function(require,module,exports){
+},{"hbsfy/runtime":13}],88:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34241,7 +34621,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],83:[function(require,module,exports){
+},{"hbsfy/runtime":13}],89:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34253,7 +34633,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],84:[function(require,module,exports){
+},{"hbsfy/runtime":13}],90:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34439,7 +34819,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../../components/numbers":43,"./templates/app.html":81,"./templates/appSection.html":82,"./templates/staffApp.html":83,"backbone-bundle":96,"backbone.marionette":105}],85:[function(require,module,exports){
+},{"../../../components/numbers":49,"./templates/app.html":87,"./templates/appSection.html":88,"./templates/staffApp.html":89,"backbone-bundle":102,"backbone.marionette":111}],91:[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -34501,7 +34881,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":87}],86:[function(require,module,exports){
+},{"./views":93}],92:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34513,7 +34893,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],87:[function(require,module,exports){
+},{"hbsfy/runtime":13}],93:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -34538,11 +34918,15 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
+
         this.appListView = new AppViews.AppListView({
                                     collection: CBApp.appCollection
                                 });
 
-        CBApp.appCollection.fetch();
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            CBApp.appCollection.fetch();
+        }).done();
     },
 
     populateViews: function() {
@@ -34595,7 +34979,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic_views":91,"../../views/regions":93,"./apps/views":84,"./templates/main.html":86,"backbone-bundle":96,"backbone.marionette":105,"q":16}],88:[function(require,module,exports){
+},{"../../views/generic_views":97,"../../views/regions":99,"./apps/views":90,"./templates/main.html":92,"backbone-bundle":102,"backbone.marionette":111,"q":16}],94:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -34664,7 +35048,7 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":58,"backbone-bundle":96,"index":57}],89:[function(require,module,exports){
+},{"./messages/models":64,"backbone-bundle":102,"index":63}],95:[function(require,module,exports){
 
 require('../models');
 
@@ -34794,6 +35178,18 @@ CBApp.CurrentUser = CBApp.User.extend({
             //includeInJSON: false,
             initializeCollection: 'appLicenceCollection'
         },
+        {
+            type: Backbone.HasMany,
+            key: 'appOwnerships',
+            keySource: 'app_ownerships',
+            keyDestination: 'app_ownerships',
+            relatedModel: 'CBApp.AppOwnership',
+            collectionType: 'CBApp.AppOwnershipCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            //includeInJSON: false,
+            initializeCollection: 'appOwnershipCollection'
+        }
     ]
 }, { modelType: "currentUser" });
 
@@ -34811,7 +35207,8 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
     }
 });
 
-},{"../models":90}],90:[function(require,module,exports){
+
+},{"../models":96}],96:[function(require,module,exports){
 
 //CBApp.User = Backbone.Deferred.Model.extend({
 CBApp.User = Backbone.RelationalModel.extend({
@@ -34859,7 +35256,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],91:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34878,7 +35275,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":94,"backbone-bundle":96,"backbone.marionette":105}],92:[function(require,module,exports){
+},{"./templates/listItemLoading.html":100,"backbone-bundle":102,"backbone.marionette":111}],98:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34888,7 +35285,7 @@ module.exports = Marionette.Layout.extend({
     //regions:
 });
 
-},{"backbone-bundle":96,"backbone.marionette":105}],93:[function(require,module,exports){
+},{"backbone-bundle":102,"backbone.marionette":111}],99:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34904,9 +35301,9 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":96,"backbone.marionette":105}],94:[function(require,module,exports){
-module.exports=require(46)
-},{"hbsfy/runtime":13}],95:[function(require,module,exports){
+},{"backbone-bundle":102,"backbone.marionette":111}],100:[function(require,module,exports){
+module.exports=require(52)
+},{"hbsfy/runtime":13}],101:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
 
@@ -34928,7 +35325,7 @@ require('./cb/models');
 })(jQuery);
 
 
-},{"./cb/models":65,"./cb/modules/config/config":66,"./cb/modules/developer/developer":72,"./cb/modules/nav/nav":75,"./cb/modules/notifications/notifications":80,"./cb/modules/store/store":85,"./cb/socket":88,"index":57,"jquery-browserify":14}],96:[function(require,module,exports){
+},{"./cb/models":71,"./cb/modules/config/config":72,"./cb/modules/developer/developer":78,"./cb/modules/nav/nav":81,"./cb/modules/notifications/notifications":86,"./cb/modules/store/store":91,"./cb/socket":94,"index":63,"jquery-browserify":14}],102:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -34983,7 +35380,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":64,"./backbone-cb-model":98,"./backbone-cb-model-mixin":97,"./backbone-cb-views":99,"./backbone-notify":103,"./backbone-relational":104,"./backbone.stickit":108,"./backbone.trackit.js":109,"backbone":3,"backbone-cocktail":100,"backbone-deferred":101,"backbone-io":102,"backbone.babysitter":1,"backbone.marionette":105,"backbone.marionette.subrouter":106,"backbone.modal":107,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],97:[function(require,module,exports){
+},{"../../cb/misc/relational-models":70,"./backbone-cb-model":104,"./backbone-cb-model-mixin":103,"./backbone-cb-views":105,"./backbone-notify":109,"./backbone-relational":110,"./backbone.stickit":114,"./backbone.trackit.js":115,"backbone":3,"backbone-cocktail":106,"backbone-deferred":107,"backbone-io":108,"backbone.babysitter":1,"backbone.marionette":111,"backbone.marionette.subrouter":112,"backbone.modal":113,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],103:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35081,7 +35478,7 @@ module.exports = {
 
 
 
-},{}],98:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -35130,7 +35527,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],99:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35207,7 +35604,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],100:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -35310,7 +35707,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":19}],101:[function(require,module,exports){
+},{"underscore":19}],107:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -35668,7 +36065,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],102:[function(require,module,exports){
+},{"backbone":3,"q":16}],108:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -35865,7 +36262,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":18,"underscore":19}],103:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":18,"underscore":19}],109:[function(require,module,exports){
 
 //var notify = require('notify');
 
@@ -35919,7 +36316,7 @@ Backbone.Notify.Error = Backbone.Notify.Notification.extend({
         this.stickit();
     }
 });
-},{"./templates/error.html":110,"./templates/notification.html":111}],104:[function(require,module,exports){
+},{"./templates/error.html":116,"./templates/notification.html":117}],110:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -37918,7 +38315,7 @@ Backbone.Notify.Error = Backbone.Notify.Notification.extend({
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":19}],105:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],111:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -40384,7 +40781,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],106:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],112:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -40497,7 +40894,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":105,"backbone":3,"underscore":19}],107:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":111,"backbone":3,"underscore":19}],113:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -40994,7 +41391,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":105,"backbone":3,"underscore":19}],108:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":111,"backbone":3,"underscore":19}],114:[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -41770,7 +42167,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":19}],109:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],115:[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -41963,7 +42360,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],110:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -41975,7 +42372,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbn-modal__topbar\">\n    <h3 class=\"name bbn-modal__title\">Error</h3>\n</div>\n<div class=\"bbn-modal__section\">\n    <ul>\n        <li class=\"message\"></li>\n        <li class=\"response\"></li>\n    </ul>\n</div>\n<div class=\"bbn-modal__bottombar\">\n    <a href=\"#\" id=\"close-button\" class=\"bbn-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],111:[function(require,module,exports){
+},{"hbsfy/runtime":13}],117:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -41987,7 +42384,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbn-modal__topbar\">\n    <h3 class=\"bbn-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbn-modal__section\">\n    <ul>\n        <li><label>Device [friendly] name</label></li>\n        <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n    </ul>\n</div>\n<div class=\"bbn-modal__bottombar\">\n    <a href=\"#\" id=\"submit-button\" class=\"bbn-button\">Install Device</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbn-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],112:[function(require,module,exports){
+},{"hbsfy/runtime":13}],118:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -43949,4 +44346,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[95])
+},{"jquery":15}]},{},[101])

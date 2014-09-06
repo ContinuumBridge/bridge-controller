@@ -2,87 +2,9 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-require('../components/numbers');
-require('./device_permissions/views');
+require('../../../components/numbers');
 
-CBApp.Components.InstallsPermittedField = CBApp.Components.NumberField.extend({
-
-    initialize: function() {
-
-    },
-
-    getContent: function() {
-
-        console.log('InstallsPermittedField getContent');
-        return this.model.get('installs_permitted');
-    },
-
-    increment: function() {
-
-        this.model.changeInstallsPermitted(1);
-    },
-
-    decrement: function() {
-
-        this.model.changeInstallsPermitted(-1);
-    },
-
-    /*
-    remove: function() {
-
-        CBApp.Components.InstallsPermittedField.prototype.remove.apply(this);
-    },
-
-    setModel: function(model) {
-
-        this.undelegateEvents();
-        this.model = model;
-        this.delegateEvents();
-    },
-    */
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-    }
-});
-
-CBApp.StaffAppView = Marionette.ItemView.extend({
-
-    tagName: 'table',
-    template: require('./templates/staffApp.html'),
-
-    bindings: {
-        '.app-id': {
-            observe: [],
-            onGet: function() {
-                return "App ID: " + this.model.get('id');
-            }
-        }
-    },
-
-    licenceBindings: {
-        '.licence-id': {
-            observe: [],
-            onGet: function() {
-                //return this.model.get('licence').get('id');
-                return "Licence ID: " + this.licence.get('id');
-            }
-        }
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licence) {
-            this.stickit(this.licence, this.licenceBindings);
-        }
-    }
-});
-
-CBApp.AppView = Marionette.ItemView.extend({
+var AppView = module.exports.AppView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -167,12 +89,7 @@ CBApp.AppView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.InstallAppView = CBApp.AppView.extend({
-
-    template: require('./templates/installApp.html'),
-});
-
-CBApp.AppListView = Marionette.CompositeView.extend({
+var AppListView = module.exports.AppListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appSection.html'),
     itemView: CBApp.AppView,

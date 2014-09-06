@@ -95,11 +95,25 @@ function DjangoBackbone(djangoURL) {
     backboneSocket.read(function(req, res) {
 
         // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
-        console.log('request model is', req.model);
-        var requestURL = (req.model.id) ? djangoURL + req.model.id
+        console.log('request is', Object.keys(req));
+        console.log('request options', req.options);
+        var baseRequestURL = (req.model.id) ? djangoURL + req.model.id
             //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
             : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
+        // Translate filters from backbone to tastypie
+        /*
+        var filters, filtersString;
+        if ((filters = req.options.data) == true) {
+            for (var key in filters) {
+                var filterString = key + "=" + filters[key];
+                filtersString += filtersString ? "&" + filterString : "?" + filterString;
+            };
+        }
+        var requestURL = filtersString ? baseRequestURL + filtersString : filtersString;
+        */
+        var requestURL = baseRequestURL;
+        console.log('requestURL is', requestURL);
         var djangoOptions = {
             method: "get",
             headers: {

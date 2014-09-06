@@ -63,17 +63,6 @@ class CBIDResourceMixin(ModelResource):
         resource_name = 'cbid_resource_mixin'
 
 
-class UserObjectsResource(CBResource):
-
-    """ Allows API access to objects which have the logged in user in their user field """
-
-    class Meta(CBResource.Meta):
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
-        authentication = HTTPHeaderSessionAuthentication()
-        authorization = UserObjectsOnlyAuthorization()
-
-
 class ClientObjectsResource(CBResource):
 
     """ Allows API access to objects which have the logged in client in their client field """

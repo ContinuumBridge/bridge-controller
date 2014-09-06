@@ -43,11 +43,12 @@ function deviceDiscovery(message) {
                     queryArray.push(matchField + '=' + discoveredDevice[matchField]);
                 }
             });
-            var deviceQueryURL = Bridge.DJANGO_URL + "device/" + '?' + queryArray.join('&');
+            var deviceQueryURL = this.config.djangoURL + "device/" + '?' + queryArray.join('&');
 
             var address = discoveredDevice.address || discoveredDevice.mac_addr;
             console.log('discovered address is', address);
             // Make a request to Django to get session data
+            logger.log('debug', 'deviceQueryURL', deviceQueryURL);
             rest.get(deviceQueryURL, djangoOptions).on('complete', function(data, response) {
 
                 var deviceInstall = {};
@@ -60,8 +61,9 @@ function deviceDiscovery(message) {
                 // If all the discoveredDevices have been iterated over, resolve the promise
                 if (discoveredDeviceInstalls.length >= discoveredDevices.length) {
 
+                    body.body = discoveredDeviceInstalls;
                     console.log('devices is', discoveredDeviceInstalls);
-                    message.set('body', discoveredDeviceInstalls);
+                    message.set('body', body);
                     logger.log('debug', 'message at device_discovery exit is', message);
                     deferredDiscoveredDeviceInstalls.resolve(message);
                 }

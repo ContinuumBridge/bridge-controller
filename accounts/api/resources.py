@@ -8,7 +8,7 @@ from accounts.models import CBUser
 from bridges.models import BridgeControl
 from apps.models import AppLicence
 
-from apps.api.resources import AppLicenceResource
+from apps.api.resources import AppLicenceResource, AppOwnershipResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
@@ -39,6 +39,12 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
     app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
                      attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
                      null=True, readonly=True, nonmodel=True)
+
+    '''
+    app_ownerships = cb_fields.ToManyThroughField(AppOwnershipResource,
+                                                attribute=lambda bundle: bundle.obj.get_app_ownerships() or bundle.obj.appownership_set, full=True,
+                                                null=True, readonly=True, nonmodel=True)
+    '''
 
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'
