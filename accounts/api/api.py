@@ -1,6 +1,6 @@
 from tastypie.api import Api
 from accounts.api.resources import UserResource, CurrentUserResource, UserAuthResource
-from apps.api.resources import AppResource, AppInstallResource, AppDevicePermissionResource, AppLicenceResource
+from apps.api.resources import AppResource, AppInstallResource, AppDevicePermissionResource, AppLicenceResource, AppOwnershipResource, AppConnectionResource
 from bridges.api.resources import BridgeResource
 from devices.api.resources import DeviceResource, DeviceInstallResource
 from adaptors.api.resources import AdaptorResource, AdaptorDeviceCompatibilityResource
@@ -16,6 +16,8 @@ v1.register(AdaptorResource())
 v1.register(AdaptorDeviceCompatibilityResource())
 v1.register(AppResource())
 v1.register(AppInstallResource())
+v1.register(AppOwnershipResource())
+v1.register(AppConnectionResource())
 v1.register(AppDevicePermissionResource())
 v1.register(AppLicenceResource())
 v1.register(DeviceResource())

@@ -1,18 +1,21 @@
 
 from tastypie import fields, utils
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource 
 from tastypie.authorization import Authorization
 
 from bridges.api.abstract_resources import ThroughModelResource
 from accounts.api.authorization import UserObjectsOnlyAuthorization
-from apps.models import App, AppInstall, AppDevicePermission, AppLicence#, AppOwnership, AppConnection
+from apps.models import App, AppInstall, AppDevicePermission, AppLicence, AppOwnership, AppConnection
 from apps.api.authorization import AppInstallAuthorization
 #from bridges.api.abstract_resources import CBModelResource
 from bridges.api.abstract_resources import PostMatchMixin
 from bridges.api import cb_fields
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, UserObjectsResource
+from accounts.api.authorization import UserObjectsOnlyAuthorization
+from accounts.api.abstract_resources import UserObjectsResource
+from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource
 from bridges.api.authorization import BridgeObjectsOnlyAuthorization
 
 class AppDevicePermissionResource(PostMatchMixin, CBResource):
@@ -30,7 +33,6 @@ class AppDevicePermissionResource(PostMatchMixin, CBResource):
        post_match = ['app_install', 'device_install']
 
 
-'''
 class AppConnectionResource(UserObjectsResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
@@ -40,15 +42,16 @@ class AppConnectionResource(UserObjectsResource):
         queryset = AppConnection.objects.all()
         resource_name = 'app_connection'
 
+
 class AppOwnershipResource(UserObjectsResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
 
     class Meta(UserObjectsResource.Meta):
+        #authorization = UserObjectsOnlyAuthorization()
         queryset = AppOwnership.objects.all()
         resource_name = 'app_ownership'
-'''
 
 
 class AppLicenceResource(PostMatchMixin, CBResource):

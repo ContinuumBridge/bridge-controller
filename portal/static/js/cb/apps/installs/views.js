@@ -32,7 +32,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
       var data = {};
       var app = this.model.get('app');
       data.name = app.get('name');
-      data.appID = "APPID" + app.get('id');
+      data.appID = "AID" + app.get('id');
       return data;
     },
 

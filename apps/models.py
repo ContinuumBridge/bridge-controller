@@ -10,6 +10,7 @@ from tastypie.exceptions import Unauthorized
 from accounts.models import CBAuth, CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin, CBIDModelMixin
+from clients.models.clients import Client
 from devices.models import Device, DeviceInstall
 
 class App(LoggedModelMixin, CBIDModelMixin):
@@ -34,7 +35,6 @@ class App(LoggedModelMixin, CBIDModelMixin):
         self.modified = timezone.now()
         super(App, self).save(*args, **kwargs)
 
-'''
 
 class AppOwnership(LoggedModelMixin):
 
@@ -46,13 +46,10 @@ class AppOwnership(LoggedModelMixin):
         verbose_name_plural = _('app_ownership')
         app_label = 'apps'
 
-    @property
-    def cbid(self):
-        return ""
 
 class AppConnection(LoggedModelMixin):
 
-    client = models.ForeignKey(CBAuth)
+    client = models.ForeignKey(Client)
     app = models.ForeignKey(App)
 
     class Meta:
@@ -60,7 +57,6 @@ class AppConnection(LoggedModelMixin):
         verbose_name_plural = _('app_connection')
         app_label = 'apps'
 
-'''
 
 class AppLicence(LoggedModelMixin):
 
@@ -82,9 +78,6 @@ class AppLicence(LoggedModelMixin):
             installs.append(install)
         return installs
 
-    @property
-    def cbid(self):
-        return ""
 
 class AppInstall(LoggedModelMixin):
     
@@ -123,7 +116,4 @@ class AppDevicePermission(LoggedModelMixin):
         verbose_name_plural = _('app_device_permissions')
         app_label = 'apps'
 
-    @property
-    def cbid(self):
-        return ""
 

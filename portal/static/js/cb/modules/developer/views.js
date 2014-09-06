@@ -6,54 +6,63 @@ var Backbone = require('backbone-bundle')
 require('../../views/generic_views');
 require('../../views/regions');
 
-require('../../apps/installs/views');
-require('../../apps/licences/views');
-require('../../bridges/views');
-//require('../../devices/views');
-require('../../devices/discovery/views');
-require('../../devices/installs/views');
-require('../../messages/views');
+require('../../apps/ownerships/views');
+
+//var AppViews = require('./apps/views');
 
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
     regions: {
+        appSection: '.app-section',
         clientSection: '.client-section',
     },
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppInstallListView();
+        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.appOwnershipCollection.fetch({
+                data: {
+                    'test': 'Test!'
+                }
+            });
+        }).done();
+        /*
         this.bridgeView = new CBApp.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
-    },
-
-    populateViews: function() {
-
-        var self = this;
+        */
     },
 
     onRender: function() {
 
         var self = this;
 
-        this.appSection.show(this.appInstallListView);
+        this.appSection.show(this.appOwnershipListView);
+        /*
         this.deviceSection.show(this.devicesView);
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
+         */
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        CBApp.getCurrentUser().then(function(currentUser) {
 
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
+            //self.listenToOnce(currentBridge, 'change:current', self.render);
+            var appOwnershipCollection = currentUser.get('appOwnerships');
+            self.appOwnershipListView.setCollection(appOwnershipCollection);
+            self.appOwnershipListView.render();
+            console.log('Developer getCurrentUser', appOwnershipCollection)
+            /*
             var appInstallCollection = currentBridge.get('appInstalls');
             var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
             //liveAppInstallCollection.setQuery({isGhost: false});
+            /*
 
             console.log('liveAppInstallCollection', liveAppInstallCollection );
             self.appInstallListView.setCollection(liveAppInstallCollection);
@@ -67,6 +76,7 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
+             */
         }).done();
     }
 

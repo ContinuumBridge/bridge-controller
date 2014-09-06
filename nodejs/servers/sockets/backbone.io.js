@@ -25,10 +25,12 @@ function BackboneIOServer(config) {
     httpServer.listen(config.port);
 
     var appController = this.appController = new djangoBackbone(config.djangoURL + 'app/');
+    var appConnectionController = this.appConnectioController = new djangoBackbone(config.djangoURL + 'app_connection/');
     var appInstallController = this.appInstallController = new djangoBackbone(config.djangoURL + 'app_install/');
     //var appInstallController = this.appInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net/');
     var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(config.djangoURL + 'app_device_permission/');
     var appLicenceController = this.appLicenceController = new djangoBackbone(config.djangoURL + 'app_licence/');
+    var appOwnershipController = this.appOwnershipController = new djangoBackbone(config.djangoURL + 'app_ownership/');
     //var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
 
     var deviceController = this.deviceController = new djangoBackbone(config.djangoURL + 'device/');
@@ -48,6 +50,7 @@ function BackboneIOServer(config) {
         appInstall: appInstallController,
         appDevicePermission: appDevicePermissionController,
         appLicence: appLicenceController,
+        appOwnership: appOwnershipController,
         bridge: bridgeController,
         bridgeControl: bridgeControlController,
         currentUser: currentUserController,

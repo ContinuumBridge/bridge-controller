@@ -87,9 +87,17 @@ Router.prototype.dispatch = function(message) {
     // Authorization could sit here?
 
     var destination = message.get('destination');
-
-    // Check if this is the client route
-    var clientRoute = new RegExp(this.connection.config.subscriptionAddress + '(.+)?');
+    // Check if the destination is the client route
+    if (message.findDestination(this.connection.config.subscriptionAddress)) {
+        logger.log('debug', 'Push to client');
+        this.connection.toClient.push(message);
+    } else {
+        logger.log('debug', 'Push to router');
+        this.router.parse(destination, [ message ]);
+    }
+    /*
+    var clientRoute = new RegExp('^' + this.connection.config.subscriptionAddress + '(.+)?');
+    logger.log('debug', 'subscriptionAddress is', this.connection.config.subscriptionAddress);
     logger.log('debug', 'clientRoute is', clientRoute);
     var destination = String(message.get('destination'));
     if (destination.match(clientRoute)) {
@@ -99,6 +107,7 @@ Router.prototype.dispatch = function(message) {
         logger.log('debug', 'Push to router');
         this.router.parse(destination, [ message ]);
     }
+    */
 }
 
 /*

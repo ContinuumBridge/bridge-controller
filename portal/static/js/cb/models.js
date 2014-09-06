@@ -8,10 +8,13 @@ require('./components/buttons');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
+require('./apps/connections/models');
 require('./apps/installs/models');
 require('./apps/licences/models');
+require('./apps/ownerships/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
+require('./clients/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
@@ -26,11 +29,15 @@ CBApp.addInitializer(function () {
   //data
   CBApp.appCollection = new CBApp.AppCollection();
 
+  CBApp.appConnectionCollection = new CBApp.AppConnectionCollection();
+
   CBApp.appInstallCollection = new CBApp.AppInstallCollection();
   //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
   CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
 
   CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
+
+  CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 

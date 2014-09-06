@@ -90,6 +90,12 @@ class CBUser(CBAuth, AuthPasswordMixin):
             app_licences.append(app_licence)
         return app_licences
 
+    def get_app_ownerships(self):
+        app_ownerships = []
+        for app_ownership in self.appownership_set.filter():
+            app_ownerships.append(app_ownership)
+        return app_ownerships
+
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.pk)
 
