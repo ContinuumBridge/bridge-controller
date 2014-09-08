@@ -25,7 +25,8 @@ Django.prototype.request = function(request, sessionID) {
         }
     };
 
-    var requestURL = this.connection.config.djangoRootURL + request.url;
+    var resource = request.url || request.resource;
+    var requestURL = this.connection.config.djangoRootURL + resource;
 
     console.log('Django request', requestURL);
 
@@ -55,11 +56,16 @@ Django.prototype.messageRequest = function(message) {
     var self = this;
 
     var requestData = message.get('body');
+    var resource = requestData.uri || requestData.resource;
     var sessionID = message.get('sessionID');
 
     this.request(requestData, sessionID).then(function(data) {
         // Success
-        message.set('body', data);
+        var responseBody = {
+            resource: resource,
+            body: data
+        }
+        message.set('body', responseBody);
         message.return('cb');
         logger.log('debug', 'Returning message', message.toJSONString());
         self.connection.router.dispatch(message);

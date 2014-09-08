@@ -101,18 +101,26 @@ function DjangoBackbone(djangoURL) {
             //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
             : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
+        //console.log('config is', req.socket.manager);
         // Translate filters from backbone to tastypie
-        /*
-        var filters, filtersString;
-        if ((filters = req.options.data) == true) {
+        var filters;
+        var filtersString = "";
+        if (!!(filters = req.options.data) == true) {
             for (var key in filters) {
-                var filterString = key + "=" + filters[key];
+                if (key == 'user' && filters[key] == 'currentUser') {
+                    //var filterString = key = "=" +
+                } else {
+                    var filterString = key + "=" + filters[key];
+                }
                 filtersString += filtersString ? "&" + filterString : "?" + filterString;
             };
         }
-        var requestURL = filtersString ? baseRequestURL + filtersString : filtersString;
-        */
-        var requestURL = baseRequestURL;
+        console.log('filtersString is', filtersString);
+        console.log('filtersString is', !!filtersString);
+        console.log('baseRequestURL is', baseRequestURL);
+        var requestURL = baseRequestURL + filtersString;
+        //var requestURL = baseRequestURL;
+
         console.log('requestURL is', requestURL);
         var djangoOptions = {
             method: "get",

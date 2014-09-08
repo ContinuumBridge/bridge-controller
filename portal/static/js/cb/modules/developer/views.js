@@ -7,6 +7,9 @@ require('../../views/generic_views');
 require('../../views/regions');
 
 require('../../apps/ownerships/views');
+require('../../apps/connections/views');
+
+require('../../clients/views');
 
 //var AppViews = require('./apps/views');
 
@@ -23,13 +26,13 @@ module.exports.Main = Marionette.Layout.extend({
 
         this.appOwnershipListView = new CBApp.AppOwnershipListView();
 
+        this.clientListView = new CBApp.ClientListView();
+
         CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({
-                data: {
-                    'test': 'Test!'
-                }
-            });
+            CBApp.appOwnershipCollection.fetch({ data: { 'user': 'current' }});
+            //CBApp.clientCollection.fetch()
         }).done();
+
         /*
         this.bridgeView = new CBApp.BridgeListView();
         // View which manages device installs and device discovery

@@ -20,6 +20,7 @@ var Portal = function(port, djangoRootURL) {
 
     this.socketServer.sockets.on('connection', function (socket) {
 
+        socket.cats = "Cats!";
         socket.getConfig = function() {
             var config = socket.config || socket.handshake.config;
             console.log('getConfig ran');
