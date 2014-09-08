@@ -39,6 +39,8 @@ CBApp.addInitializer(function () {
 
   CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
 
+  CBApp.clientCollection = new CBApp.ClientCollection();
+
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();

@@ -2,11 +2,11 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-CBApp.DeviceInstallView = Marionette.ItemView.extend({
+CBApp.ClientView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
-    template: require('./templates/deviceInstall.html'),
+    template: require('./templates/client.html'),
 
     events: {
         'click .uninstall-button': 'uninstall'
@@ -31,8 +31,8 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
         return enabled;
     },
 
-    uninstall: function() {
-        this.model.uninstall();
+    delete: function() {
+        this.model.delete();
     },
 
     onRender: function() {
@@ -41,23 +41,21 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
+CBApp.ClientListView = Marionette.CompositeView.extend({
 
-    template: require('./templates/deviceInstallSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
-    itemViewContainer: '.device-list',
+    template: require('./templates/clientSection.html'),
+    itemView: CBApp.ClientView,
+    itemViewContainer: '.client-list',
 
     emptyView: CBApp.ListItemLoadingView,
 
 
     events: {
-        'click .discover-devices-button': 'discoverDevices'
+        'click .add-client': 'addClient'
     },
 
-    discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+    addClient : function() {
+        CBApp.Config.controller.addClient();
     },
 
     onRender : function() {

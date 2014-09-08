@@ -19,7 +19,7 @@ var PortalConnection = function(socket, serverConfig) {
 
     socket.getConfig().then(function(config) {
 
-        self.config = config;
+        self.config = socket.config = config;
 
         console.log('Portal config is', config);
         // Router and django must be defined

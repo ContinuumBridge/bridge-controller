@@ -33,12 +33,6 @@ module.exports.Main = Marionette.Layout.extend({
         }).done();
     },
 
-    populateViews: function() {
-
-        var self = this;
-        //this.render();
-    },
-
     onRender: function() {
 
         var self = this;
