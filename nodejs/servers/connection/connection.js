@@ -40,8 +40,8 @@ Connection.prototype.setupSocket = function() {
         logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
 
-        message.filterDestination(self.config.publicationAddresses);
-        message.conformSource(self.config.subscriptionAddress);
+        //message.filterDestination(self.config.publicationAddresses);
+        //message.conformSource(self.config.subscriptionAddress);
 
         logger.log('debug', 'socket message config', self.config);
         logger.log('debug', 'socket message', message);
