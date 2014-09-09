@@ -15,6 +15,7 @@ require('./apps/ownerships/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
 require('./clients/models');
+require('./clients/controls/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
@@ -40,6 +41,8 @@ CBApp.addInitializer(function () {
   CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
 
   CBApp.clientCollection = new CBApp.ClientCollection();
+
+  CBApp.clientControlCollection = new CBApp.ClientControlCollection();
 
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 

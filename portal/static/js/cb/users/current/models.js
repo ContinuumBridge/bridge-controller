@@ -138,6 +138,17 @@ CBApp.CurrentUser = CBApp.User.extend({
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
             initializeCollection: 'appOwnershipCollection'
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'clientControls',
+            keySource: 'client_controls',
+            keyDestination: 'client_controls',
+            relatedModel: 'CBApp.ClientControl',
+            collectionType: 'CBApp.ClientControlCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'clientControlCollection'
         }
     ]
 }, { modelType: "currentUser" });

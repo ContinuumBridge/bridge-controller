@@ -35,7 +35,8 @@ Django.prototype.request = function(request, sessionID) {
         if (response && response.statusCode) {
             //console.log('Django response', response);
             if (response.statusCode == 200) {
-                deferred.resolve(data);
+                logger.log('debug', 'Message response in request is', response);
+                deferred.resolve(data, response);
             } else if (response.statusCode == 404) {
                 var error = new Errors.Unauthorized('Authorization with Django failed');
                 deferred.reject(error);
@@ -56,11 +57,12 @@ Django.prototype.messageRequest = function(message) {
     var self = this;
 
     var requestData = message.get('body');
-    var resource = requestData.uri || requestData.resource;
+    var resource = requestData.url || requestData.resource;
     var sessionID = message.get('sessionID');
 
-    this.request(requestData, sessionID).then(function(data) {
+    this.request(requestData, sessionID).then(function(data, response) {
         // Success
+        logger.log('debug', 'Message response in messageRequest is', response);
         var responseBody = {
             resource: resource,
             body: data

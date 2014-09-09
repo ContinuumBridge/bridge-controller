@@ -29,7 +29,7 @@ CBApp.ClientControl = Backbone.Deferred.Model.extend({
             initializeCollection: 'clientCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
-                key: 'clients',
+                key: 'clientControls',
                 collectionType: 'CBApp.ClientCollection',
                 includeInJSON: false,
                 initializeCollection: 'clientCollection',

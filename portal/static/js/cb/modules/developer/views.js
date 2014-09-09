@@ -10,6 +10,7 @@ require('../../apps/ownerships/views');
 require('../../apps/connections/views');
 
 require('../../clients/views');
+require('../../clients/controls/views');
 
 //var AppViews = require('./apps/views');
 
@@ -26,10 +27,11 @@ module.exports.Main = Marionette.Layout.extend({
 
         this.appOwnershipListView = new CBApp.AppOwnershipListView();
 
-        this.clientListView = new CBApp.ClientListView();
+        this.clientControlListView = new CBApp.ClientControlListView();
 
         CBApp.getCurrentUser().then(function(currentUser) {
             CBApp.appOwnershipCollection.fetch({ data: { 'user': 'current' }});
+            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
             //CBApp.clientCollection.fetch()
         }).done();
 
@@ -46,6 +48,7 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appSection.show(this.appOwnershipListView);
+        this.clientSection.show(this.clientControlListView);
         /*
         this.deviceSection.show(this.devicesView);
         this.devicesView.render();
@@ -59,7 +62,12 @@ module.exports.Main = Marionette.Layout.extend({
             var appOwnershipCollection = currentUser.get('appOwnerships');
             self.appOwnershipListView.setCollection(appOwnershipCollection);
             self.appOwnershipListView.render();
-            console.log('Developer getCurrentUser', appOwnershipCollection)
+            console.log('Developer getCurrentUser', appOwnershipCollection);
+
+            var clientControlCollection = currentUser.get('clientControls');
+            self.clientControlListView.setCollection(clientControlCollection);
+            self.clientControlListView.render();
+
             /*
             var appInstallCollection = currentBridge.get('appInstalls');
             var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
