@@ -1,6 +1,7 @@
 
 require('../../components/switches');
 
+/*
 CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
@@ -12,13 +13,14 @@ CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
 
     onClick: function() {
 
-        this.model.togglePermission();
+        this.model.toggleConnection();
     },
 
     onRender: function() {
         this.stickit();
     }
 });
+*/
 
 CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
 
@@ -30,7 +32,7 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.permissionSwitch = new CBApp.Components.PermissionSwitch({
+        this.permissionSwitch = new CBApp.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -41,12 +43,6 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
         this.model.on('unsavedChanges sync', function(e) {
             self.model.trigger('change:change');
         }, this);
-    },
-
-    togglePermission: function() {
-
-        console.log('togglePermission was called');
-        //var adp = this.deviceInstall.getAppPermission();
     },
 
     onRender: function() {

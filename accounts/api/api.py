@@ -4,7 +4,7 @@ from apps.api.resources import AppResource, AppInstallResource, AppDevicePermiss
 from bridges.api.resources import BridgeResource
 from clients.api.resources import ClientResource, ClientControlResource
 from devices.api.resources import DeviceResource, DeviceInstallResource
-from adaptors.api.resources import AdaptorResource, AdaptorDeviceCompatibilityResource
+from adaptors.api.resources import AdaptorResource, AdaptorOwnershipResource, AdaptorDeviceCompatibilityResource
 #from bridges.api.bridge_resources import CurrentBridgeResource, BridgeControlResource, BridgeAuthResource
 from .bridge_resources import BridgeControlResource
 
@@ -15,6 +15,7 @@ v1.register(UserAuthResource())
 
 v1.register(AdaptorResource())
 v1.register(AdaptorDeviceCompatibilityResource())
+v1.register(AdaptorOwnershipResource())
 v1.register(AppResource())
 v1.register(AppInstallResource())
 v1.register(AppOwnershipResource())

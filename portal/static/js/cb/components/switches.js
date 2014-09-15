@@ -35,4 +35,23 @@ CBApp.Components.Switch = Marionette.ItemView.extend({
 
         return "left theme-green animate toggle-switch " + activation + " " + enabled;
     }
-})
+});
+
+CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
+
+    template: require('./templates/switch.html'),
+
+    getActivation: function() {
+
+        return this.model.isNew() ? '' : 'active';
+    },
+
+    onClick: function() {
+
+        this.model.toggleConnection();
+    },
+
+    onRender: function() {
+        this.stickit();
+    }
+});

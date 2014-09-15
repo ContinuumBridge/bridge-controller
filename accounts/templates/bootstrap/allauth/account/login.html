@@ -7,10 +7,10 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
+{% block sign_in %}<li class="active"><a href="{% url 'account_login' %}"><h3>Sign In</h3></a></li>{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Sign In" %}</h1>
 
 {% if socialaccount.providers  %}
 <p>{% blocktrans with site.name as site_name %}Please sign in with one

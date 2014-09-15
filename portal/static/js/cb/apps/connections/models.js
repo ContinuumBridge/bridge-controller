@@ -1,13 +1,9 @@
 
-CBApp.AppConnection = Backbone.Deferred.Model.extend({
+require('../../common/models');
 
-    idAttribute: 'id',
+CBApp.AppConnection = CBApp.ConnectionModel.extend({
 
     backend: 'appConnection',
-
-    initialize: function() {
-        this.startTracking();
-    },
 
     relations: [
         {

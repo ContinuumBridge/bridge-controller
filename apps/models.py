@@ -43,7 +43,7 @@ class AppOwnership(LoggedModelMixin):
 
     class Meta:
         verbose_name = _('app_ownership')
-        verbose_name_plural = _('app_ownership')
+        verbose_name_plural = _('app_ownerships')
         app_label = 'apps'
 
 
@@ -54,7 +54,7 @@ class AppConnection(LoggedModelMixin):
 
     class Meta:
         verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connection')
+        verbose_name_plural = _('app_connections')
         app_label = 'apps'
 
 
@@ -69,7 +69,7 @@ class AppLicence(LoggedModelMixin):
 
     class Meta:
         verbose_name = _('app_licence')
-        verbose_name_plural = _('app_licence')
+        verbose_name_plural = _('app_licences')
         app_label = 'apps'
 
     def get_installs(self):

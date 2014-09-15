@@ -1,0 +1,134 @@
+{% load url from future %}
+
+
+{% load straight_include %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf8">
+	<title>Continuum Bridge</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-formhelpers.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/nav.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/sign-in.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.modal.theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.notification.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.notification.theme.css">
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ionicons.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/backbone.toggleswitch.css">
+	<!--<link rel="stylesheet" href="stylesheets/index.css" type="text/css" media="screen" />-->
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/lib/animate.css" media="screen, projection">
+
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/topcoat-mobile-light.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/portal.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/app.css">
+	<!-- Scripts -->
+    <script type="application/javascript" charset="utf-8">
+      HOST_ADDRESS = '{{ host_address }}';
+      PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
+      {% if data %}
+      app = {loaded: true};
+      {% endif %}
+    </script>
+
+
+</head>
+<body id="app" class="pull_top">
+    <div id="nav-region"  class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+        <div class="container">
+            <div class="navbar-header">
+                    <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand"><strong>CB</strong></a>
+            </div>
+            </li></ul>
+                <div id="navbar-right" class="nav navbar-nav navbar-right">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="notifications-region">
+        <div id="top-region"></div>
+    </div>
+    <div id="modals-region"></div>
+
+    <div id="portal-body" class="container">
+        <div id="main-region">
+            <div id="sign_in2">
+                <div class="container">
+                    <div class="row login">
+                        <div class="col-sm-6 left_box hidden-sm hidden-xs">
+                            <img src="{{ STATIC_URL }}img/continuum_bridge.jpg" class="cb-image image-centred" width="480">
+                        </div>
+                        <div class="col-sm-6 signin_box">
+                            <div class="box">
+                                <ul class="nav nav-tabs nav-justified" role="tablist">
+                                {% block sign_in %}
+                                <li><a href="{% url 'account_login' %}"><h3>Sign In</h3></a></li>
+                                {% endblock %}
+                                {% block sign_up %}
+                                <li><a href="{% url 'account_signup' %}"><h3>Sign Up</h3></a></li>
+                                {% endblock %}
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="box_cont">
+
+                                        <div class="form">
+
+                                            {% block body %}
+
+                                            {% if messages %}
+                                            <div>
+                                              <strong>Messages:</strong>
+                                              <ul>
+                                            {% for message in messages %}
+                                            <li>{{message}}</li>
+                                            {% endfor %}
+                                              </ul>
+                                            </div>
+                                            {% endif %}
+
+
+                                            {% block content %}
+                                            {% endblock %}
+                                            {% endblock %}
+                                            {% block extra_body %}
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+<html>
+  <head>
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+}
+  </body>
+</html>
