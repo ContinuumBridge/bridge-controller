@@ -63,6 +63,14 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
 
         var self = this;
 
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            var clientControls = currentUser.get('clientControls');
+            self.appConnectionListView.setCollection(clientControls);
+            var $clientConnections = self.$('.client-connections');
+            self.appConnectionListView.setElement($clientConnections).render();
+        }).done();
+
         console.log('AppOwnershipView render', this);
         this.stickit();
         this.stickit(this.app, this.appBindings);

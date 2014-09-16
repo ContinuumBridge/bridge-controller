@@ -2,8 +2,9 @@
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-require('../device_permissions/views');
+require('../../components/switches');
 
+/*
 CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
@@ -15,13 +16,14 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
 
     onClick: function() {
 
-        this.model.togglePermission();
+        this.model.toggleConnection();
     },
 
     onRender: function() {
         this.stickit();
     }
 });
+*/
 
 CBApp.AppConnectionView = Marionette.ItemView.extend({
 
@@ -33,7 +35,7 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.connectionSwitch = new CBApp.Components.PermissionSwitch({
+        this.connectionSwitch = new CBApp.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -50,11 +52,11 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
 
         console.log('render AppDevicePermissionView', this);
         this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
-        this.permissionSwitch.setElement(this.$('.permission-switch')).render();
+        this.connectionSwitch.setElement(this.$('.connection-switch')).render();
     }
 });
 
-CBApp.AppConnectionListView = Marionette.CompositeView.extend({
+CBApp.AppConnectionListView = Marionette.CollectionView.extend({
 
     //template: require('./templates/appConnectionSection.html'),
     tagName: 'ul',
@@ -62,20 +64,15 @@ CBApp.AppConnectionListView = Marionette.CompositeView.extend({
     itemView: CBApp.AppConnectionView,
     //itemViewContainer: '.connection-list',
 
-    //emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #install-apps': 'showLicences'
-    },
-
     initialize: function(options) {
 
         this.appOwnership = options.appOwnership;
         this.app = this.appOwnership.get('app');
     },
 
-    buildItemView: function(client, ItemViewType, itemViewOptions){
+    buildItemView: function(clientControl, ItemViewType, itemViewOptions){
 
+        var client = clientControl.get('client');
         //if (deviceInstall.isNew()) return void 0;
         console.log('buildItemView', client);
         // Create or fetch an app device permission
@@ -85,7 +82,7 @@ CBApp.AppConnectionListView = Marionette.CompositeView.extend({
         });
         // Set the permission field depending on whether the model is new or not
         var connected = appConnection.isNew() ? false : true;
-        appConnection.set('connected', permission);
+        appConnection.set('connected', connected);
         appConnection.restartTracking();
 
         console.log('appConnection is', appConnection);
@@ -100,14 +97,5 @@ CBApp.AppConnectionListView = Marionette.CompositeView.extend({
         // Add the app install model
         view.client = client;
         return view;
-    },
-
-    showLicences: function() {
-        console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
-    },
-
-    onRender : function(){
-
     }
 });

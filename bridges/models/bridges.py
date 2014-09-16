@@ -90,6 +90,6 @@ class BridgeControl(LoggedModelMixin):
         verbose_name_plural = _('bridgecontrols')
         app_label = 'bridges'
 
-    bridge = models.ForeignKey(Bridge)
-    user = models.ForeignKey(CBUser)
+    bridge = models.ForeignKey(Bridge, related_name='bridge_controls')
+    user = models.ForeignKey(CBUser, related_name='bridge_controls')
 

@@ -59,7 +59,7 @@ class CBUserManager(PolymorphicBaseUserManager):
         return u
 
 
-class CBUser(CBAuth, AuthPasswordMixin):
+class CBUser(AuthPasswordMixin, CBAuth):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
@@ -68,7 +68,7 @@ class CBUser(CBAuth, AuthPasswordMixin):
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
+    #bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
 
     objects = CBUserManager()
 

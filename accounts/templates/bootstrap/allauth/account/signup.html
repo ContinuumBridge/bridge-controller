@@ -6,14 +6,23 @@
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
+{% block sign_up %}<li class="active"><a href="{% url 'account_signup' %}"><h3>Sign Up</h3></a></li>{% endblock %}
+
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
-    
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
-        
+
 <form id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
-  {{ form|bootstrap }}
+  <div>
+      <div class="first-name">
+          {{ form.first_name|bootstrap }}
+      </div>
+      <div class="last-name">
+          {{ form.last_name|bootstrap }}
+      </div>
+  </div>
+  {{ form.email|bootstrap }}
+  {{ form.password1|bootstrap }}
+  {{ form.password2|bootstrap }}
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
   {% endif %}

@@ -5,6 +5,7 @@ from django.conf import settings
 
 from django.utils import timezone
 
+from accounts.models import CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
@@ -33,6 +34,17 @@ class Adaptor(LoggedModelMixin):
 
         self.modified = timezone.now()
         super(Adaptor, self).save(*args, **kwargs)
+
+
+class AdaptorOwnership(LoggedModelMixin):
+
+    user = models.ForeignKey(CBUser)
+    adaptor = models.ForeignKey(Adaptor, related_name='adaptor_ownerships')
+
+    class Meta:
+        verbose_name = _('adaptor_ownership')
+        verbose_name_plural = _('adaptor_ownerships')
+        app_label = 'adaptors'
 
 
 class AdaptorCompatibility(LoggedModelMixin):
