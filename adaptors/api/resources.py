@@ -18,7 +18,7 @@ class AdaptorResource(RelatedUserObjectsResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
         resource_name = 'adaptor'
-        user_related_through = 'adaptor_ownership'
+        user_related_through = 'adaptor_ownerships'
 
 
 class AdaptorOwnershipResource(UserObjectsResource):

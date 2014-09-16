@@ -56,9 +56,10 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         queryset = Bridge.objects.all()
         authorization = BridgeAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
+        fields = ['id', 'cbid', 'email', 'description', 'date_joined', 'last_login']
         list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
+        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
+        user_related_through = 'bridge_controls'
         resource_name = 'bridge'
 
 
@@ -112,7 +113,7 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         bundle.objects_saved.add(self.create_identifier(bundle.obj))
 
         # ADDED Create a bridge_control to the current user if the bridge is being created
-        if bundle.obj.password:
+        if bundle.obj.pk:
             bundle = self.create_bridge_control(bundle)
 
         # Now pick up the M2M bits.

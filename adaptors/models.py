@@ -39,7 +39,7 @@ class Adaptor(LoggedModelMixin):
 class AdaptorOwnership(LoggedModelMixin):
 
     user = models.ForeignKey(CBUser)
-    adaptor = models.ForeignKey(Adaptor, related_name='adaptor_ownership')
+    adaptor = models.ForeignKey(Adaptor, related_name='adaptor_ownerships')
 
     class Meta:
         verbose_name = _('adaptor_ownership')

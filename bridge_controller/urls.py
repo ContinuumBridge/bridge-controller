@@ -19,6 +19,11 @@ from clients.api.api import v1 as clients_v1
 
 from marketing.views import HomeView
 
+#from .events import autodiscover
+
+# Discover events in all apps
+#autodiscover()
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'bridge_controller.views.home', name='home'),

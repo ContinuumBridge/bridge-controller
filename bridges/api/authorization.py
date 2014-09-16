@@ -2,6 +2,7 @@
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
+from accounts.api.authorization import RelatedUserObjectsOnlyAuthorization
 from accounts.models import CBAuth, CBUser
 from bridges.models import BridgeControl
 
@@ -178,7 +179,7 @@ def get_bridges(bundle):
         bridges.append(requester)
     return bridges
 
-class BridgeAuthorization(ReadOnlyAuthorization):
+class BridgeAuthorization(RelatedUserObjectsOnlyAuthorization):
     """
     Authorization for accessing Bridge objects
     """
@@ -198,6 +199,7 @@ class BridgeAuthorization(ReadOnlyAuthorization):
         # Sorry user, no deletes for you!)
         raise Unauthorized("You may only delete one bridge at a time.")
 
+    '''
     def delete_detail(self, object_list, bundle):
         bridge = bundle.obj
         requester_bridges = get_bridges(bundle)
@@ -205,6 +207,7 @@ class BridgeAuthorization(ReadOnlyAuthorization):
         if not bridge in requester_bridges:
             raise Unauthorized("You must control a bridge to delete it")
         return True
+    '''
 
 
 class AuthAuthorization(ReadOnlyAuthorization):
