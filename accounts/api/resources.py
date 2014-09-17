@@ -33,7 +33,7 @@ class UserBridgeControlResource(ThroughModelResource):
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
-                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     app_licences = cb_fields.ToManyThroughField(AppLicenceResource,

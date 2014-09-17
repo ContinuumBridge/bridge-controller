@@ -3,10 +3,10 @@ Django==1.6.2
 South==0.7.6
 argparse==1.2.1
 distribute
-django-allauth==0.18.0
+django-allauth==0.13.0
 django-annoying==0.7.7
 django-avatar==1.0.5
-django-bootstrap-form
+django-bootstrap-form==2.05
 django-braces==1.2.2
 django-classy-tags==0.4
 django-countries==1.5
@@ -39,9 +39,9 @@ Pillow==1.6.0
 psycopg2==2.4.5
 
 # Model visualisation
-#pygraphviz==1.2
-#pyparsing==1.5.7
-#pydot==1.0.2
+pygraphviz==1.2
+pyparsing==1.5.7
+pydot==1.0.2
 
 python-dateutil==2.1
 pystache==0.3.1

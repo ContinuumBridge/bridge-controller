@@ -72,7 +72,7 @@ class Bridge(CBAuth, AuthKeyMixin):
 
     def get_controllers(self):
         controllers = []
-        for bridge_control in self.bridgecontrol_set.filter():
+        for bridge_control in self.bridge_controls.filter():
             controllers.append(bridge_control)
         return controllers
 
