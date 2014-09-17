@@ -60,8 +60,8 @@ FACEBOOK_APP_SECRET = 'b2d0fcf6fbdee2e0ac5893b77666ff50'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mark.claydon@continuumbridge.com'
-EMAIL_HOST_PASSWORD = 'Metro130'
+EMAIL_HOST_USER = 'no-reply@continuumbridge.com'
+EMAIL_HOST_PASSWORD = 'W@yt00f@r'
 
 SESSION_COOKIE_HTTPONLY = False
 
