@@ -3,7 +3,7 @@ from bridge_controller.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SERVER_ADDRESS = '54.194.28.63'
+SERVER_ADDRESS = 'portal.continuumbridge.com'
 
 DATABASES = {
     'default': {
