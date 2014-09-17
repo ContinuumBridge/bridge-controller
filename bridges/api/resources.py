@@ -56,7 +56,7 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         queryset = Bridge.objects.all()
         authorization = BridgeAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'email', 'description', 'date_joined', 'last_login']
+        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'last_login']
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
         user_related_through = 'bridge_controls'

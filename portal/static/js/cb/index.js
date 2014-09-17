@@ -10,10 +10,6 @@ CBApp.addRegions({
     modalsRegion: {
       selector: "#modals-region",
       regionType: Backbone.Marionette.Modals
-    },
-    notificationsRegion: {
-      selector: "#notifications-region",
-      regionType: Backbone.Marionette.Modals
     }
 });
 

@@ -1,5 +1,6 @@
 import re
 import sys
+import redis
 
 from django.utils import six
 
@@ -54,6 +55,75 @@ class CBResource(ModelResource):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
+    def save(self, bundle, skip_errors=False):
+        self.is_valid(bundle)
+
+        if bundle.errors and not skip_errors:
+            raise ImmediateHttpResponse(response=self.error_response(bundle.request, bundle.errors))
+
+        # Check if they're authorized.
+        if bundle.obj.pk:
+            self.authorized_update_detail(self.get_object_list(bundle.request), bundle)
+        else:
+            self.authorized_create_detail(self.get_object_list(bundle.request), bundle)
+
+        # Save FKs just in case.
+        self.save_related(bundle)
+
+        # Save the main object.
+        bundle.obj.save()
+        bundle.objects_saved.add(self.create_identifier(bundle.obj))
+
+        # ADDED
+        if bundle.obj.pk:
+            self.obj_created(bundle)
+        else:
+            self.obj_updated(bundle)
+
+        # Now pick up the M2M bits.
+        m2m_bundle = self.hydrate_m2m(bundle)
+        self.save_m2m(m2m_bundle)
+        return bundle
+
+    def obj_created(self, bundle):
+        pass
+
+    def obj_updated(self, bundle):
+        bundle = self.obj_dehydrate(bundle)
+        cbid = bundle.data.get('cbid', '')
+        body = {
+            'cbid': cbid,
+            'verb': 'PUT',
+            'object': bundle.data
+        }
+        self.publish(body)
+
+    def obj_deleted(self, bundle):
+        pass
+
+    def obj_dehydrate(self, bundle):
+        return self.full_dehydrate(bundle)
+
+    def publish(self, body):
+        r = redis.Redis()
+        r.publish('broadcast', 'Test')
+
+    def obj_delete(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_delete``.
+
+        Takes optional ``kwargs``, which are used to narrow the query to find
+        the instance.
+        """
+        if not hasattr(bundle.obj, 'delete'):
+            try:
+                bundle.obj = self.obj_get(bundle=bundle, **kwargs)
+            except ObjectDoesNotExist:
+                raise NotFound("A model instance matching the provided arguments could not be found.")
+
+        self.authorized_delete_detail(self.get_object_list(bundle.request), bundle)
+        bundle.obj.delete()
+        self.obj_deleted()
 
 class CBIDResourceMixin(ModelResource):
 

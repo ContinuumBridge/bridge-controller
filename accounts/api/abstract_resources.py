@@ -50,7 +50,8 @@ class UserObjectsResource(CBResource):
 
 class RelatedUserObjectsResource(CBResource):
 
-    """ Allows API access to objects which have the logged in user in their user field """
+    """ Allows API access to objects which have a relation to an object with
+     the logged in user in its user field """
 
     class Meta(CBResource.Meta):
         list_allowed_methods = ['get', 'post']

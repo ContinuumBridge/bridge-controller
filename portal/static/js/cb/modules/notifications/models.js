@@ -1,5 +1,5 @@
 
-CBApp.Notification = Backbone.Deferred.Model.extend({
+var Notification = module.exports.Notification = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -11,9 +11,9 @@ CBApp.Notification = Backbone.Deferred.Model.extend({
 
 }, { modelType: "notification" });
 
-CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
+module.exports.NotificationCollection = Backbone.Collection.extend({
 
-    model: CBApp.Notification,
+    model: Notification,
     backend: 'notification',
 
     initialize: function() {
