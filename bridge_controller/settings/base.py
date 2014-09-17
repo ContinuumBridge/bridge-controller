@@ -210,7 +210,7 @@ TEMPLATE_DIRS = (
     #'/home/bridge_controller/bridge_controller/templates',
     os.path.join(PROJECT_PATH, 'bridge_controller', "templates"),
     os.path.join(PROJECT_PATH, 'marketing', "templates"),
-    os.path.join(PROJECT_PATH, 'accounts', 'templates', 'bootstrap', 'allauth')
+    os.path.join(PROJECT_PATH, 'accounts', 'templates', 'bootstrap', 'allauth'),
 )
 
 INSTALLED_APPS = (

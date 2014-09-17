@@ -80,7 +80,7 @@ class CBUser(AuthPasswordMixin, CBAuth):
 
     def get_bridge_controls(self):
         bridge_controls = []
-        for bridge_control in self.bridgecontrol_set.filter():
+        for bridge_control in self.bridge_controls.filter():
             bridge_controls.append(bridge_control)
         return bridge_controls
 

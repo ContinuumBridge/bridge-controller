@@ -35,7 +35,7 @@ GRAPH_MODELS = {
 }
 
 INSTALLED_APPS += (
-    #'debug_toolbar', # and other apps for local development
+    'debug_toolbar', # and other apps for local development
     # Django Wiki
     'django_notify',
     'mptt',
