@@ -51,6 +51,7 @@ function BackboneIOServer(config) {
     var socketServer = backboneio.listen(httpServer, {
         app: appController,
         appInstall: appInstallController,
+        appConnection: appConnectionController,
         appDevicePermission: appDevicePermissionController,
         appLicence: appLicenceController,
         appOwnership: appOwnershipController,

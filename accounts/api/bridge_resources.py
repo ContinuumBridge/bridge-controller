@@ -25,9 +25,9 @@ from devices.api.resources import DeviceInstallResource
 
 from bridges.models import Bridge, BridgeControl
 
-from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource
+from bridge_controller.api.authentication import HTTPHeaderSessionAuthentication
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource
 from bridges.api.resources import BridgeResource
 
 from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
@@ -35,7 +35,7 @@ from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 # For test
 from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
 
-class BridgeControlResource(UserObjectsResource):
+class UserBridgeControlResource(UserObjectsResource):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
@@ -48,7 +48,7 @@ class BridgeControlResource(UserObjectsResource):
         resource_name = 'bridge_control'
 
 
-class BridgeResource(RelatedUserObjectsResource, BridgeResource):
+class UserBridgeResource(RelatedUserObjectsResource, BridgeResource):
 
     class Meta(RelatedUserObjectsResource.Meta, BridgeResource.Meta):
         queryset = Bridge.objects.all()

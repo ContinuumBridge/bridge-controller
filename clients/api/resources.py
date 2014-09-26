@@ -2,16 +2,16 @@
 from tastypie.authorization import ReadOnlyAuthorization
 
 from accounts.api.authorization import CurrentUserAuthorization
-from accounts.api.abstract_resources import UserObjectsResource
+from accounts.api.abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 from apps.api.resources import AppInstallResource
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 
 from clients.models import Client, ClientControl
 
-class ClientResource(CBResource):
+class ClientResource(RelatedUserObjectsResource):
 
     class Meta(CBResource.Meta):
         queryset = Client.objects.all()

@@ -1,9 +1,8 @@
 
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.exceptions import BadRequest, ImmediateHttpResponse
-from accounts.models import CBUser
-from bridges.api.abstract_resources import CBResource
-from bridges.api.authentication import HTTPHeaderSessionAuthentication
+from bridge_controller.api.resources import CBResource
+from bridge_controller.api.authentication import HTTPHeaderSessionAuthentication
 from .authorization import UserObjectsOnlyAuthorization, RelatedUserObjectsOnlyAuthorization
 
 class UserObjectsResource(CBResource):
@@ -58,23 +57,8 @@ class RelatedUserObjectsResource(CBResource):
         detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = RelatedUserObjectsOnlyAuthorization()
-        filtering = {
-            "slug": ('exact', 'startswith',),
-            "user": ALL,
-        }
 
-    def create_user_through_model(self, bundle):
-        print "Bundle is", bundle.obj.__dict__
-        # Create an appropriate through model between the current user and the current item
-        # Authorization class should check that this is a user
-        user = CBUser.objects.get(email=bundle.request.user)
-        through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
-        creation_parameters = {
-            '{0}'.format(self.resource_meta.resource_name): bundle.obj,
-            '{0}'.format('user'): bundle.request.user
-        }
-        through_model_manager.get_or_create(**creation_parameters)
-
+    '''
     def save(self, bundle, skip_errors=False):
         self.is_valid(bundle)
 
@@ -95,9 +79,10 @@ class RelatedUserObjectsResource(CBResource):
         bundle.objects_saved.add(self.create_identifier(bundle.obj))
 
         # ADDED Create a through model the current user if the object is being created
-        self.create_user_through_model(bundle)
+        #self.create_user_through_model(bundle)
 
         # Now pick up the M2M bits.
         m2m_bundle = self.hydrate_m2m(bundle)
         self.save_m2m(m2m_bundle)
         return bundle
+        '''

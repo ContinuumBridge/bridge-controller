@@ -18,7 +18,7 @@ gettext = lambda s: s
 PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', '..'))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
-AUTH_USER_MODEL = 'accounts.CBUser'
+AUTH_USER_MODEL = 'accounts.CBAuth'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'

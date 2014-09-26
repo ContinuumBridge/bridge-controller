@@ -22,10 +22,10 @@ from tastypie.authorization import Authorization
 #from haystack.query import SearchQuerySet
 
 #from bridges.api.abstract_resources import CBModelResource
-from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
-from bridges.api.abstract_resources import PostMatchMixin, CBResource, ThroughModelResource
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import PostMatchMixin, CBResource, ThroughModelResource
 from devices.models import Device, DeviceInstall
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication

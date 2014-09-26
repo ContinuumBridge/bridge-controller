@@ -9,4 +9,4 @@ class BridgeModelManager(ClientModelManager):
         Creates and saves a Bridge with the given email and password.
         """
         # Call create_client on the parent class
-        return super(BridgeModelManager, self).create_client(save=save, **extra_fields)
+        return super(BridgeModelManager, self).create_logged_in_client(save=save, **extra_fields)

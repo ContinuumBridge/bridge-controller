@@ -1,42 +1,48 @@
-from tastypie.resources import ModelResource 
+from tastypie.resources import ModelResource
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
 
 from accounts.api.abstract_resources import UserObjectsResource, RelatedUserObjectsResource
-from bridges.api.abstract_resources import CBResource, ThroughModelResource
-from bridges.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource
+#from bridge_controller.api.authorization import AbstractClientObjectsOnlyAuthorization
+from bridge_controller.api import cb_fields
+from bridge_controller.api.authorization import CBReadAllAuthorization
+from bridge_controller.api.resources import CBResource
 
 from adaptors.models import Adaptor, AdaptorOwnership, AdaptorCompatibility
-from bridges.api.authentication import HTTPHeaderSessionAuthentication
 
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class AdaptorResource(RelatedUserObjectsResource):
+class AdaptorResource(CBResource):
 
-    class Meta(RelatedUserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = Adaptor.objects.all()
-        #authorization = Authorization()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
-        resource_name = 'adaptor'
+        authorization = CBReadAllAuthorization()
         user_related_through = 'adaptor_ownerships'
+        related_user_permissions = ['read', 'create', 'update', 'delete']
+        filtering = {
+            "slug": ('exact', 'startswith',),
+            "user": ALL,
+            }
+        resource_name = 'adaptor'
 
 
-class AdaptorOwnershipResource(UserObjectsResource):
+class AdaptorOwnershipResource(CBResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
-    class Meta(UserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = AdaptorOwnership.objects.all()
         resource_name = 'adaptor_ownership'
 
 
-class AdaptorDeviceCompatibilityResource(ThroughModelResource):
+class AdaptorDeviceCompatibilityResource(CBResource):
 
     device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=False)
     adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
-    class Meta(ThroughModelResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = AdaptorCompatibility.objects.all()
         authorization = Authorization()
         #list_allowed_methods = ['get', 'post']

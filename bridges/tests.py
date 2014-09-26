@@ -1,16 +1,43 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+import factory
 
+from .models import Bridge, BridgeControl
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class BridgesTestCase(TestCase):
+
+    def setup_fixtures(self, fixtures):
+
+        # Setup bridges
+        bridges = {}
+
+        bridges.ahmeds_bridge = Bridge.objects.create_bridge(
+            name = 'Ahmed\'s Bridge'
+        )
+
+        bridges.berties_bridge = Bridge.objects.create_bridge(
+            name = 'Bertie\'s Bridge'
+        )
+
+        bridges.christines_bridge = Bridge.objects.create_bridge(
+            name = 'Christine\'s Bridge'
+        )
+        fixtures.bridges = bridges
+
+        # Setup BridgeControls
+        bridge_controls = {}
+
+        class BridgeControlFactory(factory.DjangoModelFactory):
+            FACTORY_FOR = BridgeControl
+
+        bridge_controls.berties_bridgecontrol = BridgeControlFactory(
+            bridge = bridges.berties_bridge,
+            user = fixtures.users.bertie
+        )
+
+        bridge_controls.christines_bridgecontrol = BridgeControlFactory(
+            bridge = bridges.christines_bridge,
+            user = fixtures.users.christine
+        )
+        fixtures.bridge_controls = bridge_controls
+
+        return fixtures

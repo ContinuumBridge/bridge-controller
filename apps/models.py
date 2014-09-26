@@ -39,7 +39,7 @@ class App(LoggedModelMixin, CBIDModelMixin):
 class AppOwnership(LoggedModelMixin):
 
     user = models.ForeignKey(CBUser)
-    app = models.ForeignKey(App)
+    app = models.ForeignKey(App, related_name='app_ownerships')
 
     class Meta:
         verbose_name = _('app_ownership')
@@ -50,7 +50,7 @@ class AppOwnership(LoggedModelMixin):
 class AppConnection(LoggedModelMixin):
 
     client = models.ForeignKey(Client)
-    app = models.ForeignKey(App)
+    app = models.ForeignKey(App, related_name='app_connections')
 
     class Meta:
         verbose_name = _('app_connection')
@@ -63,7 +63,7 @@ class AppLicence(LoggedModelMixin):
     """ Through model for a User and an App """
 
     user = models.ForeignKey(CBUser)
-    app = models.ForeignKey(App)
+    app = models.ForeignKey(App, related_name='app_licences')
     # How many times is the user allowed to install the app on their bridges
     installs_permitted = models.IntegerField(_("installs_permitted"))
 
@@ -84,7 +84,7 @@ class AppInstall(LoggedModelMixin):
     """ Through model for a Bridge and an App """
 
     bridge = models.ForeignKey(Bridge)
-    app = models.ForeignKey(App)
+    app = models.ForeignKey(App, related_name='app_installs')
     licence = models.ForeignKey(AppLicence)
 
     class Meta:

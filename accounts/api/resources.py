@@ -11,24 +11,9 @@ from apps.models import AppLicence
 from apps.api.resources import AppLicenceResource, AppOwnershipResource
 from bridges.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
+from bridge_controller.api.resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
-
-class UserBridgeControlResource(ThroughModelResource):
-
-    """
-    BridgeControl resource presented to a logged in user
-    """
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.CurrentBridgeResource', 'bridge', full=True)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-
-    class Meta(ThroughModelResource.Meta):
-        queryset = BridgeControl.objects.all()
-        authorization = Authorization()
-        #list_allowed_methods = ['get', 'post']
-        #detail_allowed_methods = ['get']
-        resource_name = 'user_bridge_control'
-
+from .bridge_resources import UserBridgeControlResource
 
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
@@ -75,5 +60,7 @@ class UserAuthResource(AuthResource):
 
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()
+        # Resource used to send data on successful login
+        data_resource = CurrentUserResource()
         fields = ['first_name', 'last_name', 'email']
         resource_name = 'user_auth'

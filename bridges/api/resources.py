@@ -29,8 +29,8 @@ from accounts.models import CBUser
 from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 from bridges.api.authorization import BridgeAuthorization
 
 from bridges.models import Bridge

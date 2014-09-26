@@ -8,19 +8,16 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        mc = orm['accounts.CBUser'].objects.get(email='mark.claydon@continuumbridge.com')
-        pc = orm['accounts.CBUser'].objects.get(email='peter.claydon@continuumbridge.com')
-        ms = orm['accounts.CBUser'].objects.get(email='martin.sotheran@continuumbridge.com')
+        emails = ['mark.claydon@continuumbridge.com',
+                  'peter.claydon@continuumbridge.com',
+                  'martin.sotheran@continuumbridge.com']
+        users = orm['accounts.CBUser'].objects.filter(email__in=emails)
+
         for app in orm['apps.App'].objects.all():
-            mc_app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app,
-                                                                                       user=mc)
-            mc_app_ownership.save()
-            pc_app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app,
-                                                                                       user=pc)
-            pc_app_ownership.save()
-            ms_app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app,
-                                                                                       user=ms)
-            ms_app_ownership.save()
+            for user in users:
+
+                app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app, user=user)
+                app_ownership.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."

@@ -6,11 +6,11 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models.auth import CBAuth
-from bridges.models.common import CBIDModelMixin
+from bridges.models.common import CBIDModelMixin, LoggedModelMixin
 
+from accounts.models import CBUser
 from .manager import ClientModelManager
 from .abstract import AuthKeyMixin
-
 
 class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
@@ -47,11 +47,13 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
         "Returns the short name for the user."
         return self.name
 
-    '''
-    def get_device_installs(self):
-        device_installs = []
-        for device_install in self.deviceinstall_set.filter():
-            device_installs.append(device_install)
-        return device_installs
-    '''
 
+class ClientControl(LoggedModelMixin):
+
+    class Meta:
+        verbose_name = _('clientcontrol')
+        verbose_name_plural = _('clientcontrols')
+        app_label = 'clients'
+
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(CBUser)
