@@ -47,7 +47,7 @@ class AuthKeyMixin(models.Model):
     #uid = models.CharField(_('uid'), max_length = 8, unique = True)
 
     key = models.CharField(_('key'), max_length=128)
-    plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
+    #plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
 
     class Meta:
         abstract = True

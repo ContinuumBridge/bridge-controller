@@ -30390,7 +30390,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
     }
 });
 
-},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":115,"backbone.marionette":124}],25:[function(require,module,exports){
+},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":110,"backbone.marionette":118}],25:[function(require,module,exports){
 
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
@@ -30891,7 +30891,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":115,"backbone.marionette":124}],33:[function(require,module,exports){
+},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":110,"backbone.marionette":118}],33:[function(require,module,exports){
 
 CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -31265,7 +31265,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":115,"backbone.marionette":124}],38:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":110,"backbone.marionette":118}],38:[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -31529,7 +31529,7 @@ CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":115,"backbone.marionette":124}],43:[function(require,module,exports){
+},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":110,"backbone.marionette":118}],43:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -31970,7 +31970,7 @@ CBApp.ClientControlListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":115,"backbone.marionette":124}],52:[function(require,module,exports){
+},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":110,"backbone.marionette":118}],52:[function(require,module,exports){
 
 CBApp.Client = Backbone.Deferred.Model.extend({
     
@@ -32126,7 +32126,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":115,"backbone.marionette":124}],56:[function(require,module,exports){
+},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":110,"backbone.marionette":118}],56:[function(require,module,exports){
 
 
 
@@ -32234,7 +32234,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     }
 });
 
-},{"./components":58,"backbone-bundle":115,"backbone.marionette":124}],58:[function(require,module,exports){
+},{"./components":58,"backbone-bundle":110,"backbone.marionette":118}],58:[function(require,module,exports){
 
 CBApp.Components = {};
 
@@ -32344,7 +32344,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
     }
 });
 
-},{"./components":58,"./templates/switch.html":62,"backbone-bundle":115,"backbone.marionette":124}],61:[function(require,module,exports){
+},{"./components":58,"./templates/switch.html":62,"backbone-bundle":110,"backbone.marionette":118}],61:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32703,7 +32703,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":115,"backbone.marionette":124}],68:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":110,"backbone.marionette":118}],68:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -32966,7 +32966,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":115,"backbone.marionette":124}],72:[function(require,module,exports){
+},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":110,"backbone.marionette":118}],72:[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -33142,7 +33142,7 @@ CBApp.reqres.setHandler("store:show", function(){
 });
 
 module.exports = CBApp;
-},{"./views/portal_view":111,"backbone-bundle":115,"backbone.marionette":124}],74:[function(require,module,exports){
+},{"./views/portal_view":106,"backbone-bundle":110,"backbone.marionette":118}],74:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -33368,7 +33368,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":115,"backbone.marionette":124}],78:[function(require,module,exports){
+},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":110,"backbone.marionette":118}],78:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -33988,12 +33988,6 @@ CBApp.addInitializer(function () {
 
   CBApp.userCollection = new CBApp.UserCollection();
 
-  //CBApp.u = new CBApp.U();
-  //CBApp.u.fetch();
-
-
-  //CBApp.currentUser = new CBApp.LoggedInUser();
-  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection(CBApp.currentUser);
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
   CBApp.currentUserCollection.fetch().then(function() {
 
@@ -34008,54 +34002,9 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
-  //CBApp.currentUser.fetch();
-
-  //CBApp.currentUser = new CBApp.CurrentUser();
-
-    /*
-  CBApp.currentUser.fetch().then(function(currentUser) {
-
-      console.log('currentUser fetched successfully', currentUser);
-      setTimeout(function() {
-          CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(currentUser.model);
-          console.log('App initialised');
-      }, 500);
-
-  }, function(error) {
-
-      CBApp.currentUserDeferred.reject(error);
-      console.error('currentUser could not be fetched', error);
-  });
-     */
-
-    /*
-  CBApp.currentUserDeferred.then(function(result) {
-      console.log('promise initialised', result);
-  }, function(error) {
-      console.log('promise error', error);
-  });
-     */
-  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
-
-  /*
-  CBApp.currentUserCollectionDeferred = CBApp.currentUserCollection.fetch().then(function(result) {
-
-      console.log('currentUserCollection fetched successfully');
-      setTimeout(function() {
-          CBApp._isInitialized = true;
-          console.log('App initialised');
-      }, 500);
-
-  }, function(error) {
-
-      console.error('currentUserCollection could not be fetched', error);
-  });
-  */
-
 });
 
-},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./users/current/models":108,"./users/models":109,"index":73,"q":16}],82:[function(require,module,exports){
+},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./users/current/models":103,"./users/models":104,"index":73,"q":16}],82:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -34257,6 +34206,13 @@ module.exports.Main = Marionette.Layout.extend({
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
+
+        /*
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
+            //CBApp.clientCollection.fetch()
+        }).done();
+        */
     },
 
     populateViews: function() {
@@ -34372,8 +34328,8 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
+        CBApp.appLicenceCollection.fetch({data: { 'user': 'current' }})
         this.licenceListView = new CBApp.AppLicenceListView();
-
     },
 
     clickStore: function() {
@@ -34419,7 +34375,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":110,"../../views/regions":112,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":115,"backbone.marionette":124,"q":16}],88:[function(require,module,exports){
+},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":105,"../../views/regions":107,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":110,"backbone.marionette":118,"q":16}],88:[function(require,module,exports){
 
 
 var DeveloperViews = require('./views');
@@ -34517,7 +34473,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.clientControlListView = new CBApp.ClientControlListView();
 
         CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({ data: { 'user': 'current' }});
+            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
             CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
             //CBApp.clientCollection.fetch()
         }).done();
@@ -34643,7 +34599,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 */
 
-},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":110,"../../views/regions":112,"./templates/main.html":89,"backbone-bundle":115,"backbone.marionette":124,"q":16}],91:[function(require,module,exports){
+},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":105,"../../views/regions":107,"./templates/main.html":89,"backbone-bundle":110,"backbone.marionette":118,"q":16}],91:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34811,7 +34767,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
 });
 
-},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":115,"backbone.marionette":124,"bootstrap":131}],92:[function(require,module,exports){
+},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":110,"backbone.marionette":118,"bootstrap":123}],92:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34853,169 +34809,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   });
 
 },{"hbsfy/runtime":13}],95:[function(require,module,exports){
-
-var Notification = module.exports.Notification = Backbone.Deferred.Model.extend({
-
-    idAttribute: 'id',
-
-    backend: 'notification',
-
-    initialize: function() {
-        //this.startTracking();
-    }
-
-}, { modelType: "notification" });
-
-module.exports.NotificationCollection = Backbone.Collection.extend({
-
-    model: Notification,
-    backend: 'notification',
-
-    initialize: function() {
-        //this.bindBackend();
-        CBApp.NotificationCollection.__super__.initialize.apply(this, arguments);
-    }
-});
-
-},{}],96:[function(require,module,exports){
-
-var $ = require('jquery');
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
-var Models = require('./models');
-var Views = require('./views');
-
-CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
-
-    Notifications.addInitializer(function() {
-
-        //router
-        this.controller = new this.Controller();
-
-        this.collection = new Models.NotificationCollection();
-
-        CBApp.addRegions({
-            notificationsRegion: '#notifications'
-        });
-    });
-
-    Notifications.Controller = Marionette.Controller.extend({
-        showNotifications: function() {
-
-            var notificationsListView = Views.NotificationListView({
-                collection: Notifications.collection
-            })
-            CBApp.notificationsRegion.show(notificationsListView);
-        },
-        showInformation: function(message, title) {
-            console.log('We got to the notification controller!');
-            this.collection.add({
-                title: title,
-                message: message
-            });
-            var notificationView = new Backbone.Notify.Notification();
-        },
-        showError: function(error) {
-            var err = error && error.response && error.response.error || error || {};
-            console.log('We got to the error notification controller!', err);
-            var notification = new CBApp.Notification({
-                name: err.name || "Error",
-                message: err.message || "Error message",
-                response: err.response || "Error response"
-            });
-            console.log('ErrorNotification controller model is', notification);
-            var notificationView = new Backbone.Notify.Error();
-            notificationView.model = notification;
-            console.log('notificationView is', notificationView);
-            CBApp.notificationsRegion.show(notificationView);
-        },
-    });
-
-    Notifications.on('show', function(){
-        Notifications.controller.showNotifications();
-    });
-
-    Notifications.on('add:information', function(information){
-
-        this.collection.add({
-            title: information.title,
-            message: information.message,
-            type: 'information'
-        });
-        //Notifications.controller.showInformation(message, title);
-    });
-
-    Notifications.on('add:error', function(error){
-        Notifications.controller.showError(error);
-    });
-});
-
-},{"./models":95,"./views":99,"backbone-bundle":115,"backbone.marionette":124,"jquery":15}],97:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "Notification";
-  });
-
-},{"hbsfy/runtime":13}],98:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "Notification Section";
-  });
-
-},{"hbsfy/runtime":13}],99:[function(require,module,exports){
-
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
-var NotificationView = module.exports.NotificationView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/notification.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
-    }
-
-});
-
-
-module.exports.NotificationListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/notificationSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
-    itemViewContainer: '.device-list',
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
-    },
-
-    discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
-    },
-
-    onRender : function() {
-
-    }
-});
-
-},{"./templates/notification.html":97,"./templates/notificationSection.html":98,"backbone-bundle":115,"backbone.marionette":124}],100:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35036,7 +34829,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],101:[function(require,module,exports){
+},{"hbsfy/runtime":13}],96:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35048,7 +34841,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],102:[function(require,module,exports){
+},{"hbsfy/runtime":13}],97:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35060,7 +34853,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],103:[function(require,module,exports){
+},{"hbsfy/runtime":13}],98:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35246,7 +35039,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../../components/numbers":59,"./templates/app.html":100,"./templates/appSection.html":101,"./templates/staffApp.html":102,"backbone-bundle":115,"backbone.marionette":124}],104:[function(require,module,exports){
+},{"../../../components/numbers":59,"./templates/app.html":95,"./templates/appSection.html":96,"./templates/staffApp.html":97,"backbone-bundle":110,"backbone.marionette":118}],99:[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -35308,7 +35101,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":106}],105:[function(require,module,exports){
+},{"./views":101}],100:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35320,7 +35113,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],106:[function(require,module,exports){
+},{"hbsfy/runtime":13}],101:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -35400,7 +35193,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic_views":110,"../../views/regions":112,"./apps/views":103,"./templates/main.html":105,"backbone-bundle":115,"backbone.marionette":124,"q":16}],107:[function(require,module,exports){
+},{"../../views/generic_views":105,"../../views/regions":107,"./apps/views":98,"./templates/main.html":100,"backbone-bundle":110,"backbone.marionette":118,"q":16}],102:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -35469,7 +35262,7 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":74,"backbone-bundle":115,"index":73}],108:[function(require,module,exports){
+},{"./messages/models":74,"backbone-bundle":110,"index":73}],103:[function(require,module,exports){
 
 require('../models');
 
@@ -35640,7 +35433,7 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
 });
 
 
-},{"../models":109}],109:[function(require,module,exports){
+},{"../models":104}],104:[function(require,module,exports){
 
 //CBApp.User = Backbone.Deferred.Model.extend({
 CBApp.User = Backbone.RelationalModel.extend({
@@ -35688,7 +35481,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],110:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35707,7 +35500,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":113,"backbone-bundle":115,"backbone.marionette":124}],111:[function(require,module,exports){
+},{"./templates/listItemLoading.html":108,"backbone-bundle":110,"backbone.marionette":118}],106:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35717,7 +35510,7 @@ module.exports = Marionette.Layout.extend({
     //regions:
 });
 
-},{"backbone-bundle":115,"backbone.marionette":124}],112:[function(require,module,exports){
+},{"backbone-bundle":110,"backbone.marionette":118}],107:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35733,9 +35526,9 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":115,"backbone.marionette":124}],113:[function(require,module,exports){
+},{"backbone-bundle":110,"backbone.marionette":118}],108:[function(require,module,exports){
 module.exports=require(62)
-},{"hbsfy/runtime":13}],114:[function(require,module,exports){
+},{"hbsfy/runtime":13}],109:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
 
@@ -35744,7 +35537,7 @@ require('./cb/modules/config/config');
 require('./cb/modules/developer/developer');
 require('./cb/modules/store/store');
 require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
+//require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
 //require('./cb/views');
@@ -35757,7 +35550,7 @@ require('./cb/models');
 })(jQuery);
 
 
-},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/notifications/notifications":96,"./cb/modules/store/store":104,"./cb/socket":107,"index":73,"jquery-browserify":14}],115:[function(require,module,exports){
+},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/store/store":99,"./cb/socket":102,"index":73,"jquery-browserify":14}],110:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -35776,7 +35569,7 @@ require('backbone.marionette.subrouter');
 //require('./backbone-bossview');
 require('backbone.modal');
 
-require('./backbone-notify');
+//require('./backbone-notify');
 
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
@@ -35812,7 +35605,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":80,"./backbone-cb-model":117,"./backbone-cb-model-mixin":116,"./backbone-cb-views":118,"./backbone-notify":122,"./backbone-relational":123,"./backbone.stickit":127,"./backbone.trackit.js":128,"backbone":3,"backbone-cocktail":119,"backbone-deferred":120,"backbone-io":121,"backbone.babysitter":1,"backbone.marionette":124,"backbone.marionette.subrouter":125,"backbone.modal":126,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],116:[function(require,module,exports){
+},{"../../cb/misc/relational-models":80,"./backbone-cb-model":112,"./backbone-cb-model-mixin":111,"./backbone-cb-views":113,"./backbone-relational":117,"./backbone.stickit":121,"./backbone.trackit.js":122,"backbone":3,"backbone-cocktail":114,"backbone-deferred":115,"backbone-io":116,"backbone.babysitter":1,"backbone.marionette":118,"backbone.marionette.subrouter":119,"backbone.modal":120,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],111:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35910,7 +35703,7 @@ module.exports = {
 
 
 
-},{}],117:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -35959,7 +35752,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],118:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -36036,7 +35829,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],119:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -36139,7 +35932,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":19}],120:[function(require,module,exports){
+},{"underscore":19}],115:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36497,7 +36290,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],121:[function(require,module,exports){
+},{"backbone":3,"q":16}],116:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36694,77 +36487,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":18,"underscore":19}],122:[function(require,module,exports){
-
-//var notify = require('notify');
-
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  if (typeof Backbone === "undefined" || Backbone === null) {
-    throw new Error("Backbone is not defined. Please include the latest version from http://documentcloud.github.com/backbone/backbone.js");
-  }
-
-  if (typeof Backbone.Modal === "undefined" || Backbone.Modal === null) {
-      throw new Error("Backbone Modal is not defined. Please include the latest version from http://documentcloud.github.com/awkward/backbone.modal/blob/master/backbone.modal-bundled.js");
-  }
-
-  Backbone.Notify = {};
-  Backbone.Notify.NotificationView = (function(_super) {
-
-    __extends(Notification, _super);
-
-    Notification.prototype.prefix = 'bbn';
-
-    Notification.prototype.template = require('./templates/notification.html');
-
-    function Notification() {
-      Backbone.Modal.prototype.constructor.apply(this, this.args);
-    }
-
-    return Notification;
-
-  })(Backbone.Modal);
-
-  Backbone.Notify.NotificationListView = (function(_super) {
-
-    __extends(Notification, _super);
-
-    Notification.prototype.prefix = 'bbn';
-
-    Notification.prototype.template = require('./templates/notification.html');
-
-    function Notification() {
-      Backbone.Modal.prototype.constructor.apply(this, this.args);
-    }
-
-    return Notification;
-
-  })(Backbone.Modal);
-
-}).call(this);
-
-Backbone.Notify.Error = Backbone.Notify.Notification.extend({
-
-    template: require('./templates/error.html'),
-    cancelEl: '#close-button',
-
-    bindings: {
-        '.name': 'name',
-        '.message': 'message',
-        '.response': 'response'
-    },
-
-    onRender: function() {
-
-        console.log('ErrorNotification model is', this);
-        this.stickit();
-    }
-});
-},{"./templates/error.html":129,"./templates/notification.html":130}],123:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":18,"underscore":19}],117:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -38763,7 +38486,7 @@ Backbone.Notify.Error = Backbone.Notify.Notification.extend({
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":19}],124:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],118:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41229,7 +40952,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],125:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],119:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41342,7 +41065,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":124,"backbone":3,"underscore":19}],126:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":118,"backbone":3,"underscore":19}],120:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41839,7 +41562,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":124,"backbone":3,"underscore":19}],127:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":118,"backbone":3,"underscore":19}],121:[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -42615,7 +42338,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":19}],128:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],122:[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -42808,31 +42531,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],129:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbn-modal__topbar\">\n    <h3 class=\"name bbn-modal__title\">Error</h3>\n</div>\n<div class=\"bbn-modal__section\">\n    <ul>\n        <li class=\"message\"></li>\n        <li class=\"response\"></li>\n    </ul>\n</div>\n<div class=\"bbn-modal__bottombar\">\n    <a href=\"#\" id=\"close-button\" class=\"bbn-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":13}],130:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbn-modal__topbar\">\n    <h3 class=\"bbn-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbn-modal__section\">\n    <ul>\n        <li><label>Device [friendly] name</label></li>\n        <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n    </ul>\n</div>\n<div class=\"bbn-modal__bottombar\">\n    <a href=\"#\" id=\"submit-button\" class=\"bbn-button\">Install Device</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbn-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":13}],131:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -44794,4 +44493,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[114])
+},{"jquery":15}]},{},[109])

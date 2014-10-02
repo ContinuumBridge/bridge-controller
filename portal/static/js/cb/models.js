@@ -66,12 +66,6 @@ CBApp.addInitializer(function () {
 
   CBApp.userCollection = new CBApp.UserCollection();
 
-  //CBApp.u = new CBApp.U();
-  //CBApp.u.fetch();
-
-
-  //CBApp.currentUser = new CBApp.LoggedInUser();
-  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection(CBApp.currentUser);
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
   CBApp.currentUserCollection.fetch().then(function() {
 
@@ -86,49 +80,4 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
-  //CBApp.currentUser.fetch();
-
-  //CBApp.currentUser = new CBApp.CurrentUser();
-
-    /*
-  CBApp.currentUser.fetch().then(function(currentUser) {
-
-      console.log('currentUser fetched successfully', currentUser);
-      setTimeout(function() {
-          CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(currentUser.model);
-          console.log('App initialised');
-      }, 500);
-
-  }, function(error) {
-
-      CBApp.currentUserDeferred.reject(error);
-      console.error('currentUser could not be fetched', error);
-  });
-     */
-
-    /*
-  CBApp.currentUserDeferred.then(function(result) {
-      console.log('promise initialised', result);
-  }, function(error) {
-      console.log('promise error', error);
-  });
-     */
-  //CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
-
-  /*
-  CBApp.currentUserCollectionDeferred = CBApp.currentUserCollection.fetch().then(function(result) {
-
-      console.log('currentUserCollection fetched successfully');
-      setTimeout(function() {
-          CBApp._isInitialized = true;
-          console.log('App initialised');
-      }, 500);
-
-  }, function(error) {
-
-      console.error('currentUserCollection could not be fetched', error);
-  });
-  */
-
 });

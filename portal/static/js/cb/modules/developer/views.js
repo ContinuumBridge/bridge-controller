@@ -30,7 +30,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.clientControlListView = new CBApp.ClientControlListView();
 
         CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({ data: { 'user': 'current' }});
+            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
             CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
             //CBApp.clientCollection.fetch()
         }).done();

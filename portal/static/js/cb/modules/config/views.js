@@ -48,6 +48,13 @@ module.exports.Main = Marionette.Layout.extend({
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
+
+        /*
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
+            //CBApp.clientCollection.fetch()
+        }).done();
+        */
     },
 
     populateViews: function() {
@@ -163,8 +170,8 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
+        CBApp.appLicenceCollection.fetch({data: { 'user': 'current' }})
         this.licenceListView = new CBApp.AppLicenceListView();
-
     },
 
     clickStore: function() {

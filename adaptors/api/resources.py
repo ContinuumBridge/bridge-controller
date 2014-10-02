@@ -11,7 +11,7 @@ from bridge_controller.api.resources import CBResource
 
 from adaptors.models import Adaptor, AdaptorOwnership, AdaptorCompatibility
 
-#from pages.api.authentication import HTTPHeaderSessionAuthentication
+from .authorization import AdaptorDeviceCompatibilityAuthorization
 
 class AdaptorResource(CBResource):
 
@@ -34,6 +34,7 @@ class AdaptorOwnershipResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = AdaptorOwnership.objects.all()
+        related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'adaptor_ownership'
 
 
@@ -44,9 +45,7 @@ class AdaptorDeviceCompatibilityResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = AdaptorCompatibility.objects.all()
-        authorization = Authorization()
-        #list_allowed_methods = ['get', 'post']
-        #detail_allowed_methods = ['get']
+        authorization = AdaptorDeviceCompatibilityAuthorization()
         resource_name = 'adaptor_compatibility'
 
 '''

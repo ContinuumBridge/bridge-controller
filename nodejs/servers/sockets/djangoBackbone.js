@@ -101,6 +101,8 @@ function DjangoBackbone(djangoURL) {
             //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
             : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
+        console.log('baseRequestURL request is', baseRequestURL);
+
         //console.log('config is', req.socket.manager);
         // Translate filters from backbone to tastypie
         var filters;

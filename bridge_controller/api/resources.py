@@ -4,6 +4,7 @@ import redis
 
 from django.utils import six
 
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource, ModelDeclarativeMetaclass, convert_post_to_patch
 from tastypie.authorization import Authorization
 
@@ -45,6 +46,9 @@ class CBResource(ModelResource):
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CBAuthorization()
         always_return_data = True
+        filtering = {
+            "user": ALL
+            }
         resource_name = 'cb_resource'
 
     def unauthorized_result(self, exception):
@@ -66,13 +70,15 @@ class CBResource(ModelResource):
         # Save FKs just in case.
         self.save_related(bundle)
 
+        # ADDED Is the object being updated or created?
+        updated = bool(bundle.obj.pk)
+
         # Save the main object.
         bundle.obj.save()
         bundle.objects_saved.add(self.create_identifier(bundle.obj))
 
-        print "object save"
         # ADDED
-        if bundle.obj.pk:
+        if updated:
             self.obj_updated(bundle)
         else:
             self.obj_created(bundle)
@@ -82,6 +88,33 @@ class CBResource(ModelResource):
         self.save_m2m(m2m_bundle)
         return bundle
 
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_get_list``.
+
+        Takes an optional ``request`` object, whose ``GET`` dictionary can be
+        used to narrow the query.
+        """
+        filters = {}
+
+        if hasattr(bundle.request, 'GET'):
+            # Grab a mutable copy.
+            filters = bundle.request.GET.copy()
+
+        # ADDED Replace 'current' user with the current user id
+        if filters.get('user') == 'current':
+            filters['user'] = str(bundle.request.user.id)
+
+        # Update with the provided kwargs.
+        filters.update(kwargs)
+        applicable_filters = self.build_filters(filters=filters)
+
+        try:
+            objects = self.apply_filters(bundle.request, applicable_filters)
+            return self.authorized_read_list(objects, bundle)
+        except ValueError:
+            raise BadRequest("Invalid resource lookup data provided (mismatched type).")
+
     def obj_created(self, bundle):
         self.create_user_through_model(bundle)
         message = self.create_message(bundle, 'CREATE')
@@ -90,16 +123,18 @@ class CBResource(ModelResource):
 
     def create_user_through_model(self, bundle):
         # Create an appropriate through model between the current user and the current item
-        print "self.resource_meta", dir(self._meta)
-        user_through = getattr(self._meta, 'user_related_through')
-        if user_through:
-            through_model_manager = getattr(bundle.obj, user_through)
-            creation_parameters = {
-                '{0}'.format(self._meta.resource_name): bundle.obj,
-                '{0}'.format('user'): bundle.request.user
-            }
-            through_model, created = through_model_manager.get_or_create(**creation_parameters)
-            through_model.save()
+        try:
+            user_through = getattr(self._meta, 'user_related_through')
+            if user_through:
+                through_model_manager = getattr(bundle.obj, user_through)
+                creation_parameters = {
+                    '{0}'.format(self._meta.resource_name): bundle.obj,
+                    '{0}'.format('user'): bundle.request.user
+                }
+                through_model, created = through_model_manager.get_or_create(**creation_parameters)
+                through_model.save()
+        except AttributeError:
+            pass
 
     def obj_updated(self, bundle):
         #self.create_user_through_model(bundle)
@@ -107,8 +142,8 @@ class CBResource(ModelResource):
         self.publish_message(message)
 
     def obj_deleted(self, bundle):
-        message = self.create_message(bundle, 'DELETE')
-        self.publish_message(message)
+        #message = self.create_message(bundle, 'DELETE')
+        self.publish_message(bundle.message)
         print "object deleted"
 
     def get_message_destination(self, bundle):
@@ -116,14 +151,16 @@ class CBResource(ModelResource):
 
     def create_message(self, bundle, verb):
         bundle = self.full_dehydrate(bundle)
+        body = {
+            'cbid': bundle.data.get('cbid', ''),
+            'verb': verb
+        }
+        if verb != "DELETE":
+            body['body'] = bundle.data
         return {
             'source': 'cb',
             'destination': self.get_message_destination(bundle),
-            'body': {
-                'cbid': bundle.data.get('cbid', ''),
-                'verb': verb,
-                'body': bundle.data
-            }
+            'body': body
         }
 
     def publish_message(self, message):
@@ -147,8 +184,9 @@ class CBResource(ModelResource):
                 raise NotFound("A model instance matching the provided arguments could not be found.")
 
         self.authorized_delete_detail(self.get_object_list(bundle.request), bundle)
+        bundle.message = self.create_message(bundle, 'DELETE')
         bundle.obj.delete()
-        self.obj_deleted()
+        self.obj_deleted(bundle)
 
 class CBIDResourceMixin(ModelResource):
 
@@ -377,7 +415,7 @@ class PostMatchMixin(object):
             return self.create_response(request, bundle, response_class=http.HttpAccepted)
 
 
-class AuthResource(ModelResource):
+class AuthResource(LoggedInResource):
 
     class Meta:
         authorization = AuthAuthorization()
@@ -413,8 +451,11 @@ class AuthResource(ModelResource):
             if client.is_active:
                 login(request, client)
                 # Return the client's data
-                bundle = self._meta.data_resource.build_bundle(obj=client)
-                bundle = self._meta.data_resource.full_dehydrate(bundle)
+                #bundle = self._meta.data_resource.build_bundle(obj=client)
+                #bundle = self._meta.data_resource.full_dehydrate(bundle)
+                #bundle = self.alter_detail_data_to_serialize(request, bundle)
+                bundle = self.build_bundle(obj=client)
+                bundle = self.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)
                 return self.create_response(request, bundle)
                 #return self.create_response(request, {

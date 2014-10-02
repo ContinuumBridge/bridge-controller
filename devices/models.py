@@ -33,7 +33,7 @@ class Device(LoggedModelMixin):
 
     def get_adaptor_compatibility(self):
         adaptor_compatibilities = []
-        for adaptor_compatibility in self.adaptorcompatibility_set.filter():
+        for adaptor_compatibility in self.adaptor_compatibilities.filter():
             adaptor_compatibilities.append(adaptor_compatibility)
         return adaptor_compatibilities
 

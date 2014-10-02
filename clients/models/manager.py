@@ -32,6 +32,7 @@ class ClientModelManager(PolymorphicBaseUserManager):
 
         while True:
             uid = uuid4().hex[0:8]
+            # For compatibility with users
             email = uid + "@continuumbridge.com"
             try:
                 #existing_client = self.get_queryset().get(uid=uid)
@@ -45,10 +46,7 @@ class ClientModelManager(PolymorphicBaseUserManager):
         # The first 8 characters of the key are the uid
         key = self.generate_key(uid)
 
-        # For compatibility with users
-        email = uid + "@continuumbridge.com"
-
-        client = self.model(uid=uid, plaintext_key=key, email=email,
+        client = self.model(uid=uid, email=email,
                           is_active=True, is_staff=False, is_superuser=False,
                           last_login=now,
                           #created=now,
@@ -56,6 +54,7 @@ class ClientModelManager(PolymorphicBaseUserManager):
         client.set_key(key)
         if save:
             client.save(using=self._db)
+        client.plaintext_key = key
         return client
 
 '''

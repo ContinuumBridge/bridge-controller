@@ -50,10 +50,11 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
 class ClientControl(LoggedModelMixin):
 
+    client = models.ForeignKey(Client, related_name='client_controls')
+    user = models.ForeignKey(CBUser, related_name='client_controls')
+
     class Meta:
-        verbose_name = _('clientcontrol')
-        verbose_name_plural = _('clientcontrols')
+        verbose_name = _('client_control')
+        verbose_name_plural = _('client_controls')
         app_label = 'clients'
 
-    client = models.ForeignKey(Client)
-    user = models.ForeignKey(CBUser)

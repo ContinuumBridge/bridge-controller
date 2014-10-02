@@ -175,7 +175,9 @@ class AuthAuthorization(ReadOnlyAuthorization):
         raise Unauthorized("You may only post to this endpoint with login or logout appended")
 
     def read_detail(self, object_list, bundle):
-        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+        # Is the requested object owned by the user?
+        #return bundle.obj.user == bundle.request.user
+        return bundle.obj.id == bundle.request.user.id
 
     def create_list(self, object_list, bundle):
         raise Unauthorized("You may only post to this endpoint with login or logout appended")

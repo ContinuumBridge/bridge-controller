@@ -35,22 +35,31 @@ from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 # For test
 from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
 
-class UserBridgeControlResource(UserObjectsResource):
+class UserBridgeControlResource(CBResource):
 
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
+    bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=True)
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
 
-    class Meta(UserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
+        related_user_permissions = ['read', 'create', 'update', 'delete']
         #authorization = Authorization()
         #list_allowed_methods = ['get', 'post']
         #detail_allowed_methods = ['get']
         resource_name = 'bridge_control'
 
 
-class UserBridgeResource(RelatedUserObjectsResource, BridgeResource):
+class UserBridgeResource(CBResource):
 
-    class Meta(RelatedUserObjectsResource.Meta, BridgeResource.Meta):
+    apps = cb_fields.ToManyThroughField(AppInstallResource,
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
+                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         #authorization = ReadOnlyAuthorization()
         resource_name = 'bridge'

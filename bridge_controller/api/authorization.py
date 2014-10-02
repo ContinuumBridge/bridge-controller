@@ -1,6 +1,6 @@
 import operator
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Model
 from django.db.models.query import QuerySet
 from django.db.models.fields import FieldDoesNotExist
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
@@ -15,9 +15,10 @@ class CBAuthorization(Authorization):
 
         try:
             bundle.obj._meta.get_field_by_name(related)
-            #bundle.obj.get_field_by_name(related)
+            # If related_objects is a queryset, the query should include __in, not so if it is an object
+            query_suffix = "__in" if isinstance(related_objects, QuerySet) else ""
             query_list.append((
-                 '{0}__in'.format(related), related_objects
+                 '{0}{1}'.format(related, query_suffix), related_objects
             ))
             return query_list
         except FieldDoesNotExist:
@@ -29,8 +30,10 @@ class CBAuthorization(Authorization):
         try:
             related_through = getattr(self.resource_meta, '{0}_related_through'.format(m2m_related))
             print "related_through ", related_through
+            # If related_objects is a queryset, the query should include __in, not so if it is an object
+            query_suffix= "__in" if isinstance(related_objects, QuerySet) else ""
             query_list.append((
-                 '{0}__{1}__in'.format(related_through, m2m_related), related_objects
+                 '{0}__{1}{2}'.format(related_through, m2m_related, query_suffix), related_objects
             ))
             return query_list
             #object_filters.append(Q(**object_filter))
@@ -46,8 +49,7 @@ class CBAuthorization(Authorization):
             bridges = Bridge.objects.filter(bridge_controls=bridge_controls)
         except AttributeError:
             # User is a bridge
-            bridges = []
-            bridges.append(requester)
+            bridges = Bridge.objects.filter(pk=requester.pk)
         return bridges
 
     def get_client_related_query(self, verb, query_list, bundle):
@@ -55,8 +57,9 @@ class CBAuthorization(Authorization):
         requester = CBAuth.objects.get(id=bundle.request.user.id)
         if isinstance(requester, CBUser):
             if verb in getattr(self.resource_meta, 'related_user_permissions', []):
-                query_list = self.get_relation_query([requester], 'user', query_list, bundle)
-                query_list = self.get_m2m_relation_query([requester], 'user', query_list, bundle)
+                query_list = self.get_relation_query(requester, 'user', query_list, bundle)
+                if verb != 'create':
+                    query_list = self.get_m2m_relation_query(requester, 'user', query_list, bundle)
 
         if verb in getattr(self.resource_meta, 'related_bridge_permissions', []):
             bridges = self.get_request_bridges(bundle)
@@ -65,62 +68,157 @@ class CBAuthorization(Authorization):
 
         return query_list
 
-    def filter_with_querylist(self, object_list, query_list):
+    def requester_is_staff(self, bundle):
+        requester = CBAuth.objects.get(id=bundle.request.user.id)
+        return requester.is_staff
+
+    def filter_with_querylist(self, object_list, query_list, bundle):
         if not isinstance(object_list, QuerySet):
             object_list = getattr(self.resource_meta, 'queryset').filter(id=object_list.id)
         try:
             q_list = [Q(query) for query in query_list]
-            return object_list.filter(Q(reduce(operator.or_, q_list))).distinct()
+            allowed = object_list.filter(Q(reduce(operator.or_, q_list))).distinct()
         except TypeError:
             print "TypeError in get_client_related"
-            return []
+            allowed = []
+        if self.requester_is_staff(bundle):
+            return object_list
+        else:
+            return allowed
+
+    def test_object_with_querylist(self, object, query_list, bundle):
+
+        # Determines whether an object would be left in a queryset which the query_list was applied to.
+
+        def evaluate_boolean(connector, predicates):
+            # Return the result of a list of predicate boolean values being combined with the connector
+            try:
+                allowed = predicates[0]
+            except IndexError:
+                # There are no predicates
+                return False
+            for p in predicates:
+                if connector == "OR":
+                    allowed = p | allowed
+                if connector == "AND":
+                    allowed = p & allowed
+            print "allowed is", allowed
+            return allowed
+
+        # Check if an object conforms to conditions represented in a list of querysetss
+        def test_relationship(object, relation):
+            path = relation[0].split('__')
+            related_list = relation[1]
+            if not related_list:
+                return False
+            print "related is", related_list
+            rel = object
+            for index, field in enumerate(path):
+                try:
+                    print "rel for filtering is", rel
+                    print "filtering on", '__'.join(path[index:])
+                    # Try and filter this field using the remaining path and related_list
+                    filtered = rel.filter((
+                        '{0}'.format('__'.join(path[index:])), related_list
+                    ))
+                    print "filtered is ", filtered
+                    return bool(filtered)
+                except AttributeError:
+                    print "AttributeError rel is", rel
+                    if isinstance(rel, related_list[0].__class__) and rel in related_list:
+                        return True
+                    # Set rel to be the next field/ object in the path
+                    rel = getattr(rel, field)
+
+        def evaluate_node(object, node):
+            try:
+                # node is a query
+                print "query node is", node
+                evaluated_nodes = []
+                for q in node.children:
+                    print "q is", q
+                    evaluated_nodes.append(evaluate_node(object, q))
+                connector = getattr(q, 'connector', 'AND')
+                print "connector is", connector
+                print "evaluated_nodes ", evaluated_nodes
+                return evaluate_boolean(connector, evaluated_nodes)
+            except AttributeError:
+                # node is a tuple
+                print "AttributeError"
+                print "tuple node is", node
+                print "tuple node type is", type(node)
+                relationship = test_relationship(object, node)
+                print "relationship is", relationship
+                return relationship
+
+        if not query_list:
+            return object
+
+        evaluated_query_list = []
+        for query in query_list:
+            print "query is", query
+            evaluated_query_list.append(evaluate_node(object, query))
+
+        return evaluate_boolean('OR', evaluated_query_list)
+
+    def test_list(self, object_list):
+        return object_list
 
     def get_query_list(self, verb, bundle):
         query_list = []
-        return self.get_client_related_query('read', query_list, bundle)
-        
+        return self.get_client_related_query(verb, query_list, bundle)
+
     def read_list(self, object_list, bundle):
-        # This assumes a ``QuerySet`` from ``ModelResource``.
         query_list = self.get_query_list('read', bundle)
-        return self.filter_with_querylist(object_list, query_list)
+        filtered = self.filter_with_querylist(object_list, query_list, bundle)
+        return self.test_list(filtered)
 
     def read_detail(self, object_list, bundle):
-        #object_set = set()
-        #object_set.add(bundle.obj)
         query_list = self.get_query_list('read', bundle)
-        return bool(self.filter_with_querylist(bundle.obj, query_list))
+        filtered = self.filter_with_querylist(bundle.obj, query_list, bundle)
+        return bool(self.test_list(filtered))
 
     def create_list(self, object_list, bundle):
         # Assuming they're auto-assigned to ``user``.
-        requester = CBAuth.objects.get(id=bundle.request.user.id)
-        if isinstance(requester, CBUser):
-            if 'create' in getattr(self.resource_meta, 'related_user_permissions', []):
-                return object_list
+        print "In create_list"
+        query_list = self.get_query_list('create', bundle)
+        filtered = self.filter_with_querylist(bundle.obj, query_list, bundle)
+        allowed = self.test_list(filtered)
+        if self.requester_is_staff(bundle):
+            return object_list
+        else:
+            return bool(allowed)
 
     def create_detail(self, object_list, bundle):
-        requester = CBAuth.objects.get(id=bundle.request.user.id)
-        if isinstance(requester, CBUser):
-            return 'create' in getattr(self.resource_meta, 'related_user_permissions', [])
+        print "In create_detail"
+        #requester = CBAuth.objects.get(id=bundle.request.user.id)
+        #if isinstance(requester, CBUser):
+            #return 'create' in getattr(self.resource_meta, 'related_user_permissions', [])
+        print "create_detail bundle.obj", bundle.obj
+        query_list = self.get_query_list('create', bundle)
+        filtered = self.test_object_with_querylist(bundle.obj, query_list, bundle)
+        print "create_detail filtered", filtered
+        allowed = self.test_list(filtered)
+        if self.requester_is_staff(bundle):
+            return True
         else:
-            return False
+            return bool(allowed)
 
     def update_list(self, object_list, bundle):
-        allowed = self.get_query_list('update', bundle)
-        return allowed
+        query_list = self.get_query_list('update', bundle)
+        return self.filter_with_querylist(object_list, query_list, bundle)
 
     def update_detail(self, object_list, bundle):
-        print "Update objects", object_list
-        allowed = self.get_query_list('update', bundle)
-        print "Update allowed ", allowed
-        return bool(allowed)
+        query_list = self.get_query_list('update', bundle)
+        return bool(self.filter_with_querylist(object_list, query_list, bundle))
 
     def delete_list(self, object_list, bundle):
-        allowed = self.get_query_list('delete', bundle)
-        return allowed
+        query_list = self.get_query_list('delete', bundle)
+        return self.filter_with_querylist(object_list, query_list, bundle)
 
     def delete_detail(self, object_list, bundle):
-        allowed = self.get_query_list('delete', bundle)
-        return bool(allowed)
+        query_list = self.get_query_list('delete', bundle)
+        return bool(self.filter_with_querylist(object_list, query_list, bundle))
 
 
 class CBReadAllAuthorization(CBAuthorization):
@@ -135,69 +233,36 @@ class CBReadAllAuthorization(CBAuthorization):
         return True
 
 
-class RelatedUserObjectsOnlyAuthorization(Authorization):
+class StaffAuthorization(ReadOnlyAuthorization):
 
-    def read_list(self, object_list, bundle):
-        # This assumes a ``QuerySet`` from ``ModelResource``.
-        # Allow reads of objects which have a through model between themselves and the current user
-        filters = {
-            '{0}__{1}'.format(self.resource_meta.user_related_through, 'user'): bundle.request.user
-        }
-        return object_list.filter(**filters)
-
-    def read_detail(self, object_list, bundle):
-        # Is the requested object conneced by the specified through model to the user?
-        through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
-        return through_model_manager.filter(user=bundle.request.user).exists()
+    def requester_is_staff(self, bundle):
+        requester = CBAuth.objects.get(id=bundle.request.user.id)
+        return requester.is_staff
 
     def create_list(self, object_list, bundle):
-        # Assuming they're auto-assigned to ``user``.
-        return object_list
+        if self.requester_is_staff(bundle):
+            return object_list
+        else:
+            return []
 
     def create_detail(self, object_list, bundle):
-
-        # Create a through model of specified type between this one and the current user
-        through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
-        creation_parameters = {
-            '{0}'.format(self.resource_meta.resource_name): bundle.obj,
-            '{0}'.format('user'): bundle.request.user
-        }
-        through_model = through_model_manager.create(**creation_parameters)
-        #through_model.save()
-        return True
-        #return through_model_manager.filter(user=bundle.request.user).exists()
-        #return bundle.obj.user == bundle.request.user
+        return self.requester_is_staff(bundle)
 
     def update_list(self, object_list, bundle):
-        allowed = []
-
-        # Since they may not all be saved, iterate over them.
-        for obj in object_list:
-            through_model_manager = getattr(obj, self.resource_meta.user_related_through)
-            if through_model_manager.filter(user=bundle.request.user).exists():
-                allowed.append(obj)
-
-        return allowed
+        if self.requester_is_staff(bundle):
+            return object_list
+        else:
+            return []
 
     def update_detail(self, object_list, bundle):
-        through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
-        return through_model_manager.filter(user=bundle.request.user).exists()
-        #return bundle.obj.user == bundle.request.user
+        return self.requester_is_staff(bundle)
 
     def delete_list(self, object_list, bundle):
-        allowed = []
-
-        # Since they may not all be deleted, iterate over them.
-        for obj in object_list:
-            through_model_manager = getattr(obj, self.resource_meta.user_related_through)
-            if through_model_manager.filter(user=bundle.request.user).exists():
-                allowed.append(obj)
-
-        return allowed
-        #raise Unauthorized("Sorry, no deletes.")
+        if self.requester_is_staff(bundle):
+            return object_list
+        else:
+            return []
 
     def delete_detail(self, object_list, bundle):
-        through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
-        return through_model_manager.filter(user=bundle.request.user).exists()
-        #raise Unauthorized("Sorry, no deletes.")
+        return self.requester_is_staff(bundle)
 

@@ -6,7 +6,7 @@ require('./cb/modules/config/config');
 require('./cb/modules/developer/developer');
 require('./cb/modules/store/store');
 require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
+//require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
 //require('./cb/views');

@@ -13,7 +13,7 @@ var Portal = function(port, djangoRootURL) {
         port: port,
         djangoRootURL: djangoRootURL,
         djangoURL: djangoURL,
-        authURL: djangoURL + 'current_user/user/'
+        authURL: djangoURL + 'user_auth/user/'
     }
 
     this.socketServer = new BackboneIOServer(this.config);
@@ -22,7 +22,7 @@ var Portal = function(port, djangoRootURL) {
 
         socket.getConfig = function() {
             var config = socket.config || socket.handshake.config;
-            console.log('getConfig ran');
+            console.log('getConfig ran', socket.handshake.config);
             return self.socketServer.getConnectionConfig(self.config.authURL, config);
         };
 

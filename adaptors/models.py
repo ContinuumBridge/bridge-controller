@@ -51,8 +51,8 @@ class AdaptorCompatibility(LoggedModelMixin):
 
     """ Through model for an Adaptor and a Device, denotes their compatibility """
 
-    device = models.ForeignKey(Device)
-    adaptor = models.ForeignKey(Adaptor)
+    device = models.ForeignKey(Device, related_name='adaptor_compatibilities')
+    adaptor = models.ForeignKey(Adaptor, related_name='device_compatibilities')
 
     class Meta:
         verbose_name = _('adaptor_compatibility')

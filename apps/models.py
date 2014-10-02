@@ -74,7 +74,7 @@ class AppLicence(LoggedModelMixin):
 
     def get_installs(self):
         installs = []
-        for install in self.appinstall_set.filter():
+        for install in self.app_installs.filter():
             installs.append(install)
         return installs
 
@@ -85,7 +85,7 @@ class AppInstall(LoggedModelMixin):
 
     bridge = models.ForeignKey(Bridge)
     app = models.ForeignKey(App, related_name='app_installs')
-    licence = models.ForeignKey(AppLicence)
+    licence = models.ForeignKey(AppLicence, related_name='app_installs')
 
     class Meta:
         verbose_name = _('app_install')

@@ -21,11 +21,11 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
                     null=True, readonly=True, nonmodel=True)
 
+    '''
     app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
                      attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
                      null=True, readonly=True, nonmodel=True)
 
-    '''
     app_ownerships = cb_fields.ToManyThroughField(AppOwnershipResource,
                                                 attribute=lambda bundle: bundle.obj.get_app_ownerships() or bundle.obj.appownership_set, full=True,
                                                 null=True, readonly=True, nonmodel=True)
@@ -54,13 +54,15 @@ class UserResource(CBResource, CBIDResourceMixin):
         authorization = ReadOnlyAuthorization()
 
 
-class UserAuthResource(AuthResource):
+#class UserAuthResource(AuthResource):
+class UserAuthResource(LoggedInResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
-    class Meta(AuthResource.Meta):
+    #class Meta(ModelResource.Meta):
+    class Meta(LoggedInResource.Meta):
         queryset = CBUser.objects.all()
         # Resource used to send data on successful login
-        data_resource = CurrentUserResource()
-        fields = ['first_name', 'last_name', 'email']
+        #data_resource = CurrentUserResource()
+        fields = ['first_name', 'last_name', 'email', 'cbid']
         resource_name = 'user_auth'

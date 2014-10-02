@@ -8,6 +8,7 @@ var Views = require('./views');
 
 CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
 
+    /*
     Notifications.addInitializer(function() {
 
         //router
@@ -69,4 +70,5 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
     Notifications.on('add:error', function(error){
         Notifications.controller.showError(error);
     });
+    */
 });
