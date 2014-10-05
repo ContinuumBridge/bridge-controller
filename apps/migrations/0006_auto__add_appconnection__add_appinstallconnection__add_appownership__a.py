@@ -1,26 +1,68 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
-        emails = ['mark.claydon@continuumbridge.com',
-                  'peter.claydon@continuumbridge.com',
-                  'martin.sotheran@continuumbridge.com']
-        users = orm['accounts.CBUser'].objects.filter(email__in=emails)
+        # Adding model 'AppConnection'
+        db.create_table(u'apps_appconnection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appconnection_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appconnection', null=True, to=orm['accounts.CBAuth'])),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBAuth'])),
+            ('app', self.gf('django.db.models.fields.related.ForeignKey')(related_name='app_connections', to=orm['apps.App'])),
+        ))
+        db.send_create_signal('apps', ['AppConnection'])
 
-        for app in orm['apps.App'].objects.all():
-            for user in users:
+        # Adding model 'AppInstallConnection'
+        db.create_table(u'apps_appinstallconnection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appinstallconnection_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appinstallconnection', null=True, to=orm['accounts.CBAuth'])),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBAuth'])),
+            ('app_install', self.gf('django.db.models.fields.related.ForeignKey')(related_name='app_connections', to=orm['apps.AppInstall'])),
+        ))
+        db.send_create_signal('apps', ['AppInstallConnection'])
 
-                app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app, user=user)
-                app_ownership.save()
+        # Adding model 'AppOwnership'
+        db.create_table(u'apps_appownership', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appownership_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appownership', null=True, to=orm['accounts.CBAuth'])),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBUser'])),
+            ('app', self.gf('django.db.models.fields.related.ForeignKey')(related_name='app_ownerships', to=orm['apps.App'])),
+        ))
+        db.send_create_signal('apps', ['AppOwnership'])
+
+        # Adding field 'App.git_key'
+        db.add_column(u'apps_app', 'git_key',
+                      self.gf('django.db.models.fields.TextField')(default='', max_length=1000, blank=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'AppConnection'
+        db.delete_table(u'apps_appconnection')
+
+        # Deleting model 'AppInstallConnection'
+        db.delete_table(u'apps_appinstallconnection')
+
+        # Deleting model 'AppOwnership'
+        db.delete_table(u'apps_appownership')
+
+        # Deleting field 'App.git_key'
+        db.delete_column(u'apps_app', 'git_key')
+
 
     models = {
         'accounts.cbauth': {
@@ -198,4 +240,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['apps']
-    symmetrical = True

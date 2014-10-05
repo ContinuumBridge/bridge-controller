@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from tastypie.exceptions import Unauthorized
 
-from accounts.models import CBAuth, CBUser
+from accounts.models import CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin, CBIDModelMixin
 from clients.models.clients import Client
@@ -20,6 +20,8 @@ class App(LoggedModelMixin, CBIDModelMixin):
     provider = models.CharField(_("provider"), max_length = 255)
     version = models.CharField(_("version"), max_length = 255)
     url = models.URLField(_("url"), max_length = 255)
+    git_key = models.TextField(_("git key"), max_length = 1000, blank = True)
+
     exe = models.CharField(_("exe"), max_length = 255)
 
     class Meta:
@@ -44,17 +46,6 @@ class AppOwnership(LoggedModelMixin):
     class Meta:
         verbose_name = _('app_ownership')
         verbose_name_plural = _('app_ownerships')
-        app_label = 'apps'
-
-
-class AppConnection(LoggedModelMixin):
-
-    client = models.ForeignKey(Client)
-    app = models.ForeignKey(App, related_name='app_connections')
-
-    class Meta:
-        verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connections')
         app_label = 'apps'
 
 
@@ -106,6 +97,7 @@ class AppInstall(LoggedModelMixin):
         bridge_id = "BID" + str(self.bridge.id)
         return bridge_id + "/" + app_id
 
+
 class AppDevicePermission(LoggedModelMixin):
 
     device_install = models.ForeignKey(DeviceInstall)
@@ -114,6 +106,28 @@ class AppDevicePermission(LoggedModelMixin):
     class Meta:
         verbose_name = _('app_device_permission')
         verbose_name_plural = _('app_device_permissions')
+        app_label = 'apps'
+
+
+class AppInstallConnection(LoggedModelMixin):
+
+    client = models.ForeignKey(CBAuth)
+    app_install = models.ForeignKey(AppInstall, related_name='app_connections')
+
+    class Meta:
+        verbose_name = _('app_connection')
+        verbose_name_plural = _('app_connections')
+        app_label = 'apps'
+
+
+class AppConnection(LoggedModelMixin):
+
+    client = models.ForeignKey(CBAuth)
+    app = models.ForeignKey(App, related_name='app_connections')
+
+    class Meta:
+        verbose_name = _('app_connection')
+        verbose_name_plural = _('app_connections')
         app_label = 'apps'
 
 

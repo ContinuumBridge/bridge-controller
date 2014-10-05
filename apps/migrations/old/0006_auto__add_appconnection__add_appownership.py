@@ -1,26 +1,45 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
-        emails = ['mark.claydon@continuumbridge.com',
-                  'peter.claydon@continuumbridge.com',
-                  'martin.sotheran@continuumbridge.com']
-        users = orm['accounts.CBUser'].objects.filter(email__in=emails)
+        # Adding model 'AppConnection'
+        db.create_table(u'apps_appconnection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appconnection_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appconnection', null=True, to=orm['accounts.CBAuth'])),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['clients.Client'])),
+            ('app', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['apps.App'])),
+        ))
+        db.send_create_signal('apps', ['AppConnection'])
 
-        for app in orm['apps.App'].objects.all():
-            for user in users:
+        # Adding model 'AppOwnership'
+        db.create_table(u'apps_appownership', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_apps_appownership_related', null=True, to=orm['accounts.CBAuth'])),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('modified_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='modified_apps_appownership', null=True, to=orm['accounts.CBAuth'])),
+            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['accounts.CBUser'])),
+            ('app', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['apps.App'])),
+        ))
+        db.send_create_signal('apps', ['AppOwnership'])
 
-                app_ownership, is_created = orm['apps.AppOwnership'].objects.get_or_create(app=app, user=user)
-                app_ownership.save()
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'AppConnection'
+        db.delete_table(u'apps_appconnection')
+
+        # Deleting model 'AppOwnership'
+        db.delete_table(u'apps_appownership')
+
 
     models = {
         'accounts.cbauth': {
@@ -38,6 +57,7 @@ class Migration(DataMigration):
         },
         'accounts.cbuser': {
             'Meta': {'object_name': 'CBUser', '_ormbases': ['accounts.CBAuth']},
+            'bridge_control': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['bridges.Bridge']", 'through': "orm['bridges.BridgeControl']", 'symmetrical': 'False'}),
             u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
@@ -65,7 +85,6 @@ class Migration(DataMigration):
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_app_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'exe': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'git_key': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_app'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
@@ -76,8 +95,8 @@ class Migration(DataMigration):
         },
         'apps.appconnection': {
             'Meta': {'object_name': 'AppConnection'},
-            'app': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_connections'", 'to': "orm['apps.App']"}),
-            'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBAuth']"}),
+            'app': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.App']"}),
+            'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['clients.Client']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appconnection_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -96,28 +115,18 @@ class Migration(DataMigration):
         },
         'apps.appinstall': {
             'Meta': {'object_name': 'AppInstall'},
-            'app': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_installs'", 'to': "orm['apps.App']"}),
+            'app': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.App']"}),
             'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appinstall_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'licence': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_installs'", 'to': "orm['apps.AppLicence']"}),
+            'licence': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.AppLicence']"}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_appinstall'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
         },
-        'apps.appinstallconnection': {
-            'Meta': {'object_name': 'AppInstallConnection'},
-            'app_install': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_connections'", 'to': "orm['apps.AppInstall']"}),
-            'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBAuth']"}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appinstallconnection_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_apps_appinstallconnection'", 'null': 'True', 'to': "orm['accounts.CBAuth']"})
-        },
         'apps.applicence': {
             'Meta': {'object_name': 'AppLicence'},
-            'app': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_licences'", 'to': "orm['apps.App']"}),
+            'app': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.App']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_applicence_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -128,7 +137,7 @@ class Migration(DataMigration):
         },
         'apps.appownership': {
             'Meta': {'object_name': 'AppOwnership'},
-            'app': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'app_ownerships'", 'to': "orm['apps.App']"}),
+            'app': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['apps.App']"}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_apps_appownership_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -154,7 +163,26 @@ class Migration(DataMigration):
             u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'plaintext_key': ('django.db.models.fields.CharField', [], {'max_length': '128'})
+        },
+        'bridges.bridgecontrol': {
+            'Meta': {'object_name': 'BridgeControl'},
+            'bridge': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['bridges.Bridge']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_bridges_bridgecontrol_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'modified_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'modified_bridges_bridgecontrol'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['accounts.CBUser']"})
+        },
+        'clients.client': {
+            'Meta': {'object_name': 'Client', '_ormbases': ['accounts.CBAuth']},
+            u'cbauth_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['accounts.CBAuth']", 'unique': 'True', 'primary_key': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'key': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'plaintext_key': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -169,7 +197,6 @@ class Migration(DataMigration):
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_devices_device_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'firmware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'git_key': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'blank': 'True'}),
             'hardware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'manufacturer_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -198,4 +225,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['apps']
-    symmetrical = True

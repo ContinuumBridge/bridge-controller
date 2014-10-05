@@ -12,6 +12,7 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
+print "Imported accounts.models from bridges"
 from clients.models.abstract import AuthKeyMixin
 
 from .common import LoggedModelMixin

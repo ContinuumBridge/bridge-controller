@@ -19,6 +19,7 @@ require('./clients/controls/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
+require('./notifications/models');
 require('./users/models');
 require('./users/current/models');
 
@@ -26,6 +27,9 @@ require('./misc/decorators');
 require('./misc/filters');
 
 CBApp.addInitializer(function () {
+
+  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
+  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
 
   //data
   CBApp.appCollection = new CBApp.AppCollection();
@@ -40,6 +44,9 @@ CBApp.addInitializer(function () {
 
   CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
 
+  CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
+  CBApp.bridgeCollection = new CBApp.BridgeCollection();
+
   CBApp.clientCollection = new CBApp.ClientCollection();
 
   CBApp.clientControlCollection = new CBApp.ClientControlCollection();
@@ -52,17 +59,16 @@ CBApp.addInitializer(function () {
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
   //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
 
-  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
-  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
-
   CBApp.messageCollection = new CBApp.MessageCollection([
       { body: "Test message 1", source: "BID8", destination: "UID2" },
-      { body: "Test message 2", source: "UID2", destination: "BID8" },
+      { body: "Test message 2", source: "UID2", destination: "BID8" }
   ]);
   CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
-  CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
-  CBApp.bridgeCollection = new CBApp.BridgeCollection();
+  CBApp.notificationCollection = new CBApp.NotificationCollection([
+      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
+  ]);
 
   CBApp.userCollection = new CBApp.UserCollection();
 

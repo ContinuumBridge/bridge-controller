@@ -19,6 +19,7 @@ PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 # Define user model
 AUTH_USER_MODEL = 'accounts.CBAuth'
+#USER_MODEL = 'accounts.CBUser'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
@@ -220,7 +221,6 @@ INSTALLED_APPS = (
     #'django.contrib.sessions',
     'user_sessions',
     'django.contrib.sites',
-    'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',
@@ -237,9 +237,9 @@ INSTALLED_APPS = (
     # Continuum Bridge apps
     'accounts',
     # Allauth must come below accounts for template loading order
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+    #'allauth',
+    #'allauth.account',
+    #'allauth.socialaccount',
     # More Continuum Bridge apps
     'bridge_controller',
     'bridges',
