@@ -11,7 +11,8 @@ from django.middleware.csrf import _sanitize_token, constant_time_compare
 from django.utils.http import same_origin
 from django.utils.translation import ugettext as _
 from tastypie.http import HttpUnauthorized
-from tastypie.compat import User, username_field
+#from tastypie.compat import User, username_field
+
 
 from tastypie.authentication import BasicAuthentication
 

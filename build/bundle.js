@@ -33979,6 +33979,7 @@ CBApp.addInitializer(function () {
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
   //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
 
+
   CBApp.messageCollection = new CBApp.MessageCollection([
       { body: "Test message 1", source: "BID8", destination: "UID2" },
       { body: "Test message 2", source: "UID2", destination: "BID8" }
@@ -33986,8 +33987,8 @@ CBApp.addInitializer(function () {
   CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
   CBApp.notificationCollection = new CBApp.NotificationCollection([
-      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
+      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
 
   CBApp.userCollection = new CBApp.UserCollection();

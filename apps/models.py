@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from tastypie.exceptions import Unauthorized
 
-from accounts.models import CBUser
+from accounts.models import CBUser, CBAuth
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin, CBIDModelMixin
 from clients.models.clients import Client

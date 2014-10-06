@@ -11,10 +11,10 @@ class Signup(LoggedModelMixin):
     email = models.EmailField(_("Email"), max_length = 255)
     message = models.TextField(_("Message"), blank = True)
 
-    consumer = models.BooleanField(_("Consumer"))
-    developer = models.BooleanField(_("Developer"))
-    device_manufacturer = models.BooleanField(_("Device Manufacturer"))
-    service_provider = models.BooleanField(_("Service Provider"))
+    consumer = models.BooleanField(_("Consumer"), default=False)
+    developer = models.BooleanField(_("Developer"), default=False)
+    device_manufacturer = models.BooleanField(_("Device Manufacturer"), default=False)
+    service_provider = models.BooleanField(_("Service Provider"), default=False)
 
     class Meta:
         verbose_name = _('signup')

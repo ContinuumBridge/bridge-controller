@@ -159,15 +159,12 @@ class PolymorphicAbstractBaseUser(PolymorphicModel):
         return salted_hmac(key_salt, self.password).hexdigest()
 '''
 
-class AuthPasswordMixin(models.Model):
-
-    password = models.CharField(_('password'), max_length=128)
-
-    class Meta:
-        abstract = True
+class AuthPasswordMixin(object):
 
     def set_password(self, raw_password):
+        print "User set_password"
         self.password = make_password(raw_password)
+        print "User set_password is", self.password
 
     def check_password(self, raw_password):
         """

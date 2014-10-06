@@ -1,4 +1,4 @@
-Django==1.7
+Django==1.6.2
 #-e git+git://github.com/django/django.git@1.7c1#egg=django
 South==0.7.6
 argparse==1.2.1
