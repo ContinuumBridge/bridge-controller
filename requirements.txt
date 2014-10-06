@@ -1,10 +1,10 @@
 Django==1.6.2
 #-e git+git://github.com/django/django.git@1.7c1#egg=django
-South==0.7.6
+South==1.0
 argparse==1.2.1
 distribute
 #django-allauth==0.13.0
--e git+https://github.com/continuumbridge/django-allauth.git#egg=allauth
+-e git+https://github.com/continuumbridge/django-allauth.git@24bb0ea4fea158b0eb687bdeed8d5667e54048b3#egg=allauth
 django-annoying==0.7.7
 django-avatar==1.0.5
 django-bootstrap-form==2.0.5
@@ -20,13 +20,13 @@ django-model-utils==2.0.0
 django-multiselectfield==0.1.2
 #django-notifications-hq==0.6.2
 -e git+https://github.com/continuumbridge/django-notifications.git@6a58f06cf5c8e73101e087839e1562052b7cf3c9#egg=notifications
-django-nyt
+#django-nyt
 django-polymorphic==0.5.5
 django-redis-sessions
 django-sekizai==0.7
-#django-tastypie==0.11.0
+django-tastypie==0.11.1
+#-e git+https://github.com/toastdriven/django-tastypie.git@f9a1a12eb4bf872f57deaaba03bfb2cf68ba0814#egg=tastypie
 #-e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
--e git+https://github.com/toastdriven/django-tastypie.git@437dcb5233ef0708c315d090430e502b7a8bead0#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
 #git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
 -e git+https://github.com/ContinuumBridge/telegraphy.git@0b84d001a8b8efd2fcf68110be7be721cb465e32#egg=telegraphy
@@ -54,7 +54,7 @@ requests==1.2.3
 requests-oauthlib==0.3.2
 six==1.3.0
 #twython==3.0.0
--e git+https://github.com/django-wiki/django-wiki.git@django1.7#egg=django-wiki
+#-e git+https://github.com/django-wiki/django-wiki.git@django1.7#egg=django-wiki
 #wiki
 # ^^ This is django-wiki
 wsgiref==0.1.2
