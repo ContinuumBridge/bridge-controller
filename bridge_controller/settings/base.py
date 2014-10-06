@@ -17,12 +17,16 @@ gettext = lambda s: s
 #PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', '..'))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
-# Define user model
-AUTH_USER_MODEL = 'accounts.CBAuth'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
 #SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Define user model
+AUTH_USER_MODEL = 'accounts.CBAuth'
+USER_MODEL = 'accounts.CBUser'
 
 # All Auth
 ACCOUNT_AUTHENTICATION_METHOD='email'
@@ -220,7 +224,6 @@ INSTALLED_APPS = (
     #'django.contrib.sessions',
     'user_sessions',
     'django.contrib.sites',
-    'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',

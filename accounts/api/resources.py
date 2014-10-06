@@ -55,12 +55,12 @@ class UserResource(CBResource, CBIDResourceMixin):
 
 
 #class UserAuthResource(AuthResource):
-class UserAuthResource(LoggedInResource, CBIDResourceMixin):
+class UserAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
     #class Meta(ModelResource.Meta):
-    class Meta(LoggedInResource.Meta):
+    class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()
         # Resource used to send data on successful login
         #data_resource = CurrentUserResource()

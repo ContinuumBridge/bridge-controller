@@ -41,6 +41,7 @@ class DeviceResource(PostMatchMixin, CBResource):
     class Meta(CBResource.Meta):
         queryset = Device.objects.all()
         authorization = CBReadAllAuthorization()
+        post_match = ['name']
         filtering = {
             'name': ALL,
             'protocol': ALL,

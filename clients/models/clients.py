@@ -5,10 +5,9 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 
-from accounts.models.auth import CBAuth
 from bridges.models.common import CBIDModelMixin, LoggedModelMixin
 
-from accounts.models import CBUser
+from accounts.models import CBAuth, CBUser
 from .manager import ClientModelManager
 from .abstract import AuthKeyMixin
 

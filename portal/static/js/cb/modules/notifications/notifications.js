@@ -3,31 +3,31 @@ var $ = require('jquery');
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
 
-var Models = require('./models');
-var Views = require('./views');
+require('../../notifications/views');
+//var Models = require('./models');
+//var Views = require('./views');
 
 CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
 
-    /*
     Notifications.addInitializer(function() {
 
+        console.log('Notifications Initializer');
         //router
         this.controller = new this.Controller();
 
-        this.collection = new Models.NotificationCollection();
-
-        CBApp.addRegions({
-            notificationsRegion: '#notifications'
-        });
+        //this.collection = new CBApp.NotificationCollection();
     });
 
     Notifications.Controller = Marionette.Controller.extend({
         showNotifications: function() {
 
-            var notificationsListView = Views.NotificationListView({
-                collection: Notifications.collection
-            })
-            CBApp.notificationsRegion.show(notificationsListView);
+            console.log('notificationCollection', CBApp.notificationCollection);
+            Notifications.notificationsListView = new CBApp.NotificationListView({
+                collection: CBApp.notificationCollection
+            });
+
+            console.log('notificationsListView ', Notifications.notificationsListView);
+            CBApp.notificationRegion.show(Notifications.notificationsListView);
         },
         showInformation: function(message, title) {
             console.log('We got to the notification controller!');
@@ -57,7 +57,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
         Notifications.controller.showNotifications();
     });
 
-    Notifications.on('add:information', function(information){
+    Notifications.on('show:information', function(information){
 
         this.collection.add({
             title: information.title,
@@ -70,5 +70,4 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
     Notifications.on('add:error', function(error){
         Notifications.controller.showError(error);
     });
-    */
 });

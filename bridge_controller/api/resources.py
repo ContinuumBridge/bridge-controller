@@ -417,10 +417,12 @@ class PostMatchMixin(object):
 
 class AuthResource(LoggedInResource):
 
-    class Meta:
+    class Meta(LoggedInResource.Meta):
         authorization = AuthAuthorization()
         #fields = ['first_name', 'last_name', 'email']
-        allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get']
+        #allowed_methods = ['get', 'post']
 
     def override_urls(self):
         return [

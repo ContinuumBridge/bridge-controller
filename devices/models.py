@@ -23,6 +23,8 @@ class Device(LoggedModelMixin):
     model_number = models.CharField(_("model_number"), max_length = 255, blank = True)
     system_id =  models.CharField(_("system_id"), max_length = 255, blank = True)
 
+    git_key = models.TextField(_("git key"), max_length = 1000, blank = True)
+
     class Meta:
         verbose_name = _('device')
         verbose_name_plural = _('devices')

@@ -25,7 +25,7 @@ from .auth import CBAuth
 
 class CBUserManager(PolymorphicBaseUserManager):
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password=None, first_name=None, last_name=None, save=False, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
@@ -42,12 +42,15 @@ class CBUserManager(PolymorphicBaseUserManager):
                 print "User uid is unique!"
                 break
 
-        user = self.model(email=email, uid=uid,
+        model = self.model or CBUser
+        user = model(email=email, uid=uid,
                           is_staff=False, is_active=True, is_superuser=False,
+                          first_name=first_name, last_name=last_name,
                           last_login=now, date_joined=now, **extra_fields)
 
         user.set_password(password)
-        user.save(using=self._db)
+        if save:
+            user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password, **extra_fields):
@@ -58,16 +61,19 @@ class CBUserManager(PolymorphicBaseUserManager):
         u.save(using=self._db)
         return u
 
+'''
+class CBUser(models.Model):
+    pass
+'''
 
 class CBUser(AuthPasswordMixin, CBAuth):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-
-    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
-
+    password = models.CharField(_('password'), max_length=128)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
+    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
     #bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
 
     objects = CBUserManager()
@@ -114,4 +120,5 @@ class CBUser(AuthPasswordMixin, CBAuth):
     def cbid(self):
         return "UID" + str(self.id)
 
+print "After CBUser"
 
