@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -8,39 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Device.method'
-        #db.delete_column(u'devices_device', 'method')
-
-        # Adding field 'Device.protocol'
-        db.add_column(u'devices_device', 'protocol',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
-                      keep_default=False)
-
-        # Deleting field 'DeviceInstall.mac_addr'
-        db.delete_column(u'devices_deviceinstall', 'mac_addr')
-
-        # Adding field 'DeviceInstall.address'
-        db.add_column(u'devices_deviceinstall', 'address',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=255),
+        # Adding field 'Device.git_key'
+        db.add_column(u'devices_device', 'git_key',
+                      self.gf('django.db.models.fields.TextField')(default='', max_length=1000, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Adding field 'Device.method'
-        db.add_column(u'devices_device', 'method',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
-                      keep_default=False)
-
-        # Deleting field 'Device.protocol'
-        db.delete_column(u'devices_device', 'protocol')
-
-        # Adding field 'DeviceInstall.mac_addr'
-        db.add_column(u'devices_deviceinstall', 'mac_addr',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=255),
-                      keep_default=False)
-
-        # Deleting field 'DeviceInstall.address'
-        db.delete_column(u'devices_deviceinstall', 'address')
+        # Deleting field 'Device.git_key'
+        db.delete_column(u'devices_device', 'git_key')
 
 
     models = {
@@ -105,6 +81,7 @@ class Migration(SchemaMigration):
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_devices_device_related'", 'null': 'True', 'to': "orm['accounts.CBAuth']"}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'firmware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'git_key': ('django.db.models.fields.TextField', [], {'max_length': '1000', 'blank': 'True'}),
             'hardware_revision': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'manufacturer_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),

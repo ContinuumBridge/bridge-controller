@@ -17,6 +17,7 @@ DATABASES = {
     }
 }
 
+'''
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
     # Django Wiki
@@ -39,4 +40,5 @@ SOUTH_MIGRATION_MODULES = {
     #'notifications': 'wiki.plugins.notifications.south_migrations',
     'attachments': 'wiki.plugins.attachments.south_migrations',
 }
+'''
 
