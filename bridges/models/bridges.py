@@ -13,6 +13,7 @@ from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
 print "Imported accounts.models from bridges"
+from .common import CBIDModelMixin
 from clients.models.abstract import AuthKeyMixin
 
 from .common import LoggedModelMixin
@@ -29,10 +30,13 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
                      ('authorised', 'Authorised'),
                      ('connected', 'Connected'))
 
-class Bridge(CBAuth, AuthKeyMixin):
+class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
+
+    key = models.CharField(_('key'), max_length=128)
+    plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
 
     #connected = models.BooleanField(_('connected'), default = False)
     #ip = models.GenericIPAddressField(_('ip'))

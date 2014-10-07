@@ -16,6 +16,9 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
 
+    key = models.CharField(_('key'), max_length=128)
+    plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
+
     #plaintext_key = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = ClientModelManager()

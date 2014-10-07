@@ -13,7 +13,7 @@ class BridgeControlInline(admin.TabularInline):
 class BridgeAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        (None, {'fields': ['name', 'description', 'email', 'password']}),
+        (None, {'fields': ['name', 'description', 'email']}),
         #('Related', {'fields': ['controller']}),
         #('Meta', {'fields': ['creator', 'modifier']}),
     ]
