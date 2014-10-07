@@ -4,7 +4,7 @@ South==1.0
 argparse==1.2.1
 distribute
 #django-allauth==0.13.0
--e git+https://github.com/continuumbridge/django-allauth.git@24bb0ea4fea158b0eb687bdeed8d5667e54048b3#egg=allauth
+-e git+https://github.com/continuumbridge/django-allauth.git@66fd8d49c1a4b366935b5561de87668468ea619a#egg=allauth
 django-annoying==0.7.7
 django-avatar==1.0.5
 django-bootstrap-form==2.0.5
