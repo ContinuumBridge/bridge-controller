@@ -22,6 +22,8 @@ class Adaptor(LoggedModelMixin):
     url = models.CharField(_("url"), max_length = 255, blank = True)
     exe = models.CharField(_("exe"), max_length = 255, blank = True)
 
+    git_key = models.TextField(_("git key"), max_length = 1000, blank = True)
+
     class Meta:
         verbose_name = _('adaptor')
         verbose_name_plural = _('adaptors')
