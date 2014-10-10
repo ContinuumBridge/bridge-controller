@@ -39,6 +39,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
         console.log('this in installDevice is', this);
 
+
         console.log('adaptor in installDevice is', adaptor);
         console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
         console.log('device in installDevice is', this.get('device').get('resource_uri'));
@@ -60,7 +61,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
-                adaptor: adaptor.resource_uri,
+                adaptor: adaptor,
                 friendly_name: friendlyName
             });
 
