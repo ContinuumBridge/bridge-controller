@@ -13,7 +13,7 @@ class CBAuthManager(PolymorphicBaseUserManager):
 
 class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
 
-    #email = models.EmailField(_('email address'), unique=True)
+    #old_email = models.EmailField(_('email address'), unique=True)
     uid = models.CharField(_('uid'), max_length = 8, unique = True)
 
     is_active = models.BooleanField(_('active'), default=True,

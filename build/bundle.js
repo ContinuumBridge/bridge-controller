@@ -32431,7 +32431,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
-                adaptor: adaptor.resource_uri,
+                adaptor: adaptor,
                 friendly_name: friendlyName
             });
 
@@ -44851,8 +44851,6 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"jquery":15}],137:[function(require,module,exports){
-(function (global){
-;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 // Copyright (C) 2010 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45645,9 +45643,4 @@ var caja = (function () {
 if (typeof window !== 'undefined') {
     window['caja'] = caja;
 }
-; browserify_shim__define__module__export__(typeof caja != "undefined" ? caja : window.caja);
-
-}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
-
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[122])
