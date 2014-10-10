@@ -30390,7 +30390,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
     }
 });
 
-},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":114,"backbone.marionette":122}],25:[function(require,module,exports){
+},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":123,"backbone.marionette":131}],25:[function(require,module,exports){
 
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
@@ -30891,7 +30891,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":114,"backbone.marionette":122}],33:[function(require,module,exports){
+},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":123,"backbone.marionette":131}],33:[function(require,module,exports){
 
 CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -31265,7 +31265,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":114,"backbone.marionette":122}],38:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":123,"backbone.marionette":131}],38:[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -31529,7 +31529,7 @@ CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":114,"backbone.marionette":122}],43:[function(require,module,exports){
+},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":123,"backbone.marionette":131}],43:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -31970,7 +31970,7 @@ CBApp.ClientControlListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":114,"backbone.marionette":122}],52:[function(require,module,exports){
+},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":123,"backbone.marionette":131}],52:[function(require,module,exports){
 
 CBApp.Client = Backbone.Deferred.Model.extend({
     
@@ -32126,7 +32126,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":114,"backbone.marionette":122}],56:[function(require,module,exports){
+},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":123,"backbone.marionette":131}],56:[function(require,module,exports){
 
 
 
@@ -32234,7 +32234,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     }
 });
 
-},{"./components":58,"backbone-bundle":114,"backbone.marionette":122}],58:[function(require,module,exports){
+},{"./components":58,"backbone-bundle":123,"backbone.marionette":131}],58:[function(require,module,exports){
 
 CBApp.Components = {};
 
@@ -32344,7 +32344,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
     }
 });
 
-},{"./components":58,"./templates/switch.html":62,"backbone-bundle":114,"backbone.marionette":122}],61:[function(require,module,exports){
+},{"./components":58,"./templates/switch.html":62,"backbone-bundle":123,"backbone.marionette":131}],61:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32703,7 +32703,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":114,"backbone.marionette":122}],68:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":123,"backbone.marionette":131}],68:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -32966,7 +32966,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":114,"backbone.marionette":122}],72:[function(require,module,exports){
+},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":123,"backbone.marionette":131}],72:[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -33049,6 +33049,12 @@ CBApp.Controller = Marionette.Controller.extend({
   index: function () {
     console.log('index');
   },
+  showDashboard: function(slug) {
+      console.log('showDashboard controller');
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('topbar:activate', 'dashboard');
+      CBApp.Dashboard.trigger('show', slug);
+  },
   showConfig: function(slug) {
       CBApp.modalsRegion.reset();
       CBApp.Nav.trigger('topbar:activate', 'config');
@@ -33127,6 +33133,10 @@ CBApp.Router = Marionette.SubRouter.extend({
   }
 });
 
+CBApp.reqres.setHandler("dashboard:show", function(){
+    CBApp.controller.showDashboard();
+});
+
 CBApp.reqres.setHandler("config:show", function(){
     CBApp.controller.showConfig();
 });
@@ -33140,7 +33150,7 @@ CBApp.reqres.setHandler("store:show", function(){
 });
 
 module.exports = CBApp;
-},{"backbone-bundle":114,"backbone.marionette":122}],74:[function(require,module,exports){
+},{"backbone-bundle":123,"backbone.marionette":131}],74:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -33366,7 +33376,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":114,"backbone.marionette":122}],78:[function(require,module,exports){
+},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":123,"backbone.marionette":131}],78:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -34009,7 +34019,7 @@ CBApp.addInitializer(function () {
   });
 });
 
-},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./notifications/models":103,"./users/current/models":108,"./users/models":109,"index":73,"q":16}],82:[function(require,module,exports){
+},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./notifications/models":111,"./users/current/models":117,"./users/models":118,"index":73,"q":16}],82:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -34380,515 +34390,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":110,"../../views/regions":111,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":114,"backbone.marionette":122,"q":16}],88:[function(require,module,exports){
-
-
-var DeveloperViews = require('./views');
-
-CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
-
-    console.log('Developer ran!');
-    Developer.addInitializer(function() {
-
-        //router
-        this.controller = new this.Controller();
-        this.router = new this.Router('portal/developer/', {
-            controller : this.controller,
-            createTrailingSlashRoutes: true
-        });
-    });
-
-    Developer.Controller = Marionette.Controller.extend({
-
-      showDeveloper: function() {
-
-          Developer.mainLayoutView = new DeveloperViews.Main();
-          CBApp.mainRegion.show(Developer.mainLayoutView);
-      },
-      addAppConnection: function(app, user) {
-        var that = this;
-        console.log('We got to the controller!');
-        var addAppConnectionModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-        });
-        CBApp.modalsRegion.show(installDeviceModal);
-      }
-    });
-
-    Developer.Router = Marionette.SubRouter.extend({
-
-        appRoutes: {
-          "": "showDeveloper",
-          //"config/bridge/:bridge": "config",
-        }
-    });
-
-    Developer.on('developer:show', function(){
-        console.log('show developer');
-        Developer.controller.showDeveloper();
-        Developer.router.navigate('');
-    });
-});
-
-},{"./views":90}],89:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":13}],90:[function(require,module,exports){
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette')
-    ,Q = require('q');
-
-require('../../views/generic_views');
-require('../../views/regions');
-
-require('../../apps/ownerships/views');
-require('../../apps/connections/views');
-
-require('../../clients/views');
-require('../../clients/controls/views');
-
-//var AppViews = require('./apps/views');
-
-module.exports.Main = Marionette.Layout.extend({
-
-    template: require('./templates/main.html'),
-
-    regions: {
-        appSection: '.app-section',
-        clientSection: '.client-section',
-    },
-
-    initialize: function() {
-
-        this.appOwnershipListView = new CBApp.AppOwnershipListView();
-
-        this.clientControlListView = new CBApp.ClientControlListView();
-
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
-            //CBApp.clientCollection.fetch()
-        }).done();
-
-        /*
-        this.bridgeView = new CBApp.BridgeListView();
-        // View which manages device installs and device discovery
-        this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
-        */
-    },
-
-    onRender: function() {
-
-        var self = this;
-
-        this.appSection.show(this.appOwnershipListView);
-        this.clientSection.show(this.clientControlListView);
-        /*
-        this.deviceSection.show(this.devicesView);
-        this.devicesView.render();
-        this.messageSection.show(this.messageListView);
-        this.bridgeSection.show(this.bridgeView);
-         */
-
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            //self.listenToOnce(currentBridge, 'change:current', self.render);
-            var appOwnershipCollection = currentUser.get('appOwnerships');
-            self.appOwnershipListView.setCollection(appOwnershipCollection);
-            self.appOwnershipListView.render();
-            console.log('Developer getCurrentUser', appOwnershipCollection);
-
-            var clientControlCollection = currentUser.get('clientControls');
-            self.clientControlListView.setCollection(clientControlCollection);
-            self.clientControlListView.render();
-
-            /*
-            var appInstallCollection = currentBridge.get('appInstalls');
-            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
-            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
-            //liveAppInstallCollection.setQuery({isGhost: false});
-            /*
-
-            console.log('liveAppInstallCollection', liveAppInstallCollection );
-            self.appInstallListView.setCollection(liveAppInstallCollection);
-            self.appInstallListView.render();
-
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
-            self.messageListView.render();
-
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
-            console.log('bridgeCollection is', bridgeCollection);
-            self.bridgeView.setCollection(bridgeCollection);
-            self.bridgeView.render();
-             */
-        }).done();
-    }
-
-});
-
-/*
-module.exports.InstallAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/installAppModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    events: {
-        'click .store-button': 'clickStore'
-    },
-
-
-    initialize: function() {
-
-        var self = this;
-        this.licenceListView = new CBApp.AppLicenceListView();
-
-    },
-
-    clickStore: function() {
-
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
-    },
-
-    onRender: function() {
-
-        var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            console.log('promise in app modal initialize');
-            var licenceCollection = currentUser.get('appLicences');
-            self.licenceListView.setCollection(licenceCollection);
-            self.licenceListView.render();
-        }).done();
-        //this.licenceListView.setElement(this.$('licence-section')).render();
-        this.$('.licence-section').html(this.licenceListView.render().$el);
-    },
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-module.exports.InstallDeviceModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-*/
-
-},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":110,"../../views/regions":111,"./templates/main.html":89,"backbone-bundle":114,"backbone.marionette":122,"q":16}],91:[function(require,module,exports){
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
-CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
-
-    require('bootstrap');
-
-    Nav.addInitializer(function() {
-
-        //router
-        this.controller = new this.Controller();
-    });
-
-    Nav.Controller = Marionette.Controller.extend({
-
-        showTopbar: function() {
-
-            Nav.topbarView = new Nav.TopbarView();
-            CBApp.navRegion.show(Nav.topbarView);
-        },
-        deactivateTopbar: function() {
-            console.log('deactivateTopbar');
-            Nav.topbarView.deactivateSections();
-        },
-        activateTopbar: function(section) {
-            console.log('activateTopbar', section);
-            Nav.topbarView.activateSection(section);
-        }
-    });
-
-    Nav.BridgeItemView = Marionette.ItemView.extend({
-
-        tagName: 'li',
-
-        template: require('./templates/bridgeItem.html'),
-
-        serializeData: function(){
-            return {
-              "name": this.model.get('name')
-            }
-        },
-
-        events: {
-            'click': 'bridgeClick'
-        },
-
-        bridgeClick: function() {
-            CBApp.controller.setCurrentBridge(this.model);
-        },
-
-        onRender: function() {
-
-            // Show the bridge as active if it is the current bridge
-            $(this.el).attr('class', '');
-        }
-    });
-
-    Nav.BridgeDropdownView = Marionette.CompositeView.extend({
-
-        tagName: 'li',
-        className: 'dropdown',
-        itemView: CBApp.Nav.BridgeItemView,
-        itemViewContainer: '#bridge-list',
-        template: require('./templates/bridgeDropdown.html'),
-
-        bindings: {
-            '.header-text': 'name'
-        },
-
-        initialize: function () {
-
-            var self = this;
-
-        },
-
-        collectionEvents: {
-            //'add': 'addBridge'
-        },
-
-        addBridge: function() {
-
-            //CBApp.getCurrentBridge()
-            this.render();
-        },
-
-        onRender : function(){
-
-            var self = this;
-
-            CBApp.getCurrentBridge().then(function(currentBridge){
-
-                self.model = currentBridge;
-                self.listenToOnce(self.model, 'change', self.render);
-                //self.model.bind('change', self.render);
-                self.stickit();
-            });
-        }
-    });
-
-    Nav.TopbarView = Marionette.ItemView.extend({
-
-        template: require('./templates/navSection.html'),
-        className: 'container',
-
-        ui: {
-            dashboard: '.dashboard',
-            store: '.store',
-            config: '.config',
-            developer: '.developer'
-        },
-
-        events: {
-            'click @ui.dashboard': 'navigate',
-            'click @ui.store': 'navigate',
-            'click @ui.config': 'navigate',
-            'click @ui.developer': 'navigate'
-        },
-
-        navigate: function(e) {
-            console.log('navigate', e.target.className);
-            var navEvent = e.target.className + ':show';
-            console.log('navigate', navEvent);
-            //console.log('navigate', e.target.className);
-            CBApp.request(navEvent);
-        },
-
-        activateSection: function(section) {
-
-            this.deactivateAll();
-            var $section = this.ui[section];
-            if ($section) $section.addClass('active');
-        },
-
-        deactivateAll: function() {
-
-            console.log('In deactivateSections, this.ui', this.ui);
-            _.each(this.ui, function($section) {
-                $section.removeClass('active');
-            });
-        },
-
-        onRender: function() {
-
-            var $navbarLeft = this.$('#navbar-left');
-            this.bridgeDropdownView = new Nav.BridgeDropdownView({
-                collection: CBApp.bridgeCollection
-            });
-            $navbarLeft.append(this.bridgeDropdownView.render().$el);
-
-            //this.navbarLeft.show(bridgeDropdownView);
-            //this.navbarRight.show(accountDropdownView);
-        }
-    });
-
-    Nav.on('topbar:show', function() {
-
-        Nav.controller.showTopbar();
-    });
-
-    Nav.on('topbar:activate', function(section){
-
-        Nav.controller.activateTopbar(section);
-    });
-
-});
-
-},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":114,"backbone.marionette":122,"bootstrap":127}],92:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
-  });
-
-},{"hbsfy/runtime":13}],93:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<a href=\"#\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":13}],94:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
-  });
-
-},{"hbsfy/runtime":13}],95:[function(require,module,exports){
-
-var $ = require('jquery');
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
-require('../../notifications/views');
-//var Models = require('./models');
-//var Views = require('./views');
-
-CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
-
-    Notifications.addInitializer(function() {
-
-        console.log('Notifications Initializer');
-        //router
-        this.controller = new this.Controller();
-
-        //this.collection = new CBApp.NotificationCollection();
-    });
-
-    Notifications.Controller = Marionette.Controller.extend({
-        showNotifications: function() {
-
-            console.log('notificationCollection', CBApp.notificationCollection);
-            Notifications.notificationsListView = new CBApp.NotificationListView({
-                collection: CBApp.notificationCollection
-            });
-
-            console.log('notificationsListView ', Notifications.notificationsListView);
-            CBApp.notificationRegion.show(Notifications.notificationsListView);
-        },
-        showInformation: function(message, title) {
-            console.log('We got to the notification controller!');
-            this.collection.add({
-                title: title,
-                message: message
-            });
-            var notificationView = new Backbone.Notify.Notification();
-        },
-        showError: function(error) {
-            var err = error && error.response && error.response.error || error || {};
-            console.log('We got to the error notification controller!', err);
-            var notification = new CBApp.Notification({
-                name: err.name || "Error",
-                message: err.message || "Error message",
-                response: err.response || "Error response"
-            });
-            console.log('ErrorNotification controller model is', notification);
-            var notificationView = new Backbone.Notify.Error();
-            notificationView.model = notification;
-            console.log('notificationView is', notificationView);
-            CBApp.notificationsRegion.show(notificationView);
-        },
-    });
-
-    Notifications.on('show', function(){
-        Notifications.controller.showNotifications();
-    });
-
-    Notifications.on('show:information', function(information){
-
-        this.collection.add({
-            title: information.title,
-            message: information.message,
-            type: 'information'
-        });
-        //Notifications.controller.showInformation(message, title);
-    });
-
-    Notifications.on('add:error', function(error){
-        Notifications.controller.showError(error);
-    });
-});
-
-},{"../../notifications/views":106,"backbone-bundle":114,"backbone.marionette":122,"jquery":15}],96:[function(require,module,exports){
+},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":119,"../../views/regions":120,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":123,"backbone.marionette":131,"q":16}],88:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34909,7 +34411,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],97:[function(require,module,exports){
+},{"hbsfy/runtime":13}],89:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34921,7 +34423,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],98:[function(require,module,exports){
+},{"hbsfy/runtime":13}],90:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34933,7 +34435,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],99:[function(require,module,exports){
+},{"hbsfy/runtime":13}],91:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35119,7 +34621,683 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../../components/numbers":59,"./templates/app.html":96,"./templates/appSection.html":97,"./templates/staffApp.html":98,"backbone-bundle":114,"backbone.marionette":122}],100:[function(require,module,exports){
+},{"../../../components/numbers":59,"./templates/app.html":88,"./templates/appSection.html":89,"./templates/staffApp.html":90,"backbone-bundle":123,"backbone.marionette":131}],92:[function(require,module,exports){
+
+
+var DashboardViews = require('./views');
+
+CBApp.module('Dashboard', function(Dashboard, CBApp, Backbone, Marionette, $, _) {
+
+    console.log('Dashboard ran!');
+    Dashboard.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+        this.router = new this.Router('portal/dashboard/', {
+            controller : this.controller,
+            createTrailingSlashRoutes: true
+        });
+
+    });
+
+    Dashboard.Controller = Marionette.Controller.extend({
+
+      /*
+      index: function () {
+        Dashboard.mainLayoutView = new DashboardViews.Main();
+        console.log('mainLayoutView', Dashboard.mainLayoutView);
+        console.log('portalLayout', CBApp.portalLayout);
+        CBApp.portalLayout.mainRegion.show(Dashboard.mainLayoutView);
+        console.log('config index');
+      },
+      */
+      showDashboard: function() {
+
+          console.log('showDashboard Dashboard controller');
+          Dashboard.mainLayoutView = new DashboardViews.Main();
+          CBApp.mainRegion.show(Dashboard.mainLayoutView);
+      },
+      licenseApp: function(discoveredDeviceInstall) {
+        var that = this;
+        console.log('We got to the controller!');
+          /*
+        var installDeviceModal = new ConfigViews.InstallDeviceModal({
+            model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+        });
+        CBApp.modalsRegion.show(installDeviceModal);
+           */
+      }
+    });
+
+    Dashboard.Router = Marionette.SubRouter.extend({
+
+        appRoutes: {
+          "": "showDashboard",
+          //"config/bridge/:bridge": "config",
+        }
+    });
+
+    Dashboard.on('show', function(){
+        console.log('show dashboard');
+        Dashboard.controller.showDashboard();
+        Dashboard.router.navigate('');
+    });
+});
+
+},{"./views":95}],93:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"row\">\n    <div id=\"portal-section\" class=\"col-md-6\"></div>\n</div>\n";
+  });
+
+},{"hbsfy/runtime":13}],94:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<ul class=\"nav nav-tabs\" role=\"tablist\">\n    <li class=\"active\"><a href=\"#\">Test Portal 1</a></li>\n    <li><a href=\"#\">Test Portal 2</a></li>\n</ul>\n<div class=\"portal\"></div>\n";
+  });
+
+},{"hbsfy/runtime":13}],95:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette')
+    ,Q = require('q');
+
+require('../../views/generic_views');
+require('../../views/regions');
+
+//require('../../apps/storeViews');
+var AppViews = require('./apps/views');
+
+module.exports.Main = Marionette.Layout.extend({
+
+    template: require('./templates/main.html'),
+
+    regions: {
+        portalSection: '#portal-section'
+    },
+
+    initialize: function() {
+
+
+        this.portalTabsView = new PortalTabsView();
+        /*
+        this.appListView = new AppViews.AppListView({
+                                    collection: CBApp.appCollection
+                                });
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            CBApp.appCollection.fetch();
+        }).done();
+        */
+    },
+
+    onRender: function() {
+
+        var self = this;
+
+        this.portalSection.show(this.portalTabsView);
+    }
+
+});
+
+var PortalTabsView = Marionette.ItemView.extend({
+
+    template: require('./templates/portalTabs.html'),
+
+    initialize: function() {
+
+
+        //this.portalTabsView = new PortalTabsView();
+    },
+
+    onRender: function() {
+
+
+        //var portalAPI = new CBApp.Portals.API
+
+        var $portal = this.$('.portal');
+        caja.load($portal[0], undefined, function(frame) {
+            frame.code('/static/caja-test.html',
+                'text/html')
+                .api(CBApp.Portals.API.tameAll())
+                //.api({ sayHello: tamedAlertGreeting })
+                .run();
+        });
+    }
+});
+},{"../../views/generic_views":119,"../../views/regions":120,"./apps/views":91,"./templates/main.html":93,"./templates/portalTabs.html":94,"backbone-bundle":123,"backbone.marionette":131,"q":16}],96:[function(require,module,exports){
+
+
+var DeveloperViews = require('./views');
+
+CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
+
+    console.log('Developer ran!');
+    Developer.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+        this.router = new this.Router('portal/developer/', {
+            controller : this.controller,
+            createTrailingSlashRoutes: true
+        });
+    });
+
+    Developer.Controller = Marionette.Controller.extend({
+
+      showDeveloper: function() {
+
+          Developer.mainLayoutView = new DeveloperViews.Main();
+          CBApp.mainRegion.show(Developer.mainLayoutView);
+      },
+      addAppConnection: function(app, user) {
+        var that = this;
+        console.log('We got to the controller!');
+        var addAppConnectionModal = new ConfigViews.InstallDeviceModal({
+            model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+        });
+        CBApp.modalsRegion.show(installDeviceModal);
+      }
+    });
+
+    Developer.Router = Marionette.SubRouter.extend({
+
+        appRoutes: {
+          "": "showDeveloper",
+          //"config/bridge/:bridge": "config",
+        }
+    });
+
+    Developer.on('developer:show', function(){
+        console.log('show developer');
+        Developer.controller.showDeveloper();
+        Developer.router.navigate('');
+    });
+});
+
+},{"./views":98}],97:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
+  });
+
+},{"hbsfy/runtime":13}],98:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette')
+    ,Q = require('q');
+
+require('../../views/generic_views');
+require('../../views/regions');
+
+require('../../apps/ownerships/views');
+require('../../apps/connections/views');
+
+require('../../clients/views');
+require('../../clients/controls/views');
+
+//var AppViews = require('./apps/views');
+
+module.exports.Main = Marionette.Layout.extend({
+
+    template: require('./templates/main.html'),
+
+    regions: {
+        appSection: '.app-section',
+        clientSection: '.client-section',
+    },
+
+    initialize: function() {
+
+        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+
+        this.clientControlListView = new CBApp.ClientControlListView();
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
+            //CBApp.clientCollection.fetch()
+        }).done();
+
+        /*
+        this.bridgeView = new CBApp.BridgeListView();
+        // View which manages device installs and device discovery
+        this.devicesView = new DevicesView();
+        this.messageListView = new CBApp.MessageListView();
+        */
+    },
+
+    onRender: function() {
+
+        var self = this;
+
+        this.appSection.show(this.appOwnershipListView);
+        this.clientSection.show(this.clientControlListView);
+        /*
+        this.deviceSection.show(this.devicesView);
+        this.devicesView.render();
+        this.messageSection.show(this.messageListView);
+        this.bridgeSection.show(this.bridgeView);
+         */
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            //self.listenToOnce(currentBridge, 'change:current', self.render);
+            var appOwnershipCollection = currentUser.get('appOwnerships');
+            self.appOwnershipListView.setCollection(appOwnershipCollection);
+            self.appOwnershipListView.render();
+            console.log('Developer getCurrentUser', appOwnershipCollection);
+
+            var clientControlCollection = currentUser.get('clientControls');
+            self.clientControlListView.setCollection(clientControlCollection);
+            self.clientControlListView.render();
+
+            /*
+            var appInstallCollection = currentBridge.get('appInstalls');
+            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
+            //liveAppInstallCollection.setQuery({isGhost: false});
+            /*
+
+            console.log('liveAppInstallCollection', liveAppInstallCollection );
+            self.appInstallListView.setCollection(liveAppInstallCollection);
+            self.appInstallListView.render();
+
+            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
+            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            self.messageListView.render();
+
+            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            console.log('bridgeCollection is', bridgeCollection);
+            self.bridgeView.setCollection(bridgeCollection);
+            self.bridgeView.render();
+             */
+        }).done();
+    }
+
+});
+
+/*
+module.exports.InstallAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/installAppModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    events: {
+        'click .store-button': 'clickStore'
+    },
+
+
+    initialize: function() {
+
+        var self = this;
+        this.licenceListView = new CBApp.AppLicenceListView();
+
+    },
+
+    clickStore: function() {
+
+        CBApp.request('store:show');
+        //CBApp.Controller.store();
+    },
+
+    onRender: function() {
+
+        var self = this;
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            console.log('promise in app modal initialize');
+            var licenceCollection = currentUser.get('appLicences');
+            self.licenceListView.setCollection(licenceCollection);
+            self.licenceListView.render();
+        }).done();
+        //this.licenceListView.setElement(this.$('licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+    },
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
+
+module.exports.InstallDeviceModal = Backbone.Modal.extend({
+
+    template: require('./templates/discoveryModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        CBApp.Config.controller.stopDiscoveringDevices();
+    }
+});
+
+*/
+
+},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":119,"../../views/regions":120,"./templates/main.html":97,"backbone-bundle":123,"backbone.marionette":131,"q":16}],99:[function(require,module,exports){
+
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
+
+    require('bootstrap');
+
+    Nav.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+    });
+
+    Nav.Controller = Marionette.Controller.extend({
+
+        showTopbar: function() {
+
+            Nav.topbarView = new Nav.TopbarView();
+            CBApp.navRegion.show(Nav.topbarView);
+        },
+        deactivateTopbar: function() {
+            console.log('deactivateTopbar');
+            Nav.topbarView.deactivateSections();
+        },
+        activateTopbar: function(section) {
+            console.log('activateTopbar', section);
+            Nav.topbarView.activateSection(section);
+        }
+    });
+
+    Nav.BridgeItemView = Marionette.ItemView.extend({
+
+        tagName: 'li',
+
+        template: require('./templates/bridgeItem.html'),
+
+        serializeData: function(){
+            return {
+              "name": this.model.get('name')
+            }
+        },
+
+        events: {
+            'click': 'bridgeClick'
+        },
+
+        bridgeClick: function() {
+            CBApp.controller.setCurrentBridge(this.model);
+        },
+
+        onRender: function() {
+
+            // Show the bridge as active if it is the current bridge
+            $(this.el).attr('class', '');
+        }
+    });
+
+    Nav.BridgeDropdownView = Marionette.CompositeView.extend({
+
+        tagName: 'li',
+        className: 'dropdown',
+        itemView: CBApp.Nav.BridgeItemView,
+        itemViewContainer: '#bridge-list',
+        template: require('./templates/bridgeDropdown.html'),
+
+        bindings: {
+            '.header-text': 'name'
+        },
+
+        initialize: function () {
+
+            var self = this;
+
+        },
+
+        collectionEvents: {
+            //'add': 'addBridge'
+        },
+
+        addBridge: function() {
+
+            //CBApp.getCurrentBridge()
+            this.render();
+        },
+
+        onRender : function(){
+
+            var self = this;
+
+            CBApp.getCurrentBridge().then(function(currentBridge){
+
+                self.model = currentBridge;
+                self.listenToOnce(self.model, 'change', self.render);
+                //self.model.bind('change', self.render);
+                self.stickit();
+            });
+        }
+    });
+
+    Nav.TopbarView = Marionette.ItemView.extend({
+
+        template: require('./templates/navSection.html'),
+        className: 'container',
+
+        ui: {
+            dashboard: '.dashboard',
+            store: '.store',
+            config: '.config',
+            developer: '.developer'
+        },
+
+        events: {
+            'click @ui.dashboard': 'navigate',
+            'click @ui.store': 'navigate',
+            'click @ui.config': 'navigate',
+            'click @ui.developer': 'navigate'
+        },
+
+        navigate: function(e) {
+            console.log('navigate', e.target.className);
+            var navEvent = e.target.className + ':show';
+            console.log('navigate', navEvent);
+            //console.log('navigate', e.target.className);
+            CBApp.request(navEvent);
+        },
+
+        activateSection: function(section) {
+
+            this.deactivateAll();
+            var $section = this.ui[section];
+            if ($section) $section.addClass('active');
+        },
+
+        deactivateAll: function() {
+
+            console.log('In deactivateSections, this.ui', this.ui);
+            _.each(this.ui, function($section) {
+                $section.removeClass('active');
+            });
+        },
+
+        onRender: function() {
+
+            var $navbarLeft = this.$('#navbar-left');
+            this.bridgeDropdownView = new Nav.BridgeDropdownView({
+                collection: CBApp.bridgeCollection
+            });
+            $navbarLeft.append(this.bridgeDropdownView.render().$el);
+
+            //this.navbarLeft.show(bridgeDropdownView);
+            //this.navbarRight.show(accountDropdownView);
+        }
+    });
+
+    Nav.on('topbar:show', function() {
+
+        Nav.controller.showTopbar();
+    });
+
+    Nav.on('topbar:activate', function(section){
+
+        Nav.controller.activateTopbar(section);
+    });
+
+});
+
+},{"./templates/bridgeDropdown.html":100,"./templates/bridgeItem.html":101,"./templates/navSection.html":102,"backbone-bundle":123,"backbone.marionette":131,"bootstrap":136}],100:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
+  });
+
+},{"hbsfy/runtime":13}],101:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<a href=\"#\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":13}],102:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
+  });
+
+},{"hbsfy/runtime":13}],103:[function(require,module,exports){
+
+var $ = require('jquery');
+var Backbone = require('backbone-bundle')
+    ,Marionette = require('backbone.marionette');
+
+require('../../notifications/views');
+//var Models = require('./models');
+//var Views = require('./views');
+
+CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
+
+    Notifications.addInitializer(function() {
+
+        console.log('Notifications Initializer');
+        //router
+        this.controller = new this.Controller();
+
+        //this.collection = new CBApp.NotificationCollection();
+    });
+
+    Notifications.Controller = Marionette.Controller.extend({
+        showNotifications: function() {
+
+            console.log('notificationCollection', CBApp.notificationCollection);
+            Notifications.notificationsListView = new CBApp.NotificationListView({
+                collection: CBApp.notificationCollection
+            });
+
+            console.log('notificationsListView ', Notifications.notificationsListView);
+            CBApp.notificationRegion.show(Notifications.notificationsListView);
+        },
+        showInformation: function(message, title) {
+            console.log('We got to the notification controller!');
+            this.collection.add({
+                title: title,
+                message: message
+            });
+            var notificationView = new Backbone.Notify.Notification();
+        },
+        showError: function(error) {
+            var err = error && error.response && error.response.error || error || {};
+            console.log('We got to the error notification controller!', err);
+            var notification = new CBApp.Notification({
+                name: err.name || "Error",
+                message: err.message || "Error message",
+                response: err.response || "Error response"
+            });
+            console.log('ErrorNotification controller model is', notification);
+            var notificationView = new Backbone.Notify.Error();
+            notificationView.model = notification;
+            console.log('notificationView is', notificationView);
+            CBApp.notificationsRegion.show(notificationView);
+        },
+    });
+
+    Notifications.on('show', function(){
+        Notifications.controller.showNotifications();
+    });
+
+    Notifications.on('show:information', function(information){
+
+        this.collection.add({
+            title: information.title,
+            message: information.message,
+            type: 'information'
+        });
+        //Notifications.controller.showInformation(message, title);
+    });
+
+    Notifications.on('add:error', function(error){
+        Notifications.controller.showError(error);
+    });
+});
+
+},{"../../notifications/views":114,"backbone-bundle":123,"backbone.marionette":131,"jquery":15}],104:[function(require,module,exports){
+module.exports=require(88)
+},{"hbsfy/runtime":13}],105:[function(require,module,exports){
+module.exports=require(89)
+},{"hbsfy/runtime":13}],106:[function(require,module,exports){
+module.exports=require(90)
+},{"hbsfy/runtime":13}],107:[function(require,module,exports){
+module.exports=require(91)
+},{"../../../components/numbers":59,"./templates/app.html":104,"./templates/appSection.html":105,"./templates/staffApp.html":106,"backbone-bundle":123,"backbone.marionette":131}],108:[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -35181,7 +35359,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":102}],101:[function(require,module,exports){
+},{"./views":110}],109:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35193,7 +35371,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],102:[function(require,module,exports){
+},{"hbsfy/runtime":13}],110:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -35273,7 +35451,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic_views":110,"../../views/regions":111,"./apps/views":99,"./templates/main.html":101,"backbone-bundle":114,"backbone.marionette":122,"q":16}],103:[function(require,module,exports){
+},{"../../views/generic_views":119,"../../views/regions":120,"./apps/views":107,"./templates/main.html":109,"backbone-bundle":123,"backbone.marionette":131,"q":16}],111:[function(require,module,exports){
 
 CBApp.Notification = Backbone.Deferred.Model.extend({
 
@@ -35300,7 +35478,7 @@ CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],104:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35312,7 +35490,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading\"></h4>\n<i class=\"icon ion-information-circled\"></i>\n<i class=\"icon ion-alert-circled\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],105:[function(require,module,exports){
+},{"hbsfy/runtime":13}],113:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35324,7 +35502,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"animated-list notification-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],106:[function(require,module,exports){
+},{"hbsfy/runtime":13}],114:[function(require,module,exports){
 
 
 var Backbone = require('backbone-bundle')
@@ -35362,7 +35540,24 @@ CBApp.NotificationListView = Marionette.CompositeView.extend({
 
 });
 
-},{"./templates/notification.html":104,"./templates/notificationSection.html":105,"backbone-bundle":114,"backbone.marionette":122}],107:[function(require,module,exports){
+},{"./templates/notification.html":112,"./templates/notificationSection.html":113,"backbone-bundle":123,"backbone.marionette":131}],115:[function(require,module,exports){
+
+
+//var Portals = CBApp.Portals = {};
+
+//require('./models');
+//require('./api/models');
+
+
+/*
+caja.initialize({
+    cajaServer: 'https://caja.appspot.com/',
+    debug: true
+});
+*/
+
+
+},{}],116:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -35431,7 +35626,7 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":74,"backbone-bundle":114,"index":73}],108:[function(require,module,exports){
+},{"./messages/models":74,"backbone-bundle":123,"index":73}],117:[function(require,module,exports){
 
 require('../models');
 
@@ -35602,7 +35797,7 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
 });
 
 
-},{"../models":109}],109:[function(require,module,exports){
+},{"../models":118}],118:[function(require,module,exports){
 
 //CBApp.User = Backbone.Deferred.Model.extend({
 CBApp.User = Backbone.RelationalModel.extend({
@@ -35650,7 +35845,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],110:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35669,7 +35864,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":112,"backbone-bundle":114,"backbone.marionette":122}],111:[function(require,module,exports){
+},{"./templates/listItemLoading.html":121,"backbone-bundle":123,"backbone.marionette":131}],120:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35685,20 +35880,23 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":114,"backbone.marionette":122}],112:[function(require,module,exports){
+},{"backbone-bundle":123,"backbone.marionette":131}],121:[function(require,module,exports){
 module.exports=require(62)
-},{"hbsfy/runtime":13}],113:[function(require,module,exports){
+},{"hbsfy/runtime":13}],122:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
+var caja = require('caja');
 
 var CBApp = require('index');
 require('./cb/modules/config/config');
+require('./cb/modules/dashboard/dashboard');
 require('./cb/modules/developer/developer');
 require('./cb/modules/store/store');
 require('./cb/modules/nav/nav');
 require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
+require('./cb/portals/portals');
 //require('./cb/views');
 
 (function($){
@@ -35709,7 +35907,7 @@ require('./cb/models');
 })(jQuery);
 
 
-},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/notifications/notifications":95,"./cb/modules/store/store":100,"./cb/socket":107,"index":73,"jquery-browserify":14}],114:[function(require,module,exports){
+},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/dashboard/dashboard":92,"./cb/modules/developer/developer":96,"./cb/modules/nav/nav":99,"./cb/modules/notifications/notifications":103,"./cb/modules/store/store":108,"./cb/portals/portals":115,"./cb/socket":116,"caja":137,"index":73,"jquery-browserify":14}],123:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -35764,7 +35962,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":80,"./backbone-cb-model":116,"./backbone-cb-model-mixin":115,"./backbone-cb-views":117,"./backbone-relational":121,"./backbone.stickit":125,"./backbone.trackit.js":126,"backbone":3,"backbone-cocktail":118,"backbone-deferred":119,"backbone-io":120,"backbone.babysitter":1,"backbone.marionette":122,"backbone.marionette.subrouter":123,"backbone.modal":124,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],115:[function(require,module,exports){
+},{"../../cb/misc/relational-models":80,"./backbone-cb-model":125,"./backbone-cb-model-mixin":124,"./backbone-cb-views":126,"./backbone-relational":130,"./backbone.stickit":134,"./backbone.trackit.js":135,"backbone":3,"backbone-cocktail":127,"backbone-deferred":128,"backbone-io":129,"backbone.babysitter":1,"backbone.marionette":131,"backbone.marionette.subrouter":132,"backbone.modal":133,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],124:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35862,7 +36060,7 @@ module.exports = {
 
 
 
-},{}],116:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -35911,7 +36109,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],117:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35988,7 +36186,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],118:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -36091,7 +36289,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":19}],119:[function(require,module,exports){
+},{"underscore":19}],128:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36449,7 +36647,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],120:[function(require,module,exports){
+},{"backbone":3,"q":16}],129:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36646,7 +36844,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":18,"underscore":19}],121:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":18,"underscore":19}],130:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -38645,7 +38843,7 @@ _ = global._ = require("underscore");
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":19}],122:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],131:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41111,7 +41309,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],123:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],132:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41224,7 +41422,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],124:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":131,"backbone":3,"underscore":19}],133:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41721,7 +41919,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],125:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":131,"backbone":3,"underscore":19}],134:[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -42497,7 +42695,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":19}],126:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],135:[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -42690,7 +42888,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],127:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -44652,4 +44850,804 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[113])
+},{"jquery":15}],137:[function(require,module,exports){
+(function (global){
+;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
+// Copyright (C) 2010 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview ... TODO ihab.awad
+ * @author kpreid@switchb.org
+ * @author ihab.awad@gmail.com
+ * @author jasvir@gmail.com
+ * \@requires document, setTimeout, XMLHttpRequest
+ * \@overrides window
+ * \@provides caja
+ */
+
+var caja = (function () {
+    var cajaBuildVersion = '5687';
+    var defaultServer = 'https://caja.appspot.com/';
+    var defaultFrameGroup;
+    var readyQueue = [];
+    var registeredImports = [];
+    var nextId = 0;
+
+    var UNREADY = 'UNREADY', PENDING = 'PENDING', READY = 'READY';
+    var state = UNREADY;
+    var globalConfig = undefined;
+
+    var GUESS = 'GUESS';
+
+    var ajaxCounter = 1;
+    var unsafe = false;
+
+    var loaderDocument;
+    function proxyFetchMaker(proxyServer) {
+        return function (url, mime, callback) {
+            if (!url) {
+                callback(undefined);
+                return;
+            }
+            var rndName = 'caja_ajax_' + ajaxCounter++;
+            window[rndName] = function (result) {
+                try {
+                    callback(result);
+                } finally {
+                    // GC yourself
+                    window[rndName] = undefined;
+                }
+            };
+            // TODO(jasvir): Make it so this does not pollute the host page
+            // namespace but rather just the loaderFrame
+            installSyncScript(rndName,
+                proxyServer ? String(proxyServer) : caja['server']
+                    + '/cajole?url=' + encodeURIComponent(url.toString())
+                    + '&input-mime-type=' + encodeURIComponent(mime)
+                    + '&transform=PROXY'
+                    + '&callback=' + encodeURIComponent(rndName)
+                    + '&alt=json-in-script');
+        };
+    }
+
+    function xhrFetcher(url, mime, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url.toString(), true);
+        request.overrideMimeType(mime);
+        request.onreadystatechange = function() {
+            if(request.readyState == 4) {
+                callback({ "html": request.responseText });
+            }
+        };
+        request.send();
+    }
+
+    var uriPolicies = {
+        'net': {
+            'rewriter': {
+                'NO_NETWORK': function () { return null; },
+                'ALL': function (uri) { return String(uri); }
+            },
+            'fetcher': {
+                'USE_XHR': xhrFetcher,
+                'USE_AS_PROXY': proxyFetchMaker
+            },
+            'NO_NETWORK': {
+                'rewrite': function () { return null; },
+                'fetch': function(url, mime, callback) {
+                    setTimeout(function() {
+                        // TODO(kpreid): correct error response (define one if needed)
+                        callback({});
+                    }, 0);
+                }
+            },
+            'ALL': {
+                'rewrite': function (uri) { return String(uri); },
+                'fetch': proxyFetchMaker(undefined)
+            },
+            'only': policyOnly
+        },
+
+        'ATTRIBUTETYPES': undefined,
+        'LOADERTYPES': undefined,
+        'URIEFFECTS': undefined
+    };
+
+    var caja = {
+        // Normal entry points
+        'initialize': initialize,
+        'load': load,
+        'whenReady': whenReady,
+
+        // URI policies
+        'policy': uriPolicies,
+
+        // Reference to the taming frame in the default frameGroup
+        'iframe': null,
+
+        // Reference to the USELESS object for function invocation (for testing)
+        'USELESS': undefined,
+
+        // Taming functions for the default frameGroup
+        'tame': premature,
+        'tamesTo': premature,
+        'reTamesTo': premature,
+        'untame': premature,
+        'unwrapDom': premature,
+        'markReadOnlyRecord': premature,
+        'markFunction': premature,
+        'markCtor': premature,
+        'markXo4a': premature,
+        'grantMethod': premature,
+        'grantRead': premature,
+        'grantReadWrite': premature,
+        'adviseFunctionBefore': premature,
+        'adviseFunctionAfter': premature,
+        'adviseFunctionAround': premature,
+        'makeDefensibleObject___': premature,
+        'makeDefensibleFunction___': premature,
+
+        // Esoteric functions
+        'initFeralFrame': initFeralFrame,
+        'makeFrameGroup': makeFrameGroup,
+        'configure': makeFrameGroup,
+        'disableSecurityForDebugger': disableSecurityForDebugger,
+        'Q': premature,
+
+        // Used by related tools; not for users to call on a routine basis
+        // Initialized to helper functions because they may be called by external
+        // clients before caja.initialize() is called.
+        'console': {
+            'error': makeLogMethod('error'),
+            'info': makeLogMethod('info'),
+            'log': makeLogMethod('log'),
+            'warn': makeLogMethod('warn')
+        },
+
+        // For use by the Caja test suite only. Should not be used for any other
+        // purpose and is hard to use correctly.
+        'testing_makeDomadoRuleBreaker': premature,
+
+        // unused, removed by Closure
+        closureCanary: 1
+    };
+
+    // Internal functions made available to FrameGroup maker
+    var cajaInt = {
+        'documentBaseUrl': documentBaseUrl,
+        'getId': getId,
+        'getImports': getImports,
+        'joinUrl': joinUrl,
+        'loadCajaFrame': loadCajaFrame,
+        'prepareContainerDiv': prepareContainerDiv,
+        'unregister': unregister,
+        'readPropertyAsHostFrame': readPropertyAsHostFrame
+    };
+
+    //----------------
+
+    function makeLogMethod(m) {
+        return function() {
+            globalConfig &&
+            globalConfig.console[m].apply(globalConfig.console, arguments);
+        };
+    }
+
+    function premature() {
+        throw new Error('Calling taming function before Caja is ready');
+    }
+
+    function disableSecurityForDebugger(value) {
+        unsafe = !!value;
+        if (defaultFrameGroup) {
+            defaultFrameGroup['disableSecurityForDebugger'](value);
+        }
+    }
+
+    /**
+     * Returns a URI policy that allows one URI and denies the rest.
+     */
+    function policyOnly(allowedUri) {
+        allowedUri = String(allowedUri);
+        return {
+            'rewrite': function (uri) {
+                uri = String(uri);
+                return uri === allowedUri ? uri : null;
+            }
+        };
+    }
+
+    /**
+     * Creates the default frameGroup with the given config.
+     * See {@code makeFrameGroup} for config parameters.
+     */
+    function initialize(config /*, opt_onSuccess, opt_onFailure */) {
+        if (state !== UNREADY) {
+            throw new Error('Caja cannot be initialized more than once');
+        }
+        var onSuccess = arguments[1];
+        var onFailure = arguments[2];
+        state = PENDING;
+        makeFrameGroup(config, function (frameGroup, es5Mode) {
+            defaultFrameGroup = frameGroup;
+            caja['iframe'] = frameGroup['iframe'];
+            caja['USELESS'] = frameGroup['USELESS'];
+            for (var i in caja) {
+                if (caja[i] === premature) {
+                    caja[i] = frameGroup[i];
+                }
+            }
+            frameGroup['disableSecurityForDebugger'](unsafe);
+            state = READY;
+            var detail = {};
+            detail['es5Mode'] = es5Mode;
+            if ("function" === typeof onSuccess) {
+                onSuccess(detail);
+            }
+            whenReady(null);
+        }, function(err) {
+            state = UNREADY;
+            onFailure(err);
+        });
+    }
+
+    /**
+     * Creates a guest frame in the default frameGroup.
+     */
+    function load(div, uriPolicy, loadDone, domOpts) {
+        uriPolicy = uriPolicy || caja['policy']['net']['NO_NETWORK'];
+        if (state === UNREADY) {
+            initialize({});
+        }
+        whenReady(function () {
+            defaultFrameGroup['makeES5Frame'](div, uriPolicy, loadDone, domOpts);
+        });
+    }
+
+    /**
+     * Defers func until the default frameGroup is ready.
+     */
+    function whenReady(opt_func) {
+        if (typeof opt_func === 'function') {
+            readyQueue.push(opt_func);
+        }
+        if (state === READY) {
+            for (var i = 0; i < readyQueue.length; i++) {
+                setTimeout(readyQueue[i], 0);
+            }
+            readyQueue = [];
+        }
+    }
+
+    /**
+     * Create a Caja frame group. A frame group maintains a relationship with a
+     * Caja server and some configuration parameters. Most Web pages will only
+     * need to create one frame group.
+     *
+     * Recognized configuration parameters are:
+     *
+     *     server - the URL to a Caja server. Except for unique cases,
+     *         this must be the server from which the "caja.js" script was
+     *         sourced.
+     *
+     *     resources - the URL to a directory containing the resource files.
+     *         If not specified, it defaults to the value of 'server'.
+     *
+     *     debug - whether debugging is supported. At the moment, debug support
+     *         means that the files loaded by Caja are un-minified to help with
+     *         tracking down problems.
+     *
+     *     es5Mode - If set to true or false, forces or prohibits ES5
+     *         mode, rather than autodetecting browser capabilities
+     *         capable of supporting at least maxAcceptableSeverity.
+     *
+     *     maxAcceptableSeverity - Severity of browser bugs greater than
+     *         this level cause failover from ES5 to ES5/3 if es5Mode
+     *         is undefined
+     *
+     *     forceES5Mode - If set to true or false, forces or prohibits ES5
+     *         mode, rather than autodetecting browser capabilities.
+     *         Equivalent to setting es5Mode and maxAcceptableSeverity
+     *         to the most insecure value. This should be used strictly
+     *         for testing/debugging purposes.
+     *
+     *     console - Optional user-supplied alternative to the browser's native
+     *         'console' object.
+     *
+     *     targetAttributePresets - Optional structure giving default and
+     *         whitelist for the 'target' parameter of anchors and forms.
+     *
+     *     log - Optional user-supplied alternative to the browser's native
+     *         'console.log' function.
+     *
+     *     flashbridge - Optional, location of flashbridge.swf.  This needs
+     *         to be on the same domain as the host page.
+     *
+     * @param config an object literal containing configuration parameters.
+     * @param frameGroupReady function to be called back with a reference to
+     *     the newly created frame group.
+     */
+    function makeFrameGroup(config, frameGroupReady, onFailure) {
+        initFeralFrame(window);
+        globalConfig = config = resolveConfig(config);
+        caja['server'] = config['server'];
+        if (config['es5Mode'] === false ||
+            (config['es5Mode'] !== true && unableToSES())) {
+            initES53(config, frameGroupReady, onFailure);
+        } else {
+            trySES(config, frameGroupReady, onFailure);
+        }
+    }
+
+    /**
+     * Returns a full config based on the given partial config.
+     */
+    function resolveConfig(partial) {
+        partial = partial || {};
+        var full = {};
+        full['server'] = String(
+                partial['server'] || partial['cajaServer'] || defaultServer);
+        full['resources'] = String(partial['resources'] || full['server']);
+        full['debug'] = !!partial['debug'];
+        // Full config no longer has forceES5Mode
+        // forceES5Mode passes it's value on to es5Mode and maxAcceptableSeverity
+        if ('forceES5Mode' in partial && 'es5Mode' in partial) {
+            throw new Error(
+                'Cannot use both forceES5Mode and es5Mode in the same config');
+        }
+        if (partial['forceES5Mode'] !== undefined) {
+            full['es5Mode'] = !!partial['forceES5Mode'];
+            full['maxAcceptableSeverity'] = 'NOT_ISOLATED';
+        } else {
+            full['es5Mode'] =
+                    partial['es5Mode'] === undefined ? GUESS : !!partial['es5Mode'];
+            var severity = String(partial['maxAcceptableSeverity'] ||
+                'SAFE_SPEC_VIOLATION');
+            if (severity === 'NO_KNOWN_EXPLOIT_SPEC_VIOLATION') {
+                // Special severity level which SES itself no longer implements
+                // TODO(kpreid): Should acceptNoKnownExploitProblems be part of our
+                // public interface?
+                severity = 'SAFE_SPEC_VIOLATION';
+                full['acceptNoKnownExploitProblems'] = true;
+            }
+            full['maxAcceptableSeverity'] = severity;
+        }
+
+        if (partial['console']) {
+            // Client supplies full 'console' object, which we use
+            full['console'] = partial['console'];
+        } else if (partial['log']) {
+            // Deprecated API: Client supplies 'log' function, from which we
+            // build a 'console' object of sorts
+            full['console'] = {
+                'log': partial['log'],
+                'warn': partial['log'],
+                'error': partial['log'],
+                'info': partial['log']
+            };
+        } else if (window['console']
+            && typeof(window['console']['log']) === 'function') {
+            // Platform supplies console object, which we use
+            full['console'] = window['console'];
+        } else {
+            // Cannot find any logging functions; create no-op stubs
+            full['console'] = {
+                'log': function() {},
+                'warn': function() {},
+                'error': function() {},
+                'info': function() {}
+            };
+        }
+
+        if (partial['targetAttributePresets']) {
+            if (!partial['targetAttributePresets']['default']) {
+                throw 'targetAttributePresets must contain a default';
+            }
+            if (!partial['targetAttributePresets']['whitelist']) {
+                throw 'targetAttributePresets must contain a whitelist';
+            }
+            if (partial['targetAttributePresets']['whitelist']['length'] === 0) {
+                throw 'targetAttributePresets.whitelist array must be nonempty';
+            }
+            full['targetAttributePresets'] = partial['targetAttributePresets'];
+        }
+        if (typeof(partial['cajolingServiceClient']) === 'object'){
+            full['cajolingServiceClient'] = partial['cajolingServiceClient'];
+        }
+        return full;
+    }
+
+    function initFeralFrame(feralWin) {
+        if (feralWin['Object']['FERAL_FRAME_OBJECT___'] === feralWin['Object']) {
+            return;
+        }
+        feralWin['___'] = {};
+        feralWin['Object']['FERAL_FRAME_OBJECT___'] = feralWin['Object'];
+    }
+
+    //----------------
+
+    function initES53(config, frameGroupReady, onFailure) {
+        // TODO(felix8a): with api change, can start cajoler early too
+        var guestMaker = makeFrameMaker(config, 'es53-guest-frame');
+        loadCajaFrame(config, 'es53-taming-frame', function (tamingWin) {
+            var fg = tamingWin['ES53FrameGroup'](
+                cajaInt, config, tamingWin, window, guestMaker);
+            frameGroupReady(fg, false /* es5Mode */);
+        });
+    }
+
+    function trySES(config, frameGroupReady, onFailure) {
+        function frameInit(frameWin) {
+            var ses = frameWin['ses'] || (frameWin['ses'] = {});
+            ses['maxAcceptableSeverityName'] = config['maxAcceptableSeverity'];
+            if (config['acceptNoKnownExploitProblems']) {
+                ses['acceptableProblems'] = {
+                    'DEFINING_READ_ONLY_PROTO_FAILS_SILENTLY': { 'permit': true },
+
+                    // we don't use partly-unmodifiable arrays, and the repair for push
+                    // is too slow to use unless necessary (i.e. PUSH_IGNORES_FROZEN)
+                    'PUSH_IGNORES_SEALED': { 'permit': true, 'doNotRepair': true },
+                    'UNSHIFT_IGNORES_SEALED': { 'permit': true },
+                    'SPLICE_IGNORES_SEALED': { 'permit': true },
+                    'SHIFT_IGNORES_SEALED': { 'permit': true },
+                    'PUSH_DOES_NOT_THROW_ON_FROZEN_ARRAY':
+                    { 'permit': true, 'doNotRepair': true },
+                    'ARRAYS_DELETE_NONCONFIGURABLE': { 'permit': true },
+                    'ARRAYS_MODIFY_READONLY': { 'permit': true },
+
+                    // safe given that we use exactly one SES frame
+                    'FREEZE_IS_FRAME_DEPENDENT': { 'permit': true },
+                    'SYNTAX_ERRORS_ARENT_ALWAYS_EARLY': { 'permit': true },
+
+                    // Only affects code with strict nested function defs, which
+                    // violates the ES5.1 recommendation stated at
+                    // http://wiki.ecmascript.org/doku.php?id=conventions:recommendations_for_implementors.
+                    // Thus, the NESTED_STRICT_FUNCTIONS_LEAK
+                    // doesn't affect SES as long as SES remains
+                    // compatible with ES5 implementations that follow that
+                    // recommendation.
+                    'NESTED_STRICT_FUNCTIONS_LEAK': { 'permit': true }
+                };
+            }
+            ses['mitigateSrcGotchas'] = function() {
+                throw new EvalError('This function is a placeholder that should ' +
+                    'have been replaced by the real ' +
+                    'ses.mitigateSrcGotchas.');
+            };
+        }
+
+        var sesMaker = makeFrameMaker(config, 'ses-single-frame', frameInit);
+
+        loadCajaFrame(config, 'utility-frame', function (mitigateWin) {
+            var mitigateSrcGotchas = mitigateWin['ses']['mitigateSrcGotchas'];
+            sesMaker['make'](function (tamingWin) {
+                var mustSES = config['es5Mode'] === true;
+                if (tamingWin['ses']['ok']()) {
+                    var fg = tamingWin['SESFrameGroup'](
+                        cajaInt, config, tamingWin, window,
+                        { 'mitigateSrcGotchas': mitigateSrcGotchas });
+                    frameGroupReady(fg, true /* es5Mode */);
+                } else if (!mustSES) {
+                    config['console']['log']('Unable to use SES.  Switching to ES53.');
+                    // TODO(felix8a): set a cookie to remember this?
+                    initES53(config, frameGroupReady, onFailure);
+                } else {
+                    var err = new Error('ES5 mode requested but browser is unsupported');
+                    if ("function" === typeof onFailure) {
+                        onFailure(err);
+                    } else {
+                        throw err;
+                    }
+                }
+            });
+        });
+    }
+
+    // Fast rejection of SES.  If this works, repairES5 might still fail, and
+    // we'll fall back to ES53 then.
+    function unableToSES() {
+        return !Object.getOwnPropertyNames;
+    }
+
+    //----------------
+
+    /**
+     * Returns an object that wraps loadCajaFrame() with preload support.
+     * Calling frameMaker.preload() will start creation of a new frame now,
+     * and make it available to a later call to frameMaker.make().
+     */
+    function makeFrameMaker(config, filename, opt_frameCreated) {
+        var IDLE = 'IDLE', LOADING = 'LOADING', WAITING = 'WAITING';
+        var preState = IDLE, preWin, preReady;
+        var self = {
+            'preload': function () {
+                if (preState === IDLE) {
+                    preState = LOADING;
+                    preWin = null;
+                    loadCajaFrame(config, filename, function (win) {
+                        preWin = win;
+                        consumeIfReady();
+                    }, opt_frameCreated);
+                }
+            },
+            'make': function (onReady) {
+                if (preState === LOADING) {
+                    preState = WAITING;
+                    preReady = onReady;
+                    consumeIfReady();
+                } else {
+                    loadCajaFrame(config, filename, onReady, opt_frameCreated);
+                }
+            }
+        };
+        self['preload']();
+        return self;
+
+        function consumeIfReady() {
+            if (preState === WAITING && preWin) {
+                var win = preWin, ready = preReady;
+                preState = IDLE;
+                preWin = null;
+                preReady = null;
+                ready(win);
+            }
+        }
+    }
+
+    //----------------
+
+    function loadCajaFrame(config, filename, frameReady, opt_frameCreated) {
+        var frameWin = createFrame(filename);
+        // debuggable or minified.  ?debug=1 inhibits compilation in shindig
+        var suffix = config['debug'] ? '.js?debug=1' : '.opt.js?debug=1';
+        var url = joinUrl(
+            config['resources'],
+                cajaBuildVersion + '/' + filename + suffix);
+        // The particular interleaving of async events shown below has been found
+        // necessary to get the right behavior on Firefox 3.6. Otherwise, the
+        // iframe silently fails to invoke the cajaIframeDone___ callback.
+        setTimeout(function () {
+            frameWin['cajaIframeDone___'] = function () {
+                versionCheck(config, frameWin, filename);
+                frameReady(frameWin);
+            };
+            if (opt_frameCreated) { opt_frameCreated(frameWin); }
+            // TODO(jasvir): Test what the latency doing this on all browsers is
+            // and why its necessary
+            setTimeout(function () {
+                installAsyncScript(frameWin, url);
+            }, 0);
+        }, 0);
+    }
+
+    // Throws an error if frameWin has the wrong Caja version
+    function versionCheck(config, frameWin, filename) {
+        if (cajaBuildVersion !== frameWin['cajaBuildVersion']) {
+            var message = 'Version error: caja.js version ' + cajaBuildVersion +
+                ' does not match ' + filename + ' version ' +
+                frameWin['cajaBuildVersion'] + '.';
+
+            var majorCajaVersion = String(cajaBuildVersion).split(/[mM]/)[0];
+            var majorWinVersion =
+                String(frameWin['cajaBuildVersion']).split(/[mM]/)[0];
+            if (majorCajaVersion === majorWinVersion) {
+                message += '  Continuing because major versions match.';
+                config['console']['log'](message);
+            } else {
+                config['console']['log'](message);
+                throw new Error(message);
+            }
+        }
+    }
+
+    /**
+     * opt_container may be absent, an element, or a Document. If absent
+     * then no DOM or related APIs are given to the guest.
+     */
+    function prepareContainerDiv(opt_container, feralWin, domOpts) {
+        domOpts = domOpts || {};
+        var opt_idClass = domOpts ? domOpts['idClass'] : void 0;
+        var idClass = opt_idClass || ('caja-guest-' + nextId++ + '___');
+        if (opt_container && opt_container.nodeType === 9 /* Document */) {
+            caja['console']['warn']('Warning: Using a document, rather than an ' +
+                'element, as a Caja virtual document container is an experimental ' +
+                'feature and may not operate correctly or support all features.');
+            initFeralFrame(opt_container.defaultView);
+        }
+        return {
+            'idClass': idClass,
+            'opt_div': opt_container
+        };
+    }
+
+    // Creates a new iframe and returns its contentWindow.
+    function createFrame(opt_className) {
+        var frame = document.createElement('iframe');
+        frame.style.display = "none";
+        frame.width = 0;
+        frame.height = 0;
+        frame.className = opt_className || '';
+        var where = document.getElementsByTagName('script')[0];
+        where.parentNode.insertBefore(frame, where);
+        return frame.contentWindow;
+    }
+
+    function installAsyncScript(frameWin, scriptUrl) {
+        var frameDoc = frameWin['document'];
+        var script = frameDoc.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.src = scriptUrl;
+        frameDoc.body.appendChild(script);
+    }
+
+    // TODO(jasvir): This should pulled into a utility js file
+    function escapeAttr(s) {
+        var ampRe = /&/g;
+        var ltRe = /[<]/g;
+        var gtRe = />/g;
+        var quotRe = /\"/g;
+        return ('' + s).replace(ampRe, '&amp;')
+            .replace(ltRe, '&lt;')
+            .replace(gtRe, '&gt;')
+            .replace(quotRe, '&#34;');
+    }
+
+    function installSyncScript(name, url) {
+        if (!loaderDocument) {
+            loaderDocument = createFrame('loader-frame').document;
+        }
+        // TODO(jasvir): This assignment pins the parent's handler
+        // function and, iiuc, this reference is never cleared out.
+        var result = ''
+            + ('<script>var $name = parent.window["$name"];<\/script>'
+                .replace(/[$]name/g, name))
+            + ('<script type="text/javascript" src="$url"><\/script>'
+                .replace(/[$]url/g, escapeAttr(url)));
+        loaderDocument.write(result);
+    }
+
+    function joinUrl(base, path) {
+        base = base.replace(/\/+$/, '');
+        path = path.replace(/^\/+/, '');
+        return base + '/' + path;
+    }
+
+    function documentBaseUrl() {
+        var bases = document.getElementsByTagName('base');
+        if (bases.length == 0) {
+            return document.location.toString();
+        } else if (bases.length == 1) {
+            var href = bases[0].href;
+            if (typeof href !== 'string') {
+                throw new Error('Caja loader error: <base> without a href.');
+            }
+            return href;
+        } else {
+            throw new Error('Caja loader error: document contains multiple <base>.');
+        }
+    }
+
+    //----------------
+
+    /**
+     * Enforces {@code typeof specimen === typename}, in which case
+     * specimen is returned.
+     * <p>
+     * If not, throws an informative TypeError
+     * <p>
+     * opt_name, if provided, should be a name or description of the
+     * specimen used only to generate friendlier error messages.
+     */
+    function enforceType(specimen, typename, opt_name) {
+        if (typeof specimen !== typename) {
+            throw new TypeError('expected ' + typename + ' instead of ' +
+                typeof specimen + ': ' + (opt_name || specimen));
+        }
+        return specimen;
+    }
+
+    /**
+     * Read the given property of the given object. Exists only to work
+     * around browser bugs where the answer depends on who's asking the
+     * question.
+     */
+    function readPropertyAsHostFrame(object, property) {
+        return object[property];
+    }
+
+    /**
+     * Gets or assigns the id associated with this (assumed to be)
+     * imports object, registering it so that
+     * <tt>getImports(getId(imports)) === imports</tt>.
+     * <p>
+     * This system of registration and identification allows us to
+     * cajole html such as
+     * <pre>&lt;a onmouseover="alert(1)"&gt;Mouse here&lt;/a&gt;</pre>
+     * into html-writing JavaScript such as<pre>
+     * IMPORTS___.document.innerHTML = "
+     *  &lt;a onmouseover=\"
+     *    (function(IMPORTS___) {
+   *      IMPORTS___.alert(1);
+   *    })(___.getImports(" + ___.getId(IMPORTS___) + "))
+     *  \"&gt;Mouse here&lt;/a&gt;
+     * ";
+     * </pre>
+     * If this is executed by a plugin whose imports is assigned id 42,
+     * it generates html with the same meaning as<pre>
+     * &lt;a onmouseover="___.getImports(42).alert(1)"&gt;Mouse here&lt;/a&gt;
+     * </pre>
+     * <p>
+     * An imports is not registered and no id is assigned to it until the
+     * first call to <tt>getId</tt>. This way, an imports that is never
+     * registered, or that has been <tt>unregister</tt>ed since the last
+     * time it was registered, will still be garbage collectable.
+     */
+    function getId(imports) {
+        enforceType(imports, 'object', 'imports');
+        var id;
+        if ('id___' in imports) {
+            id = enforceType(imports['id___'], 'number', 'id');
+        } else {
+            id = imports['id___'] = registeredImports.length;
+        }
+        registeredImports[id] = imports;
+        return id;
+    }
+
+    /**
+     * Gets the imports object registered under this id.
+     * <p>
+     * If it has been <tt>unregistered</tt> since the last
+     * <tt>getId</tt> on it, then <tt>getImports</tt> will fail.
+     */
+    function getImports(id) {
+        var result = registeredImports[enforceType(id, 'number', 'id')];
+        if (result === void 0) {
+            throw new Error('Internal: imports#', id, ' unregistered');
+        }
+        return result;
+    }
+
+    /**
+     * If you know that this <tt>imports</tt> no longer needs to be
+     * accessed by <tt>getImports</tt>, then you should
+     * <tt>unregister</tt> it so it can be garbage collected.
+     * <p>
+     * After unregister()ing, the id is not reassigned, and the imports
+     * remembers its id. If asked for another <tt>getId</tt>, it
+     * reregisters itself at its old id.
+     */
+    function unregister(imports) {
+        enforceType(imports, 'object', 'imports');
+        if ('id___' in imports) {
+            var id = enforceType(imports['id___'], 'number', 'id');
+            registeredImports[id] = void 0;
+        }
+    }
+
+    return caja;
+})();
+
+// Exports for closure compiler.
+if (typeof window !== 'undefined') {
+    window['caja'] = caja;
+}
+; browserify_shim__define__module__export__(typeof caja != "undefined" ? caja : window.caja);
+
+}).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
+
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}]},{},[122])

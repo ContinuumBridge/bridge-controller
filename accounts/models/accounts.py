@@ -70,6 +70,7 @@ class CBUser(AuthPasswordMixin, CBAuth):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(_('password'), max_length=128)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 

@@ -43,8 +43,7 @@ Router.prototype.setupRoutes = function() {
 
     var cbAddressRoute = router.addRoute('{cbAddress}', function(message) {
 
-
-        logger.log('debug', 'Matched cbAddress', message.toJSONString());
+        //logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
     });
 
@@ -81,18 +80,21 @@ Router.prototype.setupRoutes = function() {
 
 Router.prototype.dispatch = function(message) {
 
-    logger.log('debug', 'Dispatch message', message);
-    logger.log('debug', 'Dispatch message config', this.connection.config);
+    //logger.log('debug', 'Dispatch message', message.get('time_sent'));
+    //logger.log('debug', 'Dispatch message config', this.connection.config);
 
     // Authorization could sit here?
+    var config = this.connection.config;
 
     var destination = message.get('destination');
     // Check if the destination is the client route
     if (message.findDestination(this.connection.config.subscriptionAddress)) {
-        logger.log('debug', 'Push to client');
+        //logger.log('debug', 'Push to client', message.get('time_sent'));
+        logger.log('message', config.subscriptionAddress, '<=', message.get('source'), '    ',  message.toJSON());
         this.connection.toClient.push(message);
     } else {
-        logger.log('debug', 'Push to router');
+        //logger.log('debug', 'Push to router', message.get('time_sent'));
+        logger.log('message', config.subscriptionAddress, '=>', message.get('destination'), '    ',  message.toJSON());
         this.router.parse(destination, [ message ]);
     }
     /*

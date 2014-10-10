@@ -75,5 +75,8 @@ module.exports = {
         "depends": {
             "jquery":"$"
         }
+    },
+    "caja": {
+        "exports": "caja"
     }
 };

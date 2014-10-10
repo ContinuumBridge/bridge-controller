@@ -30,6 +30,7 @@
     "jsonfile": "~1.1.1",
     "node-redis": "^0.1.7",
     "node-rest-client": "~0.7.0",
+    "polyfill-webcomponents": "^0.20140826.0",
     "q": "~0.9.7",
     "query-engine": "^1.5.7",
     "querystring": "~0.2.0",
@@ -58,6 +59,7 @@
     "backbone-deferred": "./portal/static/js/vendor/backbone/backbone-deferred-q.js",
     "backbone-io": "./portal/static/js/vendor/backbone/backbone-io.js",
     "bootstrap": "./portal/static/js/vendor/bootstrap/bootstrap.js",
+    "caja": "./portal/static/js/vendor/caja.js",
     "notify": "./portal/static/js/vendor/notify.js",
     "index": "./portal/static/js/cb/index.js"
   },

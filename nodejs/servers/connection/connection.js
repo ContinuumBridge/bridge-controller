@@ -37,14 +37,15 @@ Connection.prototype.setupSocket = function() {
         //console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
         //message.set('source', "BID" + socket.handshake.authData.id);
-        logger.log('debug', 'Socket sessionID', socket.handshake.query);
+        //logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
 
         //message.filterDestination(self.config.publicationAddresses);
         //message.conformSource(self.config.subscriptionAddress);
 
-        logger.log('debug', 'socket message config', self.config);
-        logger.log('debug', 'socket message', message);
+        //logger.log('debug', 'socket message config', self.config);
+        //logger.log('debug', 'socket received message', message.get('time_sent'));
+        //logger.log('debug', 'socket received message destination', message.get('destination'));
 
         //self.fromClient.push(message);
         self.router.dispatch(message);
@@ -59,9 +60,10 @@ Connection.prototype.setupSocket = function() {
         var resource = body.url || body.resource;
         if (resource && '/api/bridge/v1/device_discovery/') {
             socket.emit('discoveredDeviceInstall:reset', body.body);
+            return;
         }
 
-        logger.log('debug', 'Socket emit', jsonMessage);
+        //logger.log('debug', 'Socket emit', jsonMessage);
         socket.emit('message', jsonMessage);
     });
 
@@ -88,26 +90,20 @@ Connection.prototype.setupRedis = function() {
 
     var publish = function(message) {
 
-        logger.log('debug', 'Publish redis message', message.toJSON());
+        //logger.log('debug', 'Publish redis message', message.toJSON());
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var jsonMessage = message.toJSONString();
 
         if (typeof destination == 'string') {
 
-            console.log('debug', 'destination is a string')
             redisPub.publish(destination, jsonMessage)
         } else if (destination instanceof Array) {
 
-            console.log('debug', 'destination is an array')
             destination.forEach(function(address) {
-                console.log('debug', 'address is', address)
                 redisPub.publish(String(address), jsonMessage);
             }, this);
         }
-
-        logger.log('debug', 'Message config', self.config);
-        logger.log('message', subscriptionAddress, '=>', destination, '    ',  jsonMessage);
     };
 
     var publishAll = function(message) {
@@ -132,7 +128,7 @@ Connection.prototype.setupRedis = function() {
     redisSub.subscribe(subscriptionAddress);
     redisSub.on('message', function(channel, jsonMessage) {
 
-        logger.log('debug', 'Redis received ', jsonMessage);
+        //logger.log('debug', 'Redis received ', jsonMessage);
         var message = new Message(jsonMessage);
         //logger.log('debug', 'Redis received', message.toJSON());
         //self.fromRedis.push(message);

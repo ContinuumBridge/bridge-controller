@@ -21,6 +21,12 @@ CBApp.Controller = Marionette.Controller.extend({
   index: function () {
     console.log('index');
   },
+  showDashboard: function(slug) {
+      console.log('showDashboard controller');
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('topbar:activate', 'dashboard');
+      CBApp.Dashboard.trigger('show', slug);
+  },
   showConfig: function(slug) {
       CBApp.modalsRegion.reset();
       CBApp.Nav.trigger('topbar:activate', 'config');
@@ -97,6 +103,10 @@ CBApp.Router = Marionette.SubRouter.extend({
     'developer(/:slug)': 'showDeveloper',
     'store(/:slug)': 'showStore'
   }
+});
+
+CBApp.reqres.setHandler("dashboard:show", function(){
+    CBApp.controller.showDashboard();
 });
 
 CBApp.reqres.setHandler("config:show", function(){

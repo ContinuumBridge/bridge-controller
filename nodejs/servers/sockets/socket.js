@@ -92,6 +92,7 @@ SocketServer.prototype.getConnectionConfig = function(authURL, oldConfig) {
     backendAuth(authURL, oldConfig.sessionID).then(function(authData) {
 
         var publicationAddresses = new Array();
+        console.log('authData.controllers', authData.controllers);
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
                 publicationAddresses.push(controller.user.cbid)

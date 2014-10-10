@@ -1,9 +1,13 @@
 
+import os
+import struct
+from uuid import uuid4
 from django.db import models
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import (
     check_password, make_password, is_password_usable)
+from django.core.exceptions import ObjectDoesNotExist
 
 from polymorphic import PolymorphicModel, PolymorphicManager
 
@@ -44,18 +48,30 @@ class PolymorphicBaseUserManager(PolymorphicManager):
 
 class AuthKeyMixin(object):
 
-    #uid = models.CharField(_('uid'), max_length = 8, unique = True)
+    #class Meta:
+    #    abstract = True
 
-    class Meta:
-        abstract = True
-
-    def set_key(self, raw_key):
+    def set_key(self, raw_key=None):
+        if raw_key is None:
+            raw_key = self.generate_key()
         self.key = make_password(raw_key)
         self.plaintext_key = raw_key
 
     def set_password(self, raw_password):
         # For compatibility
         self.set_key(raw_password)
+
+    def generate_key(self):
+
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+        i = 0
+        # The first 8 characters of the key are the uid
+        key = self.set_uid() if self.uid is None else self.uid
+        while i < 56:
+            new_letter = alphabet[struct.unpack("<L", os.urandom(4))[0] % 64]
+            key += new_letter
+            i += 1
+        return key
 
     def check_key(self, raw_key):
         """
