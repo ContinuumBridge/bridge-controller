@@ -75,6 +75,7 @@ class CBUser(AuthPasswordMixin, CBAuth):
     password = models.CharField(_('password'), max_length=128)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
+    USERNAME_FIELD = 'email'
     #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
     #bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
 
@@ -117,6 +118,9 @@ class CBUser(AuthPasswordMixin, CBAuth):
     def get_short_name(self):
         "Returns the short name for the user."
         return self.first_name
+
+    def get_natural_key(self):
+        return self.email
 
     @property
     def cbid(self):

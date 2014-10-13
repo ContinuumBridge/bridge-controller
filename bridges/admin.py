@@ -13,7 +13,7 @@ class BridgeControlInline(admin.TabularInline):
 class BridgeAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        (None, {'fields': ['name', 'description', 'email']}),
+        (None, {'fields': ['name', 'description']}),
         #('Related', {'fields': ['controller']}),
         #('Meta', {'fields': ['creator', 'modifier']}),
     ]
@@ -24,7 +24,7 @@ class BridgeAdmin(admin.ModelAdmin):
         #DeviceInstallInline
     ]
 
-    list_display = ('name','id', 'email', 
+    list_display = ('name','id',
     #'created'
     )
 
