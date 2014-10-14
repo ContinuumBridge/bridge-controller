@@ -9,7 +9,7 @@ from bridges.models import BridgeControl
 from apps.models import AppLicence
 
 from apps.api.resources import AppLicenceResource, AppOwnershipResource
-from bridges.api import cb_fields
+from bridge_controller.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api.resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
