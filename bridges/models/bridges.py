@@ -38,12 +38,11 @@ class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
     key = models.CharField(_('key'), max_length=128)
     plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
 
+    manager_version = models.CharField(_('manager version'), max_length = 255)
     #connected = models.BooleanField(_('connected'), default = False)
     #ip = models.GenericIPAddressField(_('ip'))
 
     #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
-
-    #plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = BridgeModelManager()
 
