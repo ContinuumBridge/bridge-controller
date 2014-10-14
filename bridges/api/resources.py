@@ -52,7 +52,7 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         queryset = Bridge.objects.all()
         #authorization = BridgeAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'last_login']
+        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
         user_related_through = 'bridge_controls'
         related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge'
