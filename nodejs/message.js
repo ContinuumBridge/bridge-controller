@@ -1,6 +1,6 @@
 
 var _ = require('underscore')
-    ,logger = require('./logger')
+    ,logger = require('./logger').logger
     ;
 
 // Create local references to array methods we'll want to use later.
@@ -63,6 +63,64 @@ _.extend(Message.prototype, {
         var newSource = src || this.get('destination');
         this.set('destination', newDestination);
         this.set('source', newSource);
+    },
+
+    findDestination: function(dest) {
+
+        var proposedDestination = this.get('destination');
+        if (typeof proposedDestination == 'string') {
+            proposedDestination = [ proposedDestination ];
+        }
+        var destRegex = new RegExp('^' + dest + '(.+)?');
+        return _.find(proposedDestination, function(proposedDest) {
+            return proposedDest.match(destRegex);
+        });
+    },
+
+    filterDestination: function(destination) {
+        // Filters a messages destination based on destination provided
+        if (typeof destination == 'string') {
+            destination = [ destination ];
+        }
+        return _.filter(destination, this.findDestination, this);
+    },
+
+    conformDestination: function(destination) {
+        // Unfinished
+
+        if (typeof destination == 'string') {
+            logger.log('debug', 'destination is a string')
+            if(!this.checkDestination(destination)) {
+                this.set('destination', destination);
+            }
+        } else if (destination instanceof Array) {
+
+        }
+    },
+
+    checkSource: function(source) {
+        // Checks if a message's source conforms to the source given
+        var sourceRegex = new RegExp('^' + source + '(.+)?');
+        var proposedSource = this.get('source');
+        return !!proposedSource.match(sourceRegex);
+    },
+
+    conformSource: function(source) {
+        // Ensure that the message source conforms to the given source
+        if (!this.checkSource(source)) {
+            logger.log('authorization', 'Client ', source, ' is not allowed to send from source', this.get('source'));
+            this.set('source', source);
+        }
+    },
+
+    remove: function(source) {
+        // Checks that a message's source matches the source given
+        var sourceRegex = new RegExp('^' + source + '(.+)?');
+        var proposedSource = message.get('source');
+        if (!proposedSource.match(sourceRegex)) {
+            logger.log('authorization', 'Client ', source, ' is not allowed to send from source', proposedSource);
+            this.set('source', self.connection.config.subscriptionAddress );
+        }
     },
 
     /*

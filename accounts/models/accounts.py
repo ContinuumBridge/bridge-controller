@@ -25,7 +25,7 @@ from .auth import CBAuth
 
 class CBUserManager(PolymorphicBaseUserManager):
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password=None, first_name=None, last_name=None, save=False, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
@@ -42,12 +42,15 @@ class CBUserManager(PolymorphicBaseUserManager):
                 print "User uid is unique!"
                 break
 
-        user = self.model(email=email, uid=uid,
+        model = self.model or CBUser
+        user = model(email=email, uid=uid,
                           is_staff=False, is_active=True, is_superuser=False,
+                          first_name=first_name, last_name=last_name,
                           last_login=now, date_joined=now, **extra_fields)
 
         user.set_password(password)
-        user.save(using=self._db)
+        if save:
+            user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password, **extra_fields):
@@ -58,17 +61,23 @@ class CBUserManager(PolymorphicBaseUserManager):
         u.save(using=self._db)
         return u
 
+'''
+class CBUser(models.Model):
+    pass
+'''
 
-class CBUser(CBAuth, AuthPasswordMixin):
+
+class CBUser(AuthPasswordMixin, CBAuth):
 
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-
-    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
-
+    email = models.EmailField(_('email address'), unique=True)
+    password = models.CharField(_('password'), max_length=128)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
+    USERNAME_FIELD = 'email'
+    #temp_password = models.CharField(_('temp_password'), max_length=128, default="")
+    #bridge_control = models.ManyToManyField('bridges.Bridge', through='bridges.BridgeControl')
 
     objects = CBUserManager()
 
@@ -80,7 +89,7 @@ class CBUser(CBAuth, AuthPasswordMixin):
 
     def get_bridge_controls(self):
         bridge_controls = []
-        for bridge_control in self.bridgecontrol_set.filter():
+        for bridge_control in self.bridge_controls.filter():
             bridge_controls.append(bridge_control)
         return bridge_controls
 
@@ -89,6 +98,12 @@ class CBUser(CBAuth, AuthPasswordMixin):
         for app_licence in self.applicence_set.filter():
             app_licences.append(app_licence)
         return app_licences
+
+    def get_app_ownerships(self):
+        app_ownerships = []
+        for app_ownership in self.appownership_set.filter():
+            app_ownerships.append(app_ownership)
+        return app_ownerships
 
     def get_absolute_url(self):
         return "/users/%s/" % urlquote(self.pk)
@@ -104,8 +119,12 @@ class CBUser(CBAuth, AuthPasswordMixin):
         "Returns the short name for the user."
         return self.first_name
 
+    def get_natural_key(self):
+        return self.email
+
     @property
     def cbid(self):
         return "UID" + str(self.id)
 
+print "After CBUser"
 

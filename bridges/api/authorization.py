@@ -2,63 +2,16 @@
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
+from accounts.api.authorization import RelatedUserObjectsOnlyAuthorization
 from accounts.models import CBAuth, CBUser
+#from bridge_controller.api.authorization import AbstractClientObjectsOnlyAuthorization
 from bridges.models import BridgeControl
-
-class UserObjectsOnlyAuthorization(Authorization):
-    def read_list(self, object_list, bundle):
-        # This assumes a ``QuerySet`` from ``ModelResource``.
-        return object_list.filter(user=bundle.request.user)
-
-    def read_detail(self, object_list, bundle):
-        # Is the requested object owned by the user?
-        return bundle.obj.user == bundle.request.user
-
-    def create_list(self, object_list, bundle):
-        # Assuming they're auto-assigned to ``user``.
-        return object_list
-
-    def create_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
-
-    def update_list(self, object_list, bundle):
-        allowed = []
-
-        # Since they may not all be saved, iterate over them.
-        for obj in object_list:
-            if obj.user == bundle.request.user:
-                allowed.append(obj)
-
-        return allowed
-
-    def update_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
-
-    def delete_list(self, object_list, bundle):
-        # Sorry user, no deletes for you!)
-        raise Unauthorized("Sorry, no deletes.")
-
-    def delete_detail(self, object_list, bundle):
-        raise Unauthorized("Sorry, no deletes.")
-
+from bridge_controller.api.authorization import CBAuthorization
 
 class BridgeObjectsOnlyAuthorization(Authorization):
     """
     Allow interaction with objects associated with the logged-in bridge, or the bridges of the logged-in user.
     """
-
-    def get_bridges(self, bundle):
-        requester = CBAuth.objects.get(email=bundle.request.user)
-        bridges = []
-        try:
-            # Assume user is a human and get bridges associated with it
-            bridge_controls = requester.bridgecontrol_set.filter()
-            for bridge_control in bridge_controls:
-                bridges.append(bridge_control.bridge)
-        except AttributeError:
-            # User is a bridge
-            bridges.append(requester)
-        return bridges
 
     def read_list(self, object_list, bundle):
         # This assumes a ``QuerySet`` from ``ModelResource``.
@@ -70,15 +23,9 @@ class BridgeObjectsOnlyAuthorization(Authorization):
 
     def read_detail(self, object_list, bundle):
         # Is the requested object associated with a bridge owned by the user?
-        '''
-        print "UserBridgeObjectsOnlyAuthorization object_list", object_list
-        user = CBUser.objects.get(email=bundle.request.user)
-        bridge_controls = user.bridgecontrol_set.filter()
-        bridges = []
-        for bridge_control in bridge_controls:
-            bridges.append(bridge_control.bridge)
-        '''
-        associated_objects = object_list.filter(bridge__in=self.get_bridges(bundle))
+
+
+        #associated_objects = object_list.filter(bridge__in=self.get_bridges(bundle))
         return associated_objects.exists()
 
     def create_list(self, object_list, bundle):
@@ -119,6 +66,16 @@ class BridgeObjectsOnlyAuthorization(Authorization):
             raise Unauthorized("You must control the bridge associated with this object")
         return True
 
+class M2MBridgeObjectsOnlyAuthorization(BridgeObjectsOnlyAuthorization):
+
+    def read_detail(self, object_list, bundle):
+        bridges = self.get_request_bridges(bundle)
+        #through_model_manager = getattr(bundle.obj, self.resource_meta.bridge_related_through)
+        #return through_model_manager.filter(user=bundle.request.user).exists()
+        filters = {
+            '{0}__{1}__in'.format(self.resource_meta.bridge_related_through, 'bridge'): bridges
+        }
+        return object_list.filter(**filters)
 
 class CurrentBridgeAuthorization(BridgeObjectsOnlyAuthorization):
     """
@@ -178,7 +135,7 @@ def get_bridges(bundle):
         bridges.append(requester)
     return bridges
 
-class BridgeAuthorization(ReadOnlyAuthorization):
+class BridgeAuthorization(RelatedUserObjectsOnlyAuthorization):
     """
     Authorization for accessing Bridge objects
     """
@@ -198,6 +155,7 @@ class BridgeAuthorization(ReadOnlyAuthorization):
         # Sorry user, no deletes for you!)
         raise Unauthorized("You may only delete one bridge at a time.")
 
+    '''
     def delete_detail(self, object_list, bundle):
         bridge = bundle.obj
         requester_bridges = get_bridges(bundle)
@@ -205,6 +163,7 @@ class BridgeAuthorization(ReadOnlyAuthorization):
         if not bridge in requester_bridges:
             raise Unauthorized("You must control a bridge to delete it")
         return True
+    '''
 
 
 class AuthAuthorization(ReadOnlyAuthorization):
@@ -216,7 +175,9 @@ class AuthAuthorization(ReadOnlyAuthorization):
         raise Unauthorized("You may only post to this endpoint with login or logout appended")
 
     def read_detail(self, object_list, bundle):
-        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+        # Is the requested object owned by the user?
+        #return bundle.obj.user == bundle.request.user
+        return bundle.obj.id == bundle.request.user.id
 
     def create_list(self, object_list, bundle):
         raise Unauthorized("You may only post to this endpoint with login or logout appended")

@@ -9,14 +9,16 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var deviceInstalls = this.getRelation('deviceInstalls');
-        this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
-        this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
+        //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
+        //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
     },
 
+    /*
     removeDeviceInstall: function() {
 
         console.log('Remove device install!');
     },
+    */
 
     getCBID: function() {
 
@@ -146,8 +148,8 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             relatedModel: 'CBApp.User',
             collectionType: 'CBApp.UserCollection',
             createModels: true,
+            includeInJSON: true,
             initializeCollection: 'userCollection',
-            includeInJSON: true
         }
     ]
 }); 

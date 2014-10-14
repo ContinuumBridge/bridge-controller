@@ -7,22 +7,14 @@ CBApp = new Marionette.Application();
 CBApp.addRegions({
     navRegion: "#nav-region",
     mainRegion: "#main-region",
+    notificationRegion: "#notification-region",
     modalsRegion: {
       selector: "#modals-region",
-      regionType: Backbone.Marionette.Modals
-    },
-    notificationsRegion: {
-      selector: "#notifications-region",
       regionType: Backbone.Marionette.Modals
     }
 });
 
-//CBApp.template = require('./views/templates/cbApp.html');
-
 CBApp._isInitialized = false;
-
-// Set the PortalLayout here to avoid requirement recursions
-CBApp.PortalLayout = require('./views/portal_view');
 
 CBApp.Controller = Marionette.Controller.extend({
 
@@ -74,9 +66,11 @@ CBApp.getCurrentRoute = function(){
   return Backbone.history.fragment
 };
 
+
 CBApp.on("initialize:after", function () {
 
   CBApp.Nav.trigger('topbar:show');
+  CBApp.Notifications.trigger('show');
 
   //for routing purposes
   if(Backbone.history) {

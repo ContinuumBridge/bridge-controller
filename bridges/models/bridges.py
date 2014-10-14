@@ -12,6 +12,8 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
+print "Imported accounts.models from bridges"
+from .common import CBIDModelMixin
 from clients.models.abstract import AuthKeyMixin
 
 from .common import LoggedModelMixin
@@ -28,17 +30,19 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
                      ('authorised', 'Authorised'),
                      ('connected', 'Connected'))
 
-class Bridge(CBAuth, AuthKeyMixin):
+class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
 
+    key = models.CharField(_('key'), max_length=128)
+    plaintext_key = models.CharField(_('plaintext_key'), max_length=128)
+
+    manager_version = models.CharField(_('manager version'), max_length = 255)
     #connected = models.BooleanField(_('connected'), default = False)
     #ip = models.GenericIPAddressField(_('ip'))
 
     #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
-
-    #plaintext_password = models.CharField(_('plaintext_password'), max_length = 255)
 
     objects = BridgeModelManager()
 
@@ -72,7 +76,7 @@ class Bridge(CBAuth, AuthKeyMixin):
 
     def get_controllers(self):
         controllers = []
-        for bridge_control in self.bridgecontrol_set.filter():
+        for bridge_control in self.bridge_controls.filter():
             controllers.append(bridge_control)
         return controllers
 
@@ -90,6 +94,6 @@ class BridgeControl(LoggedModelMixin):
         verbose_name_plural = _('bridgecontrols')
         app_label = 'bridges'
 
-    bridge = models.ForeignKey(Bridge)
-    user = models.ForeignKey(CBUser)
+    bridge = models.ForeignKey(Bridge, related_name='bridge_controls')
+    user = models.ForeignKey(CBUser, related_name='bridge_controls')
 

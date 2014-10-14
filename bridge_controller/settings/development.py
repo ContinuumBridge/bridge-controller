@@ -3,7 +3,7 @@ from bridge_controller.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SERVER_ADDRESS = '54.194.73.211'
+SERVER_ADDRESS = 'dev.continuumbridge.com'
 
 DATABASES = {
     'default': {
@@ -34,6 +34,7 @@ GRAPH_MODELS = {
   'group_models': True,
 }
 
+'''
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
     # Django Wiki
@@ -56,4 +57,5 @@ SOUTH_MIGRATION_MODULES = {
     #'notifications': 'wiki.plugins.notifications.south_migrations',
     'attachments': 'wiki.plugins.attachments.south_migrations',
 }
+'''
 

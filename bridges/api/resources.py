@@ -29,8 +29,8 @@ from accounts.models import CBUser
 from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 from bridges.api.authorization import BridgeAuthorization
 
 from bridges.models import Bridge
@@ -43,81 +43,34 @@ class BridgeControlResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
-        authorization = Authorization()
-        #list_allowed_methods = ['get', 'post']
-        #detail_allowed_methods = ['get']
         resource_name = 'bridge_control'
 
 
 class BridgeResource(CBResource, CBIDResourceMixin):
 
-
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
-        authorization = BridgeAuthorization()
+        #authorization = BridgeAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
+        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
+        user_related_through = 'bridge_controls'
+        related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge'
 
-
     def obj_create(self, bundle, **kwargs):
-        """
-        A ORM-specific implementation of ``obj_create``.
-        """
-        bundle.obj = self._meta.object_class()
-
-        for key, value in kwargs.items():
-            setattr(bundle.obj, key, value)
-
-        #bundle = self.full_hydrate(bundle)
 
         # ADDED Create a bridge using manager method, but don't save it
-        password = Bridge.objects.generate_password()
-        bundle.obj = Bridge.objects.create_bridge(password=password, save=False)
-        bundle.obj.password = password
+        bundle.obj = Bridge.objects.create_bridge(save=False)
+
+        bundle = self.full_hydrate(bundle)
 
         return self.save(bundle)
 
-    def create_bridge_control(self, bundle):
-        print "Bundle is", bundle.obj.__dict__
-        # Create a bridge_control between the current user and a newly created bridge.
-        # BridgeAuthorization class checks that this is a user
-        user = CBUser.objects.get(email=bundle.request.user)
-        bridge_control = BridgeControl(bridge=bundle.obj, user=user)
-        bridge_control.save()
-        print "Bridge control is", bridge_control
-        #raise Unauthorized("That's quite far enough")
-
-        return bundle
-
-    def save(self, bundle, skip_errors=False):
-        self.is_valid(bundle)
-
-        if bundle.errors and not skip_errors:
-            raise ImmediateHttpResponse(response=self.error_response(bundle.request, bundle.errors))
-
-        # Check if they're authorized.
-        if bundle.obj.pk:
-            self.authorized_update_detail(self.get_object_list(bundle.request), bundle)
-        else:
-            self.authorized_create_detail(self.get_object_list(bundle.request), bundle)
-
-        # Save FKs just in case.
-        self.save_related(bundle)
-
-        # Save the main object.
-        bundle.obj.save()
-        bundle.objects_saved.add(self.create_identifier(bundle.obj))
-
-        # ADDED Create a bridge_control to the current user if the bridge is being created
-        if bundle.obj.password:
-            bundle = self.create_bridge_control(bundle)
-
-        # Now pick up the M2M bits.
-        m2m_bundle = self.hydrate_m2m(bundle)
-        self.save_m2m(m2m_bundle)
+    def dehydrate(self, bundle):
+        try:
+            bundle.data['key'] = bundle.obj.plaintext_key
+        except AttributeError:
+            pass
         return bundle
 
 
@@ -136,10 +89,10 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
                     null=True, readonly=True, nonmodel=True)
 
     class Meta(LoggedInResource.Meta):
-        resource_name = 'current_bridge'
         queryset = Bridge.objects.all()
         #fields = ['id', 'email', 'name', 'date_joined', 'last_login']
         excludes = ['key', 'plaintext_key']
+        resource_name = 'current_bridge'
 
     '''
     def dehydrate(self, bundle):

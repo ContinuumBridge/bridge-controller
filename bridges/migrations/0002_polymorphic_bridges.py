@@ -10,6 +10,9 @@ class Migration(SchemaMigration):
     depends_on = (
         ("accounts", "0002_polymorphic_users"),
     )
+    needed_by = (
+        ("accounts", "0003_content_ctype_id_for_users"),
+    )
 
     def forwards(self, orm):
         # Call pre_save_polymorphic on all cb_users to populate their polymorphic_ctype_id attributes

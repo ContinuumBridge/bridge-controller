@@ -39,16 +39,29 @@ Connection.prototype.setupSocket = function() {
         //message.set('source', "BID" + socket.handshake.authData.id);
         logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
-        logger.log('debug', 'socket message config', self.config);
 
-        self.fromClient.push(message);
-        //self.router.dispatch(message);
-        //this.redis.pub.push(message);
+        //message.filterDestination(self.config.publicationAddresses);
+        //message.conformSource(self.config.subscriptionAddress);
+
+        logger.log('debug', 'socket message config', self.config);
+        logger.log('debug', 'socket message', message);
+
+        //self.fromClient.push(message);
+        self.router.dispatch(message);
     });
 
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
         var jsonMessage = message.toJSONString();
+
+        // Device discovery hack
+        var body = message.get('body');
+        var resource = body.url || body.resource;
+        if (resource && '/api/bridge/v1/device_discovery/') {
+            socket.emit('discoveredDeviceInstall:reset', body.body);
+        }
+
+        logger.log('debug', 'Socket emit', jsonMessage);
         socket.emit('message', jsonMessage);
     });
 
@@ -122,7 +135,8 @@ Connection.prototype.setupRedis = function() {
         logger.log('debug', 'Redis received ', jsonMessage);
         var message = new Message(jsonMessage);
         //logger.log('debug', 'Redis received', message.toJSON());
-        self.fromRedis.push(message);
+        //self.fromRedis.push(message);
+        self.router.dispatch(message);
     });
 
     this.disconnect = function() {
@@ -142,6 +156,7 @@ Connection.prototype.setupRouting = function() {
 
     var self = this;
 
+    /*
     this.fromRedis.onValue(function(message) {
 
         // Forward messages from redis to the client
@@ -155,6 +170,7 @@ Connection.prototype.setupRouting = function() {
         logger.log('debug', 'fromClient config', self.config)
         self.router.dispatch(message);
     });
+    */
 }
 
 Connection.prototype.unauthorizedResult = function(message, exception) {

@@ -5,6 +5,7 @@ from django.conf import settings
 
 from django.utils import timezone
 
+from accounts.models import CBUser
 from bridges.models import Bridge
 from bridges.models.common import LoggedModelMixin
 from devices.models import Device, DeviceInstall
@@ -21,6 +22,8 @@ class Adaptor(LoggedModelMixin):
     url = models.CharField(_("url"), max_length = 255, blank = True)
     exe = models.CharField(_("exe"), max_length = 255, blank = True)
 
+    git_key = models.TextField(_("git key"), max_length = 1000, blank = True)
+
     class Meta:
         verbose_name = _('adaptor')
         verbose_name_plural = _('adaptors')
@@ -35,12 +38,23 @@ class Adaptor(LoggedModelMixin):
         super(Adaptor, self).save(*args, **kwargs)
 
 
+class AdaptorOwnership(LoggedModelMixin):
+
+    user = models.ForeignKey(CBUser)
+    adaptor = models.ForeignKey(Adaptor, related_name='adaptor_ownerships')
+
+    class Meta:
+        verbose_name = _('adaptor_ownership')
+        verbose_name_plural = _('adaptor_ownerships')
+        app_label = 'adaptors'
+
+
 class AdaptorCompatibility(LoggedModelMixin):
 
     """ Through model for an Adaptor and a Device, denotes their compatibility """
 
-    device = models.ForeignKey(Device)
-    adaptor = models.ForeignKey(Adaptor)
+    device = models.ForeignKey(Device, related_name='adaptor_compatibilities')
+    adaptor = models.ForeignKey(Adaptor, related_name='device_compatibilities')
 
     class Meta:
         verbose_name = _('adaptor_compatibility')

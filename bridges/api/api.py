@@ -9,7 +9,6 @@ from .resources import BridgeControlResource, BridgeAuthResource, CurrentBridgeR
 
 v1 = Api("v1")
 v1.register(UserResource())
-v1.register(CurrentUserResource())
 
 v1.register(AdaptorResource())
 v1.register(AdaptorDeviceCompatibilityResource())

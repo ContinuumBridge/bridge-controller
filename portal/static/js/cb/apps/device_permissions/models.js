@@ -5,26 +5,20 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
-    defaults: {
-        permission: false
-    },
-    */
-
     initialize: function() {
 
         this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
     },
 
-    setPermission: function(permission) {
+    setConnection: function(connection) {
 
         // Model is out of sync, prevent further changes
         if (this.unsavedAttributes()) return void 0;
 
-        if (permission) {
+        if (connection) {
             console.log('saving');
-            this.set('permission', true);
+            this.set('connection', true);
             this.save().then(function(result) {
 
                 console.log('save successful', result);
@@ -34,33 +28,25 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
                 //this.set('permission', false);
             });
 
-        } else if (!permission) {
+        } else if (!connection) {
             console.log('disallowAll');
-            this.set('permission', false);
-            this.disallowAll();
+            this.set('connection', false);
+            this.destroyOnServer().then(function(result) {
+
+                console.log('destroyOnServer succeeded for', result);
+            }, function(error) {
+
+                console.error('destroyOnServer failed', error);
+            });
         } else {
             console.error('AppDevicePermission not saved or destroyed');
         }
     },
 
-    disallowAll: function() {
+    toggleConnection: function() {
 
-        //this.set('permission', false);
-        this.destroyOnServer().then(function(result) {
-
-            console.log('destroyOnServer succeeded for', result);
-        }, function(error) {
-
-            console.error('destroyOnServer failed', error);
-        });
-    },
-
-    togglePermission: function() {
-
-        //var currentPermission = this.isNew() ? false : true;
-        var currentPermission = !this.isNew();
-            //this.get('permission');
-        this.setPermission(!currentPermission);
+        var currentConnection = !this.isNew();
+        this.setConnection(!currentConnection);
     },
 
     relations: [

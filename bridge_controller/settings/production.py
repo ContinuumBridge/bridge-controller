@@ -3,7 +3,7 @@ from bridge_controller.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SERVER_ADDRESS = '54.194.28.63'
+SERVER_ADDRESS = 'portal.continuumbridge.com'
 
 DATABASES = {
     'default': {
@@ -12,7 +12,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'production',
         'PASSWORD': 'QdEQXFRsA8MHFskw',
-        'HOST': 'production.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': 'production-2.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',                      # Set to empty string for default.
     }
 }

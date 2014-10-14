@@ -22,17 +22,15 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
+
         this.appListView = new AppViews.AppListView({
                                     collection: CBApp.appCollection
                                 });
 
-        CBApp.appCollection.fetch();
-    },
+        CBApp.getCurrentUser().then(function(currentUser) {
 
-    populateViews: function() {
-
-        var self = this;
-        //this.render();
+            CBApp.appCollection.fetch();
+        }).done();
     },
 
     onRender: function() {

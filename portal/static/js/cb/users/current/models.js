@@ -127,6 +127,29 @@ CBApp.CurrentUser = CBApp.User.extend({
             //includeInJSON: false,
             initializeCollection: 'appLicenceCollection'
         },
+        {
+            type: Backbone.HasMany,
+            key: 'appOwnerships',
+            keySource: 'app_ownerships',
+            keyDestination: 'app_ownerships',
+            relatedModel: 'CBApp.AppOwnership',
+            collectionType: 'CBApp.AppOwnershipCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            //includeInJSON: false,
+            initializeCollection: 'appOwnershipCollection'
+        },
+        {
+            type: Backbone.HasMany,
+            key: 'clientControls',
+            keySource: 'client_controls',
+            keyDestination: 'client_controls',
+            relatedModel: 'CBApp.ClientControl',
+            collectionType: 'CBApp.ClientControlCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'clientControlCollection'
+        }
     ]
 }, { modelType: "currentUser" });
 
@@ -143,3 +166,4 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
         return response.objects;
     }
 });
+

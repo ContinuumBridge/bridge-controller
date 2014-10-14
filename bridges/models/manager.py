@@ -6,7 +6,7 @@ class BridgeModelManager(ClientModelManager):
     def create_bridge(self, save=False, **extra_fields):
 
         """
-        Creates and saves a Bridge with the given email and password.
+        Creates a bridge, saves it if save is True.
         """
         # Call create_client on the parent class
         return super(BridgeModelManager, self).create_client(save=save, **extra_fields)

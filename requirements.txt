@@ -1,11 +1,13 @@
 Django==1.6.2
 #-e git+git://github.com/django/django.git@1.7c1#egg=django
-South==0.7.6
+South==1.0
 argparse==1.2.1
 distribute
-django-allauth==0.13.0
+#django-allauth==0.13.0
+-e git+https://github.com/continuumbridge/django-allauth.git@d6f7c0e2d0812e57e4553ad42cba50b4dcc97185#egg=allauth
 django-annoying==0.7.7
 django-avatar==1.0.5
+django-bootstrap-form==2.0.5
 django-braces==1.2.2
 django-classy-tags==0.4
 django-countries==1.5
@@ -18,12 +20,13 @@ django-model-utils==2.0.0
 django-multiselectfield==0.1.2
 #django-notifications-hq==0.6.2
 -e git+https://github.com/continuumbridge/django-notifications.git@6a58f06cf5c8e73101e087839e1562052b7cf3c9#egg=notifications
-django-nyt
+#django-nyt
 django-polymorphic==0.5.5
 django-redis-sessions
 django-sekizai==0.7
-#django-tastypie==0.11.0
--e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
+django-tastypie==0.11.1
+#-e git+https://github.com/toastdriven/django-tastypie.git@f9a1a12eb4bf872f57deaaba03bfb2cf68ba0814#egg=tastypie
+#-e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
 #git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
 -e git+https://github.com/ContinuumBridge/telegraphy.git@0b84d001a8b8efd2fcf68110be7be721cb465e32#egg=telegraphy
@@ -38,9 +41,9 @@ Pillow==1.6.0
 psycopg2==2.4.5
 
 # Model visualisation
-pygraphviz==1.2
-pyparsing==1.5.7
-pydot==1.0.2
+#pygraphviz==1.2
+#pyparsing==1.5.7
+#pydot==1.0.2
 
 python-dateutil==2.1
 pystache==0.3.1
@@ -51,5 +54,7 @@ requests==1.2.3
 requests-oauthlib==0.3.2
 six==1.3.0
 #twython==3.0.0
-wiki
+#-e git+https://github.com/django-wiki/django-wiki.git@django1.7#egg=django-wiki
+#wiki
+# ^^ This is django-wiki
 wsgiref==0.1.2

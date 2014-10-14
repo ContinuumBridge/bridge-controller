@@ -7,6 +7,7 @@ var Connection = require('../connection/connection')
     ,Router = require('./router')
     ,Django = require('../connection/django.js')
     ,backendAuth = require('../../backendAuth.js')
+    ,Message = require('../../message');
     ;
 
 var PortalConnection = function(socket, serverConfig) {
@@ -19,13 +20,12 @@ var PortalConnection = function(socket, serverConfig) {
 
     socket.getConfig().then(function(config) {
 
-        self.config = config;
+        self.config = socket.config = config;
 
         console.log('Portal config is', config);
         // Router and django must be defined
         self.django = new Django(self);
         self.router = new Router(self);
-
 
         self.setupBuses();
         self.setupSocket();

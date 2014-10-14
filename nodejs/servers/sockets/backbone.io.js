@@ -25,11 +25,16 @@ function BackboneIOServer(config) {
     httpServer.listen(config.port);
 
     var appController = this.appController = new djangoBackbone(config.djangoURL + 'app/');
+    var appConnectionController = this.appConnectioController = new djangoBackbone(config.djangoURL + 'app_connection/');
     var appInstallController = this.appInstallController = new djangoBackbone(config.djangoURL + 'app_install/');
     //var appInstallController = this.appInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net/');
     var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(config.djangoURL + 'app_device_permission/');
     var appLicenceController = this.appLicenceController = new djangoBackbone(config.djangoURL + 'app_licence/');
+    var appOwnershipController = this.appOwnershipController = new djangoBackbone(config.djangoURL + 'app_ownership/');
     //var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
+
+    var clientController = this.clientController = new djangoBackbone(config.djangoURL + 'client/');
+    var clientControlController = this.clientControlController = new djangoBackbone(config.djangoURL + 'client_control/');
 
     var deviceController = this.deviceController = new djangoBackbone(config.djangoURL + 'device/');
     var deviceInstallController = this.deviceInstallController = new djangoBackbone(config.djangoURL + 'device_install/');
@@ -46,10 +51,14 @@ function BackboneIOServer(config) {
     var socketServer = backboneio.listen(httpServer, {
         app: appController,
         appInstall: appInstallController,
+        appConnection: appConnectionController,
         appDevicePermission: appDevicePermissionController,
         appLicence: appLicenceController,
+        appOwnership: appOwnershipController,
         bridge: bridgeController,
         bridgeControl: bridgeControlController,
+        client: clientController,
+        clientControl: clientControlController,
         currentUser: currentUserController,
         device: deviceController,
         deviceInstall: deviceInstallController,

@@ -42,6 +42,30 @@ Logger.levels = {
     }
 };
 
+
+winston.setLevels(Logger.levels.levels);
+winston.addColors(Logger.levels.colors);
+
+var consoleTransport = new (winston.transports.Console)({
+    level: 'debug',
+    colorize:true,
+    label: "common",
+    silent: false,
+    timestamp: true
+});
+
+Logger.logger = new (winston.Logger)({
+    level: 'debug',
+    colorize:true,
+    label: "common",
+    silent: false,
+    timestamp: true,
+    levels: Logger.levels.levels,
+    transports: [
+        consoleTransport
+    ]
+});
+
 Logger.logError = function(error) {
 
     if (error instanceof Errors.Unauthorized) {

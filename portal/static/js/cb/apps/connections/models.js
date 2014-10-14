@@ -1,27 +1,12 @@
 
-CBApp.AppConnection = Backbone.Deferred.Model.extend({
+require('../../common/models');
 
-    idAttribute: 'id',
+CBApp.AppConnection = CBApp.ConnectionModel.extend({
 
     backend: 'appConnection',
 
-    initialize: function() {
-        this.startTracking();
-    },
-
     relations: [
-        {   
-            type: Backbone.HasOne,
-            key: 'bridge',
-            keySource: 'bridge',
-            keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeCollection',
-        },
-        {   
+        {
             type: Backbone.HasOne,
             key: 'app',
             keySource: 'app',
@@ -29,38 +14,20 @@ CBApp.AppConnection = Backbone.Deferred.Model.extend({
             relatedModel: 'CBApp.App',
             collectionType: 'CBApp.AppCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
-            reverseRelation: {
-                type: Backbone.HasMany,
-                key: 'appConnections',
-                collectionType: 'CBApp.AppConnectionCollection',
-                includeInJSON: false,
-                initializeCollection: 'appConnectionCollection'
-            }   
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'devicePermissions',
-            keySource: 'device_permissions',
-            keyDestination: 'device_permissions',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'appDevicePermissionCollection'
+            includeInJSON: true
         },
         {
             type: Backbone.HasOne,
-            key: 'licence',
-            keySource: 'licence',
-            keyDestination: 'licence',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            key: 'client',
+            keySource: 'client',
+            keyDestination: 'client',
+            relatedModel: 'CBApp.Client',
+            collectionType: 'CBApp.ClientCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'appLicenceCollection',
-        },
+            initializeCollection: 'clientCollection',
+            includeInJSON: true
+        }
     ]
 }, { modelType: "appConnection" });
 

@@ -8,37 +8,28 @@ from accounts.models import CBUser
 from bridges.models import BridgeControl
 from apps.models import AppLicence
 
-from apps.api.resources import AppLicenceResource
-from bridges.api import cb_fields
+from apps.api.resources import AppLicenceResource, AppOwnershipResource
+from bridge_controller.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api.abstract_resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
+from bridge_controller.api.resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
-
-class UserBridgeControlResource(ThroughModelResource):
-
-    """
-    BridgeControl resource presented to a logged in user
-    """
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.CurrentBridgeResource', 'bridge', full=True)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-
-    class Meta(ThroughModelResource.Meta):
-        queryset = BridgeControl.objects.all()
-        authorization = Authorization()
-        #list_allowed_methods = ['get', 'post']
-        #detail_allowed_methods = ['get']
-        resource_name = 'user_bridge_control'
-
+from .bridge_resources import UserBridgeControlResource
 
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
-                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridgecontrol_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
                     null=True, readonly=True, nonmodel=True)
 
+    '''
     app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
                      attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
                      null=True, readonly=True, nonmodel=True)
+
+    app_ownerships = cb_fields.ToManyThroughField(AppOwnershipResource,
+                                                attribute=lambda bundle: bundle.obj.get_app_ownerships() or bundle.obj.appownership_set, full=True,
+                                                null=True, readonly=True, nonmodel=True)
+    '''
 
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'
@@ -63,11 +54,15 @@ class UserResource(CBResource, CBIDResourceMixin):
         authorization = ReadOnlyAuthorization()
 
 
-class UserAuthResource(AuthResource):
+#class UserAuthResource(AuthResource):
+class UserAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
+    #class Meta(ModelResource.Meta):
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()
-        fields = ['first_name', 'last_name', 'email']
+        # Resource used to send data on successful login
+        #data_resource = CurrentUserResource()
+        fields = ['first_name', 'last_name', 'email', 'cbid']
         resource_name = 'user_auth'

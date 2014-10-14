@@ -17,26 +17,34 @@ gettext = lambda s: s
 #PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', '..'))
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
-# Define user model
-AUTH_USER_MODEL = 'accounts.CBAuth'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
 #SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Define user model
+AUTH_USER_MODEL = 'accounts.CBAuth'
+USER_MODEL = 'accounts.CBUser'
+
 # All Auth
 ACCOUNT_AUTHENTICATION_METHOD='email'
+#ACCOUNT_CONFIRM_EMAIL_ON_GET
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_EMAIL_FIELD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "[q4ts]"
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_PASSWORD_MIN_LENGTH = 6
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "http://continuumbridge.com/portal/"
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/portal/"
+ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
+LOGIN_REDIRECT_URL = "/portal/"
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 #SOCIALACCOUNT_AVATAR_SUPPORT
@@ -52,6 +60,12 @@ SOCIALACCOUNT_PROVIDERS = \
 # Facebook info
 FACEBOOK_APP_ID = '511836845532247'
 FACEBOOK_APP_SECRET = 'b2d0fcf6fbdee2e0ac5893b77666ff50'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'no-reply@continuumbridge.com'
+EMAIL_HOST_PASSWORD = 'Wayt00f@r'
 
 SESSION_COOKIE_HTTPONLY = False
 
@@ -97,7 +111,9 @@ TIME_ZONE = 'Europe/London'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 1 
+SITE_ID = 1
+DOMAIN_NAME = 'continuumbridge.com'
+SITE_NAME = 'continuumbridge'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -198,6 +214,7 @@ TEMPLATE_DIRS = (
     #'/home/bridge_controller/bridge_controller/templates',
     os.path.join(PROJECT_PATH, 'bridge_controller', "templates"),
     os.path.join(PROJECT_PATH, 'marketing', "templates"),
+    os.path.join(PROJECT_PATH, 'accounts', 'templates', 'bootstrap', 'allauth'),
 )
 
 INSTALLED_APPS = (
@@ -207,12 +224,9 @@ INSTALLED_APPS = (
     #'django.contrib.sessions',
     'user_sessions',
     'django.contrib.sites',
-    'django.contrib.humanize',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+    'bootstrapform',
     #'allauth.socialaccount.providers.facebook',
     #'allauth.socialaccount.providers.twitter',
     #'allauth.socialaccount.providers.google',
@@ -225,6 +239,12 @@ INSTALLED_APPS = (
     'telegraphy.contrib.django_telegraphy',
     # Continuum Bridge apps
     'accounts',
+    # Allauth must come below accounts for template loading order
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # More Continuum Bridge apps
+    'bridge_controller',
     'bridges',
     'clients',
     'apps',
@@ -258,8 +278,9 @@ AUTHENTICATION_BACKENDS = (
     #'userena.backends.UserenaAuthenticationBackend',
     #'guardian.backends.ObjectPermissionBackend',
     #'django_facebook.auth_backends.FacebookBackend',
-    'clients.authentication.ClientBackend',
-    'django.contrib.auth.backends.ModelBackend'
+    'accounts.authentication.UserBackend',
+    'clients.authentication.ClientBackend'
+    #'django.contrib.auth.backends.ModelBackend'
     # `allauth` specific authentication methods, such as login by e-mail
     #"allauth.account.auth_backends.AuthenticationBackend",
 )

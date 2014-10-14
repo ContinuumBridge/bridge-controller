@@ -16,7 +16,23 @@
   }
 
   Backbone.Notify = {};
-  Backbone.Notify.Notification = (function(_super) {
+  Backbone.Notify.NotificationView = (function(_super) {
+
+    __extends(Notification, _super);
+
+    Notification.prototype.prefix = 'bbn';
+
+    Notification.prototype.template = require('./templates/notification.html');
+
+    function Notification() {
+      Backbone.Modal.prototype.constructor.apply(this, this.args);
+    }
+
+    return Notification;
+
+  })(Backbone.Modal);
+
+  Backbone.Notify.NotificationListView = (function(_super) {
 
     __extends(Notification, _super);
 

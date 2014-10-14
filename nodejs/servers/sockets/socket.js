@@ -50,10 +50,13 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer) {
 
             var sessionID;
 
+            console.log('authorization ran', data.headers);
             if(data && data.headers && data.headers.cookie) {
                 // Pull out the cookies from the data
                 var cookies = cookie_reader.parse(data.headers.cookie);
+                console.log('authorization cookies', cookies);
                 sessionID = cookies.sessionid;
+                console.log('authorization sessionID', sessionID);
             }
             if(data && data.query && data.query.sessionID) {
                 console.log('data.query is', data);

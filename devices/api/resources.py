@@ -22,27 +22,26 @@ from tastypie.authorization import Authorization
 #from haystack.query import SearchQuerySet
 
 #from bridges.api.abstract_resources import CBModelResource
-from bridges.api import cb_fields
 
 from adaptors.api.resources import AdaptorDeviceCompatibilityResource
-from bridges.api.abstract_resources import PostMatchMixin, CBResource, ThroughModelResource
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import PostMatchMixin, CBResource, ThroughModelResource
+from bridge_controller.api.authorization import CBReadAllAuthorization
 from devices.models import Device, DeviceInstall
 
+from .authorization import DeviceInstallAuthorization
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
 
-class DeviceResource(CBResource):
+class DeviceResource(PostMatchMixin, CBResource):
 
     adaptor_compatibility = cb_fields.ToManyThroughField(AdaptorDeviceCompatibilityResource, 
-                    attribute=lambda bundle: bundle.obj.get_adaptor_compatibility() or bundle.obj.adaptorcompatibility_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_adaptor_compatibility() or bundle.obj.adaptor_compatibilities, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     class Meta(CBResource.Meta):
         queryset = Device.objects.all()
-        always_return_data = True
-        authorization = Authorization()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
-        resource_name = 'device'
+        authorization = CBReadAllAuthorization()
+        post_match = ['name']
         filtering = {
             'name': ALL,
             'protocol': ALL,
@@ -53,7 +52,9 @@ class DeviceResource(CBResource):
             'model_number': ALL,
             'system_id': ALL,
         }
+        resource_name = 'device'
 
+    '''
     def post_list(self, request, **kwargs):
         """
         Creates a new resource/object with the provided data.
@@ -106,6 +107,7 @@ class DeviceResource(CBResource):
 
 def convert_post_to_patch(request):
     return convert_post_to_VERB(request, verb='PATCH')
+    '''
 
 
 class DeviceInstallResource(PostMatchMixin, CBResource):
@@ -116,13 +118,9 @@ class DeviceInstallResource(PostMatchMixin, CBResource):
 
     class Meta(CBResource.Meta):
         queryset = DeviceInstall.objects.all()
-        authorization = Authorization()
-        always_return_data = True
-        resource_name = 'device_install'
+        authorization = DeviceInstallAuthorization()
+        related_bridge_permissions = ['read', 'create', 'update', 'delete']
         post_match = ['adaptor', 'bridge', 'device', 'address']
+        resource_name = 'device_install'
 
-
-    def dehydrate(self, bundle):
-        # Prevent a cbid being added
-        return bundle
 

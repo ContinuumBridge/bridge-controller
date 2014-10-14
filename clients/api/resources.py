@@ -1,33 +1,13 @@
 
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
-
-from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden
-from django.conf.urls import url
-
-from django.conf.urls import patterns, url, include
-from django.http import HttpResponse, HttpResponseNotFound, Http404
-
-from tastypie.resources import ModelResource
-from tastypie.authorization import Authorization
-from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
-from tastypie.utils import trailing_slash
-from tastypie import fields
-
-from tastypie.resources import ObjectDoesNotExist
-from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
+from tastypie.authorization import ReadOnlyAuthorization
 
 from accounts.api.authorization import CurrentUserAuthorization
+from accounts.api.abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 from apps.api.resources import AppInstallResource
-from devices.api.resources import DeviceInstallResource
-
-from bridges.models import Bridge, BridgeControl
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
-from bridges.api import cb_fields
-from bridges.api.abstract_resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
+from bridge_controller.api import cb_fields
+from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 
 from clients.models import Client, ClientControl
 
@@ -35,10 +15,21 @@ class ClientResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = Client.objects.all()
+        excludes = ['email', 'is_staff', 'is_superuser', 'key', 'plaintext_key']
         authorization = ReadOnlyAuthorization()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get']
         resource_name = 'client'
+
+
+class ClientControlResource(CBResource):
+
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=True)
+
+    class Meta(CBResource.Meta):
+        queryset = ClientControl.objects.all()
+        resource_name = 'client_control'
 
 
 class CurrentClientResource(LoggedInResource, CBIDResourceMixin):
