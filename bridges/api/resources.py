@@ -109,6 +109,6 @@ class BridgeAuthResource(AuthResource):
         queryset = Bridge.objects.all()
         # Resource used to send data on successful login
         data_resource = CurrentBridgeResource()
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name']
         resource_name = 'bridge_auth'
 

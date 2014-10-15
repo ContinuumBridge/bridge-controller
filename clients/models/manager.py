@@ -32,13 +32,9 @@ class ClientModelManager(PolymorphicBaseUserManager):
 
         while True:
             uid = uuid4().hex[0:8]
-            # For compatibility with users
-            email = uid + "@continuumbridge.com"
             try:
-                #existing_client = self.get_queryset().get(uid=uid)
-                existing_client = CBAuth.objects.get(
-                    Q(uid=uid) | Q(email=email)
-                )
+                #existinclient = self.get_queryset().get(uid=uid)
+                existing_client = CBAuth.objects.get(uid=uid)
             except ObjectDoesNotExist:
                 print "Client uid is unique!"
                 break
@@ -46,7 +42,7 @@ class ClientModelManager(PolymorphicBaseUserManager):
         # The first 8 characters of the key are the uid
         key = self.generate_key(uid)
 
-        client = self.model(uid=uid, email=email,
+        client = self.model(uid=uid,
                           is_active=True, is_staff=False, is_superuser=False,
                           last_login=now,
                           #created=now,
