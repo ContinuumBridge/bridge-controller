@@ -2,6 +2,7 @@
 import os
 import sys
 
+print "Settings is", os.environ.get('DJANGO_SETTINGS_MODULE')
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bridge_controller.settings")
 

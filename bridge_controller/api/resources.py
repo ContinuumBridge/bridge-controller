@@ -188,6 +188,16 @@ class CBResource(ModelResource):
         bundle.obj.delete()
         self.obj_deleted(bundle)
 
+    def get_via_uri(self, uri, request=None):
+
+        # Remove API name to catch bug where resource and api names are confused.
+        for api_prefix in ['/api/user/', '/api/bridge/', '/api/client/']:
+            if uri.startswith(api_prefix):
+                uri = uri[len(api_prefix)-1:]
+
+        return super(CBResource, self).get_via_uri(uri, request)
+
+        
 class CBIDResourceMixin(ModelResource):
 
     cbid = fields.CharField(attribute='cbid', readonly=True)

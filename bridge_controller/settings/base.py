@@ -19,8 +19,8 @@ PROJECT_PATH =  os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 
 #GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
-#SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
+#SECRET_KEY = 'lza8loq511%9qt%@#^5t&nfh-pa2mglk4xs-03_@7sp7sl5ygg'
+SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 

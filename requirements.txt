@@ -24,8 +24,8 @@ django-multiselectfield==0.1.2
 django-polymorphic==0.5.5
 django-redis-sessions
 django-sekizai==0.7
-django-tastypie==0.11.1
-#-e git+https://github.com/toastdriven/django-tastypie.git@f9a1a12eb4bf872f57deaaba03bfb2cf68ba0814#egg=tastypie
+#django-tastypie==0.11.1
+-e git+https://github.com/toastdriven/django-tastypie.git@f9a1a12eb4bf872f57deaaba03bfb2cf68ba0814#egg=tastypie
 #-e git+https://github.com/ContinuumBridge/django-tastypie.git@e99a00a1cb048945283244d201b098380adb4259#egg=tastypie
 #git+https://github.com/hcarvalhoalves/django-rest-thumbnails.git@52cab1123bd7ec0715f8d660571dec0b9946bfbc
 #git+https://github.com/toastdriven/django-tastypie.git@e5d3bd7af807f721f2c326d4bbe971f62ef3eb33
@@ -48,10 +48,6 @@ psycopg2==2.4.5
 python-dateutil==2.1
 pystache==0.3.1
 pytz>=2013b
-
-# 0MQ
-pyzmq
--e git+git@github.com:awesomo/django-ztaskq.git#egg=django_ztaskq
 
 redis==2.8.0
 requests==1.2.3
