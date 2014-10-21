@@ -1,12 +1,12 @@
 
 from django.db import models
-from bridges.models.common import LoggedModelMixin
+from bridges.models.common import LoggedModel
 
 from django.utils.translation import ugettext_lazy as _
 from accounts.models import CBUser
 from .clients import Client
 
-class ClientControl(LoggedModelMixin):
+class ClientControl(LoggedModel):
 
     class Meta:
         verbose_name = _('clientcontrol')

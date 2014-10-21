@@ -7,9 +7,9 @@ from django.utils import timezone
 
 #from adaptors.models import Adaptor
 from bridges.models import Bridge
-from bridges.models.common import LoggedModelMixin
+from bridges.models.common import LoggedModel
 
-class Device(LoggedModelMixin):
+class Device(LoggedModel):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), blank = True)
@@ -41,7 +41,7 @@ class Device(LoggedModelMixin):
 
     
 
-class DeviceInstall(LoggedModelMixin):
+class DeviceInstall(LoggedModel):
     
     friendly_name = models.CharField(_("friendly_name"), max_length = 255, blank=True)
     address = models.CharField(_("address"), max_length = 255)

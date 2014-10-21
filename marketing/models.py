@@ -2,9 +2,9 @@
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from bridges.models.common import LoggedModelMixin
+from bridges.models.common import LoggedModel
 
-class Signup(LoggedModelMixin):
+class Signup(LoggedModel):
 
     first_name = models.CharField(_("First Name"), max_length = 255)
     last_name = models.CharField(_("Last Name"), max_length = 255)

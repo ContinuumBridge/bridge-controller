@@ -5,7 +5,7 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 
-from bridges.models.common import CBIDModelMixin, LoggedModelMixin
+from bridges.models.common import CBIDModelMixin, LoggedModel
 
 from accounts.models import CBAuth, CBUser
 from .manager import ClientModelManager
@@ -50,7 +50,7 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
         return self.name
 
 
-class ClientControl(LoggedModelMixin):
+class ClientControl(LoggedModel):
 
     client = models.ForeignKey(Client, related_name='client_controls')
     user = models.ForeignKey(CBUser, related_name='client_controls')
