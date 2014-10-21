@@ -1,17 +1,17 @@
 from django.contrib import admin
 
-from apps.models import App, AppInstall, AppDevicePermission
+from apps.models import App, AppInstall#, AppDevicePermission
 
 '''
 class AppInstallInline(admin.TabularInline):
     model = AppInstall
     #fk_name = 'app_install'
     extra = 0
-'''
 
 class AppDevicePermissionInline(admin.TabularInline):
     model = AppDevicePermission
     extra = 0
+'''
 
 class AppAdmin(admin.ModelAdmin):
 

@@ -5,12 +5,13 @@ TEMPLATE_DEBUG = DEBUG
 
 SERVER_ADDRESS = 'dev.continuumbridge.com'
 
+# This development database has name staging and user staging
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'development',                      # Or path to database file if using sqlite3.
+        'NAME': 'staging',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'development',
+        'USER': 'staging',
         'PASSWORD': 'NUdpDt8ztsUmDVbd',
         'HOST': 'development.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',                      # Set to empty string for default.
@@ -24,7 +25,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'development',
         'PASSWORD': 'ALWbBfEADrmrPc3',
-        'HOST': 'development-2.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': 'development.cilsyqruufj3.eu-west-1.rds.amazonaws.com',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '5432',                      # Set to empty string for default.
     }
 '''
