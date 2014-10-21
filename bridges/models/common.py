@@ -36,7 +36,7 @@ class LoggedModel(models.Model):
         blank=True
     )
 
-    deleted = models.BooleanField(_("deleted"), default=False)
+    #deleted = models.BooleanField(_("deleted"), default=False)
 
 
 class CBIDModelMixin(models.Model):
