@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-class LoggedModelMixin(models.Model):
+class LoggedModel(models.Model):
 
     class Meta:
         verbose_name = _('logged_model_mixin')
@@ -34,7 +34,9 @@ class LoggedModelMixin(models.Model):
         auto_now=True,
         editable=False,
         blank=True
-    )   
+    )
+
+    deleted = models.BooleanField(_("deleted"), default=False)
 
 
 class CBIDModelMixin(models.Model):
