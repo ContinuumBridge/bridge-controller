@@ -31,10 +31,10 @@ from bridges.models import Bridge, BridgeControl
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
 from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
-from bridges.api.authorization import BridgeAuthorization
 
 from bridges.models import Bridge
 
+from .authorization import BridgeControlAuthorization
 
 class BridgeControlResource(CBResource):
 
@@ -43,7 +43,10 @@ class BridgeControlResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
+        #authorization = BridgeControlAuthorization()
         resource_name = 'bridge_control'
+        #related_user_permissions = ['read', 'create', 'update', 'delete']
+        related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
 
 class BridgeResource(CBResource, CBIDResourceMixin):

@@ -33,10 +33,8 @@ from bridges.models import Bridge, BridgeControl
 
 from accounts.models import CBUser
 from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization
-from bridges.api.authorization import AuthAuthorization
+from .authorization import AuthAuthorization, CBAuthorization
 from .authentication import HTTPHeaderSessionAuthentication
-from .authorization import CBAuthorization
-
 
 class CBResource(ModelResource):
 

@@ -1,4 +1,5 @@
 import operator
+import collections
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Model
 from django.db.models.query import QuerySet
@@ -88,6 +89,8 @@ class CBAuthorization(Authorization):
 
     def test_object_with_querylist(self, object, query_list, bundle):
 
+        print "test_object_with_querylist", query_list
+
         # Determines whether an object would be left in a queryset which the query_list was applied to.
 
         def evaluate_boolean(connector, predicates):
@@ -109,11 +112,16 @@ class CBAuthorization(Authorization):
         def test_relationship(object, relation):
             path = relation[0].split('__')
             related_list = relation[1]
+            print "related_list is", related_list
             if not related_list:
                 return False
-            print "related is", related_list
+            # If an object is passed, turn it into a list
+            if not isinstance(related_list, collections.Iterable):
+                related_list = [ related_list ]
+
             rel = object
             for index, field in enumerate(path):
+                print "field is", field
                 try:
                     print "rel for filtering is", rel
                     print "filtering on", '__'.join(path[index:])
@@ -124,11 +132,24 @@ class CBAuthorization(Authorization):
                     print "filtered is ", filtered
                     return bool(filtered)
                 except AttributeError:
-                    print "AttributeError rel is", rel
+                    '''
                     if isinstance(rel, related_list[0].__class__) and rel in related_list:
                         return True
+                    '''
                     # Set rel to be the next field/ object in the path
-                    rel = getattr(rel, field)
+                    try:
+                        rel = getattr(rel, field)
+                        print "new rel is", rel.__class__
+                        print "related list class is", related_list[0].__class__
+                        print "isinstance(rel, related_list[0].__class__)", isinstance(rel, related_list[0].__class__)
+                        print "rel in related_list", rel in related_list
+                        # Check if this rel is the object we're after
+                        if isinstance(rel, related_list[0].__class__) and rel in related_list:
+                            print "test_relationship return True"
+                            return True
+                    except AttributeError:
+                        return False
+            return False
 
         def evaluate_node(object, node):
             try:
@@ -154,14 +175,17 @@ class CBAuthorization(Authorization):
         if not query_list:
             return object
 
-        evaluated_query_list = []
+        evaluated_query_list = [ False ]
         for query in query_list:
             print "query is", query
             evaluated_query_list.append(evaluate_node(object, query))
 
+        print "evaluated_query_list is", evaluated_query_list
+        print "evaluated_boolean is", evaluate_boolean('OR', evaluated_query_list)
+
         return evaluate_boolean('OR', evaluated_query_list)
 
-    def test_list(self, object_list):
+    def test_list(self, object_list, bundle):
         return object_list
 
     def get_query_list(self, verb, bundle):
@@ -171,19 +195,19 @@ class CBAuthorization(Authorization):
     def read_list(self, object_list, bundle):
         query_list = self.get_query_list('read', bundle)
         filtered = self.filter_with_querylist(object_list, query_list, bundle)
-        return self.test_list(filtered)
+        return self.test_list(filtered, bundle)
 
     def read_detail(self, object_list, bundle):
         query_list = self.get_query_list('read', bundle)
         filtered = self.filter_with_querylist(bundle.obj, query_list, bundle)
-        return bool(self.test_list(filtered))
+        return bool(self.test_list(filtered, bundle))
 
     def create_list(self, object_list, bundle):
         # Assuming they're auto-assigned to ``user``.
         print "In create_list"
         query_list = self.get_query_list('create', bundle)
         filtered = self.filter_with_querylist(bundle.obj, query_list, bundle)
-        allowed = self.test_list(filtered)
+        allowed = self.test_list(filtered, bundle)
         if self.requester_is_staff(bundle):
             return object_list
         else:
@@ -194,11 +218,13 @@ class CBAuthorization(Authorization):
         #requester = CBAuth.objects.get(id=bundle.request.user.id)
         #if isinstance(requester, CBUser):
             #return 'create' in getattr(self.resource_meta, 'related_user_permissions', [])
-        print "create_detail bundle.obj", bundle.obj
         query_list = self.get_query_list('create', bundle)
-        filtered = self.test_object_with_querylist(bundle.obj, query_list, bundle)
-        print "create_detail filtered", filtered
-        allowed = self.test_list(filtered)
+        print "query_list is", query_list
+
+        # Test the object with the query list, if it passes run test_list, otherwise return false
+        allowed = self.test_list([ bundle.obj ], bundle) if self.test_object_with_querylist(bundle.obj, query_list, bundle) \
+                    else False
+
         if self.requester_is_staff(bundle):
             return True
         else:
@@ -266,3 +292,29 @@ class StaffAuthorization(ReadOnlyAuthorization):
     def delete_detail(self, object_list, bundle):
         return self.requester_is_staff(bundle)
 
+
+class AuthAuthorization(ReadOnlyAuthorization):
+    """
+    Authorization resource used to login clients, bridges and users
+    """
+    def read_list(self, object_list, bundle):
+        # This assumes a ``QuerySet`` from ``ModelResource``.
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def read_detail(self, object_list, bundle):
+        # Is the requested object owned by the user?
+        #return bundle.obj.user == bundle.request.user
+        return bundle.obj.id == bundle.request.user.id
+
+    def create_list(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+        #return object_list
+
+    def create_detail(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def delete_list(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
+
+    def delete_detail(self, object_list, bundle):
+        raise Unauthorized("You may only post to this endpoint with login or logout appended")
