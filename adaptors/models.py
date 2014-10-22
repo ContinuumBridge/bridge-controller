@@ -7,10 +7,10 @@ from django.utils import timezone
 
 from accounts.models import CBUser
 from bridges.models import Bridge
-from bridges.models.common import LoggedModelMixin
+from bridges.models.common import LoggedModel
 from devices.models import Device, DeviceInstall
 
-class Adaptor(LoggedModelMixin):
+class Adaptor(LoggedModel):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), blank = True)
@@ -38,7 +38,7 @@ class Adaptor(LoggedModelMixin):
         super(Adaptor, self).save(*args, **kwargs)
 
 
-class AdaptorOwnership(LoggedModelMixin):
+class AdaptorOwnership(LoggedModel):
 
     user = models.ForeignKey(CBUser)
     adaptor = models.ForeignKey(Adaptor, related_name='adaptor_ownerships')
@@ -49,7 +49,7 @@ class AdaptorOwnership(LoggedModelMixin):
         app_label = 'adaptors'
 
 
-class AdaptorCompatibility(LoggedModelMixin):
+class AdaptorCompatibility(LoggedModel):
 
     """ Through model for an Adaptor and a Device, denotes their compatibility """
 
@@ -60,20 +60,4 @@ class AdaptorCompatibility(LoggedModelMixin):
         verbose_name = _('adaptor_compatibility')
         verbose_name_plural = _('adaptor_compatibilities')
         app_label = 'adaptors'
-
-
-'''
-class AdaptorInstall(LoggedModelMixin):
-
-    """ Through model for an Adaptor and a DeviceInstall """
-
-    device_install = models.OneToOneField(DeviceInstall, related_name='adaptor_install')
-    adaptor = models.ForeignKey(Adaptor)
-
-    class Meta:
-        verbose_name = _('adaptor_install')
-        verbose_name_plural = _('adaptor_installs')
-        app_label = 'adaptors'
-'''
-
 

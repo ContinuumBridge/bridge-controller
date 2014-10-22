@@ -234,7 +234,7 @@ INSTALLED_APPS = (
     'django_extensions',
     #'notifications',
     'polymorphic',
-    'south',
+    #'south',
     'tastypie',
     'telegraphy.contrib.django_telegraphy',
     # Continuum Bridge apps

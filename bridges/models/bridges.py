@@ -16,7 +16,7 @@ print "Imported accounts.models from bridges"
 from .common import CBIDModelMixin
 from clients.models.abstract import AuthKeyMixin
 
-from .common import LoggedModelMixin
+from .common import LoggedModel
 from .manager import BridgeModelManager
 
 
@@ -87,7 +87,7 @@ class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
         return device_installs
 
 
-class BridgeControl(LoggedModelMixin):
+class BridgeControl(LoggedModel):
     
     class Meta:
         verbose_name = _('bridgecontrol')

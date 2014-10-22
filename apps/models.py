@@ -9,11 +9,11 @@ from tastypie.exceptions import Unauthorized
 
 from accounts.models import CBUser, CBAuth
 from bridges.models import Bridge
-from bridges.models.common import LoggedModelMixin, CBIDModelMixin
+from bridges.models.common import LoggedModel, CBIDModelMixin
 from clients.models.clients import Client
 from devices.models import Device, DeviceInstall
 
-class App(LoggedModelMixin, CBIDModelMixin):
+class App(LoggedModel, CBIDModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
@@ -38,7 +38,7 @@ class App(LoggedModelMixin, CBIDModelMixin):
         super(App, self).save(*args, **kwargs)
 
 
-class AppOwnership(LoggedModelMixin):
+class AppOwnership(LoggedModel):
 
     user = models.ForeignKey(CBUser)
     app = models.ForeignKey(App, related_name='app_ownerships')
@@ -48,7 +48,7 @@ class AppOwnership(LoggedModelMixin):
         verbose_name_plural = _('app_ownerships')
         app_label = 'apps'
 
-class AppLicence(LoggedModelMixin):
+class AppLicence(LoggedModel):
 
     """ Through model for a User and an App """
 
@@ -69,7 +69,7 @@ class AppLicence(LoggedModelMixin):
         return installs
 
 
-class AppInstall(LoggedModelMixin):
+class AppInstall(LoggedModel):
     
     """ Through model for a Bridge and an App """
 
@@ -97,7 +97,7 @@ class AppInstall(LoggedModelMixin):
         return bridge_id + "/" + app_id
 
 
-class AppDevicePermission(LoggedModelMixin):
+class AppDevicePermission(LoggedModel):
 
     device_install = models.ForeignKey(DeviceInstall)
     app_install = models.ForeignKey(AppInstall)
@@ -108,7 +108,7 @@ class AppDevicePermission(LoggedModelMixin):
         app_label = 'apps'
 
 
-class AppInstallConnection(LoggedModelMixin):
+class AppInstallConnection(LoggedModel):
 
     client = models.ForeignKey(CBAuth)
     app_install = models.ForeignKey(AppInstall, related_name='app_connections')
@@ -119,7 +119,7 @@ class AppInstallConnection(LoggedModelMixin):
         app_label = 'apps'
 
 
-class AppConnection(LoggedModelMixin):
+class AppConnection(LoggedModel):
 
     client = models.ForeignKey(CBAuth)
     app = models.ForeignKey(App, related_name='app_connections')
