@@ -43,6 +43,7 @@ class AppInstallAuthorization(CBAuthorization):
             except AttributeError:
                 raise BadRequest("An AppInstall must have an app, licence and bridge")
 
+            print "validate app_install"
             requester = CBAuth.objects.get(pk=bundle.request.user.id)
 
             bridges = self.get_request_bridges(bundle)
@@ -62,12 +63,14 @@ class AppInstallAuthorization(CBAuthorization):
                 message = "Licence not valid for install. Your licence permits {0} installs, " \
                           "you have used {1}".format(existing_install_count, licence.installs_permitted)
                 raise Unauthorized(message)
+        print "end of validate app_install"
         return object_list
 
     def create_list(self, object_list, bundle):
         return self.validate(object_list, bundle)
 
     def create_detail(self, object_list, bundle):
+        print "Create app install"
         return bool(self.validate([bundle.obj], bundle))
         #return super(AppInstallAuthorization, self).create_detail(object_list, bundle)
 

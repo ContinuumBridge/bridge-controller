@@ -52,7 +52,7 @@ class UserBridgeControlResource(CBResource):
 class UserBridgeResource(CBResource):
 
     apps = cb_fields.ToManyThroughField(AppInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     devices = cb_fields.ToManyThroughField(DeviceInstallResource,

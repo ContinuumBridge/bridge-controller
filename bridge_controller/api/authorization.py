@@ -28,7 +28,9 @@ class CBAuthorization(Authorization):
     def get_m2m_relation_query(self, related_objects, m2m_related, query_list, bundle):
 
         try:
-            related_through = getattr(self.resource_meta, '{0}_related_through'.format(m2m_related))
+            model = self.resource_meta.queryset.model
+            #related_through = getattr(self.resource_meta, '{0}_related_through'.format(m2m_related))
+            related_through = getattr(model._meta, '{0}_related_through'.format(m2m_related))
             print "related_through ", related_through
             # If related_objects is a queryset, the query should include __in, not so if it is an object
             query_suffix= "__in" if isinstance(related_objects, QuerySet) else ""

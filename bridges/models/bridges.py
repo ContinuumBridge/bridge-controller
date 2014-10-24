@@ -12,11 +12,10 @@ from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from accounts.models import CBAuth, CBUser#, PolymorphicBaseUserManager
-print "Imported accounts.models from bridges"
 from .common import CBIDModelMixin
 from clients.models.abstract import AuthKeyMixin
 
-from .common import LoggedModel
+from .common import LoggedModel, BroadcastMixin
 from .manager import BridgeModelManager
 
 
@@ -30,7 +29,7 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
                      ('authorised', 'Authorised'),
                      ('connected', 'Connected'))
 
-class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
+class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)
@@ -48,18 +47,8 @@ class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     class Meta:
         verbose_name = _('bridge')
-        verbose_name_plural = _('bridges')
+        default_resource = 'bridges.api.resources.BridgeResource'
         app_label = 'bridges'
-
-    def save(self, *args, **kwargs):
-        #On save, update timestamps
-        '''
-        if not self.id:
-            self.created = timezone.now() 
-       
-        self.modified = timezone.now()
-        '''
-        super(Bridge, self).save(*args, **kwargs)
 
     def get_full_name(self):
         return self.name
@@ -70,7 +59,7 @@ class Bridge(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
     def get_apps(self):
         apps = []
-        for app_install in self.appinstall_set.filter():
+        for app_install in self.app_installs.filter():
             apps.append(app_install)
         return apps
 
