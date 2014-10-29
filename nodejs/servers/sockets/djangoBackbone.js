@@ -10,7 +10,7 @@ var cookie_reader = require('cookie');
 
 module.exports = DjangoBackbone;
 
-function DjangoBackbone(djangoURL) {
+function DjangoBackbone(djangoURL, cbid) {
 
     // Setup backbone websockets
     backboneSocket = backboneio.createBackend();

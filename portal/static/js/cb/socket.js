@@ -4,6 +4,7 @@ var Backbone = require('backbone-bundle')
     ;
 
 require('./messages/models');
+var routers = require('./routers');
 //var Message = require('./message');
 
 CBApp.addInitializer(function() {
@@ -47,6 +48,8 @@ CBApp.addInitializer(function() {
       });
     };
 
+    CBApp.messageRouter = new routers.MessageRouter();
+
     CBApp.socket.on('message', function(jsonString) {
 
         try {
@@ -55,13 +58,10 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        var message = new CBApp.Message(jsonMessage);
+        //var message = new CBApp.Message(jsonMessage);
+        console.log('Server >', jsonMessage);
+        CBApp.messageRouter.dispatch(jsonMessage);
 
-        var date = new Date();
-        message.set('time_received', date);
-        console.log('Server >', message);
-        CBApp.messageCollection.add(message);
         //that.appendLine(message);
     });
 });
-

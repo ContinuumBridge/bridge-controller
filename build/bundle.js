@@ -30390,7 +30390,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
     }
 });
 
-},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":114,"backbone.marionette":122}],25:[function(require,module,exports){
+},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":115,"backbone.marionette":123}],25:[function(require,module,exports){
 
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
@@ -30891,7 +30891,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":114,"backbone.marionette":122}],33:[function(require,module,exports){
+},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":115,"backbone.marionette":123}],33:[function(require,module,exports){
 
 CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -31265,7 +31265,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":114,"backbone.marionette":122}],38:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":115,"backbone.marionette":123}],38:[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -31529,7 +31529,7 @@ CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":114,"backbone.marionette":122}],43:[function(require,module,exports){
+},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":115,"backbone.marionette":123}],43:[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -31970,7 +31970,7 @@ CBApp.ClientControlListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":114,"backbone.marionette":122}],52:[function(require,module,exports){
+},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":115,"backbone.marionette":123}],52:[function(require,module,exports){
 
 CBApp.Client = Backbone.Deferred.Model.extend({
     
@@ -32126,7 +32126,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":114,"backbone.marionette":122}],56:[function(require,module,exports){
+},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":115,"backbone.marionette":123}],56:[function(require,module,exports){
 
 
 
@@ -32234,7 +32234,7 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     }
 });
 
-},{"./components":58,"backbone-bundle":114,"backbone.marionette":122}],58:[function(require,module,exports){
+},{"./components":58,"backbone-bundle":115,"backbone.marionette":123}],58:[function(require,module,exports){
 
 CBApp.Components = {};
 
@@ -32344,7 +32344,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
     }
 });
 
-},{"./components":58,"./templates/switch.html":62,"backbone-bundle":114,"backbone.marionette":122}],61:[function(require,module,exports){
+},{"./components":58,"./templates/switch.html":62,"backbone-bundle":115,"backbone.marionette":123}],61:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32704,7 +32704,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":114,"backbone.marionette":122}],68:[function(require,module,exports){
+},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":115,"backbone.marionette":123}],68:[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -32967,7 +32967,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":114,"backbone.marionette":122}],72:[function(require,module,exports){
+},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":115,"backbone.marionette":123}],72:[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -33141,7 +33141,7 @@ CBApp.reqres.setHandler("store:show", function(){
 });
 
 module.exports = CBApp;
-},{"backbone-bundle":114,"backbone.marionette":122}],74:[function(require,module,exports){
+},{"backbone-bundle":115,"backbone.marionette":123}],74:[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -33367,7 +33367,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":114,"backbone.marionette":122}],78:[function(require,module,exports){
+},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":115,"backbone.marionette":123}],78:[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -34010,7 +34010,7 @@ CBApp.addInitializer(function () {
   });
 });
 
-},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./notifications/models":103,"./users/current/models":108,"./users/models":109,"index":73,"q":16}],82:[function(require,module,exports){
+},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./notifications/models":103,"./users/current/models":109,"./users/models":110,"index":73,"q":16}],82:[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -34381,7 +34381,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":110,"../../views/regions":111,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":114,"backbone.marionette":122,"q":16}],88:[function(require,module,exports){
+},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":111,"../../views/regions":112,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":115,"backbone.marionette":123,"q":16}],88:[function(require,module,exports){
 
 
 var DeveloperViews = require('./views');
@@ -34605,7 +34605,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 */
 
-},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":110,"../../views/regions":111,"./templates/main.html":89,"backbone-bundle":114,"backbone.marionette":122,"q":16}],91:[function(require,module,exports){
+},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":111,"../../views/regions":112,"./templates/main.html":89,"backbone-bundle":115,"backbone.marionette":123,"q":16}],91:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34773,7 +34773,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
 });
 
-},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":114,"backbone.marionette":122,"bootstrap":127}],92:[function(require,module,exports){
+},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":115,"backbone.marionette":123,"bootstrap":128}],92:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34889,7 +34889,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
     });
 });
 
-},{"../../notifications/views":106,"backbone-bundle":114,"backbone.marionette":122,"jquery":15}],96:[function(require,module,exports){
+},{"../../notifications/views":106,"backbone-bundle":115,"backbone.marionette":123,"jquery":15}],96:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35120,7 +35120,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../../components/numbers":59,"./templates/app.html":96,"./templates/appSection.html":97,"./templates/staffApp.html":98,"backbone-bundle":114,"backbone.marionette":122}],100:[function(require,module,exports){
+},{"../../../components/numbers":59,"./templates/app.html":96,"./templates/appSection.html":97,"./templates/staffApp.html":98,"backbone-bundle":115,"backbone.marionette":123}],100:[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -35274,7 +35274,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic_views":110,"../../views/regions":111,"./apps/views":99,"./templates/main.html":101,"backbone-bundle":114,"backbone.marionette":122,"q":16}],103:[function(require,module,exports){
+},{"../../views/generic_views":111,"../../views/regions":112,"./apps/views":99,"./templates/main.html":101,"backbone-bundle":115,"backbone.marionette":123,"q":16}],103:[function(require,module,exports){
 
 CBApp.Notification = Backbone.Deferred.Model.extend({
 
@@ -35363,13 +35363,120 @@ CBApp.NotificationListView = Marionette.CompositeView.extend({
 
 });
 
-},{"./templates/notification.html":104,"./templates/notificationSection.html":105,"backbone-bundle":114,"backbone.marionette":122}],107:[function(require,module,exports){
+},{"./templates/notification.html":104,"./templates/notificationSection.html":105,"backbone-bundle":115,"backbone.marionette":123}],107:[function(require,module,exports){
+
+var _ = require('underscore')
+    ,Backbone = require('backbone-bundle');
+
+var PortalRouter = Backbone.Router.extend({
+
+    routes: {
+        'BID:b/UID:u': 'bridgeControl',
+    },
+    /*
+        'AID[0-9]+': 'app',
+        'ACID[0-9]+': 'appConnection',
+        'BID[0-9]+/AID[0-9]+': 'appInstall',
+        'ADPID[0-9]+': 'appDevicePermission',
+        'ALID[0-9]+': 'appLicence',
+        'AOID[0-9]+': 'appOwnership',
+        'BID[0-9]+': 'bridge',
+        'CID[0-9]+': 'client',
+        'CCID[0-9]+': 'clientControl',
+        'DID[0-9]+': 'device',
+        'BID[0-9]+/DID[0-9]+': 'deviceInstall',
+        'DDID[0-9]+': 'discoveredDevice',
+        'UID[0-9]+': 'currentUser'
+    */
+
+    dispatch: function(transportMessage) {
+
+        var collectionMessage = _.property('body')(transportMessage);
+        var jsonModels = _.property('body')(collectionMessage);
+
+        if (!jsonModels) {
+            console.warn('Message received has no inner body', transportMessage);
+            return;
+        }
+        var model = jsonModels[0] || jsonModels;
+
+        if (!cbid) {
+
+            var date = new Date();
+            message.set('time_received', date);
+            //CBApp.messageCollection.add(message);
+        }
+        _.any(this.handlers, function(handler) {
+            if (handler.route.test(messageCBID)) {
+                console.log('Matched', messageCBID)
+                console.log('Callback is', handler.callback);
+                //handler.callback(fragment);
+                return true;
+            }
+        });
+
+    }
+});
+
+var MessageRouter = module.exports.MessageRouter = Backbone.Router.extend({
+
+    routes: {
+        'broadcast': 'toPortal'
+    },
+
+    initialize: function() {
+
+        var self = this;
+
+        this.portalRouter = new PortalRouter();
+
+        CBApp.getCurrentUser().then(function(currentUser) {
+
+            var uid = currentUser.get('cbid');
+            self.route(uid, "portal", self.toPortal);
+            self.route(uid + '/:webapp', "webapp", self.toWebApps);
+        });
+    },
+
+    toPortal: function(message, fragment) {
+
+        console.log('Message for portal', message);
+        this.portalRouter.dispatch(message);
+    },
+
+    toWebApps: function(message, webapp) {
+
+        console.log('Message for webapp', webapp, message);
+    },
+
+    dispatch: function(transportMessage) {
+
+        var destination = _.property('destination')(transportMessage);
+
+        console.log('transportMessage in dispatch', transportMessage);
+
+        //var message = new CBApp.Message(jsonMessage);
+
+        _.any(this.handlers, function(handler) {
+            if (handler.route.test(destination)) {
+                console.log('Matched', destination)
+                console.log('Callback is', handler.callback);
+                handler.callback(transportMessage);
+                return true;
+            }
+        });
+
+    }
+});
+
+},{"backbone-bundle":115,"underscore":19}],108:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
     ;
 
 require('./messages/models');
+var routers = require('./routers');
 //var Message = require('./message');
 
 CBApp.addInitializer(function() {
@@ -35413,6 +35520,8 @@ CBApp.addInitializer(function() {
       });
     };
 
+    CBApp.messageRouter = new routers.MessageRouter();
+
     CBApp.socket.on('message', function(jsonString) {
 
         try {
@@ -35421,18 +35530,15 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        var message = new CBApp.Message(jsonMessage);
+        //var message = new CBApp.Message(jsonMessage);
+        console.log('Server >', jsonMessage);
+        CBApp.messageRouter.dispatch(jsonMessage);
 
-        var date = new Date();
-        message.set('time_received', date);
-        console.log('Server >', message);
-        CBApp.messageCollection.add(message);
         //that.appendLine(message);
     });
 });
 
-
-},{"./messages/models":74,"backbone-bundle":114,"index":73}],108:[function(require,module,exports){
+},{"./messages/models":74,"./routers":107,"backbone-bundle":115,"index":73}],109:[function(require,module,exports){
 
 require('../models');
 
@@ -35603,7 +35709,7 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
 });
 
 
-},{"../models":109}],109:[function(require,module,exports){
+},{"../models":110}],110:[function(require,module,exports){
 
 //CBApp.User = Backbone.Deferred.Model.extend({
 CBApp.User = Backbone.RelationalModel.extend({
@@ -35651,7 +35757,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],110:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35670,7 +35776,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":112,"backbone-bundle":114,"backbone.marionette":122}],111:[function(require,module,exports){
+},{"./templates/listItemLoading.html":113,"backbone-bundle":115,"backbone.marionette":123}],112:[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35686,9 +35792,9 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":114,"backbone.marionette":122}],112:[function(require,module,exports){
+},{"backbone-bundle":115,"backbone.marionette":123}],113:[function(require,module,exports){
 module.exports=require(62)
-},{"hbsfy/runtime":13}],113:[function(require,module,exports){
+},{"hbsfy/runtime":13}],114:[function(require,module,exports){
 
 var $ = require('jquery-browserify');
 
@@ -35710,7 +35816,7 @@ require('./cb/models');
 })(jQuery);
 
 
-},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/notifications/notifications":95,"./cb/modules/store/store":100,"./cb/socket":107,"index":73,"jquery-browserify":14}],114:[function(require,module,exports){
+},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/notifications/notifications":95,"./cb/modules/store/store":100,"./cb/socket":108,"index":73,"jquery-browserify":14}],115:[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -35765,7 +35871,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":80,"./backbone-cb-model":116,"./backbone-cb-model-mixin":115,"./backbone-cb-views":117,"./backbone-relational":121,"./backbone.stickit":125,"./backbone.trackit.js":126,"backbone":3,"backbone-cocktail":118,"backbone-deferred":119,"backbone-io":120,"backbone.babysitter":1,"backbone.marionette":122,"backbone.marionette.subrouter":123,"backbone.modal":124,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],115:[function(require,module,exports){
+},{"../../cb/misc/relational-models":80,"./backbone-cb-model":117,"./backbone-cb-model-mixin":116,"./backbone-cb-views":118,"./backbone-relational":122,"./backbone.stickit":126,"./backbone.trackit.js":127,"backbone":3,"backbone-cocktail":119,"backbone-deferred":120,"backbone-io":121,"backbone.babysitter":1,"backbone.marionette":123,"backbone.marionette.subrouter":124,"backbone.modal":125,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],116:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35863,7 +35969,7 @@ module.exports = {
 
 
 
-},{}],116:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -35912,7 +36018,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],117:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35989,7 +36095,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],118:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -36092,7 +36198,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":19}],119:[function(require,module,exports){
+},{"underscore":19}],120:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36450,7 +36556,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],120:[function(require,module,exports){
+},{"backbone":3,"q":16}],121:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36647,7 +36753,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":18,"underscore":19}],121:[function(require,module,exports){
+},{"backbone":3,"socket.io-client":18,"underscore":19}],122:[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -38646,7 +38752,7 @@ _ = global._ = require("underscore");
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":19}],122:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],123:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41112,7 +41218,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],123:[function(require,module,exports){
+},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],124:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41225,7 +41331,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],124:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":123,"backbone":3,"underscore":19}],125:[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41722,7 +41828,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],125:[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":123,"backbone":3,"underscore":19}],126:[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -42498,7 +42604,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":19}],126:[function(require,module,exports){
+},{"backbone":3,"underscore":19}],127:[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -42691,7 +42797,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],127:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -44653,4 +44759,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[113])
+},{"jquery":15}]},{},[114])

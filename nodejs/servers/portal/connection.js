@@ -47,4 +47,16 @@ PortalConnection.prototype.disconnect = function(error) {
     logger.log('info', 'Disconnect was called');
 }
 
+/*
+PortalConnection.prototype.onMessageToClient = function(message) {
+
+    // Device discovery hack
+    var body = message.get('body');
+    var resource = body.url || body.resource;
+    if (resource && '/api/bridge/v1/device_discovery/') {
+        this.socket.emit('discoveredDeviceInstall:reset', body.body);
+    }
+}
+*/
+
 module.exports = PortalConnection;

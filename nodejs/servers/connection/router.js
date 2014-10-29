@@ -64,6 +64,9 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
+        if (message.get('source') == 'cb') {
+            self.connection.toClient.push(message);
+        }
         message.set('destination', publicationAddresses);
         self.connection.toRedis.push(message);
     });

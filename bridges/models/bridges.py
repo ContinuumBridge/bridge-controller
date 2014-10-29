@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
@@ -76,13 +78,19 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin, CBIDModelMixin):
         return device_installs
 
 
-class BridgeControl(LoggedModel):
+class BridgeControl(BroadcastMixin, LoggedModel):
     
     class Meta:
-        verbose_name = _('bridgecontrol')
-        verbose_name_plural = _('bridgecontrols')
+        verbose_name = _('bridge_control')
+        default_resource = 'bridges.api.resources.BridgeControlResource'
         app_label = 'bridges'
 
     bridge = models.ForeignKey(Bridge, related_name='bridge_controls')
     user = models.ForeignKey(CBUser, related_name='bridge_controls')
 
+    @property
+    def cbid(self):
+        #prefix = '_'.join([a for a in re.split(r'([A-Z][a-z]*)', self.__class__.__name__) if a])
+        bridge_id = "BID" + str(self.bridge.id)
+        user_id = "UID" + str(self.user.id)
+        return bridge_id + "/" + user_id

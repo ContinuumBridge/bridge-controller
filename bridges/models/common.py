@@ -1,8 +1,11 @@
+import json
 import redis
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.importlib import import_module
+from bridge_controller.utils import RawJSON, RawJSONEncoder
 
 from bridge_controller import tasks
 
@@ -13,14 +16,6 @@ models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('default_resource
 
 class BroadcastMixin(object):
 
-    def to_json(self):
-        # Get the default resource for this model and use it for dehydration
-        resource_path = getattr(self._meta, 'default_resource').split('.')
-        module = __import__('.'.join(resource_path[:-1]), fromlist=[resource_path[-1]])
-        resource = getattr(module, resource_path[-1])()
-        bundle = resource.build_bundle(obj=self)
-        return getattr(resource.full_dehydrate(bundle), 'data')
-
     def get_related_cbids(self):
         # Get clients related to this object
         client_names = ['user', 'bridge', 'client']
@@ -28,9 +23,15 @@ class BroadcastMixin(object):
         for client_name in client_names:
             # Get clients directly related to this object
             try:
+                print "self is", self
+                print "client_name is", client_name
                 client = getattr(self, client_name)
                 related_cbids.append(client.cbid)
+            except ObjectDoesNotExist:
+                # For clients
+                pass
             except AttributeError:
+                # For models
                 pass
             # Get clients related to this object by a through model
             try:
@@ -39,12 +40,22 @@ class BroadcastMixin(object):
                 related_cbids.extend([c.cbid for c in clients])
             except AttributeError:
                 pass
+        print "related_cbids is", related_cbids
         return related_cbids
+
+    def to_json(self):
+        # Get the default resource for this model and use it for dehydration
+        resource_path = getattr(self._meta, 'default_resource').split('.')
+        module = __import__('.'.join(resource_path[:-1]), fromlist=[resource_path[-1]])
+        resource = getattr(module, resource_path[-1])()
+        bundle = resource.build_bundle(obj=self)
+        data = getattr(resource.full_dehydrate(bundle), 'data')
+        return RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
 
     def create_message(self, verb):
         data = self.to_json()
         body = {
-            'cbid': data.get('cbid', ''),
+            'cbid': self.cbid,
             'verb': verb
         }
 
@@ -66,14 +77,15 @@ class BroadcastMixin(object):
     def broadcast(self, verb):
         r = redis.Redis()
         message = self.create_message(verb)
+        json_message = json.dumps(message, cls=RawJSONEncoder)
         destinations = self.get_related_cbids()
         for d in destinations:
-            r.publish(d, message)
+            r.publish(d, json_message)
 
-    def save(self, using=None, broadcast=True):
+    def save(self, *args, **kwargs):
         verb = "update" if self.pk else "create"
-
-        super(BroadcastMixin, self).save(using=using)
+        broadcast = kwargs.pop('broadcast', True)
+        super(BroadcastMixin, self).save(*args, **kwargs)
         if broadcast:
             if settings.ENVIRONMENT == "development":
                 self.broadcast(verb)

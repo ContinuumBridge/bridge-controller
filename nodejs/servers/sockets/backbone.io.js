@@ -1,5 +1,6 @@
 
 var http = require('http')
+    ,_ = require('underscore')
     ,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
@@ -24,6 +25,33 @@ function BackboneIOServer(config) {
     var httpServer = http.createServer(connect);
     httpServer.listen(config.port);
 
+    var collectionNames = [
+        'app',
+        'appConnection',
+        'appInstall',
+        'appDevicePermission',
+        'appLicence',
+        'appOwnership',
+        'bridge',
+        'bridgeControl',
+        'client',
+        'clientControl',
+        'device',
+        'deviceInstall',
+        'discoveredDevice',
+        'currentUser'
+    ];
+
+    var controllers = {};
+    _.each(collectionNames, function(name) {
+        var api = config.djangoURL + name.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();}) + "/";
+        controllers[name] = new djangoBackbone(api);
+    });
+
+    console.log('controllers are', controllers);
+
+    var socketServer = backboneio.listen(httpServer, controllers);
+    /*
     var appController = this.appController = new djangoBackbone(config.djangoURL + 'app/');
     var appConnectionController = this.appConnectioController = new djangoBackbone(config.djangoURL + 'app_connection/');
     var appInstallController = this.appInstallController = new djangoBackbone(config.djangoURL + 'app_install/');
@@ -65,6 +93,7 @@ function BackboneIOServer(config) {
         discoveredDevice: discoveredDeviceController.backboneSocket,
         discoveredDeviceInstall: discoveredDeviceInstallController
     });
+    */
 
     // Set the socket io log level
     socketServer.set('log level', 1);

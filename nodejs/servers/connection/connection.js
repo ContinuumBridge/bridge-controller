@@ -34,35 +34,19 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('message', function (jsonMessage) {
 
-        //console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
-        //message.set('source', "BID" + socket.handshake.authData.id);
-        logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
 
-        //message.filterDestination(self.config.publicationAddresses);
-        //message.conformSource(self.config.subscriptionAddress);
-
-        logger.log('debug', 'socket message config', self.config);
-        logger.log('debug', 'socket message', message);
-
-        //self.fromClient.push(message);
         self.router.dispatch(message);
     });
 
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
+        //self.onMessageToClient(message)
         var jsonMessage = message.toJSONString();
-
-        // Device discovery hack
-        var body = message.get('body');
-        var resource = body.url || body.resource;
-        if (resource && '/api/bridge/v1/device_discovery/') {
-            socket.emit('discoveredDeviceInstall:reset', body.body);
-        }
-
         logger.log('debug', 'Socket emit', jsonMessage);
-        socket.emit('message', jsonMessage);
+        self.socket.emit('message', jsonMessage);
+
     });
 
     socket.on('disconnect', function() {
@@ -73,6 +57,10 @@ Connection.prototype.setupSocket = function() {
         socket.removeAllListeners('disconnect');
     });
 };
+
+Connection.prototype.onMessageToClient = function(message) {
+
+}
 
 Connection.prototype.setupRedis = function() {
 
