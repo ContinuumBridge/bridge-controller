@@ -2,11 +2,96 @@
 var _ = require('underscore')
     ,Backbone = require('backbone-bundle');
 
-var PortalRouter = Backbone.Router.extend({
+var Router = function(options) {
+    options || (options = {});
+    if (options.routes) this.routes = options.routes;
+    this.handlers = [];
+    this._bindRoutes();
+    this.initialize.apply(this, arguments);
+}
+
+var optionalParam = /\((.*?)\)/g;
+var namedParam    = /(\(\?)?:\w+/g;
+var splatParam    = /\*\w+/g;
+var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+_.extend(Router.prototype, Backbone.Events, {
+
+    initialize: function() {},
+
+    _bindRoutes: function() {
+        if (!this.routes) return;
+        this.routes = _.result(this, 'routes');
+        var route, routes = _.keys(this.routes);
+        while ((route = routes.pop()) != null) {
+            this.route(route, this.routes[route]);
+        }
+    },
+
+    _routeToRegExp: function(route) {
+        route = route.replace(escapeRegExp, '\\$&')
+            .replace(optionalParam, '(?:$1)?')
+            .replace(namedParam, function(match, optional) {
+                return optional ? match : '([^/?]+)';
+            })
+            .replace(splatParam, '([^?]*?)');
+        return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+    },
+
+    route: function(route, callback) {
+        if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+        if (!_.isFunction(callback)) callback = this[callback];
+        var router = this;
+        this.handlers.unshift({route: route, callback: callback});
+    },
+
+    dispatch: function(message) {
+
+        console.log('message in dispatch', message);
+
+        var self = this;
+        //var message = new CBApp.Message(jsonMessage);
+        var route = this.getRoute(message);
+        var formattedMessage = this.formatMessage(message);
+        _.any(this.handlers, function(handler) {
+            console.log('handler is', handler);
+            if (handler.route.test(route)) {
+                console.log('Matched', route)
+                console.log('Callback is', handler.callback);
+                console.log('this in dispatch is', this);
+                console.log('message for callback', message);
+                handler.callback.call(self, formattedMessage);
+                return true;
+            }
+        });
+    },
+
+    getRoute: function(message) {
+        // Overide this
+    },
+
+    formatMessage: function(message) {
+        return message;
+    }
+});
+
+Router.extend = Backbone.Model.extend;
+
+var updateCollection = function(collection) {
+
+    return function(message) {
+        collection.add(message);
+    }
+};
+
+var PortalRouter = Router.extend({
 
     routes: {
         'BID:b/UID:u': 'bridgeControl',
+        'message': updateCollection(CBApp.messageCollection)
     },
+
+
     /*
         'AID[0-9]+': 'app',
         'ACID[0-9]+': 'appConnection',
@@ -23,10 +108,12 @@ var PortalRouter = Backbone.Router.extend({
         'UID[0-9]+': 'currentUser'
     */
 
-    dispatch: function(transportMessage) {
+    getRoute: function(message) {
 
-        var collectionMessage = _.property('body')(transportMessage);
+        var collectionMessage = _.property('body')(message);
+        console.log('collectionMessage ', collectionMessage );
         var jsonModels = _.property('body')(collectionMessage);
+        console.log('jsonModels ', jsonModels );
 
         if (!jsonModels) {
             console.warn('Message received has no inner body', transportMessage);
@@ -34,25 +121,16 @@ var PortalRouter = Backbone.Router.extend({
         }
         var model = jsonModels[0] || jsonModels;
 
+        var cbid = _.property('cbid')(model);
         if (!cbid) {
-
-            var date = new Date();
-            message.set('time_received', date);
+            return "message";
             //CBApp.messageCollection.add(message);
         }
-        _.any(this.handlers, function(handler) {
-            if (handler.route.test(messageCBID)) {
-                console.log('Matched', messageCBID)
-                console.log('Callback is', handler.callback);
-                //handler.callback(fragment);
-                return true;
-            }
-        });
 
     }
 });
 
-var MessageRouter = module.exports.MessageRouter = Backbone.Router.extend({
+var MessageRouter = module.exports.MessageRouter = Router.extend({
 
     routes: {
         'broadcast': 'toPortal'
@@ -64,6 +142,8 @@ var MessageRouter = module.exports.MessageRouter = Backbone.Router.extend({
 
         this.portalRouter = new PortalRouter();
 
+        console.log('portalRouter is', this.portalRouter );
+
         CBApp.getCurrentUser().then(function(currentUser) {
 
             var uid = currentUser.get('cbid');
@@ -72,33 +152,22 @@ var MessageRouter = module.exports.MessageRouter = Backbone.Router.extend({
         });
     },
 
+    getRoute: function(message) {
+
+        console.log('getRoute message', message);
+        return _.property('destination')(message);
+    },
+
     toPortal: function(message, fragment) {
 
         console.log('Message for portal', message);
+        console.log('fragment', fragment);
+        console.log('this in portal', this);
         this.portalRouter.dispatch(message);
     },
 
     toWebApps: function(message, webapp) {
 
         console.log('Message for webapp', webapp, message);
-    },
-
-    dispatch: function(transportMessage) {
-
-        var destination = _.property('destination')(transportMessage);
-
-        console.log('transportMessage in dispatch', transportMessage);
-
-        //var message = new CBApp.Message(jsonMessage);
-
-        _.any(this.handlers, function(handler) {
-            if (handler.route.test(destination)) {
-                console.log('Matched', destination)
-                console.log('Callback is', handler.callback);
-                handler.callback(transportMessage);
-                return true;
-            }
-        });
-
     }
 });

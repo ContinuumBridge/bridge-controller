@@ -11,8 +11,8 @@
     "backbone.babysitter": "^0.1.2",
     "backbone.wreqr": "^1.2.1",
     "baconjs": "~0.6.22",
-    "browserify": "3.38.0",
-    "browserify-shim": "~3.4.1",
+    "browserify": "^6.0.2",
+    "browserify-shim": "^3.8.0",
     "cb-backbone.io": "~0.4.3",
     "connect": "~2.7.8",
     "cookie": "~0.1.0",
@@ -43,7 +43,8 @@
     "winston": "~0.7.3"
   },
   "devDependencies": {
-    "gulp-livereload": "^2.1.0"
+    "gulp-livereload": "^2.1.0",
+    "watchify": "^2.1.0"
   },
   "optionalDependencies": {},
   "engines": {

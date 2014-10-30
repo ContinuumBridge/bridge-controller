@@ -8,6 +8,7 @@ var gulp = require('gulp')
     ,nodemon = require('gulp-nodemon')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
+    ,watchify = require('watchify');
     ;
 
 var clean = require('gulp-clean');
@@ -21,12 +22,29 @@ gulp.task('clean', function () {
 
 gulp.task('client', function() {
 
+    browserifyShare();
+});
+
+function browserifyShare() {
+    var b = browserify({
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    });
+    var b = watchify(b);
+    //var b = watchify(CLIENT_SCRIPTS + 'main.js');
+    b.on('update', function() {
+        bundleShare(b)
+    });
+    b.add(CLIENT_SCRIPTS + 'main.js');
+    bundleShare(b);
+}
+
+function bundleShare(b) {
+    console.log('rebundling');
     var hbsfy = require('hbsfy').configure({
         extensions: ["html"]
-    })
-
-    var b = browserify();
-    b.add(CLIENT_SCRIPTS + 'main.js');
+    });
     b.transform(hbsfy);
     var bundleStream = b.bundle();
 
@@ -35,7 +53,7 @@ gulp.task('client', function() {
         .pipe(gulp.dest('./build'))
         // Refresh browser
         .pipe(livereload());
-})
+}
 
 gulp.task('connect', function() {
   connect.server({
@@ -44,9 +62,11 @@ gulp.task('connect', function() {
   });
 });
 
+/*
 gulp.task('watch', function() {
     gulp.watch(CLIENT_SCRIPTS + '**', ['client']);
 })
+*/
 
 gulp.task('node_server', function () {
     nodemon({ script: './nodejs/index.js', watch: './nodejs'})
@@ -54,7 +74,8 @@ gulp.task('node_server', function () {
 })
 
 // Dev server
-gulp.task('default', ['client', 'node_server', 'watch']);
+gulp.task('default', ['client', 'node_server']);
+//gulp.task('default', ['client', 'node_server', 'watch']);
 
 // Local OSX
 //gulp.task('default', ['client', 'connect', 'watch']);
