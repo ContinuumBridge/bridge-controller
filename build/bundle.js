@@ -1,4 +1,26 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./portal/static/js/main.js":[function(require,module,exports){
+
+var $ = require('jquery-browserify');
+
+var CBApp = require('index');
+require('./cb/modules/config/config');
+require('./cb/modules/developer/developer');
+require('./cb/modules/store/store');
+require('./cb/modules/nav/nav');
+require('./cb/modules/notifications/notifications');
+require('./cb/socket');
+require('./cb/models');
+//require('./cb/views');
+
+(function($){
+	$(document).ready(function() {
+
+        CBApp.start();
+	});
+})(jQuery);
+
+
+},{"./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/modules/store/store":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/store.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js":[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.5
@@ -190,7 +212,7 @@
 
 }));
 
-},{"backbone":3,"underscore":19}],2:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js":[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.1
@@ -632,7 +654,7 @@
 
 }));
 
-},{"backbone":3,"underscore":19}],3:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js":[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -2242,9 +2264,9 @@
 
 }));
 
-},{"underscore":19}],4:[function(require,module,exports){
+},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js":[function(require,module,exports){
 
-},{}],5:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2252,6 +2274,8 @@ var process = module.exports = {};
 process.nextTick = (function () {
     var canSetImmediate = typeof window !== 'undefined'
     && window.setImmediate;
+    var canMutationObserver = typeof window !== 'undefined'
+    && window.MutationObserver;
     var canPost = typeof window !== 'undefined'
     && window.postMessage && window.addEventListener
     ;
@@ -2260,8 +2284,29 @@ process.nextTick = (function () {
         return function (f) { return window.setImmediate(f) };
     }
 
+    var queue = [];
+
+    if (canMutationObserver) {
+        var hiddenDiv = document.createElement("div");
+        var observer = new MutationObserver(function () {
+            var queueList = queue.slice();
+            queue.length = 0;
+            queueList.forEach(function (fn) {
+                fn();
+            });
+        });
+
+        observer.observe(hiddenDiv, { attributes: true });
+
+        return function nextTick(fn) {
+            if (!queue.length) {
+                hiddenDiv.setAttribute('yes', 'no');
+            }
+            queue.push(fn);
+        };
+    }
+
     if (canPost) {
-        var queue = [];
         window.addEventListener('message', function (ev) {
             var source = ev.source;
             if ((source === window || source === null) && ev.data === 'process-tick') {
@@ -2292,13 +2337,16 @@ process.argv = [];
 function noop() {}
 
 process.on = noop;
+process.addListener = noop;
 process.once = noop;
 process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
 process.emit = noop;
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
-}
+};
 
 // TODO(shtylman)
 process.cwd = function () { return '/' };
@@ -2306,7 +2354,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],6:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js":[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -2339,7 +2387,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":7,"./handlebars/exception":8,"./handlebars/runtime":9,"./handlebars/safe-string":10,"./handlebars/utils":11}],7:[function(require,module,exports){
+},{"./handlebars/base":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./handlebars/exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./handlebars/runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js","./handlebars/safe-string":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js","./handlebars/utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2520,7 +2568,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":8,"./utils":11}],8:[function(require,module,exports){
+},{"./exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js":[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -2549,7 +2597,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],9:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2687,7 +2735,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":7,"./exception":8,"./utils":11}],10:[function(require,module,exports){
+},{"./base":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js":[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -2699,7 +2747,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],11:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js":[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -2776,15 +2824,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":10}],12:[function(require,module,exports){
+},{"./safe-string":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/runtime.js":[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":6}],13:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js"}],"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js":[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":12}],14:[function(require,module,exports){
+},{"handlebars/runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/runtime.js"}],"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js":[function(require,module,exports){
 // Uses Node, AMD or browser globals to create a module.
 
 // If you want something that will work in other stricter CommonJS environments,
@@ -12118,7 +12166,7 @@ return jQuery;
 
 })( window ); }));
 
-},{}],15:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -21310,7 +21358,7 @@ return jQuery;
 
 }));
 
-},{}],16:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -23250,8 +23298,8 @@ return Q;
 
 });
 
-}).call(this,require("/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":5}],17:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js":[function(require,module,exports){
 (function() {
   var Backbone, Criteria, Hash, Pill, Query, QueryCollection, queryEngine, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -24943,7 +24991,7 @@ return Q;
 
 }).call(this);
 
-},{"backbone":4,"exoskeleton":4}],18:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/dist/socket.io.js":[function(require,module,exports){
 /*! Socket.IO.js build:0.9.17, development. Copyright(c) 2011 LearnBoost <dev@learnboost.com> MIT Licensed */
 
 var io = ('undefined' === typeof module ? {} : module.exports);
@@ -28817,7 +28865,7 @@ if (typeof define === "function" && define.amd) {
   define([], function () { return io; });
 }
 })();
-},{}],19:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -30162,7 +30210,7 @@ if (typeof define === "function" && define.amd) {
   }
 }).call(this);
 
-},{}],20:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
 
 CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
@@ -30202,7 +30250,7 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 });
 
 
-},{}],21:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js":[function(require,module,exports){
 
 CBApp.Adaptor = Backbone.RelationalModel.extend({
 
@@ -30229,7 +30277,7 @@ CBApp.AdaptorCollection = Backbone.Collection.extend({
 });
 
 
-},{}],22:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/models.js":[function(require,module,exports){
 
 require('../../common/models');
 
@@ -30275,7 +30323,7 @@ CBApp.AppConnectionCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{"../../common/models":56}],23:[function(require,module,exports){
+},{"../../common/models":"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30287,7 +30335,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"connection-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
   });
 
-},{"hbsfy/runtime":13}],24:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -30390,7 +30438,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
     }
 });
 
-},{"../../components/switches":60,"./templates/appConnection.html":23,"backbone-bundle":114,"backbone.marionette":122}],25:[function(require,module,exports){
+},{"../../components/switches":"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js","./templates/appConnection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
 
 CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
 
@@ -30480,7 +30528,7 @@ CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
 
 });
 
-},{}],26:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/templates/devicePermission.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30492,7 +30540,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"permission-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
   });
 
-},{"hbsfy/runtime":13}],27:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js":[function(require,module,exports){
 
 require('../../components/switches');
 
@@ -30591,7 +30639,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
 });
 
 
-},{"../../components/switches":60,"./templates/devicePermission.html":26}],28:[function(require,module,exports){
+},{"../../components/switches":"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js","./templates/devicePermission.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/templates/devicePermission.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
 
 CBApp.AppInstall = Backbone.Deferred.Model.extend({
 
@@ -30713,7 +30761,7 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],29:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30738,7 +30786,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],30:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstallSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30750,7 +30798,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"install-apps\"  class=\"topcoat-button--cta center full\">Install Apps</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],31:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/staffAppInstall.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -30762,7 +30810,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table \">\n    <tr>\n        <td class=\"col-md-4 panel-item\">\n            AppInstall ID: <span class=\"app-install-id\"></span>\n        </td>\n        <td class=\"col-md-8 panel-item\">\n            Licence Owner: <span class=\"licence-owner\"></span> (ID: <span class=\"licence-owner-id\"></span>)\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],32:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -30891,7 +30939,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../device_permissions/views":27,"./templates/appInstall.html":29,"./templates/appInstallSection.html":30,"./templates/staffAppInstall.html":31,"backbone-bundle":114,"backbone.marionette":122}],33:[function(require,module,exports){
+},{"../device_permissions/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js","./templates/appInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html","./templates/appInstallSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstallSection.html","./templates/staffAppInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/staffAppInstall.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
 
 CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -31055,7 +31103,7 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],34:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/button.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31067,7 +31115,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "Test Install Button";
   });
 
-},{"hbsfy/runtime":13}],35:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licence.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31079,7 +31127,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<td class=\"app-name\">\n    App Name\n</td>\n<td class=\"installs-permitted\">\n    Installs permitted\n</td>\n<td class=\"installs-remaining\">\n    Installs remaining\n</td>\n<td>\n    <div class=\"install-component\"></div>\n</td>\n";
   });
 
-},{"hbsfy/runtime":13}],36:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licenceSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31091,7 +31139,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4>My Licences</h4>\n\n<table class=\"table\">\n    <thead>\n        <td class=\"col-md-6\">\n            <div class=\"list-group-item-heading app-name\">App Name</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-permitted\">Installs permitted</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-remaining\">Installs remaining</div>\n        </td>\n        <td class=\"col-md-2\">\n        </td>\n    </thead>\n    <tbody>\n\n    </tbody>\n</table>\n";
   });
 
-},{"hbsfy/runtime":13}],37:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31265,7 +31313,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/button.html":34,"./templates/licence.html":35,"./templates/licenceSection.html":36,"backbone-bundle":114,"backbone.marionette":122}],38:[function(require,module,exports){
+},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/button.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/button.html","./templates/licence.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licence.html","./templates/licenceSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licenceSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
 CBApp.App = Backbone.RelationalModel.extend({
 
@@ -31341,7 +31389,7 @@ CBApp.AppCollection = Backbone.Collection.extend({
 });
 
 
-},{}],39:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js":[function(require,module,exports){
 
 CBApp.AppOwnership = Backbone.Deferred.Model.extend({
 
@@ -31410,7 +31458,7 @@ CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],40:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31422,7 +31470,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"app-name list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div class=\"panel-collapse collapse app-config\">\n    <li class=\"client-connections inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],41:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31434,7 +31482,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"create-app\"  class=\"topcoat-button--cta center full\">Create App</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],42:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31529,7 +31577,7 @@ CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"../connections/views":24,"./templates/ownership.html":40,"./templates/ownershipSection.html":41,"backbone-bundle":114,"backbone.marionette":122}],43:[function(require,module,exports){
+},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","../connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","./templates/ownership.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html","./templates/ownershipSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -31701,7 +31749,7 @@ CBApp.BridgeControlCollection = Backbone.Collection.extend({
 }, { modelType: "bridgeControl" });
 
 
-},{"q":16}],44:[function(require,module,exports){
+},{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31718,7 +31766,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],45:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31730,7 +31778,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],46:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31742,7 +31790,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge name:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-name\">\n        </td>\n    </tr>\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge ID:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],47:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
 
 CBApp.StaffBridgeView = Marionette.ItemView.extend({
@@ -31832,7 +31880,7 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":44,"./templates/bridgeSection.html":45,"./templates/staffBridge.html":46}],48:[function(require,module,exports){
+},{"./templates/bridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
 
 CBApp.ClientControl = Backbone.Deferred.Model.extend({
 
@@ -31889,9 +31937,9 @@ CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],49:[function(require,module,exports){
-module.exports=require(29)
-},{"hbsfy/runtime":13}],50:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31903,7 +31951,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Clients</h2>\n<div class=\"table animated-list client-list\"></div>\n<div id=\"create-client\"  class=\"topcoat-button--cta center full\">Create Client</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],51:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -31970,7 +32018,7 @@ CBApp.ClientControlListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/clientControl.html":49,"./templates/clientControlSection.html":50,"backbone-bundle":114,"backbone.marionette":122}],52:[function(require,module,exports){
+},{"./templates/clientControl.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html","./templates/clientControlSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
 
 CBApp.Client = Backbone.Deferred.Model.extend({
     
@@ -32007,7 +32055,7 @@ CBApp.ClientCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],53:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/client.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32019,7 +32067,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading name\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],54:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32031,7 +32079,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Devices</h2>\n\n<div class=\"animated-list device-list\"></div>\n<div class=\"topcoat-button--cta center full discover-devices-button\">Connect to a Device</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],55:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32126,7 +32174,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/client.html":53,"./templates/clientSection.html":54,"backbone-bundle":114,"backbone.marionette":122}],56:[function(require,module,exports){
+},{"./templates/client.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/client.html","./templates/clientSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
 
 
 
@@ -32181,7 +32229,7 @@ CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "connectionModel" });
 
-},{}],57:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32234,12 +32282,12 @@ CBApp.Components.Button = Marionette.ItemView.extend({
     }
 });
 
-},{"./components":58,"backbone-bundle":114,"backbone.marionette":122}],58:[function(require,module,exports){
+},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js":[function(require,module,exports){
 
 CBApp.Components = {};
 
 
-},{}],59:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js":[function(require,module,exports){
 
 require('./components');
 
@@ -32285,7 +32333,7 @@ CBApp.Components.NumberField = Marionette.ItemView.extend({
         return false;
     }
 });
-},{"./components":58,"./templates/numberField.html":61}],60:[function(require,module,exports){
+},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./templates/numberField.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/numberField.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js":[function(require,module,exports){
 
 
 var Backbone = require('backbone-bundle')
@@ -32344,7 +32392,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
     }
 });
 
-},{"./components":58,"./templates/switch.html":62,"backbone-bundle":114,"backbone.marionette":122}],61:[function(require,module,exports){
+},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/numberField.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32356,7 +32404,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<input type=\"text\" class=\"form-control bfh-number app-form-input installs-permitted\">\n<span class=\"input-group-addon bfh-number-btn inc\"><span class=\"glyphicon glyphicon-chevron-up\"></span></span>\n<span class=\"input-group-addon bfh-number-btn dec\"><span class=\"glyphicon glyphicon-chevron-down\"></span></span>\n";
   });
 
-},{"hbsfy/runtime":13}],62:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32368,7 +32416,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],63:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
 /*
 CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
@@ -32559,7 +32607,7 @@ CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
 });
 
 
-},{}],64:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDevice.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32571,7 +32619,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"card-heading h4 device-name\"></div>\n<div class=\"card-subheading h4 small device-address\"></div>\n<div class=\"install-button\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],65:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDeviceSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32583,9 +32631,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Device Discovery</h2>\n\n<div id=\"discovered-device-list\" class=\"animated-list\"></div>\n<div id=\"devices\" class=\"topcoat-button--cta\">Show Devices</div>\n<div id=\"rescan\" class=\"topcoat-button--cta\">Rescan</div></br>\n";
   });
 
-},{"hbsfy/runtime":13}],66:[function(require,module,exports){
-module.exports=require(62)
-},{"hbsfy/runtime":13}],67:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32704,7 +32752,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":57,"./templates/discoveredDevice.html":64,"./templates/discoveredDeviceSection.html":65,"./templates/installButton.html":66,"backbone-bundle":114,"backbone.marionette":122}],68:[function(require,module,exports){
+},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/discoveredDevice.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDevice.html","./templates/discoveredDeviceSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDeviceSection.html","./templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
 
 CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -32856,7 +32904,7 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],69:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstall.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -32868,9 +32916,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],70:[function(require,module,exports){
-module.exports=require(54)
-},{"hbsfy/runtime":13}],71:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstallSection.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -32967,7 +33015,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
  */
 
 
-},{"./templates/deviceInstall.html":69,"./templates/deviceInstallSection.html":70,"backbone-bundle":114,"backbone.marionette":122}],72:[function(require,module,exports){
+},{"./templates/deviceInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstall.html","./templates/deviceInstallSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstallSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
 CBApp.Device = Backbone.Deferred.Model.extend({
     
@@ -33026,7 +33074,7 @@ CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],73:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -33141,7 +33189,7 @@ CBApp.reqres.setHandler("store:show", function(){
 });
 
 module.exports = CBApp;
-},{"backbone-bundle":114,"backbone.marionette":122}],74:[function(require,module,exports){
+},{"backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
 CBApp.Message = Backbone.RelationalModel.extend({
 
@@ -33222,7 +33270,7 @@ CBApp.MessageCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],75:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/message.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33247,7 +33295,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],76:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -33259,7 +33307,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update_config' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send_log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n  <div id='z-exclude' class=\"topcoat-button-bar__item\">\n      <button class=\"topcoat-button-bar__button\">Z Exclude</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],77:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -33367,7 +33415,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/message.html":75,"./templates/messageSection.html":76,"backbone-bundle":114,"backbone.marionette":122}],78:[function(require,module,exports){
+},{"./templates/message.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/message.html","./templates/messageSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
 
 CBApp.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -33484,7 +33532,7 @@ CBApp.FilteredCollection = function(original){
 
     return filtered;
 }
-},{}],79:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/filters.js":[function(require,module,exports){
 
 require('q');
 
@@ -33531,7 +33579,7 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
 CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 
 
-},{"q":16}],80:[function(require,module,exports){
+},{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js":[function(require,module,exports){
 
 
 
@@ -33918,7 +33966,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         }
     },
 });
-},{}],81:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -34010,7 +34058,7 @@ CBApp.addInitializer(function () {
   });
 });
 
-},{"./adaptors/compatibility/models":20,"./adaptors/models":21,"./apps/connections/models":22,"./apps/device_permissions/models":25,"./apps/installs/models":28,"./apps/licences/models":33,"./apps/models":38,"./apps/ownerships/models":39,"./bridges/models":43,"./clients/controls/models":48,"./clients/models":52,"./components/buttons":57,"./devices/discovery/models":63,"./devices/installs/models":68,"./devices/models":72,"./misc/decorators":78,"./misc/filters":79,"./notifications/models":103,"./users/current/models":108,"./users/models":109,"index":73,"q":16}],82:[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js","./components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./devices/discovery/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -34113,7 +34161,7 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":87}],83:[function(require,module,exports){
+},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/devicesView.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34125,7 +34173,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"current-view\"></div>";
   });
 
-},{"hbsfy/runtime":13}],84:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34137,7 +34185,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],85:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34149,7 +34197,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"bbm-modal__topbar\">\n    <h3 class=\"bbm-modal__title\">Install App</h3>\n</div>\n<div class=\"bbm-modal__section\">\n    <div class=\"licence-section\"></div>\n</div>\n<div class=\"bbm-modal__bottombar\">\n    <a href=\"#\" class=\"bbm-button store-button\">App Store</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],86:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/main.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34161,7 +34209,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"device-section col-md-6\"></div>\n</div>\n<div class=\"row\">\n    <div class=\"message-section col-md-6\"></div>\n    <div class=\"bridge-section col-md-6\"></div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],87:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -34381,7 +34429,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 });
 
 
-},{"../../apps/installs/views":32,"../../apps/licences/views":37,"../../bridges/views":47,"../../devices/discovery/views":67,"../../devices/installs/views":71,"../../messages/views":77,"../../views/generic_views":110,"../../views/regions":111,"./templates/devicesView.html":83,"./templates/discoveryModal.html":84,"./templates/installAppModal.html":85,"./templates/main.html":86,"backbone-bundle":114,"backbone.marionette":122,"q":16}],88:[function(require,module,exports){
+},{"../../apps/installs/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic_views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic_views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/devicesView.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/devicesView.html","./templates/discoveryModal.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html","./templates/installAppModal.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/templates/main.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
 
 
 var DeveloperViews = require('./views');
@@ -34434,7 +34482,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
     });
 });
 
-},{"./views":90}],89:[function(require,module,exports){
+},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34446,7 +34494,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],90:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -34605,7 +34653,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 */
 
-},{"../../apps/connections/views":24,"../../apps/ownerships/views":42,"../../clients/controls/views":51,"../../clients/views":55,"../../views/generic_views":110,"../../views/regions":111,"./templates/main.html":89,"backbone-bundle":114,"backbone.marionette":122,"q":16}],91:[function(require,module,exports){
+},{"../../apps/connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","../../apps/ownerships/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../../clients/controls/views":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/views.js","../../clients/views":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js","../../views/generic_views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic_views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -34773,7 +34821,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
 });
 
-},{"./templates/bridgeDropdown.html":92,"./templates/bridgeItem.html":93,"./templates/navSection.html":94,"backbone-bundle":114,"backbone.marionette":122,"bootstrap":127}],92:[function(require,module,exports){
+},{"./templates/bridgeDropdown.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html","./templates/bridgeItem.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html","./templates/navSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","bootstrap":"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34785,7 +34833,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
   });
 
-},{"hbsfy/runtime":13}],93:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34802,7 +34850,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],94:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34814,7 +34862,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a href=\"index.html\" class=\"navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":13}],95:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js":[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone-bundle')
@@ -34889,7 +34937,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
     });
 });
 
-},{"../../notifications/views":106,"backbone-bundle":114,"backbone.marionette":122,"jquery":15}],96:[function(require,module,exports){
+},{"../../notifications/views":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34910,7 +34958,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":13}],97:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34922,7 +34970,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],98:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -34934,7 +34982,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":13}],99:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35120,7 +35168,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../../components/numbers":59,"./templates/app.html":96,"./templates/appSection.html":97,"./templates/staffApp.html":98,"backbone-bundle":114,"backbone.marionette":122}],100:[function(require,module,exports){
+},{"../../../components/numbers":"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js","./templates/app.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html","./templates/appSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html","./templates/staffApp.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/store.js":[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -35182,7 +35230,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":102}],101:[function(require,module,exports){
+},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/templates/main.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35194,7 +35242,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":13}],102:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
@@ -35274,7 +35322,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic_views":110,"../../views/regions":111,"./apps/views":99,"./templates/main.html":101,"backbone-bundle":114,"backbone.marionette":122,"q":16}],103:[function(require,module,exports){
+},{"../../views/generic_views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic_views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/views.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/templates/main.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
 CBApp.Notification = Backbone.Deferred.Model.extend({
 
@@ -35301,7 +35349,7 @@ CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],104:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notification.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35313,7 +35361,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h4 class=\"list-group-item-heading\"></h4>\n<i class=\"icon ion-information-circled\"></i>\n<i class=\"icon ion-alert-circled\"></i>\n";
   });
 
-},{"hbsfy/runtime":13}],105:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -35325,7 +35373,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"animated-list notification-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":13}],106:[function(require,module,exports){
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
 
 
 var Backbone = require('backbone-bundle')
@@ -35363,7 +35411,7 @@ CBApp.NotificationListView = Marionette.CompositeView.extend({
 
 });
 
-},{"./templates/notification.html":104,"./templates/notificationSection.html":105,"backbone-bundle":114,"backbone.marionette":122}],107:[function(require,module,exports){
+},{"./templates/notification.html":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notification.html","./templates/notificationSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,CBApp = require('index')
@@ -35432,7 +35480,7 @@ CBApp.addInitializer(function() {
 });
 
 
-},{"./messages/models":74,"backbone-bundle":114,"index":73}],108:[function(require,module,exports){
+},{"./messages/models":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 
@@ -35603,7 +35651,7 @@ CBApp.CurrentUserCollection = Backbone.Collection.extend({
 });
 
 
-},{"../models":109}],109:[function(require,module,exports){
+},{"../models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
 
 //CBApp.User = Backbone.Deferred.Model.extend({
 CBApp.User = Backbone.RelationalModel.extend({
@@ -35651,7 +35699,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
     }
 });
 
-},{}],110:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic_views.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35670,7 +35718,7 @@ CBApp.ListView = Marionette.CompositeView.extend({
 
     }
 })
-},{"./templates/listItemLoading.html":112,"backbone-bundle":114,"backbone.marionette":122}],111:[function(require,module,exports){
+},{"./templates/listItemLoading.html":"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette');
@@ -35686,31 +35734,9 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{"backbone-bundle":114,"backbone.marionette":122}],112:[function(require,module,exports){
-module.exports=require(62)
-},{"hbsfy/runtime":13}],113:[function(require,module,exports){
-
-var $ = require('jquery-browserify');
-
-var CBApp = require('index');
-require('./cb/modules/config/config');
-require('./cb/modules/developer/developer');
-require('./cb/modules/store/store');
-require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
-require('./cb/socket');
-require('./cb/models');
-//require('./cb/views');
-
-(function($){
-	$(document).ready(function() {
-
-        CBApp.start();
-	});
-})(jQuery);
-
-
-},{"./cb/models":81,"./cb/modules/config/config":82,"./cb/modules/developer/developer":88,"./cb/modules/nav/nav":91,"./cb/modules/notifications/notifications":95,"./cb/modules/store/store":100,"./cb/socket":107,"index":73,"jquery-browserify":14}],114:[function(require,module,exports){
+},{"backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -35765,7 +35791,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":80,"./backbone-cb-model":116,"./backbone-cb-model-mixin":115,"./backbone-cb-views":117,"./backbone-relational":121,"./backbone.stickit":125,"./backbone.trackit.js":126,"backbone":3,"backbone-cocktail":118,"backbone-deferred":119,"backbone-io":120,"backbone.babysitter":1,"backbone.marionette":122,"backbone.marionette.subrouter":123,"backbone.modal":124,"backbone.wreqr":2,"jquery":15,"q":16,"query-engine":17,"underscore":19}],115:[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-model":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js","./backbone-cb-model-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-views":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-io":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-io.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js","query-engine":"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35863,7 +35889,7 @@ module.exports = {
 
 
 
-},{}],116:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -35912,7 +35938,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],117:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -35989,7 +36015,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],118:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js":[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -36092,7 +36118,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":19}],119:[function(require,module,exports){
+},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36449,8 +36475,8 @@ Q = global.Q = require("q");
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"q":16}],120:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-io.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -36646,8 +36672,8 @@ _ = global._ = require("underscore");
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"socket.io-client":18,"underscore":19}],121:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","socket.io-client":"/home/vagrant/bridge-controller/node_modules/socket.io-client/dist/socket.io.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js":[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -38646,7 +38672,7 @@ _ = global._ = require("underscore");
 		return child;
 	};
 })();
-},{"backbone":3,"underscore":19}],122:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -41111,12 +41137,12 @@ _.extend(Marionette.Module, {
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":3,"backbone.babysitter":1,"backbone.wreqr":2,"underscore":19}],123:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
-Marionette = global.Marionette = require("/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
+Marionette = global.Marionette = require("/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
 _ = global._ = require("underscore");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 // This is heavily based on Backbone.SubRoute 
@@ -41224,12 +41250,12 @@ _ = global._ = require("underscore");
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],124:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
-Marionette = global.Marionette = require("/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
+Marionette = global.Marionette = require("/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
 _ = global._ = require("underscore");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 (function() {
@@ -41721,8 +41747,8 @@ _ = global._ = require("underscore");
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":122,"backbone":3,"underscore":19}],125:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js":[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -42498,7 +42524,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":3,"underscore":19}],126:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js":[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -42691,7 +42717,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],127:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -44652,5 +44678,5 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":15}]},{},[113])
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js"}]},{},["./portal/static/js/main.js"]);

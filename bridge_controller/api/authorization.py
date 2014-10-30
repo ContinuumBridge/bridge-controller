@@ -123,7 +123,7 @@ class CBAuthorization(Authorization):
             for index, field in enumerate(path):
                 print "field is", field
                 try:
-                    print "rel for filtering is", rel
+                    #print "rel for filtering is", rel
                     print "filtering on", '__'.join(path[index:])
                     # Try and filter this field using the remaining path and related_list
                     filtered = rel.filter((
@@ -139,7 +139,8 @@ class CBAuthorization(Authorization):
                     # Set rel to be the next field/ object in the path
                     try:
                         rel = getattr(rel, field)
-                        print "new rel is", rel.__class__
+                        print "new rel class is", rel.__class__
+                        #print "new rel is", rel
                         print "related list class is", related_list[0].__class__
                         print "isinstance(rel, related_list[0].__class__)", isinstance(rel, related_list[0].__class__)
                         print "rel in related_list", rel in related_list
