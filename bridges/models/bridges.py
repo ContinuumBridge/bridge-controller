@@ -31,7 +31,7 @@ BRIDGE_CONNECTIONS = (('disconnected', 'Disconnected'),
                      ('authorised', 'Authorised'),
                      ('connected', 'Connected'))
 
-class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin, CBIDModelMixin):
+class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
 
     name = models.CharField(_('name'), max_length = 255)
     description = models.TextField(_('description'), null = True, blank = True)

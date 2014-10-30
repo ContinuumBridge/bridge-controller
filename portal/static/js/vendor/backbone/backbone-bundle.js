@@ -24,6 +24,9 @@ require('../../cb/misc/relational-models');
 var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
+var CBCollectionMixin = require('./backbone-cb-collection-mixin');
+Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
+
 var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);

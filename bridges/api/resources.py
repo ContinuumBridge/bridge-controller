@@ -36,7 +36,7 @@ from bridges.api.authorization import BridgeAuthorization
 from bridges.models import Bridge
 
 
-class BridgeControlResource(CBResource):
+class BridgeControlResource(CBResource, CBIDResourceMixin):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)

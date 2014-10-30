@@ -26,13 +26,3 @@ class RawJSONEncoder(json.JSONEncoder):
         for k, v in self._replacement_map.iteritems():
              result = result.replace('"%s"' % (k,), v)
         return result
-
-'''
-testvar = {
-   'a': 1,
-   'b': 'abc',
-   'c': RawJavaScriptText('{ "x": [ 1, 2, 3 ] }')
-}
-
-print json.dumps(testvar, cls=RawJSONEncoder)
-'''

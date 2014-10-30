@@ -9,12 +9,23 @@ from bridge_controller.utils import RawJSON, RawJSONEncoder
 
 from bridge_controller import tasks
 
+
+class CBIDModelMixin(object):
+
+    @property
+    def cbid(self):
+        # Get the prefix by concatenating the first letter of the model name with "ID"
+        #prefix = self.__class__.__name__[0] + "ID"
+        prefix = self.__class__.__name__[0] + "ID"
+        return prefix + str(self.id)
+
+
 models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('default_resource',
                                                                'user_related_through',
                                                                'bridge_related_through',
                                                                'client_related_through')
 
-class BroadcastMixin(object):
+class BroadcastMixin(CBIDModelMixin):
 
     def get_related_cbids(self):
         # Get clients related to this object
@@ -43,30 +54,34 @@ class BroadcastMixin(object):
         print "related_cbids is", related_cbids
         return related_cbids
 
-    def to_json(self):
+    def to_json(self, fields=None):
         # Get the default resource for this model and use it for dehydration
         resource_path = getattr(self._meta, 'default_resource').split('.')
         module = __import__('.'.join(resource_path[:-1]), fromlist=[resource_path[-1]])
         resource = getattr(module, resource_path[-1])()
         bundle = resource.build_bundle(obj=self)
-        data = getattr(resource.full_dehydrate(bundle), 'data')
+        if fields:
+            for field in fields:
+                if field == 'resource_uri':
+                    data = { 'resource_uri': resource.get_resource_uri() + str(self.pk) }
+                # TODO Allow choosing of fields other than resource_uri
+        else:
+            data = getattr(resource.full_dehydrate(bundle), 'data')
         return RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
 
     def create_message(self, verb):
-        data = self.to_json()
+
+        if verb != "delete":
+            data = self.to_json()
+        elif verb == "delete":
+            # Only serialize specific fields if the model is being deleted
+            data = self.to_json(fields=['resource_uri', 'deleted_by'])
+
         body = {
             'cbid': self.cbid,
-            'verb': verb
+            'verb': verb,
+            'body': data
         }
-
-        # Add the body, or if deleting add the user who did it
-        if verb != "delete":
-            body['body'] = data
-        elif verb == "delete":
-            try:
-                body['body'] = { 'deleted_by': self.deleted_by }
-            except AttributeError:
-                pass
 
         return {
             'source': 'cb',
@@ -74,9 +89,8 @@ class BroadcastMixin(object):
             'body': body
         }
 
-    def broadcast(self, verb):
+    def broadcast(self, message):
         r = redis.Redis()
-        message = self.create_message(verb)
         json_message = json.dumps(message, cls=RawJSONEncoder)
         destinations = self.get_related_cbids()
         for d in destinations:
@@ -88,15 +102,22 @@ class BroadcastMixin(object):
         super(BroadcastMixin, self).save(*args, **kwargs)
         if broadcast:
             if settings.ENVIRONMENT == "development":
-                self.broadcast(verb)
+                message = self.create_message(verb)
+                self.broadcast(message)
             else:
                 # User the task queue if we're not in development
-                tasks.broadcast.delay(self, verb)
+                message = self.create_message(verb)
+                tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
+        message = self.create_message('delete')
         super(BroadcastMixin, self).delete(using=using)
         if broadcast:
-            self.broadcast('delete')
+            if settings.ENVIRONMENT == "development":
+                self.broadcast(message)
+            else:
+                # User the task queue if we're not in development
+                tasks.broadcast.delay(self, message)
 
 
 class LoggedModel(models.Model):
@@ -133,19 +154,4 @@ class LoggedModel(models.Model):
         blank=True
     )
 
-
-class CBIDModelMixin(models.Model):
-
-    class Meta:
-        verbose_name = _('logged_model_mixin')
-        verbose_name_plural = _('logged_model_mixin')
-        abstract = True
-        app_label = 'bridges'
-
-    @property
-    def cbid(self):
-        # Get the prefix by concatenating the first letter of the model name with "ID"
-        #prefix = self.__class__.__name__[0] + "ID"
-        prefix = self.__class__.__name__[0] + "ID"
-        return prefix + str(self.id)
 

@@ -33611,14 +33611,11 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
-                //console.log('ToOne keyContents', this.keyContents);
                 var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
-                //console.log('ToOne keyContents after', this.keyContents);
 
-                //console.log('ToOne relatedModel', this.relatedModel);
                 //var opts = _.defaults( { create: this.options.createModels }, options );
                 // Taken from the HasMany relation
                 var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
@@ -35491,20 +35488,36 @@ _.extend(Router.prototype, Backbone.Events, {
 
 Router.extend = Backbone.Model.extend;
 
-var updateCollection = function(collection) {
+var updateCollection = function(collectionName) {
 
+    console.log('collection', collectionName);
     return function(message) {
-        collection.add(message);
+        console.log('updateCollection message', message );
+        var messageBody = _.property('body')(message);
+        var verb = _.property('verb')(messageBody);
+        var jsonModels = _.property('body')(messageBody);
+        console.log('updateCollection jsonModels', jsonModels );
+        var collection = CBApp[collectionName];
+        console.log('collection', collection);
+        if (verb != 'delete') {
+            collection.update(jsonModels);
+        } else if (verb == 'delete') {
+            collection.delete(jsonModels);
+        }
     }
 };
 
 var PortalRouter = Router.extend({
 
     routes: {
-        'BID:b/UID:u': 'bridgeControl',
-        'message': updateCollection(CBApp.messageCollection)
+        'BID:b/UID:u': updateCollection('bridgeControlCollection'),
+        'message': 'updateMessageCollection'
     },
 
+    updateMessageCollection: function(message) {
+        console.log('updateMessageCollection', message);
+        CBApp.messageCollection.add(message);
+    },
 
     /*
         'AID[0-9]+': 'app',
@@ -35524,9 +35537,10 @@ var PortalRouter = Router.extend({
 
     getRoute: function(message) {
 
-        var collectionMessage = _.property('body')(message);
-        console.log('collectionMessage ', collectionMessage );
-        var jsonModels = _.property('body')(collectionMessage);
+        var portalMessage = _.property('body')(message);
+        console.log('portalMessage ', portalMessage );
+        var verb = _.property('body')(message);
+        var jsonModels = _.property('body')(portalMessage);
         console.log('jsonModels ', jsonModels );
 
         if (!jsonModels) {
@@ -35535,12 +35549,14 @@ var PortalRouter = Router.extend({
         }
         var model = jsonModels[0] || jsonModels;
 
+        console.log('model ', model );
         var cbid = _.property('cbid')(model);
+        console.log('cbid ', cbid );
         if (!cbid) {
             return "message";
-            //CBApp.messageCollection.add(message);
+        } else {
+            return cbid;
         }
-
     }
 });
 
@@ -35938,6 +35954,9 @@ require('../../cb/misc/relational-models');
 var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
+var CBCollectionMixin = require('./backbone-cb-collection-mixin');
+Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
+
 var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
@@ -35966,7 +35985,50 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-model":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js","./backbone-cb-model-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-views":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-io":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-io.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js","query-engine":"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection-mixin.js","./backbone-cb-model":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js","./backbone-cb-model-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-views":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-io":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-io.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js","query-engine":"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection-mixin.js":[function(require,module,exports){
+
+module.exports = {
+
+    subscribe: function(filters) {
+
+        this.bindBackend();
+        this.fetch(filters);
+    },
+
+    update: function(models) {
+
+        var self = this;
+        models = models instanceof Array ? models : [models];
+        _.each(models, function(model) {
+
+            self.findOrAdd(model);
+        });
+    },
+
+    delete: function(models) {
+
+        var self = this;
+        models = models instanceof Array ? models : [ models ];
+        var existingModels = _.map(models, function(model) {
+
+            var cbid = _.property('cbid')(model) || model.get('cbid');
+            var idArray = CBApp.filters.apiRegex.exec(cbid);
+            if (idArray && idArray[1]) {
+                return self.where({id: idArray[1]});
+            } else {
+                return false;
+            }
+        });
+        console.log('delete models ', models );
+        _.each(_.compact(existingModels), function(model) {
+
+            console.log('relationalDestroy model', model);
+            model.relationalDestroy();
+        });
+    }
+};
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {

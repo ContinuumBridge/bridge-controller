@@ -77,20 +77,36 @@ _.extend(Router.prototype, Backbone.Events, {
 
 Router.extend = Backbone.Model.extend;
 
-var updateCollection = function(collection) {
+var updateCollection = function(collectionName) {
 
+    console.log('collection', collectionName);
     return function(message) {
-        collection.add(message);
+        console.log('updateCollection message', message );
+        var messageBody = _.property('body')(message);
+        var verb = _.property('verb')(messageBody);
+        var jsonModels = _.property('body')(messageBody);
+        console.log('updateCollection jsonModels', jsonModels );
+        var collection = CBApp[collectionName];
+        console.log('collection', collection);
+        if (verb != 'delete') {
+            collection.update(jsonModels);
+        } else if (verb == 'delete') {
+            collection.delete(jsonModels);
+        }
     }
 };
 
 var PortalRouter = Router.extend({
 
     routes: {
-        'BID:b/UID:u': 'bridgeControl',
-        'message': updateCollection(CBApp.messageCollection)
+        'BID:b/UID:u': updateCollection('bridgeControlCollection'),
+        'message': 'updateMessageCollection'
     },
 
+    updateMessageCollection: function(message) {
+        console.log('updateMessageCollection', message);
+        CBApp.messageCollection.add(message);
+    },
 
     /*
         'AID[0-9]+': 'app',
@@ -110,9 +126,10 @@ var PortalRouter = Router.extend({
 
     getRoute: function(message) {
 
-        var collectionMessage = _.property('body')(message);
-        console.log('collectionMessage ', collectionMessage );
-        var jsonModels = _.property('body')(collectionMessage);
+        var portalMessage = _.property('body')(message);
+        console.log('portalMessage ', portalMessage );
+        var verb = _.property('body')(message);
+        var jsonModels = _.property('body')(portalMessage);
         console.log('jsonModels ', jsonModels );
 
         if (!jsonModels) {
@@ -121,12 +138,14 @@ var PortalRouter = Router.extend({
         }
         var model = jsonModels[0] || jsonModels;
 
+        console.log('model ', model );
         var cbid = _.property('cbid')(model);
+        console.log('cbid ', cbid );
         if (!cbid) {
             return "message";
-            //CBApp.messageCollection.add(message);
+        } else {
+            return cbid;
         }
-
     }
 });
 

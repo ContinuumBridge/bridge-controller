@@ -64,6 +64,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
+        logger.log('debug', 'message for broadcast', message);
         if (message.get('source') == 'cb') {
             self.connection.toClient.push(message);
         }

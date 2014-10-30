@@ -29,14 +29,11 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
-                //console.log('ToOne keyContents', this.keyContents);
                 var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
-                //console.log('ToOne keyContents after', this.keyContents);
 
-                //console.log('ToOne relatedModel', this.relatedModel);
                 //var opts = _.defaults( { create: this.options.createModels }, options );
                 // Taken from the HasMany relation
                 var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
