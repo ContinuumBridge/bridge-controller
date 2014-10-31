@@ -1,6 +1,18 @@
 
 var Backbone = require('backbone-bundle')
+    //,React = require('react-bundle')
     ,Marionette = require('backbone.marionette');
+
+
+/*
+CBApp.DeviceInstallView = React.createClass({
+    mixins: [React.ItemView]
+});
+
+CBApp.DeviceInstallListView = React.createClass({
+    mixins: [React.CollectionView]
+});
+*/
 
 CBApp.DeviceInstallView = Marionette.ItemView.extend({
     

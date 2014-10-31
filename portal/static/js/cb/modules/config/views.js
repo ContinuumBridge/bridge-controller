@@ -1,5 +1,6 @@
 
 var Backbone = require('backbone-bundle')
+    ,React = require('react-bundle')
     ,Marionette = require('backbone.marionette')
     ,Q = require('q');
 
@@ -19,11 +20,8 @@ module.exports.Main = Marionette.Layout.extend({
     template: require('./templates/main.html'),
 
     regions: {
-        appSection: {
-            selector: '.app-section',
-            regionType: CBApp.Regions.Fade
-        },
-        deviceSection: '.device-section',
+        appSection: '.app-section',
+        //deviceSection: '.device-section',
         messageSection: '.message-section',
         bridgeSection: '.bridge-section'
     },
@@ -46,15 +44,9 @@ module.exports.Main = Marionette.Layout.extend({
         this.appInstallListView = new CBApp.AppInstallListView();
         this.bridgeView = new CBApp.BridgeListView();
         // View which manages device installs and device discovery
-        this.devicesView = new DevicesView();
+        //this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
 
-        /*
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
-            //CBApp.clientCollection.fetch()
-        }).done();
-        */
     },
 
     populateViews: function() {
@@ -67,8 +59,16 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appSection.show(this.appInstallListView);
-        this.deviceSection.show(this.devicesView);
-        this.devicesView.render();
+
+
+        /*
+        React.renderComponent(
+            <Hello name="World" />,
+            this.$('.device-section')[0]
+        );
+        */
+        //this.deviceSection.show(this.devicesView);
+        //this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
 
@@ -98,6 +98,13 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
+/*
+CBApp.DevicesView = React.createClass({
+
+    render: function() {
+        return <div>Hello, {this.props.name}!</div>
+    }
+});
 var DevicesView = Marionette.ItemView.extend({
 
     template: require('./templates/devicesView.html'),
@@ -155,6 +162,7 @@ var DevicesView = Marionette.ItemView.extend({
         return this;
     }
 })
+*/
 
 module.exports.InstallAppModal = Backbone.Modal.extend({
 
