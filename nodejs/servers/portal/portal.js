@@ -1,6 +1,7 @@
 
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
+var Server = require('../server');
 
 logger = require('./logger');
 
@@ -8,27 +9,42 @@ var Portal = function(port, djangoRootURL) {
 
     var self = this;
 
-    var djangoURL = djangoRootURL + '/api/user/v1/';
-    this.config = {
-        port: port,
-        djangoRootURL: djangoRootURL,
-        djangoURL: djangoURL,
-        authURL: djangoURL + 'user_auth/user/'
-    }
+    this.djangoURL = djangoRootURL + '/api/user/v1/';
+    this.authURL = this.djangoURL + 'user_auth/user/';
 
-    this.socketServer = new BackboneIOServer(this.config);
-
-    this.socketServer.sockets.on('connection', function (socket) {
-
-        socket.getConfig = function() {
-            var config = socket.config || socket.handshake.config;
-            console.log('getConfig ran', socket.handshake.config);
-            return self.socketServer.getConnectionConfig(self.config.authURL, config);
-        };
-
-        var connection = new PortalConnection(socket, self.config);
-    });
+    this.createSocketServer(BackboneIOServer, port);
 };
+
+Portal.prototype = new Server();
+
+Portal.prototype.onConnection = function(socket) {
+
+    var self = this;
+
+    socket.getConfig = function() {
+        var sessionID = socket.handshake.query.sessionID;
+        console.log('portal getConfig sessionID', sessionID);
+        return self.socketServer.getConnectionConfig(self.authURL, sessionID);
+    };
+
+    var connection = new PortalConnection(socket);
+}
+
+Portal.prototype.formatConfig = function(authData) {
+
+        var publicationAddresses = new Array();
+        if (authData.controllers) {
+            authData.controllers.forEach(function(controller) {
+                publicationAddresses.push(controller.user.cbid)
+            });
+        }
+
+        var config = {
+            subscriptionAddress: authData.cbid,
+            publicationAddresses: publicationAddresses,
+            email: authData.email
+        }
+}
 
 module.exports = Portal;
 

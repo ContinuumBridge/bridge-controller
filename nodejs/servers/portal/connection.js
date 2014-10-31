@@ -10,14 +10,12 @@ var Connection = require('../connection/connection')
     ,Message = require('../../message');
     ;
 
-var PortalConnection = function(socket, serverConfig) {
+var PortalConnection = function(socket) {
 
     var self = this;
     this.socket = socket;
 
-    this.serverConfig = serverConfig;
-    //this.djangoURL = djangoURL;
-
+    console.log('PortalConnection socket is ', socket);
     socket.getConfig().then(function(config) {
 
         self.config = socket.config = config;

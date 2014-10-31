@@ -64,5 +64,5 @@ class ClientAuthResource(AuthResource):
         data_resource = CurrentClientResource()
         #authorization = Authorization()
         fields = ['name','email']
-        resource_name = 'client_auth'
+        resource_name = 'auth'
 

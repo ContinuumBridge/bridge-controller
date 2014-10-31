@@ -12,13 +12,11 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-var BridgeConnection = function(socket, serverConfig) {
+var BridgeConnection = function(socket) {
 
     var self = this;
     this.socket = socket;
     this.logger = logger;
-
-    this.serverConfig = serverConfig;
 
     socket.getConfig().then(function(config) {
 
