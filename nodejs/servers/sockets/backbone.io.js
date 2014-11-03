@@ -1,5 +1,6 @@
 
 var http = require('http')
+    ,_ = require('underscore')
     ,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
@@ -17,61 +18,41 @@ var SocketServer = require('./socket')
     ;
 
 
-function BackboneIOServer(config) {
-
-    this.config = config;
+function BackboneIOServer(port, getConfig, djangoURL) {
 
     var httpServer = http.createServer(connect);
-    httpServer.listen(config.port);
+    httpServer.listen(port);
 
-    var appController = this.appController = new djangoBackbone(config.djangoURL + 'app/');
-    var appConnectionController = this.appConnectioController = new djangoBackbone(config.djangoURL + 'app_connection/');
-    var appInstallController = this.appInstallController = new djangoBackbone(config.djangoURL + 'app_install/');
-    //var appInstallController = this.appInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net/');
-    var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone(config.djangoURL + 'app_device_permission/');
-    var appLicenceController = this.appLicenceController = new djangoBackbone(config.djangoURL + 'app_licence/');
-    var appOwnershipController = this.appOwnershipController = new djangoBackbone(config.djangoURL + 'app_ownership/');
-    //var appDevicePermissionController = this.appDevicePermissionController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
+    var controllerURLs = {
+        appController: 'app/',
+        appConnectionController: 'app_connection/',
+        appInstallController: 'app_install/',
+        appDevicePermissionController: 'app_device_permission/',
+        appLicenceController: 'app_licence/',
+        appOwnershipController: 'app_ownership/',
+        clientController: 'client/',
+        clientControlController: 'client_control/',
+        deviceController: 'device/',
+        deviceInstallController: 'device_install/',
+        discoveredDeviceInstallController: 'discovered_device_install/',
+        bridgeController: 'bridge/',
+        bridgeControlController: 'bridge_control/',
+        currentUserController: 'current_user/'
+    }
 
-    var clientController = this.clientController = new djangoBackbone(config.djangoURL + 'client/');
-    var clientControlController = this.clientControlController = new djangoBackbone(config.djangoURL + 'client_control/');
+    var controllers = _.map(controllerURLs, function(url) {
+        return new djangoBackbone(djangoURL + url);
+    });
 
-    var deviceController = this.deviceController = new djangoBackbone(config.djangoURL + 'device/');
-    var deviceInstallController = this.deviceInstallController = new djangoBackbone(config.djangoURL + 'device_install/');
-    //var deviceInstallController = this.deviceInstallController = new djangoBackbone('https://m54ga2jjusw6.runscope.net');
-
-    var discoveredDeviceController = this.discoveredDeviceController = new DeviceDiscovery();
-    var discoveredDeviceInstallController = this.discoveredDeviceInstallController = new djangoBackbone(config.djangoURL + 'discovered_device_install/');
-
-    var bridgeController = this.bridgeController = new djangoBackbone(config.djangoURL + 'bridge/');
-    var bridgeControlController = this.bridgeControlController = new djangoBackbone(config.djangoURL + 'bridge_control/');
-    var currentUserController = this.currentUserController = new djangoBackbone(config.djangoURL + 'current_user/');
+    controllers.discoveredDevice = new DeviceDiscovery().backboneSocket;
 
     // Start backbone io listening
-    var socketServer = backboneio.listen(httpServer, {
-        app: appController,
-        appInstall: appInstallController,
-        appConnection: appConnectionController,
-        appDevicePermission: appDevicePermissionController,
-        appLicence: appLicenceController,
-        appOwnership: appOwnershipController,
-        bridge: bridgeController,
-        bridgeControl: bridgeControlController,
-        client: clientController,
-        clientControl: clientControlController,
-        currentUser: currentUserController,
-        device: deviceController,
-        deviceInstall: deviceInstallController,
-        discoveredDevice: discoveredDeviceController.backboneSocket,
-        discoveredDeviceInstall: discoveredDeviceInstallController
-    });
+    var socketServer = backboneio.listen(httpServer, controllers);
 
     // Set the socket io log level
     socketServer.set('log level', 1);
 
-    this.setupLegacyAuthorization(socketServer);
-    socketServer.config = config;
-    socketServer.getConnectionConfig = this.getConnectionConfig;
+    this.setupLegacyAuthorization(socketServer, getConfig);
 
     return socketServer;
 }

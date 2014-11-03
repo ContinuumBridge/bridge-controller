@@ -20,18 +20,20 @@ function Server() {
     //this.redisClient = new RedisClient();
 };
 
-Server.prototype.createSocketServer = function(SocketServer, port) {
+Server.prototype.createSocketServer = function(SocketServer, port, djangoURL) {
 
     var self = this;
 
     var getConfig = function(sessionID) {
         return self.getConnectionConfig(self.authURL, sessionID);
     }
-    this.socketServer = new SocketServer(port, getConfig);
+    var socketServer = new SocketServer(port, getConfig, djangoURL);
 
-    this.socketServer.sockets.on('connection', function (socket) {
+    socketServer.sockets.on('connection', function (socket) {
         self.onConnection(socket);
     });
+
+    return socketServer;
 }
 
 Server.prototype.getConnectionConfig = function(authURL, sessionID) {
@@ -43,7 +45,9 @@ Server.prototype.getConnectionConfig = function(authURL, sessionID) {
 
     backendAuth(authURL, sessionID).then(function(authData) {
 
+        console.log('authData is', authData);
         var config = self.formatConfig(authData);
+        console.log('config is', config);
         config.sessionID = sessionID;
         deferredConfig.resolve(config);
 

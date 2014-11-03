@@ -12,7 +12,8 @@ var Portal = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'user_auth/user/';
 
-    this.createSocketServer(BackboneIOServer, port);
+    this.socketServer =  this.createSocketServer(BackboneIOServer, port);
+    //console.log('portal socketserver is', this.socketServer);
 };
 
 Portal.prototype = new Server();
@@ -21,10 +22,11 @@ Portal.prototype.onConnection = function(socket) {
 
     var self = this;
 
-    socket.getConfig = function() {
-        var sessionID = socket.handshake.query.sessionID;
+    socket.getConfig = function(sessionID) {
+        //var sessionID = socket.handshake;
+        //var sessionID = socket.handshake.query.sessionID;
         console.log('portal getConfig sessionID', sessionID);
-        return self.socketServer.getConnectionConfig(self.authURL, sessionID);
+        return self.getConnectionConfig(self.authURL, sessionID);
     };
 
     var connection = new PortalConnection(socket);
@@ -39,7 +41,7 @@ Portal.prototype.formatConfig = function(authData) {
             });
         }
 
-        var config = {
+        return {
             subscriptionAddress: authData.cbid,
             publicationAddresses: publicationAddresses,
             email: authData.email

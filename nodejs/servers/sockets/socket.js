@@ -24,6 +24,7 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         }
         getConfig(sessionID).then(function(config) {
             socket.config = config;
+            socket.sessionID = sessionID;
             console.log('getConnectionConfig response', config);
             next();
         }, function(error) {
@@ -53,13 +54,7 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConf
             if(data && data.query && data.query.sessionID) {
                 sessionID = data.query.sessionID;
             }
-            /*
-            var protoConfig = {
-                sessionID: sessionID,
-                address: data.address
-            }
-            */
-            getConnectionConfig(sessionID).then(function(config) {
+            getConfig(sessionID).then(function(config) {
                 data.config = config;
                 //data.config.address = data.address;
                 console.log('Legacy getConnectionConfig config', config);

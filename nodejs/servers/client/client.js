@@ -34,7 +34,7 @@ var Client = function(port, djangoRootURL) {
 Client.prototype = new Server();
 
 
-Portal.prototype.formatConfig = function(authData) {
+Client.prototype.formatConfig = function(authData) {
 
         var publicationAddresses = new Array();
         if (authData.controllers) {
@@ -43,10 +43,9 @@ Portal.prototype.formatConfig = function(authData) {
             });
         }
 
-        var config = {
+        return config = {
             subscriptionAddress: authData.cbid,
             publicationAddresses: publicationAddresses,
-            email: authData.email
         }
 }
 

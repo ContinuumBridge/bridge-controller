@@ -15,8 +15,8 @@ var PortalConnection = function(socket) {
     var self = this;
     this.socket = socket;
 
-    console.log('PortalConnection socket is ', socket);
-    socket.getConfig().then(function(config) {
+    console.log('PortalConnection socket is ', socket.sessionID);
+    socket.getConfig(socket.sessionID).then(function(config) {
 
         self.config = socket.config = config;
 
