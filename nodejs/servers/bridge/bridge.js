@@ -13,7 +13,8 @@ var Bridge = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
-    this.createSocketServer(SocketIOServer, port);
+    this.socketServer = this.createSocketServer(SocketIOServer, port);
+    //console.log('bridge socketserver is', this.socketServer);
 };
 
 Bridge.prototype = new Server();
@@ -41,10 +42,9 @@ Bridge.prototype.formatConfig = function(authData) {
         });
     }
 
-    var config = {
+    return {
         subscriptionAddress: authData.cbid,
-        publicationAddresses: publicationAddresses,
-        email: authData.email
+        publicationAddresses: publicationAddresses
     }
 }
 

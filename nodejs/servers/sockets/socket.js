@@ -16,15 +16,22 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
     socketServer.use(function(socket, next) {
 
-        console.log('socket sessionID is', socket.handshake.query.sessionID);
-        if(socket.handshake && socket.handshake.query && socket.handshake.query.sessionID) {
-            var sessionID = socket.handshake.query.sessionID;
+        var sessionID;
+        var handshake = socket.handshake;
+        if(handshake.headers && handshake.headers.cookie) {
+            // Pull out the cookies from the data
+            var cookies = cookie_reader.parse(handshake.headers.cookie);
+            sessionID = cookies.sessionid;
+        } else if (handshake.query && handshake.query.sessionID) {
+            sessionID = handshake.query.sessionID;
         } else {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
+        console.log('socket sessionID is', sessionID);
+
         getConfig(sessionID).then(function(config) {
             socket.config = config;
-            console.log('getConnectionConfig response', config);
+            socket.sessionID = sessionID;
             next();
         }, function(error) {
 
@@ -53,13 +60,7 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConf
             if(data && data.query && data.query.sessionID) {
                 sessionID = data.query.sessionID;
             }
-            /*
-            var protoConfig = {
-                sessionID: sessionID,
-                address: data.address
-            }
-            */
-            getConnectionConfig(sessionID).then(function(config) {
+            getConfig(sessionID).then(function(config) {
                 data.config = config;
                 //data.config.address = data.address;
                 console.log('Legacy getConnectionConfig config', config);

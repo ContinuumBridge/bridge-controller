@@ -1,30 +1,31 @@
 (function() {
     var connected = new Promise();
 
-    Backbone.io = Backbone.IO = {
-        connect: function() {
-            var socket = io.connect.apply(io, arguments);
-            connected.resolve(socket);
-            return socket;
-        }
+    Backbone.io = Backbone.IO = function() {
+        var socket = io.apply(io, arguments);
+        connected.resolve(socket);
+        return socket;
     };
-    
+
     var origSync = Backbone.sync;
 
     Backbone.sync = function(method, model, options) {
         var backend = model.backend || (model.collection && model.collection.backend);
-        
+
         options = _.clone(options) || {};
 
         var error = options.error || function() {};
         var success = options.success || function() {};
-        
+
         if (backend) {
             // Don't pass these to server
             delete options.error;
             delete options.success;
-            delete options.collection; 
-            
+            delete options.collection;
+
+            // Jquery Deferred Object Initialization
+            var dfd = new $.Deferred();
+
             // Use Socket.IO backend
             backend.ready(function() {
                 var req = {
@@ -32,15 +33,19 @@
                     model: model.toJSON(),
                     options: options
                 };
-                
+
                 backend.socket.emit('sync', req, function(err, resp) {
                     if (err) {
                         error(err);
+                        dfd.reject(err);
                     } else {
                         success(resp);
+                        dfd.resolve(resp);
                     }
                 });
             });
+
+            return dfd.promise();
         } else {
             // Call the original Backbone.sync
             return origSync(method, model, options);
@@ -53,10 +58,10 @@
         bindBackend: function() {
             var self = this;
             var idAttribute = this.model.prototype.idAttribute;
-            
+
             this.backend.ready(function() {
                 var event = self.backend.options.event;
-                
+
                 self.bind(event + ':create', function(model) {
                     self.add(model);
                 });
@@ -68,22 +73,28 @@
                     self.remove(model[idAttribute]);
                 });
             });
-        }  
+        }
     };
-    
-    Backbone.Collection = (function(Parent) {
+
+    function addBackendBinding(Parent) {
         // Override the parent constructor
-        var Child = function() {
+        var Child = function(models, options) {
+            if (options && options.backend) {
+                this.backend = options.backend;
+            }
             if (this.backend) {
                 this.backend = buildBackend(this);
             }
-            
+
             Parent.apply(this, arguments);
         };
-        
+
         // Inherit everything else from the parent
         return inherits(Parent, Child, [Mixins]);
-    })(Backbone.Collection);
+    }
+
+    Backbone.Collection = addBackendBinding(Backbone.Collection);
+    Backbone.Model = addBackendBinding(Backbone.Model);
 
     // Helpers
     // ---------------
@@ -102,11 +113,11 @@
 
         return _.extend(Child, Parent);
     };
-    
+
     function buildBackend(collection) {
         var ready = new Promise();
         var options = collection.backend;
-        
+
         if (typeof options === 'string') {
             var name = options;
             var channel = undefined;
@@ -124,7 +135,8 @@
         };
 
         connected.then(function(socket) {
-            backend.socket = socket.of(name);
+            // Use the full uri to get the socket channel
+            backend.socket = io(socket.io.uri + name);
 
             backend.socket.emit('listen', backend.channel, function(options) {
                 backend.options = options;
@@ -135,11 +147,11 @@
                     collection.trigger(event, method, resp);
                     collection.trigger(event + ':' + method, resp);
                 });
-                
+
                 ready.resolve();
             });
         });
-        
+
         return backend;
     };
 
