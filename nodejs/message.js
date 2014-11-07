@@ -3,6 +3,8 @@ var _ = require('underscore')
     ,logger = require('./logger').logger
     ;
 
+var errors = require('./errors');
+
 // Create local references to array methods we'll want to use later.
 var array = [];
 var slice = array.slice;
@@ -102,6 +104,10 @@ _.extend(Message.prototype, {
         // Checks if a message's source conforms to the source given
         var sourceRegex = new RegExp('^' + source + '(.+)?');
         var proposedSource = this.get('source');
+        if (typeof proposedSource != 'string') {
+            return new errors.MessageError('The message source ', proposedSource
+                ,' (', typeof proposedSource, ') is incorrect');
+        }
         return !!proposedSource.match(sourceRegex);
     },
 

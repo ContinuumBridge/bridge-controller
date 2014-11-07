@@ -40867,7 +40867,6 @@ _ = global._ = require("underscore");
     var connected = new Promise();
 
     Backbone.io = Backbone.IO = function() {
-        console.log('arguments to backbone io', arguments);
         var socket = io.apply(io, arguments);
         connected.resolve(socket);
         return socket;
@@ -41001,10 +41000,7 @@ _ = global._ = require("underscore");
         };
 
         connected.then(function(socket) {
-            console.log('socket is', socket);
-            console.log('socket.io.uri is', socket.io.uri);
-            console.log('name is', socket.io.uri + name);
-            //backend.socket = socket.of(name);
+            // Use the full uri to get the socket channel
             backend.socket = io(socket.io.uri + name);
 
             backend.socket.emit('listen', backend.channel, function(options) {

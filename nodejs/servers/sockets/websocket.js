@@ -1,4 +1,5 @@
 
+
 var cookie_reader = require('cookie');
 
 var backendAuth = require('../../backendAuth.js')
@@ -77,3 +78,4 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConf
 }
 
 module.exports = SocketServer;
+

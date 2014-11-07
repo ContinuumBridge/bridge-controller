@@ -34,19 +34,16 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('message', function (jsonMessage) {
 
-        //console.log('Message is ', jsonMessage);
         var message = new Message(jsonMessage);
-        //message.set('source', "BID" + socket.handshake.authData.id);
         logger.log('debug', 'Socket sessionID', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
 
         //message.filterDestination(self.config.publicationAddresses);
-        //message.conformSource(self.config.subscriptionAddress);
+        message.conformSource(self.config.subscriptionAddress);
 
-        logger.log('debug', 'socket message config', self.config);
-        logger.log('debug', 'socket message', message);
+        //logger.log('debug', 'socket message config', self.config);
+        //logger.log('debug', 'socket message', message);
 
-        //self.fromClient.push(message);
         self.router.dispatch(message);
     });
 
@@ -86,23 +83,33 @@ Connection.prototype.setupRedis = function() {
 
     var redisPub = redis.createClient();
 
-    var publish = function(message) {
+    var publishAll = function(message) {
 
         logger.log('debug', 'Publish redis message', message.toJSON());
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var jsonMessage = message.toJSONString();
 
+        var publish = function(address, message) {
+
+            // Publish to the first part of the address
+            var addressArray = address.match(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/);
+            redisPub.publish(addressArray[1], jsonMessage)
+        }
+
         if (typeof destination == 'string') {
 
             console.log('debug', 'destination is a string')
-            redisPub.publish(destination, jsonMessage)
+
+            publish(destination, message);
         } else if (destination instanceof Array) {
 
             console.log('debug', 'destination is an array')
-            destination.forEach(function(address) {
-                console.log('debug', 'address is', address)
-                redisPub.publish(String(address), jsonMessage);
+            destination.forEach(function(dest) {
+
+                console.log('debug', 'dest is', dest)
+                publish(dest , message);
+                //redisPub.publish(String(address), jsonMessage);
             }, this);
         }
 
@@ -110,17 +117,9 @@ Connection.prototype.setupRedis = function() {
         logger.log('message', subscriptionAddress, '=>', destination, '    ',  jsonMessage);
     };
 
-    var publishAll = function(message) {
-
-        // Publish message to each allowed bridge address
-        message.set('destination', publicationAddresses);
-        publish(message);
-    };
-
     var unsubscribeToRedis = this.toRedis.onValue(function(message) {
 
-        publish(message);
-        //publishAll(message);
+        publishAll(message);
     });
 
     //var message = new Message({ destination: 'BID2'});

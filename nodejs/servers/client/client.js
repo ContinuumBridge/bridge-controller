@@ -8,31 +8,26 @@ var Client = function(port, djangoRootURL) {
 
     var self = this;
 
-    var djangoURL = djangoRootURL + '/api/client/v1/';
-    var authURL = djangoURL + 'current_client/client/';
+    this.djangoURL = djangoRootURL + '/api/client/v1/';
+    this.authURL = this.djangoURL + 'current_client/client/';
 
-    this.socketServer = new SocketIOServer(port);
-
-    this.socketServer.sockets.on('connection', function (socket) {
-
-        logger.log('debug', 'In socketServer connection handshake', socket.handshake);
-
-        logger.log('debug', 'In socketServer connection config', socket.config);
-        socket.getConfig = function() {
-            var config = socket.config;
-                //|| socket.handshake.config;
-            return self.socketServer.getConnectionConfig(authURL, config);
-        };
-
-        var connection = new ClientConnection(socket, djangoURL);
-
-        logger.log('debug', 'connection config', connection.config);
-
-    });
+    this.socketServer = this.createSocketServer(SocketIOServer, port);
 };
 
 Client.prototype = new Server();
 
+Client.prototype.onConnection = function(socket) {
+
+    var self = this;
+
+    socket.getConfig = function() {
+        var sessionID = socket.handshake.query.sessionID;
+        console.log('getConfig', socket.handshake);
+        return self.getConnectionConfig(self.authURL, sessionID);
+    };
+
+    var connection = new ClientConnection(socket);
+}
 
 Client.prototype.formatConfig = function(authData) {
 
@@ -45,7 +40,7 @@ Client.prototype.formatConfig = function(authData) {
 
         return config = {
             subscriptionAddress: authData.cbid,
-            publicationAddresses: publicationAddresses,
+            publicationAddresses: publicationAddresses
         }
 }
 
