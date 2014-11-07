@@ -1,7 +1,7 @@
 
 var http = require('http')
     ,_ = require('underscore')
-    ,connect = require('connect')
+    //,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
@@ -20,39 +20,48 @@ var SocketServer = require('./socket')
 
 function BackboneIOServer(port, getConfig, djangoURL) {
 
-    var httpServer = http.createServer(connect);
-    httpServer.listen(port);
+    var httpServer = http.createServer();
 
     var controllerURLs = {
-        appController: 'app/',
-        appConnectionController: 'app_connection/',
-        appInstallController: 'app_install/',
-        appDevicePermissionController: 'app_device_permission/',
-        appLicenceController: 'app_licence/',
-        appOwnershipController: 'app_ownership/',
-        clientController: 'client/',
-        clientControlController: 'client_control/',
-        deviceController: 'device/',
-        deviceInstallController: 'device_install/',
-        discoveredDeviceInstallController: 'discovered_device_install/',
-        bridgeController: 'bridge/',
-        bridgeControlController: 'bridge_control/',
-        currentUserController: 'current_user/'
+        app: 'app/',
+        appConnection: 'app_connection/',
+        appInstall: 'app_install/',
+        appDevicePermission: 'app_device_permission/',
+        appLicence: 'app_licence/',
+        appOwnership: 'app_ownership/',
+        client: 'client/',
+        clientControl: 'client_control/',
+        device: 'device/',
+        deviceInstall: 'device_install/',
+        discoveredDeviceInstall: 'discovered_device_install/',
+        bridge: 'bridge/',
+        bridgeControl: 'bridge_control/',
+        currentUser: 'current_user/'
     }
 
-    var controllers = _.map(controllerURLs, function(url) {
+    /*
+    var controllers = _.object(_.map(controllerURLs, function(name, url) {
         return new djangoBackbone(djangoURL + url);
-    });
+    }));
+    */
+    // Map the controllerURLs to create instances for them
+    var controllers = _.reduce(controllerURLs, function(controller, url, name) {
+        controller[name] = new djangoBackbone(djangoURL + url);
+        return controller;
+    }, {});
 
     controllers.discoveredDevice = new DeviceDiscovery().backboneSocket;
 
+    //var currentUserController = new djangoBackbone(djangoURL + 'current_user/');
     // Start backbone io listening
     var socketServer = backboneio.listen(httpServer, controllers);
+    //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
+    httpServer.listen(port);
     // Set the socket io log level
-    socketServer.set('log level', 1);
+    //socketServer.set('log level', 1);
 
-    this.setupLegacyAuthorization(socketServer, getConfig);
+    this.setupAuthorization(socketServer, getConfig);
 
     return socketServer;
 }

@@ -1,9 +1,10 @@
 
+from tastypie import fields
 from tastypie.authorization import ReadOnlyAuthorization
 
 from accounts.api.authorization import CurrentUserAuthorization
 from accounts.api.abstract_resources import UserObjectsResource, RelatedUserObjectsResource
-from apps.api.resources import AppInstallResource
+from apps.api.resources import AppInstallResource, AppConnectionResource
 
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
@@ -25,30 +26,31 @@ class ClientResource(CBResource):
 class ClientControlResource(CBResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=True)
+    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
 
     class Meta(CBResource.Meta):
         queryset = ClientControl.objects.all()
         resource_name = 'client_control'
 
 
-class CurrentClientResource(LoggedInResource, CBIDResourceMixin):
+class CurrentClientResource(CBResource, CBIDResourceMixin):
+
+    controllers = cb_fields.ToManyThroughField(ClientControlResource,
+                    #attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.client_controls, full=True,
+                    attribute=lambda bundle: bundle.obj.client_controls, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    apps = cb_fields.ToManyThroughField(AppConnectionResource,
+                    attribute=lambda bundle: bundle.obj.app_connections, full=True,
+                    null=True, readonly=True, nonmodel=True)
 
     '''
-    controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
-                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    apps = cb_fields.ToManyThroughField(AppInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
+    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
                     attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
     '''
 
-    class Meta(LoggedInResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = Client.objects.all()
         fields = ['id', 'cbid', 'name', 'date_joined', 'last_login']
         resource_name = 'current_client'
@@ -58,11 +60,35 @@ class ClientAuthResource(AuthResource):
 
     """ Allows clients to login and logout """
 
+    '''
+    controllers = cb_fields.ToManyThroughField(ClientControlResource,
+                    #attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.client_controls, full=True,
+                    attribute=lambda bundle: bundle.obj.client_controls, full=True,
+                    null=True, readonly=True, nonmodel=True)
+
+    apps = cb_fields.ToManyThroughField(AppConnectionResource,
+                    attribute=lambda bundle: bundle.obj.app_connections, full=True,
+                    null=True, readonly=True, nonmodel=True)
+    '''
+
+    #controllers = fields.ToManyField(ClientControlResource, full=True
+    #                                 , attribute=lambda bundle: bundle.obj.controllers.all())
+
+    controllers = fields.ToManyField('clients.api.resources.ClientControlResource', 'controllers', full=True)
+
+    #apps = fields.ToManyField(AppConnectionResource, full=True
+    #                                 , attribute=lambda bundle: bundle.obj.app_connections.all())
+
     class Meta(AuthResource.Meta):
         queryset = Client.objects.all()
         # Resource used to send data on successful login
-        data_resource = CurrentClientResource()
+        #data_resource = CurrentClientResource()
         #authorization = Authorization()
-        fields = ['name','email']
+        fields = ['name','cbid']
         resource_name = 'auth'
+
+class ClientAuthAliasResource(ClientAuthResource):
+
+    class Meta(ClientAuthResource.Meta):
+        resource_name = 'client_auth'
 

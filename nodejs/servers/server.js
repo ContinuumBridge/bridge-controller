@@ -40,7 +40,6 @@ Server.prototype.getConnectionConfig = function(authURL, sessionID) {
 
     var self = this;
 
-    console.log('getConnectionConfig sessionID', sessionID);
     var deferredConfig = Q.defer();
 
     backendAuth(authURL, sessionID).then(function(authData) {

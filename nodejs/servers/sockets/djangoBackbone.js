@@ -47,7 +47,7 @@ function DjangoBackbone(djangoURL) {
             }
         } else {
             var error = new Error('Something went wrong with response in django_backbone');
-            log('error', error);
+            logger.log('error', error);
             res.end(error);
         }
     };
@@ -56,8 +56,9 @@ function DjangoBackbone(djangoURL) {
 
         if (req.socket.handshake.headers.cookie) {
 
+            console.log('req.socket.handshake.headers', req.socket.handshake.headers);
             cookies = cookie_reader.parse(req.socket.handshake.headers.cookie);
-
+            console.log('cookies[sessionid]', cookies['sessionid']);
             req.args={
                 headers:{ "X_CB_SESSIONID": cookies['sessionid'] }
             };

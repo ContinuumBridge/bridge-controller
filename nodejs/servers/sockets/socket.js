@@ -16,16 +16,25 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
     socketServer.use(function(socket, next) {
 
-        console.log('socket sessionID is', socket.handshake.query.sessionID);
-        if(socket.handshake && socket.handshake.query && socket.handshake.query.sessionID) {
-            var sessionID = socket.handshake.query.sessionID;
+        var sessionID;
+        var handshake = socket.handshake;
+        // TODO check for cookies and query sessionID
+        console.log('handshake is', handshake);
+        if(handshake.headers && handshake.headers.cookie) {
+            // Pull out the cookies from the data
+            var cookies = cookie_reader.parse(handshake.headers.cookie);
+            sessionID = cookies.sessionid;
+        } else if (handshake.query && handshake.query.sessionID) {
+            sessionID = handshake.query.sessionID;
+            console.log('handshake.query.sessionID is', handshake.query.sessionID);
         } else {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
+        console.log('socket sessionID is', sessionID);
+
         getConfig(sessionID).then(function(config) {
             socket.config = config;
             socket.sessionID = sessionID;
-            console.log('getConnectionConfig response', config);
             next();
         }, function(error) {
 

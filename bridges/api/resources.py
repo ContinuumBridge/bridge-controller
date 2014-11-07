@@ -104,7 +104,7 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
     '''
 
 
-class BridgeAuthResource(AuthResource):
+class BridgeAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows bridges to login and logout """
 
@@ -113,5 +113,9 @@ class BridgeAuthResource(AuthResource):
         # Resource used to send data on successful login
         data_resource = CurrentBridgeResource()
         fields = ['first_name', 'last_name']
-        resource_name = 'bridge_auth'
+        resource_name = 'auth'
 
+class BridgeAuthAliasResource(BridgeAuthResource):
+
+    class Meta(BridgeAuthResource.Meta):
+        resource_name = 'bridge_auth'
