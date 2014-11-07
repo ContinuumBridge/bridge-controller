@@ -18,7 +18,7 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
         var sessionID;
         var handshake = socket.handshake;
-        // TODO check for cookies and query sessionID
+
         console.log('handshake is', handshake);
         if(handshake.headers && handshake.headers.cookie) {
             // Pull out the cookies from the data
