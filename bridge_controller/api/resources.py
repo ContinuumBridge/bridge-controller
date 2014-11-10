@@ -246,6 +246,7 @@ class LoggedInResource(CBResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
+        print "user id is", request.user.id
         # ADDED Set the request pk to the id of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id

@@ -47,14 +47,6 @@ module.exports = {
             "underscore":"_"
         }
     },
-    "backbone-bossview": {
-        "exports": "Backbone.Marionette.BossView",
-        "depends": {
-            "backbone":"Backbone",
-            "backbone.marionette": "Marionette",
-            "underscore":"_"
-        }
-    },
     "backbone-deferred": {
         "exports": "Backbone",
         "depends": {
@@ -62,7 +54,7 @@ module.exports = {
             "q": "Q"
         }
     },
-    "backbone-io": {
+    "backbone.io": {
         "exports": "Backbone",
         "depends": {
             "backbone":"Backbone",

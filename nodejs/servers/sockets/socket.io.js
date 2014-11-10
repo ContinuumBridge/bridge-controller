@@ -8,23 +8,19 @@ var SocketServer = require('./socket');
 
 var backendAuth = require('../../backendAuth.js');
 
-function SocketIOServer(config) {
+function SocketIOServer(port, getConfig) {
 
     var self = this;
-    this.config = config;
 
-    console.log('debug', 'config is', config);
-    //var socketServer = io.listen(config.port);
     var httpServer = require('http').createServer();
     var socketServer = require('socket.io')(httpServer);
-    httpServer.listen(config.port);
+    httpServer.listen(port);
 
     // Set the socket io log level
     //socketServer.set('log level', 1);
 
-    this.setupAuthorization(socketServer);
-    socketServer.config = config;
-    socketServer.getConnectionConfig = this.getConnectionConfig;
+    this.setupAuthorization(socketServer, getConfig);
+    //socketServer.config = config;
 
     return socketServer;
 }
