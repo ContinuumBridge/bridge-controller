@@ -24,7 +24,7 @@ Client.prototype.onConnection = function(socket) {
     var self = this;
 
     socket.getConfig = function() {
-        var sessionID = socket.handshake.query.sessionID;
+        var sessionID = socket.sessionID;
         console.log('getConfig', socket.handshake);
         return self.getConnectionConfig(self.authURL, sessionID);
     };

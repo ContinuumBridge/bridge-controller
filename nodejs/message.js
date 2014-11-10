@@ -113,6 +113,7 @@ _.extend(Message.prototype, {
 
     conformSource: function(source) {
         // Ensure that the message source conforms to the given source
+        //console.log('checkSource', !this.checkSource(source));
         if (!this.checkSource(source)) {
             logger.log('authorization', 'Client ', source, ' is not allowed to send from source', this.get('source'));
             this.set('source', source);

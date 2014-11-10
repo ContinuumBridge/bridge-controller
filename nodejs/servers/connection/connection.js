@@ -32,22 +32,29 @@ Connection.prototype.setupSocket = function() {
 
     var socket = this.socket;
 
-    socket.on('message', function (jsonMessage) {
+    logger.log('debug', 'setupSocket');
+    socket.on('message', function (rawMessage) {
 
-        if (jsonMessage.type === 'utf8') {
-            console.log('Received Message: ' + jsonMessage.utf8Data);
+        logger.log('debug', 'Socket message', rawMessage);
+        if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
+            console.log('Received Message: ' + rawMessage.utf8Data);
+            rawMessage = rawMessage.utf8Data;
             //socket.sendUTF(message.utf8Data);
         }
-        else if (jsonMessage.type === 'binary') {
-            console.log('Received Binary Message of ' + jsonMessage.binaryData.length + ' bytes');
+        /*
+        else if (rawMessage.type === 'binary') {
+            console.log('Received Binary Message of ' + rawMessage.binaryData.length + ' bytes');
             //socket.sendBytes(message.binaryData);
         }
-        var message = new Message(jsonMessage);
+        */
+
+        var message = new Message(rawMessage);
         logger.log('debug', 'Socket sessionID', socket.sessionID);
-        logger.log('debug', 'Socket handshake query', socket.handshake.query);
-        message.set('sessionID', socket.handshake.query.sessionID);
+        //logger.log('debug', 'Socket handshake query', socket.handshake.query);
+        message.set('sessionID', socket.sessionID);
 
         //message.filterDestination(self.config.publicationAddresses);
+        logger.log('debug', 'Socket subscriptionAddress', self.config.subscriptionAddress);
         message.conformSource(self.config.subscriptionAddress);
 
         //logger.log('debug', 'socket message config', self.config);

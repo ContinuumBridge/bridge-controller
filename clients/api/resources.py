@@ -10,6 +10,7 @@ from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
 from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 
+from bridges.models import Bridge
 from clients.models import Client, ClientControl
 
 class ClientResource(CBResource):

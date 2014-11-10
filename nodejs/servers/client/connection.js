@@ -18,6 +18,7 @@ var ClientConnection = function(socket) {
 
     var config = this.config = socket.config;
 
+    console.log('ClientConnection');
     socket.getConfig().then(function(config) {
 
         self.config = config;
@@ -29,6 +30,15 @@ var ClientConnection = function(socket) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
+
+        var connectedMessage = {
+            destination: config.subscriptionAddress,
+            source: 'cb',
+            body: 'connected'
+        }
+        logger.log('debug', 'connectedMessage', connectedMessage);
+        socket.emit('message', JSON.stringify(connectedMessage));
+        //socket.sendUTF('message', JSON.stringify(connectedMessage));
 
         var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
         logger.log('info', 'New client connection. Subscribed to %s, publishing to %s'
