@@ -6,9 +6,9 @@ from .resources import ClientResource, CurrentClientResource, ClientAuthResource
 
 v1 = Api("v1")
 v1.register(ClientResource())
-v1.register(CurrentClientResource())
 v1.register(ClientControlResource())
 v1.register(ClientAuthResource())
 v1.register(ClientAuthAliasResource())
+v1.register(CurrentClientResource())
 
 

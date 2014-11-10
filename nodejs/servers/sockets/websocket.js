@@ -1,81 +1,88 @@
 
 
-var cookie_reader = require('cookie');
+var cookie_reader = require('cookie')
+    ,EventEmitter = require('events').EventEmitter
+    ,http = require('http')
+    ,WebSocketServer = require('websocket').server;
 
 var backendAuth = require('../../backendAuth.js')
     ,Errors = require('../../errors')
     ;
 
-function SocketServer() {
+function WSServer(port, getConfig, djangoURL) {
 
+    var httpServer = http.createServer(function(request, response) {
+        console.log((new Date()) + ' Received request for ' + request.url);
+        response.writeHead(404);
+        response.end();
+    });
+    httpServer.listen(port, function() {
+        console.log((new Date()) + ' Server is listening on port 8080');
+    });
+
+    var wsServer = new WebSocketServer({
+        httpServer: httpServer,
+        autoAcceptConnections: false
+    });
+
+    wsServer.sockets = new EventEmitter();
+
+    this.setupAuthorization(wsServer, getConfig);
+
+    return wsServer;
 }
 
-SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
+WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
     /* Setup authorization for socket io >1.0 */
     var self = this;
 
-    socketServer.use(function(socket, next) {
+    wsServer.on('request', function(request) {
 
         var sessionID;
-        var handshake = socket.handshake;
 
-        console.log('handshake is', handshake);
-        if(handshake.headers && handshake.headers.cookie) {
-            // Pull out the cookies from the data
-            var cookies = cookie_reader.parse(handshake.headers.cookie);
-            sessionID = cookies.sessionid;
-        } else if (handshake.query && handshake.query.sessionID) {
-            sessionID = handshake.query.sessionID;
-            console.log('handshake.query.sessionID is', handshake.query.sessionID);
+        if(request.httpRequest && request.httpRequest.headers && request.httpRequest.headers.sessionid) {
+            sessionID = request.httpRequest.headers.sessionid;
         } else {
-            next(new Errors.Unauthorized('No sessionID was provided'));
+            var error = new Errors.Unauthorized('No sessionID was provided');
+            logger.log('unauthorized', error);
+            request.reject(error);
         }
-        console.log('socket sessionID is', sessionID);
+        //console.log('wsServer httpRequest is', request.httpRequest);
+        console.log('wsServer sessionID ', sessionID);
 
         getConfig(sessionID).then(function(config) {
+
+            console.log('Websocket authorization successful', config);
+            var socket = request.accept('echo-protocol', request.origin);
             socket.config = config;
             socket.sessionID = sessionID;
-            next();
+            wsServer.sockets.emit('connection', socket);
+
         }, function(error) {
 
+            request.reject();
             console.log(error);
             next(error);
         });
-    });
-}
 
-SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConfig) {
-
-    /* Setup authorization for socket io <1.0 */
-    var self = this;
-    // Authenticate the sessionid from the socket with django
-    socketServer.configure(function() {
-
-        socketServer.set('authorization', function(data, accept) {
-
-            var sessionID;
-
-            if(data && data.headers && data.headers.cookie) {
-                // Pull out the cookies from the data
-                var cookies = cookie_reader.parse(data.headers.cookie);
-                sessionID = cookies.sessionid;
+        /*
+        socket.on('message', function(message) {
+            if (message.type === 'utf8') {
+                console.log('Received Message: ' + message.utf8Data);
+                socket.sendUTF(message.utf8Data);
             }
-            if(data && data.query && data.query.sessionID) {
-                sessionID = data.query.sessionID;
+            else if (message.type === 'binary') {
+                console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+                socket.sendBytes(message.binaryData);
             }
-            getConfig(sessionID).then(function(config) {
-                data.config = config;
-                //data.config.address = data.address;
-                console.log('Legacy getConnectionConfig config', config);
-                accept(null, true);
-            }, function(error) {
-
-                accept('error', false);
-            });
         });
+        socket.on('close', function(reasonCode, description) {
+            console.log((new Date()) + ' Peer ' + socket.remoteAddress + ' disconnected.');
+        });
+        */
     });
 }
 
-module.exports = SocketServer;
+module.exports = WSServer;
 

@@ -34,8 +34,17 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('message', function (jsonMessage) {
 
+        if (jsonMessage.type === 'utf8') {
+            console.log('Received Message: ' + jsonMessage.utf8Data);
+            //socket.sendUTF(message.utf8Data);
+        }
+        else if (jsonMessage.type === 'binary') {
+            console.log('Received Binary Message of ' + jsonMessage.binaryData.length + ' bytes');
+            //socket.sendBytes(message.binaryData);
+        }
         var message = new Message(jsonMessage);
-        logger.log('debug', 'Socket sessionID', socket.handshake.query);
+        logger.log('debug', 'Socket sessionID', socket.sessionID);
+        logger.log('debug', 'Socket handshake query', socket.handshake.query);
         message.set('sessionID', socket.handshake.query.sessionID);
 
         //message.filterDestination(self.config.publicationAddresses);

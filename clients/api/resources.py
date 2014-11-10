@@ -33,8 +33,9 @@ class ClientControlResource(CBResource):
         resource_name = 'client_control'
 
 
-class CurrentClientResource(CBResource, CBIDResourceMixin):
+class CurrentClientResource(LoggedInResource, CBIDResourceMixin):
 
+    '''
     controllers = cb_fields.ToManyThroughField(ClientControlResource,
                     #attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.client_controls, full=True,
                     attribute=lambda bundle: bundle.obj.client_controls, full=True,
@@ -44,19 +45,20 @@ class CurrentClientResource(CBResource, CBIDResourceMixin):
                     attribute=lambda bundle: bundle.obj.app_connections, full=True,
                     null=True, readonly=True, nonmodel=True)
 
-    '''
     devices = cb_fields.ToManyThroughField(DeviceInstallResource,
                     attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
     '''
 
-    class Meta(CBResource.Meta):
+    class Meta(LoggedInResource.Meta):
         queryset = Client.objects.all()
-        fields = ['id', 'cbid', 'name', 'date_joined', 'last_login']
+        #fields = ['id', 'cbid', 'name', 'date_joined', 'last_login']
+        excludes = ['key', 'plaintext_key']
         resource_name = 'current_client'
 
 
-class ClientAuthResource(AuthResource):
+
+class ClientAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows clients to login and logout """
 

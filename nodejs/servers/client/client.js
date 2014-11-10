@@ -1,8 +1,10 @@
 
-var ClientConnection = require('./connection');
-var SocketIOServer = require('../sockets/socket.io');
-var Server = require('../server');
-var logger = require('./logger');
+var ClientConnection = require('./connection')
+    ,logger = require('./logger')
+    ,Server = require('../server')
+    ,SocketIOServer = require('../sockets/socket.io')
+    ,WSServer = require('../sockets/websocket')
+    ;
 
 var Client = function(port, djangoRootURL) {
 
@@ -12,6 +14,7 @@ var Client = function(port, djangoRootURL) {
     this.authURL = this.djangoURL + 'current_client/client/';
 
     this.socketServer = this.createSocketServer(SocketIOServer, port);
+    this.wsServer = this.createSocketServer(WSServer, port + 1)
 };
 
 Client.prototype = new Server();
