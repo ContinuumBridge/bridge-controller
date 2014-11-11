@@ -2,6 +2,7 @@
 //var Server = require('../server');
 var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
+var Server = require('../server');
 
 logger = require('./logger');
 
@@ -9,27 +10,41 @@ var Bridge = function(port, djangoRootURL) {
 
     var self = this;
 
-    var djangoURL = djangoRootURL + '/api/bridge/v1/';
-    this.config = {
-        port: port,
-        djangoRootURL: djangoRootURL,
-        djangoURL: djangoURL,
-        authURL: djangoURL + 'current_bridge/bridge/'
-    }
+    this.djangoURL = djangoRootURL + '/api/bridge/v1/';
+    this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
-    this.socketServer = new SocketIOServer(this.config);
-
-    this.socketServer.sockets.on('connection', function (socket) {
-
-        socket.getConfig = function() {
-            var config = socket.config || socket.handshake.config;
-            console.log('getConfig', socket.handshake.config);
-            return self.socketServer.getConnectionConfig(self.config.authURL, config);
-        };
-
-        var connection = new BridgeConnection(socket, djangoURL);
-    });
+    this.socketServer = this.createSocketServer(SocketIOServer, port);
 };
 
+Bridge.prototype = new Server();
+
+Bridge.prototype.onConnection = function(socket) {
+
+    var self = this;
+
+    socket.getConfig = function() {
+        var sessionID = socket.handshake.query.sessionID;
+        return self.getConnectionConfig(self.authURL, sessionID);
+    };
+
+    var connection = new BridgeConnection(socket);
+}
+
+Bridge.prototype.formatConfig = function(authData) {
+
+    var publicationAddresses = new Array();
+    if (authData.controllers) {
+        authData.controllers.forEach(function(controller) {
+            publicationAddresses.push(controller.user.cbid)
+        });
+    }
+
+    return {
+        subscriptionAddress: authData.cbid,
+        publicationAddresses: publicationAddresses
+    }
+}
+
 module.exports = Bridge;
+
 

@@ -5,7 +5,7 @@ from apps.api.resources import AppResource, AppInstallResource, AppDevicePermiss
 from devices.api.resources import DeviceResource, DeviceInstallResource
 from adaptors.api.resources import AdaptorResource, AdaptorDeviceCompatibilityResource
 
-from .resources import BridgeControlResource, BridgeAuthResource, CurrentBridgeResource, BridgeResource
+from .resources import BridgeControlResource, BridgeAuthResource, BridgeAuthAliasResource, CurrentBridgeResource, BridgeResource
 
 v1 = Api("v1")
 v1.register(UserResource())
@@ -21,4 +21,5 @@ v1.register(DeviceInstallResource())
 v1.register(BridgeResource())
 v1.register(BridgeControlResource())
 v1.register(BridgeAuthResource())
+v1.register(BridgeAuthAliasResource())
 v1.register(CurrentBridgeResource())

@@ -5,7 +5,6 @@ from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, BadRequest
 
 from accounts.models import CBUser
-from bridges.api.authorization import BridgeObjectsOnlyAuthorization
 from bridge_controller.api.authorization import CBReadAllAuthorization
 
 class AdaptorDeviceCompatibilityAuthorization(CBReadAllAuthorization):

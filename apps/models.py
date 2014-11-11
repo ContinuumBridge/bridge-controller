@@ -116,8 +116,7 @@ class AppInstallConnection(LoggedModel):
     app_install = models.ForeignKey(AppInstall, related_name='app_connections')
 
     class Meta:
-        verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connections')
+        verbose_name = _('app_install_connection')
         app_label = 'apps'
 
 
@@ -128,7 +127,7 @@ class AppConnection(LoggedModel):
 
     class Meta:
         verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connections')
         app_label = 'apps'
+
 
 

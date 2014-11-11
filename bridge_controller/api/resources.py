@@ -33,10 +33,8 @@ from bridges.models import Bridge, BridgeControl
 
 from accounts.models import CBUser
 from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization
-from bridges.api.authorization import AuthAuthorization
+from .authorization import AuthAuthorization, CBAuthorization
 from .authentication import HTTPHeaderSessionAuthentication
-from .authorization import CBAuthorization
-
 
 class CBResource(ModelResource):
 
@@ -251,6 +249,7 @@ class LoggedInResource(CBResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
+        print "user id is", request.user.id
         # ADDED Set the request pk to the id of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id

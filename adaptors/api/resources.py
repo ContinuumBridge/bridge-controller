@@ -46,6 +46,7 @@ class AdaptorDeviceCompatibilityResource(CBResource):
     class Meta(CBResource.Meta):
         queryset = AdaptorCompatibility.objects.all()
         authorization = AdaptorDeviceCompatibilityAuthorization()
+        related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'adaptor_compatibility'
 
 '''

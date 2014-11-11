@@ -7,9 +7,12 @@ require('./messages/models');
 var routers = require('./routers');
 //var Message = require('./message');
 
+
 CBApp.addInitializer(function() {
 
-    CBApp.socket = Backbone.io.connect(HOST_ADDRESS, {port: 9415});
+    CBApp.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
+
+    //CBApp.socket = Backbone.io('http://gfdsgfds:9453/');
 
     CBApp.socket.on('connect', function(){
         console.log('Socket connected');

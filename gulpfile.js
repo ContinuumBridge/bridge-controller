@@ -13,6 +13,8 @@ var gulp = require('gulp')
 
 var clean = require('gulp-clean');
 
+//process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
+
 var CLIENT_SCRIPTS = './portal/static/js/';
 
 gulp.task('clean', function () {

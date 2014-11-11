@@ -10,15 +10,13 @@ var Connection = require('../connection/connection')
     ,Message = require('../../message');
     ;
 
-var PortalConnection = function(socket, serverConfig) {
+var PortalConnection = function(socket) {
 
     var self = this;
     this.socket = socket;
 
-    this.serverConfig = serverConfig;
-    //this.djangoURL = djangoURL;
-
-    socket.getConfig().then(function(config) {
+    console.log('PortalConnection socket is ', socket.sessionID);
+    socket.getConfig(socket.sessionID).then(function(config) {
 
         self.config = socket.config = config;
 
@@ -34,9 +32,8 @@ var PortalConnection = function(socket, serverConfig) {
 
         //var pa = config.publicationAddresses || [];
         var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.log('info', 'New portal connection from %s:%s. Subscribed to %s (%s), publishing to %s'
-            ,config.address.address, config.address.port, config.subscriptionAddress
-            ,config.email, publicationAddressesString);
+        logger.log('info', 'New portal connection subscribed to %s (%s), publishing to %s'
+            ,config.subscriptionAddress, config.email, publicationAddressesString);
     }).done();
 };
 

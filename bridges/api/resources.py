@@ -31,10 +31,10 @@ from bridges.models import Bridge, BridgeControl
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
 from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
-from bridges.api.authorization import BridgeAuthorization
 
 from bridges.models import Bridge
 
+from .authorization import BridgeControlAuthorization
 
 class BridgeControlResource(CBResource, CBIDResourceMixin):
 
@@ -43,7 +43,10 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
+        #authorization = BridgeControlAuthorization()
         resource_name = 'bridge_control'
+        #related_user_permissions = ['read', 'create', 'update', 'delete']
+        related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
 
 class BridgeResource(CBResource, CBIDResourceMixin):
@@ -101,7 +104,7 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
     '''
 
 
-class BridgeAuthResource(AuthResource):
+class BridgeAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows bridges to login and logout """
 
@@ -110,5 +113,9 @@ class BridgeAuthResource(AuthResource):
         # Resource used to send data on successful login
         data_resource = CurrentBridgeResource()
         fields = ['first_name', 'last_name']
-        resource_name = 'bridge_auth'
+        resource_name = 'auth'
 
+class BridgeAuthAliasResource(BridgeAuthResource):
+
+    class Meta(BridgeAuthResource.Meta):
+        resource_name = 'bridge_auth'

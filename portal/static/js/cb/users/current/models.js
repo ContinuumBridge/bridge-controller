@@ -153,7 +153,7 @@ CBApp.CurrentUser = CBApp.User.extend({
     ]
 }, { modelType: "currentUser" });
 
-CBApp.CurrentUserCollection = Backbone.Collection.extend({
+CBApp.CurrentUserCollection = Backbone.QueryCollection.extend({
 
     model: CBApp.CurrentUser,
     backend: 'currentUser',

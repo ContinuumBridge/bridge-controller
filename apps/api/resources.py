@@ -31,12 +31,12 @@ class AppResource(CBResource, CBIDResourceMixin):
         resource_name = 'app'
 
 
-class AppConnectionResource(UserObjectsResource):
+class AppConnectionResource(CBResource):
 
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=False)
 
-    class Meta(UserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = AppConnection.objects.all()
         authorization = AppConnectionAuthorization()
         resource_name = 'app_connection'

@@ -9,12 +9,13 @@ Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
 
 require('./backbone.stickit');
-require('backbone-io');
-require('./backbone.trackit.js');
+require('backbone.io');
+require('./backbone.trackit');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
 //require('./backbone-bossview');
 require('backbone.modal');
+
 
 //require('./backbone-notify');
 
@@ -37,6 +38,8 @@ QueryEngine = require('query-engine');
 
 require('./backbone-cb-model');
 require('backbone-deferred');
+
+Backbone.QueryCollection = QueryEngine.QueryCollection;
 
 /*
 var TrackableModelMixin = require('./backbone-trackable');
