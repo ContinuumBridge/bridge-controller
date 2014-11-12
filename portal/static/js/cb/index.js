@@ -1,6 +1,8 @@
 
 var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
+    ,Marionette = require('backbone.marionette')
+    ,React = require('react')
+    ;
 
 CBApp = new Marionette.Application();
 
@@ -47,6 +49,15 @@ CBApp.Controller = Marionette.Controller.extend({
   }
 });
 
+/*
+var DevicesView = React.createClass({
+
+    render: function() {
+        return <div>Hello!</div>
+    }
+});
+*/
+
 CBApp.addInitializer(function () {
 
   //router
@@ -55,6 +66,9 @@ CBApp.addInitializer(function () {
       controller : CBApp.controller,
       createTrailingSlashRoutes: true
   });
+  var $testSection = document.getElementById('test-region');
+  console.log('$testSection ', $testSection );
+  //React.renderComponent(DevicesView(), $testSection);
 });
 
 CBApp.navigate = function(route,  options){

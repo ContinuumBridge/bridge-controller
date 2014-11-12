@@ -19,7 +19,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     initialize: function() {
 
         this.staffView = new CBApp.StaffAppInstallView({
-            model: this.model,
+            model: this.model
         });
         this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =

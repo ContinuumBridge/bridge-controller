@@ -6,12 +6,15 @@ var gulp = require('gulp')
     //,styl = require('gulp-styl')
     ,livereload = require('gulp-livereload')
     ,nodemon = require('gulp-nodemon')
+    ,reactify = require('reactify')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
     ,watchify = require('watchify');
     ;
 
 var clean = require('gulp-clean');
+
+var production = process.env.NODE_ENV === 'production';
 
 //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
@@ -24,38 +27,69 @@ gulp.task('clean', function () {
 
 gulp.task('client', function() {
 
-    browserifyShare();
+    scripts(true);
 });
 
-function browserifyShare() {
+function scripts(watch) {
+
+    var bundler, rebundle;
+    bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
+        basedir: __dirname,
+        debug: !production,
+        cache: {}, // required for watchify
+        packageCache: {}, // required for watchify
+        fullPaths: watch // required to be true only for watchify
+    });
+    if(watch) {
+        bundler = watchify(bundler)
+    }
+
+    var hbsfy = require('hbsfy').configure({
+        extensions: ["html"]
+    });
+    bundler.transform(hbsfy);
+
+    //bundler.transform(reactify);
+
+    rebundle = function() {
+        console.log('rebundling');
+        var stream = bundler.bundle();
+        //stream.on('error', handleError('Browserify'));
+        stream = stream.pipe(source('bundle.js'));
+        return stream.pipe(gulp.dest('./build'));
+    };
+
+    bundler.on('update', rebundle);
+    return rebundle();
+    /*
     var b = browserify({
         cache: {},
         packageCache: {},
         fullPaths: true
     });
-    var b = watchify(b);
+    b = watchify(b);
+    b.transform(reactify);
     //var b = watchify(CLIENT_SCRIPTS + 'main.js');
     b.on('update', function() {
         bundleShare(b)
     });
-    b.add(CLIENT_SCRIPTS + 'main.js');
+     b.add(CLIENT_SCRIPTS + 'main.js');
+    var b = watchify(CLIENT_SCRIPTS + 'main.js');
     bundleShare(b);
+     */
 }
 
+/*
 function bundleShare(b) {
-    console.log('rebundling');
-    var hbsfy = require('hbsfy').configure({
-        extensions: ["html"]
-    });
-    b.transform(hbsfy);
     var bundleStream = b.bundle();
 
     var t = bundleStream
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./build'))
+        .pipe(gulp.dest('./build'));
         // Refresh browser
-        .pipe(livereload());
+        //.pipe(livereload());
 }
+*/
 
 gulp.task('connect', function() {
   connect.server({
@@ -76,7 +110,8 @@ gulp.task('node_server', function () {
 })
 
 // Dev server
-gulp.task('default', ['client', 'node_server']);
+gulp.task('default', ['client']);
+//gulp.task('default', ['client', 'node_server']);
 //gulp.task('default', ['client', 'node_server', 'watch']);
 
 // Local OSX

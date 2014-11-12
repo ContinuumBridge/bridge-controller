@@ -15,6 +15,13 @@ require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
+var DevicesView = React.createClass({
+
+    render: function() {
+        return <div>Hello, {this.props.name}!</div>
+    }
+});
+
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
@@ -46,7 +53,6 @@ module.exports.Main = Marionette.Layout.extend({
         // View which manages device installs and device discovery
         //this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
-
     },
 
     populateViews: function() {
@@ -93,18 +99,18 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
+
+            var $deviceSection = self.$('.device-section');
+            console.log('$deviceSection ', $deviceSection );
+            console.log('$deviceSection[0] ', $deviceSection[0] );
+            //React.renderComponent(<DevicesView name="User" />, $deviceSection[0]);
+
         }).done();
     }
 
 });
 
 /*
-CBApp.DevicesView = React.createClass({
-
-    render: function() {
-        return <div>Hello, {this.props.name}!</div>
-    }
-});
 var DevicesView = Marionette.ItemView.extend({
 
     template: require('./templates/devicesView.html'),
