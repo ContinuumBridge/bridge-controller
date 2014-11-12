@@ -10,6 +10,7 @@ var Bridge = function(port, djangoRootURL) {
 
     var self = this;
 
+    this.djangoRootURL = djangoRootURL;
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
@@ -25,9 +26,12 @@ Bridge.prototype.onConnection = function(socket) {
     socket.getConfig = function() {
         var sessionID = socket.handshake.query.sessionID;
         return self.getConnectionConfig(self.authURL, sessionID);
+        //config.djangoRootURL = self.djangoRootURL;
+        //return config;
     };
 
     var connection = new BridgeConnection(socket);
+    connection.djangoRootURL = this.djangoRootURL;
 }
 
 Bridge.prototype.formatConfig = function(authData) {

@@ -26,7 +26,7 @@ Django.prototype.request = function(request, sessionID) {
     };
 
     var resource = request.url || request.resource;
-    var requestURL = this.connection.config.djangoRootURL + resource;
+    var requestURL = this.connection.djangoRootURL + resource;
 
     console.log('Django request', requestURL);
 
