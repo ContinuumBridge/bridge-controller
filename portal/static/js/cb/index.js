@@ -1,7 +1,6 @@
 
 var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
-    ,React = require('react')
     ;
 
 CBApp = new Marionette.Application();

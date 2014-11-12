@@ -4,6 +4,8 @@ var gulp = require('gulp')
     ,connect = require('gulp-connect')
     //,concat = require('gulp-concat')
     //,styl = require('gulp-styl')
+    ,disc = require('disc')
+    ,fs = require('fs')
     ,livereload = require('gulp-livereload')
     ,nodemon = require('gulp-nodemon')
     ,reactify = require('reactify')
@@ -38,7 +40,7 @@ function scripts(watch) {
         debug: !production,
         cache: {}, // required for watchify
         packageCache: {}, // required for watchify
-        fullPaths: watch // required to be true only for watchify
+        fullPaths: true // required to be true only for watchify
     });
     if(watch) {
         bundler = watchify(bundler)
@@ -55,8 +57,13 @@ function scripts(watch) {
         console.log('rebundling');
         var stream = bundler.bundle();
         //stream.on('error', handleError('Browserify'));
-        stream = stream.pipe(source('bundle.js'));
-        return stream.pipe(gulp.dest('./build'));
+        //stream = stream.pipe(disc());
+        //var disc = stream.pipe(disc())
+        //    .pipe(fs.createWriteStream('./build/disc.html'));
+
+        return stream.pipe(source('bundle.js'))
+            .pipe(gulp.dest('./build'))
+            .pipe(livereload());
     };
 
     bundler.on('update', rebundle);

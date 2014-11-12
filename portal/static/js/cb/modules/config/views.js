@@ -1,6 +1,6 @@
 
 var Backbone = require('backbone-bundle')
-    ,React = require('react-bundle')
+    //,React = require('react-bundle')
     ,Marionette = require('backbone.marionette')
     ,Q = require('q');
 
@@ -15,12 +15,14 @@ require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
+/*
 var DevicesView = React.createClass({
 
     render: function() {
         return <div>Hello, {this.props.name}!</div>
     }
 });
+*/
 
 module.exports.Main = Marionette.Layout.extend({
 
