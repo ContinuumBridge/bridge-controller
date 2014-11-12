@@ -32,6 +32,7 @@ Bridge.prototype.onConnection = function(socket) {
 
     var connection = new BridgeConnection(socket);
     connection.djangoRootURL = this.djangoRootURL;
+    connection.djangoURL = this.djangoURL;
 }
 
 Bridge.prototype.formatConfig = function(authData) {
