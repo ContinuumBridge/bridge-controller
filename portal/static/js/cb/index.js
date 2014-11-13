@@ -3,6 +3,7 @@ var Backbone = require('backbone-bundle')
     ,Marionette = require('backbone.marionette')
     ;
 
+
 CBApp = new Marionette.Application();
 
 CBApp.addRegions({

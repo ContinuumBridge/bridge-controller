@@ -1,6 +1,6 @@
 
 var Backbone = require('backbone-bundle')
-    //,React = require('react-bundle')
+    //,React = require('react')
     ,Marionette = require('backbone.marionette')
     ,Q = require('q');
 

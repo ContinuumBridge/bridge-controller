@@ -18,14 +18,21 @@ var clean = require('gulp-clean');
 
 var production = process.env.NODE_ENV === 'production';
 
+
+var vendorFiles = [
+    'bower_components/react/react-with-addons.js'];
+    //'node_modules/es6ify/node_modules/traceur/bin/traceur-runtime.js'];
+var vendorBuild = 'build/vendor';
+var requireFiles = './node_modules/react/react.js';
+
+gulp.task('vendor', function () {
+    return gulp.src(vendorFiles).
+        pipe(gulp.dest(vendorBuild));
+});
+
 //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
 var CLIENT_SCRIPTS = './portal/static/js/';
-
-gulp.task('clean', function () {
-  return gulp.src('build', {read: false})
-    .pipe(clean());
-});
 
 gulp.task('client', function() {
 
@@ -51,11 +58,13 @@ function scripts(watch) {
     });
     bundler.transform(hbsfy);
 
-    //bundler.transform(reactify);
+    bundler.require(requireFiles);
+    bundler.transform(reactify);
 
     rebundle = function() {
         console.log('rebundling');
         var stream = bundler.bundle();
+        stream.on('error', function (err) { console.error(err) });
         //stream.on('error', handleError('Browserify'));
         //stream = stream.pipe(disc());
         //var disc = stream.pipe(disc())
