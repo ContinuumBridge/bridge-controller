@@ -1,10 +1,7 @@
 
-var Backbone = require('backbone-bundle')
-    //,React = require('react')
-    ,Marionette = require('backbone.marionette')
-    ,Q = require('q');
+var Q = require('q');
 
-require('../../views/generic_views');
+require('../../views/generic-views');
 require('../../views/regions');
 
 require('../../apps/installs/views');
@@ -15,14 +12,6 @@ require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
-/*
-var DevicesView = React.createClass({
-
-    render: function() {
-        return <div>Hello, {this.props.name}!</div>
-    }
-});
-*/
 
 module.exports.Main = Marionette.Layout.extend({
 
@@ -69,16 +58,15 @@ module.exports.Main = Marionette.Layout.extend({
         this.appSection.show(this.appInstallListView);
 
 
-        /*
-        React.renderComponent(
-            <Hello name="World" />,
-            this.$('.device-section')[0]
-        );
-        */
         //this.deviceSection.show(this.devicesView);
         //this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
+
+        React.renderComponent(
+            <DevicesView />,
+            this.$('.device-section')[0]
+        );
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
@@ -104,12 +92,37 @@ module.exports.Main = Marionette.Layout.extend({
 
             var $deviceSection = self.$('.device-section');
             console.log('$deviceSection ', $deviceSection );
+
             console.log('$deviceSection[0] ', $deviceSection[0] );
             //React.renderComponent(<DevicesView name="User" />, $deviceSection[0]);
 
         }).done();
     }
 
+});
+
+var DevicesView = React.createClass({
+
+    /*
+    getCurrentView: function() {
+
+        var self = this;
+
+        CBApp.getCurrentBridge().then(function(currentBridge) {
+
+            var deviceInstallCollection = currentBridge.get('deviceInstalls');
+            self.deviceInstallListView.setCollection(deviceInstallCollection);
+
+            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
+            self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
+        });
+        //self.discoveredDeviceInstallListView.render();
+    },
+    */
+    render: function() {
+        return <div>Hello, {this.props.name}!</div>
+        //return <CBApp.DeviceInstallView name="Test Device" />
+    }
 });
 
 /*

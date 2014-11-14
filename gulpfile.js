@@ -20,14 +20,30 @@ var production = process.env.NODE_ENV === 'production';
 
 
 var vendorFiles = [
-    'bower_components/react/react-with-addons.js'];
+    'node_modules/react/dist/react-with-addons.js',
+    'node_modules/backbone-react-component/dist/backbone-react-component.js'
+];
+
+var VENDOR_SCRIPTS = './portal/static/js/vendor/';
     //'node_modules/es6ify/node_modules/traceur/bin/traceur-runtime.js'];
+
 var vendorBuild = 'build/vendor';
 var requireFiles = './node_modules/react/react.js';
 
 gulp.task('vendor', function () {
-    return gulp.src(vendorFiles).
-        pipe(gulp.dest(vendorBuild));
+    console.log('bundling vendor');
+
+    var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js')
+
+    var stream = bundler.bundle()
+        .pipe(source('vendor.js'))
+        //.pipe(rename('vendor.js'))
+        .pipe(gulp.dest('build'))
+        .pipe(livereload());
+        ;
+
+    //return gulp.src(vendorFiles)
+        //.pipe(source('vendor.js'))
 });
 
 //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
@@ -44,7 +60,7 @@ function scripts(watch) {
     var bundler, rebundle;
     bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
         basedir: __dirname,
-        debug: !production,
+        //debug: !production,
         cache: {}, // required for watchify
         packageCache: {}, // required for watchify
         fullPaths: true // required to be true only for watchify
@@ -58,7 +74,9 @@ function scripts(watch) {
     });
     bundler.transform(hbsfy);
 
-    bundler.require(requireFiles);
+    bundler.external('react');
+    bundler.external('backbone-bundle');
+    //bundler.require(requireFiles);
     bundler.transform(reactify);
 
     rebundle = function() {
@@ -126,7 +144,7 @@ gulp.task('node_server', function () {
 })
 
 // Dev server
-gulp.task('default', ['client']);
+gulp.task('default', ['client', 'vendor', 'node_server']);
 //gulp.task('default', ['client', 'node_server']);
 //gulp.task('default', ['client', 'node_server', 'watch']);
 

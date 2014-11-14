@@ -1,10 +1,9 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette')
-    ;
-
-
 CBApp = new Marionette.Application();
+
+require('./views/generic-views');
+
+CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",

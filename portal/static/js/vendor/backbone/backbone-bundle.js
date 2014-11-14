@@ -41,6 +41,7 @@ require('backbone-deferred');
 
 Backbone.QueryCollection = QueryEngine.QueryCollection;
 
+require('backbone-react-component');
 /*
 var TrackableModelMixin = require('./backbone-trackable');
 Cocktail.mixin(Backbone.Deferred.Model, TrackableModelMixin);

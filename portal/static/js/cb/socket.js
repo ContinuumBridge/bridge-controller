@@ -1,6 +1,5 @@
 
-var Backbone = require('backbone-bundle')
-    ,CBApp = require('index')
+var CBApp = require('index')
     ;
 
 require('./messages/models');

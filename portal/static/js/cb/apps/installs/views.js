@@ -1,8 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    //,React = require('react-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('../device_permissions/views');
 
 CBApp.AppInstallView = Marionette.ItemView.extend({

@@ -1,6 +1,5 @@
 
-var _ = require('underscore')
-    ,Backbone = require('backbone-bundle');
+var _ = require('underscore');
 
 var Router = function(options) {
     options || (options = {});

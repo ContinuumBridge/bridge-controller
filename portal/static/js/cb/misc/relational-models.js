@@ -1,7 +1,4 @@
 
-
-
-
 Backbone.HasOne = Backbone.HasOne.extend({
 
     initialize: function( opts ) {

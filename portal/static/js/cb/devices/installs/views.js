@@ -1,18 +1,21 @@
 
-var Backbone = require('backbone-bundle')
-    //,React = require('react-bundle')
-    ,Marionette = require('backbone.marionette');
-
-/*
 CBApp.DeviceInstallView = React.createClass({
-    mixins: [React.ItemView]
+    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+    //mixins: [CBApp.ItemView],
+    getTitle: function() {
+        return "Device";
+    }
 });
 
 CBApp.DeviceInstallListView = React.createClass({
-    mixins: [React.CollectionView]
-});
-*/
 
+    itemView: CBApp.DeviceInstallView,
+
+    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+
+});
+
+/*
 CBApp.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
