@@ -102,6 +102,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         ui: {
             dashboard: '.dashboard',
+            home: '.home',
             store: '.store',
             config: '.config',
             developer: '.developer'
@@ -109,6 +110,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         events: {
             'click @ui.dashboard': 'navigate',
+            'click @ui.home': 'navigate',
             'click @ui.store': 'navigate',
             'click @ui.config': 'navigate',
             'click @ui.developer': 'navigate'
