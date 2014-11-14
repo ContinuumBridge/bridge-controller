@@ -4,8 +4,11 @@ var gulp = require('gulp')
     ,connect = require('gulp-connect')
     //,concat = require('gulp-concat')
     //,styl = require('gulp-styl')
+    //,disc = require('disc')
+    ,fs = require('fs')
     ,livereload = require('gulp-livereload')
     ,nodemon = require('gulp-nodemon')
+    ,reactify = require('reactify')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
     ,watchify = require('watchify');
@@ -13,49 +16,114 @@ var gulp = require('gulp')
 
 var clean = require('gulp-clean');
 
+var production = process.env.NODE_ENV === 'production';
+
+
+var vendorFiles = [
+    'node_modules/react/dist/react-with-addons.js',
+    'node_modules/backbone-react-component/dist/backbone-react-component.js'
+];
+
+var VENDOR_SCRIPTS = './portal/static/js/vendor/';
+    //'node_modules/es6ify/node_modules/traceur/bin/traceur-runtime.js'];
+
+var vendorBuild = 'build/vendor';
+var requireFiles = './node_modules/react/react.js';
+
+gulp.task('vendor', function () {
+    console.log('bundling vendor');
+
+    var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js')
+
+    var stream = bundler.bundle()
+        .pipe(source('vendor.js'))
+        //.pipe(rename('vendor.js'))
+        .pipe(gulp.dest('build'))
+        .pipe(livereload());
+        ;
+
+    //return gulp.src(vendorFiles)
+        //.pipe(source('vendor.js'))
+});
+
 //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
 var CLIENT_SCRIPTS = './portal/static/js/';
 
-gulp.task('clean', function () {
-  return gulp.src('build', {read: false})
-    .pipe(clean());
-});
-
 gulp.task('client', function() {
 
-    browserifyShare();
+    scripts(true);
 });
 
-function browserifyShare() {
+function scripts(watch) {
+
+    var bundler, rebundle;
+    bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
+        basedir: __dirname,
+        //debug: !production,
+        cache: {}, // required for watchify
+        packageCache: {}, // required for watchify
+        fullPaths: true // required to be true only for watchify
+    });
+    if(watch) {
+        bundler = watchify(bundler)
+    }
+
+    var hbsfy = require('hbsfy').configure({
+        extensions: ["html"]
+    });
+    bundler.transform(hbsfy);
+
+    bundler.external('react');
+    bundler.external('backbone-bundle');
+    //bundler.require(requireFiles);
+    bundler.transform(reactify);
+
+    rebundle = function() {
+        console.log('rebundling');
+        var stream = bundler.bundle();
+        stream.on('error', function (err) { console.error(err) });
+        //stream.on('error', handleError('Browserify'));
+        //stream = stream.pipe(disc());
+        //var disc = stream.pipe(disc())
+        //    .pipe(fs.createWriteStream('./build/disc.html'));
+
+        return stream.pipe(source('bundle.js'))
+            .pipe(gulp.dest('./build'))
+            .pipe(livereload());
+    };
+
+    bundler.on('update', rebundle);
+    return rebundle();
+    /*
     var b = browserify({
         cache: {},
         packageCache: {},
         fullPaths: true
     });
-    var b = watchify(b);
+    b = watchify(b);
+    b.transform(reactify);
     //var b = watchify(CLIENT_SCRIPTS + 'main.js');
     b.on('update', function() {
         bundleShare(b)
     });
-    b.add(CLIENT_SCRIPTS + 'main.js');
+     b.add(CLIENT_SCRIPTS + 'main.js');
+    var b = watchify(CLIENT_SCRIPTS + 'main.js');
     bundleShare(b);
+     */
 }
 
+/*
 function bundleShare(b) {
-    console.log('rebundling');
-    var hbsfy = require('hbsfy').configure({
-        extensions: ["html"]
-    });
-    b.transform(hbsfy);
     var bundleStream = b.bundle();
 
     var t = bundleStream
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('./build'))
+        .pipe(gulp.dest('./build'));
         // Refresh browser
-        .pipe(livereload());
+        //.pipe(livereload());
 }
+*/
 
 gulp.task('connect', function() {
   connect.server({
@@ -76,7 +144,8 @@ gulp.task('node_server', function () {
 })
 
 // Dev server
-gulp.task('default', ['client', 'node_server']);
+gulp.task('default', ['client', 'vendor', 'node_server']);
+//gulp.task('default', ['client', 'node_server']);
 //gulp.task('default', ['client', 'node_server', 'watch']);
 
 // Local OSX

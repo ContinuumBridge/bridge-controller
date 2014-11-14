@@ -1,8 +1,9 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 CBApp = new Marionette.Application();
+
+require('./views/generic-views');
+
+//CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",
@@ -31,6 +32,11 @@ CBApp.Controller = Marionette.Controller.extend({
       CBApp.Nav.trigger('topbar:activate', '');
       CBApp.Developer.trigger('developer:show', slug);
   },
+  showHome: function() {
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('home:activate', '');
+      CBApp.Home.trigger('developer:show', slug);
+  },
   showStore: function(slug) {
       CBApp.modalsRegion.reset();
       CBApp.Nav.trigger('topbar:activate', 'store');
@@ -47,6 +53,15 @@ CBApp.Controller = Marionette.Controller.extend({
   }
 });
 
+/*
+var DevicesView = React.createClass({
+
+    render: function() {
+        return <div>Hello!</div>
+    }
+});
+*/
+
 CBApp.addInitializer(function () {
 
   //router
@@ -55,6 +70,9 @@ CBApp.addInitializer(function () {
       controller : CBApp.controller,
       createTrailingSlashRoutes: true
   });
+  var $testSection = document.getElementById('test-region');
+  console.log('$testSection ', $testSection );
+  //React.renderComponent(DevicesView(), $testSection);
 });
 
 CBApp.navigate = function(route,  options){
@@ -92,7 +110,7 @@ CBApp.on("initialize:after", function () {
 CBApp.Router = Marionette.SubRouter.extend({
 
   appRoutes: {
-    '': 'index',
+    '': 'showHome',
     'config(/:slug)': 'showConfig',
     'developer(/:slug)': 'showDeveloper',
     'store(/:slug)': 'showStore'
@@ -106,6 +124,11 @@ CBApp.reqres.setHandler("config:show", function(){
 CBApp.reqres.setHandler("developer:show", function(){
     CBApp.controller.showDeveloper();
 });
+
+CBApp.reqres.setHandler("home:show", function(){
+    CBApp.controller.showHome();
+});
+
 
 CBApp.reqres.setHandler("store:show", function(){
     CBApp.controller.showStore();

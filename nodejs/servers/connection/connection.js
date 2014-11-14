@@ -1,5 +1,4 @@
 
-
 var Bacon = require('baconjs').Bacon;
 
 var Message = require('../../message')
@@ -65,17 +64,11 @@ Connection.prototype.setupSocket = function() {
 
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
+        //self.onMessageToClient(message)
         var jsonMessage = message.toJSONString();
-
-        // Device discovery hack
-        var body = message.get('body');
-        var resource = body.url || body.resource;
-        if (resource && '/api/bridge/v1/device_discovery/') {
-            socket.emit('discoveredDeviceInstall:reset', body.body);
-        }
-
         logger.log('debug', 'Socket emit', jsonMessage);
-        socket.emit('message', jsonMessage);
+        self.socket.emit('message', jsonMessage);
+
     });
 
     socket.on('disconnect', function() {
@@ -86,6 +79,10 @@ Connection.prototype.setupSocket = function() {
         socket.removeAllListeners('disconnect');
     });
 };
+
+Connection.prototype.onMessageToClient = function(message) {
+
+}
 
 Connection.prototype.setupRedis = function() {
 

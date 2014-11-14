@@ -1,5 +1,6 @@
 from bridge_controller.settings.base import *
 
+ENVIRONMENT = "development"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

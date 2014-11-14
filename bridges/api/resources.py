@@ -36,7 +36,7 @@ from bridges.models import Bridge
 
 from .authorization import BridgeControlAuthorization
 
-class BridgeControlResource(CBResource):
+class BridgeControlResource(CBResource, CBIDResourceMixin):
 
     bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
@@ -84,7 +84,7 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
                     null=True, readonly=True, nonmodel=True)
 
     apps = cb_fields.ToManyThroughField(AppInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     devices = cb_fields.ToManyThroughField(DeviceInstallResource, 

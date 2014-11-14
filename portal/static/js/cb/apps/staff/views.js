@@ -1,7 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 CBApp.StaffAppView = Marionette.ItemView.extend({
 
     tagName: 'table',

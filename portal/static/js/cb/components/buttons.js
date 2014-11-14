@@ -1,7 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('./components');
 
 CBApp.Components.Button = Marionette.ItemView.extend({

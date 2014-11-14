@@ -1,5 +1,4 @@
 
-
 var DeveloperViews = require('./views');
 
 CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {

@@ -1,7 +1,6 @@
 
 var http = require('http')
     ,_ = require('underscore')
-    //,connect = require('connect')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
@@ -13,10 +12,8 @@ var djangoBackbone = require('./djangoBackbone.js');
 var SocketServer = require('./socket')
     ,DeviceDiscovery = require('../portal/deviceDiscovery.js')
     ,backendAuth = require('../../backendAuth.js')
-    //,internalAPI = require('./internal_api_router.js')
     ,MessageUtils = require('../../message_utils')
     ;
-
 
 function BackboneIOServer(port, getConfig, djangoURL) {
 
@@ -60,6 +57,7 @@ function BackboneIOServer(port, getConfig, djangoURL) {
     httpServer.listen(port);
     // Set the socket io log level
     //socketServer.set('log level', 1);
+
 
     this.setupAuthorization(socketServer, getConfig);
 

@@ -14,7 +14,6 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
     /* Setup authorization for socket io >1.0 */
     var self = this;
 
-    console.log('socketServer', socketServer);
     socketServer.use(function(socket, next) {
 
         var sessionID;

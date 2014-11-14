@@ -1,8 +1,4 @@
 
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 CBApp.NotificationView = Marionette.ItemView.extend({
 
     tagName: 'li',
