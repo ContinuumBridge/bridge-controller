@@ -60,6 +60,7 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
+
         var message = new CBApp.Message(jsonMessage);
 
         var date = new Date();

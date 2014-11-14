@@ -27487,11 +27487,14 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        //var message = new CBApp.Message(jsonMessage);
-        console.log('Server >', jsonMessage);
-        CBApp.messageRouter.dispatch(jsonMessage);
 
-        //that.appendLine(message);
+        var message = new CBApp.Message(jsonMessage);
+
+        var date = new Date();
+        message.set('time_received', date);
+        console.log('Server >', message);
+        CBApp.messageCollection.add(message);
+
     });
 });
 
@@ -27800,8 +27803,8 @@ CBApp.Regions.Fade = Marionette.Region.extend({
 });
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
-},{"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html")
+},{"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
