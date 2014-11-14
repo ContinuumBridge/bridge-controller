@@ -1,21 +1,4 @@
 
-CBApp.DeviceInstallView = React.createClass({
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
-    //mixins: [CBApp.ItemView],
-    getTitle: function() {
-        return "Device";
-    }
-});
-
-CBApp.DeviceInstallListView = React.createClass({
-
-    itemView: CBApp.DeviceInstallView,
-
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
-
-});
-
-/*
 CBApp.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
