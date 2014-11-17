@@ -24693,7 +24693,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     ]
 }, { modelType: "discoveredDeviceInstall" });
 
-CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
+CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
@@ -25015,11 +25015,13 @@ CBApp.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
     }
 });
 
+
 CBApp.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallListView',
 
     itemView: CBApp.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+    mixins: [Backbone.React.Component.mixin, CBApp.ListView],
+    //mixins: [CBApp.FluxBoneMixin('collection'), CBApp.ListView],
 
 });
 
@@ -25181,7 +25183,7 @@ CBApp = new Marionette.Application();
 
 require('./views/generic-views');
 
-CBApp.dispatcher = new Dispatcher();
+dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",
@@ -25275,6 +25277,7 @@ CBApp.on("initialize:after", function () {
           //Backbone.history.navigate('index');
 
       }
+
   } else {
       console.warn('Backbone.history was not started');
   }
@@ -25301,7 +25304,6 @@ CBApp.reqres.setHandler("developer:show", function(){
 CBApp.reqres.setHandler("store:show", function(){
     CBApp.controller.showStore();
 });
-
 module.exports = CBApp;
 },{"./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
@@ -25987,15 +25989,29 @@ module.exports.Main = Marionette.Layout.extend({
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
 
+        var deviceInstalls = this.deviceInstalls = CBApp.deviceInstallCollection.findAllLive();
+        deviceInstalls.fetched = false;
+
+        var discoveredDeviceInstalls = this.discoveredDeviceInstalls
+            = CBApp.discoveredDeviceInstallCollection.findAll();
+
         React.renderComponent(
-            React.createElement(DevicesView, null),
-            this.$('.device-section')[0]
+            React.createElement(DevicesView, {deviceInstalls: deviceInstalls, 
+                         discoveredDevices: discoveredDeviceInstalls}),
+            self.$('.device-section')[0]
         );
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
+            deviceInstalls.setQuery('bridge', {bridge: currentBridge});
+            deviceInstalls.fetched = true;
+
+            discoveredDeviceInstalls.setQuery('bridge', {bridge: currentBridge});
+            discoveredDeviceInstalls.fetched = true;
+
+            console.log('self.deviceInstalls', self.deviceInstalls);
             var appInstallCollection = currentBridge.get('appInstalls');
             var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
@@ -26044,8 +26060,8 @@ var DevicesView = React.createClass({displayName: 'DevicesView',
     },
     */
     render: function() {
-        return React.createElement("div", null, "Hello, ", this.props.name, "!")
-        //return <CBApp.DeviceInstallView name="Test Device" />
+        //return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
+        return React.createElement(CBApp.DeviceInstallListView, {collection: CBApp.deviceInstallCollection})
     }
 });
 
@@ -27636,10 +27652,10 @@ CBApp.ItemView = {
     */
     render: function() {
         return (
-            React.createElement("div", null, 
-                React.createElement("h4", {classname: "list-group-item-heading"}, this.getTitle()), 
-                React.createElement("i", {id: "edit-button", classname: "icon ion-edit edit-button"}), 
-                React.createElement("i", {classname: "icon ion-trash-a uninstall-button"})
+            React.createElement("li", {className: "new-item"}, 
+                React.createElement("h4", {className: "item-title"}, this.getTitle()), 
+                React.createElement("i", {id: "edit-button", className: "icon ion-chevron-right edit-button"}), 
+                React.createElement("i", {className: "icon ion-trash-a uninstall-button"})
             )
         );
     }
@@ -27650,7 +27666,14 @@ CBApp.ListView = {
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
         console.log('item', item);
-        return React.createElement("div", null, item);
+        var cid = model.cid;
+
+        console.log('model.cid', model.cid);
+
+        //return < this.itemView model={item} />
+        return React.createElement(CBApp.DeviceInstallView, {key: cid, model: item})
+
+        //return <div>Another Item</div>;
     },
     setCollection: function(collection) {
 
@@ -27664,14 +27687,38 @@ CBApp.ListView = {
     },
      */
     render: function() {
+        console.log('render collection', this.props);
+        console.log('render mapped collection', this.props.collection.map(this.createItem));
+
         return (
             React.createElement("div", null, 
-                React.createElement("h4", {classname: "list-group-item-heading"}, "Test"), 
-                React.createElement("i", {id: "edit-button", classname: "icon ion-edit edit-button"}), 
-                React.createElement("i", {classname: "icon ion-trash-a uninstall-button"})
+                React.createElement("h2", null, "Devices"), 
+                React.createElement("div", {className: "animated-list device-list"}, 
+                    this.props.collection.map(this.createItem)
+                ), 
+                React.createElement("div", {className: "topcoat-button--cta center full discover-devices-button"}, "Connect to a Device")
             )
         );
     }
+};
+
+CBApp.FluxBoneMixin = function(propName) {
+    return {
+        componentDidMount: function() {
+            return this.props[propName].on("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        },
+        componentWillUnmount: function() {
+            return this.props[propName].off("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        }
+    };
 };
 
 CBApp.ListItemLoadingView = Marionette.ItemView.extend({
@@ -27681,13 +27728,6 @@ CBApp.ListItemLoadingView = Marionette.ItemView.extend({
     template: require('./templates/listItemLoading.html')
 });
 
-CBApp.ListView = Marionette.CompositeView.extend({
-
-    showLoading: function() {
-
-
-    }
-})
 },{"./templates/listItemLoading.html":"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
 CBApp.Regions = {};

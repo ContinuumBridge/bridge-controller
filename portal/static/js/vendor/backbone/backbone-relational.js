@@ -1455,7 +1455,6 @@
 			}
 
 			try {
-                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 

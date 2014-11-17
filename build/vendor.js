@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-Dispatcher = require('Flux').Dispatcher
+Dispatcher = require('Flux').Dispatcher;
 React = require('react');
 Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
@@ -35586,6 +35586,8 @@ return Q;
     };
 
     Query.prototype.testCompiledSelector = function(compiledSelector, model) {
+      console.log('query model', model);
+      console.log('query compiledSelector', compiledSelector);
       var match, opts, test;
       opts = compiledSelector.opts;
       test = compiledSelector.test;
@@ -35597,6 +35599,7 @@ return Q;
         opts.modelValue = false;
       }
       match = test(opts);
+      console.log('query match', match);
       return match;
     };
 
@@ -61593,12 +61596,9 @@ Backbone.HasOne = Backbone.HasOne.extend({
                 // Taken from the HasMany relation
                 var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
                 related = this.relatedModel.findOrCreate( this.keyContents, opts );
-                //console.log('ToOne related', related);
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                //console.log('related is', related);
-                //console.log('initializeCollection is', initializeCollection);
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = CBApp[initializeCollection];
                 }
@@ -61608,7 +61608,6 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                 // ADDED If the model only has an id, fetch the rest of it
                 if (related && related.isNew()) {
-                    //console.log('ToOne isNew!');
                         related.fetch();
                 }
         }
@@ -61645,7 +61644,6 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
-                                //console.log('ToMany keyContents attributes', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = CBApp.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
@@ -61709,7 +61707,6 @@ Backbone.Collection = Backbone.Collection.extend({
     findOrAdd: function(attributes, options) {
 
         options = options ? _.clone(options) : {};
-        console.log('findOrAdd', attributes);
         var model = this.findUnique(attributes) ||
             new this.model(attributes, options);
         //this.create(attributes);
@@ -61727,24 +61724,22 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        console.log('initializeRelations was called', options);
+
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
-            console.log('Initialise relation', rel.key);
-            console.log('Initialise relation this', this);
-            console.log('Initialise relation options', options);
             Backbone.Relational.store.initializeRelation( this, rel, options );
 
             //this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
+            /*
             this.listenTo(this, 'all', function(event) {
 
                 //var name = this.collection ? this.collection.backend ? this.collection.backend.name : "" : "";
-                console.log('EVENT', event, ' on ', this);
             });
+            */
             //this.updateRelationToSelf(rel, options);
         }, this);
 
@@ -61783,7 +61778,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         /*
         if (!models[0]) {
             // Not sure why keyContents is sometimes needed
-            console.log('rel.keyContents used', rel);
             models = [ rel.keyContents];
         }
         */
@@ -61791,21 +61785,17 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
         var model;
 
-        //console.log('Models are ', models);
         //for (i = 0; i < models.length; i++) {
         _.forEach(models, function(model) {
 
             // Iterate through models related to this model
             if (model) {
 
-                //console.log('model in updateRelationsToSelf related to ', this.collection.backend.name, ' is ', model.toJSON());
                 // Get the relation these related models have to this model
                 var plural = rel.related instanceof Backbone.Collection ? "" : "s";
                 var selfType = this.constructor.modelType + plural;
                 var reverseRelation = model.get(selfType);
-                console.log('selfType is', selfType, reverseRelation);
-                console.log('reverseRelation key is', rel.reverseRelation.key);
-                console.log('reverseRelation is', reverseRelation);
+
                 // If there is no reverse relation, there is nothing on any of the related models to update
                 if (!reverseRelation) return;
 
@@ -61817,8 +61807,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 var reverseModel = _.findWhere(reverseModels, this.toJSON());
                 if (!reverseModel) {
 
-                    console.log('this in updateRelationsToSelf', this.toJSON());
-                    console.log('reverseModel', reverseModels);
                     /*
                     if (reverseModels[0]) {
                         console.log('reverseModel JSON', reverseModels[0].toJSON());
@@ -61828,7 +61816,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                 if (reverseModel) {
 
-                    console.log('reverseModel is', reverseModel);
                     if (options && options.destroy) {
                         // Destroy the reverseModel if this model is being destroyed
                         if (reverseRelation instanceof Backbone.Collection) {
@@ -61845,17 +61832,13 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 } else {
                     // Add the model to the reverse relation
                     if (reverseRelation instanceof Backbone.Collection) {
-                        console.log('updateRelationsToSelf reverseRelation is collection', reverseRelation, this);
                         reverseRelation.add(this);
                         //reverseRelation.models.push(this);
-                        //console.log('model', model);
-                        //console.log('rel.reverseRelation.key', rel.reverseRelation.key)
                         //model.set(rel.reverseRelation.key, this);
                         //reverseRelation.set(this);
                     } else {
 
                         // Use updateRelations: false here to stop the update recurring indefinitely, there is probs a better way?
-                        console.log('updateRelationsToSelf reverseRelation is not a collection', reverseRelation, this);
                         var attrs = {};
                         attrs[rel.reverseRelation.key] = this;
                         model.set(attrs, {skipUpdateRelations: true});
@@ -61868,9 +61851,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
     updateRelations: function( changedAttrs, options ) {
 
         // ADDED If skipUpdateRelations is true, don't update relations
-        //console.log('skipUpdateRelations', options.skipUpdateRelations);
         if (options && options.skipUpdateRelations) return;
-        //console.log('skipUpdateRelations did not skip');
 
         if ( this._isInitialized && !this.isLocked() ) {
             _.each( this._relations, function( rel ) {
@@ -61882,9 +61863,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                 if (id) {
 
-                    console.log('id is', id)
                     var reverseRelation = rel.getReverseRelations(rel.related);
-                    console.log('Reverse relation is', reverseRelation);
                     var model = rel.related.get(id);
                 }
                 */
@@ -61894,13 +61873,10 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
-                    //console.log('updateRelations value', value);
-                    //console.log('updateRelations rel', rel.related);
-                    //console.log('updateRelations comp', (rel.related !== value) );
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
                     if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
-                        //console.log('updateRelations after comp', (rel.related !== value) );
+
                         this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
 
                         if (CBApp._isInitialized) {
@@ -61981,6 +61957,7 @@ require('backbone-deferred');
 Backbone.QueryCollection = QueryEngine.QueryCollection;
 
 require('backbone-react-component');
+
 /*
 var TrackableModelMixin = require('./backbone-trackable');
 Cocktail.mixin(Backbone.Deferred.Model, TrackableModelMixin);
@@ -64184,7 +64161,6 @@ Q = global.Q = require("q");
 			}
 
 			try {
-                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 

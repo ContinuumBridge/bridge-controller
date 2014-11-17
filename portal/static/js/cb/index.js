@@ -3,7 +3,7 @@ CBApp = new Marionette.Application();
 
 require('./views/generic-views');
 
-CBApp.dispatcher = new Dispatcher();
+dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",
@@ -97,6 +97,7 @@ CBApp.on("initialize:after", function () {
           //Backbone.history.navigate('index');
 
       }
+
   } else {
       console.warn('Backbone.history was not started');
   }
@@ -123,5 +124,4 @@ CBApp.reqres.setHandler("developer:show", function(){
 CBApp.reqres.setHandler("store:show", function(){
     CBApp.controller.showStore();
 });
-
 module.exports = CBApp;

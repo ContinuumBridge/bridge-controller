@@ -17,11 +17,11 @@ CBApp.ItemView = {
     */
     render: function() {
         return (
-            <div>
-                <h4 classname="list-group-item-heading">{this.getTitle()}</h4>
-                <i id="edit-button" classname="icon ion-edit edit-button" />
-                <i classname="icon ion-trash-a uninstall-button" />
-            </div>
+            <li className="new-item">
+                <h4 className="item-title">{this.getTitle()}</h4>
+                <i id="edit-button" className="icon ion-chevron-right edit-button" />
+                <i className="icon ion-trash-a uninstall-button" />
+            </li>
         );
     }
 };
@@ -31,7 +31,14 @@ CBApp.ListView = {
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
         console.log('item', item);
-        return <div>{item}</div>;
+        var cid = model.cid;
+
+        console.log('model.cid', model.cid);
+
+        //return < this.itemView model={item} />
+        return <CBApp.DeviceInstallView key={cid} model={item} />
+
+        //return <div>Another Item</div>;
     },
     setCollection: function(collection) {
 
@@ -45,14 +52,38 @@ CBApp.ListView = {
     },
      */
     render: function() {
+        console.log('render collection', this.props);
+        console.log('render mapped collection', this.props.collection.map(this.createItem));
+
         return (
             <div>
-                <h4 classname="list-group-item-heading">Test</h4>
-                <i id="edit-button" classname="icon ion-edit edit-button" />
-                <i classname="icon ion-trash-a uninstall-button" />
+                <h2>Devices</h2>
+                <div className="animated-list device-list">
+                    {this.props.collection.map(this.createItem)}
+                </div>
+                <div className="topcoat-button--cta center full discover-devices-button">Connect to a Device</div>
             </div>
         );
     }
+};
+
+CBApp.FluxBoneMixin = function(propName) {
+    return {
+        componentDidMount: function() {
+            return this.props[propName].on("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        },
+        componentWillUnmount: function() {
+            return this.props[propName].off("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        }
+    };
 };
 
 CBApp.ListItemLoadingView = Marionette.ItemView.extend({
@@ -61,11 +92,3 @@ CBApp.ListItemLoadingView = Marionette.ItemView.extend({
     className: 'spinner',
     template: require('./templates/listItemLoading.html')
 });
-
-CBApp.ListView = Marionette.CompositeView.extend({
-
-    showLoading: function() {
-
-
-    }
-})

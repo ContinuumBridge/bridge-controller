@@ -131,16 +131,25 @@ input[type='text']:focus {
 }
 */
 
+.item-title {
+    margin-top: 4px;
+    margin-bottom: 5px;
+    margin-left: 18px;
+}
+
 .edit-button,
 .uninstall-button {
     position: absolute;
     top: 15px;
-    font-size: 20px;
     color: #aaa;
     cursor: pointer;
-    right: 40px;
+}
+.edit-button {
+    left: 10px;
+    font-size: 15px;
 }
 .uninstall-button {
+    font-size: 20px;
     right: 12px;
 }
 

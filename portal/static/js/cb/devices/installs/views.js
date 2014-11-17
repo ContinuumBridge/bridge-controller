@@ -7,11 +7,13 @@ CBApp.DeviceInstallView = React.createClass({
     }
 });
 
+
 CBApp.DeviceInstallListView = React.createClass({
 
     itemView: CBApp.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+    mixins: [Backbone.React.Component.mixin, CBApp.ListView],
+    //mixins: [CBApp.FluxBoneMixin('collection'), CBApp.ListView],
 
 });
 

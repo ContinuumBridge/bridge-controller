@@ -163,7 +163,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     ]
 }, { modelType: "discoveredDeviceInstall" });
 
-CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
+CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
