@@ -77,7 +77,7 @@ BridgeConnection.prototype.deviceDiscovery = function(message) {
                     queryArray.push(matchField + '=' + discoveredDevice[matchField]);
                 }
             });
-            var deviceQueryURL = self.config.djangoURL + "device/" + '?' + queryArray.join('&');
+            var deviceQueryURL = self.djangoURL + "device/" + '?' + queryArray.join('&');
 
             var address = discoveredDevice.address || discoveredDevice.mac_addr;
             console.log('discovered address is', address);
