@@ -1,5 +1,7 @@
 
-var Bacon = require('baconjs').Bacon;
+var Bacon = require('baconjs').Bacon
+    ,io = require('socket.io')
+    ;
 
 var Message = require('../../message')
     ,authorization = require('./authorization')
@@ -49,8 +51,10 @@ Connection.prototype.setupSocket = function() {
 
         var message = new Message(rawMessage);
         logger.log('debug', 'Socket sessionID', socket.sessionID);
+        logger.log('debug', 'Socket id', socket.id);
         //logger.log('debug', 'Socket handshake query', socket.handshake.query);
         message.set('sessionID', socket.sessionID);
+        logger.log('debug', Object.keys(socket));
 
         //message.filterDestination(self.config.publicationAddresses);
         logger.log('debug', 'Socket subscriptionAddress', self.config.subscriptionAddress);
@@ -66,15 +70,27 @@ Connection.prototype.setupSocket = function() {
 
         //self.onMessageToClient(message)
         var jsonMessage = message.toJSONString();
-        logger.log('debug', 'Socket emit', jsonMessage);
-        self.socket.emit('message', jsonMessage);
 
+        // Device discovery hack
+        var body = message.get('body');
+        var resource = body.url || body.resource;
+
+        if (resource && '/api/bridge/v1/device_discovery/') {
+            logger.log('debug', 'socket server is ', Object.keys(socket.server));
+            //io.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
+            //socket.emit('discoveredDeviceInstall:reset', body.body);
+            socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
+
+        } else {
+
+            socket.server.to(socket.id).emit('message', jsonMessage);
+        }
     });
 
     socket.on('disconnect', function() {
         logger.log('info', 'Disconnected');
         unsubscribeToClient();
-        self.emit('disconnect')
+        self.emit('disconnect');
         socket.removeAllListeners('message');
         socket.removeAllListeners('disconnect');
     });

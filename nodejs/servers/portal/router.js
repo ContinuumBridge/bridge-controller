@@ -20,6 +20,9 @@ PortalRouter.prototype = new Router();
 
 module.exports = PortalRouter;
 
+PortalRouter.prototype.matchCB = function(message) {
+
+}
 /*
 send = function(message){
 
