@@ -23,9 +23,9 @@ class AppResource(CBResource, CBIDResourceMixin):
         queryset = App.objects.all()
         authorization = AppAuthorization()
         always_return_data = True
-        bridge_related_through = 'app_installs'
+        #bridge_related_through = 'app_installs'
         related_bridge_permissions = ['read']
-        user_related_through = 'app_ownerships'
+        #user_related_through = 'app_ownerships'
         related_user_permissions = ['read', 'create', 'update', 'delete']
         #client_related_through = 'app_connections'
         resource_name = 'app'

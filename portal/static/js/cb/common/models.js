@@ -1,6 +1,4 @@
 
-
-
 CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
 
     /* Model for connecting things ie. Apps and Devices, Clients and Apps */

@@ -1,7 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('../../../components/numbers');
 //require('./device_permissions/views');
 

@@ -1,6 +1,7 @@
 from bridge_controller.settings.base import *
 
-DEBUG = True
+ENVIRONMENT = "production"
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 #SERVER_ADDRESS = 'portal.continuumbridge.com'

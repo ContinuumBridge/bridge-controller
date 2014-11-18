@@ -1,6 +1,8 @@
 
 
-
+.welcome{
+    padding-top: 100px;
+}
 .card-heading {
     float: left;
 }

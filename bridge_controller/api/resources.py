@@ -53,6 +53,12 @@ class CBResource(ModelResource):
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
+    def update_modified_by(self, bundle):
+        if 'created_by' in bundle.obj._meta.fields and not bundle.obj.pk:
+            bundle.obj.created_by = bundle.request.user
+        if 'updated_by' in bundle.obj._meta.fields:
+            bundle.obj.modified_by = bundle.request.user
+
     def save(self, bundle, skip_errors=False):
         self.is_valid(bundle)
 
@@ -68,18 +74,12 @@ class CBResource(ModelResource):
         # Save FKs just in case.
         self.save_related(bundle)
 
-        # ADDED Is the object being updated or created?
-        updated = bool(bundle.obj.pk)
+        # ADDED Update the modified_by and created_by fields if they exist
+        self.update_modified_by(bundle)
 
         # Save the main object.
         bundle.obj.save()
         bundle.objects_saved.add(self.create_identifier(bundle.obj))
-
-        # ADDED
-        if updated:
-            self.obj_updated(bundle)
-        else:
-            self.obj_created(bundle)
 
         # Now pick up the M2M bits.
         m2m_bundle = self.hydrate_m2m(bundle)
@@ -113,12 +113,6 @@ class CBResource(ModelResource):
         except ValueError:
             raise BadRequest("Invalid resource lookup data provided (mismatched type).")
 
-    def obj_created(self, bundle):
-        self.create_user_through_model(bundle)
-        message = self.create_message(bundle, 'CREATE')
-        self.publish_message(message)
-        print "object created"
-
     def create_user_through_model(self, bundle):
         # Create an appropriate through model between the current user and the current item
         try:
@@ -133,6 +127,40 @@ class CBResource(ModelResource):
                 through_model.save()
         except AttributeError:
             pass
+
+    def obj_delete(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_delete``.
+
+        Takes optional ``kwargs``, which are used to narrow the query to find
+        the instance.
+        """
+        if not hasattr(bundle.obj, 'delete'):
+            try:
+                bundle.obj = self.obj_get(bundle=bundle, **kwargs)
+            except ObjectDoesNotExist:
+                raise NotFound("A model instance matching the provided arguments could not be found.")
+
+        self.authorized_delete_detail(self.get_object_list(bundle.request), bundle)
+        # ADDED Add the current user to the deleted object for broadcast
+        bundle.obj.deleted_by = bundle.request.user
+        bundle.obj.delete()
+
+    def get_via_uri(self, uri, request=None):
+
+        # ADDED Remove API name to catch bug where resource and api names are confused.
+        for api_prefix in ['/api/user/', '/api/bridge/', '/api/client/']:
+            if uri.startswith(api_prefix):
+                uri = uri[len(api_prefix)-1:]
+
+        return super(CBResource, self).get_via_uri(uri, request)
+
+    '''
+    def obj_created(self, bundle):
+        self.create_user_through_model(bundle)
+        message = self.create_message(bundle, 'CREATE')
+        self.publish_message(message)
+        print "object created"
 
     def obj_updated(self, bundle):
         #self.create_user_through_model(bundle)
@@ -167,33 +195,8 @@ class CBResource(ModelResource):
         destination = message.get('destination')
         r.publish(destination, message)
         print "published"
+    '''
 
-    def obj_delete(self, bundle, **kwargs):
-        """
-        A ORM-specific implementation of ``obj_delete``.
-
-        Takes optional ``kwargs``, which are used to narrow the query to find
-        the instance.
-        """
-        if not hasattr(bundle.obj, 'delete'):
-            try:
-                bundle.obj = self.obj_get(bundle=bundle, **kwargs)
-            except ObjectDoesNotExist:
-                raise NotFound("A model instance matching the provided arguments could not be found.")
-
-        self.authorized_delete_detail(self.get_object_list(bundle.request), bundle)
-        bundle.message = self.create_message(bundle, 'DELETE')
-        bundle.obj.delete()
-        self.obj_deleted(bundle)
-
-    def get_via_uri(self, uri, request=None):
-
-        # Remove API name to catch bug where resource and api names are confused.
-        for api_prefix in ['/api/user/', '/api/bridge/', '/api/client/']:
-            if uri.startswith(api_prefix):
-                uri = uri[len(api_prefix)-1:]
-
-        return super(CBResource, self).get_via_uri(uri, request)
 
         
 class CBIDResourceMixin(ModelResource):

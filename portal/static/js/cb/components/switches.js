@@ -1,8 +1,4 @@
 
-
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('./components');
 
 CBApp.Components.Switch = Marionette.ItemView.extend({

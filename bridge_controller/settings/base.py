@@ -227,6 +227,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',
+    'djcelery',
+    #'celerytest',
     #'allauth.socialaccount.providers.facebook',
     #'allauth.socialaccount.providers.twitter',
     #'allauth.socialaccount.providers.google',
@@ -258,6 +260,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+import djcelery
+djcelery.setup_loader()
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
