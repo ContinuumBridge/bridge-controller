@@ -4,6 +4,7 @@ CBApp = new Marionette.Application();
 require('./views/generic-views');
 
 dispatcher = new Dispatcher();
+//CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",
@@ -31,6 +32,11 @@ CBApp.Controller = Marionette.Controller.extend({
       CBApp.modalsRegion.reset();
       CBApp.Nav.trigger('topbar:activate', '');
       CBApp.Developer.trigger('developer:show', slug);
+  },
+  showHome: function() {
+      CBApp.modalsRegion.reset();
+      CBApp.Nav.trigger('home:activate', '');
+      CBApp.Home.trigger('developer:show', slug);
   },
   showStore: function(slug) {
       CBApp.modalsRegion.reset();
@@ -106,7 +112,7 @@ CBApp.on("initialize:after", function () {
 CBApp.Router = Marionette.SubRouter.extend({
 
   appRoutes: {
-    '': 'index',
+    '': 'showHome',
     'config(/:slug)': 'showConfig',
     'developer(/:slug)': 'showDeveloper',
     'store(/:slug)': 'showStore'
@@ -120,6 +126,11 @@ CBApp.reqres.setHandler("config:show", function(){
 CBApp.reqres.setHandler("developer:show", function(){
     CBApp.controller.showDeveloper();
 });
+
+CBApp.reqres.setHandler("home:show", function(){
+    CBApp.controller.showHome();
+});
+
 
 CBApp.reqres.setHandler("store:show", function(){
     CBApp.controller.showStore();

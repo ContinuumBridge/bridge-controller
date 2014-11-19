@@ -60,10 +60,13 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        //var message = new CBApp.Message(jsonMessage);
-        console.log('Server >', jsonMessage);
-        CBApp.messageRouter.dispatch(jsonMessage);
 
-        //that.appendLine(message);
+        var message = new CBApp.Message(jsonMessage);
+
+        var date = new Date();
+        message.set('time_received', date);
+        console.log('Server >', message);
+        CBApp.messageCollection.add(message);
+
     });
 });

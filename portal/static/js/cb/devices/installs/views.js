@@ -18,6 +18,8 @@ CBApp.DeviceInstallListView = React.createClass({
 });
 
 /*
+=======
+>>>>>>> staging-2
 CBApp.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',

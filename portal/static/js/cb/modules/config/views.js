@@ -12,14 +12,16 @@ require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
-
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
     regions: {
-        appSection: '.app-section',
-        //deviceSection: '.device-section',
+        appSection: {
+            selector: '.app-section',
+            regionType: CBApp.Regions.Fade
+        },
+        deviceSection: '.device-section',
         messageSection: '.message-section',
         bridgeSection: '.bridge-section'
     },
@@ -42,8 +44,15 @@ module.exports.Main = Marionette.Layout.extend({
         this.appInstallListView = new CBApp.AppInstallListView();
         this.bridgeView = new CBApp.BridgeListView();
         // View which manages device installs and device discovery
-        //this.devicesView = new DevicesView();
+        this.devicesView = new DevicesView();
         this.messageListView = new CBApp.MessageListView();
+
+        /*
+        CBApp.getCurrentUser().then(function(currentUser) {
+            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
+            //CBApp.clientCollection.fetch()
+        }).done();
+        */
     },
 
     populateViews: function() {
@@ -56,10 +65,8 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appSection.show(this.appInstallListView);
-
-
-        //this.deviceSection.show(this.devicesView);
-        //this.devicesView.render();
+        this.deviceSection.show(this.devicesView);
+        this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
 
@@ -103,13 +110,6 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-
-            var $deviceSection = self.$('.device-section');
-            console.log('$deviceSection ', $deviceSection );
-
-            console.log('$deviceSection[0] ', $deviceSection[0] );
-            //React.renderComponent(<DevicesView name="User" />, $deviceSection[0]);
-
         }).done();
     }
 
@@ -197,7 +197,6 @@ var DevicesView = Marionette.ItemView.extend({
         return this;
     }
 })
-*/
 
 module.exports.InstallAppModal = Backbone.Modal.extend({
 
