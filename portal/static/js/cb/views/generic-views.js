@@ -31,9 +31,9 @@ CBApp.ListView = {
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
         console.log('item', item);
-        var cid = model.cid;
+        var cid = item.cid;
 
-        console.log('model.cid', model.cid);
+        console.log('model.cid', item.cid);
 
         //return < this.itemView model={item} />
         return <CBApp.DeviceInstallView key={cid} model={item} />

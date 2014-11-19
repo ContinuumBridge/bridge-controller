@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "backbone": "~1.1.2",
-    "backbone-react-component": "^0.7.1",
+    "backbone-react-component": "git+https://git@github.com/ContinuumBridge/backbone-react-component.git#cb",
     "backbone.babysitter": "^0.1.2",
     "backbone.wreqr": "^1.2.1",
     "baconjs": "~0.6.22",

@@ -65,38 +65,48 @@ module.exports.Main = Marionette.Layout.extend({
         var self = this;
 
         this.appSection.show(this.appInstallListView);
-        this.deviceSection.show(this.devicesView);
-        this.devicesView.render();
+        //this.deviceSection.show(this.devicesView);
+        //this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
 
+        /*
         var deviceInstalls = this.deviceInstalls = CBApp.deviceInstallCollection.findAllLive();
         deviceInstalls.fetched = false;
 
         var discoveredDeviceInstalls = this.discoveredDeviceInstalls
             = CBApp.discoveredDeviceInstallCollection.findAll();
+        */
 
-        React.renderComponent(
-            <DevicesView deviceInstalls={deviceInstalls}
-                         discoveredDevices={discoveredDeviceInstalls} />,
-            self.$('.device-section')[0]
-        );
 
         CBApp.getCurrentBridge().then(function(currentBridge) {
 
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
+            /*
             deviceInstalls.setQuery('bridge', {bridge: currentBridge});
             deviceInstalls.fetched = true;
 
             discoveredDeviceInstalls.setQuery('bridge', {bridge: currentBridge});
             discoveredDeviceInstalls.fetched = true;
+            */
 
             console.log('self.deviceInstalls', self.deviceInstalls);
             var appInstallCollection = currentBridge.get('appInstalls');
             var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
             //liveAppInstallCollection.setQuery({isGhost: false});
+
+            var deviceInstalls = currentBridge.get('deviceInstalls');
+
+            //var discoveredDeviceInstalls = currentBridge.get('discoveredDeviceInstalls');
+            console.log('DevicesView deviceInstalls ', deviceInstalls );
+
+            React.renderComponent(
+                <DevicesView deviceInstalls={deviceInstalls} />,
+                //discoveredDevices={discoveredDeviceInstalls} />,
+                self.$('.device-section')[0]
+            );
 
             console.log('liveAppInstallCollection', liveAppInstallCollection );
             self.appInstallListView.setCollection(liveAppInstallCollection);
@@ -135,7 +145,8 @@ var DevicesView = React.createClass({
     */
     render: function() {
         //return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
-        return <CBApp.DeviceInstallListView collection={CBApp.deviceInstallCollection} />
+        console.log('DeviceView this.props', this.props);
+        return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
     }
 });
 
@@ -257,4 +268,5 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         CBApp.Config.controller.stopDiscoveringDevices();
     }
 });
+*/
 
