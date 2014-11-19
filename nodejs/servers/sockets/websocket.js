@@ -108,6 +108,11 @@ var WSSocket = function(ws) {
         }
         //socket.sendUTF(message.utf8Data);
     });
+
+    this.server = {};
+    this.server.to = function() {
+        return self;
+    }
 }
 
 WSSocket.prototype.__proto__ = EventEmitter.prototype;
@@ -121,3 +126,4 @@ WSSocket.prototype.emit = function(ev) {
         this.ws.sendUTF(args.join())
     }
 }
+
