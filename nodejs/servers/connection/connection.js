@@ -73,9 +73,11 @@ Connection.prototype.setupSocket = function() {
 
         // Device discovery hack
         var body = message.get('body');
-        var resource = body.url || body.resource;
+        if (body) {
+            var resource = body.url || body.resource;
+        }
 
-        if (resource == '/api/bridge/v1/device_discovery/') {
+        if (resource && resource == '/api/bridge/v1/device_discovery/') {
             logger.log('debug', 'socket server is ', Object.keys(socket.server));
             //io.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
             //socket.emit('discoveredDeviceInstall:reset', body.body);
