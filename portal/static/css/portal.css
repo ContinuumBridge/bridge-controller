@@ -1,7 +1,10 @@
 
-
-.welcome{
+.welcome {
     padding-top: 100px;
+}
+.welcome-text {
+    font-size:medium;
+
 }
 .card-heading {
     float: left;

@@ -35268,6 +35268,8 @@ return Q;
     };
 
     Query.prototype.testCompiledSelector = function(compiledSelector, model) {
+      console.log('query model', model);
+      console.log('query compiledSelector', compiledSelector);
       var match, opts, test;
       opts = compiledSelector.opts;
       test = compiledSelector.test;
@@ -35279,6 +35281,7 @@ return Q;
         opts.modelValue = false;
       }
       match = test(opts);
+      console.log('query match', match);
       return match;
     };
 
