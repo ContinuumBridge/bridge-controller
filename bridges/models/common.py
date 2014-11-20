@@ -20,7 +20,7 @@ class CBIDModelMixin(object):
         return prefix + str(self.id)
 
 
-models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('default_resource',
+models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('broadcast_resource',
                                                                'user_related_through',
                                                                'bridge_related_through',
                                                                'client_related_through')
@@ -51,12 +51,11 @@ class BroadcastMixin(CBIDModelMixin):
                 related_cbids.extend([c.cbid for c in clients])
             except AttributeError:
                 pass
-        print "related_cbids is", related_cbids
         return related_cbids
 
     def to_json(self, fields=None):
-        # Get the default resource for this model and use it for dehydration
-        resource_path = getattr(self._meta, 'default_resource').split('.')
+        # Get the broadcast resource for this model and use it for dehydration
+        resource_path = getattr(self._meta, 'broadcast_resource').split('.')
         module = __import__('.'.join(resource_path[:-1]), fromlist=[resource_path[-1]])
         resource = getattr(module, resource_path[-1])()
         bundle = resource.build_bundle(obj=self)

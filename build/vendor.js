@@ -6,6 +6,7 @@ Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
 
 
+
 },{"Flux":2,"backbone-bundle":206,"backbone.marionette":215,"react":159}],2:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -560,7 +561,8 @@ module.exports = invariant;
         props.collection = newProps;
       } else {
         props = newProps;
-	props.cid = modelOrCollection.cid;
+        props.cid = modelOrCollection.cid;
+        props.modelType = modelOrCollection.modelType;
       }
 
       if (target) {

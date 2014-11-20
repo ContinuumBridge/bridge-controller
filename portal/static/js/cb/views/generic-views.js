@@ -15,6 +15,16 @@ CBApp.ItemView = {
         return "Staff contents";
     },
     */
+    handleDelete: function() {
+
+        CBDispatcher.dispatch({verb: 'delete',
+                               model: this.props.model});
+    },
+    handleUpdate: function() {
+
+        CBDispatcher.dispatch({verb: 'update',
+                               model: this.props.model});
+    },
     render: function() {
         return (
             <li className="new-item">

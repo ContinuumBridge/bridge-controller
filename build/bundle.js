@@ -25016,7 +25016,6 @@ CBApp.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
     }
 });
 
-
 CBApp.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallListView',
 
     itemView: CBApp.DeviceInstallView,
@@ -25184,7 +25183,7 @@ CBApp = new Marionette.Application();
 
 require('./views/generic-views');
 
-dispatcher = new Dispatcher();
+CBDispatcher = new Dispatcher();
 //CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({
@@ -25761,6 +25760,7 @@ CBApp.addInitializer(function () {
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
+  CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
   //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
@@ -27359,6 +27359,7 @@ var PortalRouter = Router.extend({
 
     routes: {
         'BID:b/UID:u': updateCollection('bridgeControlCollection'),
+        'BID:b/DID:u': updateCollection('deviceInstallCollection'),
         'message': 'updateMessageCollection'
     },
 
@@ -27761,6 +27762,16 @@ CBApp.ItemView = {
         return "Staff contents";
     },
     */
+    handleDelete: function() {
+
+        CBDispatcher.dispatch({verb: 'delete',
+                               model: this.props.model});
+    },
+    handleUpdate: function() {
+
+        CBDispatcher.dispatch({verb: 'update',
+                               model: this.props.model});
+    },
     render: function() {
         return (
             React.createElement("li", {className: "new-item"}, 

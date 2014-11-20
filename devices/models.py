@@ -7,7 +7,7 @@ from django.utils import timezone
 
 #from adaptors.models import Adaptor
 from bridges.models import Bridge
-from bridges.models.common import LoggedModel
+from bridges.models.common import BroadcastMixin, LoggedModel
 
 class Device(LoggedModel):
 
@@ -27,11 +27,8 @@ class Device(LoggedModel):
 
     class Meta:
         verbose_name = _('device')
-        verbose_name_plural = _('devices')
+        broadcast_resource = 'devices.api.resources.DeviceResource'
         app_label = 'devices'
-
-    def save(self, *args, **kwargs):
-        super(Device, self).save(*args, **kwargs)
 
     def get_adaptor_compatibility(self):
         adaptor_compatibilities = []
@@ -39,9 +36,8 @@ class Device(LoggedModel):
             adaptor_compatibilities.append(adaptor_compatibility)
         return adaptor_compatibilities
 
-    
 
-class DeviceInstall(LoggedModel):
+class DeviceInstall(BroadcastMixin, LoggedModel):
     
     friendly_name = models.CharField(_("friendly_name"), max_length = 255, blank=True)
     address = models.CharField(_("address"), max_length = 255)
@@ -54,10 +50,14 @@ class DeviceInstall(LoggedModel):
     class Meta:
         verbose_name = _('device_install')
         verbose_name_plural = _('device_installs')
+        broadcast_resource = 'devices.api.resources.DeviceInstallResource'
         app_label = 'devices'
 
-    #def get_adaptor_install(self):
-    #    return self.adaptor_install
+    @property
+    def cbid(self):
+        bridge_id = "BID" + str(self.bridge.id)
+        device_id = "DID" + str(self.device.id)
+        return bridge_id + "/" + device_id
 
 
 '''

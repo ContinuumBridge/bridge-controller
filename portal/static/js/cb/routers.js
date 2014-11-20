@@ -99,6 +99,7 @@ var PortalRouter = Router.extend({
 
     routes: {
         'BID:b/UID:u': updateCollection('bridgeControlCollection'),
+        'BID:b/DID:u': updateCollection('deviceInstallCollection'),
         'message': 'updateMessageCollection'
     },
 

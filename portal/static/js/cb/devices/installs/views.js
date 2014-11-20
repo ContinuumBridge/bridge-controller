@@ -7,7 +7,6 @@ CBApp.DeviceInstallView = React.createClass({
     }
 });
 
-
 CBApp.DeviceInstallListView = React.createClass({
 
     itemView: CBApp.DeviceInstallView,

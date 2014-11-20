@@ -3,7 +3,7 @@ CBApp = new Marionette.Application();
 
 require('./views/generic-views');
 
-dispatcher = new Dispatcher();
+CBDispatcher = new Dispatcher();
 //CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({

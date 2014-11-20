@@ -28,7 +28,7 @@ class App(BroadcastMixin, LoggedModel, CBIDModelMixin):
         verbose_name = _('app')
         user_related_through = 'app_ownerships'
         bridge_related_through = 'app_installs'
-        default_resource = 'apps.api.resources.AppResource'
+        broadcast_resource = 'apps.api.resources.AppResource'
         app_label = 'apps'
 
     def save(self, *args, **kwargs):

@@ -207,20 +207,6 @@ class CBIDResourceMixin(ModelResource):
         resource_name = 'cbid_resource_mixin'
 
 
-'''
-class ClientObjectsResource(CBResource):
-
-    """ Allows API access to objects which have the logged in client in their client field """
-
-    class Meta(CBResource.Meta):
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
-        authentication = HTTPHeaderSessionAuthentication()
-        authorization = ClientObjectsOnlyAuthorization()
-
-        #authorization = UserObjectsOnlyAuthorization()
-'''
-
 class LoggedInResource(CBResource):
 
     class Meta(CBResource.Meta):
@@ -305,12 +291,6 @@ class ThroughModelResource(CBResource):
 
             if method:
                 bundle.data[field_name] = method(bundle)
-            '''
-            # Dehydrate ids of related resources if they have them and append them to the ToMany level
-            if 'dehydrate_id' in dir(field_object) and callable(field_object.dehydrate_id):
-                print "Field object is callable"
-                bundle.data['%s_id' % field_name] = field_object.dehydrate_id(bundle)
-            '''
 
         if hasattr(self, 'instance'):
             # Add the through model id to the bundle

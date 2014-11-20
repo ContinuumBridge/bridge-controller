@@ -54,6 +54,7 @@ CBApp.addInitializer(function () {
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
+  CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
   //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();

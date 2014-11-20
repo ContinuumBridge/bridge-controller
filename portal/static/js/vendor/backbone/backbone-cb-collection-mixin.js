@@ -1,6 +1,24 @@
 
 module.exports = {
 
+    dispatchCallback: function(payload) {
+
+        switch(payload.verb) {
+
+            case "create":
+                this.add(payload.models);
+
+            case "update":
+                this.update(payload.models);
+
+            case "delete":
+                this.delete(payload.models);
+
+            default:
+                console.warn('dispatcher doesn\'t know what to do with', payload);
+        }
+    },
+
     subscribe: function(filters) {
 
         this.bindBackend();

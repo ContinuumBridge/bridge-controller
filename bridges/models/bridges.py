@@ -49,7 +49,7 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
 
     class Meta:
         verbose_name = _('bridge')
-        default_resource = 'bridges.api.resources.BridgeResource'
+        broadcast_resource = 'bridges.api.resources.BridgeResource'
         app_label = 'bridges'
 
     def get_full_name(self):
@@ -82,7 +82,7 @@ class BridgeControl(BroadcastMixin, LoggedModel):
     
     class Meta:
         verbose_name = _('bridge_control')
-        default_resource = 'bridges.api.resources.BridgeControlResource'
+        broadcast_resource = 'bridges.api.resources.BridgeControlResource'
         app_label = 'bridges'
 
     bridge = models.ForeignKey(Bridge, related_name='bridge_controls')
