@@ -25009,10 +25009,10 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
 CBApp.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+    mixins: [CBApp.ItemView],
     //mixins: [CBApp.ItemView],
     getTitle: function() {
-        return "Device";
+        return this.props.model.friendly_name;
     }
 });
 
@@ -27853,8 +27853,8 @@ CBApp.Regions.Fade = Marionette.Region.extend({
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
-},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

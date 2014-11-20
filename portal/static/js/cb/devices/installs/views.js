@@ -1,9 +1,9 @@
 
 CBApp.DeviceInstallView = React.createClass({
-    mixins: [Backbone.React.Component.mixin, CBApp.ItemView],
+    mixins: [CBApp.ItemView],
     //mixins: [CBApp.ItemView],
     getTitle: function() {
-        return "Device";
+        return this.props.model.friendly_name;
     }
 });
 
