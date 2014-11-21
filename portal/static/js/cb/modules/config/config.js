@@ -9,7 +9,7 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
           //"": "showConfig",
-          ":id": "showBridge",
+          ":id": "showConfig",
           //"config/bridge/:bridge": "config",
           "install_device": "installDevice"
         }
@@ -31,12 +31,12 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         Config.mainLayoutView = new ConfigViews.Main();
         CBApp.mainRegion.show(Config.mainLayoutView);
       },
-      showBridge: function(bridgeID) {
+      showConfig: function() {
 
-          console.log('showBridge bridgeID is', bridgeID);
+          //console.log('showConfig bridgeID is', bridgeID);
           Config.mainLayoutView = new ConfigViews.Main();
-          var bridge = CBApp.bridgeCollection.get(bridgeID);
-          if (bridge) CBApp.setCurrentBridge(bridge);
+          //var bridge = CBApp.bridgeCollection.get(bridgeID);
+          //if (bridge) CBApp.setCurrentBridge(bridge);
           CBApp.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
@@ -94,7 +94,8 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        Config.controller.showBridge(bridgeID);
+        CBApp.currentBridge = CBApp.bridgeCollection.get(bridgeID);
+        Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
     });

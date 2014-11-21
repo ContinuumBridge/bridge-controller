@@ -54,7 +54,7 @@ CBApp.addInitializer(function () {
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
+  //CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
   //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
@@ -62,10 +62,10 @@ CBApp.addInitializer(function () {
 
 
   CBApp.messageCollection = new CBApp.MessageCollection([
-      { body: "Test message 1", source: "BID8", destination: "UID2" },
-      { body: "Test message 2", source: "UID2", destination: "BID8" }
+    { source: "UID1", destination: "BID2", body: "Test Body 1"},
+    { source: "UID1", destination: "BID2", body: "Test Body 2"}
   ]);
-  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+  //CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
   CBApp.notificationCollection = new CBApp.NotificationCollection([
       //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
@@ -75,6 +75,10 @@ CBApp.addInitializer(function () {
   CBApp.userCollection = new CBApp.UserCollection();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+  CBApp.currentUser = new CBApp.CurrentUser(JSON.parse(INITIAL_USER_DATA));
+  CBApp.currentUserCollection.add(CBApp.currentUser);
+
+  /*
   CBApp.currentUserCollection.fetch().then(function() {
 
       CBApp.currentUser = CBApp.currentUserCollection.at(0);
@@ -88,4 +92,5 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+  */
 });

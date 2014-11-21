@@ -41,25 +41,22 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-CBApp.MessageCollection = Backbone.Collection.extend({
+//CBApp.MessageCollection = Backbone.Collection.extend({
+CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.Message,
     //backend: 'message',
 
+    /*
     initialize: function() {
-        /*
         this.bindBackend();
 
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-        */
     },
-    
-    parse : function(response){
-        return response.objects;
-    },
+    */
 
     sendMessage: function(message) {
 

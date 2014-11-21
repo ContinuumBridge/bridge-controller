@@ -34,12 +34,21 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 // Required for backbone deferred
 Q = require('q');
 
-QueryEngine = require('query-engine');
-
 require('./backbone-cb-model');
+
+var originalCollection = Backbone.Collection;
+
 require('backbone-deferred');
 
-Backbone.QueryCollection = QueryEngine.QueryCollection;
+Backbone.Collection = Backbone.Deferred.Collection;
+
+QueryEngine = require('query-engine');
+
+//Backbone.Deferred.Collection = QueryEngine.QueryCollection;
+
+Backbone.Collection = originalCollection;
+
+//Backbone.QueryCollection = QueryEngine.QueryCollection;
 
 require('backbone-react-component');
 

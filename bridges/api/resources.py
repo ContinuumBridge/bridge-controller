@@ -48,8 +48,30 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
         #related_user_permissions = ['read', 'create', 'update', 'delete']
         related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
+def controlled_by_client(bundle):
+    if bundle.request.META['REQUEST_METHOD'] == "GET":
+        try:
+            return getattr(bundle, 'controlled_by_client')
+        except AttributeError:
+            controlled = bundle.obj.is_controlled_by(bundle.request.user)
+            bundle.controlled_by_client = controlled
+            return controlled
+    else:
+        return False
 
 class BridgeResource(CBResource, CBIDResourceMixin):
+
+    controllers = cb_fields.ToManyThroughField(BridgeControlResource,
+                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
+                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
+
+    apps = cb_fields.ToManyThroughField(AppInstallResource,
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
+                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
+
+    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
+                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
+                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
@@ -96,6 +118,7 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
         #fields = ['id', 'email', 'name', 'date_joined', 'last_login']
         excludes = ['key', 'plaintext_key']
         resource_name = 'current_bridge'
+
 
     '''
     def dehydrate(self, bundle):

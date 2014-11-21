@@ -83,15 +83,12 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         onRender : function(){
 
-            var self = this;
-
-            CBApp.getCurrentBridge().then(function(currentBridge){
-
-                self.model = currentBridge;
-                self.listenToOnce(self.model, 'change', self.render);
-                //self.model.bind('change', self.render);
-                self.stickit();
-            });
+            this.model = CBApp.getCurrentBridge();
+            //console.log('CBApp.getCurrentBridge();', CBApp.getCurrentBridge());
+            //this.listenToOnce(this.model, 'change', this.render);
+            this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+            //self.model.bind('change', self.render);
+            this.stickit();
         }
     });
 

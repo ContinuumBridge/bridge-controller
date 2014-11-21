@@ -57,8 +57,7 @@ gulp.task('client', function() {
 
 function scripts(watch) {
 
-    var bundler, rebundle;
-    bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
+    var bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
         basedir: __dirname,
         //debug: !production,
         cache: {}, // required for watchify
@@ -79,7 +78,7 @@ function scripts(watch) {
     //bundler.require(requireFiles);
     bundler.transform(reactify);
 
-    rebundle = function() {
+    var rebundle = function() {
         console.log('rebundling');
         var stream = bundler.bundle();
         stream.on('error', function (err) { console.error(err) });

@@ -46,7 +46,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         this.staffView.setElement(this.$('.staff-panel')).render();
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        CBApp.getCurrentBridge().fetch(function(currentBridge) {
 
             console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');

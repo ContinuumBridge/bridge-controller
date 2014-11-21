@@ -37,6 +37,7 @@
 	<!-- Scripts -->
     <script type="application/javascript" charset="utf-8">
       HOST_ADDRESS = '{{ host_address }}';
+      INITIAL_USER_DATA = '{{ initial_user_data|safe }}';
       PAGE_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="device" %}";
       {% if data %}
       app = {loaded: true};
@@ -57,3 +58,4 @@
     </div>
 </body>
 </html>
+

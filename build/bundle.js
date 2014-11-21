@@ -23023,7 +23023,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         this.staffView.setElement(this.$('.staff-panel')).render();
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        CBApp.getCurrentBridge().fetch(function(currentBridge) {
 
             console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
@@ -23377,25 +23377,23 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
         this.installButton = new CBApp.Components.AppInstallButton();
 
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        var currentBridge = CBApp.getCurrentBridge();
 
-            self.installButton.bridge = currentBridge;
-            self.appInstall = CBApp.appInstallCollection.findOrAdd({
-                app: self.app,
-                bridge: currentBridge,
-                licence: self.model
-            });
-            // Trigger change events on the model, to cause the view to update
-            self.listenTo(self.appInstall, 'all', function(e) {
-                console.log('event on appInstall', e);
-            });
+        this.installButton.bridge = currentBridge;
+        this.appInstall = CBApp.appInstallCollection.findOrAdd({
+            app: this.app,
+            bridge: currentBridge,
+            licence: this.model
+        });
+        // Trigger change events on the model, to cause the view to update
+        this.listenTo(this.appInstall, 'all', function(e) {
+            console.log('event on appInstall', e);
+        });
 
-            self.stickit(self.appInstall, self.appInstallBindings);
+        this.stickit(this.appInstall, this.appInstallBindings);
 
-            self.installButton.setModel(self.appInstall);
-            self.installButton.stickit();
-            //self.render();
-        }).done();
+        this.installButton.setModel(this.appInstall);
+        this.installButton.stickit();
     },
 
     getInstallsRemaining: function() {
@@ -23802,28 +23800,21 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
 
 CBApp.getCurrentBridge = function() {
 
-    var currentBridgeDeferred = Q.defer();
+    //var currentBridgeDeferred = Q.defer();
 
-    CBApp.getCurrentUser().then(function(result) {
+    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
 
-        var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    if (!bridge) {
+        //logger.log('warn', 'There is no current bridge');
+        bridge = false;
+    } else {
+        bridge.set({current: true});
+    }
 
-        if (!bridge) {
-            //logger.log('warn', 'There is no current bridge');
-            bridge = false;
-        } else {
-            bridge.set({current: true});
-        }
+    return bridge
+    //currentBridgeDeferred.resolve(bridge);
 
-        currentBridgeDeferred.resolve(bridge);
-
-    }, function(error) {
-
-        console.log('Error fetching currentUser', error);
-        currentBridgeDeferred.reject(error);
-    });
-
-    return currentBridgeDeferred.promise;
+    //return currentBridgeDeferred.promise;
 }
 
 
@@ -24699,23 +24690,12 @@ CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
 
-
+    /*
     initialize: function() {
 
         var self = this;
-
-        /*
-        // Listen for reset event from the backend
-        this.bind('backend:reset', function(models) {
-            console.log('DiscoveredDeviceCollection reset with ', models);
-            self.reset(models);
-        });
-        */
     },
-
-    parse : function(response){
-        return response.objects;
-    }
+    */
 });
 
 
@@ -25225,10 +25205,12 @@ CBApp.Controller = Marionette.Controller.extend({
   },
   setCurrentBridge: function(bridge) {
 
+      console.log('setCurrentBridge bridge', bridge);
       var currentBridges = CBApp.bridgeCollection.where({current: true})
       for (i=0; i < currentBridges.length; i++) {
-          currentBridges[i].set('current', false);
+          currentBridges[i].set('current', false, {silent: true});
       }
+      console.log('setCurrentBridge currentBridges', currentBridges);
 
       bridge.set('current', true);
   }
@@ -25360,25 +25342,22 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-CBApp.MessageCollection = Backbone.Collection.extend({
+//CBApp.MessageCollection = Backbone.Collection.extend({
+CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
 
     model: CBApp.Message,
     //backend: 'message',
 
+    /*
     initialize: function() {
-        /*
         this.bindBackend();
 
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-        */
     },
-    
-    parse : function(response){
-        return response.objects;
-    },
+    */
 
     sendMessage: function(message) {
 
@@ -25506,16 +25485,14 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     sendCommand: function(command) {
 
         console.log('sendCommand', command);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-            var destination = currentBridge.get('cbid');
-            var message = new CBApp.Message({
-                destination: destination,
-                body: {
-                    command: command
-                }
-            });
-            CBApp.messageCollection.sendMessage(message);
+        var destination = CBApp.getCurrentBridge().get('cbid');
+        var message = new CBApp.Message({
+            destination: destination,
+            body: {
+                command: command
+            }
         });
+        CBApp.messageCollection.sendMessage(message);
     },
 
     clickCommand: function(e) {
@@ -25760,7 +25737,7 @@ CBApp.addInitializer(function () {
   CBApp.deviceCollection = new CBApp.DeviceCollection();
 
   CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
+  //CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
   //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
 
   CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
@@ -25768,10 +25745,10 @@ CBApp.addInitializer(function () {
 
 
   CBApp.messageCollection = new CBApp.MessageCollection([
-      { body: "Test message 1", source: "BID8", destination: "UID2" },
-      { body: "Test message 2", source: "UID2", destination: "BID8" }
+    { source: "UID1", destination: "BID2", body: "Test Body 1"},
+    { source: "UID1", destination: "BID2", body: "Test Body 2"}
   ]);
-  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+  //CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
 
   CBApp.notificationCollection = new CBApp.NotificationCollection([
       //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
@@ -25781,6 +25758,10 @@ CBApp.addInitializer(function () {
   CBApp.userCollection = new CBApp.UserCollection();
 
   CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
+  CBApp.currentUser = new CBApp.CurrentUser(JSON.parse(INITIAL_USER_DATA));
+  CBApp.currentUserCollection.add(CBApp.currentUser);
+
+  /*
   CBApp.currentUserCollection.fetch().then(function() {
 
       CBApp.currentUser = CBApp.currentUserCollection.at(0);
@@ -25794,6 +25775,7 @@ CBApp.addInitializer(function () {
       CBApp.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+  */
 });
 
 },{"./adaptors/compatibility/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js","./components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./devices/discovery/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
@@ -25808,7 +25790,7 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
           //"": "showConfig",
-          ":id": "showBridge",
+          ":id": "showConfig",
           //"config/bridge/:bridge": "config",
           "install_device": "installDevice"
         }
@@ -25830,12 +25812,12 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         Config.mainLayoutView = new ConfigViews.Main();
         CBApp.mainRegion.show(Config.mainLayoutView);
       },
-      showBridge: function(bridgeID) {
+      showConfig: function() {
 
-          console.log('showBridge bridgeID is', bridgeID);
+          //console.log('showConfig bridgeID is', bridgeID);
           Config.mainLayoutView = new ConfigViews.Main();
-          var bridge = CBApp.bridgeCollection.get(bridgeID);
-          if (bridge) CBApp.setCurrentBridge(bridge);
+          //var bridge = CBApp.bridgeCollection.get(bridgeID);
+          //if (bridge) CBApp.setCurrentBridge(bridge);
           CBApp.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
@@ -25893,7 +25875,8 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        Config.controller.showBridge(bridgeID);
+        CBApp.currentBridge = CBApp.bridgeCollection.get(bridgeID);
+        Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
     });
@@ -25991,11 +25974,18 @@ module.exports.Main = Marionette.Layout.extend({
         var discoveredDeviceInstalls = this.discoveredDeviceInstalls
             = CBApp.discoveredDeviceInstallCollection.findAll();
         */
+        var currentBridge = CBApp.getCurrentBridge();
+        this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+        this.listenToOnce(CBApp.bridgeCollection, 'change:current', function() {
+            console.log('currentBridge changed');
+        });
 
+        console.log('calling getCurrentBridge ');
+        currentBridge.fetch().done(function(currentBridgeResolved) {
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+            var currentBridge = currentBridgeResolved.model;
 
-            self.listenToOnce(currentBridge, 'change:current', self.render);
+            console.log('getCurrentBridge fetched', currentBridge);
 
             /*
             deviceInstalls.setQuery('bridge', {bridge: currentBridge});
@@ -26026,15 +26016,16 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
+            var currentBridgeMessageCollection = CBApp.messageCollection.findAllLive({bridge:currentBridge});
+            self.messageListView.setCollection(currentBridgeMessageCollection, true);
             self.messageListView.render();
 
             var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-        }).done();
+        });
     }
 
 });
@@ -26477,7 +26468,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"welcome\">\n    Welcome to the ContinuumBridge portal.\n    <br><br>\n    If this is the first time you have logged-in and you don't have any bridges, please click <a href=\"http://continuumbridge.readme.io/v1.0/docs/start-here\">here</a>\n    <br><br>\n    If you have a bridge, click <a href=\"http://portal.continuumbridge.com/portal/config/\">here</a> to see what devices and apps you have and add more.\n    <br><br>\n    For further information on how to use this portal, click <a href=\"http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal\">here</a>\n</div>\n";
+  return "<div class=\"welcome\">\n    <div class=\"welcome-text panel-body\">\n        Welcome to the ContinuumBridge portal.\n        <br><br>\n        If this is the first time you have logged-in and you don't have any bridges, please click <a href=\"http://continuumbridge.readme.io/v1.0/docs/start-here\">here</a>\n        <br><br>\n        If you have a bridge, click <a href=\"http://portal.continuumbridge.com/portal/config/\">here</a> to see what devices and apps you have and add more.\n        <br><br>\n        For further information on how to use this portal, click <a href=\"http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal\">here</a>\n    </div>\n</div>\n";
   });
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
@@ -26599,15 +26590,12 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         onRender : function(){
 
-            var self = this;
-
-            CBApp.getCurrentBridge().then(function(currentBridge){
-
-                self.model = currentBridge;
-                self.listenToOnce(self.model, 'change', self.render);
-                //self.model.bind('change', self.render);
-                self.stickit();
-            });
+            this.model = CBApp.getCurrentBridge();
+            //console.log('CBApp.getCurrentBridge();', CBApp.getCurrentBridge());
+            //this.listenToOnce(this.model, 'change', this.render);
+            this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+            //self.model.bind('change', self.render);
+            this.stickit();
         }
     });
 
@@ -26718,7 +26706,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
+  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>Continuum Bridge</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js":[function(require,module,exports){
@@ -27480,11 +27468,11 @@ CBApp.addInitializer(function() {
         console.log('foundDevices are', JSON.toString(foundDevices));
 
         CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        var currentBridge = CBApp.getCurrentBridge()
             // Trigger reset for the GUI
-            var collection = currentBridge.get('discoveredDeviceInstalls');
-            collection.trigger('reset');
-        });
+        var collection = currentBridge.get('discoveredDeviceInstalls');
+        collection.trigger('reset');
+
     });
 
     CBApp.socket.publish = function(message) {
@@ -27681,17 +27669,13 @@ CBApp.CurrentUser = CBApp.User.extend({
     ]
 }, { modelType: "currentUser" });
 
-CBApp.CurrentUserCollection = Backbone.QueryCollection.extend({
+CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
     model: CBApp.CurrentUser,
     backend: 'currentUser',
 
     initialize: function() {
         this.bindBackend();
-    },
-
-    parse : function(response){
-        return response.objects;
     }
 });
 

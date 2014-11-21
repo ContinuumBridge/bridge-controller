@@ -38,6 +38,8 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
+                console.log('this in findRelated', this );
+                console.log('this.options.initializeCollection', this.options.initializeCollection);
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = CBApp[initializeCollection];
                 }

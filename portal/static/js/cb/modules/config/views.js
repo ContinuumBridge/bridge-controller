@@ -77,11 +77,18 @@ module.exports.Main = Marionette.Layout.extend({
         var discoveredDeviceInstalls = this.discoveredDeviceInstalls
             = CBApp.discoveredDeviceInstallCollection.findAll();
         */
+        var currentBridge = CBApp.getCurrentBridge();
+        this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+        this.listenToOnce(CBApp.bridgeCollection, 'change:current', function() {
+            console.log('currentBridge changed');
+        });
 
+        console.log('calling getCurrentBridge ');
+        currentBridge.fetch().done(function(currentBridgeResolved) {
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+            var currentBridge = currentBridgeResolved.model;
 
-            self.listenToOnce(currentBridge, 'change:current', self.render);
+            console.log('getCurrentBridge fetched', currentBridge);
 
             /*
             deviceInstalls.setQuery('bridge', {bridge: currentBridge});
@@ -112,15 +119,16 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
+            var currentBridgeMessageCollection = CBApp.messageCollection.findAllLive({bridge:currentBridge});
+            self.messageListView.setCollection(currentBridgeMessageCollection, true);
             self.messageListView.render();
 
             var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-        }).done();
+        });
     }
 
 });

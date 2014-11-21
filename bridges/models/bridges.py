@@ -59,6 +59,17 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
         "Returns the short name for the user."
         return self.name
 
+    def is_controlled_by(self, client):
+
+        if client == self:
+            return True
+
+        try:
+            bridge_controls = getattr(client, 'bridge_controls')
+            return bool(bridge_controls.filter(bridge=self))
+        except AttributeError:
+            return False
+
     def get_apps(self):
         apps = []
         for app_install in self.app_installs.filter():
@@ -67,7 +78,7 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
 
     def get_controllers(self):
         controllers = []
-        for bridge_control in self.bridge_controls.filter():
+        for bridge_control in self.controls.filter():
             controllers.append(bridge_control)
         return controllers
 
@@ -85,7 +96,7 @@ class BridgeControl(BroadcastMixin, LoggedModel):
         broadcast_resource = 'bridges.api.resources.BridgeControlResource'
         app_label = 'bridges'
 
-    bridge = models.ForeignKey(Bridge, related_name='bridge_controls')
+    bridge = models.ForeignKey(Bridge, related_name='controls')
     user = models.ForeignKey(CBUser, related_name='bridge_controls')
 
     @property

@@ -168,22 +168,11 @@ CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
     model: CBApp.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
 
-
+    /*
     initialize: function() {
 
         var self = this;
-
-        /*
-        // Listen for reset event from the backend
-        this.bind('backend:reset', function(models) {
-            console.log('DiscoveredDeviceCollection reset with ', models);
-            self.reset(models);
-        });
-        */
     },
-
-    parse : function(response){
-        return response.objects;
-    }
+    */
 });
 

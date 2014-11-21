@@ -45,10 +45,12 @@ CBApp.Controller = Marionette.Controller.extend({
   },
   setCurrentBridge: function(bridge) {
 
+      console.log('setCurrentBridge bridge', bridge);
       var currentBridges = CBApp.bridgeCollection.where({current: true})
       for (i=0; i < currentBridges.length; i++) {
-          currentBridges[i].set('current', false);
+          currentBridges[i].set('current', false, {silent: true});
       }
+      console.log('setCurrentBridge currentBridges', currentBridges);
 
       bridge.set('current', true);
   }

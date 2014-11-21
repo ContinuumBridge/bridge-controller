@@ -95,28 +95,21 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
 
 CBApp.getCurrentBridge = function() {
 
-    var currentBridgeDeferred = Q.defer();
+    //var currentBridgeDeferred = Q.defer();
 
-    CBApp.getCurrentUser().then(function(result) {
+    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
 
-        var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    if (!bridge) {
+        //logger.log('warn', 'There is no current bridge');
+        bridge = false;
+    } else {
+        bridge.set({current: true});
+    }
 
-        if (!bridge) {
-            //logger.log('warn', 'There is no current bridge');
-            bridge = false;
-        } else {
-            bridge.set({current: true});
-        }
+    return bridge
+    //currentBridgeDeferred.resolve(bridge);
 
-        currentBridgeDeferred.resolve(bridge);
-
-    }, function(error) {
-
-        console.log('Error fetching currentUser', error);
-        currentBridgeDeferred.reject(error);
-    });
-
-    return currentBridgeDeferred.promise;
+    //return currentBridgeDeferred.promise;
 }
 
 

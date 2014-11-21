@@ -69,16 +69,14 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     sendCommand: function(command) {
 
         console.log('sendCommand', command);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-            var destination = currentBridge.get('cbid');
-            var message = new CBApp.Message({
-                destination: destination,
-                body: {
-                    command: command
-                }
-            });
-            CBApp.messageCollection.sendMessage(message);
+        var destination = CBApp.getCurrentBridge().get('cbid');
+        var message = new CBApp.Message({
+            destination: destination,
+            body: {
+                command: command
+            }
         });
+        CBApp.messageCollection.sendMessage(message);
     },
 
     clickCommand: function(e) {

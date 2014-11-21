@@ -41596,6 +41596,8 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
+                console.log('this in findRelated', this );
+                console.log('this.options.initializeCollection', this.options.initializeCollection);
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = CBApp[initializeCollection];
                 }
@@ -41946,12 +41948,21 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 // Required for backbone deferred
 Q = require('q');
 
-QueryEngine = require('query-engine');
-
 require('./backbone-cb-model');
+
+var originalCollection = Backbone.Collection;
+
 require('backbone-deferred');
 
-Backbone.QueryCollection = QueryEngine.QueryCollection;
+Backbone.Collection = Backbone.Deferred.Collection;
+
+QueryEngine = require('query-engine');
+
+//Backbone.Deferred.Collection = QueryEngine.QueryCollection;
+
+Backbone.Collection = originalCollection;
+
+//Backbone.QueryCollection = QueryEngine.QueryCollection;
 
 require('backbone-react-component');
 
@@ -41975,6 +41986,24 @@ module.exports = Backbone;
 },{"../../cb/misc/relational-models":205,"./backbone-cb-collection-mixin":207,"./backbone-cb-model":209,"./backbone-cb-model-mixin":208,"./backbone-cb-views":210,"./backbone-relational":213,"./backbone.stickit":218,"./backbone.trackit":219,"backbone":8,"backbone-cocktail":211,"backbone-deferred":212,"backbone-react-component":5,"backbone.babysitter":6,"backbone.io":214,"backbone.marionette":215,"backbone.marionette.subrouter":216,"backbone.modal":217,"backbone.wreqr":7,"jquery":11,"q":12,"query-engine":13,"underscore":204}],207:[function(require,module,exports){
 
 module.exports = {
+
+    dispatchCallback: function(payload) {
+
+        switch(payload.verb) {
+
+            case "create":
+                this.add(payload.models);
+
+            case "update":
+                this.update(payload.models);
+
+            case "delete":
+                this.delete(payload.models);
+
+            default:
+                console.warn('dispatcher doesn\'t know what to do with', payload);
+        }
+    },
 
     subscribe: function(filters) {
 
@@ -42691,7 +42720,7 @@ Q = global.Q = require("q");
     return Collection;
 
       // ADDED Changed Backbone.Collection to QueryEngine.QueryCollection
-  })(QueryEngine.QueryCollection);
+  })(Backbone.Collection);
 
 }).call(this);
 
