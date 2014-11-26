@@ -38,8 +38,9 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                console.log('this in findRelated', this );
-                console.log('this.options.initializeCollection', this.options.initializeCollection);
+                if (this.instance.id == 2) {
+                    console.log('this in findRelated', this );
+                }
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = CBApp[initializeCollection];
                 }
@@ -70,6 +71,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
         options = _.defaults( { parse: this.options.parse }, options );
 
+        if (this.instance.id == 2) {
+            console.log('findRelated keyContents', this.keyContents);
+        }
+
         // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
         if ( this.keyContents instanceof Backbone.Collection ) {
                 this._prepareCollection( this.keyContents );
@@ -78,6 +83,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
         // Otherwise, 'this.keyContents' should be an array of related object ids.
         // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
         else {
+                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+
+                    console.log('findRelated this.keyContents', this.keyContents);
+                }
                 var toAdd = [];
 
                 _.each( this.keyContents, function( attributes ) {
@@ -117,10 +126,20 @@ Backbone.HasMany = Backbone.HasMany.extend({
                 }, this );
 
                 if ( this.related instanceof Backbone.Collection ) {
+                        console.log('related = this.related');
                         related = this.related;
                 }
                 else {
+                        console.log('this._prepareCollection');
                         related = this._prepareCollection();
+                }
+
+                if (this.instance.id == 2) {
+                    if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+
+                        console.log('findRelated toAdd length', JSON.stringify(toAdd));
+                        console.log('findRelated related length', JSON.stringify(related));
+                    }
                 }
 
                 // By now, both `merge` and `parse` will already have been executed for models if they were specified.
@@ -294,7 +313,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // ADDED If skipUpdateRelations is true, don't update relations
         if (options && options.skipUpdateRelations) return;
 
+        if (this.id == 2) {
+            console.log('updateRelations on ', this.constructor.modelType, 'changedAttrs before', JSON.stringify(changedAttrs));
+        }
+
         if ( this._isInitialized && !this.isLocked() ) {
+
+            var changeTriggers = [];
+
             _.each( this._relations, function( rel ) {
 
                 /*
@@ -314,15 +340,43 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
+
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
                     if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
 
-                        this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
+                        if (this.id == 2) {
+                            console.log('updateRelations rel.keySource ', rel.keySource, 'this.attributes ', JSON.stringify(this.attributes));
+                            console.log('updateRelations key ', rel.keySource, 'value ', value);
+                            console.log('this.attributes[ rel.keySource ]', JSON.stringify(this.attributes[ rel.keySource ]));
+                            console.log('updateRelations changedAttrs', JSON.stringify(changedAttrs));
+                        }
 
-                        if (CBApp._isInitialized) {
+                        //var self = this;
 
-                            this.updateRelationToSelf(rel);
+                        // ADDED Defer triggering the relation change and deleting attributes
+                        var changeTrigger = function(model, relation, val, opts) {
+
+                            return function() {
+                                console.log('changeTrigger for ', relation.key, ' passing ', val, 'on ', model);
+                                if (model.id == 2) {
+                                }
+
+                                model.trigger( 'relational:change:' + relation.key, model, val, opts || {} );
+
+                                if ( relation.keySource !== relation.key ) {
+                                    if (model.id == 2) {
+                                        console.log('changeTrigger deleting', model.attributes[relation.keySource]);
+                                    }
+                                    delete model.attributes[ relation.keySource ];
+                                }
+                            }
+                        }
+                        changeTriggers.push(changeTrigger(this, rel, value, options));
+
+                        // ADDED
+                        //this.updateRelationToSelf(rel);
+
                             /*
 
                             // ADDED automatically update related models
@@ -341,15 +395,26 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                                 }
                             });
                         */
-                        }
                     }
                 }
 
                 // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
+                /*
                 if ( rel.keySource !== rel.key ) {
                     delete this.attributes[ rel.keySource ];
+                    if (this.id == 2) {
+                        console.log(' delete rel.keySource', rel.keySource);
+                    }
                 }
+                */
             }, this );
+
+            _.each(changeTriggers, function(trigger) {
+                trigger();
+            });
+        }
+        if (this.id == 2) {
+            console.log('updateRelations changedAttrs after', JSON.stringify(changedAttrs));
         }
     },
 });

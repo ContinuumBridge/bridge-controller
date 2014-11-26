@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./portal/static/js/vendor/vendor.js":[function(require,module,exports){
 
 Dispatcher = require('Flux').Dispatcher;
 React = require('react');
@@ -7,7 +7,7 @@ Marionette = require('backbone.marionette');
 
 
 
-},{"Flux":2,"backbone-bundle":206,"backbone.marionette":215,"react":159}],2:[function(require,module,exports){
+},{"Flux":"/home/vagrant/bridge-controller/node_modules/Flux/index.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/index.js":[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -19,7 +19,7 @@ Marionette = require('backbone.marionette');
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":3}],3:[function(require,module,exports){
+},{"./lib/Dispatcher":"/home/vagrant/bridge-controller/node_modules/Flux/lib/Dispatcher.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/lib/Dispatcher.js":[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -271,7 +271,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":4}],4:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/Flux/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/lib/invariant.js":[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -326,7 +326,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],5:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
 // Backbone React Component
 // ========================
 //
@@ -617,7 +617,7 @@ module.exports = invariant;
 }));
 // <a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 
-},{"backbone":8,"react":159,"underscore":204}],6:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js":[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.5
@@ -809,7 +809,7 @@ module.exports = invariant;
 
 }));
 
-},{"backbone":8,"underscore":204}],7:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js":[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.1
@@ -1251,7 +1251,7 @@ module.exports = invariant;
 
 }));
 
-},{"backbone":8,"underscore":204}],8:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js":[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -2861,9 +2861,9 @@ module.exports = invariant;
 
 }));
 
-},{"underscore":204}],9:[function(require,module,exports){
+},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js":[function(require,module,exports){
 
-},{}],10:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2928,7 +2928,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],11:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -12120,7 +12120,7 @@ return jQuery;
 
 }));
 
-},{}],12:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -14061,7 +14061,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":10}],13:[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js":[function(require,module,exports){
 (function() {
   var Backbone, Criteria, Hash, Pill, Query, QueryCollection, queryEngine, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -15582,8 +15582,6 @@ return Q;
     };
 
     Query.prototype.testCompiledSelector = function(compiledSelector, model) {
-      console.log('query model', model);
-      console.log('query compiledSelector', compiledSelector);
       var match, opts, test;
       opts = compiledSelector.opts;
       test = compiledSelector.test;
@@ -15595,7 +15593,6 @@ return Q;
         opts.modelValue = false;
       }
       match = test(opts);
-      console.log('query match', match);
       return match;
     };
 
@@ -15756,7 +15753,7 @@ return Q;
 
 }).call(this);
 
-},{"backbone":9,"exoskeleton":9}],14:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -15783,7 +15780,7 @@ var AutoFocusMixin = {
 
 module.exports = AutoFocusMixin;
 
-},{"./focusNode":124}],15:[function(require,module,exports){
+},{"./focusNode":"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -16005,7 +16002,7 @@ var BeforeInputEventPlugin = {
 
 module.exports = BeforeInputEventPlugin;
 
-},{"./EventConstants":28,"./EventPropagators":33,"./ExecutionEnvironment":34,"./SyntheticInputEvent":102,"./keyOf":146}],16:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16121,7 +16118,7 @@ var CSSProperty = {
 
 module.exports = CSSProperty;
 
-},{}],17:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16256,7 +16253,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./CSSProperty":16,"./ExecutionEnvironment":34,"./camelizeStyleName":113,"./dangerousStyleValue":118,"./hyphenateStyleName":137,"./memoizeStringOnly":148,"./warning":158,"_process":10}],18:[function(require,module,exports){
+},{"./CSSProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./camelizeStyleName":"/home/vagrant/bridge-controller/node_modules/react/lib/camelizeStyleName.js","./dangerousStyleValue":"/home/vagrant/bridge-controller/node_modules/react/lib/dangerousStyleValue.js","./hyphenateStyleName":"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenateStyleName.js","./memoizeStringOnly":"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16356,7 +16353,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 module.exports = CallbackQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./PooledClass":40,"./invariant":139,"_process":10}],19:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16738,7 +16735,7 @@ var ChangeEventPlugin = {
 
 module.exports = ChangeEventPlugin;
 
-},{"./EventConstants":28,"./EventPluginHub":30,"./EventPropagators":33,"./ExecutionEnvironment":34,"./ReactUpdates":92,"./SyntheticEvent":100,"./isEventSupported":140,"./isTextInputElement":142,"./keyOf":146}],20:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js","./isTextInputElement":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16763,7 +16760,7 @@ var ClientReactRootIndex = {
 
 module.exports = ClientReactRootIndex;
 
-},{}],21:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -17022,7 +17019,7 @@ var CompositionEventPlugin = {
 
 module.exports = CompositionEventPlugin;
 
-},{"./EventConstants":28,"./EventPropagators":33,"./ExecutionEnvironment":34,"./ReactInputSelection":72,"./SyntheticCompositionEvent":98,"./getTextContentAccessor":134,"./keyOf":146}],22:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticCompositionEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17197,7 +17194,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 }).call(this,require('_process'))
-},{"./Danger":25,"./ReactMultiChildUpdateTypes":78,"./getTextContentAccessor":134,"./invariant":139,"_process":10}],23:[function(require,module,exports){
+},{"./Danger":"/home/vagrant/bridge-controller/node_modules/react/lib/Danger.js","./ReactMultiChildUpdateTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17496,7 +17493,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],24:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17693,7 +17690,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":23,"./escapeTextForBrowser":122,"./memoizeStringOnly":148,"./warning":158,"_process":10}],25:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./memoizeStringOnly":"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Danger.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17879,7 +17876,7 @@ var Danger = {
 module.exports = Danger;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":34,"./createNodesFromMarkup":117,"./emptyFunction":120,"./getMarkupWrap":131,"./invariant":139,"_process":10}],26:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createNodesFromMarkup":"/home/vagrant/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./getMarkupWrap":"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -17919,7 +17916,7 @@ var DefaultEventPluginOrder = [
 
 module.exports = DefaultEventPluginOrder;
 
-},{"./keyOf":146}],27:[function(require,module,exports){
+},{"./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -18059,7 +18056,7 @@ var EnterLeaveEventPlugin = {
 
 module.exports = EnterLeaveEventPlugin;
 
-},{"./EventConstants":28,"./EventPropagators":33,"./ReactMount":76,"./SyntheticMouseEvent":104,"./keyOf":146}],28:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -18131,7 +18128,7 @@ var EventConstants = {
 
 module.exports = EventConstants;
 
-},{"./keyMirror":145}],29:[function(require,module,exports){
+},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventListener.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014 Facebook, Inc.
@@ -18221,7 +18218,7 @@ var EventListener = {
 module.exports = EventListener;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":120,"_process":10}],30:[function(require,module,exports){
+},{"./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -18497,7 +18494,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":31,"./EventPluginUtils":32,"./accumulateInto":110,"./forEachAccumulated":125,"./invariant":139,"_process":10}],31:[function(require,module,exports){
+},{"./EventPluginRegistry":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -18777,7 +18774,7 @@ var EventPluginRegistry = {
 module.exports = EventPluginRegistry;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],32:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -18998,7 +18995,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 }).call(this,require('_process'))
-},{"./EventConstants":28,"./invariant":139,"_process":10}],33:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19140,7 +19137,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 }).call(this,require('_process'))
-},{"./EventConstants":28,"./EventPluginHub":30,"./accumulateInto":110,"./forEachAccumulated":125,"_process":10}],34:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -19185,7 +19182,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],35:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -19371,7 +19368,7 @@ var HTMLDOMPropertyConfig = {
 
 module.exports = HTMLDOMPropertyConfig;
 
-},{"./DOMProperty":23,"./ExecutionEnvironment":34}],36:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19527,7 +19524,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 }).call(this,require('_process'))
-},{"./ReactPropTypes":85,"./invariant":139,"_process":10}],37:[function(require,module,exports){
+},{"./ReactPropTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -19577,7 +19574,7 @@ var LocalEventTrapMixin = {
 module.exports = LocalEventTrapMixin;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserEventEmitter":43,"./accumulateInto":110,"./forEachAccumulated":125,"./invariant":139,"_process":10}],38:[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -19635,7 +19632,7 @@ var MobileSafariClickEventPlugin = {
 
 module.exports = MobileSafariClickEventPlugin;
 
-},{"./EventConstants":28,"./emptyFunction":120}],39:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -19682,7 +19679,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],40:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19798,7 +19795,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],41:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/React.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19986,7 +19983,7 @@ React.version = '0.12.0';
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./DOMPropertyOperations":24,"./EventPluginUtils":32,"./ExecutionEnvironment":34,"./Object.assign":39,"./ReactChildren":44,"./ReactComponent":45,"./ReactCompositeComponent":47,"./ReactContext":48,"./ReactCurrentOwner":49,"./ReactDOM":50,"./ReactDOMComponent":52,"./ReactDefaultInjection":62,"./ReactElement":65,"./ReactElementValidator":66,"./ReactInstanceHandles":73,"./ReactLegacyElement":74,"./ReactMount":76,"./ReactMultiChild":77,"./ReactPerf":81,"./ReactPropTypes":85,"./ReactServerRendering":89,"./ReactTextComponent":91,"./deprecated":119,"./onlyChild":150,"_process":10}],42:[function(require,module,exports){
+},{"./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactChildren.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactDOMComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDefaultInjection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./ReactServerRendering":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRendering.js","./ReactTextComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./onlyChild":"/home/vagrant/bridge-controller/node_modules/react/lib/onlyChild.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -20029,7 +20026,7 @@ var ReactBrowserComponentMixin = {
 module.exports = ReactBrowserComponentMixin;
 
 }).call(this,require('_process'))
-},{"./ReactEmptyComponent":67,"./ReactMount":76,"./invariant":139,"_process":10}],43:[function(require,module,exports){
+},{"./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -20384,7 +20381,7 @@ var ReactBrowserEventEmitter = assign({}, ReactEventEmitterMixin, {
 
 module.exports = ReactBrowserEventEmitter;
 
-},{"./EventConstants":28,"./EventPluginHub":30,"./EventPluginRegistry":31,"./Object.assign":39,"./ReactEventEmitterMixin":69,"./ViewportMetrics":109,"./isEventSupported":140}],44:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -20534,7 +20531,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 }).call(this,require('_process'))
-},{"./PooledClass":40,"./traverseAllChildren":157,"./warning":158,"_process":10}],45:[function(require,module,exports){
+},{"./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./traverseAllChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -20977,7 +20974,7 @@ var ReactComponent = {
 module.exports = ReactComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./ReactElement":65,"./ReactOwner":80,"./ReactUpdates":92,"./invariant":139,"./keyMirror":145,"_process":10}],46:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -21099,7 +21096,7 @@ var ReactComponentBrowserEnvironment = {
 module.exports = ReactComponentBrowserEnvironment;
 
 }).call(this,require('_process'))
-},{"./ReactDOMIDOperations":54,"./ReactMarkupChecksum":75,"./ReactMount":76,"./ReactPerf":81,"./ReactReconcileTransaction":87,"./getReactRootElementInContainer":133,"./invariant":139,"./setInnerHTML":153,"_process":10}],47:[function(require,module,exports){
+},{"./ReactDOMIDOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js","./ReactMarkupChecksum":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactReconcileTransaction":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js","./getReactRootElementInContainer":"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22539,7 +22536,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./ReactComponent":45,"./ReactContext":48,"./ReactCurrentOwner":49,"./ReactElement":65,"./ReactElementValidator":66,"./ReactEmptyComponent":67,"./ReactErrorUtils":68,"./ReactLegacyElement":74,"./ReactOwner":80,"./ReactPerf":81,"./ReactPropTransferer":82,"./ReactPropTypeLocationNames":83,"./ReactPropTypeLocations":84,"./ReactUpdates":92,"./instantiateReactComponent":138,"./invariant":139,"./keyMirror":145,"./keyOf":146,"./mapObject":147,"./monitorCodeUse":149,"./shouldUpdateReactComponent":155,"./warning":158,"_process":10}],48:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactErrorUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactErrorUtils.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTransferer":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTransferer.js","./ReactPropTypeLocationNames":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./ReactPropTypeLocations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./mapObject":"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22601,7 +22598,7 @@ var ReactContext = {
 
 module.exports = ReactContext;
 
-},{"./Object.assign":39}],49:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22635,7 +22632,7 @@ var ReactCurrentOwner = {
 
 module.exports = ReactCurrentOwner;
 
-},{}],50:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22818,7 +22815,7 @@ var ReactDOM = mapObject({
 module.exports = ReactDOM;
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./ReactElementValidator":66,"./ReactLegacyElement":74,"./mapObject":147,"_process":10}],51:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./mapObject":"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22883,7 +22880,7 @@ var ReactDOMButton = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMButton;
 
-},{"./AutoFocusMixin":14,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65,"./keyMirror":145}],52:[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23370,7 +23367,7 @@ assign(
 module.exports = ReactDOMComponent;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":17,"./DOMProperty":23,"./DOMPropertyOperations":24,"./Object.assign":39,"./ReactBrowserComponentMixin":42,"./ReactBrowserEventEmitter":43,"./ReactComponent":45,"./ReactMount":76,"./ReactMultiChild":77,"./ReactPerf":81,"./escapeTextForBrowser":122,"./invariant":139,"./isEventSupported":140,"./keyOf":146,"./monitorCodeUse":149,"_process":10}],53:[function(require,module,exports){
+},{"./CSSPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23420,7 +23417,7 @@ var ReactDOMForm = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMForm;
 
-},{"./EventConstants":28,"./LocalEventTrapMixin":37,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65}],54:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23606,7 +23603,7 @@ var ReactDOMIDOperations = {
 module.exports = ReactDOMIDOperations;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":17,"./DOMChildrenOperations":22,"./DOMPropertyOperations":24,"./ReactMount":76,"./ReactPerf":81,"./invariant":139,"./setInnerHTML":153,"_process":10}],55:[function(require,module,exports){
+},{"./CSSPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMChildrenOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23654,7 +23651,7 @@ var ReactDOMImg = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMImg;
 
-},{"./EventConstants":28,"./LocalEventTrapMixin":37,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65}],56:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23832,7 +23829,7 @@ var ReactDOMInput = ReactCompositeComponent.createClass({
 module.exports = ReactDOMInput;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":14,"./DOMPropertyOperations":24,"./LinkedValueUtils":36,"./Object.assign":39,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65,"./ReactMount":76,"./ReactUpdates":92,"./invariant":139,"_process":10}],57:[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -23885,7 +23882,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 module.exports = ReactDOMOption;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65,"./warning":158,"_process":10}],58:[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24069,7 +24066,7 @@ var ReactDOMSelect = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMSelect;
 
-},{"./AutoFocusMixin":14,"./LinkedValueUtils":36,"./Object.assign":39,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65,"./ReactUpdates":92}],59:[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24278,7 +24275,7 @@ var ReactDOMSelection = {
 
 module.exports = ReactDOMSelection;
 
-},{"./ExecutionEnvironment":34,"./getNodeForCharacterOffset":132,"./getTextContentAccessor":134}],60:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./getNodeForCharacterOffset":"/home/vagrant/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -24419,7 +24416,7 @@ var ReactDOMTextarea = ReactCompositeComponent.createClass({
 module.exports = ReactDOMTextarea;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":14,"./DOMPropertyOperations":24,"./LinkedValueUtils":36,"./Object.assign":39,"./ReactBrowserComponentMixin":42,"./ReactCompositeComponent":47,"./ReactDOM":50,"./ReactElement":65,"./ReactUpdates":92,"./invariant":139,"./warning":158,"_process":10}],61:[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24492,7 +24489,7 @@ var ReactDefaultBatchingStrategy = {
 
 module.exports = ReactDefaultBatchingStrategy;
 
-},{"./Object.assign":39,"./ReactUpdates":92,"./Transaction":108,"./emptyFunction":120}],62:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -24621,7 +24618,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":15,"./ChangeEventPlugin":19,"./ClientReactRootIndex":20,"./CompositionEventPlugin":21,"./DefaultEventPluginOrder":26,"./EnterLeaveEventPlugin":27,"./ExecutionEnvironment":34,"./HTMLDOMPropertyConfig":35,"./MobileSafariClickEventPlugin":38,"./ReactBrowserComponentMixin":42,"./ReactComponentBrowserEnvironment":46,"./ReactDOMButton":51,"./ReactDOMComponent":52,"./ReactDOMForm":53,"./ReactDOMImg":55,"./ReactDOMInput":56,"./ReactDOMOption":57,"./ReactDOMSelect":58,"./ReactDOMTextarea":60,"./ReactDefaultBatchingStrategy":61,"./ReactDefaultPerf":63,"./ReactEventListener":70,"./ReactInjection":71,"./ReactInstanceHandles":73,"./ReactMount":76,"./SVGDOMPropertyConfig":93,"./SelectEventPlugin":94,"./ServerReactRootIndex":95,"./SimpleEventPlugin":96,"./createFullPageComponent":116,"_process":10}],63:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js","./ChangeEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js","./ClientReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js","./CompositionEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js","./DefaultEventPluginOrder":"/home/vagrant/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js","./EnterLeaveEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./HTMLDOMPropertyConfig":"/home/vagrant/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js","./MobileSafariClickEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactComponentBrowserEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js","./ReactDOMButton":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMButton.js","./ReactDOMComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDOMForm":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMForm.js","./ReactDOMImg":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMImg.js","./ReactDOMInput":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMInput.js","./ReactDOMOption":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMOption.js","./ReactDOMSelect":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelect.js","./ReactDOMTextarea":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js","./ReactDefaultBatchingStrategy":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js","./ReactDefaultPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js","./ReactEventListener":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventListener.js","./ReactInjection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInjection.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./SVGDOMPropertyConfig":"/home/vagrant/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js","./SelectEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/SelectEventPlugin.js","./ServerReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js","./SimpleEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js","./createFullPageComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/createFullPageComponent.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24881,7 +24878,7 @@ var ReactDefaultPerf = {
 
 module.exports = ReactDefaultPerf;
 
-},{"./DOMProperty":23,"./ReactDefaultPerfAnalysis":64,"./ReactMount":76,"./ReactPerf":81,"./performanceNow":152}],64:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactDefaultPerfAnalysis":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./performanceNow":"/home/vagrant/bridge-controller/node_modules/react/lib/performanceNow.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25087,7 +25084,7 @@ var ReactDefaultPerfAnalysis = {
 
 module.exports = ReactDefaultPerfAnalysis;
 
-},{"./Object.assign":39}],65:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -25333,7 +25330,7 @@ ReactElement.isValidElement = function(object) {
 module.exports = ReactElement;
 
 }).call(this,require('_process'))
-},{"./ReactContext":48,"./ReactCurrentOwner":49,"./warning":158,"_process":10}],66:[function(require,module,exports){
+},{"./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -25601,7 +25598,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 
-},{"./ReactCurrentOwner":49,"./ReactElement":65,"./ReactPropTypeLocations":84,"./monitorCodeUse":149}],67:[function(require,module,exports){
+},{"./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -25678,7 +25675,7 @@ var ReactEmptyComponent = {
 module.exports = ReactEmptyComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./invariant":139,"_process":10}],68:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25710,7 +25707,7 @@ var ReactErrorUtils = {
 
 module.exports = ReactErrorUtils;
 
-},{}],69:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25760,7 +25757,7 @@ var ReactEventEmitterMixin = {
 
 module.exports = ReactEventEmitterMixin;
 
-},{"./EventPluginHub":30}],70:[function(require,module,exports){
+},{"./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25944,7 +25941,7 @@ var ReactEventListener = {
 
 module.exports = ReactEventListener;
 
-},{"./EventListener":29,"./ExecutionEnvironment":34,"./Object.assign":39,"./PooledClass":40,"./ReactInstanceHandles":73,"./ReactMount":76,"./ReactUpdates":92,"./getEventTarget":130,"./getUnboundedScrollPosition":135}],71:[function(require,module,exports){
+},{"./EventListener":"/home/vagrant/bridge-controller/node_modules/react/lib/EventListener.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js","./getUnboundedScrollPosition":"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25984,7 +25981,7 @@ var ReactInjection = {
 
 module.exports = ReactInjection;
 
-},{"./DOMProperty":23,"./EventPluginHub":30,"./ReactBrowserEventEmitter":43,"./ReactComponent":45,"./ReactCompositeComponent":47,"./ReactEmptyComponent":67,"./ReactNativeComponent":79,"./ReactPerf":81,"./ReactRootIndex":88,"./ReactUpdates":92}],72:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactNativeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26120,7 +26117,7 @@ var ReactInputSelection = {
 
 module.exports = ReactInputSelection;
 
-},{"./ReactDOMSelection":59,"./containsNode":114,"./focusNode":124,"./getActiveElement":126}],73:[function(require,module,exports){
+},{"./ReactDOMSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelection.js","./containsNode":"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js","./focusNode":"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js","./getActiveElement":"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -26455,7 +26452,7 @@ var ReactInstanceHandles = {
 module.exports = ReactInstanceHandles;
 
 }).call(this,require('_process'))
-},{"./ReactRootIndex":88,"./invariant":139,"_process":10}],74:[function(require,module,exports){
+},{"./ReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -26702,7 +26699,7 @@ ReactLegacyElementFactory._isLegacyCallWarningEnabled = true;
 module.exports = ReactLegacyElementFactory;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":49,"./invariant":139,"./monitorCodeUse":149,"./warning":158,"_process":10}],75:[function(require,module,exports){
+},{"./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26750,7 +26747,7 @@ var ReactMarkupChecksum = {
 
 module.exports = ReactMarkupChecksum;
 
-},{"./adler32":111}],76:[function(require,module,exports){
+},{"./adler32":"/home/vagrant/bridge-controller/node_modules/react/lib/adler32.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27448,7 +27445,7 @@ ReactMount.renderComponent = deprecated(
 module.exports = ReactMount;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":23,"./ReactBrowserEventEmitter":43,"./ReactCurrentOwner":49,"./ReactElement":65,"./ReactInstanceHandles":73,"./ReactLegacyElement":74,"./ReactPerf":81,"./containsNode":114,"./deprecated":119,"./getReactRootElementInContainer":133,"./instantiateReactComponent":138,"./invariant":139,"./shouldUpdateReactComponent":155,"./warning":158,"_process":10}],77:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./containsNode":"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./getReactRootElementInContainer":"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27876,7 +27873,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 
-},{"./ReactComponent":45,"./ReactMultiChildUpdateTypes":78,"./flattenChildren":123,"./instantiateReactComponent":138,"./shouldUpdateReactComponent":155}],78:[function(require,module,exports){
+},{"./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMultiChildUpdateTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./flattenChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/flattenChildren.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27909,7 +27906,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 
 module.exports = ReactMultiChildUpdateTypes;
 
-},{"./keyMirror":145}],79:[function(require,module,exports){
+},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -27982,7 +27979,7 @@ var ReactNativeComponent = {
 module.exports = ReactNativeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./invariant":139,"_process":10}],80:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28138,7 +28135,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 }).call(this,require('_process'))
-},{"./emptyObject":121,"./invariant":139,"_process":10}],81:[function(require,module,exports){
+},{"./emptyObject":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyObject.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28222,7 +28219,7 @@ function _noMeasure(objName, fnName, func) {
 module.exports = ReactPerf;
 
 }).call(this,require('_process'))
-},{"_process":10}],82:[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTransferer.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28389,7 +28386,7 @@ var ReactPropTransferer = {
 module.exports = ReactPropTransferer;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./emptyFunction":120,"./invariant":139,"./joinClasses":144,"./warning":158,"_process":10}],83:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./joinClasses":"/home/vagrant/bridge-controller/node_modules/react/lib/joinClasses.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28417,7 +28414,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactPropTypeLocationNames;
 
 }).call(this,require('_process'))
-},{"_process":10}],84:[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28441,7 +28438,7 @@ var ReactPropTypeLocations = keyMirror({
 
 module.exports = ReactPropTypeLocations;
 
-},{"./keyMirror":145}],85:[function(require,module,exports){
+},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28795,7 +28792,7 @@ function getPreciseType(propValue) {
 
 module.exports = ReactPropTypes;
 
-},{"./ReactElement":65,"./ReactPropTypeLocationNames":83,"./deprecated":119,"./emptyFunction":120}],86:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocationNames":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28851,7 +28848,7 @@ PooledClass.addPoolingTo(ReactPutListenerQueue);
 
 module.exports = ReactPutListenerQueue;
 
-},{"./Object.assign":39,"./PooledClass":40,"./ReactBrowserEventEmitter":43}],87:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29027,7 +29024,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
 
-},{"./CallbackQueue":18,"./Object.assign":39,"./PooledClass":40,"./ReactBrowserEventEmitter":43,"./ReactInputSelection":72,"./ReactPutListenerQueue":86,"./Transaction":108}],88:[function(require,module,exports){
+},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./ReactPutListenerQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29058,7 +29055,7 @@ var ReactRootIndex = {
 
 module.exports = ReactRootIndex;
 
-},{}],89:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29138,7 +29135,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./ReactInstanceHandles":73,"./ReactMarkupChecksum":75,"./ReactServerRenderingTransaction":90,"./instantiateReactComponent":138,"./invariant":139,"_process":10}],90:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMarkupChecksum":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactServerRenderingTransaction":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -29251,7 +29248,7 @@ PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
 
-},{"./CallbackQueue":18,"./Object.assign":39,"./PooledClass":40,"./ReactPutListenerQueue":86,"./Transaction":108,"./emptyFunction":120}],91:[function(require,module,exports){
+},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactPutListenerQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29357,7 +29354,7 @@ ReactTextComponentFactory.type = ReactTextComponent;
 
 module.exports = ReactTextComponentFactory;
 
-},{"./DOMPropertyOperations":24,"./Object.assign":39,"./ReactComponent":45,"./ReactElement":65,"./escapeTextForBrowser":122}],92:[function(require,module,exports){
+},{"./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29647,7 +29644,7 @@ var ReactUpdates = {
 module.exports = ReactUpdates;
 
 }).call(this,require('_process'))
-},{"./CallbackQueue":18,"./Object.assign":39,"./PooledClass":40,"./ReactCurrentOwner":49,"./ReactPerf":81,"./Transaction":108,"./invariant":139,"./warning":158,"_process":10}],93:[function(require,module,exports){
+},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29739,7 +29736,7 @@ var SVGDOMPropertyConfig = {
 
 module.exports = SVGDOMPropertyConfig;
 
-},{"./DOMProperty":23}],94:[function(require,module,exports){
+},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29934,7 +29931,7 @@ var SelectEventPlugin = {
 
 module.exports = SelectEventPlugin;
 
-},{"./EventConstants":28,"./EventPropagators":33,"./ReactInputSelection":72,"./SyntheticEvent":100,"./getActiveElement":126,"./isTextInputElement":142,"./keyOf":146,"./shallowEqual":154}],95:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getActiveElement":"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js","./isTextInputElement":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./shallowEqual":"/home/vagrant/bridge-controller/node_modules/react/lib/shallowEqual.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29965,7 +29962,7 @@ var ServerReactRootIndex = {
 
 module.exports = ServerReactRootIndex;
 
-},{}],96:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -30393,7 +30390,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 }).call(this,require('_process'))
-},{"./EventConstants":28,"./EventPluginUtils":32,"./EventPropagators":33,"./SyntheticClipboardEvent":97,"./SyntheticDragEvent":99,"./SyntheticEvent":100,"./SyntheticFocusEvent":101,"./SyntheticKeyboardEvent":103,"./SyntheticMouseEvent":104,"./SyntheticTouchEvent":105,"./SyntheticUIEvent":106,"./SyntheticWheelEvent":107,"./getEventCharCode":127,"./invariant":139,"./keyOf":146,"./warning":158,"_process":10}],97:[function(require,module,exports){
+},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./SyntheticClipboardEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js","./SyntheticDragEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./SyntheticFocusEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js","./SyntheticKeyboardEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js","./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./SyntheticTouchEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js","./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./SyntheticWheelEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js","./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30439,7 +30436,7 @@ SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 module.exports = SyntheticClipboardEvent;
 
 
-},{"./SyntheticEvent":100}],98:[function(require,module,exports){
+},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30485,7 +30482,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticCompositionEvent;
 
 
-},{"./SyntheticEvent":100}],99:[function(require,module,exports){
+},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30524,7 +30521,7 @@ SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
 
-},{"./SyntheticMouseEvent":104}],100:[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30682,7 +30679,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
 
 module.exports = SyntheticEvent;
 
-},{"./Object.assign":39,"./PooledClass":40,"./emptyFunction":120,"./getEventTarget":130}],101:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30721,7 +30718,7 @@ SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
 
-},{"./SyntheticUIEvent":106}],102:[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -30768,7 +30765,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticInputEvent;
 
 
-},{"./SyntheticEvent":100}],103:[function(require,module,exports){
+},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30855,7 +30852,7 @@ SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
 
-},{"./SyntheticUIEvent":106,"./getEventCharCode":127,"./getEventKey":128,"./getEventModifierState":129}],104:[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js","./getEventKey":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventKey.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30938,7 +30935,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
 
-},{"./SyntheticUIEvent":106,"./ViewportMetrics":109,"./getEventModifierState":129}],105:[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./ViewportMetrics":"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30986,7 +30983,7 @@ SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
 
-},{"./SyntheticUIEvent":106,"./getEventModifierState":129}],106:[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31048,7 +31045,7 @@ SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
 
-},{"./SyntheticEvent":100,"./getEventTarget":130}],107:[function(require,module,exports){
+},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31109,7 +31106,7 @@ SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
 
-},{"./SyntheticMouseEvent":104}],108:[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31350,7 +31347,7 @@ var Transaction = {
 module.exports = Transaction;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],109:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31382,7 +31379,7 @@ var ViewportMetrics = {
 
 module.exports = ViewportMetrics;
 
-},{"./getUnboundedScrollPosition":135}],110:[function(require,module,exports){
+},{"./getUnboundedScrollPosition":"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -31448,7 +31445,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],111:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/adler32.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31482,7 +31479,7 @@ function adler32(data) {
 
 module.exports = adler32;
 
-},{}],112:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/camelize.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31514,7 +31511,7 @@ function camelize(string) {
 
 module.exports = camelize;
 
-},{}],113:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -31556,7 +31553,7 @@ function camelizeStyleName(string) {
 
 module.exports = camelizeStyleName;
 
-},{"./camelize":112}],114:[function(require,module,exports){
+},{"./camelize":"/home/vagrant/bridge-controller/node_modules/react/lib/camelize.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31600,7 +31597,7 @@ function containsNode(outerNode, innerNode) {
 
 module.exports = containsNode;
 
-},{"./isTextNode":143}],115:[function(require,module,exports){
+},{"./isTextNode":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31686,7 +31683,7 @@ function createArrayFrom(obj) {
 
 module.exports = createArrayFrom;
 
-},{"./toArray":156}],116:[function(require,module,exports){
+},{"./toArray":"/home/vagrant/bridge-controller/node_modules/react/lib/toArray.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31747,7 +31744,7 @@ function createFullPageComponent(tag) {
 module.exports = createFullPageComponent;
 
 }).call(this,require('_process'))
-},{"./ReactCompositeComponent":47,"./ReactElement":65,"./invariant":139,"_process":10}],117:[function(require,module,exports){
+},{"./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31837,7 +31834,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":34,"./createArrayFrom":115,"./getMarkupWrap":131,"./invariant":139,"_process":10}],118:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createArrayFrom":"/home/vagrant/bridge-controller/node_modules/react/lib/createArrayFrom.js","./getMarkupWrap":"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31895,7 +31892,7 @@ function dangerousStyleValue(name, value) {
 
 module.exports = dangerousStyleValue;
 
-},{"./CSSProperty":16}],119:[function(require,module,exports){
+},{"./CSSProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31946,7 +31943,7 @@ function deprecated(namespace, oldName, newName, ctx, fn) {
 module.exports = deprecated;
 
 }).call(this,require('_process'))
-},{"./Object.assign":39,"./warning":158,"_process":10}],120:[function(require,module,exports){
+},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31980,7 +31977,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],121:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32004,7 +32001,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = emptyObject;
 
 }).call(this,require('_process'))
-},{"_process":10}],122:[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32045,7 +32042,7 @@ function escapeTextForBrowser(text) {
 
 module.exports = escapeTextForBrowser;
 
-},{}],123:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32114,7 +32111,7 @@ function flattenChildren(children) {
 module.exports = flattenChildren;
 
 }).call(this,require('_process'))
-},{"./ReactTextComponent":91,"./traverseAllChildren":157,"./warning":158,"_process":10}],124:[function(require,module,exports){
+},{"./ReactTextComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./traverseAllChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -32143,7 +32140,7 @@ function focusNode(node) {
 
 module.exports = focusNode;
 
-},{}],125:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32174,7 +32171,7 @@ var forEachAccumulated = function(arr, cb, scope) {
 
 module.exports = forEachAccumulated;
 
-},{}],126:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32203,7 +32200,7 @@ function getActiveElement() /*?DOMElement*/ {
 
 module.exports = getActiveElement;
 
-},{}],127:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32255,7 +32252,7 @@ function getEventCharCode(nativeEvent) {
 
 module.exports = getEventCharCode;
 
-},{}],128:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32360,7 +32357,7 @@ function getEventKey(nativeEvent) {
 
 module.exports = getEventKey;
 
-},{"./getEventCharCode":127}],129:[function(require,module,exports){
+},{"./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -32407,7 +32404,7 @@ function getEventModifierState(nativeEvent) {
 
 module.exports = getEventModifierState;
 
-},{}],130:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32438,7 +32435,7 @@ function getEventTarget(nativeEvent) {
 
 module.exports = getEventTarget;
 
-},{}],131:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32555,7 +32552,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":34,"./invariant":139,"_process":10}],132:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32630,7 +32627,7 @@ function getNodeForCharacterOffset(root, offset) {
 
 module.exports = getNodeForCharacterOffset;
 
-},{}],133:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32665,7 +32662,7 @@ function getReactRootElementInContainer(container) {
 
 module.exports = getReactRootElementInContainer;
 
-},{}],134:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32702,7 +32699,7 @@ function getTextContentAccessor() {
 
 module.exports = getTextContentAccessor;
 
-},{"./ExecutionEnvironment":34}],135:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32742,7 +32739,7 @@ function getUnboundedScrollPosition(scrollable) {
 
 module.exports = getUnboundedScrollPosition;
 
-},{}],136:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32775,7 +32772,7 @@ function hyphenate(string) {
 
 module.exports = hyphenate;
 
-},{}],137:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32816,7 +32813,7 @@ function hyphenateStyleName(string) {
 
 module.exports = hyphenateStyleName;
 
-},{"./hyphenate":136}],138:[function(require,module,exports){
+},{"./hyphenate":"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenate.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32930,7 +32927,7 @@ function instantiateReactComponent(element, parentCompositeType) {
 module.exports = instantiateReactComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./ReactEmptyComponent":67,"./ReactLegacyElement":74,"./ReactNativeComponent":79,"./warning":158,"_process":10}],139:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactNativeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32987,7 +32984,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":10}],140:[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33052,7 +33049,7 @@ function isEventSupported(eventNameSuffix, capture) {
 
 module.exports = isEventSupported;
 
-},{"./ExecutionEnvironment":34}],141:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/isNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33080,7 +33077,7 @@ function isNode(object) {
 
 module.exports = isNode;
 
-},{}],142:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33124,7 +33121,7 @@ function isTextInputElement(elem) {
 
 module.exports = isTextInputElement;
 
-},{}],143:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33149,7 +33146,7 @@ function isTextNode(object) {
 
 module.exports = isTextNode;
 
-},{"./isNode":141}],144:[function(require,module,exports){
+},{"./isNode":"/home/vagrant/bridge-controller/node_modules/react/lib/isNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/joinClasses.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33190,7 +33187,7 @@ function joinClasses(className/*, ... */) {
 
 module.exports = joinClasses;
 
-},{}],145:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33245,7 +33242,7 @@ var keyMirror = function(obj) {
 module.exports = keyMirror;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],146:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33281,7 +33278,7 @@ var keyOf = function(oneKeyObj) {
 
 module.exports = keyOf;
 
-},{}],147:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33334,7 +33331,7 @@ function mapObject(object, callback, context) {
 
 module.exports = mapObject;
 
-},{}],148:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33368,7 +33365,7 @@ function memoizeStringOnly(callback) {
 
 module.exports = memoizeStringOnly;
 
-},{}],149:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -33402,7 +33399,7 @@ function monitorCodeUse(eventName, data) {
 module.exports = monitorCodeUse;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],150:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33442,7 +33439,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./invariant":139,"_process":10}],151:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/performance.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33470,7 +33467,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = performance || {};
 
-},{"./ExecutionEnvironment":34}],152:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33498,7 +33495,7 @@ var performanceNow = performance.now.bind(performance);
 
 module.exports = performanceNow;
 
-},{"./performance":151}],153:[function(require,module,exports){
+},{"./performance":"/home/vagrant/bridge-controller/node_modules/react/lib/performance.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33576,7 +33573,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = setInnerHTML;
 
-},{"./ExecutionEnvironment":34}],154:[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33620,7 +33617,7 @@ function shallowEqual(objA, objB) {
 
 module.exports = shallowEqual;
 
-},{}],155:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33658,7 +33655,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 
 module.exports = shouldUpdateReactComponent;
 
-},{}],156:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/toArray.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -33730,7 +33727,7 @@ function toArray(obj) {
 module.exports = toArray;
 
 }).call(this,require('_process'))
-},{"./invariant":139,"_process":10}],157:[function(require,module,exports){
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33913,7 +33910,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 }).call(this,require('_process'))
-},{"./ReactElement":65,"./ReactInstanceHandles":73,"./invariant":139,"_process":10}],158:[function(require,module,exports){
+},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -33958,14 +33955,14 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":120,"_process":10}],159:[function(require,module,exports){
+},{"./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/react.js":[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":41}],160:[function(require,module,exports){
+},{"./lib/React":"/home/vagrant/bridge-controller/node_modules/react/lib/React.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/index.js":[function(require,module,exports){
 
 module.exports = require('./lib/');
 
-},{"./lib/":161}],161:[function(require,module,exports){
+},{"./lib/":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -34054,7 +34051,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":162,"./socket":164,"./url":165,"debug":168,"socket.io-parser":199}],162:[function(require,module,exports){
+},{"./manager":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/manager.js","./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/manager.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -34529,7 +34526,7 @@ Manager.prototype.onreconnect = function(){
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":163,"./socket":164,"./url":165,"component-bind":166,"component-emitter":167,"debug":168,"engine.io-client":169,"indexof":195,"object-component":196,"socket.io-parser":199}],163:[function(require,module,exports){
+},{"./on":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js","./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js","component-bind":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-client":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js","indexof":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","object-component":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js":[function(require,module,exports){
 
 /**
  * Module exports.
@@ -34555,7 +34552,7 @@ function on(obj, ev, fn) {
   };
 }
 
-},{}],164:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -34941,7 +34938,7 @@ Socket.prototype.disconnect = function(){
   return this;
 };
 
-},{"./on":163,"component-bind":166,"component-emitter":167,"debug":168,"has-binary":193,"socket.io-parser":199,"to-array":203}],165:[function(require,module,exports){
+},{"./on":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js","component-bind":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","has-binary":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js","to-array":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -35018,7 +35015,7 @@ function url(uri, loc){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"debug":168,"parseuri":197}],166:[function(require,module,exports){
+},{"debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","parseuri":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js":[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -35043,7 +35040,7 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],167:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js":[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -35209,7 +35206,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],168:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js":[function(require,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -35348,11 +35345,11 @@ try {
   if (window.localStorage) debug.enable(localStorage.debug);
 } catch(e){}
 
-},{}],169:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js":[function(require,module,exports){
 
 module.exports =  require('./lib/');
 
-},{"./lib/":170}],170:[function(require,module,exports){
+},{"./lib/":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js":[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -35364,7 +35361,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":171,"engine.io-parser":180}],171:[function(require,module,exports){
+},{"./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -36051,7 +36048,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./transport":172,"./transports":173,"component-emitter":167,"debug":168,"engine.io-parser":180,"indexof":195,"parsejson":189,"parseqs":190,"parseuri":191}],172:[function(require,module,exports){
+},{"./transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","./transports":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","indexof":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","parsejson":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","parseuri":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -36203,7 +36200,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":167,"engine.io-parser":180}],173:[function(require,module,exports){
+},{"component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies
@@ -36260,7 +36257,7 @@ function polling(opts){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling-jsonp":174,"./polling-xhr":175,"./websocket":177,"xmlhttprequest":178}],174:[function(require,module,exports){
+},{"./polling-jsonp":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js","./polling-xhr":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js","./websocket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -36497,7 +36494,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":176,"component-inherit":179}],175:[function(require,module,exports){
+},{"./polling":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js":[function(require,module,exports){
 (function (global){
 /**
  * Module requirements.
@@ -36852,7 +36849,7 @@ function unloadHandler() {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":176,"component-emitter":167,"component-inherit":179,"debug":168,"xmlhttprequest":178}],176:[function(require,module,exports){
+},{"./polling":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -37099,7 +37096,7 @@ Polling.prototype.uri = function(){
   return schema + '://' + this.hostname + port + this.path + query;
 };
 
-},{"../transport":172,"component-inherit":179,"debug":168,"engine.io-parser":180,"parseqs":190,"xmlhttprequest":178}],177:[function(require,module,exports){
+},{"../transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -37330,7 +37327,7 @@ WS.prototype.check = function(){
   return !!WebSocket && !('__initialize' in WebSocket && this.name === WS.prototype.name);
 };
 
-},{"../transport":172,"component-inherit":179,"debug":168,"engine.io-parser":180,"parseqs":190,"ws":192}],178:[function(require,module,exports){
+},{"../transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","ws":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js":[function(require,module,exports){
 // browser shim for xmlhttprequest module
 var hasCORS = require('has-cors');
 
@@ -37368,7 +37365,7 @@ module.exports = function(opts) {
   }
 }
 
-},{"has-cors":187}],179:[function(require,module,exports){
+},{"has-cors":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js":[function(require,module,exports){
 
 module.exports = function(a, b){
   var fn = function(){};
@@ -37376,7 +37373,7 @@ module.exports = function(a, b){
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],180:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -37946,7 +37943,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./keys":181,"after":182,"arraybuffer.slice":183,"base64-arraybuffer":184,"blob":185,"utf8":186}],181:[function(require,module,exports){
+},{"./keys":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js","after":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js","arraybuffer.slice":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js","base64-arraybuffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js","blob":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js","utf8":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js":[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -37967,7 +37964,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],182:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js":[function(require,module,exports){
 module.exports = after
 
 function after(count, callback, err_cb) {
@@ -37997,7 +37994,7 @@ function after(count, callback, err_cb) {
 
 function noop() {}
 
-},{}],183:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js":[function(require,module,exports){
 /**
  * An abstraction for slicing an arraybuffer even when
  * ArrayBuffer.prototype.slice is not supported
@@ -38028,7 +38025,7 @@ module.exports = function(arraybuffer, start, end) {
   return result.buffer;
 };
 
-},{}],184:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js":[function(require,module,exports){
 /*
  * base64-arraybuffer
  * https://github.com/niklasvh/base64-arraybuffer
@@ -38089,7 +38086,7 @@ module.exports = function(arraybuffer, start, end) {
   };
 })("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 
-},{}],185:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Create a blob builder even when vendor prefixes exist
@@ -38142,7 +38139,7 @@ module.exports = (function() {
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],186:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js":[function(require,module,exports){
 (function (global){
 /*! http://mths.be/utf8js v2.0.0 by @mathias */
 ;(function(root) {
@@ -38385,7 +38382,7 @@ module.exports = (function() {
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],187:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -38410,7 +38407,7 @@ try {
   module.exports = false;
 }
 
-},{"global":188}],188:[function(require,module,exports){
+},{"global":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js":[function(require,module,exports){
 
 /**
  * Returns `this`. Execute this without a "context" (i.e. without it being
@@ -38420,7 +38417,7 @@ try {
 
 module.exports = (function () { return this; })();
 
-},{}],189:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js":[function(require,module,exports){
 (function (global){
 /**
  * JSON parse.
@@ -38455,7 +38452,7 @@ module.exports = function parsejson(data) {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],190:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js":[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -38494,7 +38491,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],191:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -38535,7 +38532,7 @@ module.exports = function parseuri(str) {
     return uri;
 };
 
-},{}],192:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -38580,7 +38577,7 @@ function ws(uri, protocols, opts) {
 
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
-},{}],193:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js":[function(require,module,exports){
 (function (global){
 
 /*
@@ -38642,12 +38639,12 @@ function hasBinary(data) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"isarray":194}],194:[function(require,module,exports){
+},{"isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],195:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js":[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -38658,7 +38655,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],196:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js":[function(require,module,exports){
 
 /**
  * HOP ref.
@@ -38743,7 +38740,7 @@ exports.length = function(obj){
 exports.isEmpty = function(obj){
   return 0 == exports.length(obj);
 };
-},{}],197:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -38770,7 +38767,7 @@ module.exports = function parseuri(str) {
   return uri;
 };
 
-},{}],198:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports){
 (function (global){
 /*global Blob,File*/
 
@@ -38915,7 +38912,7 @@ exports.removeBlobs = function(data, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./is-buffer":200,"isarray":201}],199:[function(require,module,exports){
+},{"./is-buffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -39313,7 +39310,7 @@ function error(data){
   };
 }
 
-},{"./binary":198,"./is-buffer":200,"component-emitter":167,"debug":168,"isarray":201,"json3":202}],200:[function(require,module,exports){
+},{"./binary":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js","./is-buffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js","json3":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports){
 (function (global){
 
 module.exports = isBuf;
@@ -39330,9 +39327,9 @@ function isBuf(obj) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],201:[function(require,module,exports){
-module.exports=require(194)
-},{"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":194}],202:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js")
+},{"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js":[function(require,module,exports){
 /*! JSON v3.2.6 | http://bestiejs.github.io/json3 | Copyright 2012-2013, Kit Cambridge | http://kit.mit-license.org */
 ;(function (window) {
   // Convenience aliases.
@@ -40195,7 +40192,7 @@ module.exports=require(194)
   }
 }(this));
 
-},{}],203:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js":[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -40210,7 +40207,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],204:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -41555,7 +41552,7 @@ function toArray(list, index) {
   }
 }).call(this);
 
-},{}],205:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js":[function(require,module,exports){
 
 Backbone.HasOne = Backbone.HasOne.extend({
 
@@ -41596,8 +41593,9 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                console.log('this in findRelated', this );
-                console.log('this.options.initializeCollection', this.options.initializeCollection);
+                if (this.instance.id == 2) {
+                    console.log('this in findRelated', this );
+                }
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = CBApp[initializeCollection];
                 }
@@ -41628,6 +41626,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
         options = _.defaults( { parse: this.options.parse }, options );
 
+        if (this.instance.id == 2) {
+            console.log('findRelated keyContents', this.keyContents);
+        }
+
         // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
         if ( this.keyContents instanceof Backbone.Collection ) {
                 this._prepareCollection( this.keyContents );
@@ -41636,6 +41638,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
         // Otherwise, 'this.keyContents' should be an array of related object ids.
         // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
         else {
+                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+
+                    console.log('findRelated this.keyContents', this.keyContents);
+                }
                 var toAdd = [];
 
                 _.each( this.keyContents, function( attributes ) {
@@ -41675,10 +41681,20 @@ Backbone.HasMany = Backbone.HasMany.extend({
                 }, this );
 
                 if ( this.related instanceof Backbone.Collection ) {
+                        console.log('related = this.related');
                         related = this.related;
                 }
                 else {
+                        console.log('this._prepareCollection');
                         related = this._prepareCollection();
+                }
+
+                if (this.instance.id == 2) {
+                    if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+
+                        console.log('findRelated toAdd length', JSON.stringify(toAdd));
+                        console.log('findRelated related length', JSON.stringify(related));
+                    }
                 }
 
                 // By now, both `merge` and `parse` will already have been executed for models if they were specified.
@@ -41852,7 +41868,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // ADDED If skipUpdateRelations is true, don't update relations
         if (options && options.skipUpdateRelations) return;
 
+        if (this.id == 2) {
+            console.log('updateRelations on ', this.constructor.modelType, 'changedAttrs before', JSON.stringify(changedAttrs));
+        }
+
         if ( this._isInitialized && !this.isLocked() ) {
+
+            var changeTriggers = [];
+
             _.each( this._relations, function( rel ) {
 
                 /*
@@ -41872,15 +41895,43 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
+
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
                     if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
 
-                        this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
+                        if (this.id == 2) {
+                            console.log('updateRelations rel.keySource ', rel.keySource, 'this.attributes ', JSON.stringify(this.attributes));
+                            console.log('updateRelations key ', rel.keySource, 'value ', value);
+                            console.log('this.attributes[ rel.keySource ]', JSON.stringify(this.attributes[ rel.keySource ]));
+                            console.log('updateRelations changedAttrs', JSON.stringify(changedAttrs));
+                        }
 
-                        if (CBApp._isInitialized) {
+                        //var self = this;
 
-                            this.updateRelationToSelf(rel);
+                        // ADDED Defer triggering the relation change and deleting attributes
+                        var changeTrigger = function(model, relation, val, opts) {
+
+                            return function() {
+                                console.log('changeTrigger for ', relation.key, ' passing ', val, 'on ', model);
+                                if (model.id == 2) {
+                                }
+
+                                model.trigger( 'relational:change:' + relation.key, model, val, opts || {} );
+
+                                if ( relation.keySource !== relation.key ) {
+                                    if (model.id == 2) {
+                                        console.log('changeTrigger deleting', model.attributes[relation.keySource]);
+                                    }
+                                    delete model.attributes[ relation.keySource ];
+                                }
+                            }
+                        }
+                        changeTriggers.push(changeTrigger(this, rel, value, options));
+
+                        // ADDED
+                        //this.updateRelationToSelf(rel);
+
                             /*
 
                             // ADDED automatically update related models
@@ -41899,19 +41950,30 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                                 }
                             });
                         */
-                        }
                     }
                 }
 
                 // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
+                /*
                 if ( rel.keySource !== rel.key ) {
                     delete this.attributes[ rel.keySource ];
+                    if (this.id == 2) {
+                        console.log(' delete rel.keySource', rel.keySource);
+                    }
                 }
+                */
             }, this );
+
+            _.each(changeTriggers, function(trigger) {
+                trigger();
+            });
+        }
+        if (this.id == 2) {
+            console.log('updateRelations changedAttrs after', JSON.stringify(changedAttrs));
         }
     },
 });
-},{}],206:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
 
 var Backbone = require('backbone')
     ,$ = require('jquery')
@@ -41983,7 +42045,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":205,"./backbone-cb-collection-mixin":207,"./backbone-cb-model":209,"./backbone-cb-model-mixin":208,"./backbone-cb-views":210,"./backbone-relational":213,"./backbone.stickit":218,"./backbone.trackit":219,"backbone":8,"backbone-cocktail":211,"backbone-deferred":212,"backbone-react-component":5,"backbone.babysitter":6,"backbone.io":214,"backbone.marionette":215,"backbone.marionette.subrouter":216,"backbone.modal":217,"backbone.wreqr":7,"jquery":11,"q":12,"query-engine":13,"underscore":204}],207:[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection-mixin.js","./backbone-cb-model":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js","./backbone-cb-model-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-views":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js","query-engine":"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection-mixin.js":[function(require,module,exports){
 
 module.exports = {
 
@@ -42044,7 +42106,7 @@ module.exports = {
     }
 };
 
-},{}],208:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -42142,7 +42204,7 @@ module.exports = {
 
 
 
-},{}],209:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.RelationalModel;
 
@@ -42191,7 +42253,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.RelationalModel = CBModel;
-},{}],210:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -42268,7 +42330,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],211:[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js":[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -42371,7 +42433,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":204}],212:[function(require,module,exports){
+},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -42729,7 +42791,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":8,"q":12}],213:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js":[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -43623,6 +43685,15 @@ Q = global.Q = require("q");
 		},
 
 		initialize: function( opts ) {
+
+            if (this.instance.id == 2) {
+                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+
+                    console.log('hasMany initialize', this);
+                    console.log('hasMany initialize key', this.key);
+                }
+            }
+
 			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
 
 			// Handle a custom 'collectionType'
@@ -43636,8 +43707,12 @@ Q = global.Q = require("q");
 			if ( this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
 				throw new Error( '`collectionType` must inherit from Backbone.Collection' );
 			}
-
 			var related = this.findRelated( opts );
+            if (this.instance.id == 2) {
+                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
+                    console.log('relational related are', JSON.stringify(related));
+                }
+            }
 			this.setRelated( related );
 		},
 
@@ -43730,6 +43805,10 @@ Q = global.Q = require("q");
 			// Remove entries from `keyIds` that were already part of the relation (and are thus 'unchanged')
 			this.keyIds = _.difference( this.keyIds, _.pluck( related.models, 'id' ) );
 
+            if (this.instance.id == 2) {
+                console.log('related is ', related);
+            }
+
 			return related;
 		},
 
@@ -43760,6 +43839,9 @@ Q = global.Q = require("q");
 		 */
 		onChange: function( model, attr, options ) {
 			options = options ? _.clone( options ) : {};
+            if (this.instance.id == 2) {
+                console.log('onChange ', this, 'attr ', attr);
+            }
 			this.setKeyContents( attr );
 			this.changed = false;
 
@@ -44207,6 +44289,7 @@ Q = global.Q = require("q");
 				}
 
 				if ( attributes ) {
+
 					this.updateRelations( attributes, options );
 				}
 			}
@@ -44592,6 +44675,18 @@ Q = global.Q = require("q");
 		var newModels = [],
 			toAdd = [];
 
+        if(this.backend) {
+            if (this.backend == 'deviceInstall') {
+                console.log('collection ', this.backend.name, 'set models ', models);
+                //throw "deviceInstall";
+            }
+            if (this.backend.name == 'appInstall') {
+
+                console.log('collection ', this.backend.name, 'set models ', models);
+                //throw "appInstall";
+            }
+        }
+
 		//console.debug( 'calling add on coll=%o; model=%o, options=%o', this, models, options );
 		_.each( models, function( model ) {
 			if ( !( model instanceof Backbone.Model ) ) {
@@ -44722,12 +44817,12 @@ Q = global.Q = require("q");
 	Backbone.RelationalModel.extend = function( protoProps, classProps ) {
 		var child = Backbone.Model.extend.apply( this, arguments );
 
-		child.setup( this );
+		child.setup(this );
 
 		return child;
 	};
 })();
-},{"backbone":8,"underscore":204}],214:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -44923,7 +45018,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":8,"socket.io-client":160,"underscore":204}],215:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","socket.io-client":"/home/vagrant/bridge-controller/node_modules/socket.io-client/index.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -47389,7 +47484,7 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":8,"backbone.babysitter":6,"backbone.wreqr":7,"underscore":204}],216:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -47502,7 +47597,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":215,"backbone":8,"underscore":204}],217:[function(require,module,exports){
+},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -47999,7 +48094,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":215,"backbone":8,"underscore":204}],218:[function(require,module,exports){
+},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js":[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -48756,7 +48851,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":8,"underscore":204}],219:[function(require,module,exports){
+},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js":[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -48949,4 +49044,4 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}]},{},[1]);
+},{}]},{},["./portal/static/js/vendor/vendor.js"]);

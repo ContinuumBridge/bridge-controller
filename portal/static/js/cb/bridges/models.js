@@ -8,6 +8,9 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        this.on('all', function(event, payload) {
+            console.log('Bridge event ', event, payload);
+        });
         var deviceInstalls = this.getRelation('deviceInstalls');
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -29,7 +32,7 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
         {   
             type: Backbone.HasMany,
             key: 'bridgeControls',
-            keySource: 'bridge_controls',
+            keySource: 'controllers',
             relatedModel: 'CBApp.BridgeControl',
             collectionType: 'CBApp.BridgeControlCollection',
             createModels: false,
@@ -86,18 +89,19 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     initialize: function() {
         this.bindBackend();
     },
-    
+
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
-
 
 CBApp.getCurrentBridge = function() {
 
     //var currentBridgeDeferred = Q.defer();
 
-    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(2);
 
     if (!bridge) {
         //logger.log('warn', 'There is no current bridge');

@@ -22915,13 +22915,18 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
     backend: 'appInstall',
 
     initialize: function() {
+        this.on('all', function(event, payload) {
+            console.log('AppInstall event ', event, payload);
+        });
         this.bindBackend();
         CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
 
@@ -23713,6 +23718,9 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        this.on('all', function(event, payload) {
+            console.log('Bridge event ', event, payload);
+        });
         var deviceInstalls = this.getRelation('deviceInstalls');
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -23734,7 +23742,7 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
         {   
             type: Backbone.HasMany,
             key: 'bridgeControls',
-            keySource: 'bridge_controls',
+            keySource: 'controllers',
             relatedModel: 'CBApp.BridgeControl',
             collectionType: 'CBApp.BridgeControlCollection',
             createModels: false,
@@ -23791,18 +23799,19 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     initialize: function() {
         this.bindBackend();
     },
-    
+
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
-
 
 CBApp.getCurrentBridge = function() {
 
     //var currentBridgeDeferred = Q.defer();
 
-    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(2);
 
     if (!bridge) {
         //logger.log('warn', 'There is no current bridge');
@@ -24840,20 +24849,12 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    /*
-    computeds: {
-
-        unconfirmed: function() {
-            var isNew = this.isNew();
-            return isNew || this.hasChangedSinceLastSync;
-        }
-    },
-    */
+    backend: 'deviceInstall',
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
-        this.bind("change", this.changeHandler)
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        //this.bind("change", this.changeHandler)
 
     },
 
@@ -24906,13 +24907,15 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             keyDestination: 'bridge',
             relatedModel: 'CBApp.Bridge',
             collectionType: 'CBApp.BridgeCollection',
-            createModels: false,
+            createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
+            */
         },
         {
             type: Backbone.HasOne,
@@ -24975,15 +24978,20 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     initialize: function() {
         var self = this;
 
+        this.bindBackend();
+        /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
+        */
         CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
@@ -25976,9 +25984,6 @@ module.exports.Main = Marionette.Layout.extend({
         */
         var currentBridge = CBApp.getCurrentBridge();
         this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
-        this.listenToOnce(CBApp.bridgeCollection, 'change:current', function() {
-            console.log('currentBridge changed');
-        });
 
         console.log('calling getCurrentBridge ');
         currentBridge.fetch().done(function(currentBridgeResolved) {
@@ -25995,16 +26000,16 @@ module.exports.Main = Marionette.Layout.extend({
             discoveredDeviceInstalls.fetched = true;
             */
 
-            console.log('self.deviceInstalls', self.deviceInstalls);
-            var appInstallCollection = currentBridge.get('appInstalls');
-            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            var appInstalls = currentBridge.get('appInstalls');
+            console.log('Config View appInstalls ', appInstalls );
+            var liveAppInstalls = appInstalls.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
             //liveAppInstallCollection.setQuery({isGhost: false});
 
             var deviceInstalls = currentBridge.get('deviceInstalls');
 
             //var discoveredDeviceInstalls = currentBridge.get('discoveredDeviceInstalls');
-            console.log('DevicesView deviceInstalls ', deviceInstalls );
+            console.log('Config View deviceInstalls ', deviceInstalls );
 
             React.renderComponent(
                 React.createElement(DevicesView, {deviceInstalls: deviceInstalls}),
@@ -26012,8 +26017,8 @@ module.exports.Main = Marionette.Layout.extend({
                 self.$('.device-section')[0]
             );
 
-            console.log('liveAppInstallCollection', liveAppInstallCollection );
-            self.appInstallListView.setCollection(liveAppInstallCollection);
+            console.log('liveAppInstalls', liveAppInstalls );
+            self.appInstallListView.setCollection(liveAppInstalls);
             self.appInstallListView.render();
 
             //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
@@ -27848,8 +27853,8 @@ CBApp.Regions.Fade = Marionette.Region.extend({
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
-},{"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

@@ -3,20 +3,12 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    /*
-    computeds: {
-
-        unconfirmed: function() {
-            var isNew = this.isNew();
-            return isNew || this.hasChangedSinceLastSync;
-        }
-    },
-    */
+    backend: 'deviceInstall',
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
-        this.bind("change", this.changeHandler)
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        //this.bind("change", this.changeHandler)
 
     },
 
@@ -69,13 +61,15 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             keyDestination: 'bridge',
             relatedModel: 'CBApp.Bridge',
             collectionType: 'CBApp.BridgeCollection',
-            createModels: false,
+            createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
+            */
         },
         {
             type: Backbone.HasOne,
@@ -138,13 +132,18 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     initialize: function() {
         var self = this;
 
+        this.bindBackend();
+        /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
+        */
         CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });

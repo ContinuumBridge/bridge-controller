@@ -109,12 +109,17 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
     backend: 'appInstall',
 
     initialize: function() {
+        this.on('all', function(event, payload) {
+            console.log('AppInstall event ', event, payload);
+        });
         this.bindBackend();
         CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 

@@ -79,9 +79,6 @@ module.exports.Main = Marionette.Layout.extend({
         */
         var currentBridge = CBApp.getCurrentBridge();
         this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
-        this.listenToOnce(CBApp.bridgeCollection, 'change:current', function() {
-            console.log('currentBridge changed');
-        });
 
         console.log('calling getCurrentBridge ');
         currentBridge.fetch().done(function(currentBridgeResolved) {
@@ -98,16 +95,16 @@ module.exports.Main = Marionette.Layout.extend({
             discoveredDeviceInstalls.fetched = true;
             */
 
-            console.log('self.deviceInstalls', self.deviceInstalls);
-            var appInstallCollection = currentBridge.get('appInstalls');
-            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
+            var appInstalls = currentBridge.get('appInstalls');
+            console.log('Config View appInstalls ', appInstalls );
+            var liveAppInstalls = appInstalls.findAllLive({isGhost: false})
             //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
             //liveAppInstallCollection.setQuery({isGhost: false});
 
             var deviceInstalls = currentBridge.get('deviceInstalls');
 
             //var discoveredDeviceInstalls = currentBridge.get('discoveredDeviceInstalls');
-            console.log('DevicesView deviceInstalls ', deviceInstalls );
+            console.log('Config View deviceInstalls ', deviceInstalls );
 
             React.renderComponent(
                 <DevicesView deviceInstalls={deviceInstalls} />,
@@ -115,8 +112,8 @@ module.exports.Main = Marionette.Layout.extend({
                 self.$('.device-section')[0]
             );
 
-            console.log('liveAppInstallCollection', liveAppInstallCollection );
-            self.appInstallListView.setCollection(liveAppInstallCollection);
+            console.log('liveAppInstalls', liveAppInstalls );
+            self.appInstallListView.setCollection(liveAppInstalls);
             self.appInstallListView.render();
 
             //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
