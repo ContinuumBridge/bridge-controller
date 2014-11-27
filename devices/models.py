@@ -44,12 +44,11 @@ class DeviceInstall(BroadcastMixin, LoggedModel):
     device_version = models.CharField(_("device_version"), max_length = 255, blank=True)
 
     adaptor = models.ForeignKey('adaptors.Adaptor')
-    bridge = models.ForeignKey(Bridge)
-    device = models.ForeignKey(Device)
+    bridge = models.ForeignKey(Bridge, related_name='device_installs')
+    device = models.ForeignKey(Device, related_name='bridge_installs')
 
     class Meta:
         verbose_name = _('device_install')
-        verbose_name_plural = _('device_installs')
         broadcast_resource = 'devices.api.resources.DeviceInstallResource'
         app_label = 'devices'
 

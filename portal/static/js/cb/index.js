@@ -3,9 +3,6 @@ CBApp = new Marionette.Application();
 
 require('./views/generic-views');
 
-CBDispatcher = new Dispatcher();
-//CBApp.dispatcher = new Dispatcher();
-
 CBApp.addRegions({
     navRegion: "#nav-region",
     mainRegion: "#main-region",

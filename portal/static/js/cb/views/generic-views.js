@@ -17,20 +17,22 @@ CBApp.ItemView = {
     */
     handleDelete: function() {
 
-        CBDispatcher.dispatch({verb: 'delete',
-                               model: this.props.model});
+        CBDispatcher.dispatch({actionType: 'delete',
+                               model: this.props.model,
+                               source: 'portal' });
     },
     handleUpdate: function() {
 
-        CBDispatcher.dispatch({verb: 'update',
-                               model: this.props.model});
+        CBDispatcher.dispatch({actionType: 'update',
+                               model: this.props.model,
+                               source: 'portal' });
     },
     render: function() {
         return (
             <li className="new-item">
                 <h4 className="item-title">{this.getTitle()}</h4>
                 <i id="edit-button" className="icon ion-chevron-right edit-button" />
-                <i className="icon ion-trash-a uninstall-button" />
+                <i className="icon ion-trash-a uninstall-button" onClick={this.handleDelete} />
             </li>
         );
     }
@@ -64,6 +66,7 @@ CBApp.ListView = {
     render: function() {
         console.log('render collection', this.props);
         console.log('render mapped collection', this.props.collection.map(this.createItem));
+        console.log('react getCollection ', this.getCollection());
 
         return (
             <div>

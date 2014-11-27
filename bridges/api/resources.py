@@ -61,6 +61,15 @@ def controlled_by_client(bundle):
 
 class BridgeResource(CBResource, CBIDResourceMixin):
 
+    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
+                                 'controls', full=True, use_in=controlled_by_client)
+
+    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                 'app_installs', full=True, use_in=controlled_by_client)
+
+    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
+                                 'device_installs', full=True, use_in=controlled_by_client)
+    '''
     controllers = cb_fields.ToManyThroughField(BridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
                     null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
@@ -72,6 +81,7 @@ class BridgeResource(CBResource, CBIDResourceMixin):
     devices = cb_fields.ToManyThroughField(DeviceInstallResource,
                     attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
+    '''
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()

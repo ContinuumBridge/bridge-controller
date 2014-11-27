@@ -64,11 +64,13 @@ class AppLicence(LoggedModel):
         verbose_name_plural = _('app_licences')
         app_label = 'apps'
 
+    '''
     def get_installs(self):
         installs = []
         for install in self.app_installs.filter():
             installs.append(install)
         return installs
+    '''
 
 
 class AppInstall(LoggedModel):
@@ -76,8 +78,8 @@ class AppInstall(LoggedModel):
     """ Through model for a Bridge and an App """
 
     bridge = models.ForeignKey(Bridge, related_name='app_installs')
-    app = models.ForeignKey(App, related_name='app_installs')
-    licence = models.ForeignKey(AppLicence, related_name='app_installs')
+    app = models.ForeignKey(App, related_name='bridge_installs')
+    licence = models.ForeignKey(AppLicence, related_name='installs')
 
     class Meta:
         verbose_name = _('app_install')

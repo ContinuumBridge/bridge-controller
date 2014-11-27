@@ -24979,6 +24979,8 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
         var self = this;
 
         this.bindBackend();
+
+        CBDispatcher.register(this.dispatchCallback);
         /*
         this.bind('backend:create', function(model) {
             self.add(model);
@@ -25170,9 +25172,6 @@ CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
 CBApp = new Marionette.Application();
 
 require('./views/generic-views');
-
-CBDispatcher = new Dispatcher();
-//CBApp.dispatcher = new Dispatcher();
 
 CBApp.addRegions({
     navRegion: "#nav-region",
@@ -27753,20 +27752,22 @@ CBApp.ItemView = {
     */
     handleDelete: function() {
 
-        CBDispatcher.dispatch({verb: 'delete',
-                               model: this.props.model});
+        CBDispatcher.dispatch({actionType: 'delete',
+                               model: this.props.model,
+                               source: 'portal' });
     },
     handleUpdate: function() {
 
-        CBDispatcher.dispatch({verb: 'update',
-                               model: this.props.model});
+        CBDispatcher.dispatch({actionType: 'update',
+                               model: this.props.model,
+                               source: 'portal' });
     },
     render: function() {
         return (
             React.createElement("li", {className: "new-item"}, 
                 React.createElement("h4", {className: "item-title"}, this.getTitle()), 
                 React.createElement("i", {id: "edit-button", className: "icon ion-chevron-right edit-button"}), 
-                React.createElement("i", {className: "icon ion-trash-a uninstall-button"})
+                React.createElement("i", {className: "icon ion-trash-a uninstall-button", onClick: this.handleDelete})
             )
         );
     }
@@ -27800,6 +27801,7 @@ CBApp.ListView = {
     render: function() {
         console.log('render collection', this.props);
         console.log('render mapped collection', this.props.collection.map(this.createItem));
+        console.log('react getCollection ', this.getCollection());
 
         return (
             React.createElement("div", null, 

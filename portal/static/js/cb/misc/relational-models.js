@@ -313,10 +313,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         // ADDED If skipUpdateRelations is true, don't update relations
         if (options && options.skipUpdateRelations) return;
 
-        if (this.id == 2) {
-            console.log('updateRelations on ', this.constructor.modelType, 'changedAttrs before', JSON.stringify(changedAttrs));
-        }
-
         if ( this._isInitialized && !this.isLocked() ) {
 
             var changeTriggers = [];
@@ -345,29 +341,14 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     // Which can also happen before the originally intended related model has been found (`val` is null).
                     if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
 
-                        if (this.id == 2) {
-                            console.log('updateRelations rel.keySource ', rel.keySource, 'this.attributes ', JSON.stringify(this.attributes));
-                            console.log('updateRelations key ', rel.keySource, 'value ', value);
-                            console.log('this.attributes[ rel.keySource ]', JSON.stringify(this.attributes[ rel.keySource ]));
-                            console.log('updateRelations changedAttrs', JSON.stringify(changedAttrs));
-                        }
-
-                        //var self = this;
-
                         // ADDED Defer triggering the relation change and deleting attributes
                         var changeTrigger = function(model, relation, val, opts) {
 
                             return function() {
-                                console.log('changeTrigger for ', relation.key, ' passing ', val, 'on ', model);
-                                if (model.id == 2) {
-                                }
 
                                 model.trigger( 'relational:change:' + relation.key, model, val, opts || {} );
 
                                 if ( relation.keySource !== relation.key ) {
-                                    if (model.id == 2) {
-                                        console.log('changeTrigger deleting', model.attributes[relation.keySource]);
-                                    }
                                     delete model.attributes[ relation.keySource ];
                                 }
                             }
@@ -376,45 +357,15 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                         // ADDED
                         //this.updateRelationToSelf(rel);
-
-                            /*
-
-                            // ADDED automatically update related models
-                            if (value.id) {
-
-                                console.log('model is', model);
-                            }
-                            _.each(value, function (data) {
-                                //console.log('data is', data);
-                                /*
-                                var model = rel.related.get(data.id);
-                                if (model) {
-                                    model.set(data);
-                                } else {
-                                    rel.related.add(data);
-                                }
-                            });
-                        */
                     }
                 }
 
-                // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-                /*
-                if ( rel.keySource !== rel.key ) {
-                    delete this.attributes[ rel.keySource ];
-                    if (this.id == 2) {
-                        console.log(' delete rel.keySource', rel.keySource);
-                    }
-                }
-                */
             }, this );
 
+            // Trigger change on the relations
             _.each(changeTriggers, function(trigger) {
                 trigger();
             });
         }
-        if (this.id == 2) {
-            console.log('updateRelations changedAttrs after', JSON.stringify(changedAttrs));
-        }
-    },
+    }
 });

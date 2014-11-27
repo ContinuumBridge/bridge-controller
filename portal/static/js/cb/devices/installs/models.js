@@ -133,6 +133,8 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
         var self = this;
 
         this.bindBackend();
+
+        CBDispatcher.register(this.dispatchCallback);
         /*
         this.bind('backend:create', function(model) {
             self.add(model);

@@ -72,9 +72,14 @@ class AppLicenceResource(PostMatchMixin, CBResource):
     app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
     #installs_permitted = fields.IntegerField()
 
+    installs = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                  'installs', full=False)
+
+    '''
     installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
                                                       attribute=lambda bundle: bundle.obj.get_installs() or bundle.obj.app_installs, full=False,
                                                       null=True, readonly=True, nonmodel=True)
+    '''
 
     class Meta(CBResource.Meta):
        queryset = AppLicence.objects.all()
