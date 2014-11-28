@@ -1,23 +1,23 @@
 
-CBApp.DeviceInstallView = React.createClass({
-    mixins: [CBApp.ItemView],
-    //mixins: [CBApp.ItemView],
+Portal.DeviceInstallView = React.createClass({
+    mixins: [Portal.ItemView],
+    //mixins: [Portal.ItemView],
     getTitle: function() {
         return this.props.model.friendly_name;
     }
 });
 
-CBApp.DeviceInstallListView = React.createClass({
+Portal.DeviceInstallListView = React.createClass({
 
-    itemView: CBApp.DeviceInstallView,
+    itemView: Portal.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, CBApp.ListView],
-    //mixins: [CBApp.FluxBoneMixin('collection'), CBApp.ListView],
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
 });
 
 /*
-CBApp.DeviceInstallView = Marionette.ItemView.extend({
+Portal.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -56,15 +56,15 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
+Portal.DeviceInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/deviceInstallSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
+    itemView: Portal.DeviceInstallView,
     itemViewContainer: '.device-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -72,7 +72,7 @@ CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function() {
@@ -81,7 +81,7 @@ CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
 });
 
 /*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
+Portal.DeviceLayoutView = Marionette.Layout.extend({
 
 
     events: {
@@ -94,12 +94,12 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.messageCollection.sendMessage('command', 'discover');
+        Portal.messageCollection.sendMessage('command', 'discover');
     },
 
     onRender: function() {
 
-        var deviceListView = new CBApp.DeviceListView({ 
+        var deviceListView = new Portal.DeviceListView({
             collection: this.collection
         });
         

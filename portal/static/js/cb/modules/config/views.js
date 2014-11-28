@@ -19,7 +19,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '.app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         },
         deviceSection: '.device-section',
         messageSection: '.message-section',
@@ -41,16 +41,16 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppInstallListView();
-        this.bridgeView = new CBApp.BridgeListView();
+        this.appInstallListView = new Portal.AppInstallListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
+        this.messageListView = new Portal.MessageListView();
 
         /*
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
+            //Portal.clientCollection.fetch()
         }).done();
         */
     },
@@ -71,14 +71,14 @@ module.exports.Main = Marionette.Layout.extend({
         this.bridgeSection.show(this.bridgeView);
 
         /*
-        var deviceInstalls = this.deviceInstalls = CBApp.deviceInstallCollection.findAllLive();
+        var deviceInstalls = this.deviceInstalls = Portal.deviceInstallCollection.findAllLive();
         deviceInstalls.fetched = false;
 
         var discoveredDeviceInstalls = this.discoveredDeviceInstalls
-            = CBApp.discoveredDeviceInstallCollection.findAll();
+            = Portal.discoveredDeviceInstallCollection.findAll();
         */
-        var currentBridge = CBApp.getCurrentBridge();
-        this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+        var currentBridge = Portal.getCurrentBridge();
+        this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
 
         console.log('calling getCurrentBridge ');
         currentBridge.fetch().done(function(currentBridgeResolved) {
@@ -116,12 +116,12 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstalls);
             self.appInstallListView.render();
 
-            //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            var currentBridgeMessageCollection = CBApp.messageCollection.findAllLive({bridge:currentBridge});
+            //Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            var currentBridgeMessageCollection = Portal.messageCollection.findAllLive({bridge:currentBridge});
             self.messageListView.setCollection(currentBridgeMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
@@ -137,7 +137,7 @@ var DevicesView = React.createClass({
 
         var self = this;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
@@ -149,7 +149,7 @@ var DevicesView = React.createClass({
     },
     */
     render: function() {
-        //return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
+        //return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
         console.log('DeviceView this.props', this.props);
         return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
     }
@@ -162,8 +162,8 @@ var DevicesView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.deviceInstallListView = new CBApp.DeviceInstallListView();
-        this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
+        this.deviceInstallListView = new Portal.DeviceInstallListView();
+        this.discoveredDeviceInstallListView = new Portal.DiscoveredDeviceListView();
         this.currentView = this.deviceInstallListView;
 
         //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
@@ -195,7 +195,7 @@ var DevicesView = Marionette.ItemView.extend({
 
         var self = this;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
@@ -228,20 +228,20 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
-        CBApp.appLicenceCollection.fetch({data: { 'user': 'current' }})
-        this.licenceListView = new CBApp.AppLicenceListView();
+        Portal.appLicenceCollection.fetch({data: { 'user': 'current' }})
+        this.licenceListView = new Portal.AppLicenceListView();
     },
 
     clickStore: function() {
 
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
+        Portal.request('store:show');
+        //Portal.Controller.store();
     },
 
     onRender: function() {
 
         var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             console.log('promise in app modal initialize');
             var licenceCollection = currentUser.get('appLicences');
@@ -256,7 +256,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 
@@ -270,7 +270,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 */

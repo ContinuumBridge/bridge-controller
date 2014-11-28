@@ -14,7 +14,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
     */

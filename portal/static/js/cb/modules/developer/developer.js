@@ -1,7 +1,7 @@
 
 var DeveloperViews = require('./views');
 
-CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Developer ran!');
     Developer.addInitializer(function() {
@@ -19,7 +19,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
       showDeveloper: function() {
 
           Developer.mainLayoutView = new DeveloperViews.Main();
-          CBApp.mainRegion.show(Developer.mainLayoutView);
+          Portal.mainRegion.show(Developer.mainLayoutView);
       },
       addAppConnection: function(app, user) {
         var that = this;
@@ -30,7 +30,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 

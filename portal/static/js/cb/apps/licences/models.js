@@ -1,5 +1,5 @@
 
-CBApp.AppLicence = Backbone.Deferred.Model.extend({
+Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -48,8 +48,8 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri'
             /*
             modelBuilder: {
-                'user': CBApp.User,
-                'currentUser': CBApp.CurrentUser
+                'user': Portal.User,
+                'currentUser': Portal.CurrentUser
             }
             //initializeCollection: 'userCollection',
             reverseRelation: {
@@ -138,10 +138,10 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
 }, { modelType: "appLicence" });
 
 //var QueryEngine = require('query-engine');
-//CBApp.AppLicenceCollection = Backbone.Collection.extend({
-CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
+//Portal.AppLicenceCollection = Backbone.Collection.extend({
+Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppLicence,
+    model: Portal.AppLicence,
     backend: 'appLicence',
 
     initialize: function() {
@@ -153,7 +153,7 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
             self.add(model);
         });
         */
-        CBApp.AppLicenceCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){

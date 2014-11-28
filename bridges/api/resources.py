@@ -69,19 +69,6 @@ class BridgeResource(CBResource, CBIDResourceMixin):
 
     devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
                                  'device_installs', full=True, use_in=controlled_by_client)
-    '''
-    controllers = cb_fields.ToManyThroughField(BridgeControlResource,
-                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
-                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
-
-    apps = cb_fields.ToManyThroughField(AppInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
-                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
-
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True, use_in=controlled_by_client)
-    '''
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
@@ -110,7 +97,17 @@ class BridgeResource(CBResource, CBIDResourceMixin):
 
 
 class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
-    
+
+    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
+                                 'controls', full=True, use_in=controlled_by_client)
+
+    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                 'app_installs', full=True, use_in=controlled_by_client)
+
+    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
+                                 'device_installs', full=True, use_in=controlled_by_client)
+
+    '''
     controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
                     attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
                     null=True, readonly=True, nonmodel=True)
@@ -122,19 +119,13 @@ class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
     devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
                     attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
                     null=True, readonly=True, nonmodel=True)
+    '''
 
     class Meta(LoggedInResource.Meta):
         queryset = Bridge.objects.all()
         #fields = ['id', 'email', 'name', 'date_joined', 'last_login']
         excludes = ['key', 'plaintext_key']
         resource_name = 'current_bridge'
-
-
-    '''
-    def dehydrate(self, bundle):
-        bundle.data['cbid'] = "BID" + str(bundle.obj.id)
-        return bundle
-    '''
 
 
 class BridgeAuthResource(AuthResource, CBIDResourceMixin):

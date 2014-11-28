@@ -644,6 +644,10 @@
 				warn = Backbone.Relational.showWarnings && typeof console !== 'undefined';
 
 			if ( !m || !k || !rm ) {
+                console.log('instance', JSON.stringify(i));
+                console.log('key', JSON.stringify(k));
+                console.log('model', JSON.stringify(m));
+                console.log('related model', JSON.stringify(rm));
 				warn && console.warn( 'Relation=%o: missing model, key or relatedModel (%o, %o, %o).', this, m, k, rm );
 				return false;
 			}

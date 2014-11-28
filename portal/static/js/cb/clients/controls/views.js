@@ -1,5 +1,5 @@
 
-CBApp.ClientControlView = Marionette.ItemView.extend({
+Portal.ClientControlView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -40,20 +40,20 @@ CBApp.ClientControlView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.ClientControlListView = Marionette.CompositeView.extend({
+Portal.ClientControlListView = Marionette.CompositeView.extend({
 
     template: require('./templates/clientControlSection.html'),
-    itemView: CBApp.ClientControlView,
+    itemView: Portal.ClientControlView,
     itemViewContainer: '.client-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #create-client': 'createClient'
     },
 
     createClient: function() {
-        CBApp.Config.controller.createClient();
+        Portal.Config.controller.createClient();
     },
 
     onRender : function(){

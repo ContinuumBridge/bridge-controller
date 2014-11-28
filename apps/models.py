@@ -64,14 +64,6 @@ class AppLicence(LoggedModel):
         verbose_name_plural = _('app_licences')
         app_label = 'apps'
 
-    '''
-    def get_installs(self):
-        installs = []
-        for install in self.app_installs.filter():
-            installs.append(install)
-        return installs
-    '''
-
 
 class AppInstall(LoggedModel):
     

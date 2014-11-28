@@ -1,5 +1,5 @@
 
-CBApp.ClientView = Marionette.ItemView.extend({
+Portal.ClientView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -38,13 +38,13 @@ CBApp.ClientView = Marionette.ItemView.extend({
 });
 
 
-CBApp.ClientListView = Marionette.CompositeView.extend({
+Portal.ClientListView = Marionette.CompositeView.extend({
 
     template: require('./templates/clientSection.html'),
-    itemView: CBApp.ClientView,
+    itemView: Portal.ClientView,
     itemViewContainer: '.client-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -52,7 +52,7 @@ CBApp.ClientListView = Marionette.CompositeView.extend({
     },
 
     addClient : function() {
-        CBApp.Config.controller.addClient();
+        Portal.Config.controller.addClient();
     },
 
     onRender : function() {
@@ -61,7 +61,7 @@ CBApp.ClientListView = Marionette.CompositeView.extend({
 });
 
 /*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
+Portal.DeviceLayoutView = Marionette.Layout.extend({
 
 
     events: {
@@ -74,12 +74,12 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.messageCollection.sendMessage('command', 'discover');
+        Portal.messageCollection.sendMessage('command', 'discover');
     },
 
     onRender: function() {
 
-        var deviceListView = new CBApp.DeviceListView({ 
+        var deviceListView = new Portal.DeviceListView({
             collection: this.collection
         });
         

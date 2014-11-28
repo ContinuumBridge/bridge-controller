@@ -1,5 +1,5 @@
 
-CBApp.Adaptor = Backbone.RelationalModel.extend({
+Portal.Adaptor = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -9,9 +9,9 @@ CBApp.Adaptor = Backbone.RelationalModel.extend({
 }, { modelType: "adaptor" });
 
 
-CBApp.AdaptorCollection = Backbone.Collection.extend({
+Portal.AdaptorCollection = Backbone.Collection.extend({
 
-    model: CBApp.Adaptor,
+    model: Portal.Adaptor,
     backend: 'app',
 
     initialize: function() {

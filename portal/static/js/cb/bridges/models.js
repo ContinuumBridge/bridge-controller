@@ -2,7 +2,7 @@
 //var logger = require('logger');
 var Q = require('q');
 
-CBApp.Bridge = Backbone.Deferred.Model.extend({
+Portal.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -81,9 +81,9 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "bridge" });
 
-CBApp.BridgeCollection = Backbone.Collection.extend({
+Portal.BridgeCollection = Backbone.Collection.extend({
 
-    model: CBApp.Bridge,
+    model: Portal.Bridge,
     backend: 'bridge',
 
     initialize: function() {
@@ -97,11 +97,11 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     */
 });
 
-CBApp.getCurrentBridge = function() {
+Portal.getCurrentBridge = function() {
 
     //var currentBridgeDeferred = Q.defer();
 
-    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(2);
+    var bridge = Portal.bridgeCollection.findWhere({current: true}) || Portal.bridgeCollection.at(2);
 
     if (!bridge) {
         //logger.log('warn', 'There is no current bridge');
@@ -117,7 +117,7 @@ CBApp.getCurrentBridge = function() {
 }
 
 
-CBApp.BridgeControl = Backbone.RelationalModel.extend({
+Portal.BridgeControl = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -151,9 +151,9 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
     ]
 }); 
 
-CBApp.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = Backbone.Collection.extend({
 
-    model: CBApp.BridgeControl,
+    model: Portal.BridgeControl,
     backend: 'bridgeControl',
 
     initialize: function() {

@@ -1,7 +1,7 @@
 
 require('./components');
 
-CBApp.Components.Button = Marionette.ItemView.extend({
+Portal.Components.Button = Marionette.ItemView.extend({
 
     tagName: 'button',
 

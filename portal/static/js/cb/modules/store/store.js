@@ -2,7 +2,7 @@
 
 var StoreViews = require('./views');
 
-CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Store ran!');
     Store.addInitializer(function() {
@@ -21,15 +21,15 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
       index: function () {
         Store.mainLayoutView = new StoreViews.Main();
         console.log('mainLayoutView', Store.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
         console.log('config index');
       },
       */
       showStore: function() {
 
           Store.mainLayoutView = new StoreViews.Main();
-          CBApp.mainRegion.show(Store.mainLayoutView);
+          Portal.mainRegion.show(Store.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -40,7 +40,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 

@@ -1,7 +1,7 @@
 
 require('../../components/buttons');
 
-CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
+Portal.Components.AppInstallButton = Portal.Components.Button.extend({
 
     //className: 'btn btn-default install-button',
 
@@ -50,7 +50,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
         console.log('onClick');
         this.model.toggleInstalled();
         /*
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        Portal.getCurrentBridge().then(function(currentBridge){
             console.log('onClick promise');
             self.model.toggleInstall(currentBridge);
             console.log('onClick promise 2');
@@ -68,7 +68,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
     }
 });
 
-CBApp.AppLicenceView = Marionette.ItemView.extend({
+Portal.AppLicenceView = Marionette.ItemView.extend({
 
     tagName: 'tr',
     //className: 'row',
@@ -100,12 +100,12 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
         this.app = this.model.get('app');
 
-        this.installButton = new CBApp.Components.AppInstallButton();
+        this.installButton = new Portal.Components.AppInstallButton();
 
-        var currentBridge = CBApp.getCurrentBridge();
+        var currentBridge = Portal.getCurrentBridge();
 
         this.installButton.bridge = currentBridge;
-        this.appInstall = CBApp.appInstallCollection.findOrAdd({
+        this.appInstall = Portal.appInstallCollection.findOrAdd({
             app: this.app,
             bridge: currentBridge,
             licence: this.model
@@ -148,13 +148,13 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppLicenceListView = Marionette.CompositeView.extend({
+Portal.AppLicenceListView = Marionette.CompositeView.extend({
 
     template: require('./templates/licenceSection.html'),
-    itemView: CBApp.AppLicenceView,
+    itemView: Portal.AppLicenceView,
     //itemViewContainer: 'tbody',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     appendHtml: function(collectionView, itemView){
         collectionView.$("tbody").append(itemView.el);

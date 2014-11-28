@@ -1,5 +1,5 @@
 
-CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
+Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
@@ -75,9 +75,9 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appDevicePermission" });
 
-CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
-    model: CBApp.AppDevicePermission,
+    model: Portal.AppDevicePermission,
     backend: 'appDevicePermission',
 
     initialize: function() {

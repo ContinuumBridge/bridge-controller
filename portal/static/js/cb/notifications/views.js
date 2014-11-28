@@ -1,5 +1,5 @@
 
-CBApp.NotificationView = Marionette.ItemView.extend({
+Portal.NotificationView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -21,12 +21,12 @@ CBApp.NotificationView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.NotificationListView = Marionette.CompositeView.extend({
+Portal.NotificationListView = Marionette.CompositeView.extend({
 
     template: require('./templates/notificationSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.NotificationView,
+    itemView: Portal.NotificationView,
     itemViewContainer: '.notification-list',
 
 });

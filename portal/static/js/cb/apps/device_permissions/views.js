@@ -2,7 +2,7 @@
 require('../../components/switches');
 
 /*
-CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.PermissionSwitch = Portal.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
 
@@ -22,7 +22,7 @@ CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
 });
 */
 
-CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
+Portal.AppDevicePermissionView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'inner-item',
@@ -32,7 +32,7 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.permissionSwitch = new CBApp.Components.ConnectionSwitch({
+        this.permissionSwitch = new Portal.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -53,11 +53,11 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
+Portal.AppDevicePermissionListView = Marionette.CollectionView.extend({
 
     tagName: 'ul',
     className: '',
-    itemView: CBApp.AppDevicePermissionView,
+    itemView: Portal.AppDevicePermissionView,
     //template: require('./templates/devicePermissionSection.html'),
 
     initialize: function(options) {
@@ -71,7 +71,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         console.log('buildItemView', deviceInstall);
         // Create or fetch an app device permission
         //var adp = deviceInstall.getAppPermission(this.appInstall);
-        var adp = CBApp.appDevicePermissionCollection.findOrAdd({
+        var adp = Portal.appDevicePermissionCollection.findOrAdd({
             appInstall: this.appInstall,
             deviceInstall: deviceInstall
         });

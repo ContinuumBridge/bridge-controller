@@ -1,5 +1,5 @@
 
-CBApp.StaffAppView = Marionette.ItemView.extend({
+Portal.StaffAppView = Marionette.ItemView.extend({
 
     tagName: 'table',
     template: require('./templates/staffApp.html'),

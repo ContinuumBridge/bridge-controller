@@ -1,5 +1,5 @@
 
-CBApp.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -31,8 +31,8 @@ CBApp.Message = Backbone.RelationalModel.extend({
             key: 'source',
             keySource: 'source',
             keyDestination: 'source',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: false,
             includeInJSON: 'BID',
             initializeCollection: 'bridgeCollection',
@@ -41,10 +41,10 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-//CBApp.MessageCollection = Backbone.Collection.extend({
-CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
+//Portal.MessageCollection = Backbone.Collection.extend({
+Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Message,
+    model: Portal.Message,
     //backend: 'message',
 
     /*
@@ -64,13 +64,13 @@ CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
         var self = this;
 
         var time = new Date();
-        var currentUserID = CBApp.currentUser.get('cbid');
+        var currentUserID = Portal.currentUser.get('cbid');
         message.set('source', currentUserID);
         message.set('time_sent', time);
 
         console.log('publishMessage', message.toJSON());
 
-        CBApp.socket.publish(message);
+        Portal.socket.publish(message);
         this.add(message);
     }
 });

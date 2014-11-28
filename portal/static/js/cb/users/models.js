@@ -1,6 +1,6 @@
 
-//CBApp.User = Backbone.Deferred.Model.extend({
-CBApp.User = Backbone.RelationalModel.extend({
+//Portal.User = Backbone.Deferred.Model.extend({
+Portal.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -31,9 +31,9 @@ CBApp.User = Backbone.RelationalModel.extend({
     }
 }, { modelType: "user" });
 
-CBApp.UserCollection = Backbone.Collection.extend({
+Portal.UserCollection = Backbone.Collection.extend({
 
-    model: CBApp.User,
+    model: Portal.User,
     backend: 'user',
 
     initialize: function() {

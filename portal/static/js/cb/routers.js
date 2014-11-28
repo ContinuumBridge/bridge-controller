@@ -49,7 +49,7 @@ _.extend(Router.prototype, Backbone.Events, {
         console.log('message in dispatch', message);
 
         var self = this;
-        //var message = new CBApp.Message(jsonMessage);
+        //var message = new Portal.Message(jsonMessage);
         var route = this.getRoute(message);
         var formattedMessage = this.formatMessage(message);
         _.any(this.handlers, function(handler) {
@@ -85,7 +85,7 @@ var updateCollection = function(collectionName) {
         var verb = _.property('verb')(messageBody);
         var jsonModels = _.property('body')(messageBody);
         console.log('updateCollection jsonModels', jsonModels );
-        var collection = CBApp[collectionName];
+        var collection = Portal[collectionName];
         console.log('collection', collection);
         if (verb != 'delete') {
             collection.update(jsonModels);
@@ -105,7 +105,7 @@ var PortalRouter = Router.extend({
 
     updateMessageCollection: function(message) {
         console.log('updateMessageCollection', message);
-        CBApp.messageCollection.add(message);
+        Portal.messageCollection.add(message);
     },
 
     /*
@@ -163,7 +163,7 @@ var MessageRouter = module.exports.MessageRouter = Router.extend({
 
         console.log('portalRouter is', this.portalRouter );
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             var uid = currentUser.get('cbid');
             self.route(uid, "portal", self.toPortal);

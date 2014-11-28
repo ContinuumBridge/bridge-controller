@@ -41581,7 +41581,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
-                var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
+                var idArray = Portal.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
@@ -41597,7 +41597,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
                     console.log('this in findRelated', this );
                 }
                 if ( _.isString( initializeCollection ) ) {
-                        initializeCollection = CBApp[initializeCollection];
+                        initializeCollection = Portal[initializeCollection];
                 }
                 if (initializeCollection instanceof Backbone.Collection) {
                         initializeCollection.add(related);
@@ -41650,7 +41650,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                         }
                         else {
                                 // ADDED If the keyContents are a uri, extract the id and create an object
-                                var idArray = CBApp.filters.apiRegex.exec(attributes);
+                                var idArray = Portal.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
                                         attributes = { id: idArray[1] };
                                 }
@@ -41663,7 +41663,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 // ADDED Add model to initializeCollection
                                 var initializeCollection = this.options.initializeCollection
                                 if ( _.isString( initializeCollection ) ) {
-                                        initializeCollection = CBApp[initializeCollection];
+                                        initializeCollection = Portal[initializeCollection];
                                 }
                                 if (initializeCollection instanceof Backbone.Collection) {
                                         initializeCollection.add(model);
@@ -41710,11 +41710,17 @@ Backbone.HasMany = Backbone.HasMany.extend({
 });
 
 
+/*
 Backbone.Collection = Backbone.Collection.extend({
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes
-        models = this.where(attrs);
+        var models;
+        if (attrs.id) {
+            models = this.where({id: attrs.id});
+        } else {
+            models = this.where(attrs);
+        }
         if(models.length > 1) { console.warn(attrs, 'is not unique') }
         return models[0] || void 0;
     },
@@ -41731,6 +41737,7 @@ Backbone.Collection = Backbone.Collection.extend({
         return model;
     }
 });
+*/
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
@@ -41876,7 +41883,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                 /*
                 // ADDED If the value is a uri, extract the id
-                var idArray = CBApp.filters.apiRegex.exec(value);
+                var idArray = Portal.filters.apiRegex.exec(value);
                 var id = (idArray && idArray[1]) ? idArray[1] : void 0;
 
                 if (id) {
@@ -42030,40 +42037,36 @@ module.exports = {
 
         if (!this.matchAddress(message.destination)) return;
 
-        if(message.source == 'cb') {
-
-        }
         switch(message.actionType) {
 
-            case "create":
-                if(message.source == 'portal') {
+            // Actions from app views
+            case 'create':
+                this.create(message.payload);
 
-                    this.add(message.models);
-                } else if (message.source == 'cb') {
+            case 'update':
+                this.update(message.payload);
 
-                    this.add(message.models);
-                }
+            case 'delete':
+                this.delete(message.payload);
 
-            case "update":
-                this.update(message.models);
+            // Actions from CB server
+            case 'add':
+                this.add(message.payload);
 
-            case "delete":
-                this.delete(message.models);
+            case 'modify':
+                this.modify(message.payload);
+
+            case 'remove':
+                this.remove(message.payload);
 
             default:
-                console.warn('dispatcher doesn\'t know what to do with', message);
+                console.warn('Unrecognised message actionType', message);
+
         }
     },
 
-    /*
-    subscribe: function(filters) {
-
-        this.bindBackend();
-        this.fetch(filters);
-    },
-    */
-
     update: function(models) {
+        // Update models in collection and persist them to the server
 
         var self = this;
         models = models instanceof Array ? models : [models];
@@ -42075,12 +42078,13 @@ module.exports = {
 
     delete: function(models) {
 
+        // Delete models from collection and the server
         var self = this;
         models = models instanceof Array ? models : [ models ];
         var existingModels = _.map(models, function(model) {
 
             var cbid = _.property('cbid')(model) || model.get('cbid');
-            var idArray = CBApp.filters.apiRegex.exec(cbid);
+            var idArray = Portal.filters.apiRegex.exec(cbid);
             if (idArray && idArray[1]) {
                 return self.where({id: idArray[1]});
             } else {
@@ -42093,6 +42097,30 @@ module.exports = {
             console.log('relationalDestroy model', model);
             model.relationalDestroy();
         });
+    },
+
+    findUnique: function(attrs) {
+        // Returns a model after verifying the uniqueness of the attributes
+        var models;
+        if (attrs.id) {
+            models = this.where({id: attrs.id});
+        } else {
+            models = this.where(attrs);
+        }
+        if(models.length > 1) { console.warn(attrs, 'is not unique') }
+        return models[0] || void 0;
+    },
+
+    findOrAdd: function(attributes, options) {
+
+        options = options ? _.clone(options) : {};
+        var model = this.findUnique(attributes) ||
+            new this.model(attributes, options);
+        //this.create(attributes);
+
+        this.add(model);
+
+        return model;
     }
 };
 
@@ -43428,6 +43456,10 @@ Q = global.Q = require("q");
 				warn = Backbone.Relational.showWarnings && typeof console !== 'undefined';
 
 			if ( !m || !k || !rm ) {
+                console.log('instance', JSON.stringify(i));
+                console.log('key', JSON.stringify(k));
+                console.log('model', JSON.stringify(m));
+                console.log('related model', JSON.stringify(rm));
 				warn && console.warn( 'Relation=%o: missing model, key or relatedModel (%o, %o, %o).', this, m, k, rm );
 				return false;
 			}

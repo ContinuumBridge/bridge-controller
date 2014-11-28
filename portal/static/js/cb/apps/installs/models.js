@@ -1,5 +1,5 @@
 
-CBApp.AppInstall = Backbone.Deferred.Model.extend({
+Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -16,7 +16,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             console.log('AppInstall successfully saved');
         }, function(error) {
             console.log('Error installing', error);
-            CBApp.Notifications.trigger('error:show', error);
+            Portal.Notifications.trigger('error:show', error);
         }).done();
     },
 
@@ -83,7 +83,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstall',
                 keySource: 'app_install',
                 keyDestination: 'app_install',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
@@ -103,9 +103,9 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appInstall" });
 
-CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppInstall,
+    model: Portal.AppInstall,
     backend: 'appInstall',
 
     initialize: function() {
@@ -113,7 +113,7 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
             console.log('AppInstall event ', event, payload);
         });
         this.bindBackend();
-        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
     /*

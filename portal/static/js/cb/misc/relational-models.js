@@ -26,7 +26,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
-                var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
+                var idArray = Portal.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[1]) {
                         this.keyContents = { id: idArray[1] };
                 }
@@ -42,7 +42,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
                     console.log('this in findRelated', this );
                 }
                 if ( _.isString( initializeCollection ) ) {
-                        initializeCollection = CBApp[initializeCollection];
+                        initializeCollection = Portal[initializeCollection];
                 }
                 if (initializeCollection instanceof Backbone.Collection) {
                         initializeCollection.add(related);
@@ -95,7 +95,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                         }
                         else {
                                 // ADDED If the keyContents are a uri, extract the id and create an object
-                                var idArray = CBApp.filters.apiRegex.exec(attributes);
+                                var idArray = Portal.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[1]) {
                                         attributes = { id: idArray[1] };
                                 }
@@ -108,7 +108,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 // ADDED Add model to initializeCollection
                                 var initializeCollection = this.options.initializeCollection
                                 if ( _.isString( initializeCollection ) ) {
-                                        initializeCollection = CBApp[initializeCollection];
+                                        initializeCollection = Portal[initializeCollection];
                                 }
                                 if (initializeCollection instanceof Backbone.Collection) {
                                         initializeCollection.add(model);
@@ -155,11 +155,17 @@ Backbone.HasMany = Backbone.HasMany.extend({
 });
 
 
+/*
 Backbone.Collection = Backbone.Collection.extend({
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes
-        models = this.where(attrs);
+        var models;
+        if (attrs.id) {
+            models = this.where({id: attrs.id});
+        } else {
+            models = this.where(attrs);
+        }
         if(models.length > 1) { console.warn(attrs, 'is not unique') }
         return models[0] || void 0;
     },
@@ -176,6 +182,7 @@ Backbone.Collection = Backbone.Collection.extend({
         return model;
     }
 });
+*/
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
@@ -321,7 +328,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                 /*
                 // ADDED If the value is a uri, extract the id
-                var idArray = CBApp.filters.apiRegex.exec(value);
+                var idArray = Portal.filters.apiRegex.exec(value);
                 var id = (idArray && idArray[1]) ? idArray[1] : void 0;
 
                 if (id) {

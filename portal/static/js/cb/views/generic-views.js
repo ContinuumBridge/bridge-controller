@@ -1,5 +1,5 @@
 
-CBApp.ItemView = {
+Portal.ItemView = {
     //mixins: [Backbone.React.Component.mixin],
     /*
     getTitle: function() {
@@ -38,7 +38,7 @@ CBApp.ItemView = {
     }
 };
 
-CBApp.ListView = {
+Portal.ListView = {
     //mixins: [Backbone.React.Component.mixin],
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
@@ -80,7 +80,7 @@ CBApp.ListView = {
     }
 };
 
-CBApp.FluxBoneMixin = function(propName) {
+Portal.FluxBoneMixin = function(propName) {
     return {
         componentDidMount: function() {
             return this.props[propName].on("all", (function(_this) {
@@ -99,7 +99,7 @@ CBApp.FluxBoneMixin = function(propName) {
     };
 };
 
-CBApp.ListItemLoadingView = Marionette.ItemView.extend({
+Portal.ListItemLoadingView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'spinner',

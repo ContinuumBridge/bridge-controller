@@ -1,7 +1,7 @@
 
 //var Message = require('./message');
 
-CBApp.MessageView = Marionette.ItemView.extend({
+Portal.MessageView = Marionette.ItemView.extend({
 
     tagName: 'tr',
     className: '',
@@ -22,13 +22,13 @@ CBApp.MessageView = Marionette.ItemView.extend({
     }
 })
 
-CBApp.MessageListView = Marionette.CompositeView.extend({
+Portal.MessageListView = Marionette.CompositeView.extend({
 
     template: require('./templates/messageSection.html'),
     id: 'messages',
     //tagName: 'table',
     //className: 'table-condensed table-hover table-striped',
-    itemView: CBApp.MessageView,
+    itemView: Portal.MessageView,
     itemViewContainer: '#messages-table',
 
     events: {
@@ -69,14 +69,14 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     sendCommand: function(command) {
 
         console.log('sendCommand', command);
-        var destination = CBApp.getCurrentBridge().get('cbid');
-        var message = new CBApp.Message({
+        var destination = Portal.getCurrentBridge().get('cbid');
+        var message = new Portal.Message({
             destination: destination,
             body: {
                 command: command
             }
         });
-        CBApp.messageCollection.sendMessage(message);
+        Portal.messageCollection.sendMessage(message);
     },
 
     clickCommand: function(e) {

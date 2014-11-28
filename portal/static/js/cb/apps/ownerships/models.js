@@ -1,5 +1,5 @@
 
-CBApp.AppOwnership = Backbone.Deferred.Model.extend({
+Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -50,15 +50,15 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appOwnership" });
 
-CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppOwnership,
+    model: Portal.AppOwnership,
     backend: 'appOwnership',
 
     initialize: function() {
         this.bindBackend();
 
-        CBApp.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){

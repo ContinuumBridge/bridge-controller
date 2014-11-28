@@ -15,7 +15,7 @@ require('./cb/models');
 (function($){
 	$(document).ready(function() {
 
-        CBApp.start();
+        Portal.start();
 	});
 })(jQuery);
 

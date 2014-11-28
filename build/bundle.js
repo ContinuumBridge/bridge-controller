@@ -16,7 +16,7 @@ require('./cb/models');
 (function($){
 	$(document).ready(function() {
 
-        CBApp.start();
+        Portal.start();
 	});
 })(jQuery);
 
@@ -22379,7 +22379,7 @@ return Q;
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
 
-CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
+Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -22388,9 +22388,9 @@ CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
+Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
-    model: CBApp.AdaptorCompatibility,
+    model: Portal.AdaptorCompatibility,
     //backend: 'app',
 
     initialize: function() {
@@ -22419,7 +22419,7 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js":[function(require,module,exports){
 
-CBApp.Adaptor = Backbone.RelationalModel.extend({
+Portal.Adaptor = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -22429,9 +22429,9 @@ CBApp.Adaptor = Backbone.RelationalModel.extend({
 }, { modelType: "adaptor" });
 
 
-CBApp.AdaptorCollection = Backbone.Collection.extend({
+Portal.AdaptorCollection = Backbone.Collection.extend({
 
-    model: CBApp.Adaptor,
+    model: Portal.Adaptor,
     backend: 'app',
 
     initialize: function() {
@@ -22448,7 +22448,7 @@ CBApp.AdaptorCollection = Backbone.Collection.extend({
 
 require('../../common/models');
 
-CBApp.AppConnection = CBApp.ConnectionModel.extend({
+Portal.AppConnection = Portal.ConnectionModel.extend({
 
     backend: 'appConnection',
 
@@ -22478,14 +22478,14 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
     ]
 }, { modelType: "appConnection" });
 
-CBApp.AppConnectionCollection = QueryEngine.QueryCollection.extend({
+Portal.AppConnectionCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppConnection,
+    model: Portal.AppConnection,
     backend: 'appConnection',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.AppConnectionCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppConnectionCollection.__super__.initialize.apply(this, arguments);
     }
 });
 
@@ -22507,7 +22507,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 require('../../components/switches');
 
 /*
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.ConnectionSwitch = Portal.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
 
@@ -22527,7 +22527,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
 });
 */
 
-CBApp.AppConnectionView = Marionette.ItemView.extend({
+Portal.AppConnectionView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'inner-item',
@@ -22537,7 +22537,7 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.connectionSwitch = new CBApp.Components.ConnectionSwitch({
+        this.connectionSwitch = new Portal.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -22558,12 +22558,12 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppConnectionListView = Marionette.CollectionView.extend({
+Portal.AppConnectionListView = Marionette.CollectionView.extend({
 
     //template: require('./templates/appConnectionSection.html'),
     tagName: 'ul',
     className: '',
-    itemView: CBApp.AppConnectionView,
+    itemView: Portal.AppConnectionView,
     //itemViewContainer: '.connection-list',
 
     initialize: function(options) {
@@ -22578,7 +22578,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
         //if (deviceInstall.isNew()) return void 0;
         console.log('buildItemView', client);
         // Create or fetch an app device permission
-        var appConnection = CBApp.appConnectionCollection.findOrAdd({
+        var appConnection = Portal.appConnectionCollection.findOrAdd({
             app: this.app,
             client: client
         });
@@ -22604,7 +22604,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
 
 },{"../../components/switches":"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js","./templates/appConnection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
 
-CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
+Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
@@ -22680,9 +22680,9 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appDevicePermission" });
 
-CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
-    model: CBApp.AppDevicePermission,
+    model: Portal.AppDevicePermission,
     backend: 'appDevicePermission',
 
     initialize: function() {
@@ -22709,7 +22709,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 require('../../components/switches');
 
 /*
-CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.PermissionSwitch = Portal.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
 
@@ -22729,7 +22729,7 @@ CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
 });
 */
 
-CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
+Portal.AppDevicePermissionView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'inner-item',
@@ -22739,7 +22739,7 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.permissionSwitch = new CBApp.Components.ConnectionSwitch({
+        this.permissionSwitch = new Portal.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -22760,11 +22760,11 @@ CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
+Portal.AppDevicePermissionListView = Marionette.CollectionView.extend({
 
     tagName: 'ul',
     className: '',
-    itemView: CBApp.AppDevicePermissionView,
+    itemView: Portal.AppDevicePermissionView,
     //template: require('./templates/devicePermissionSection.html'),
 
     initialize: function(options) {
@@ -22778,7 +22778,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
         console.log('buildItemView', deviceInstall);
         // Create or fetch an app device permission
         //var adp = deviceInstall.getAppPermission(this.appInstall);
-        var adp = CBApp.appDevicePermissionCollection.findOrAdd({
+        var adp = Portal.appDevicePermissionCollection.findOrAdd({
             appInstall: this.appInstall,
             deviceInstall: deviceInstall
         });
@@ -22805,7 +22805,7 @@ CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
 
 },{"../../components/switches":"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js","./templates/devicePermission.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/templates/devicePermission.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
 
-CBApp.AppInstall = Backbone.Deferred.Model.extend({
+Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -22822,7 +22822,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             console.log('AppInstall successfully saved');
         }, function(error) {
             console.log('Error installing', error);
-            CBApp.Notifications.trigger('error:show', error);
+            Portal.Notifications.trigger('error:show', error);
         }).done();
     },
 
@@ -22889,7 +22889,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstall',
                 keySource: 'app_install',
                 keyDestination: 'app_install',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
@@ -22909,9 +22909,9 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appInstall" });
 
-CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppInstall,
+    model: Portal.AppInstall,
     backend: 'appInstall',
 
     initialize: function() {
@@ -22919,7 +22919,7 @@ CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
             console.log('AppInstall event ', event, payload);
         });
         this.bindBackend();
-        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
     /*
@@ -22983,7 +22983,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 require('../device_permissions/views');
 
-CBApp.AppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -22996,12 +22996,12 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffAppInstallView({
+        this.staffView = new Portal.StaffAppInstallView({
             model: this.model
         });
         this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
+            new Portal.AppDevicePermissionListView({
                 appInstall: this.model
             });
     },
@@ -23028,7 +23028,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         this.staffView.setElement(this.$('.staff-panel')).render();
 
-        CBApp.getCurrentBridge().fetch(function(currentBridge) {
+        Portal.getCurrentBridge().fetch(function(currentBridge) {
 
             console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
@@ -23040,7 +23040,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+Portal.StaffAppInstallView = Marionette.ItemView.extend({
 
     tagName: 'table',
     template: require('./templates/staffAppInstall.html'),
@@ -23055,13 +23055,13 @@ CBApp.StaffAppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppInstallListView = Marionette.CompositeView.extend({
+Portal.AppInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appInstallSection.html'),
-    itemView: CBApp.AppInstallView,
+    itemView: Portal.AppInstallView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #install-apps': 'showLicences'
@@ -23069,7 +23069,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
     showLicences: function() {
         console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
+        Portal.Config.controller.showAppLicences();
     },
 
     onRender : function(){
@@ -23079,7 +23079,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
 },{"../device_permissions/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js","./templates/appInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html","./templates/appInstallSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstallSection.html","./templates/staffAppInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/staffAppInstall.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
 
-CBApp.AppLicence = Backbone.Deferred.Model.extend({
+Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -23128,8 +23128,8 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri'
             /*
             modelBuilder: {
-                'user': CBApp.User,
-                'currentUser': CBApp.CurrentUser
+                'user': Portal.User,
+                'currentUser': Portal.CurrentUser
             }
             //initializeCollection: 'userCollection',
             reverseRelation: {
@@ -23218,10 +23218,10 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
 }, { modelType: "appLicence" });
 
 //var QueryEngine = require('query-engine');
-//CBApp.AppLicenceCollection = Backbone.Collection.extend({
-CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
+//Portal.AppLicenceCollection = Backbone.Collection.extend({
+Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppLicence,
+    model: Portal.AppLicence,
     backend: 'appLicence',
 
     initialize: function() {
@@ -23233,7 +23233,7 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
             self.add(model);
         });
         */
-        CBApp.AppLicenceCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){
@@ -23281,7 +23281,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 require('../../components/buttons');
 
-CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
+Portal.Components.AppInstallButton = Portal.Components.Button.extend({
 
     //className: 'btn btn-default install-button',
 
@@ -23330,7 +23330,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
         console.log('onClick');
         this.model.toggleInstalled();
         /*
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        Portal.getCurrentBridge().then(function(currentBridge){
             console.log('onClick promise');
             self.model.toggleInstall(currentBridge);
             console.log('onClick promise 2');
@@ -23348,7 +23348,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
     }
 });
 
-CBApp.AppLicenceView = Marionette.ItemView.extend({
+Portal.AppLicenceView = Marionette.ItemView.extend({
 
     tagName: 'tr',
     //className: 'row',
@@ -23380,12 +23380,12 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
         this.app = this.model.get('app');
 
-        this.installButton = new CBApp.Components.AppInstallButton();
+        this.installButton = new Portal.Components.AppInstallButton();
 
-        var currentBridge = CBApp.getCurrentBridge();
+        var currentBridge = Portal.getCurrentBridge();
 
         this.installButton.bridge = currentBridge;
-        this.appInstall = CBApp.appInstallCollection.findOrAdd({
+        this.appInstall = Portal.appInstallCollection.findOrAdd({
             app: this.app,
             bridge: currentBridge,
             licence: this.model
@@ -23428,13 +23428,13 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppLicenceListView = Marionette.CompositeView.extend({
+Portal.AppLicenceListView = Marionette.CompositeView.extend({
 
     template: require('./templates/licenceSection.html'),
-    itemView: CBApp.AppLicenceView,
+    itemView: Portal.AppLicenceView,
     //itemViewContainer: 'tbody',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     appendHtml: function(collectionView, itemView){
         collectionView.$("tbody").append(itemView.el);
@@ -23448,7 +23448,7 @@ CBApp.AppLicenceListView = Marionette.CompositeView.extend({
 
 },{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/button.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/button.html","./templates/licence.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licence.html","./templates/licenceSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/templates/licenceSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
-CBApp.App = Backbone.RelationalModel.extend({
+Portal.App = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -23457,7 +23457,7 @@ CBApp.App = Backbone.RelationalModel.extend({
         {
             type: Backbone.HasMany,
             key: 'appInstalls',
-            collectionType: 'CBApp.AppInstallCollection',
+            collectionType: 'Portal.AppInstallCollection',
             includeInJSON: false,
             initializeCollection: 'appInstallCollection'
         }
@@ -23483,7 +23483,7 @@ CBApp.App = Backbone.RelationalModel.extend({
 
     getInstall: function(bridge) {
 
-        var appInstall = CBApp.appInstallCollection.findOrCreate({
+        var appInstall = Portal.appInstallCollection.findOrCreate({
             app: this,
             bridge: bridge
         });
@@ -23502,9 +23502,9 @@ CBApp.App = Backbone.RelationalModel.extend({
     }
 }, { modelType: "app" });
 
-CBApp.AppCollection = Backbone.Collection.extend({
+Portal.AppCollection = Backbone.Collection.extend({
 
-    model: CBApp.App,
+    model: Portal.App,
     backend: 'app',
 
     initialize: function() {
@@ -23524,7 +23524,7 @@ CBApp.AppCollection = Backbone.Collection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js":[function(require,module,exports){
 
-CBApp.AppOwnership = Backbone.Deferred.Model.extend({
+Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -23575,15 +23575,15 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appOwnership" });
 
-CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppOwnership,
+    model: Portal.AppOwnership,
     backend: 'appOwnership',
 
     initialize: function() {
         this.bindBackend();
 
-        CBApp.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){
@@ -23621,7 +23621,7 @@ require('../../components/buttons');
 
 require('../connections/views');
 
-CBApp.AppOwnershipView = Marionette.ItemView.extend({
+Portal.AppOwnershipView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -23669,7 +23669,7 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
         this.app = this.model.get('app');
 
         this.appConnectionListView =
-            new CBApp.AppConnectionListView({
+            new Portal.AppConnectionListView({
                 appOwnership: this.model
             });
     },
@@ -23678,7 +23678,7 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
 
         var self = this;
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             var clientControls = currentUser.get('clientControls');
             self.appConnectionListView.setCollection(clientControls);
@@ -23693,13 +23693,13 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
 });
 
 
-CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
+Portal.AppOwnershipListView = Marionette.CompositeView.extend({
 
     template: require('./templates/ownershipSection.html'),
-    itemView: CBApp.AppOwnershipView,
+    itemView: Portal.AppOwnershipView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     onRender : function(){
 
@@ -23712,7 +23712,7 @@ CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
 //var logger = require('logger');
 var Q = require('q');
 
-CBApp.Bridge = Backbone.Deferred.Model.extend({
+Portal.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -23791,9 +23791,9 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "bridge" });
 
-CBApp.BridgeCollection = Backbone.Collection.extend({
+Portal.BridgeCollection = Backbone.Collection.extend({
 
-    model: CBApp.Bridge,
+    model: Portal.Bridge,
     backend: 'bridge',
 
     initialize: function() {
@@ -23807,11 +23807,11 @@ CBApp.BridgeCollection = Backbone.Collection.extend({
     */
 });
 
-CBApp.getCurrentBridge = function() {
+Portal.getCurrentBridge = function() {
 
     //var currentBridgeDeferred = Q.defer();
 
-    var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(2);
+    var bridge = Portal.bridgeCollection.findWhere({current: true}) || Portal.bridgeCollection.at(2);
 
     if (!bridge) {
         //logger.log('warn', 'There is no current bridge');
@@ -23827,7 +23827,7 @@ CBApp.getCurrentBridge = function() {
 }
 
 
-CBApp.BridgeControl = Backbone.RelationalModel.extend({
+Portal.BridgeControl = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -23861,9 +23861,9 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
     ]
 }); 
 
-CBApp.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = Backbone.Collection.extend({
 
-    model: CBApp.BridgeControl,
+    model: Portal.BridgeControl,
     backend: 'bridgeControl',
 
     initialize: function() {
@@ -23920,7 +23920,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
 
-CBApp.StaffBridgeView = Marionette.ItemView.extend({
+Portal.StaffBridgeView = Marionette.ItemView.extend({
 
     //tagName: 'table',
     template: require('./templates/staffBridge.html'),
@@ -23937,7 +23937,7 @@ CBApp.StaffBridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeView = Marionette.ItemView.extend({
+Portal.BridgeView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -23960,7 +23960,7 @@ CBApp.BridgeView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffBridgeView({
+        this.staffView = new Portal.StaffBridgeView({
             model: this.model
         });
     },
@@ -23983,15 +23983,15 @@ CBApp.BridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeListView = Marionette.CompositeView.extend({
+Portal.BridgeListView = Marionette.CompositeView.extend({
 
     template: require('./templates/bridgeSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.BridgeView,
+    itemView: Portal.BridgeView,
     itemViewContainer: '.bridge-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -23999,7 +23999,7 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function() {
@@ -24007,9 +24007,110 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./templates/bridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
-CBApp.ClientControl = Backbone.Deferred.Model.extend({
+var optionalParam = /\((.*?)\)/g;
+var namedParam    = /(\(\?)?:\w+/g;
+var splatParam    = /\*\w+/g;
+var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+var CBApp = Marionette.Application.extend({
+
+    initialize: function(options) {
+
+        var self = this;
+
+        console.log('CBApp initialized');
+
+    },
+
+    setupCBIDTypes: function(cbidTypes) {
+
+        var self = this;
+
+        // Setup regex expressions to match CBIDs to their types
+        this.cbidTypesRegex = {};
+        _.each(cbidTypes, function(type, pattern) {
+            self.cbidTypesRegex[self.patternToRegex(pattern)] = type;
+        });
+    },
+
+    patternToRegex: function(pattern) {
+        pattern = pattern.replace(escapeRegExp, '\\$&')
+            .replace(optionalParam, '(?:$1)?')
+            .replace(namedParam, function (match, optional) {
+                return optional ? match : '([^/?]+)';
+            })
+            .replace(splatParam, '([^?]*?)');
+        return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
+    },
+
+    dispatchItems: function(items, itemType, actionType) {
+
+        var self = this;
+
+        var dispatchItem = function(item, actionType) {
+            var payload = {
+                item: item,
+                itemType: itemType,
+                actionType: actionType
+            };
+            self.dispatcher.dispatch(payload);
+        }
+
+        if (items instanceof Array) {
+            _.each(items, function(item) {
+                dispatchItem(item, actionType)
+            });
+        } else {
+            dispatchItem(items, actionType);
+        }
+    },
+
+    dispatch: function(message) {
+
+        var source = _.property('source')(message);
+        var body = _.property('body')(message);
+
+        if (source == 'portal') {
+
+            this.dispatcher.dispatch(message);
+
+        } else if (source == 'cb') {
+
+            var actionTypes = {
+                create: 'add',
+                delete: 'remove',
+                update: 'modify'
+            }
+            var verb = _.property('verb')(body);
+            var actionType = actionTypes[verb.toLowerCase()];
+            var items = _.property('body')(body);
+
+            this.dispatchItems(items, actionType);
+
+        } else if (source.match(/BID([0-9])+\/?\w+/g)) {
+            // Message is from a bridge or an app on a bridge
+            console.log('Received message from ', source, message);
+
+        } else {
+            console.warn('message source unrecognised', message);
+        }
+
+        this.dispatcher.dispatch(message);
+    },
+
+    register: function(callback) {
+
+        this.dispatcher.register(callback);
+    }
+});
+
+module.exports = CBApp;
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+
+Portal.ClientControl = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -24048,14 +24149,14 @@ CBApp.ClientControl = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "clientControl" });
 
-CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
+Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.ClientControl,
+    model: Portal.ClientControl,
     backend: 'clientControl',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.ClientControlCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientControlCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -24080,7 +24181,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
 
-CBApp.ClientControlView = Marionette.ItemView.extend({
+Portal.ClientControlView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -24121,20 +24222,20 @@ CBApp.ClientControlView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.ClientControlListView = Marionette.CompositeView.extend({
+Portal.ClientControlListView = Marionette.CompositeView.extend({
 
     template: require('./templates/clientControlSection.html'),
-    itemView: CBApp.ClientControlView,
+    itemView: Portal.ClientControlView,
     itemViewContainer: '.client-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #create-client': 'createClient'
     },
 
     createClient: function() {
-        CBApp.Config.controller.createClient();
+        Portal.Config.controller.createClient();
     },
 
     onRender : function(){
@@ -24144,7 +24245,7 @@ CBApp.ClientControlListView = Marionette.CompositeView.extend({
 
 },{"./templates/clientControl.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html","./templates/clientControlSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
 
-CBApp.Client = Backbone.Deferred.Model.extend({
+Portal.Client = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
@@ -24166,16 +24267,16 @@ CBApp.Client = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "client" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.ClientCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.ClientCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Client,
+    model: Portal.Client,
     backend: 'client',
 
     initialize: function() {
         var self = this;
 
-        CBApp.ClientCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientCollection.__super__.initialize.apply(this, arguments);
     }
 });
 
@@ -24205,7 +24306,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
 
-CBApp.ClientView = Marionette.ItemView.extend({
+Portal.ClientView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -24244,13 +24345,13 @@ CBApp.ClientView = Marionette.ItemView.extend({
 });
 
 
-CBApp.ClientListView = Marionette.CompositeView.extend({
+Portal.ClientListView = Marionette.CompositeView.extend({
 
     template: require('./templates/clientSection.html'),
-    itemView: CBApp.ClientView,
+    itemView: Portal.ClientView,
     itemViewContainer: '.client-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -24258,7 +24359,7 @@ CBApp.ClientListView = Marionette.CompositeView.extend({
     },
 
     addClient : function() {
-        CBApp.Config.controller.addClient();
+        Portal.Config.controller.addClient();
     },
 
     onRender : function() {
@@ -24267,7 +24368,7 @@ CBApp.ClientListView = Marionette.CompositeView.extend({
 });
 
 /*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
+Portal.DeviceLayoutView = Marionette.Layout.extend({
 
 
     events: {
@@ -24280,12 +24381,12 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.messageCollection.sendMessage('command', 'discover');
+        Portal.messageCollection.sendMessage('command', 'discover');
     },
 
     onRender: function() {
 
-        var deviceListView = new CBApp.DeviceListView({ 
+        var deviceListView = new Portal.DeviceListView({
             collection: this.collection
         });
         
@@ -24297,7 +24398,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
 },{"./templates/client.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/client.html","./templates/clientSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
 
-CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
+Portal.ConnectionModel = Backbone.Deferred.Model.extend({
 
     /* Model for connecting things ie. Apps and Devices, Clients and Apps */
 
@@ -24352,7 +24453,7 @@ CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
 
 require('./components');
 
-CBApp.Components.Button = Marionette.ItemView.extend({
+Portal.Components.Button = Marionette.ItemView.extend({
 
     tagName: 'button',
 
@@ -24400,14 +24501,14 @@ CBApp.Components.Button = Marionette.ItemView.extend({
 
 },{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js":[function(require,module,exports){
 
-CBApp.Components = {};
+Portal.Components = {};
 
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js":[function(require,module,exports){
 
 require('./components');
 
-CBApp.Components.NumberField = Marionette.ItemView.extend({
+Portal.Components.NumberField = Marionette.ItemView.extend({
 
     tagName: 'button',
 
@@ -24453,7 +24554,7 @@ CBApp.Components.NumberField = Marionette.ItemView.extend({
 
 require('./components');
 
-CBApp.Components.Switch = Marionette.ItemView.extend({
+Portal.Components.Switch = Marionette.ItemView.extend({
 
     //tagName: 'button',
 
@@ -24485,7 +24586,7 @@ CBApp.Components.Switch = Marionette.ItemView.extend({
     }
 });
 
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.ConnectionSwitch = Portal.Components.Switch.extend({
 
     template: require('./templates/switch.html'),
 
@@ -24531,7 +24632,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
 /*
-CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
+Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -24540,9 +24641,9 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
+Portal.DiscoveredDeviceCollection = Backbone.Collection.extend({
 
-    model: CBApp.DiscoveredDevice,
+    model: Portal.DiscoveredDevice,
     backend: 'discoveredDevice',
 
     initialize: function() {
@@ -24556,7 +24657,7 @@ CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
 });
  */
 
-CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
+Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -24587,8 +24688,8 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         };
 
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
-        var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
-            || new CBApp.DeviceInstall({
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
+            || new Portal.DeviceInstall({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
@@ -24597,7 +24698,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             });
 
         /*
-        var deviceInstall = CBApp.deviceInstallCollection.findOrAdd({
+        var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
 
         });
         */
@@ -24610,7 +24711,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         });
         console.log('deviceInstall is', deviceInstall.toJSON());
         // Add to the deviceInstall collection, to save with backbone io
-        CBApp.deviceInstallCollection.add(deviceInstall);
+        Portal.deviceInstallCollection.add(deviceInstall);
         deviceInstall.save().then(function(result) {
 
             console.log('deviceInstall saved successfully');
@@ -24623,7 +24724,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         console.log('In installDevice');
         // Create the device_install model on the server
         /*
-        CBApp.deviceInstallCollection.create(deviceInstall, {
+        Portal.deviceInstallCollection.create(deviceInstall, {
 
             wait: true,
 
@@ -24684,8 +24785,8 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection'
@@ -24694,9 +24795,9 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     ]
 }, { modelType: "discoveredDeviceInstall" });
 
-CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DiscoveredDeviceInstall,
+    model: Portal.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
 
     /*
@@ -24740,16 +24841,16 @@ require('../../components/buttons');
 
 
 /*
-CBApp.DiscoveredDeviceView = React.createClass({
+Portal.DiscoveredDeviceView = React.createClass({
     mixins: [React.ItemView]
 });
 
-CBApp.DiscoveredDeviceListView = React.createClass({
+Portal.DiscoveredDeviceListView = React.createClass({
     mixins: [React.CollectionView]
 });
 */
 
-CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
+Portal.Components.DeviceInstallButton = Portal.Components.Button.extend({
 
     template: require('./templates/installButton.html'),
 
@@ -24762,7 +24863,7 @@ CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
     onClick: function(e) {
 
         e.preventDefault();
-        CBApp.Config.controller.installDevice(this.model);
+        Portal.Config.controller.installDevice(this.model);
     },
 
     getContent: function() {
@@ -24776,7 +24877,7 @@ CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
     }
 });
 
-CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
+Portal.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
     className: 'new-item',
@@ -24792,7 +24893,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.installButton = new CBApp.Components.DeviceInstallButton({
+        this.installButton = new Portal.Components.DeviceInstallButton({
             model: this.model
         });
     },
@@ -24815,13 +24916,13 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
+Portal.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
     template: require('./templates/discoveredDeviceSection.html'),
-    itemView: CBApp.DiscoveredDeviceItemView,
+    itemView: Portal.DiscoveredDeviceItemView,
     itemViewContainer: '#discovered-device-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #devices': 'clickDevices',
@@ -24830,12 +24931,12 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
     clickDevices: function() {
 
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     },
 
     clickDiscover: function() {
 
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function(){
@@ -24845,7 +24946,7 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
 },{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/discoveredDevice.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDevice.html","./templates/discoveredDeviceSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDeviceSection.html","./templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
 
-CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
+Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
@@ -24878,7 +24979,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
 
         //var adp = appInstall.get('devicePermissions').findOrCreate({deviceInstall: this});
-        var adp = CBApp.appInstallCollection.findOrCreate({
+        var adp = Portal.appInstallCollection.findOrCreate({
             appInstall: appInstall,
             deviceInstall: this
         });
@@ -24887,13 +24988,13 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         if (adp) {
             adp.set({permission: true}, {silent: true});
         } else {
-            var adp = CBApp.AppDevicePermission.findOrCreate({
+            var adp = Portal.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
                 appInstall: appInstall,
                 permission: false
             });
         }
-        CBApp.appDevicePermissionCollection.add(adp);
+        Portal.appDevicePermissionCollection.add(adp);
         */
 
         return adp;
@@ -24959,8 +25060,8 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'appPermissions',
             //keySource: '',
             //keyDestination: 'bridge',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: false,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -24969,10 +25070,10 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DeviceInstall,
+    model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
     initialize: function() {
@@ -24980,13 +25081,16 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
         this.bindBackend();
 
-        CBDispatcher.register(this.dispatchCallback);
+        Portal.addInitializer(function(options) {
+
+            Portal.register(self.dispatchCallback);
+        });
         /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
         */
-        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
     /*
@@ -24998,25 +25102,25 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
-CBApp.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
-    mixins: [CBApp.ItemView],
-    //mixins: [CBApp.ItemView],
+Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
+    mixins: [Portal.ItemView],
+    //mixins: [Portal.ItemView],
     getTitle: function() {
         return this.props.model.friendly_name;
     }
 });
 
-CBApp.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallListView',
+Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallListView',
 
-    itemView: CBApp.DeviceInstallView,
+    itemView: Portal.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, CBApp.ListView],
-    //mixins: [CBApp.FluxBoneMixin('collection'), CBApp.ListView],
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
 });
 
 /*
-CBApp.DeviceInstallView = Marionette.ItemView.extend({
+Portal.DeviceInstallView = Marionette.ItemView.extend({
     
     tagName: 'li',
     //className: 'new-item',
@@ -25055,15 +25159,15 @@ CBApp.DeviceInstallView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
+Portal.DeviceInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/deviceInstallSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
+    itemView: Portal.DeviceInstallView,
     itemViewContainer: '.device-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -25071,7 +25175,7 @@ CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function() {
@@ -25080,7 +25184,7 @@ CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
 });
 
 /*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
+Portal.DeviceLayoutView = Marionette.Layout.extend({
 
 
     events: {
@@ -25093,12 +25197,12 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
     discover: function() {
 
-        CBApp.messageCollection.sendMessage('command', 'discover');
+        Portal.messageCollection.sendMessage('command', 'discover');
     },
 
     onRender: function() {
 
-        var deviceListView = new CBApp.DeviceListView({ 
+        var deviceListView = new Portal.DeviceListView({
             collection: this.collection
         });
         
@@ -25110,7 +25214,7 @@ CBApp.DeviceLayoutView = Marionette.Layout.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
-CBApp.Device = Backbone.Deferred.Model.extend({
+Portal.Device = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
     
@@ -25137,8 +25241,8 @@ CBApp.Device = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             //keySource: 'device_installs',
             //keyDestination: 'device_installs',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: false,
             initializeCollection: 'deviceInstallCollection',
             includeInJSON: true,
@@ -25151,15 +25255,15 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "device" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Device,
+    model: Portal.Device,
     backend: 'device',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.DeviceCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -25169,11 +25273,21 @@ CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
-CBApp = new Marionette.Application();
+var CBApp = require('./cbApp')
+
+var cbidTypes = {
+    'BID:b': 'bridge',
+    'BID:b/UID:u': 'bridgeControl',
+    'BID:b/DID:d': 'deviceInstall'
+}
+
+Portal = new CBApp();
+Portal.dispatcher = new Dispatcher();
+Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/generic-views');
 
-CBApp.addRegions({
+Portal.addRegions({
     navRegion: "#nav-region",
     mainRegion: "#main-region",
     notificationRegion: "#notification-region",
@@ -25183,37 +25297,37 @@ CBApp.addRegions({
     }
 });
 
-CBApp._isInitialized = false;
+Portal._isInitialized = false;
 
-CBApp.Controller = Marionette.Controller.extend({
+Portal.Controller = Marionette.Controller.extend({
 
   index: function () {
     console.log('index');
   },
   showConfig: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', 'config');
-      CBApp.Config.trigger('config:show', slug);
+      Portal.modalsRegion.reset();
+      Portal.Nav.trigger('topbar:activate', 'config');
+      Portal.Config.trigger('config:show', slug);
   },
   showDeveloper: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', '');
-      CBApp.Developer.trigger('developer:show', slug);
+      Portal.modalsRegion.reset();
+      Portal.Nav.trigger('topbar:activate', '');
+      Portal.Developer.trigger('developer:show', slug);
   },
   showHome: function() {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('home:activate', '');
-      CBApp.Home.trigger('developer:show', slug);
+      Portal.modalsRegion.reset();
+      Portal.Nav.trigger('home:activate', '');
+      Portal.Home.trigger('developer:show', slug);
   },
   showStore: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', 'store');
-      CBApp.Store.trigger('store:show', slug);
+      Portal.modalsRegion.reset();
+      Portal.Nav.trigger('topbar:activate', 'store');
+      Portal.Store.trigger('store:show', slug);
   },
   setCurrentBridge: function(bridge) {
 
       console.log('setCurrentBridge bridge', bridge);
-      var currentBridges = CBApp.bridgeCollection.where({current: true})
+      var currentBridges = Portal.bridgeCollection.where({current: true})
       for (i=0; i < currentBridges.length; i++) {
           currentBridges[i].set('current', false, {silent: true});
       }
@@ -25232,12 +25346,12 @@ var DevicesView = React.createClass({
 });
 */
 
-CBApp.addInitializer(function () {
+Portal.addInitializer(function () {
 
   //router
-  CBApp.controller = new CBApp.Controller();
-  CBApp.router = new CBApp.Router('portal', {
-      controller : CBApp.controller,
+  Portal.controller = new Portal.Controller();
+  Portal.router = new Portal.Router('portal', {
+      controller : Portal.controller,
       createTrailingSlashRoutes: true
   });
   var $testSection = document.getElementById('test-region');
@@ -25245,20 +25359,20 @@ CBApp.addInitializer(function () {
   //React.renderComponent(DevicesView(), $testSection);
 });
 
-CBApp.navigate = function(route,  options){
+Portal.navigate = function(route,  options){
   options || (options = {});
   Backbone.history.navigate(route, options);
 };
 
-CBApp.getCurrentRoute = function(){
+Portal.getCurrentRoute = function(){
   return Backbone.history.fragment
 };
 
 
-CBApp.on("initialize:after", function () {
+Portal.on("initialize:after", function () {
 
-  CBApp.Nav.trigger('topbar:show');
-  CBApp.Notifications.trigger('show');
+  Portal.Nav.trigger('topbar:show');
+  Portal.Notifications.trigger('show');
 
   //for routing purposes
   if(Backbone.history) {
@@ -25268,7 +25382,7 @@ CBApp.on("initialize:after", function () {
 
       console.log('Backbone.history.fragment', Backbone.history.fragment);
       if (this.getCurrentRoute() === "") {
-          CBApp.request('config:show');
+          Portal.request('config:show');
           //Backbone.history.navigate('index');
 
       }
@@ -25278,7 +25392,7 @@ CBApp.on("initialize:after", function () {
   }
 });
 
-CBApp.Router = Marionette.SubRouter.extend({
+Portal.Router = Marionette.SubRouter.extend({
 
   appRoutes: {
     '': 'showHome',
@@ -25288,26 +25402,26 @@ CBApp.Router = Marionette.SubRouter.extend({
   }
 });
 
-CBApp.reqres.setHandler("config:show", function(){
-    CBApp.controller.showConfig();
+Portal.reqres.setHandler("config:show", function(){
+    Portal.controller.showConfig();
 });
 
-CBApp.reqres.setHandler("developer:show", function(){
-    CBApp.controller.showDeveloper();
+Portal.reqres.setHandler("developer:show", function(){
+    Portal.controller.showDeveloper();
 });
 
-CBApp.reqres.setHandler("home:show", function(){
-    CBApp.controller.showHome();
+Portal.reqres.setHandler("home:show", function(){
+    Portal.controller.showHome();
 });
 
 
-CBApp.reqres.setHandler("store:show", function(){
-    CBApp.controller.showStore();
+Portal.reqres.setHandler("store:show", function(){
+    Portal.controller.showStore();
 });
-module.exports = CBApp;
-},{"./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+module.exports = Portal;
+},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
-CBApp.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -25339,8 +25453,8 @@ CBApp.Message = Backbone.RelationalModel.extend({
             key: 'source',
             keySource: 'source',
             keyDestination: 'source',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: false,
             includeInJSON: 'BID',
             initializeCollection: 'bridgeCollection',
@@ -25349,10 +25463,10 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-//CBApp.MessageCollection = Backbone.Collection.extend({
-CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
+//Portal.MessageCollection = Backbone.Collection.extend({
+Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Message,
+    model: Portal.Message,
     //backend: 'message',
 
     /*
@@ -25372,13 +25486,13 @@ CBApp.MessageCollection = QueryEngine.QueryCollection.extend({
         var self = this;
 
         var time = new Date();
-        var currentUserID = CBApp.currentUser.get('cbid');
+        var currentUserID = Portal.currentUser.get('cbid');
         message.set('source', currentUserID);
         message.set('time_sent', time);
 
         console.log('publishMessage', message.toJSON());
 
-        CBApp.socket.publish(message);
+        Portal.socket.publish(message);
         this.add(message);
     }
 });
@@ -25424,7 +25538,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 //var Message = require('./message');
 
-CBApp.MessageView = Marionette.ItemView.extend({
+Portal.MessageView = Marionette.ItemView.extend({
 
     tagName: 'tr',
     className: '',
@@ -25445,13 +25559,13 @@ CBApp.MessageView = Marionette.ItemView.extend({
     }
 })
 
-CBApp.MessageListView = Marionette.CompositeView.extend({
+Portal.MessageListView = Marionette.CompositeView.extend({
 
     template: require('./templates/messageSection.html'),
     id: 'messages',
     //tagName: 'table',
     //className: 'table-condensed table-hover table-striped',
-    itemView: CBApp.MessageView,
+    itemView: Portal.MessageView,
     itemViewContainer: '#messages-table',
 
     events: {
@@ -25492,14 +25606,14 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
     sendCommand: function(command) {
 
         console.log('sendCommand', command);
-        var destination = CBApp.getCurrentBridge().get('cbid');
-        var message = new CBApp.Message({
+        var destination = Portal.getCurrentBridge().get('cbid');
+        var message = new Portal.Message({
             destination: destination,
             body: {
                 command: command
             }
         });
-        CBApp.messageCollection.sendMessage(message);
+        Portal.messageCollection.sendMessage(message);
     },
 
     clickCommand: function(e) {
@@ -25525,7 +25639,7 @@ CBApp.MessageListView = Marionette.CompositeView.extend({
 
 },{"./templates/message.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/message.html","./templates/messageSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
 
-CBApp.FilteredCollection = function(original){
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
     
     // allow this object to have it's own events
@@ -25583,7 +25697,7 @@ CBApp.FilteredCollection = function(original){
     return filtered;
 }
 
-CBApp.FilteredCollection = function(original){
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
 
     // allow this object to have it's own events
@@ -25644,26 +25758,26 @@ CBApp.FilteredCollection = function(original){
 
 require('q');
 
-CBApp.filters = {};
+Portal.filters = {};
 
-CBApp.filters.currentBridge = function() {
+Portal.filters.currentBridge = function() {
     
     return function(item) {
 
         var relation = item.get('bridge');
 
         // Add the item to the collection if it belongs to the bridge
-        if (relation === CBApp.getCurrentBridge()) {
+        if (relation === Portal.getCurrentBridge()) {
             return item;
         }
     }
 }
 
-CBApp.filters.currentBridgeMessageDeferred = function() {
+Portal.filters.currentBridgeMessageDeferred = function() {
 
     var iteratorDeferred = Q.defer();
 
-    CBApp.getCurrentBridge().then(function(currentBridge) {
+    Portal.getCurrentBridge().then(function(currentBridge) {
 
         var iterator = function(item) {
 
@@ -25683,8 +25797,8 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
     return iteratorDeferred.promise;
 }
 
-//CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
-CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+//Portal.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
+Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 
 
 },{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
@@ -25716,70 +25830,70 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-CBApp.addInitializer(function () {
+Portal.addInitializer(function () {
 
-  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
-  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
+  Portal.adaptorCollection = new Portal.AdaptorCollection();
+  Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
 
   //data
-  CBApp.appCollection = new CBApp.AppCollection();
+  Portal.appCollection = new Portal.AppCollection();
 
-  CBApp.appConnectionCollection = new CBApp.AppConnectionCollection();
+  Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
-  CBApp.appInstallCollection = new CBApp.AppInstallCollection();
-  //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
-  CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+  Portal.appInstallCollection = new Portal.AppInstallCollection();
+  //Portal.filteredAppInstallCollection = new Portal.FilteredCollection(Portal.appInstallCollection);
+  Portal.appDevicePermissionCollection = new Portal.AppDevicePermissionCollection();
 
-  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
+  Portal.appLicenceCollection = new Portal.AppLicenceCollection();
 
-  CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
+  Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
-  CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
-  CBApp.bridgeCollection = new CBApp.BridgeCollection();
+  Portal.bridgeControlCollection = new Portal.BridgeControlCollection();
+  Portal.bridgeCollection = new Portal.BridgeCollection();
 
-  CBApp.clientCollection = new CBApp.ClientCollection();
+  Portal.clientCollection = new Portal.ClientCollection();
 
-  CBApp.clientControlCollection = new CBApp.ClientControlCollection();
+  Portal.clientControlCollection = new Portal.ClientControlCollection();
 
-  CBApp.deviceCollection = new CBApp.DeviceCollection();
+  Portal.deviceCollection = new Portal.DeviceCollection();
 
-  CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  //CBDispatcher.registerCallback(CBApp.deviceInstallCollection.dispatchCallback);
-  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
+  //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
+  //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+  Portal.discoveredDeviceInstallCollection = new Portal.DiscoveredDeviceInstallCollection();
+  //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
 
-  CBApp.messageCollection = new CBApp.MessageCollection([
+  Portal.messageCollection = new Portal.MessageCollection([
     { source: "UID1", destination: "BID2", body: "Test Body 1"},
     { source: "UID1", destination: "BID2", body: "Test Body 2"}
   ]);
-  //CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+  //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
-  CBApp.notificationCollection = new CBApp.NotificationCollection([
+  Portal.notificationCollection = new Portal.NotificationCollection([
       //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
       //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
 
-  CBApp.userCollection = new CBApp.UserCollection();
+  Portal.userCollection = new Portal.UserCollection();
 
-  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
-  CBApp.currentUser = new CBApp.CurrentUser(JSON.parse(INITIAL_USER_DATA));
-  CBApp.currentUserCollection.add(CBApp.currentUser);
+  Portal.currentUserCollection = new Portal.CurrentUserCollection();
+  Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));
+  Portal.currentUserCollection.add(Portal.currentUser);
 
   /*
-  CBApp.currentUserCollection.fetch().then(function() {
+  Portal.currentUserCollection.fetch().then(function() {
 
-      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+      Portal.currentUser = Portal.currentUserCollection.at(0);
       setTimeout(function() {
-          CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+          Portal._isInitialized = true;
+          Portal.currentUserDeferred.resolve(Portal.currentUser);
       }, 500);
 
   }, function(error) {
 
-      CBApp.currentUserDeferred.reject(error);
+      Portal.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
   */
@@ -25790,7 +25904,7 @@ CBApp.addInitializer(function () {
 
 var ConfigViews = require('./views');
 
-CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Config ran!');
 
@@ -25817,15 +25931,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        CBApp.mainRegion.show(Config.mainLayoutView);
+        Portal.mainRegion.show(Config.mainLayoutView);
       },
       showConfig: function() {
 
           //console.log('showConfig bridgeID is', bridgeID);
           Config.mainLayoutView = new ConfigViews.Main();
-          //var bridge = CBApp.bridgeCollection.get(bridgeID);
-          //if (bridge) CBApp.setCurrentBridge(bridge);
-          CBApp.mainRegion.show(Config.mainLayoutView);
+          //var bridge = Portal.bridgeCollection.get(bridgeID);
+          //if (bridge) Portal.setCurrentBridge(bridge);
+          Portal.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
@@ -25837,15 +25951,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
             }
             */
 
-        CBApp.modalsRegion.show(installAppModal);
+        Portal.modalsRegion.show(installAppModal);
       },
       discoverDevices: function() {
 
-          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+          Portal.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
           /*
-          CBApp.getCurrentBridge().then(function(currentBridge) {
+          Portal.getCurrentBridge().then(function(currentBridge) {
 
               // Remove all existing discovered devices
               var collection = currentBridge.get('discoveredDeviceInstalls');
@@ -25854,15 +25968,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               });
           });
           */
-          CBApp.getCurrentBridge().then(function(currentBridge) {
+          Portal.getCurrentBridge().then(function(currentBridge) {
               var destination = currentBridge.get('cbid');
-              var message = new CBApp.Message({
+              var message = new Portal.Message({
                   body: {
                       command: 'discover'
                   },
                   destination: destination
               });
-              CBApp.messageCollection.sendMessage(message);
+              Portal.messageCollection.sendMessage(message);
           });
 
           Config.mainLayoutView.devicesView.showDeviceDiscovery();
@@ -25875,14 +25989,14 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
             model: discoveredDeviceInstall,
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        CBApp.currentBridge = CBApp.bridgeCollection.get(bridgeID);
+        Portal.currentBridge = Portal.bridgeCollection.get(bridgeID);
         Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
@@ -25923,7 +26037,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '.app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         },
         deviceSection: '.device-section',
         messageSection: '.message-section',
@@ -25945,16 +26059,16 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appInstallListView = new CBApp.AppInstallListView();
-        this.bridgeView = new CBApp.BridgeListView();
+        this.appInstallListView = new Portal.AppInstallListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
+        this.messageListView = new Portal.MessageListView();
 
         /*
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
+            //Portal.clientCollection.fetch()
         }).done();
         */
     },
@@ -25975,14 +26089,14 @@ module.exports.Main = Marionette.Layout.extend({
         this.bridgeSection.show(this.bridgeView);
 
         /*
-        var deviceInstalls = this.deviceInstalls = CBApp.deviceInstallCollection.findAllLive();
+        var deviceInstalls = this.deviceInstalls = Portal.deviceInstallCollection.findAllLive();
         deviceInstalls.fetched = false;
 
         var discoveredDeviceInstalls = this.discoveredDeviceInstalls
-            = CBApp.discoveredDeviceInstallCollection.findAll();
+            = Portal.discoveredDeviceInstallCollection.findAll();
         */
-        var currentBridge = CBApp.getCurrentBridge();
-        this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+        var currentBridge = Portal.getCurrentBridge();
+        this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
 
         console.log('calling getCurrentBridge ');
         currentBridge.fetch().done(function(currentBridgeResolved) {
@@ -26020,12 +26134,12 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstalls);
             self.appInstallListView.render();
 
-            //CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            var currentBridgeMessageCollection = CBApp.messageCollection.findAllLive({bridge:currentBridge});
+            //Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            var currentBridgeMessageCollection = Portal.messageCollection.findAllLive({bridge:currentBridge});
             self.messageListView.setCollection(currentBridgeMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
@@ -26041,7 +26155,7 @@ var DevicesView = React.createClass({displayName: 'DevicesView',
 
         var self = this;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
@@ -26053,7 +26167,7 @@ var DevicesView = React.createClass({displayName: 'DevicesView',
     },
     */
     render: function() {
-        //return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
+        //return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
         console.log('DeviceView this.props', this.props);
         return React.createElement(CBApp.DeviceInstallListView, {collection: this.props.deviceInstalls})
     }
@@ -26066,8 +26180,8 @@ var DevicesView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.deviceInstallListView = new CBApp.DeviceInstallListView();
-        this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
+        this.deviceInstallListView = new Portal.DeviceInstallListView();
+        this.discoveredDeviceInstallListView = new Portal.DiscoveredDeviceListView();
         this.currentView = this.deviceInstallListView;
 
         //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
@@ -26099,7 +26213,7 @@ var DevicesView = Marionette.ItemView.extend({
 
         var self = this;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var deviceInstallCollection = currentBridge.get('deviceInstalls');
             self.deviceInstallListView.setCollection(deviceInstallCollection);
@@ -26132,20 +26246,20 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
-        CBApp.appLicenceCollection.fetch({data: { 'user': 'current' }})
-        this.licenceListView = new CBApp.AppLicenceListView();
+        Portal.appLicenceCollection.fetch({data: { 'user': 'current' }})
+        this.licenceListView = new Portal.AppLicenceListView();
     },
 
     clickStore: function() {
 
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
+        Portal.request('store:show');
+        //Portal.Controller.store();
     },
 
     onRender: function() {
 
         var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             console.log('promise in app modal initialize');
             var licenceCollection = currentUser.get('appLicences');
@@ -26160,7 +26274,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 
@@ -26174,7 +26288,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 */
@@ -26184,7 +26298,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 var DeveloperViews = require('./views');
 
-CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Developer ran!');
     Developer.addInitializer(function() {
@@ -26202,7 +26316,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
       showDeveloper: function() {
 
           Developer.mainLayoutView = new DeveloperViews.Main();
-          CBApp.mainRegion.show(Developer.mainLayoutView);
+          Portal.mainRegion.show(Developer.mainLayoutView);
       },
       addAppConnection: function(app, user) {
         var that = this;
@@ -26213,7 +26327,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
@@ -26270,21 +26384,21 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+        this.appOwnershipListView = new Portal.AppOwnershipListView();
 
-        this.clientControlListView = new CBApp.ClientControlListView();
+        this.clientControlListView = new Portal.ClientControlListView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }})
+            //Portal.clientCollection.fetch()
         }).done();
 
         /*
-        this.bridgeView = new CBApp.BridgeListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
+        this.messageListView = new Portal.MessageListView();
         */
     },
 
@@ -26301,7 +26415,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.bridgeSection.show(this.bridgeView);
          */
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             //self.listenToOnce(currentBridge, 'change:current', self.render);
             var appOwnershipCollection = currentUser.get('appOwnerships');
@@ -26324,11 +26438,11 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            self.messageListView.setCollection(Portal.filteredMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
@@ -26353,20 +26467,20 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
-        this.licenceListView = new CBApp.AppLicenceListView();
+        this.licenceListView = new Portal.AppLicenceListView();
 
     },
 
     clickStore: function() {
 
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
+        Portal.request('store:show');
+        //Portal.Controller.store();
     },
 
     onRender: function() {
 
         var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             console.log('promise in app modal initialize');
             var licenceCollection = currentUser.get('appLicences');
@@ -26381,7 +26495,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 
@@ -26395,7 +26509,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 
@@ -26406,7 +26520,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
 
 var HomeViews = require('./views');
 
-CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Home ran!');
     Home.addInitializer(function() {
@@ -26425,15 +26539,15 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
       index: function () {
         Home.mainLayoutView = new HomeViews.Main();
         console.log('mainLayoutView', Home.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Home.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Home.mainLayoutView);
         console.log('config index');
       },
       */
       showHome: function() {
 
           Home.mainLayoutView = new HomeViews.Main();
-          CBApp.mainRegion.show(Home.mainLayoutView);
+          Portal.mainRegion.show(Home.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -26444,7 +26558,7 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
@@ -26492,7 +26606,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
     */
@@ -26510,7 +26624,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 },{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
-CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
     require('bootstrap');
 
@@ -26525,7 +26639,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         showTopbar: function() {
 
             Nav.topbarView = new Nav.TopbarView();
-            CBApp.navRegion.show(Nav.topbarView);
+            Portal.navRegion.show(Nav.topbarView);
         },
         deactivateTopbar: function() {
             console.log('deactivateTopbar');
@@ -26554,7 +26668,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         },
 
         bridgeClick: function() {
-            CBApp.controller.setCurrentBridge(this.model);
+            Portal.controller.setCurrentBridge(this.model);
         },
 
         onRender: function() {
@@ -26568,7 +26682,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         tagName: 'li',
         className: 'dropdown',
-        itemView: CBApp.Nav.BridgeItemView,
+        itemView: Portal.Nav.BridgeItemView,
         itemViewContainer: '#bridge-list',
         template: require('./templates/bridgeDropdown.html'),
 
@@ -26588,16 +26702,16 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         addBridge: function() {
 
-            //CBApp.getCurrentBridge()
+            //Portal.getCurrentBridge()
             this.render();
         },
 
         onRender : function(){
 
-            this.model = CBApp.getCurrentBridge();
-            //console.log('CBApp.getCurrentBridge();', CBApp.getCurrentBridge());
+            this.model = Portal.getCurrentBridge();
+            //console.log('Portal.getCurrentBridge();', Portal.getCurrentBridge());
             //this.listenToOnce(this.model, 'change', this.render);
-            this.listenToOnce(CBApp.bridgeCollection, 'change:current', this.render);
+            this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
             //self.model.bind('change', self.render);
             this.stickit();
         }
@@ -26629,7 +26743,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
             var navEvent = e.target.className + ':show';
             console.log('navigate', navEvent);
             //console.log('navigate', e.target.className);
-            CBApp.request(navEvent);
+            Portal.request(navEvent);
         },
 
         activateSection: function(section) {
@@ -26651,7 +26765,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
             var $navbarLeft = this.$('#navbar-left');
             this.bridgeDropdownView = new Nav.BridgeDropdownView({
-                collection: CBApp.bridgeCollection
+                collection: Portal.bridgeCollection
             });
             $navbarLeft.append(this.bridgeDropdownView.render().$el);
 
@@ -26719,7 +26833,7 @@ require('../../notifications/views');
 //var Models = require('./models');
 //var Views = require('./views');
 
-CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
 
     Notifications.addInitializer(function() {
 
@@ -26727,19 +26841,19 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
         //router
         this.controller = new this.Controller();
 
-        //this.collection = new CBApp.NotificationCollection();
+        //this.collection = new Portal.NotificationCollection();
     });
 
     Notifications.Controller = Marionette.Controller.extend({
         showNotifications: function() {
 
-            console.log('notificationCollection', CBApp.notificationCollection);
-            Notifications.notificationsListView = new CBApp.NotificationListView({
-                collection: CBApp.notificationCollection
+            console.log('notificationCollection', Portal.notificationCollection);
+            Notifications.notificationsListView = new Portal.NotificationListView({
+                collection: Portal.notificationCollection
             });
 
             console.log('notificationsListView ', Notifications.notificationsListView);
-            CBApp.notificationRegion.show(Notifications.notificationsListView);
+            Portal.notificationRegion.show(Notifications.notificationsListView);
         },
         showInformation: function(message, title) {
             console.log('We got to the notification controller!');
@@ -26752,7 +26866,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
         showError: function(error) {
             var err = error && error.response && error.response.error || error || {};
             console.log('We got to the error notification controller!', err);
-            var notification = new CBApp.Notification({
+            var notification = new Portal.Notification({
                 name: err.name || "Error",
                 message: err.message || "Error message",
                 response: err.response || "Error response"
@@ -26761,7 +26875,7 @@ CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionett
             var notificationView = new Backbone.Notify.Error();
             notificationView.model = notification;
             console.log('notificationView is', notificationView);
-            CBApp.notificationsRegion.show(notificationView);
+            Portal.notificationsRegion.show(notificationView);
         },
     });
 
@@ -26834,7 +26948,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 require('../../../components/numbers');
 //require('./device_permissions/views');
 
-var InstallsPermittedField = CBApp.Components.NumberField.extend({
+var InstallsPermittedField = Portal.Components.NumberField.extend({
 
     initialize: function() {
 
@@ -26914,21 +27028,21 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
         this.installsPermittedField = new InstallsPermittedField();
         this.staffView = new StaffAppView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             // Create or find a licence, then bind to it
-            var licence = CBApp.appLicenceCollection.findWhere({
+            var licence = Portal.appLicenceCollection.findWhere({
                 app: self.model,
                 user: currentUser
             });
 
-            self.licence = licence || new CBApp.AppLicence({
+            self.licence = licence || new Portal.AppLicence({
                                                     app: self.model,
                                                     user: currentUser,
                                                     installs_permitted: 0
                                                 });
 
-            CBApp.appLicenceCollection.add(self.licence);
+            Portal.appLicenceCollection.add(self.licence);
 
             self.staffView.licence = self.licence;
             self.staffView.setModel(self.model);
@@ -26967,12 +27081,12 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
         this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
         /*
         self.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
+            new Portal.AppDevicePermissionListView({
                 collection: currentBridge.get('deviceInstalls'),
                 appInstall: self.model
             });
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var appID = '#APPID' + self.model.get('app').get('id');
             $appDevicePermissionList = self.$(appID);
@@ -26983,7 +27097,7 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
 });
 
 /*
-module.exports.InstallAppView = CBApp.AppView.extend({
+module.exports.InstallAppView = Portal.AppView.extend({
 
     template: require('./templates/installApp.html'),
 });
@@ -26995,7 +27109,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     itemView: AppView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     /*
     buildItemView: function(item, ItemViewType, itemViewOptions){
@@ -27017,7 +27131,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
 
 var StoreViews = require('./views');
 
-CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Store ran!');
     Store.addInitializer(function() {
@@ -27036,15 +27150,15 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
       index: function () {
         Store.mainLayoutView = new StoreViews.Main();
         console.log('mainLayoutView', Store.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
         console.log('config index');
       },
       */
       showStore: function() {
 
           Store.mainLayoutView = new StoreViews.Main();
-          CBApp.mainRegion.show(Store.mainLayoutView);
+          Portal.mainRegion.show(Store.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -27055,7 +27169,7 @@ CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
@@ -27103,7 +27217,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
 
@@ -27111,12 +27225,12 @@ module.exports.Main = Marionette.Layout.extend({
 
 
         this.appListView = new AppViews.AppListView({
-                                    collection: CBApp.appCollection
+                                    collection: Portal.appCollection
                                 });
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
-            CBApp.appCollection.fetch();
+            Portal.appCollection.fetch();
         }).done();
     },
 
@@ -27127,11 +27241,11 @@ module.exports.Main = Marionette.Layout.extend({
         this.appSection.show(this.appListView);
 
         /*
-        CBApp.appCollection.fetch().then(function(appCollection) {
+        Portal.appCollection.fetch().then(function(appCollection) {
 
             console.log('appCollection fetched', appCollection);
         });
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
@@ -27159,14 +27273,14 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 */
 
 },{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/views.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
-CBApp.Notification = Backbone.Deferred.Model.extend({
+Portal.Notification = Backbone.Deferred.Model.extend({
 
 
     idAttribute: 'id',
@@ -27179,15 +27293,15 @@ CBApp.Notification = Backbone.Deferred.Model.extend({
 
 }, { modelType: "notification" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Notification,
+    model: Portal.Notification,
     backend: 'notification',
 
     initialize: function() {
         //this.bindBackend();
-        CBApp.NotificationCollection.__super__.initialize.apply(this, arguments);
+        Portal.NotificationCollection.__super__.initialize.apply(this, arguments);
     }
 });
 
@@ -27217,7 +27331,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
 
-CBApp.NotificationView = Marionette.ItemView.extend({
+Portal.NotificationView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -27239,12 +27353,12 @@ CBApp.NotificationView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.NotificationListView = Marionette.CompositeView.extend({
+Portal.NotificationListView = Marionette.CompositeView.extend({
 
     template: require('./templates/notificationSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.NotificationView,
+    itemView: Portal.NotificationView,
     itemViewContainer: '.notification-list',
 
 });
@@ -27301,7 +27415,7 @@ _.extend(Router.prototype, Backbone.Events, {
         console.log('message in dispatch', message);
 
         var self = this;
-        //var message = new CBApp.Message(jsonMessage);
+        //var message = new Portal.Message(jsonMessage);
         var route = this.getRoute(message);
         var formattedMessage = this.formatMessage(message);
         _.any(this.handlers, function(handler) {
@@ -27337,7 +27451,7 @@ var updateCollection = function(collectionName) {
         var verb = _.property('verb')(messageBody);
         var jsonModels = _.property('body')(messageBody);
         console.log('updateCollection jsonModels', jsonModels );
-        var collection = CBApp[collectionName];
+        var collection = Portal[collectionName];
         console.log('collection', collection);
         if (verb != 'delete') {
             collection.update(jsonModels);
@@ -27357,7 +27471,7 @@ var PortalRouter = Router.extend({
 
     updateMessageCollection: function(message) {
         console.log('updateMessageCollection', message);
-        CBApp.messageCollection.add(message);
+        Portal.messageCollection.add(message);
     },
 
     /*
@@ -27415,7 +27529,7 @@ var MessageRouter = module.exports.MessageRouter = Router.extend({
 
         console.log('portalRouter is', this.portalRouter );
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             var uid = currentUser.get('cbid');
             self.route(uid, "portal", self.toPortal);
@@ -27453,17 +27567,17 @@ var routers = require('./routers');
 //var Message = require('./message');
 
 
-CBApp.addInitializer(function() {
+Portal.addInitializer(function() {
 
-    CBApp.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
+    Portal.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
 
-    //CBApp.socket = Backbone.io('http://gfdsgfds:9453/');
+    //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
-    CBApp.socket.on('connect', function(){
+    Portal.socket.on('connect', function(){
         console.log('Socket connected');
     });
 
-    CBApp.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
+    Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');
@@ -27471,34 +27585,34 @@ CBApp.addInitializer(function() {
         console.log('foundDevices are', foundDevices);
         console.log('foundDevices are', JSON.toString(foundDevices));
 
-        CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
-        var currentBridge = CBApp.getCurrentBridge()
+        Portal.discoveredDeviceInstallCollection.reset(foundDevices);
+        var currentBridge = Portal.getCurrentBridge()
             // Trigger reset for the GUI
         var collection = currentBridge.get('discoveredDeviceInstalls');
         collection.trigger('reset');
 
     });
 
-    CBApp.socket.publish = function(message) {
+    Portal.socket.publish = function(message) {
 
       var self = this;
 
-      CBApp.getCurrentBridge().then(function(currentBridge) {
+      Portal.getCurrentBridge().then(function(currentBridge) {
 
           var destination = "BID" + currentBridge.get('id');
           message.set('destination', destination);
           console.log('Message is', message);
           var jsonMessage = message.toJSON();
 
-          CBApp.socket.emit('message', jsonMessage, function(data){
+          Portal.socket.emit('message', jsonMessage, function(data){
               //logger.log('verbose', 'Sent to socket ' + data);
           });
       });
     };
 
-    CBApp.messageRouter = new routers.MessageRouter();
+    Portal.messageRouter = new routers.MessageRouter();
 
-    CBApp.socket.on('message', function(jsonString) {
+    Portal.socket.on('message', function(jsonString) {
 
         try {
             var jsonMessage = JSON.parse(jsonString);
@@ -27507,12 +27621,12 @@ CBApp.addInitializer(function() {
             return;
         }
 
-        var message = new CBApp.Message(jsonMessage);
+        var message = new Portal.Message(jsonMessage);
 
         var date = new Date();
         message.set('time_received', date);
         console.log('Server >', message);
-        CBApp.messageCollection.add(message);
+        Portal.messageCollection.add(message);
 
     });
 });
@@ -27521,15 +27635,15 @@ CBApp.addInitializer(function() {
 
 require('../models');
 
-//CBApp.CurrentUser = Backbone.Deferred.Model.extend({
+//Portal.CurrentUser = Backbone.Deferred.Model.extend({
 /*
-CBApp.CurrentUser = CBApp.User.extend({
+Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
 
     backend: 'currentUser',
 
-    //partOfModel: CBApp.User,
+    //partOfModel: Portal.User,
 
     initialize: function() {
 
@@ -27548,8 +27662,8 @@ CBApp.CurrentUser = CBApp.User.extend({
             key: 'appLicences',
             keySource: 'app_licences',
             keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
@@ -27560,8 +27674,8 @@ CBApp.CurrentUser = CBApp.User.extend({
             key: 'bridgeControls',
             keySource: 'bridge_controls',
             keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection'
@@ -27571,12 +27685,12 @@ CBApp.CurrentUser = CBApp.User.extend({
 });
 */
 
-CBApp.currentUserDeferred = Q.defer();
+Portal.currentUserDeferred = Q.defer();
 
-CBApp.getCurrentUser = function() {
+Portal.getCurrentUser = function() {
 
     /*
-    var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
+    var user = Portal.currentUserCollection.findWhere({current: true}) || Portal.currentUserCollection.at(0);
 
     if (!user) {
         console.warn('There is no current user');
@@ -27587,15 +27701,15 @@ CBApp.getCurrentUser = function() {
 
     return user;
     */
-    return CBApp.currentUserDeferred.promise;
+    return Portal.currentUserDeferred.promise;
 };
 
-//CBApp.U = Backbone.RelationalModel.extend({
-//CBApp.U = Backbone.Deferred.Model.extend({
+//Portal.U = Backbone.RelationalModel.extend({
+//Portal.U = Backbone.Deferred.Model.extend({
 
-//CBApp.CurrentUser = CBApp.User.extend({
-//CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
-CBApp.CurrentUser = CBApp.User.extend({
+//Portal.CurrentUser = Portal.User.extend({
+//Portal.LoggedInUser = Backbone.Deferred.Model.extend({
+Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
 
@@ -27605,7 +27719,7 @@ CBApp.CurrentUser = CBApp.User.extend({
         type: 'loggedInUser'
     },
 
-    //partOfModel: CBApp.User,
+    //partOfModel: Portal.User,
 
     initialize: function() {
 
@@ -27673,9 +27787,9 @@ CBApp.CurrentUser = CBApp.User.extend({
     ]
 }, { modelType: "currentUser" });
 
-CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
+Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
-    model: CBApp.CurrentUser,
+    model: Portal.CurrentUser,
     backend: 'currentUser',
 
     initialize: function() {
@@ -27686,8 +27800,8 @@ CBApp.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
 },{"../models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
 
-//CBApp.User = Backbone.Deferred.Model.extend({
-CBApp.User = Backbone.RelationalModel.extend({
+//Portal.User = Backbone.Deferred.Model.extend({
+Portal.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -27718,9 +27832,9 @@ CBApp.User = Backbone.RelationalModel.extend({
     }
 }, { modelType: "user" });
 
-CBApp.UserCollection = Backbone.Collection.extend({
+Portal.UserCollection = Backbone.Collection.extend({
 
-    model: CBApp.User,
+    model: Portal.User,
     backend: 'user',
 
     initialize: function() {
@@ -27734,7 +27848,7 @@ CBApp.UserCollection = Backbone.Collection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
-CBApp.ItemView = {
+Portal.ItemView = {
     //mixins: [Backbone.React.Component.mixin],
     /*
     getTitle: function() {
@@ -27773,7 +27887,7 @@ CBApp.ItemView = {
     }
 };
 
-CBApp.ListView = {
+Portal.ListView = {
     //mixins: [Backbone.React.Component.mixin],
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
@@ -27815,7 +27929,7 @@ CBApp.ListView = {
     }
 };
 
-CBApp.FluxBoneMixin = function(propName) {
+Portal.FluxBoneMixin = function(propName) {
     return {
         componentDidMount: function() {
             return this.props[propName].on("all", (function(_this) {
@@ -27834,7 +27948,7 @@ CBApp.FluxBoneMixin = function(propName) {
     };
 };
 
-CBApp.ListItemLoadingView = Marionette.ItemView.extend({
+Portal.ListItemLoadingView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'spinner',
@@ -27843,9 +27957,9 @@ CBApp.ListItemLoadingView = Marionette.ItemView.extend({
 
 },{"./templates/listItemLoading.html":"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
-CBApp.Regions = {};
+Portal.Regions = {};
 
-CBApp.Regions.Fade = Marionette.Region.extend({
+Portal.Regions.Fade = Marionette.Region.extend({
 
     open: function(view){
         this.$el.hide();
@@ -27855,8 +27969,8 @@ CBApp.Regions.Fade = Marionette.Region.extend({
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
-},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

@@ -28,7 +28,7 @@
           });
           */
 
-          if (CBApp._isInitialized && changed && !changed.hasOwnProperty('hasChangedSinceLastSync')) {
+          if (Portal._isInitialized && changed && !changed.hasOwnProperty('hasChangedSinceLastSync')) {
             this.set({hasChangedSinceLastSync: true});
             test = this;
             console.log('Model hasChangedSinceLastSync', this.get('hasChangedSinceLastSync'));

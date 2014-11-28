@@ -2,7 +2,7 @@
 
 var ConfigViews = require('./views');
 
-CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Config ran!');
 
@@ -29,15 +29,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        CBApp.mainRegion.show(Config.mainLayoutView);
+        Portal.mainRegion.show(Config.mainLayoutView);
       },
       showConfig: function() {
 
           //console.log('showConfig bridgeID is', bridgeID);
           Config.mainLayoutView = new ConfigViews.Main();
-          //var bridge = CBApp.bridgeCollection.get(bridgeID);
-          //if (bridge) CBApp.setCurrentBridge(bridge);
-          CBApp.mainRegion.show(Config.mainLayoutView);
+          //var bridge = Portal.bridgeCollection.get(bridgeID);
+          //if (bridge) Portal.setCurrentBridge(bridge);
+          Portal.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
@@ -49,15 +49,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
             }
             */
 
-        CBApp.modalsRegion.show(installAppModal);
+        Portal.modalsRegion.show(installAppModal);
       },
       discoverDevices: function() {
 
-          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+          Portal.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
           /*
-          CBApp.getCurrentBridge().then(function(currentBridge) {
+          Portal.getCurrentBridge().then(function(currentBridge) {
 
               // Remove all existing discovered devices
               var collection = currentBridge.get('discoveredDeviceInstalls');
@@ -66,15 +66,15 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               });
           });
           */
-          CBApp.getCurrentBridge().then(function(currentBridge) {
+          Portal.getCurrentBridge().then(function(currentBridge) {
               var destination = currentBridge.get('cbid');
-              var message = new CBApp.Message({
+              var message = new Portal.Message({
                   body: {
                       command: 'discover'
                   },
                   destination: destination
               });
-              CBApp.messageCollection.sendMessage(message);
+              Portal.messageCollection.sendMessage(message);
           });
 
           Config.mainLayoutView.devicesView.showDeviceDiscovery();
@@ -87,14 +87,14 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
             model: discoveredDeviceInstall,
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        CBApp.currentBridge = CBApp.bridgeCollection.get(bridgeID);
+        Portal.currentBridge = Portal.bridgeCollection.get(bridgeID);
         Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);

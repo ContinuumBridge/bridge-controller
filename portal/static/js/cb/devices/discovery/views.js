@@ -3,16 +3,16 @@ require('../../components/buttons');
 
 
 /*
-CBApp.DiscoveredDeviceView = React.createClass({
+Portal.DiscoveredDeviceView = React.createClass({
     mixins: [React.ItemView]
 });
 
-CBApp.DiscoveredDeviceListView = React.createClass({
+Portal.DiscoveredDeviceListView = React.createClass({
     mixins: [React.CollectionView]
 });
 */
 
-CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
+Portal.Components.DeviceInstallButton = Portal.Components.Button.extend({
 
     template: require('./templates/installButton.html'),
 
@@ -25,7 +25,7 @@ CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
     onClick: function(e) {
 
         e.preventDefault();
-        CBApp.Config.controller.installDevice(this.model);
+        Portal.Config.controller.installDevice(this.model);
     },
 
     getContent: function() {
@@ -39,7 +39,7 @@ CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
     }
 });
 
-CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
+Portal.DiscoveredDeviceItemView = Marionette.ItemView.extend({
     
     tagName: 'li',
     className: 'new-item',
@@ -55,7 +55,7 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.installButton = new CBApp.Components.DeviceInstallButton({
+        this.installButton = new Portal.Components.DeviceInstallButton({
             model: this.model
         });
     },
@@ -78,13 +78,13 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 });
 
 
-CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
+Portal.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
     template: require('./templates/discoveredDeviceSection.html'),
-    itemView: CBApp.DiscoveredDeviceItemView,
+    itemView: Portal.DiscoveredDeviceItemView,
     itemViewContainer: '#discovered-device-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #devices': 'clickDevices',
@@ -93,12 +93,12 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
     clickDevices: function() {
 
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     },
 
     clickDiscover: function() {
 
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function(){

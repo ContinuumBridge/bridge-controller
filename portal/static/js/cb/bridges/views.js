@@ -1,6 +1,6 @@
 
 
-CBApp.StaffBridgeView = Marionette.ItemView.extend({
+Portal.StaffBridgeView = Marionette.ItemView.extend({
 
     //tagName: 'table',
     template: require('./templates/staffBridge.html'),
@@ -17,7 +17,7 @@ CBApp.StaffBridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeView = Marionette.ItemView.extend({
+Portal.BridgeView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -40,7 +40,7 @@ CBApp.BridgeView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffBridgeView({
+        this.staffView = new Portal.StaffBridgeView({
             model: this.model
         });
     },
@@ -63,15 +63,15 @@ CBApp.BridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeListView = Marionette.CompositeView.extend({
+Portal.BridgeListView = Marionette.CompositeView.extend({
 
     template: require('./templates/bridgeSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.BridgeView,
+    itemView: Portal.BridgeView,
     itemViewContainer: '.bridge-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -79,7 +79,7 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function() {

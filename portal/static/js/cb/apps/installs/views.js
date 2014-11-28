@@ -1,7 +1,7 @@
 
 require('../device_permissions/views');
 
-CBApp.AppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -14,12 +14,12 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffAppInstallView({
+        this.staffView = new Portal.StaffAppInstallView({
             model: this.model
         });
         this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
+            new Portal.AppDevicePermissionListView({
                 appInstall: this.model
             });
     },
@@ -46,7 +46,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         this.staffView.setElement(this.$('.staff-panel')).render();
 
-        CBApp.getCurrentBridge().fetch(function(currentBridge) {
+        Portal.getCurrentBridge().fetch(function(currentBridge) {
 
             console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
@@ -58,7 +58,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+Portal.StaffAppInstallView = Marionette.ItemView.extend({
 
     tagName: 'table',
     template: require('./templates/staffAppInstall.html'),
@@ -73,13 +73,13 @@ CBApp.StaffAppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppInstallListView = Marionette.CompositeView.extend({
+Portal.AppInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appInstallSection.html'),
-    itemView: CBApp.AppInstallView,
+    itemView: Portal.AppInstallView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #install-apps': 'showLicences'
@@ -87,7 +87,7 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
     showLicences: function() {
         console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
+        Portal.Config.controller.showAppLicences();
     },
 
     onRender : function(){

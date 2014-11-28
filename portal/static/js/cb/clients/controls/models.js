@@ -1,5 +1,5 @@
 
-CBApp.ClientControl = Backbone.Deferred.Model.extend({
+Portal.ClientControl = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -38,14 +38,14 @@ CBApp.ClientControl = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "clientControl" });
 
-CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
+Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.ClientControl,
+    model: Portal.ClientControl,
     backend: 'clientControl',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.ClientControlCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientControlCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

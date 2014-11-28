@@ -1,6 +1,6 @@
 
 /*
-CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
+Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -9,9 +9,9 @@ CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
+Portal.DiscoveredDeviceCollection = Backbone.Collection.extend({
 
-    model: CBApp.DiscoveredDevice,
+    model: Portal.DiscoveredDevice,
     backend: 'discoveredDevice',
 
     initialize: function() {
@@ -25,7 +25,7 @@ CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
 });
  */
 
-CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
+Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -56,8 +56,8 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         };
 
         var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
-        var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
-            || new CBApp.DeviceInstall({
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
+            || new Portal.DeviceInstall({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
@@ -66,7 +66,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             });
 
         /*
-        var deviceInstall = CBApp.deviceInstallCollection.findOrAdd({
+        var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
 
         });
         */
@@ -79,7 +79,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         });
         console.log('deviceInstall is', deviceInstall.toJSON());
         // Add to the deviceInstall collection, to save with backbone io
-        CBApp.deviceInstallCollection.add(deviceInstall);
+        Portal.deviceInstallCollection.add(deviceInstall);
         deviceInstall.save().then(function(result) {
 
             console.log('deviceInstall saved successfully');
@@ -92,7 +92,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         console.log('In installDevice');
         // Create the device_install model on the server
         /*
-        CBApp.deviceInstallCollection.create(deviceInstall, {
+        Portal.deviceInstallCollection.create(deviceInstall, {
 
             wait: true,
 
@@ -153,8 +153,8 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection'
@@ -163,9 +163,9 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
     ]
 }, { modelType: "discoveredDeviceInstall" });
 
-CBApp.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DiscoveredDeviceInstall,
+    model: Portal.DiscoveredDeviceInstall,
     backend: 'discoveredDeviceInstall',
 
     /*

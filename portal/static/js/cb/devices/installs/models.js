@@ -1,5 +1,5 @@
 
-CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
+Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
@@ -32,7 +32,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
 
         //var adp = appInstall.get('devicePermissions').findOrCreate({deviceInstall: this});
-        var adp = CBApp.appInstallCollection.findOrCreate({
+        var adp = Portal.appInstallCollection.findOrCreate({
             appInstall: appInstall,
             deviceInstall: this
         });
@@ -41,13 +41,13 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         if (adp) {
             adp.set({permission: true}, {silent: true});
         } else {
-            var adp = CBApp.AppDevicePermission.findOrCreate({
+            var adp = Portal.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
                 appInstall: appInstall,
                 permission: false
             });
         }
-        CBApp.appDevicePermissionCollection.add(adp);
+        Portal.appDevicePermissionCollection.add(adp);
         */
 
         return adp;
@@ -113,8 +113,8 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'appPermissions',
             //keySource: '',
             //keyDestination: 'bridge',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: false,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -123,10 +123,10 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DeviceInstall,
+    model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
     initialize: function() {
@@ -134,13 +134,16 @@ CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
         this.bindBackend();
 
-        CBDispatcher.register(this.dispatchCallback);
+        Portal.addInitializer(function(options) {
+
+            Portal.register(self.dispatchCallback);
+        });
         /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
         */
-        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
 
     /*
