@@ -9,8 +9,8 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
@@ -25,8 +25,8 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
             /*

@@ -49,7 +49,7 @@ class CBAuthorization(Authorization):
         try:
             # Assume user is a human and get bridges associated with it
             bridge_controls = requester.bridge_controls.all()
-            bridges = Bridge.objects.filter(bridge_controls=bridge_controls)
+            bridges = Bridge.objects.filter(controls=bridge_controls)
         except AttributeError:
             # User is a bridge
             bridges = Bridge.objects.filter(pk=requester.pk)

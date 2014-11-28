@@ -15,13 +15,18 @@ from bridge_controller.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api.resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
-from .bridge_resources import UserBridgeControlResource
+#from .bridge_resources import UserBridgeControlResource
 
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
+    bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserBridgeControlResource',
+                                     'controls', full=True)
+
+    '''
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
                     null=True, readonly=True, nonmodel=True)
+    '''
 
     '''
     app_licences = cb_fields.ToManyThroughField(AppLicenceResource,

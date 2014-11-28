@@ -7,26 +7,6 @@ var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
 module.exports = {
 
-    createAddressRegex: function() {
-
-        var address = this.address.replace(escapeRegExp, '\\$&')
-            .replace(optionalParam, '(?:$1)?')
-            .replace(namedParam, function(match, optional) {
-                return optional ? match : '([^/?]+)';
-            })
-            .replace(splatParam, '([^?]*?)');
-
-        this.addressRegex = new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-
-        return this.addressRegex;
-    },
-
-    matchAddress: function(destination) {
-
-        var addressRegex = this.addressRegex || this.createAddressRegex();
-        return destination.match(addressRegex);
-    },
-
     dispatchCallback: function(message) {
 
         if (!this.matchAddress(message.destination)) return;
@@ -59,6 +39,26 @@ module.exports = {
         }
     },
 
+    createAddressRegex: function() {
+
+        var address = this.address.replace(escapeRegExp, '\\$&')
+            .replace(optionalParam, '(?:$1)?')
+            .replace(namedParam, function(match, optional) {
+                return optional ? match : '([^/?]+)';
+            })
+            .replace(splatParam, '([^?]*?)');
+
+        this.addressRegex = new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+
+        return this.addressRegex;
+    },
+
+    matchAddress: function(destination) {
+
+        var addressRegex = this.addressRegex || this.createAddressRegex();
+        return destination.match(addressRegex);
+    },
+
     update: function(models) {
         // Update models in collection and persist them to the server
 
@@ -68,6 +68,11 @@ module.exports = {
 
             self.findOrAdd(model);
         });
+    },
+
+    modify: function(items) {
+        // Modify models in this collection
+
     },
 
     delete: function(models) {

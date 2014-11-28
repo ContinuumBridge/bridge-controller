@@ -22403,8 +22403,8 @@ Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             initializeCollection: 'adaptorCollection',
             includeInJSON: true
@@ -22458,8 +22458,8 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             initializeCollection: 'appCollection',
             includeInJSON: true
@@ -22469,8 +22469,8 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             initializeCollection: 'clientCollection',
             includeInJSON: true
@@ -22660,8 +22660,8 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             key: 'deviceInstall',
             keySource: 'device_install',
             keyDestination: 'device_install',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceInstallCollection'
@@ -22671,8 +22671,8 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             key: 'appInstall',
             keySource: 'app_install',
             keyDestination: 'app_install',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -22849,8 +22849,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -22860,15 +22860,15 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'appInstalls',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'appInstallCollection',
             }   
@@ -22878,8 +22878,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             key: 'devicePermissions',
             keySource: 'device_permissions',
             keyDestination: 'device_permissions',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appDevicePermissionCollection'
@@ -22900,8 +22900,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             key: 'licence',
             keySource: 'licence',
             keyDestination: 'licence',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appLicenceCollection',
@@ -23095,8 +23095,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
@@ -23111,8 +23111,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'installs',
             keySource: 'installs',
             keyDestination: 'installs',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -23122,8 +23122,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
             /*
@@ -23534,8 +23534,8 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
@@ -23550,8 +23550,8 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
             /*
@@ -23743,8 +23743,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             type: Backbone.HasMany,
             key: 'bridgeControls',
             keySource: 'controllers',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection'
@@ -23760,8 +23760,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'appInstalls',
             keySource: 'apps',
             keyDestination: 'apps',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -23771,8 +23771,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             keySource: 'devices',
             keyDestination: 'devices',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceInstallCollection'
@@ -23782,8 +23782,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'discoveredDeviceInstalls',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: 'CBApp.DiscoveredDeviceInstall',
-            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            relatedModel: 'Portal.DiscoveredDeviceInstall',
+            collectionType: 'Portal.DiscoveredDeviceInstallCollection',
             createModels: true,
             //includeInJSON: true,
             initializeCollection: 'discoveredDeviceInstallCollection'
@@ -23841,8 +23841,8 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             initializeCollection: 'bridgeCollection',
             includeInJSON: true
@@ -23852,8 +23852,8 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'userCollection',
@@ -24097,7 +24097,7 @@ var CBApp = Marionette.Application.extend({
             console.warn('message source unrecognised', message);
         }
 
-        this.dispatcher.dispatch(message);
+        //this.dispatcher.dispatch(message);
     },
 
     register: function(callback) {
@@ -24122,8 +24122,8 @@ Portal.ClientControl = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'userCollection',
@@ -24133,15 +24133,15 @@ Portal.ClientControl = Backbone.Deferred.Model.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'clientControls',
-                collectionType: 'CBApp.ClientCollection',
+                collectionType: 'Portal.ClientCollection',
                 includeInJSON: false,
                 initializeCollection: 'clientCollection',
             }   
@@ -24258,8 +24258,8 @@ Portal.Client = Backbone.Deferred.Model.extend({
             type: Backbone.HasMany,
             key: 'clientControls',
             keySource: 'client_controls',
-            relatedModel: 'CBApp.ClientControl',
-            collectionType: 'CBApp.ClientControlCollection',
+            relatedModel: 'Portal.ClientControl',
+            collectionType: 'Portal.ClientControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'clientControlCollection'
@@ -24748,8 +24748,8 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -24763,8 +24763,8 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection'
@@ -24773,7 +24773,7 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'appPermissions',
             keySource: 'app_permissions',
             keyDestination: 'app_permissions',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -25006,8 +25006,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -25023,15 +25023,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -25041,15 +25041,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -25229,8 +25229,8 @@ Portal.Device = Backbone.Deferred.Model.extend({
             key: 'adaptorCompatibility',
             keySource: 'adaptor_compatibility',
             keyDestination: 'adaptor_compatibility',
-            relatedModel: 'CBApp.AdaptorCompatibility',
-            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            relatedModel: 'Portal.AdaptorCompatibility',
+            collectionType: 'Portal.AdaptorCompatibilityCollection',
             createModels: true,
             initializeCollection: 'adaptorCompatibilityCollection',
             includeInJSON: true
@@ -26169,7 +26169,7 @@ var DevicesView = React.createClass({displayName: 'DevicesView',
     render: function() {
         //return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
         console.log('DeviceView this.props', this.props);
-        return React.createElement(CBApp.DeviceInstallListView, {collection: this.props.deviceInstalls})
+        return React.createElement(Portal.DeviceInstallListView, {collection: this.props.deviceInstalls})
     }
 });
 
@@ -27743,8 +27743,8 @@ Portal.CurrentUser = Portal.User.extend({
             key: 'bridgeControls',
             keySource: 'bridge_controls',
             keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeControlCollection'
@@ -27754,8 +27754,8 @@ Portal.CurrentUser = Portal.User.extend({
             key: 'appLicences',
             keySource: 'app_licences',
             keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
@@ -27766,8 +27766,8 @@ Portal.CurrentUser = Portal.User.extend({
             key: 'appOwnerships',
             keySource: 'app_ownerships',
             keyDestination: 'app_ownerships',
-            relatedModel: 'CBApp.AppOwnership',
-            collectionType: 'CBApp.AppOwnershipCollection',
+            relatedModel: 'Portal.AppOwnership',
+            collectionType: 'Portal.AppOwnershipCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
@@ -27778,8 +27778,8 @@ Portal.CurrentUser = Portal.User.extend({
             key: 'clientControls',
             keySource: 'client_controls',
             keyDestination: 'client_controls',
-            relatedModel: 'CBApp.ClientControl',
-            collectionType: 'CBApp.ClientControlCollection',
+            relatedModel: 'Portal.ClientControl',
+            collectionType: 'Portal.ClientControlCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientControlCollection'
@@ -27806,7 +27806,7 @@ Portal.User = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     subModelTypes: {
-		'currentUser': 'CBApp.CurrentUser',
+		'currentUser': 'Portal.CurrentUser',
 	},
 
     /*
@@ -27897,7 +27897,7 @@ Portal.ListView = {
         console.log('model.cid', item.cid);
 
         //return < this.itemView model={item} />
-        return React.createElement(CBApp.DeviceInstallView, {key: cid, model: item})
+        return React.createElement(Portal.DeviceInstallView, {key: cid, model: item})
 
         //return <div>Another Item</div>;
     },

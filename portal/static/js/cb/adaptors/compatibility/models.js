@@ -23,8 +23,8 @@ Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             initializeCollection: 'adaptorCollection',
             includeInJSON: true

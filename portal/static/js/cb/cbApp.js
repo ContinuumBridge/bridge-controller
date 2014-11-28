@@ -87,7 +87,7 @@ var CBApp = Marionette.Application.extend({
             console.warn('message source unrecognised', message);
         }
 
-        this.dispatcher.dispatch(message);
+        //this.dispatcher.dispatch(message);
     },
 
     register: function(callback) {

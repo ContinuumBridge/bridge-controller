@@ -59,8 +59,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -76,15 +76,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -94,15 +94,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }

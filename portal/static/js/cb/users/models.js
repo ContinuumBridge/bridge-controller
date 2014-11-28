@@ -5,7 +5,7 @@ Portal.User = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     subModelTypes: {
-		'currentUser': 'CBApp.CurrentUser',
+		'currentUser': 'Portal.CurrentUser',
 	},
 
     /*

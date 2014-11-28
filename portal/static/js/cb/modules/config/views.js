@@ -151,7 +151,7 @@ var DevicesView = React.createClass({
     render: function() {
         //return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
         console.log('DeviceView this.props', this.props);
-        return <CBApp.DeviceInstallListView collection={this.props.deviceInstalls} />
+        return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
     }
 });
 

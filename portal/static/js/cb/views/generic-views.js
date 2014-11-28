@@ -48,7 +48,7 @@ Portal.ListView = {
         console.log('model.cid', item.cid);
 
         //return < this.itemView model={item} />
-        return <CBApp.DeviceInstallView key={cid} model={item} />
+        return <Portal.DeviceInstallView key={cid} model={item} />
 
         //return <div>Another Item</div>;
     },

@@ -14,8 +14,8 @@ Portal.Device = Backbone.Deferred.Model.extend({
             key: 'adaptorCompatibility',
             keySource: 'adaptor_compatibility',
             keyDestination: 'adaptor_compatibility',
-            relatedModel: 'CBApp.AdaptorCompatibility',
-            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            relatedModel: 'Portal.AdaptorCompatibility',
+            collectionType: 'Portal.AdaptorCompatibilityCollection',
             createModels: true,
             initializeCollection: 'adaptorCompatibilityCollection',
             includeInJSON: true
