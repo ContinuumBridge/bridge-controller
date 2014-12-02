@@ -20,7 +20,7 @@ from accounts.api.authorization import CurrentUserAuthorization
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
     bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserBridgeControlResource',
-                                     'controls', full=True)
+                                     'bridge_controls', full=True)
 
     '''
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
@@ -65,7 +65,7 @@ class UserAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
-    bridges = fields.ToManyField('accounts.api.bridge_resources.UserAuthBridgeControlResource', 'bridge_controls', full=True)
+    bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserAuthBridgeControlResource', 'bridge_controls', full=True)
 
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()

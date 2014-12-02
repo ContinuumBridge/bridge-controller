@@ -60,26 +60,30 @@ class BroadcastMixin(CBIDModelMixin):
         resource = getattr(module, resource_path[-1])()
         bundle = resource.build_bundle(obj=self)
         if fields:
+            data = {}
             for field in fields:
                 if field == 'resource_uri':
-                    data = { 'resource_uri': resource.get_resource_uri() + str(self.pk) }
+                    data['resource_uri'] = resource.get_resource_uri() + str(self.pk)
+                if field == 'id':
+                    data['id'] = str(self.pk)
+
                 # TODO Allow choosing of fields other than resource_uri
         else:
             data = getattr(resource.full_dehydrate(bundle), 'data')
-        return RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
+        return resource.get_resource_uri(), RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
 
     def create_message(self, verb):
 
         if verb != "delete":
-            data = self.to_json()
+            resource_uri, data = self.to_json()
         elif verb == "delete":
             # Only serialize specific fields if the model is being deleted
-            data = self.to_json(fields=['resource_uri', 'deleted_by'])
+            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id'])
 
         body = {
-            'cbid': self.cbid,
             'verb': verb,
-            'body': data
+            'body': data,
+            'resource_uri': resource_uri
         }
 
         return {

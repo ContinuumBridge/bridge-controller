@@ -2,6 +2,7 @@
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
 var Server = require('../server');
+var utils = require('../utils');
 
 logger = require('./logger');
 
@@ -35,14 +36,28 @@ Portal.prototype.onConnection = function(socket) {
 Portal.prototype.formatConfig = function(authData) {
 
         var publicationAddresses = new Array();
-        if (authData.controllers) {
-            authData.controllers.forEach(function(controller) {
-                publicationAddresses.push(controller.user.cbid)
+        var subscriptionAddresses = new Array();
+
+        //console.log('formatConfig authData.bridge_controllers', authData.bridge_controls);
+
+        if (authData.bridge_controls) {
+            authData.bridge_controls.forEach(function(control) {
+                var resourceMatch = utils.apiRegex.exec(control.bridge);
+                //console.log('formatConfig resourceMatch', resourceMatch);
+                if(resourceMatch && resourceMatch[2]) {
+                    var cbid = 'BID' + resourceMatch[2];
+                    //console.log('formatConfig cbid', cbid);
+                    publicationAddresses.push(cbid);
+                    subscriptionAddresses.push(cbid);
+                }
             });
         }
 
+        subscriptionAddresses.push(authData.cbid);
+
         return {
-            subscriptionAddress: authData.cbid,
+            cbid: authData.cbid,
+            subscriptionAddresses: subscriptionAddresses,
             publicationAddresses: publicationAddresses,
             email: authData.email
         }

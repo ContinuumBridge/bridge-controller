@@ -22432,15 +22432,8 @@ Portal.Adaptor = Backbone.RelationalModel.extend({
 Portal.AdaptorCollection = Backbone.Collection.extend({
 
     model: Portal.Adaptor,
-    backend: 'app',
+    backend: 'app'
 
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
 });
 
 
@@ -22915,9 +22908,11 @@ Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
     backend: 'appInstall',
 
     initialize: function() {
+        /*
         this.on('all', function(event, payload) {
             console.log('AppInstall event ', event, payload);
         });
+        */
         this.bindBackend();
         Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
@@ -23718,9 +23713,11 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
+        */
         var deviceInstalls = this.getRelation('deviceInstalls');
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -23794,13 +23791,13 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 Portal.BridgeCollection = Backbone.Collection.extend({
 
     model: Portal.Bridge,
-    backend: 'bridge',
+    backend: 'bridge'
 
+    /*
     initialize: function() {
         this.bindBackend();
     },
 
-    /*
     parse : function(response){
         return response.objects;
     }
@@ -24009,6 +24006,8 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
 
 },{"./templates/bridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
+var utils = require('./utils');
+
 var optionalParam = /\((.*?)\)/g;
 var namedParam    = /(\(\?)?:\w+/g;
 var splatParam    = /\*\w+/g;
@@ -24049,6 +24048,7 @@ var CBApp = Marionette.Application.extend({
 
         var self = this;
 
+        /*
         var dispatchItem = function(item, actionType) {
             var payload = {
                 item: item,
@@ -24065,9 +24065,12 @@ var CBApp = Marionette.Application.extend({
         } else {
             dispatchItem(items, actionType);
         }
+        */
     },
 
     dispatch: function(message) {
+
+        console.log('dispatch message', message);
 
         var source = _.property('source')(message);
         var body = _.property('body')(message);
@@ -24078,16 +24081,39 @@ var CBApp = Marionette.Application.extend({
 
         } else if (source == 'cb') {
 
+            console.log('dispatch cb message', message);
+
+            console.log('body', body);
+
             var actionTypes = {
                 create: 'add',
-                delete: 'remove',
-                update: 'modify'
+                delete: 'delete',
+                update: 'update'
             }
             var verb = _.property('verb')(body);
+            console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
+            console.log('actionType ', actionType );
+            var uri = _.property('resource_uri')(body);
+            console.log('uri ', uri );
+            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
+            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
+            var resourceMatches = uri.match(Portal.filters.apiRegex);
+            console.log('resourceMatches ', resourceMatches );
+            //var resource = resourceRegex.exec(resourceURI);
+            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            console.log('dispatch itemType ', itemType );
             var items = _.property('body')(body);
 
-            this.dispatchItems(items, actionType);
+            var msg = {
+                payload: items,
+                itemType: itemType,
+                actionType: actionType
+            };
+
+            this.dispatcher.dispatch(msg);
+
+            //this.dispatchItems(items, actionType);
 
         } else if (source.match(/BID([0-9])+\/?\w+/g)) {
             // Message is from a bridge or an app on a bridge
@@ -24108,7 +24134,7 @@ var CBApp = Marionette.Application.extend({
 
 module.exports = CBApp;
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./utils":"/home/vagrant/bridge-controller/portal/static/js/cb/utils.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
 
 Portal.ClientControl = Backbone.Deferred.Model.extend({
 
@@ -25076,22 +25102,20 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
-    initialize: function() {
+    /*
+    initialize: function(options) {
         var self = this;
 
-        this.bindBackend();
+        //Portal.addInitializer(function(options) {
 
-        Portal.addInitializer(function(options) {
-
-            Portal.register(self.dispatchCallback);
-        });
+        //});
         /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
-        */
         Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
+    */
 
     /*
     parse : function(response){
@@ -25798,7 +25822,8 @@ Portal.filters.currentBridgeMessageDeferred = function() {
 }
 
 //Portal.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
-Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+//Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/$/;
 
 
 },{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
@@ -25849,7 +25874,9 @@ Portal.addInitializer(function () {
   Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
   Portal.bridgeControlCollection = new Portal.BridgeControlCollection();
+
   Portal.bridgeCollection = new Portal.BridgeCollection();
+  Portal.bridgeCollection.subscribe();
 
   Portal.clientCollection = new Portal.ClientCollection();
 
@@ -25857,13 +25884,13 @@ Portal.addInitializer(function () {
 
   Portal.deviceCollection = new Portal.DeviceCollection();
 
-  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection([], {register: true});
+  Portal.deviceInstallCollection.subscribe();
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
   Portal.discoveredDeviceInstallCollection = new Portal.DiscoveredDeviceInstallCollection();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
-
 
   Portal.messageCollection = new Portal.MessageCollection([
     { source: "UID1", destination: "BID2", body: "Test Body 1"},
@@ -26062,7 +26089,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.appInstallListView = new Portal.AppInstallListView();
         this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
-        this.devicesView = new DevicesView();
+        //this.devicesView = new DevicesView();
         this.messageListView = new Portal.MessageListView();
 
         /*
@@ -27621,13 +27648,16 @@ Portal.addInitializer(function() {
             return;
         }
 
+        console.log('Server >', jsonMessage);
+        Portal.dispatch(jsonMessage);
+        /*
         var message = new Portal.Message(jsonMessage);
 
         var date = new Date();
         message.set('time_received', date);
         console.log('Server >', message);
         Portal.messageCollection.add(message);
-
+        */
     });
 });
 
@@ -27846,6 +27876,13 @@ Portal.UserCollection = Backbone.Collection.extend({
     }
 });
 
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/utils.js":[function(require,module,exports){
+
+module.exports.underscoredToCamelCase = function(underscored) {
+    var camelCased = underscored.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+    console.log('underscoredToCamelCase camelCased ', camelCased );
+    return camelCased;
+}
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
 Portal.ItemView = {

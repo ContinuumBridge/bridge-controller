@@ -129,22 +129,20 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
-    initialize: function() {
+    /*
+    initialize: function(options) {
         var self = this;
 
-        this.bindBackend();
+        //Portal.addInitializer(function(options) {
 
-        Portal.addInitializer(function(options) {
-
-            Portal.register(self.dispatchCallback);
-        });
+        //});
         /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
-        */
         Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
+    */
 
     /*
     parse : function(response){

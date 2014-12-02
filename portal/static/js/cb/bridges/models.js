@@ -8,9 +8,11 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
+        */
         var deviceInstalls = this.getRelation('deviceInstalls');
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -84,13 +86,13 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 Portal.BridgeCollection = Backbone.Collection.extend({
 
     model: Portal.Bridge,
-    backend: 'bridge',
+    backend: 'bridge'
 
+    /*
     initialize: function() {
         this.bindBackend();
     },
 
-    /*
     parse : function(response){
         return response.objects;
     }

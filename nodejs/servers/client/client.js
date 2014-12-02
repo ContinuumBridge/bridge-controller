@@ -35,15 +35,26 @@ Client.prototype.onConnection = function(socket) {
 Client.prototype.formatConfig = function(authData) {
 
         var publicationAddresses = new Array();
+        var subscriptionAddresses = new Array();
+
+        /*
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
-                publicationAddresses.push(controller.user.cbid)
+                var resourceMatch = utils.apiRegex.exec(controller.bridge);
+                var cbid = 'BID' + resourceMatch[2];
+                publicationAddresses.push(cbid);
+                subscriptionAddresses.push(cbid)
             });
         }
+        */
 
-        return config = {
-            subscriptionAddress: authData.cbid,
-            publicationAddresses: publicationAddresses
+        subscriptionAddresses.push(authData.cbid);
+
+        return {
+            cbid: authData.cbid,
+            subscriptionAddresses: subscriptionAddresses,
+            publicationAddresses: publicationAddresses,
+            email: authData.email
         }
 }
 

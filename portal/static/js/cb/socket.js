@@ -61,12 +61,15 @@ Portal.addInitializer(function() {
             return;
         }
 
+        console.log('Server >', jsonMessage);
+        Portal.dispatch(jsonMessage);
+        /*
         var message = new Portal.Message(jsonMessage);
 
         var date = new Date();
         message.set('time_received', date);
         console.log('Server >', message);
         Portal.messageCollection.add(message);
-
+        */
     });
 });

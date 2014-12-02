@@ -103,8 +103,10 @@ class CBResource(ModelResource):
         if filters.get('user') == 'current':
             filters['user'] = str(bundle.request.user.id)
 
-        # Update with the provided kwargs.
+        # Update filters with the provided kwargs.
+        print "filter kwargs are", kwargs
         filters.update(kwargs)
+        print "filter filters are", filters
         applicable_filters = self.build_filters(filters=filters)
 
         try:

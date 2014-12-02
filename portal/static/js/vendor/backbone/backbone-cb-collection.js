@@ -1,31 +1,29 @@
 
+var OriginalCollection = Backbone.Collection;
 
-var optionalParam = /\((.*?)\)/g;
-var namedParam    = /(\(\?)?:\w+/g;
-var splatParam    = /\*\w+/g;
-var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-
-module.exports = {
+var CBCollection = OriginalCollection.extend({
 
     dispatchCallback: function(message) {
 
-        console.log('dispatchCallback', this.backend.name, message);
         //if (!this.matchResource(message.itemType)) return;
         if( this.backend.name != message.itemType) return;
+
+        console.log('dispatchCallback', this.backend.name, message);
 
         switch(message.actionType) {
 
             // Actions from CB server
             case 'add':
-                this.add(message.payload);
+                this.update(message.payload);
                 break;
 
-            case 'modify':
-                this.modify(message.payload);
+            case 'update':
+                this.update(message.payload);
                 break;
 
-            case 'remove':
-                this.remove(message.payload);
+            case 'delete':
+                console.log('deleting', message.payload);
+                this.delete(message.payload);
                 break;
 
             default:
@@ -48,32 +46,10 @@ module.exports = {
 
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
-        console.log('collection subscribe', this.backend.name);
+        console.log('collection subscribed', this.backend.name);
     },
+
     /*
-    createAddressRegex: function() {
-
-        var address = this.address.replace(escapeRegExp, '\\$&')
-            .replace(optionalParam, '(?:$1)?')
-            .replace(namedParam, function(match, optional) {
-                return optional ? match : '([^/?]+)';
-            })
-            .replace(splatParam, '([^?]*?)');
-
-        this.addressRegex = new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-
-        return this.addressRegex;
-    },
-
-    matchResource: function(itemType) {
-
-        if (itemType == this.backend) {
-
-        }
-        //var addressRegex = this.addressRegex || this.createAddressRegex();
-        //return destination.match(addressRegex);
-    },
-
     update: function(models) {
         // Update models in collection and persist them to the server
 
@@ -86,19 +62,62 @@ module.exports = {
     },
     */
 
-    modify: function(attrs, options) {
+    update: function(models, options) {
 
-        var model = this.findWhere({id: _.property(attrs, 'id')});
-        //this._prepareModel(model, options)
-        //var model = this.findOrAdd(model);
-        if (model) {
-            model.set(atts);
-        } else {
-            if (!(model = this._prepareModel(model, options))) return false;
-            this.add(model);
+        console.log('updating models', this.backend.name, models);
+        var singular = !_.isArray(models);
+        models = singular ? [models] : _.clone(models);
+        //var model = this.findWhere({id: _.property(attrs, 'id')});
+        options || (options = {});
+        var i, l, index, model;
+        for (i = 0, l = models.length; i < l; i++) {
+            model = this.get(models[i]);
+            if (model) {
+                model.set(models[i]);
+                console.log('setting model', model);
+            } else {
+                console.log('adding model', model);
+                if (!(model = this._prepareModel(model, options))) return false;
+                this.add(model);
+                console.log('model added', model);
+            };
         }
     },
 
+    delete: function(models, options) {
+        var singular = !_.isArray(models);
+        models = singular ? [models] : _.clone(models);
+        options || (options = {});
+        var i, l, index, model;
+        for (i = 0, l = models.length; i < l; i++) {
+            model = this.get(models[i]);
+            model.delete();
+        }
+    },
+    /*
+    remove: function(models, options) {
+        var singular = !_.isArray(models);
+        models = singular ? [models] : _.clone(models);
+        options || (options = {});
+        var i, l, index, model;
+        for (i = 0, l = models.length; i < l; i++) {
+            model = models[i] = this.get(models[i]);
+            if (!model) continue;
+            delete this._byId[model.id];
+            delete this._byId[model.cid];
+            index = this.indexOf(model);
+            this.models.splice(index, 1);
+            this.length--;
+            if (!options.silent) {
+                options.index = index;
+                model.trigger('remove', model, this, options);
+            }
+            this._removeReference(model, options);
+        }
+        return singular ? models[0] : models;
+    },
+    */
+    /*
     delete: function(models) {
 
         // Delete models from collection and the server
@@ -121,6 +140,7 @@ module.exports = {
             model.relationalDestroy();
         });
     },
+    */
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes
@@ -145,4 +165,6 @@ module.exports = {
 
         return model;
     }
-};
+});
+
+Backbone.Collection = CBCollection;

@@ -1,4 +1,6 @@
 
+var utils = require('./utils');
+
 var optionalParam = /\((.*?)\)/g;
 var namedParam    = /(\(\?)?:\w+/g;
 var splatParam    = /\*\w+/g;
@@ -39,6 +41,7 @@ var CBApp = Marionette.Application.extend({
 
         var self = this;
 
+        /*
         var dispatchItem = function(item, actionType) {
             var payload = {
                 item: item,
@@ -55,9 +58,12 @@ var CBApp = Marionette.Application.extend({
         } else {
             dispatchItem(items, actionType);
         }
+        */
     },
 
     dispatch: function(message) {
+
+        console.log('dispatch message', message);
 
         var source = _.property('source')(message);
         var body = _.property('body')(message);
@@ -68,16 +74,39 @@ var CBApp = Marionette.Application.extend({
 
         } else if (source == 'cb') {
 
+            console.log('dispatch cb message', message);
+
+            console.log('body', body);
+
             var actionTypes = {
                 create: 'add',
-                delete: 'remove',
-                update: 'modify'
+                delete: 'delete',
+                update: 'update'
             }
             var verb = _.property('verb')(body);
+            console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
+            console.log('actionType ', actionType );
+            var uri = _.property('resource_uri')(body);
+            console.log('uri ', uri );
+            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
+            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
+            var resourceMatches = uri.match(Portal.filters.apiRegex);
+            console.log('resourceMatches ', resourceMatches );
+            //var resource = resourceRegex.exec(resourceURI);
+            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            console.log('dispatch itemType ', itemType );
             var items = _.property('body')(body);
 
-            this.dispatchItems(items, actionType);
+            var msg = {
+                payload: items,
+                itemType: itemType,
+                actionType: actionType
+            };
+
+            this.dispatcher.dispatch(msg);
+
+            //this.dispatchItems(items, actionType);
 
         } else if (source.match(/BID([0-9])+\/?\w+/g)) {
             // Message is from a bridge or an app on a bridge

@@ -25,9 +25,6 @@ require('../../cb/misc/relational-models');
 var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
-var CBCollectionMixin = require('./backbone-cb-collection-mixin');
-Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
-
 var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
@@ -35,8 +32,7 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 Q = require('q');
 
 require('./backbone-cb-model');
-
-var originalCollection = Backbone.Collection;
+require('./backbone-cb-collection');
 
 require('backbone-deferred');
 
@@ -44,9 +40,10 @@ Backbone.Collection = Backbone.Deferred.Collection;
 
 QueryEngine = require('query-engine');
 
-//Backbone.Deferred.Collection = QueryEngine.QueryCollection;
+//var CBCollectionMixin = require('./backbone-cb-collection-mixin');
+//Cocktail.mixin(QueryEngine.QueryCollection, CBCollectionMixin);
 
-Backbone.Collection = originalCollection;
+//Backbone.Deferred.Collection = QueryEngine.QueryCollection;
 
 //Backbone.QueryCollection = QueryEngine.QueryCollection;
 

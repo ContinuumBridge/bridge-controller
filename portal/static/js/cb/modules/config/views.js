@@ -44,7 +44,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.appInstallListView = new Portal.AppInstallListView();
         this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
-        this.devicesView = new DevicesView();
+        //this.devicesView = new DevicesView();
         this.messageListView = new Portal.MessageListView();
 
         /*
@@ -64,7 +64,7 @@ module.exports.Main = Marionette.Layout.extend({
 
         var self = this;
 
-        this.appSection.show(this.appInstallListView);
+        //this.appSection.show(this.appInstallListView);
         //this.deviceSection.show(this.devicesView);
         //this.devicesView.render();
         this.messageSection.show(this.messageListView);

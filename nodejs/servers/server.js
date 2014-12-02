@@ -44,9 +44,9 @@ Server.prototype.getConnectionConfig = function(authURL, sessionID) {
 
     backendAuth(authURL, sessionID).then(function(authData) {
 
-        console.log('authData is', authData);
+        //console.log('authData is', authData);
         var config = self.formatConfig(authData);
-        console.log('config is', config);
+        console.log('getConnectionConfig config is', config);
         config.sessionID = sessionID;
         deferredConfig.resolve(config);
 

@@ -45,7 +45,9 @@ Portal.addInitializer(function () {
   Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
   Portal.bridgeControlCollection = new Portal.BridgeControlCollection();
+
   Portal.bridgeCollection = new Portal.BridgeCollection();
+  Portal.bridgeCollection.subscribe();
 
   Portal.clientCollection = new Portal.ClientCollection();
 
@@ -53,13 +55,13 @@ Portal.addInitializer(function () {
 
   Portal.deviceCollection = new Portal.DeviceCollection();
 
-  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection([], {register: true});
+  Portal.deviceInstallCollection.subscribe();
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
   Portal.discoveredDeviceInstallCollection = new Portal.DiscoveredDeviceInstallCollection();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
-
 
   Portal.messageCollection = new Portal.MessageCollection([
     { source: "UID1", destination: "BID2", body: "Test Body 1"},

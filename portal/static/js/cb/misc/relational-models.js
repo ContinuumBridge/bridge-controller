@@ -27,8 +27,8 @@ Backbone.HasOne = Backbone.HasOne.extend({
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
                 var idArray = Portal.filters.apiRegex.exec(this.keyContents);
-                if (idArray && idArray[1]) {
-                        this.keyContents = { id: idArray[1] };
+                if (idArray && idArray[2]) {
+                        this.keyContents = { id: idArray[2] };
                 }
 
                 //var opts = _.defaults( { create: this.options.createModels }, options );
@@ -96,8 +96,8 @@ Backbone.HasMany = Backbone.HasMany.extend({
                         else {
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = Portal.filters.apiRegex.exec(attributes);
-                                if (idArray && idArray[1]) {
-                                        attributes = { id: idArray[1] };
+                                if (idArray && idArray[2]) {
+                                        attributes = { id: idArray[2] };
                                 }
 
                                 // If `merge` is true, update models here, instead of during update.

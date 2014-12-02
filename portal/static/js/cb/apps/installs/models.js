@@ -109,9 +109,11 @@ Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
     backend: 'appInstall',
 
     initialize: function() {
+        /*
         this.on('all', function(event, payload) {
             console.log('AppInstall event ', event, payload);
         });
+        */
         this.bindBackend();
         Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },

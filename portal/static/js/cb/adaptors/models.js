@@ -12,14 +12,7 @@ Portal.Adaptor = Backbone.RelationalModel.extend({
 Portal.AdaptorCollection = Backbone.Collection.extend({
 
     model: Portal.Adaptor,
-    backend: 'app',
+    backend: 'app'
 
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
 });
 

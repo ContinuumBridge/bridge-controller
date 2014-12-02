@@ -29,10 +29,8 @@ var BridgeConnection = function(socket) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
+        self.logConnection('bridge');
 
-        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.log('info', 'New bridge connection. Subscribed to %s, publishing to %s'
-            ,config.subscriptionAddress, publicationAddressesString);
     }).done();
 };
 
