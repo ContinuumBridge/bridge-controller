@@ -16,6 +16,15 @@ Errors.DjangoError = function(response) {
 }
 Errors.DjangoError.prototype = Error.prototype;
 
+Errors.MessageError = function(message) {
+    this.name = "MessageError";
+
+    //var message = util.format('"%s %s %s" %s', req.method, req.path, httpVersion, res.statusCode);
+
+    this.message = (message || "");
+}
+Errors.MessageError.prototype = Error.prototype;
+
 Errors.Unauthorized = function(message) {
     this.name = "Unauthorized";
     this.message = (message || "");

@@ -49,10 +49,21 @@ class UserBridgeControlResource(CBResource):
         resource_name = 'bridge_control'
 
 
+class UserAuthBridgeControlResource(CBResource):
+
+    bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=False)
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+
+    class Meta(CBResource.Meta):
+        queryset = BridgeControl.objects.all()
+        related_user_permissions = ['read', 'create', 'update', 'delete']
+        resource_name = 'bridge_control'
+
+
 class UserBridgeResource(CBResource):
 
     apps = cb_fields.ToManyThroughField(AppInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.appinstall_set, full=True,
+                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
                     null=True, readonly=True, nonmodel=True)
 
     devices = cb_fields.ToManyThroughField(DeviceInstallResource,

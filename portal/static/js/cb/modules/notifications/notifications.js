@@ -1,8 +1,4 @@
 
-var $ = require('jquery');
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('../../notifications/views');
 //var Models = require('./models');
 //var Views = require('./views');

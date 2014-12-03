@@ -23,20 +23,20 @@ class AppResource(CBResource, CBIDResourceMixin):
         queryset = App.objects.all()
         authorization = AppAuthorization()
         always_return_data = True
-        bridge_related_through = 'app_installs'
+        #bridge_related_through = 'app_installs'
         related_bridge_permissions = ['read']
-        user_related_through = 'app_ownerships'
+        #user_related_through = 'app_ownerships'
         related_user_permissions = ['read', 'create', 'update', 'delete']
         #client_related_through = 'app_connections'
         resource_name = 'app'
 
 
-class AppConnectionResource(UserObjectsResource):
+class AppConnectionResource(CBResource):
 
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=False)
 
-    class Meta(UserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = AppConnection.objects.all()
         authorization = AppConnectionAuthorization()
         resource_name = 'app_connection'

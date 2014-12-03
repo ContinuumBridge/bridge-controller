@@ -9,12 +9,13 @@ Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
 
 require('./backbone.stickit');
-require('backbone-io');
-require('./backbone.trackit.js');
+require('backbone.io');
+require('./backbone.trackit');
 require('backbone.marionette');
 require('backbone.marionette.subrouter');
 //require('./backbone-bossview');
 require('backbone.modal');
+
 
 //require('./backbone-notify');
 
@@ -23,6 +24,9 @@ require('../../cb/misc/relational-models');
 
 var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+
+var CBCollectionMixin = require('./backbone-cb-collection-mixin');
+Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
 
 var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
@@ -35,6 +39,9 @@ QueryEngine = require('query-engine');
 require('./backbone-cb-model');
 require('backbone-deferred');
 
+Backbone.QueryCollection = QueryEngine.QueryCollection;
+
+require('backbone-react-component');
 /*
 var TrackableModelMixin = require('./backbone-trackable');
 Cocktail.mixin(Backbone.Deferred.Model, TrackableModelMixin);

@@ -1,9 +1,7 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette')
-    ,Q = require('q');
+var Q = require('q');
 
-require('../../views/generic_views');
+require('../../views/generic-views');
 require('../../views/regions');
 
 //require('../../apps/storeViews');

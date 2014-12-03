@@ -10,7 +10,7 @@ from braces.views import LoginRequiredMixin
 from devices.models import Device
 
 class PortalView(LoginRequiredMixin, TemplateView):
-    template_name = 'user_app.html'
+    template_name = 'portal.html'
 
     login_url = "/accounts/login/"
     

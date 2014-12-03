@@ -10,40 +10,40 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-var ClientConnection = function(socket, serverConfig) {
+var ClientConnection = function(socket) {
 
     var self = this;
     this.socket = socket;
-
-    this.serverConfig = serverConfig;
-    //this.logger = logger;
-    //this.djangoURL = djangoURL;
-
-    logger.log('debug', 'socket.address is', Object.keys(socket));
-    logger.log('debug', 'socket.config is', socket.config);
-    //this.config = socket.handshake.config;
-    //socket.getConfig().then(function(config) {
+    this.logger = logger;
 
     var config = this.config = socket.config;
 
-    //var publicationAddresses = config.publicationAddresses || [];
-    //var publicationAddressesString = publicationAddresses.join(', ');
+    console.log('ClientConnection');
+    socket.getConfig().then(function(config) {
 
-    // Router and django must be defined
-    self.django = new Django(self);
-    self.router = new Router(self);
+        self.config = config;
 
-    self.setupBuses();
-    self.setupSocket();
-    self.setupRedis();
-    self.setupRouting();
+        self.django = new Django(self);
+        self.router = new Router(self);
 
-    var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-    logger.info('New client connection from %s:%s. Subscribed to %s (%s), publishing to %s'
-        ,config.address.address, config.address.port, config.subscriptionAddress
-        ,config.email, publicationAddressesString);
-    //}).done();
+        self.setupBuses();
+        self.setupSocket();
+        self.setupRedis();
+        self.setupRouting();
 
+        var connectedMessage = {
+            destination: config.subscriptionAddress,
+            source: 'cb',
+            body: 'connected'
+        }
+        logger.log('debug', 'connectedMessage', connectedMessage);
+        socket.emit('message', JSON.stringify(connectedMessage));
+        //socket.sendUTF('message', JSON.stringify(connectedMessage));
+
+        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
+        logger.log('info', 'New client connection. Subscribed to %s, publishing to %s'
+            ,config.subscriptionAddress, publicationAddressesString);
+    }).done();
 };
 
 ClientConnection.prototype = new Connection();

@@ -1,7 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 //var Message = require('./message');
 
 CBApp.MessageView = Marionette.ItemView.extend({

@@ -1,8 +1,16 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('../../components/buttons');
+
+
+/*
+CBApp.DiscoveredDeviceView = React.createClass({
+    mixins: [React.ItemView]
+});
+
+CBApp.DiscoveredDeviceListView = React.createClass({
+    mixins: [React.CollectionView]
+});
+*/
 
 CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
 
@@ -67,18 +75,6 @@ CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
 
         this.installButton.setElement(this.$('.install-button')).render();
     },
-
-    /*
-    serializeData: function() {
-
-      var data = {};
-      data.install = this.model.get('device') ? 'Install' : 'Request an adaptor';
-      // The label is the last four letters of the mac address
-      var macAddr = this.model.get('mac_addr') || "";
-      data.label = macAddr.slice(macAddr.length-5);
-      return data;
-    }
-    */
 });
 
 
@@ -94,12 +90,6 @@ CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
         'click #devices': 'clickDevices',
         'click #rescan': 'clickDiscover'
     },
-
-    /*
-    initialize: function(){
-
-    },
-    */
 
     clickDevices: function() {
 

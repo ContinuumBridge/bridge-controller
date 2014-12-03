@@ -9,11 +9,11 @@ from tastypie.exceptions import Unauthorized
 
 from accounts.models import CBUser, CBAuth
 from bridges.models import Bridge
-from bridges.models.common import LoggedModel, CBIDModelMixin
+from bridges.models.common import BroadcastMixin, LoggedModel, CBIDModelMixin
 from clients.models.clients import Client
 from devices.models import Device, DeviceInstall
 
-class App(LoggedModel, CBIDModelMixin):
+class App(BroadcastMixin, LoggedModel, CBIDModelMixin):
 
     name = models.CharField(_("name"), max_length = 255)
     description = models.TextField(_("description"), null = True, blank = True)
@@ -26,7 +26,9 @@ class App(LoggedModel, CBIDModelMixin):
 
     class Meta:
         verbose_name = _('app')
-        verbose_name_plural = _('apps')
+        user_related_through = 'app_ownerships'
+        bridge_related_through = 'app_installs'
+        default_resource = 'apps.api.resources.AppResource'
         app_label = 'apps'
 
     def save(self, *args, **kwargs):
@@ -73,7 +75,7 @@ class AppInstall(LoggedModel):
     
     """ Through model for a Bridge and an App """
 
-    bridge = models.ForeignKey(Bridge)
+    bridge = models.ForeignKey(Bridge, related_name='app_installs')
     app = models.ForeignKey(App, related_name='app_installs')
     licence = models.ForeignKey(AppLicence, related_name='app_installs')
 
@@ -114,19 +116,18 @@ class AppInstallConnection(LoggedModel):
     app_install = models.ForeignKey(AppInstall, related_name='app_connections')
 
     class Meta:
-        verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connections')
+        verbose_name = _('app_install_connection')
         app_label = 'apps'
 
 
 class AppConnection(LoggedModel):
 
-    client = models.ForeignKey(CBAuth)
+    client = models.ForeignKey(CBAuth, related_name='app_connections')
     app = models.ForeignKey(App, related_name='app_connections')
 
     class Meta:
         verbose_name = _('app_connection')
-        verbose_name_plural = _('app_connections')
         app_label = 'apps'
+
 
 

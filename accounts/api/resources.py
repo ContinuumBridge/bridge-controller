@@ -1,7 +1,9 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.conf.urls import url, include
 
+from tastypie import fields
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.resources import ModelResource
+from tastypie.utils import trailing_slash
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
 
 from accounts.models import CBUser
@@ -54,15 +56,21 @@ class UserResource(CBResource, CBIDResourceMixin):
         authorization = ReadOnlyAuthorization()
 
 
-#class UserAuthResource(AuthResource):
 class UserAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
-    #class Meta(ModelResource.Meta):
+    bridges = fields.ToManyField('accounts.api.bridge_resources.UserAuthBridgeControlResource', 'bridge_controls', full=True)
+
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()
         # Resource used to send data on successful login
         #data_resource = CurrentUserResource()
         fields = ['first_name', 'last_name', 'email', 'cbid']
+        resource_name = 'auth'
+
+
+class UserAuthAliasResource(UserAuthResource):
+
+    class Meta(AuthResource.Meta):
         resource_name = 'user_auth'

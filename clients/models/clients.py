@@ -52,7 +52,7 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
 
 class ClientControl(LoggedModel):
 
-    client = models.ForeignKey(Client, related_name='client_controls')
+    client = models.ForeignKey(Client, related_name='controllers')
     user = models.ForeignKey(CBUser, related_name='client_controls')
 
     class Meta:

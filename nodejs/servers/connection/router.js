@@ -41,16 +41,18 @@ Router.prototype.setupRoutes = function() {
 
     */
 
-    var cbAddressRoute = router.addRoute('{cbAddress}', function(message) {
+    var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
 
         logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
     });
 
+    /*
     cbAddressRoute.rules = {
-        cbAddress: /\/?[A-Z]ID[0-9]+(.+)?/
+        cbAddress: /\/?[A-Z]ID[0-9]+\/[A-Z]ID[0-9]+/
     }
+    */
 
     router.addRoute('cb', function(message) {
 
@@ -64,6 +66,10 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
+        logger.log('debug', 'message for broadcast', message);
+        if (message.get('source') == 'cb') {
+            self.connection.toClient.push(message);
+        }
         message.set('destination', publicationAddresses);
         self.connection.toRedis.push(message);
     });
@@ -92,7 +98,7 @@ Router.prototype.dispatch = function(message) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
-        logger.log('debug', 'Push to router');
+        logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
     /*

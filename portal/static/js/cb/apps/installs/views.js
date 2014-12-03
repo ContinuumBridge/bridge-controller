@@ -1,7 +1,4 @@
 
-var Backbone = require('backbone-bundle')
-    ,Marionette = require('backbone.marionette');
-
 require('../device_permissions/views');
 
 CBApp.AppInstallView = Marionette.ItemView.extend({
@@ -18,7 +15,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     initialize: function() {
 
         this.staffView = new CBApp.StaffAppInstallView({
-            model: this.model,
+            model: this.model
         });
         this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
@@ -61,38 +58,10 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     }
 });
 
-
 CBApp.StaffAppInstallView = Marionette.ItemView.extend({
 
     tagName: 'table',
     template: require('./templates/staffAppInstall.html'),
-
-    bindings: {
-        '.app-install-id': 'id'
-        /*
-        {
-            observe: [],
-            onGet: function() {
-                return "AppInstall ID: " + this.model.get('id');
-            }
-        }
-        */
-    },
-
-    licenceOwnerBindings: {
-        '.licence-owner': 'first_name',
-        '.licence-owner-id': 'id'
-        /*
-            {
-            observe: [],
-            onGet: function() {
-                //return this.model.get('licence').get('id');
-                return "Licence owner: " + this.licenceOwner.get('first_name')
-                    + " (" + this.licenceOwner.get('id') + ")";
-            }
-        }
-        */
-    },
 
     onRender: function() {
         if (this.model) {
