@@ -41,8 +41,14 @@ var CBModel = OriginalModel.extend({
         // ADDED Set isGhost to false, indicating the model is being instantiated on server
         this.set('isGhost', false);
         OriginalModel.prototype.save.apply(this, args);
-    }
+    },
 
+    toJSON: function(options) {
+
+        var json = OriginalModel.prototype.toJSON.apply(this, arguments);
+        json.cid = this.cid;
+        return json;
+    }
 });
 
 Backbone.RelationalModel = CBModel;

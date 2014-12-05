@@ -2,16 +2,22 @@
 require('../../components/buttons');
 
 
-/*
 Portal.DiscoveredDeviceView = React.createClass({
-    mixins: [React.ItemView]
+    mixins: [Portal.ItemView]
 });
 
 Portal.DiscoveredDeviceListView = React.createClass({
-    mixins: [React.CollectionView]
-});
-*/
 
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function() {
+        return {
+            title: 'Apps'
+        };
+    }
+});
+
+/*
 Portal.Components.DeviceInstallButton = Portal.Components.Button.extend({
 
     template: require('./templates/installButton.html'),
@@ -105,3 +111,4 @@ Portal.DiscoveredDeviceListView = Marionette.CompositeView.extend({
 
     }
 });
+*/

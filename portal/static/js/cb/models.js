@@ -37,6 +37,7 @@ Portal.addInitializer(function () {
   Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
   Portal.appInstallCollection = new Portal.AppInstallCollection();
+  Portal.appInstallCollection.subscribe();
   //Portal.filteredAppInstallCollection = new Portal.FilteredCollection(Portal.appInstallCollection);
   Portal.appDevicePermissionCollection = new Portal.AppDevicePermissionCollection();
 
@@ -55,7 +56,7 @@ Portal.addInitializer(function () {
 
   Portal.deviceCollection = new Portal.DeviceCollection();
 
-  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection([], {register: true});
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
   Portal.deviceInstallCollection.subscribe();
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);

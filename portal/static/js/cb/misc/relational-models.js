@@ -358,12 +358,12 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                                 if ( relation.keySource !== relation.key ) {
                                     delete model.attributes[ relation.keySource ];
                                 }
+
+                                // ADDED
+                                model.updateRelationToSelf(relation);
                             }
                         }
                         changeTriggers.push(changeTrigger(this, rel, value, options));
-
-                        // ADDED
-                        //this.updateRelationToSelf(rel);
                     }
                 }
 

@@ -1,4 +1,41 @@
 
+
+Portal.ReactBackboneMixin = {
+
+    getModel: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        return collection.get({cid: this.props.model.cid})
+    }
+}
+
+Portal.InnerItemView = {
+
+    render: function() {
+        return (
+            <div className="inner-item">
+                Inner Item
+            </div>
+        );
+    }
+}
+
+Portal.InnerListView = {
+
+    render: function() {
+        return (
+            <div className="inner-item">
+                <h3>{this.props.title}</h3>
+                <div>
+                    {this.props.collection.map(this.createItem)}
+                </div>
+            </div>
+        );
+    }
+}
+
 Portal.ItemView = {
     //mixins: [Backbone.React.Component.mixin],
     /*
@@ -15,31 +52,51 @@ Portal.ItemView = {
         return "Staff contents";
     },
     */
+
+    getModel: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        return collection.get({cid: this.props.model.cid})
+    },
+
+    getCollection: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        return owner.getCollection();
+    },
+
     handleDelete: function() {
 
         CBDispatcher.dispatch({actionType: 'delete',
                                model: this.props.model,
                                source: 'portal' });
     },
+
     handleUpdate: function() {
 
         CBDispatcher.dispatch({actionType: 'update',
                                model: this.props.model,
                                source: 'portal' });
     },
+
     render: function() {
+        console.log('ItemView props', this.props);
+        var model = this.props.model;
+        var body = this.renderBody ? this.renderBody() : "";
         return (
-            <li className="new-item">
-                <h4 className="item-title">{this.getTitle()}</h4>
-                <i id="edit-button" className="icon ion-chevron-right edit-button" />
-                <i className="icon ion-trash-a uninstall-button" onClick={this.handleDelete} />
-            </li>
+            <React.ListItem header={this.props.title} bsStyle='' collapsable={this.props.openable} eventKey="1">
+                {body}
+            </React.ListItem>
         );
     }
 };
 
 Portal.ListView = {
     //mixins: [Backbone.React.Component.mixin],
+    /*
     createItem: function (item) {
         console.log('createItem itemView', this.itemView);
         console.log('item', item);
@@ -47,11 +104,12 @@ Portal.ListView = {
 
         console.log('model.cid', item.cid);
 
-        //return < this.itemView model={item} />
-        return <Portal.DeviceInstallView key={cid} model={item} />
+        return < this.itemView key={cid} model={item} />
+        //return <Portal.DeviceInstallView key={cid} model={item} />
 
         //return <div>Another Item</div>;
     },
+    */
     setCollection: function(collection) {
 
     },
@@ -70,7 +128,7 @@ Portal.ListView = {
 
         return (
             <div>
-                <h2>Devices</h2>
+                <h2>{this.props.title}</h2>
                 <div className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
                 </div>

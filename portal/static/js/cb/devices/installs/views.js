@@ -3,6 +3,7 @@ Portal.DeviceInstallView = React.createClass({
     mixins: [Portal.ItemView],
     //mixins: [Portal.ItemView],
     getTitle: function() {
+        console.log('DeviceInstallView ', this );
         return this.props.model.friendly_name;
     }
 });
@@ -14,6 +15,21 @@ Portal.DeviceInstallListView = React.createClass({
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
     //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
+    getDefaultProps: function () {
+        return {
+            title: 'Devices'
+        };
+    },
+
+    createItem: function (item) {
+        console.log('DeviceInstallListView createItem', this.itemView);
+        console.log('DeviceInstallListView item', item);
+        var cid = item.cid;
+
+        console.log('DeviceInstallListView item cid', item.cid);
+
+        return < Portal.DeviceInstallView key={cid} title={item.friendly_name} model={item} />
+    }
 });
 
 /*

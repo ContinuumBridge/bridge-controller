@@ -1,6 +1,61 @@
 
 require('../../components/switches');
 
+var PermissionSwitch = React.createClass({
+
+    mixins: [Portal.ReactBackboneMixin],
+
+
+    handleClick: function() {
+
+    },
+
+    render: function() {
+
+        console.log('PermissionSwitch render');
+
+        return (
+            <li class="inner-item">
+                <h3>Permission switch</h3>
+                <div class="left theme-green animate toggle-switch active" onClick={this.handleClick}></div>
+                <div id="device-name" class="list-label">22</div>
+            </li>
+        )
+    }
+});
+
+Portal.AppDevicePermissionView = React.createClass({
+    mixins: [Portal.InnerItemView],
+
+});
+
+Portal.AppDevicePermissionListView = React.createClass({
+    mixins: [Backbone.React.Component.mixin, Portal.InnerListView],
+
+    getDefaultProps: function () {
+        return {
+            title: 'Device connections'
+        };
+    },
+
+    createItem: function(item) {
+
+        //var appInstall = this.props.appInstall;
+        //var devicePermissions = this.props.devicePermissions;
+
+        console.log('AppDevicePermissionListView create item', item);
+        return (
+            <div> "Hello" </div>
+        );
+        /*
+        return (
+            "createItem"
+         < PermissionSwitch key={item.cid} name={item.name} model={item} />
+        )
+        */
+    }
+});
+
 /*
 Portal.Components.PermissionSwitch = Portal.Components.Switch.extend({
 
@@ -20,7 +75,6 @@ Portal.Components.PermissionSwitch = Portal.Components.Switch.extend({
         this.stickit();
     }
 });
-*/
 
 Portal.AppDevicePermissionView = Marionette.ItemView.extend({
 
@@ -94,4 +148,6 @@ Portal.AppDevicePermissionListView = Marionette.CollectionView.extend({
         return view;
     }
 });
+
+*/
 
