@@ -64,7 +64,7 @@ class DiscoveredDevice(models.Model):
 
     device_name = models.CharField(_("device_name"), max_length = 255)
     method = models.CharField(_("method"), max_length = 255)
-    mac_addr = models.CharField(_("mac_addr"), max_length = 255)
+    address = models.CharField(_("mac_addr"), max_length = 255)
     manufacturer_name = models.CharField(_("manufacturer_name"), max_length = 255)
     hardware_revision = models.CharField(_("hardware_revision"), max_length = 255)
     firmware_revision = models.CharField(_("firmware_revision"), max_length = 255)
@@ -76,7 +76,6 @@ class DiscoveredDevice(models.Model):
 
     class Meta:
         verbose_name = _('discovered_device')
-        verbose_name_plural = _('discovered_devices')
         app_label = 'devices'
 
 '''

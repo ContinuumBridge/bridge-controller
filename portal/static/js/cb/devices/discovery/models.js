@@ -1,31 +1,5 @@
 
-/*
 Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initialize: function() {
-
-    }
-});
-
-Portal.DiscoveredDeviceCollection = Backbone.Collection.extend({
-
-    model: Portal.DiscoveredDevice,
-    backend: 'discoveredDevice',
-
-    initialize: function() {
-
-        var self = this;
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-});
- */
-
-Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -121,10 +95,12 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'discoveredDeviceInstalls'
             }
+            */
         },
         {
             type: Backbone.HasOne,
@@ -161,12 +137,12 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         }
         */
     ]
-}, { modelType: "discoveredDeviceInstall" });
+}, { modelType: "discoveredDevice" });
 
-Portal.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: Portal.DiscoveredDeviceInstall,
-    backend: 'discoveredDeviceInstall',
+    model: Portal.DiscoveredDevice,
+    backend: 'discoveredDevice',
 
     /*
     initialize: function() {

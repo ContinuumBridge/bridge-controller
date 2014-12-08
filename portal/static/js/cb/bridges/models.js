@@ -31,7 +31,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     },
 
     relations: [
-        {   
+        {
             type: Backbone.HasMany,
             key: 'bridgeControls',
             keySource: 'controllers',
@@ -71,14 +71,14 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         },
         {
             type: Backbone.HasMany,
-            key: 'discoveredDeviceInstalls',
+            key: 'discoveredDevices',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: 'Portal.DiscoveredDeviceInstall',
-            collectionType: 'Portal.DiscoveredDeviceInstallCollection',
+            relatedModel: 'Portal.DiscoveredDevice',
+            collectionType: 'Portal.DiscoveredDeviceCollection',
             createModels: true,
             //includeInJSON: true,
-            initializeCollection: 'discoveredDeviceInstallCollection'
+            initializeCollection: 'discoveredDeviceCollection'
         }
     ]
 }, { modelType: "bridge" });

@@ -63,7 +63,10 @@ Portal.AppInstallListView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            title: 'Apps'
+            title: 'Apps',
+            buttons: [{
+                name: 'Install Apps'
+            }]
         };
     },
 

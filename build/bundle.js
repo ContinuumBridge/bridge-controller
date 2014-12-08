@@ -23043,7 +23043,10 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     getDefaultProps: function () {
         return {
-            title: 'Apps'
+            title: 'Apps',
+            buttons: [{
+                name: 'Install Apps'
+            }]
         };
     },
 
@@ -23821,7 +23824,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     },
 
     relations: [
-        {   
+        {
             type: Backbone.HasMany,
             key: 'bridgeControls',
             keySource: 'controllers',
@@ -23861,14 +23864,14 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         },
         {
             type: Backbone.HasMany,
-            key: 'discoveredDeviceInstalls',
+            key: 'discoveredDevices',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: 'Portal.DiscoveredDeviceInstall',
-            collectionType: 'Portal.DiscoveredDeviceInstallCollection',
+            relatedModel: 'Portal.DiscoveredDevice',
+            collectionType: 'Portal.DiscoveredDeviceCollection',
             createModels: true,
             //includeInJSON: true,
-            initializeCollection: 'discoveredDeviceInstallCollection'
+            initializeCollection: 'discoveredDeviceCollection'
         }
     ]
 }, { modelType: "bridge" });
@@ -24765,33 +24768,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 },{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
-/*
 Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initialize: function() {
-
-    }
-});
-
-Portal.DiscoveredDeviceCollection = Backbone.Collection.extend({
-
-    model: Portal.DiscoveredDevice,
-    backend: 'discoveredDevice',
-
-    initialize: function() {
-
-        var self = this;
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-});
- */
-
-Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -24887,10 +24864,12 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'discoveredDeviceInstalls'
             }
+            */
         },
         {
             type: Backbone.HasOne,
@@ -24927,12 +24906,12 @@ Portal.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         }
         */
     ]
-}, { modelType: "discoveredDeviceInstall" });
+}, { modelType: "discoveredDevice" });
 
-Portal.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: Portal.DiscoveredDeviceInstall,
-    backend: 'discoveredDeviceInstall',
+    model: Portal.DiscoveredDevice,
+    backend: 'discoveredDevice',
 
     /*
     initialize: function() {
@@ -24947,19 +24926,36 @@ Portal.DiscoveredDeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
 require('../../components/buttons');
 
-
 Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceView',
-    mixins: [Portal.ItemView]
+
+    mixins: [Portal.ItemView],
+
+
 });
 
 Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDeviceListView',
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getInitialState: function() {
+    getDefaultProps: function () {
         return {
-            title: 'Apps'
+            title: 'Discovered Devices',
+            handleButtonClick: this.handleButtonClick,
+            buttons: [{
+                name: 'Rescan'
+            }]
         };
+    },
+
+    handleButtonClick: function() {
+
+        console.log('discoveredDevices handleButtonClick');
+        Portal.Config.controller.discoverDevices();
+    },
+
+    createItem: function (item) {
+
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: item.friendly_name, model: item})
     }
 });
 
@@ -25995,7 +25991,8 @@ Portal.addInitializer(function () {
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  Portal.discoveredDeviceInstallCollection = new Portal.DiscoveredDeviceInstallCollection();
+  //Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  //Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
   Portal.messageCollection = new Portal.MessageCollection([
@@ -26222,48 +26219,27 @@ module.exports.Main = Marionette.Layout.extend({
 
         var self = this;
 
-        //this.appSection.show(this.appInstallListView);
-        //this.deviceSection.show(this.devicesView);
-        //this.devicesView.render();
-        //this.messageSection.show(this.messageListView);
-        //this.bridgeSection.show(this.bridgeView);
-
-        /*
-        var deviceInstalls = this.deviceInstalls = Portal.deviceInstallCollection.findAllLive();
-        deviceInstalls.fetched = false;
-
-        var discoveredDeviceInstalls = this.discoveredDeviceInstalls
-            = Portal.discoveredDeviceInstallCollection.findAll();
-        */
         var currentBridge = Portal.getCurrentBridge();
         this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
 
         console.log('calling getCurrentBridge ');
 
-        /*
-        var deviceInstalls = currentBridge.get('deviceInstalls');
+        var discoveredDevices = currentBridge.get('discoveredDevices');
 
-        console.log('config deviceInstalls ', deviceInstalls);
-        var devicesView = DevicesView({
-            deviceInstalls: deviceInstalls
-        });
-        React.render(devicesView, self.$('.device-section')[0]);
+        console.log('config discoveredDevices ', discoveredDevices );
+
         React.render(
-            <DevicesView collection = {{
-                deviceInstalls: deviceInstalls
-            }} />,
-            //<Portal.DeviceInstallListView collection={deviceInstalls} />,
-            //discoveredDevices={discoveredDeviceInstalls} />,
+            React.createElement(Portal.DiscoveredDeviceListView, {collection: discoveredDevices}),
+            self.$('.device-section')[0]
+        );
+
+        var deviceInstalls = currentBridge.get('deviceInstalls');
+        /*
+        React.render(
+            <Portal.DeviceInstallListView collection={deviceInstalls} />,
             self.$('.device-section')[0]
         );
         */
-
-        var deviceInstalls = currentBridge.get('deviceInstalls');
-
-        React.render(
-            React.createElement(Portal.DeviceInstallListView, {collection: deviceInstalls}),
-            self.$('.device-section')[0]
-        );
 
         var appInstalls = currentBridge.get('appInstalls');
 
@@ -27928,6 +27904,7 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeControlCollection'
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'appLicences',
@@ -27952,6 +27929,7 @@ Portal.CurrentUser = Portal.User.extend({
             //includeInJSON: false,
             initializeCollection: 'appOwnershipCollection'
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'clientControls',
@@ -27963,6 +27941,7 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientControlCollection'
         }
+        */
     ]
 }, { modelType: "currentUser" });
 
@@ -28130,36 +28109,30 @@ Portal.ItemView = {
 };
 
 Portal.ListView = {
-    //mixins: [Backbone.React.Component.mixin],
+
     /*
-    createItem: function (item) {
-        console.log('createItem itemView', this.itemView);
-        console.log('item', item);
-        var cid = item.cid;
-
-        console.log('model.cid', item.cid);
-
-        return < this.itemView key={cid} model={item} />
-        //return <Portal.DeviceInstallView key={cid} model={item} />
-
-        //return <div>Another Item</div>;
+    propTypes: {
+        handleButtonClick: React.PropTypes.func
     },
-    */
+
     setCollection: function(collection) {
 
     },
-    /*
-    componentWillReceiveProps: function(newProps, oldProps){
-        this.setState(this.getInitialState(newProps));
+    */
+
+    renderButton: function(button) {
+
+        return (
+            React.createElement("div", {className: "topcoat-button--cta center full", onClick: this.handleButtonClick}, button.name)
+        );
     },
-    render: function () {
-        return <div>{this.props.collection.map(this.createItem)}</div>;
-    },
-     */
+
     render: function() {
         console.log('render collection', this.props);
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
+
+        var buttons = this.props.buttons || [];
 
         return (
             React.createElement("div", null, 
@@ -28167,7 +28140,7 @@ Portal.ListView = {
                 React.createElement("div", {className: "animated-list device-list"}, 
                     this.props.collection.map(this.createItem)
                 ), 
-                React.createElement("div", {className: "topcoat-button--cta center full discover-devices-button"}, "Connect to a Device")
+                    buttons.map(this.renderButton)
             )
         );
     }

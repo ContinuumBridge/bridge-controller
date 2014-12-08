@@ -115,6 +115,7 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeControlCollection'
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'appLicences',
@@ -139,6 +140,7 @@ Portal.CurrentUser = Portal.User.extend({
             //includeInJSON: false,
             initializeCollection: 'appOwnershipCollection'
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'clientControls',
@@ -150,6 +152,7 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientControlCollection'
         }
+        */
     ]
 }, { modelType: "currentUser" });
 

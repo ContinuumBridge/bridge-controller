@@ -71,48 +71,27 @@ module.exports.Main = Marionette.Layout.extend({
 
         var self = this;
 
-        //this.appSection.show(this.appInstallListView);
-        //this.deviceSection.show(this.devicesView);
-        //this.devicesView.render();
-        //this.messageSection.show(this.messageListView);
-        //this.bridgeSection.show(this.bridgeView);
-
-        /*
-        var deviceInstalls = this.deviceInstalls = Portal.deviceInstallCollection.findAllLive();
-        deviceInstalls.fetched = false;
-
-        var discoveredDeviceInstalls = this.discoveredDeviceInstalls
-            = Portal.discoveredDeviceInstallCollection.findAll();
-        */
         var currentBridge = Portal.getCurrentBridge();
         this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
 
         console.log('calling getCurrentBridge ');
 
-        /*
-        var deviceInstalls = currentBridge.get('deviceInstalls');
+        var discoveredDevices = currentBridge.get('discoveredDevices');
 
-        console.log('config deviceInstalls ', deviceInstalls);
-        var devicesView = DevicesView({
-            deviceInstalls: deviceInstalls
-        });
-        React.render(devicesView, self.$('.device-section')[0]);
+        console.log('config discoveredDevices ', discoveredDevices );
+
         React.render(
-            <DevicesView collection = {{
-                deviceInstalls: deviceInstalls
-            }} />,
-            //<Portal.DeviceInstallListView collection={deviceInstalls} />,
-            //discoveredDevices={discoveredDeviceInstalls} />,
+            <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
             self.$('.device-section')[0]
         );
-        */
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
-
+        /*
         React.render(
             <Portal.DeviceInstallListView collection={deviceInstalls} />,
             self.$('.device-section')[0]
         );
+        */
 
         var appInstalls = currentBridge.get('appInstalls');
 

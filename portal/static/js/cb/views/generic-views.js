@@ -95,36 +95,30 @@ Portal.ItemView = {
 };
 
 Portal.ListView = {
-    //mixins: [Backbone.React.Component.mixin],
+
     /*
-    createItem: function (item) {
-        console.log('createItem itemView', this.itemView);
-        console.log('item', item);
-        var cid = item.cid;
-
-        console.log('model.cid', item.cid);
-
-        return < this.itemView key={cid} model={item} />
-        //return <Portal.DeviceInstallView key={cid} model={item} />
-
-        //return <div>Another Item</div>;
+    propTypes: {
+        handleButtonClick: React.PropTypes.func
     },
-    */
+
     setCollection: function(collection) {
 
     },
-    /*
-    componentWillReceiveProps: function(newProps, oldProps){
-        this.setState(this.getInitialState(newProps));
+    */
+
+    renderButton: function(button) {
+
+        return (
+            <div className="topcoat-button--cta center full" onClick={this.handleButtonClick}>{button.name}</div>
+        );
     },
-    render: function () {
-        return <div>{this.props.collection.map(this.createItem)}</div>;
-    },
-     */
+
     render: function() {
         console.log('render collection', this.props);
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
+
+        var buttons = this.props.buttons || [];
 
         return (
             <div>
@@ -132,7 +126,7 @@ Portal.ListView = {
                 <div className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
                 </div>
-                <div className="topcoat-button--cta center full discover-devices-button">Connect to a Device</div>
+                    {buttons.map(this.renderButton)}
             </div>
         );
     }

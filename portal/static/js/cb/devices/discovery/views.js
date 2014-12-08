@@ -1,19 +1,36 @@
 
 require('../../components/buttons');
 
-
 Portal.DiscoveredDeviceView = React.createClass({
-    mixins: [Portal.ItemView]
+
+    mixins: [Portal.ItemView],
+
+
 });
 
 Portal.DiscoveredDeviceListView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getInitialState: function() {
+    getDefaultProps: function () {
         return {
-            title: 'Apps'
+            title: 'Discovered Devices',
+            handleButtonClick: this.handleButtonClick,
+            buttons: [{
+                name: 'Rescan'
+            }]
         };
+    },
+
+    handleButtonClick: function() {
+
+        console.log('discoveredDevices handleButtonClick');
+        Portal.Config.controller.discoverDevices();
+    },
+
+    createItem: function (item) {
+
+        return < Portal.DiscoveredDeviceView key={item.cid} title={item.friendly_name} model={item} />
     }
 });
 

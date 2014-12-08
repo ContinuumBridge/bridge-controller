@@ -61,7 +61,8 @@ Portal.addInitializer(function () {
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  Portal.discoveredDeviceInstallCollection = new Portal.DiscoveredDeviceInstallCollection();
+  //Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  //Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
   Portal.messageCollection = new Portal.MessageCollection([
