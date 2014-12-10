@@ -53,31 +53,21 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       discoverDevices: function() {
 
-          Portal.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+          Portal.discoveredDeviceCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
+
           /*
-          Portal.getCurrentBridge().then(function(currentBridge) {
-
-              // Remove all existing discovered devices
-              var collection = currentBridge.get('discoveredDeviceInstalls');
-              collection.forEach(function(discoveredDeviceInstall) {
-                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
-              });
+          var message = new Portal.Message({
+              body: {
+                  command: 'discover'
+              }
           });
+          Portal.messageCollection.sendMessage(message);
           */
-          Portal.getCurrentBridge().then(function(currentBridge) {
-              var destination = currentBridge.get('cbid');
-              var message = new Portal.Message({
-                  body: {
-                      command: 'discover'
-                  },
-                  destination: destination
-              });
-              Portal.messageCollection.sendMessage(message);
-          });
+          Portal.messageCollection.sendCommand('discover');
 
-          Config.mainLayoutView.devicesView.showDeviceDiscovery();
+          Config.mainLayoutView.showDeviceDiscovery();
       },
       stopDiscoveringDevices: function() {
 

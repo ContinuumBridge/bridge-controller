@@ -30,16 +30,7 @@ Router.prototype.setupRoutes = function() {
     var publicationAddresses = connection.config.publicationAddresses;
 
     logger.log('debug', 'Router setupRoutes config', self.connection.config);
-    // Capture destinations matching the client on this connection
-    /*
-    var clientRoute = subscriptionAddress + ":slug";
-    router.addRoute(clientRoute, function(message) {
 
-        logger.log('debug', 'Matched clientRoute', message);
-        //self.connection.toClient.push(message);
-    });
-
-    */
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
@@ -94,7 +85,7 @@ Router.prototype.dispatch = function(message) {
 
     var destination = message.get('destination');
     // Check if the destination is the client route
-    if (message.findDestination(this.connection.config.subscriptionAddress)) {
+    if (message.findDestination(this.connection.config.cbid)) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
@@ -116,15 +107,5 @@ Router.prototype.dispatch = function(message) {
     */
 }
 
-/*
-var r = new Router();
-
-var Message = require('../message');
-var m = new Message({ destination: 'CID12'});
-r.dispatch(m);
-*/
-//r.parse('cb', ['test']);
-
-//console.log('r is', r);
 
 module.exports = Router;

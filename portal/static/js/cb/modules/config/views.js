@@ -55,15 +55,27 @@ module.exports.Main = Marionette.Layout.extend({
         */
     },
 
-    discoverDevices: function() {
+    showDeviceDiscovery: function() {
 
-        React.unmountComponentAtNode(self.$('.device-section')[0]);
+        React.unmountComponentAtNode(this.$('.device-section')[0]);
 
-        var discoveredDevices = currentBridge.get('discoveredDeviceInstalls');
+        var discoveredDevices = Portal.getCurrentBridge().get('discoveredDevices');
 
         React.renderComponent(
-            <Portal.DeviceInstallListView collection={discoveredDevices} />,
-            self.$('.device-section')[0]
+            <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
+            this.$('.device-section')[0]
+        );
+    },
+
+    showDeviceInstalls: function() {
+
+        React.unmountComponentAtNode(this.$('.device-section')[0]);
+
+        var deviceInstalls = Portal.getCurrentBridge().get('deviceInstalls');
+
+        React.renderComponent(
+            <Portal.DeviceInstallListView collection={deviceInstalls} />,
+            this.$('.device-section')[0]
         );
     },
 
@@ -76,6 +88,8 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
+        this.showDeviceDiscovery();
+        /*
         var discoveredDevices = currentBridge.get('discoveredDevices');
 
         console.log('config discoveredDevices ', discoveredDevices );
@@ -84,6 +98,7 @@ module.exports.Main = Marionette.Layout.extend({
             <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
             self.$('.device-section')[0]
         );
+        */
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
         /*
@@ -100,7 +115,14 @@ module.exports.Main = Marionette.Layout.extend({
             self.$('.app-section')[0]
         );
 
-        var messages = currentBridge.get('')
+        //var messages = currentBridge.get('')
+        var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
+        console.log('filteredMessages', messages);
+
+        React.render(
+            <Portal.MessageListView collection={messages} />,
+            self.$('.message-section')[0]
+        );
 
         currentBridge.fetch().done(function(currentBridgeResolved) {
 

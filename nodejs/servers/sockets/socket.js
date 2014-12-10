@@ -19,7 +19,6 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         var sessionID;
         var handshake = socket.handshake;
 
-        //console.log('handshake is', handshake);
         if(handshake.headers && handshake.headers.cookie) {
             // Pull out the cookies from the data
             var cookies = cookie_reader.parse(handshake.headers.cookie);
@@ -30,6 +29,8 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         } else {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
+
+        console.log('Authorisation sessionID', sessionID);
         //console.log('socket sessionID is', sessionID);
 
         getConfig(sessionID).then(function(config) {

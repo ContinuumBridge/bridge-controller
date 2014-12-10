@@ -49,15 +49,22 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
         related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
 def controlled_by_client(bundle):
-    if bundle.request.META['REQUEST_METHOD'] == "GET":
+    #print "bundle.request.META['REQUEST_METHOD'] is", bundle.request
+    #if bundle.request.META['REQUEST_METHOD'] == "GET":
+    try:
+        return getattr(bundle, 'controlled_by_client')
+    except AttributeError:
         try:
-            return getattr(bundle, 'controlled_by_client')
-        except AttributeError:
+            getattr(bundle, 'request')
             controlled = bundle.obj.is_controlled_by(bundle.request.user)
             bundle.controlled_by_client = controlled
             return controlled
-    else:
-        return False
+        except AttributeError:
+            # The request is being made by the system
+            return True
+
+    #else:
+    #    return False
 
 class BridgeResource(CBResource, CBIDResourceMixin):
 

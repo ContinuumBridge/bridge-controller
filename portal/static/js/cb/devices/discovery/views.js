@@ -17,7 +17,8 @@ Portal.DiscoveredDeviceListView = React.createClass({
             title: 'Discovered Devices',
             handleButtonClick: this.handleButtonClick,
             buttons: [{
-                name: 'Rescan'
+                name: 'Rescan',
+                type: 'bold'
             }]
         };
     },
@@ -30,7 +31,8 @@ Portal.DiscoveredDeviceListView = React.createClass({
 
     createItem: function (item) {
 
-        return < Portal.DiscoveredDeviceView key={item.cid} title={item.friendly_name} model={item} />
+        console.log('DiscoveredDeviceListView item', item);
+        return < Portal.DiscoveredDeviceView key={item.cid} model={item} />
     }
 });
 

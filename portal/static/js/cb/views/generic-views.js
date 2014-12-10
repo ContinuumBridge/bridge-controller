@@ -108,9 +108,23 @@ Portal.ListView = {
 
     renderButton: function(button) {
 
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+
         return (
-            <div className="topcoat-button--cta center full" onClick={this.handleButtonClick}>{button.name}</div>
+            <div className={className} onClick={this.handleButtonClick}>{button.name}</div>
         );
+    },
+
+    renderButtons: function() {
+
+        var buttons = this.props.buttons || [];
+
+        return (
+            <div class="topcoat-button-bar">
+                {buttons.map(this.renderButton)}
+            </div>
+        )
     },
 
     render: function() {
@@ -118,15 +132,13 @@ Portal.ListView = {
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
 
-        var buttons = this.props.buttons || [];
-
         return (
             <div>
                 <h2>{this.props.title}</h2>
                 <div className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
                 </div>
-                    {buttons.map(this.renderButton)}
+                {this.renderButtons()}
             </div>
         );
     }

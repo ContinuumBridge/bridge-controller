@@ -27,7 +27,7 @@ from adaptors.api.resources import AdaptorDeviceCompatibilityResource
 from bridge_controller.api import cb_fields
 from bridge_controller.api.resources import PostMatchMixin, CBResource, ThroughModelResource
 from bridge_controller.api.authorization import CBReadAllAuthorization
-from devices.models import Device, DeviceInstall
+from devices.models import Device, DeviceInstall, DiscoveredDevice
 
 from .authorization import DeviceInstallAuthorization
 #from pages.api.authentication import HTTPHeaderSessionAuthentication
@@ -124,3 +124,44 @@ class DeviceInstallResource(PostMatchMixin, CBResource):
         resource_name = 'device_install'
 
 
+class DiscoveredDeviceResource(CBResource):
+
+    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', null=True, full=False)
+    device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', null=True, full=True)
+
+    class Meta(CBResource.Meta):
+        queryset = DiscoveredDevice.objects.all()
+        #authorization = DeviceInstallAuthorization()
+        related_bridge_permissions = ['read', 'create', 'update', 'delete']
+        #post_match = ['adaptor', 'bridge', 'device', 'address']
+        resource_name = 'discovered_device'
+
+    def obj_create(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_create``.
+        """
+        print "Discovery device data", bundle.data
+        print "Discovery device obj", bundle.obj
+
+        bundle.obj = self._meta.object_class()
+
+        for key, value in kwargs.items():
+            setattr(bundle.obj, key, value)
+
+        obj = bundle.obj
+        obj.device = Device.objects.all()[0]
+        #obj.device = Device.objects.filter(name=obj.name)[0]
+        print "Discovery device is", obj.device
+        obj.bridge = bundle.request.user
+        print "Discovery bridge is", obj.bridge
+        bundle.obj = obj
+
+        bundle = self.full_hydrate(bundle)
+
+        return self.save(bundle)
+
+
+class DiscoveredDeviceAliasResource(DiscoveredDeviceResource):
+
+    class Meta(DiscoveredDeviceResource.Meta):
+        resource_name = 'device_discovery'

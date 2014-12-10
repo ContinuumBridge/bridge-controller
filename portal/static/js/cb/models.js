@@ -61,13 +61,13 @@ Portal.addInitializer(function () {
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  //Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
-  //Portal.discoveredDeviceCollection.subscribe();
+  Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
   Portal.messageCollection = new Portal.MessageCollection([
-    { source: "UID1", destination: "BID2", body: "Test Body 1"},
-    { source: "UID1", destination: "BID2", body: "Test Body 2"}
+    { source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
+    { source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
   ]);
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 

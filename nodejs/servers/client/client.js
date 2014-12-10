@@ -3,6 +3,7 @@ var ClientConnection = require('./connection')
     ,logger = require('./logger')
     ,Server = require('../server')
     ,SocketIOServer = require('../sockets/socket.io')
+    ,utils = require('../utils')
     ,WSServer = require('../sockets/websocket')
     ;
 

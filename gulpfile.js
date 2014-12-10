@@ -45,7 +45,7 @@ gulp.task('vendor', function () {
 
     bundler.transform(reactify);
     // Used for react-bootstrap
-    bundler.transform('folderify');
+    //bundler.transform('folderify');
 
     var rebundle = function() {
         console.log('rebundling vendor');

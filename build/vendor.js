@@ -1,7 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./portal/static/js/vendor/vendor.js":[function(require,module,exports){
 
 Dispatcher = require('Flux').Dispatcher;
+
 React = require('./react/react-bundle');
+
+//React.Forms = require('react-forms')
+//React.Forms.Schema = ReactForms.schema.Schema
+//React.Forms.Property = ReactForms.schema.Property
+
 Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
 
@@ -46935,6 +46941,9 @@ require('../../cb/misc/relational-models');
 var CBModelMixin = require('./backbone-cb-model-mixin');
 Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
+//var CBCollectionMixin = require('./backbone-cb-collection-mixin');
+//Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
+
 var CBViewsMixin = require('./backbone-cb-views');
 Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
 Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
@@ -46942,11 +46951,12 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 Q = require('q');
 
 require('./backbone-cb-model');
-require('./backbone-cb-collection');
 
 require('backbone-deferred');
 
 Backbone.Collection = Backbone.Deferred.Collection;
+
+require('./backbone-cb-collection');
 
 QueryEngine = require('query-engine');
 
@@ -47160,50 +47170,6 @@ var wrapError = function(model, options) {
 
 module.exports = {
 
-    // Return a copy of the model's `attributes` object.
-    toJSONString: function(options) {
-
-      var jsonAttributes = JSON.stringify(_.clone(this.attributes));
-      return jsonAttributes;
-    },
-
-
-    destroyOnServer: function(options) {
-      options = options ? _.clone(options) : {};
-      var model = this;
-      var success = options.success;
-
-      // ADDED Set isGhost to true, indicating the model is being deleted on server
-      this.set('isGhost', true);
-
-      //var destroy = function() {
-      //  model.trigger('destroy', model, model.collection, options);
-      //};
-
-      options.success = function(resp) {
-        //if (options.wait || model.isNew()) destroy();
-        // Remove the id from the local model
-        if (!model.isNew()) {
-            delete model.id;
-            model.unset('id');
-        }
-        if (success) success(model, resp, options);
-        // ADDED Reset trackit
-        if (model.unsavedAttributes()) model.restartTracking();
-        if (!model.isNew()) model.trigger('sync', model, resp, options);
-      };
-
-      if (this.isNew()) {
-        options.success();
-        return false;
-      }
-      wrapError(this, options);
-
-      var xhr = this.sync('delete', this, options);
-      //if (!options.wait) destroy();
-      return xhr;
-    },
-
     /*
     initialize: function() {
       Backbone.Deferred.Model.prototype.initialize.apply(this, arguments);
@@ -47253,15 +47219,35 @@ var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
 
-        var args = Array.prototype.slice.call(arguments);
-        var attrs = args[0] || {};
-        // Set a model to be a ghost if it has not been instantiated on the server
-        attrs.isGhost = attrs[ this.idAttribute ] ? false : true;
-        //Backbone.RelationalModel.prototype.constructor.apply(this, arguments);
-        args[0] = attrs;
-        OriginalModel.apply(this, args);
+        OriginalModel.call(this, attributes, options);
+
+        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
+        this.startTracking();
     },
 
+    save: function(key, val, options) {
+
+        var self = this;
+        
+        this.set({isGhost: true}, {trackit_silent:true});
+
+        return OriginalModel.save.call(this, arguments).then(
+            function(result) {
+
+                //var model = resolveModel.model;
+                result.model.set({'isGhost': false}, {trackit_silent:true});
+
+                return result;
+                //model.trigger('change');
+            },
+            function(error) {
+
+                self.resetAttributes();
+            }
+        )
+    },
+
+    /*
     save: function(key, val, options) {
 
         console.log('save cb');
@@ -47289,6 +47275,50 @@ var CBModel = OriginalModel.extend({
         // ADDED Set isGhost to false, indicating the model is being instantiated on server
         this.set('isGhost', false);
         OriginalModel.prototype.save.apply(this, args);
+    },
+
+    destroyOnServer: function(options) {
+      options = options ? _.clone(options) : {};
+      var model = this;
+      var success = options.success;
+
+      // ADDED Set isGhost to true, indicating the model is being deleted on server
+      this.set('isGhost', true);
+
+      //var destroy = function() {
+      //  model.trigger('destroy', model, model.collection, options);
+      //};
+
+      options.success = function(resp) {
+        //if (options.wait || model.isNew()) destroy();
+        // Remove the id from the local model
+        if (!model.isNew()) {
+            delete model.id;
+            model.unset('id');
+        }
+        if (success) success(model, resp, options);
+        // ADDED Reset trackit
+        if (model.unsavedAttributes()) model.restartTracking();
+        if (!model.isNew()) model.trigger('sync', model, resp, options);
+      };
+
+      if (this.isNew()) {
+        options.success();
+        return false;
+      }
+      wrapError(this, options);
+
+      var xhr = this.sync('delete', this, options);
+      //if (!options.wait) destroy();
+      return xhr;
+    },
+    */
+
+    toJSONString: function(options) {
+
+        // Return a string copy of the model's `attributes` object.
+        var jsonAttributes = JSON.stringify(_.clone(this.attributes));
+        return jsonAttributes;
     },
 
     toJSON: function(options) {

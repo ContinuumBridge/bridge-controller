@@ -58,19 +58,27 @@ Portal.MessageCollection = QueryEngine.QueryCollection.extend({
     },
     */
 
-    sendMessage: function(message) {
+    send: function(message) {
 
-        console.log('sendMessage', message);
         var self = this;
 
-        var time = new Date();
-        var currentUserID = Portal.currentUser.get('cbid');
-        message.set('source', currentUserID);
-        message.set('time_sent', time);
-
-        console.log('publishMessage', message.toJSON());
+        message.set('source', Portal.currentUser.get('cbid'));
+        message.set('time_sent', new Date());
 
         Portal.socket.publish(message);
+
+        message.set('direction', 'outbound');
         this.add(message);
+    },
+
+    sendCommand: function(command) {
+
+        console.log('sendCommand', command);
+        var message = new Portal.Message({
+            destination: Portal.getCurrentBridge().get('cbid'),
+            body: {command: command}
+        });
+        this.send(message);
+        //message.set('destination', Portal.getCurrentBridge().get('cbid'));
     }
 });

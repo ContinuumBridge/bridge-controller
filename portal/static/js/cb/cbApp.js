@@ -37,30 +37,6 @@ var CBApp = Marionette.Application.extend({
         return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
     },
 
-    dispatchItems: function(items, itemType, actionType) {
-
-        var self = this;
-
-        /*
-        var dispatchItem = function(item, actionType) {
-            var payload = {
-                item: item,
-                itemType: itemType,
-                actionType: actionType
-            };
-            self.dispatcher.dispatch(payload);
-        }
-
-        if (items instanceof Array) {
-            _.each(items, function(item) {
-                dispatchItem(item, actionType)
-            });
-        } else {
-            dispatchItem(items, actionType);
-        }
-        */
-    },
-
     dispatch: function(message) {
 
         console.log('dispatch message', message);
@@ -108,9 +84,11 @@ var CBApp = Marionette.Application.extend({
 
             //this.dispatchItems(items, actionType);
 
-        } else if (source.match(/BID([0-9])+\/?\w+/g)) {
+        } else if (source.match(Portal.filters.cbidRegex)) {
             // Message is from a bridge or an app on a bridge
             console.log('Received message from ', source, message);
+            message.direction = "inbound";
+            Portal.messageCollection.add(message);
 
         } else {
             console.warn('message source unrecognised', message);

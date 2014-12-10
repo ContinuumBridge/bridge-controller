@@ -3,6 +3,7 @@
 var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var Server = require('../server');
+var utils = require('../utils');
 
 logger = require('./logger');
 
@@ -42,7 +43,14 @@ Bridge.prototype.formatConfig = function(authData) {
 
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
-                var resourceMatch = utils.apiRegex.exec(controller.user);
+                var user = controller.user;
+                console.log('user is', user);
+                if (user.resource_uri) {
+                    user = user.resource_uri;
+                }
+                console.log('user uri is', user);
+
+                var resourceMatch = utils.apiRegex.exec(user);
                 var cbid = 'UID' + resourceMatch[2];
                 publicationAddresses.push(cbid);
             });

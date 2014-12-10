@@ -39,7 +39,7 @@ from .authentication import HTTPHeaderSessionAuthentication
 class CBResource(ModelResource):
 
     class Meta:
-        list_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get', 'post', 'patch']
         detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CBAuthorization()
@@ -447,10 +447,9 @@ class AuthResource(LoggedInResource):
             if client.is_active:
                 login(request, client)
                 # Return the client's data
-                #bundle = self._meta.data_resource.build_bundle(obj=client)
-                #bundle = self._meta.data_resource.full_dehydrate(bundle)
-                #bundle = self.alter_detail_data_to_serialize(request, bundle)
-                bundle = self.build_bundle(obj=client)
+                bundle = self.build_bundle(obj=client, request=request)
+                print "bundle.request is", bundle.request
+
                 bundle = self.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)
                 return self.create_response(request, bundle)

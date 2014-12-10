@@ -37,17 +37,21 @@ Portal.addInitializer(function() {
 
       var self = this;
 
+      console.log('Socket sending >', message.toJSON());
+
+      var jsonMessage = message.toJSON();
+
+      Portal.socket.emit('message', jsonMessage, function(data){
+          //logger.log('verbose', 'Sent to socket ' + data);
+      });
+      /*
       Portal.getCurrentBridge().then(function(currentBridge) {
 
           var destination = "BID" + currentBridge.get('id');
           message.set('destination', destination);
           console.log('Message is', message);
-          var jsonMessage = message.toJSON();
-
-          Portal.socket.emit('message', jsonMessage, function(data){
-              //logger.log('verbose', 'Sent to socket ' + data);
-          });
       });
+      */
     };
 
     Portal.messageRouter = new routers.MessageRouter();

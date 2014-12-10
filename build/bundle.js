@@ -23000,17 +23000,13 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         console.log('AppInstallView render body', this);
 
-        var model = this.getModel();
-
-        console.log('AppInstallView render model', model);
-
         var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.appInstall;
 
         deviceInstalls.each(function(deviceInstall) {
 
-            if(!devicePermissions.get({deviceInstall: deviceInstall})) {
+            if(!devicePermissions.findWhere({deviceInstall: deviceInstall})) {
                 var permission = new Portal.AppDevicePermission({
                     deviceInstall: deviceInstall,
                     appInstall: appInstall
@@ -23045,19 +23041,24 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
         return {
             title: 'Apps',
             buttons: [{
-                name: 'Install Apps'
+                name: 'Install Apps',
+                type: 'bold'
             }]
         };
     },
 
     createItem: function (item) {
         var cid = item.cid;
-        var collection = this.getCollection();
-        var appInstall = collection.get({cid: cid});
+
+        var appInstalls = this.getCollection();
+        var appInstall = appInstalls.get({cid: cid});
+
         var app = appInstall.get('app');
+        var title = app.get('name');
+
         var deviceInstalls = this.props.deviceInstalls;
         var devicePermissions = appInstall.get('devicePermissions');
-        var title = app.get('name');
+
 
         return React.createElement(Portal.AppInstallView, {key: cid, title: title, appInstall: item, 
                     deviceInstalls: deviceInstalls, devicePermissions: devicePermissions, model: item})
@@ -24132,30 +24133,6 @@ var CBApp = Marionette.Application.extend({
         return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
     },
 
-    dispatchItems: function(items, itemType, actionType) {
-
-        var self = this;
-
-        /*
-        var dispatchItem = function(item, actionType) {
-            var payload = {
-                item: item,
-                itemType: itemType,
-                actionType: actionType
-            };
-            self.dispatcher.dispatch(payload);
-        }
-
-        if (items instanceof Array) {
-            _.each(items, function(item) {
-                dispatchItem(item, actionType)
-            });
-        } else {
-            dispatchItem(items, actionType);
-        }
-        */
-    },
-
     dispatch: function(message) {
 
         console.log('dispatch message', message);
@@ -24203,9 +24180,11 @@ var CBApp = Marionette.Application.extend({
 
             //this.dispatchItems(items, actionType);
 
-        } else if (source.match(/BID([0-9])+\/?\w+/g)) {
+        } else if (source.match(Portal.filters.cbidRegex)) {
             // Message is from a bridge or an app on a bridge
             console.log('Received message from ', source, message);
+            message.direction = "inbound";
+            Portal.messageCollection.add(message);
 
         } else {
             console.warn('message source unrecognised', message);
@@ -24942,7 +24921,8 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
             title: 'Discovered Devices',
             handleButtonClick: this.handleButtonClick,
             buttons: [{
-                name: 'Rescan'
+                name: 'Rescan',
+                type: 'bold'
             }]
         };
     },
@@ -24955,7 +24935,8 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
 
     createItem: function (item) {
 
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: item.friendly_name, model: item})
+        console.log('DiscoveredDeviceListView item', item);
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, model: item})
     }
 });
 
@@ -25605,64 +25586,178 @@ Portal.MessageCollection = QueryEngine.QueryCollection.extend({
     },
     */
 
-    sendMessage: function(message) {
+    send: function(message) {
 
-        console.log('sendMessage', message);
         var self = this;
 
-        var time = new Date();
-        var currentUserID = Portal.currentUser.get('cbid');
-        message.set('source', currentUserID);
-        message.set('time_sent', time);
-
-        console.log('publishMessage', message.toJSON());
+        message.set('source', Portal.currentUser.get('cbid'));
+        message.set('time_sent', new Date());
 
         Portal.socket.publish(message);
+
+        message.set('direction', 'outbound');
         this.add(message);
+    },
+
+    sendCommand: function(command) {
+
+        console.log('sendCommand', command);
+        var message = new Portal.Message({
+            destination: Portal.getCurrentBridge().get('cbid'),
+            body: {command: command}
+        });
+        this.send(message);
+        //message.set('destination', Portal.getCurrentBridge().get('cbid'));
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/message.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<td class=\"shrink\">";
-  if (helper = helpers.remote) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.remote); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  if (helper = helpers.direction) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.direction); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</td>\n<td class=\"expand\">";
-  if (helper = helpers.body) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.body); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</td>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update_config' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send_log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n  <div id='z-exclude' class=\"topcoat-button-bar__item\">\n      <button class=\"topcoat-button-bar__button\">Z Exclude</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
 
 //var Message = require('./message');
 
+Portal.MessageView = React.createClass({displayName: 'MessageView',
+    //mixins: [Portal.ItemView],
+    render: function() {
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("td", {className: "shrink"}, "\"remote\" \"direction\""), 
+                React.createElement("td", {className: "expand"}, " \"body\" ")
+            )
+        )
+    }
+});
+
+Portal.MessageListView = React.createClass({displayName: 'MessageListView',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function() {
+        return {command: ''};
+    },
+
+    getDefaultProps: function () {
+        return {
+            title: 'Messages',
+            buttons: [
+                'start',
+                'stop',
+                'update',
+                'send_log',
+                'z_exclude',
+                'restart',
+                'reboot',
+                'upgrade'
+            ]
+        };
+    },
+
+    sendCommand: function(command) {
+
+        Portal.messageCollection.sendCommand(command);
+    },
+
+    commandSubmit: function() {
+        var command = this.refs.command.getDOMNode().value;
+        this.sendCommand(command);
+        this.setState({command: ''});
+    },
+
+    handleCommandChange: function(e) {
+        this.setState({command: e.target.value});
+    },
+
+    handleCommandKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            return this.commandSubmit();
+        }
+    },
+
+    createMessage: function(message) {
+
+        console.log('createMessage', message);
+        var direction = message.direction == 'outbound' ? '<=' : '=>';
+        var remote = message.direction == 'outbound' ? message.destination : message.source;
+        return (
+            React.createElement("tr", {key: message.cid}, 
+                React.createElement("td", {className: "shrink"}, remote, " ", direction), 
+                React.createElement("td", {className: "expand"}, message.body)
+            )
+        )
+    },
+
+    createButton: function(name) {
+
+        //var label = name.charAt(0).toUpperCase() + name.slice(1);
+        var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        return (
+            React.createElement("div", {className: "topcoat-button-bar__item"}, 
+                React.createElement("button", {'data-tag': name, className: "topcoat-button-bar__button", onClick: this.onButtonClick}, label)
+            )
+        )
+    },
+
+    onButtonClick: function(e) {
+
+        console.log('onButtonClick', e.target.getAttribute('data-tag'));
+        var command = e.target.getAttribute('data-tag');
+        this.sendCommand(command);
+        this.setState({command: ''});
+    },
+
+    componentWillUpdate: function() {
+        // Check if the message window is already at the bottom
+        var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
+        console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
+        console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
+        this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+    },
+
+    componentDidUpdate: function() {
+        if (this.shouldScrollBottom) {
+            // Scroll the message window to its bottom
+            var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight
+        }
+    },
+
+    render: function() {
+
+        var command = this.state.command;
+
+        var topButtons = this.props.buttons.slice(0, 5);
+        var bottomButtons = this.props.buttons.slice(5);
+
+        return (
+            React.createElement("div", {id: "messages"}, 
+                React.createElement("h2", null, "Bridge Messages"), 
+
+                React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
+                    React.createElement("table", {id: "messages-table", className: "table-condensed table-hover table-striped"}, 
+                        this.props.collection.map(this.createMessage)
+                    )
+                ), 
+
+                React.createElement("div", {className: "input-group"}, 
+                    React.createElement("input", {type: "text", className: "form-control", ref: "command", 
+                        value: command, onKeyDown: this.handleCommandKeyDown, onChange: this.handleCommandChange}), 
+                    React.createElement("span", {className: "input-group-btn"}, 
+                        React.createElement("button", {id: "send-button", className: "btn btn-default", 
+                            type: "button", onClick: this.commandSubmit}, "Send")
+                    )
+                ), 
+                React.createElement("div", {className: "topcoat-button-bar"}, 
+                    topButtons.map(this.createButton)
+                ), 
+                React.createElement("div", {className: "topcoat-button-bar"}, 
+                    bottomButtons.map(this.createButton)
+                )
+            )
+        )
+    }
+});
+/*
 Portal.MessageView = Marionette.ItemView.extend({
 
     tagName: 'tr',
@@ -25761,8 +25856,9 @@ Portal.MessageListView = Marionette.CompositeView.extend({
         }
     }
 });
+*/
 
-},{"./templates/message.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/message.html","./templates/messageSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
 
 Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -25926,6 +26022,7 @@ Portal.filters.currentBridgeMessageDeferred = function() {
 //Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/$/;
 
+Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
 
 },{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
@@ -25991,13 +26088,13 @@ Portal.addInitializer(function () {
   //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
   //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  //Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
-  //Portal.discoveredDeviceCollection.subscribe();
+  Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
   Portal.messageCollection = new Portal.MessageCollection([
-    { source: "UID1", destination: "BID2", body: "Test Body 1"},
-    { source: "UID1", destination: "BID2", body: "Test Body 2"}
+    { source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
+    { source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
   ]);
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
@@ -26085,31 +26182,21 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       discoverDevices: function() {
 
-          Portal.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
+          Portal.discoveredDeviceCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
+
           /*
-          Portal.getCurrentBridge().then(function(currentBridge) {
-
-              // Remove all existing discovered devices
-              var collection = currentBridge.get('discoveredDeviceInstalls');
-              collection.forEach(function(discoveredDeviceInstall) {
-                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
-              });
+          var message = new Portal.Message({
+              body: {
+                  command: 'discover'
+              }
           });
+          Portal.messageCollection.sendMessage(message);
           */
-          Portal.getCurrentBridge().then(function(currentBridge) {
-              var destination = currentBridge.get('cbid');
-              var message = new Portal.Message({
-                  body: {
-                      command: 'discover'
-                  },
-                  destination: destination
-              });
-              Portal.messageCollection.sendMessage(message);
-          });
+          Portal.messageCollection.sendCommand('discover');
 
-          Config.mainLayoutView.devicesView.showDeviceDiscovery();
+          Config.mainLayoutView.showDeviceDiscovery();
       },
       stopDiscoveringDevices: function() {
 
@@ -26203,15 +26290,27 @@ module.exports.Main = Marionette.Layout.extend({
         */
     },
 
-    discoverDevices: function() {
+    showDeviceDiscovery: function() {
 
-        React.unmountComponentAtNode(self.$('.device-section')[0]);
+        React.unmountComponentAtNode(this.$('.device-section')[0]);
 
-        var discoveredDevices = currentBridge.get('discoveredDeviceInstalls');
+        var discoveredDevices = Portal.getCurrentBridge().get('discoveredDevices');
 
         React.renderComponent(
-            React.createElement(Portal.DeviceInstallListView, {collection: discoveredDevices}),
-            self.$('.device-section')[0]
+            React.createElement(Portal.DiscoveredDeviceListView, {collection: discoveredDevices}),
+            this.$('.device-section')[0]
+        );
+    },
+
+    showDeviceInstalls: function() {
+
+        React.unmountComponentAtNode(this.$('.device-section')[0]);
+
+        var deviceInstalls = Portal.getCurrentBridge().get('deviceInstalls');
+
+        React.renderComponent(
+            React.createElement(Portal.DeviceInstallListView, {collection: deviceInstalls}),
+            this.$('.device-section')[0]
         );
     },
 
@@ -26224,14 +26323,17 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
+        this.showDeviceDiscovery();
+        /*
         var discoveredDevices = currentBridge.get('discoveredDevices');
 
         console.log('config discoveredDevices ', discoveredDevices );
 
         React.render(
-            React.createElement(Portal.DiscoveredDeviceListView, {collection: discoveredDevices}),
+            <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
             self.$('.device-section')[0]
         );
+        */
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
         /*
@@ -26248,7 +26350,14 @@ module.exports.Main = Marionette.Layout.extend({
             self.$('.app-section')[0]
         );
 
-        var messages = currentBridge.get('')
+        //var messages = currentBridge.get('')
+        var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
+        console.log('filteredMessages', messages);
+
+        React.render(
+            React.createElement(Portal.MessageListView, {collection: messages}),
+            self.$('.message-section')[0]
+        );
 
         currentBridge.fetch().done(function(currentBridgeResolved) {
 
@@ -27749,17 +27858,21 @@ Portal.addInitializer(function() {
 
       var self = this;
 
+      console.log('Socket sending >', message.toJSON());
+
+      var jsonMessage = message.toJSON();
+
+      Portal.socket.emit('message', jsonMessage, function(data){
+          //logger.log('verbose', 'Sent to socket ' + data);
+      });
+      /*
       Portal.getCurrentBridge().then(function(currentBridge) {
 
           var destination = "BID" + currentBridge.get('id');
           message.set('destination', destination);
           console.log('Message is', message);
-          var jsonMessage = message.toJSON();
-
-          Portal.socket.emit('message', jsonMessage, function(data){
-              //logger.log('verbose', 'Sent to socket ' + data);
-          });
       });
+      */
     };
 
     Portal.messageRouter = new routers.MessageRouter();
@@ -28122,9 +28235,23 @@ Portal.ListView = {
 
     renderButton: function(button) {
 
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+
         return (
-            React.createElement("div", {className: "topcoat-button--cta center full", onClick: this.handleButtonClick}, button.name)
+            React.createElement("div", {className: className, onClick: this.handleButtonClick}, button.name)
         );
+    },
+
+    renderButtons: function() {
+
+        var buttons = this.props.buttons || [];
+
+        return (
+            React.createElement("div", {class: "topcoat-button-bar"}, 
+                buttons.map(this.renderButton)
+            )
+        )
     },
 
     render: function() {
@@ -28132,15 +28259,13 @@ Portal.ListView = {
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
 
-        var buttons = this.props.buttons || [];
-
         return (
             React.createElement("div", null, 
                 React.createElement("h2", null, this.props.title), 
                 React.createElement("div", {className: "animated-list device-list"}, 
                     this.props.collection.map(this.createItem)
                 ), 
-                    buttons.map(this.renderButton)
+                this.renderButtons()
             )
         );
     }

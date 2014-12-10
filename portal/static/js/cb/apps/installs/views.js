@@ -20,17 +20,13 @@ Portal.AppInstallView = React.createClass({
 
         console.log('AppInstallView render body', this);
 
-        var model = this.getModel();
-
-        console.log('AppInstallView render model', model);
-
         var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.appInstall;
 
         deviceInstalls.each(function(deviceInstall) {
 
-            if(!devicePermissions.get({deviceInstall: deviceInstall})) {
+            if(!devicePermissions.findWhere({deviceInstall: deviceInstall})) {
                 var permission = new Portal.AppDevicePermission({
                     deviceInstall: deviceInstall,
                     appInstall: appInstall
@@ -65,19 +61,24 @@ Portal.AppInstallListView = React.createClass({
         return {
             title: 'Apps',
             buttons: [{
-                name: 'Install Apps'
+                name: 'Install Apps',
+                type: 'bold'
             }]
         };
     },
 
     createItem: function (item) {
         var cid = item.cid;
-        var collection = this.getCollection();
-        var appInstall = collection.get({cid: cid});
+
+        var appInstalls = this.getCollection();
+        var appInstall = appInstalls.get({cid: cid});
+
         var app = appInstall.get('app');
+        var title = app.get('name');
+
         var deviceInstalls = this.props.deviceInstalls;
         var devicePermissions = appInstall.get('devicePermissions');
-        var title = app.get('name');
+
 
         return < Portal.AppInstallView key={cid} title={title} appInstall={item}
                     deviceInstalls={deviceInstalls} devicePermissions={devicePermissions} model={item} />
