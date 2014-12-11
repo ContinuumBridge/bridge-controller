@@ -96,7 +96,9 @@ class BroadcastMixin(CBIDModelMixin):
         r = redis.Redis()
         json_message = json.dumps(message, cls=RawJSONEncoder)
         destinations = self.get_related_cbids()
+        modified_by = self.modified_by
         for d in destinations:
+
             r.publish(d, json_message)
 
     def save(self, *args, **kwargs):

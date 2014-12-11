@@ -5,9 +5,10 @@ var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
 
+        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
+
         OriginalModel.call(this, attributes, options);
 
-        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
         this.startTracking();
     },
 
@@ -15,9 +16,9 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
         
-        this.set({isGhost: true}, {trackit_silent:true});
+        //this.set({isGhost: true}, {trackit_silent:true});
 
-        return OriginalModel.save.call(this, arguments).then(
+        return OriginalModel.prototype.save.call(this, arguments).then(
             function(result) {
 
                 //var model = resolveModel.model;
@@ -33,34 +34,24 @@ var CBModel = OriginalModel.extend({
         )
     },
 
-    /*
-    save: function(key, val, options) {
+    fetch: function(key, val, options) {
 
-        console.log('save cb');
-        // Copied from Backbone source
-        var attrs, method, xhr, attributes = this.attributes;
-        if (key == null || typeof key === 'object') {
-            attrs = key;
-            options = val;
-        } else {
-            (attrs = {})[key] = val;
-        }
+        var self = this;
 
-        options = _.extend({validate: true}, options);
+        return OriginalModel.prototype.save.call(this, arguments).then(
+            function(result) {
 
-        var success = options.success;
-        options.success = function(model, resp, options) {
-          // ADDED If this model saved successfully it is not a ghost
-          model.set('isGhost', false);
-          model.restartTracking();
-          model.trigger('change');
-          if (success) success(model, resp, options);
-        };
+                //var model = resolveModel.model;
+                result.model.set({'isGhost': false}, {trackit_silent:true});
 
-        var args = Array.prototype.slice.call(arguments);
-        // ADDED Set isGhost to false, indicating the model is being instantiated on server
-        this.set('isGhost', false);
-        OriginalModel.prototype.save.apply(this, args);
+                return result;
+                //model.trigger('change');
+            },
+            function(error) {
+
+                self.resetAttributes();
+            }
+        )
     },
 
     destroyOnServer: function(options) {
@@ -88,6 +79,10 @@ var CBModel = OriginalModel.extend({
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
+      options.error = function(resp) {
+          model.resetAttributes();
+      }
+
       if (this.isNew()) {
         options.success();
         return false;
@@ -98,7 +93,6 @@ var CBModel = OriginalModel.extend({
       //if (!options.wait) destroy();
       return xhr;
     },
-    */
 
     toJSONString: function(options) {
 

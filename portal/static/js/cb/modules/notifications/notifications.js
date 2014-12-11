@@ -17,6 +17,7 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
     Notifications.Controller = Marionette.Controller.extend({
         showNotifications: function() {
 
+            /*
             console.log('notificationCollection', Portal.notificationCollection);
             Notifications.notificationsListView = new Portal.NotificationListView({
                 collection: Portal.notificationCollection
@@ -24,6 +25,7 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
 
             console.log('notificationsListView ', Notifications.notificationsListView);
             Portal.notificationRegion.show(Notifications.notificationsListView);
+            */
         },
         showInformation: function(message, title) {
             console.log('We got to the notification controller!');

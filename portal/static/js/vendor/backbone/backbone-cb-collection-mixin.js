@@ -7,6 +7,7 @@ var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
 module.exports = {
 
+    /*
     dispatchCallback: function(message) {
 
         console.log('dispatchCallback', this.backend.name, message);
@@ -40,7 +41,6 @@ module.exports = {
 
             case 'delete':
                 this.delete(message.payload);
-            */
         }
     },
 

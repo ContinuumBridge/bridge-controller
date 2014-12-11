@@ -100,6 +100,11 @@ var CBApp = Marionette.Application.extend({
     register: function(callback) {
 
         this.dispatcher.register(callback);
+    },
+
+    error: function(error) {
+        // Log an error
+
     }
 });
 

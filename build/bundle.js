@@ -24196,6 +24196,11 @@ var CBApp = Marionette.Application.extend({
     register: function(callback) {
 
         this.dispatcher.register(callback);
+    },
+
+    error: function(error) {
+        // Log an error
+
     }
 });
 
@@ -25460,9 +25465,7 @@ Portal.addInitializer(function () {
       controller : Portal.controller,
       createTrailingSlashRoutes: true
   });
-  var $testSection = document.getElementById('test-region');
-  console.log('$testSection ', $testSection );
-  //React.renderComponent(DevicesView(), $testSection);
+
 });
 
 Portal.navigate = function(route,  options){
@@ -25478,7 +25481,12 @@ Portal.getCurrentRoute = function(){
 Portal.on("initialize:after", function () {
 
   Portal.Nav.trigger('topbar:show');
-  Portal.Notifications.trigger('show');
+  //Portal.Notifications.trigger('show');
+
+  React.renderComponent(
+      React.createElement(Portal.NotificationListView, {collection: Portal.notificationCollection}),
+      document.getElementById('notification-region')
+  );
 
   //for routing purposes
   if(Backbone.history) {
@@ -26099,9 +26107,10 @@ Portal.addInitializer(function () {
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
   Portal.notificationCollection = new Portal.NotificationCollection([
-      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
+      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
+  Portal.notificationCollection.subscribe();
 
   Portal.userCollection = new Portal.UserCollection();
 
@@ -27108,6 +27117,7 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
     Notifications.Controller = Marionette.Controller.extend({
         showNotifications: function() {
 
+            /*
             console.log('notificationCollection', Portal.notificationCollection);
             Notifications.notificationsListView = new Portal.NotificationListView({
                 collection: Portal.notificationCollection
@@ -27115,6 +27125,7 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
 
             console.log('notificationsListView ', Notifications.notificationsListView);
             Portal.notificationRegion.show(Notifications.notificationsListView);
+            */
         },
         showInformation: function(message, title) {
             console.log('We got to the notification controller!');
@@ -27560,38 +27571,56 @@ Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
     model: Portal.Notification,
     backend: 'notification',
 
+    /*
     initialize: function() {
         //this.bindBackend();
         Portal.NotificationCollection.__super__.initialize.apply(this, arguments);
     }
+    */
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notification.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
 
 
-  return "<h4 class=\"list-group-item-heading\"></h4>\n<i class=\"icon ion-information-circled\"></i>\n<i class=\"icon ion-alert-circled\"></i>\n";
-  });
+Portal.NotificationView = React.createClass({displayName: 'NotificationView',
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    //mixins: [Portal.ItemView],
 
+    render: function() {
 
-  return "<div class=\"animated-list notification-list\"></div>\n";
-  });
+        return (
+            React.createElement("li", null, 
+                React.createElement("h4", {class: "list-group-item-heading"}), 
+                React.createElement("i", {class: "icon ion-information-circled"}), 
+                React.createElement("i", {class: "icon ion-alert-circled"})
+            )
+        )
+    }
+});
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
+Portal.NotificationListView = React.createClass({displayName: 'NotificationListView',
 
+    mixins: [Backbone.React.Component.mixin],
+
+    renderNotification: function(item) {
+
+        return (
+            React.createElement(Portal.NotificationView, {model: item})
+        )
+    },
+
+    render: function() {
+
+        return (
+            React.createElement("div", {class: "animated-list notification-list"}, 
+                this.props.collection.map(this.renderNotification)
+            )
+        )
+    }
+
+});
+
+/*
 Portal.NotificationView = Marionette.ItemView.extend({
 
     tagName: 'li',
@@ -27623,8 +27652,9 @@ Portal.NotificationListView = Marionette.CompositeView.extend({
     itemViewContainer: '.notification-list',
 
 });
+*/
 
-},{"./templates/notification.html":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notification.html","./templates/notificationSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
 
 var _ = require('underscore');
 

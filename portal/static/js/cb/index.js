@@ -80,9 +80,7 @@ Portal.addInitializer(function () {
       controller : Portal.controller,
       createTrailingSlashRoutes: true
   });
-  var $testSection = document.getElementById('test-region');
-  console.log('$testSection ', $testSection );
-  //React.renderComponent(DevicesView(), $testSection);
+
 });
 
 Portal.navigate = function(route,  options){
@@ -98,7 +96,12 @@ Portal.getCurrentRoute = function(){
 Portal.on("initialize:after", function () {
 
   Portal.Nav.trigger('topbar:show');
-  Portal.Notifications.trigger('show');
+  //Portal.Notifications.trigger('show');
+
+  React.renderComponent(
+      <Portal.NotificationListView collection={Portal.notificationCollection} />,
+      document.getElementById('notification-region')
+  );
 
   //for routing purposes
   if(Backbone.history) {
