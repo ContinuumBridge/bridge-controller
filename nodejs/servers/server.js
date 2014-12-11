@@ -20,14 +20,14 @@ function Server() {
     //this.redisClient = new RedisClient();
 };
 
-Server.prototype.createSocketServer = function(SocketServer, port, djangoURL) {
+Server.prototype.createSocketServer = function(SocketServer, options) {
 
     var self = this;
 
     var getConfig = function(sessionID) {
         return self.getConnectionConfig(self.authURL, sessionID);
     }
-    var socketServer = new SocketServer(port, getConfig, djangoURL);
+    var socketServer = new SocketServer(getConfig, options);
 
     socketServer.sockets.on('connection', function (socket) {
         self.onConnection(socket);

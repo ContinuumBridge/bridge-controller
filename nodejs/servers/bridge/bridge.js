@@ -14,7 +14,13 @@ var Bridge = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
-    this.socketServer = this.createSocketServer(SocketIOServer, port);
+    var options = {
+        port: port,
+        heartBeatInterval: 300,
+        heartBeatTimeout: 630
+    }
+
+    this.socketServer = this.createSocketServer(SocketIOServer, options);
 };
 
 Bridge.prototype = new Server();
