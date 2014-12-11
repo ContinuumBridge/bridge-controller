@@ -1,5 +1,5 @@
 
-var OriginalModel = Backbone.RelationalModel;
+var OriginalModel = Backbone.Deferred.Model;
 
 var CBModel = OriginalModel.extend({
 
@@ -21,6 +21,7 @@ var CBModel = OriginalModel.extend({
         return OriginalModel.prototype.save.call(this, arguments).then(
             function(result) {
 
+                console.log('Save result', result);
                 //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
@@ -28,7 +29,13 @@ var CBModel = OriginalModel.extend({
                 //model.trigger('change');
             },
             function(error) {
-
+                console.error('Save error', error);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
                 self.resetAttributes();
             }
         )
@@ -38,9 +45,10 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
 
-        return OriginalModel.prototype.save.call(this, arguments).then(
+        return OriginalModel.prototype.fetch.call(this, arguments).then(
             function(result) {
 
+                console.log('Fetch result', result);
                 //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
@@ -49,6 +57,13 @@ var CBModel = OriginalModel.extend({
             },
             function(error) {
 
+                console.error('Fetch error', error);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
                 self.resetAttributes();
             }
         )
@@ -109,4 +124,4 @@ var CBModel = OriginalModel.extend({
     }
 });
 
-Backbone.RelationalModel = CBModel;
+Backbone.Deferred.Model = CBModel;

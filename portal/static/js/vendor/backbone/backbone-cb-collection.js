@@ -26,13 +26,14 @@ var CBCollection = OriginalCollection.extend({
                 this.delete(message.payload);
                 break;
 
-            default:
-                console.warn('Unrecognised message actionType', message);
-            /*
             // Actions from app views
             case 'create':
                 this.create(message.payload);
 
+            default:
+                console.warn('Unrecognised message actionType', message);
+
+            /*
             case 'update':
                 this.update(message.payload);
 

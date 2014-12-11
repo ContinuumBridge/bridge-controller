@@ -22660,9 +22660,9 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             initializeCollection: 'deviceInstallCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
-                key: 'appPermission',
-                keySource: 'app_permission',
-                keyDestination: 'app_permission',
+                key: 'appPermissions',
+                keySource: 'app_permissions',
+                keyDestination: 'app_permissions',
                 collectionType: 'Portal.AppDevicePermissionCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appDevicePermissionCollection'
@@ -22711,11 +22711,11 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
         console.log('PermissionSwitch render');
 
+        var label = this.props.label;
         return (
-            React.createElement("li", {class: "inner-item"}, 
-                React.createElement("h3", null, "Permission switch"), 
-                React.createElement("div", {class: "left theme-green animate toggle-switch active", onClick: this.handleClick}), 
-                React.createElement("div", {id: "device-name", class: "list-label"}, "22")
+            React.createElement("li", {className: "inner-item"}, 
+                React.createElement("div", {className: "left theme-green animate toggle-switch active", onClick: this.handleClick}), 
+                React.createElement("div", {className: "list-label"}, label)
             )
         )
     }
@@ -22741,15 +22741,15 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
         //var devicePermissions = this.props.devicePermissions;
 
         console.log('AppDevicePermissionListView create item', item);
+        var cid = item.cid;
+
+        var adp = this.getCollection().get({cid: cid});;
+        var label = adp.get('deviceInstall').get('friendly_name');
+
+        //return < PermissionSwitch key={cid} label={label} model={adp} />
         return (
-            React.createElement("div", null, " \"Hello\" ")
-        );
-        /*
-        return (
-            "createItem"
-         < PermissionSwitch key={item.cid} name={item.name} model={item} />
+            React.createElement("div", null, "\"createItem\"")
         )
-        */
     }
 });
 
@@ -23000,24 +23000,42 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         console.log('AppInstallView render body', this);
 
-        var devicePermissions = this.props.devicePermissions;
+        //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.appInstall;
+        var appInstall = this.props.model;
+
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        console.log('deviceInstalls', deviceInstalls);
 
         deviceInstalls.each(function(deviceInstall) {
 
-            if(!devicePermissions.findWhere({deviceInstall: deviceInstall})) {
-                var permission = new Portal.AppDevicePermission({
-                    deviceInstall: deviceInstall,
-                    appInstall: appInstall
-                });
-                console.log('permission is', permission );
-                devicePermissions.add(permission);
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
             }
+            adp = devicePermissions.findWhere(adpData)
+            console.log('existing adp', adp);
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                console.log('created adp', adp);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
         });
 
+        console.log('devicePermissions are', devicePermissions);
+
         return (
-            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
+            React.createElement(Portal.AppDevicePermissionListView, {collection: appInstall.get('devicePermissions')})
         );
     },
 
@@ -23050,18 +23068,17 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
     createItem: function (item) {
         var cid = item.cid;
 
-        var appInstalls = this.getCollection();
-        var appInstall = appInstalls.get({cid: cid});
+        var appInstall = this.getCollection().get({cid: cid});;
+        //var appInstalls = this.getCollection();
+        //var appInstall = appInstalls.get({cid: cid});
 
         var app = appInstall.get('app');
         var title = app.get('name');
 
         var deviceInstalls = this.props.deviceInstalls;
-        var devicePermissions = appInstall.get('devicePermissions');
 
-
-        return React.createElement(Portal.AppInstallView, {key: cid, title: title, appInstall: item, 
-                    deviceInstalls: deviceInstalls, devicePermissions: devicePermissions, model: item})
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
+                    deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
 
@@ -25200,6 +25217,13 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
     mixins: [Portal.ItemView],
     //mixins: [Portal.ItemView],
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
     getTitle: function() {
         console.log('DeviceInstallView ', this );
         return this.props.model.friendly_name;
@@ -25215,16 +25239,20 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     getDefaultProps: function () {
         return {
-            title: 'Devices'
+            title: 'Devices',
+            buttons: [{
+                name: 'Discover Devices',
+                type: 'bold'
+            }]
         };
     },
 
     createItem: function (item) {
-        console.log('DeviceInstallListView createItem', this.itemView);
-        console.log('DeviceInstallListView item', item);
+        //console.log('DeviceInstallListView createItem', this.itemView);
+        //console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
-        console.log('DeviceInstallListView item cid', item.cid);
+        //console.log('DeviceInstallListView item cid', item.cid);
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
     }
@@ -26260,6 +26288,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
+    /*
     regions: {
         appSection: {
             selector: '.app-section',
@@ -26282,6 +26311,7 @@ module.exports.Main = Marionette.Layout.extend({
           }]
         }
       },
+    */
 
     initialize: function() {
 
@@ -26332,7 +26362,8 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
-        this.showDeviceDiscovery();
+        //this.showDeviceDiscovery();
+        this.showDeviceInstalls();
         /*
         var discoveredDevices = currentBridge.get('discoveredDevices');
 

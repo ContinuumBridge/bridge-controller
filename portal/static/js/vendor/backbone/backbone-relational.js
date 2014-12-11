@@ -892,14 +892,6 @@
 
 		initialize: function( opts ) {
 
-            if (this.instance.id == 2) {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-
-                    console.log('hasMany initialize', this);
-                    console.log('hasMany initialize key', this.key);
-                }
-            }
-
 			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
 
 			// Handle a custom 'collectionType'
@@ -914,11 +906,6 @@
 				throw new Error( '`collectionType` must inherit from Backbone.Collection' );
 			}
 			var related = this.findRelated( opts );
-            if (this.instance.id == 2) {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-                    console.log('relational related are', JSON.stringify(related));
-                }
-            }
 			this.setRelated( related );
 		},
 
@@ -1011,10 +998,6 @@
 			// Remove entries from `keyIds` that were already part of the relation (and are thus 'unchanged')
 			this.keyIds = _.difference( this.keyIds, _.pluck( related.models, 'id' ) );
 
-            if (this.instance.id == 2) {
-                console.log('related is ', related);
-            }
-
 			return related;
 		},
 
@@ -1045,9 +1028,7 @@
 		 */
 		onChange: function( model, attr, options ) {
 			options = options ? _.clone( options ) : {};
-            if (this.instance.id == 2) {
-                console.log('onChange ', this, 'attr ', attr);
-            }
+
 			this.setKeyContents( attr );
 			this.changed = false;
 
@@ -1881,17 +1862,6 @@
 		var newModels = [],
 			toAdd = [];
 
-        if(this.backend) {
-            if (this.backend == 'deviceInstall') {
-                console.log('collection ', this.backend.name, 'set models ', models);
-                //throw "deviceInstall";
-            }
-            if (this.backend.name == 'appInstall') {
-
-                console.log('collection ', this.backend.name, 'set models ', models);
-                //throw "appInstall";
-            }
-        }
 
 		//console.debug( 'calling add on coll=%o; model=%o, options=%o', this, models, options );
 		_.each( models, function( model ) {

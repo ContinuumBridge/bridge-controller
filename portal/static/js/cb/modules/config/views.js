@@ -16,6 +16,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
+    /*
     regions: {
         appSection: {
             selector: '.app-section',
@@ -38,6 +39,7 @@ module.exports.Main = Marionette.Layout.extend({
           }]
         }
       },
+    */
 
     initialize: function() {
 
@@ -88,7 +90,8 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
-        this.showDeviceDiscovery();
+        //this.showDeviceDiscovery();
+        this.showDeviceInstalls();
         /*
         var discoveredDevices = currentBridge.get('discoveredDevices');
 

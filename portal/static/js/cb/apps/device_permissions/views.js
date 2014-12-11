@@ -14,11 +14,11 @@ var PermissionSwitch = React.createClass({
 
         console.log('PermissionSwitch render');
 
+        var label = this.props.label;
         return (
-            <li class="inner-item">
-                <h3>Permission switch</h3>
-                <div class="left theme-green animate toggle-switch active" onClick={this.handleClick}></div>
-                <div id="device-name" class="list-label">22</div>
+            <li className="inner-item">
+                <div className="left theme-green animate toggle-switch active" onClick={this.handleClick}></div>
+                <div className="list-label">{label}</div>
             </li>
         )
     }
@@ -44,15 +44,15 @@ Portal.AppDevicePermissionListView = React.createClass({
         //var devicePermissions = this.props.devicePermissions;
 
         console.log('AppDevicePermissionListView create item', item);
+        var cid = item.cid;
+
+        var adp = this.getCollection().get({cid: cid});;
+        var label = adp.get('deviceInstall').get('friendly_name');
+
+        //return < PermissionSwitch key={cid} label={label} model={adp} />
         return (
-            <div> "Hello" </div>
-        );
-        /*
-        return (
-            "createItem"
-         < PermissionSwitch key={item.cid} name={item.name} model={item} />
+            <div>"createItem"</div>
         )
-        */
     }
 });
 

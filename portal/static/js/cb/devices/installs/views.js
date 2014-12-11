@@ -2,6 +2,13 @@
 Portal.DeviceInstallView = React.createClass({
     mixins: [Portal.ItemView],
     //mixins: [Portal.ItemView],
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
     getTitle: function() {
         console.log('DeviceInstallView ', this );
         return this.props.model.friendly_name;
@@ -17,16 +24,20 @@ Portal.DeviceInstallListView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            title: 'Devices'
+            title: 'Devices',
+            buttons: [{
+                name: 'Discover Devices',
+                type: 'bold'
+            }]
         };
     },
 
     createItem: function (item) {
-        console.log('DeviceInstallListView createItem', this.itemView);
-        console.log('DeviceInstallListView item', item);
+        //console.log('DeviceInstallListView createItem', this.itemView);
+        //console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
-        console.log('DeviceInstallListView item cid', item.cid);
+        //console.log('DeviceInstallListView item cid', item.cid);
 
         return < Portal.DeviceInstallView key={cid} title={item.friendly_name} model={item} />
     }

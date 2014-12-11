@@ -1,6 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./portal/static/js/vendor/vendor.js":[function(require,module,exports){
 
-Dispatcher = require('Flux').Dispatcher;
+Dispatcher = require('flux').Dispatcher;
 
 React = require('./react/react-bundle');
 
@@ -13,326 +13,7 @@ Marionette = require('backbone.marionette');
 
 
 
-},{"./react/react-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/react-bundle.js","Flux":"/home/vagrant/bridge-controller/node_modules/Flux/index.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/index.js":[function(require,module,exports){
-/**
- * Copyright (c) 2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-module.exports.Dispatcher = require('./lib/Dispatcher')
-
-},{"./lib/Dispatcher":"/home/vagrant/bridge-controller/node_modules/Flux/lib/Dispatcher.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/lib/Dispatcher.js":[function(require,module,exports){
-/*
- * Copyright (c) 2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule Dispatcher
- * @typechecks
- */
-
-"use strict";
-
-var invariant = require('./invariant');
-
-var _lastID = 1;
-var _prefix = 'ID_';
-
-/**
- * Dispatcher is used to broadcast payloads to registered callbacks. This is
- * different from generic pub-sub systems in two ways:
- *
- *   1) Callbacks are not subscribed to particular events. Every payload is
- *      dispatched to every registered callback.
- *   2) Callbacks can be deferred in whole or part until other callbacks have
- *      been executed.
- *
- * For example, consider this hypothetical flight destination form, which
- * selects a default city when a country is selected:
- *
- *   var flightDispatcher = new Dispatcher();
- *
- *   // Keeps track of which country is selected
- *   var CountryStore = {country: null};
- *
- *   // Keeps track of which city is selected
- *   var CityStore = {city: null};
- *
- *   // Keeps track of the base flight price of the selected city
- *   var FlightPriceStore = {price: null}
- *
- * When a user changes the selected city, we dispatch the payload:
- *
- *   flightDispatcher.dispatch({
- *     actionType: 'city-update',
- *     selectedCity: 'paris'
- *   });
- *
- * This payload is digested by `CityStore`:
- *
- *   flightDispatcher.register(function(payload) {
- *     if (payload.actionType === 'city-update') {
- *       CityStore.city = payload.selectedCity;
- *     }
- *   });
- *
- * When the user selects a country, we dispatch the payload:
- *
- *   flightDispatcher.dispatch({
- *     actionType: 'country-update',
- *     selectedCountry: 'australia'
- *   });
- *
- * This payload is digested by both stores:
- *
- *    CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
- *     if (payload.actionType === 'country-update') {
- *       CountryStore.country = payload.selectedCountry;
- *     }
- *   });
- *
- * When the callback to update `CountryStore` is registered, we save a reference
- * to the returned token. Using this token with `waitFor()`, we can guarantee
- * that `CountryStore` is updated before the callback that updates `CityStore`
- * needs to query its data.
- *
- *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
- *     if (payload.actionType === 'country-update') {
- *       // `CountryStore.country` may not be updated.
- *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
- *       // `CountryStore.country` is now guaranteed to be updated.
- *
- *       // Select the default city for the new country
- *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
- *     }
- *   });
- *
- * The usage of `waitFor()` can be chained, for example:
- *
- *   FlightPriceStore.dispatchToken =
- *     flightDispatcher.register(function(payload) {
- *       switch (payload.actionType) {
- *         case 'country-update':
- *           flightDispatcher.waitFor([CityStore.dispatchToken]);
- *           FlightPriceStore.price =
- *             getFlightPriceStore(CountryStore.country, CityStore.city);
- *           break;
- *
- *         case 'city-update':
- *           FlightPriceStore.price =
- *             FlightPriceStore(CountryStore.country, CityStore.city);
- *           break;
- *     }
- *   });
- *
- * The `country-update` payload will be guaranteed to invoke the stores'
- * registered callbacks in order: `CountryStore`, `CityStore`, then
- * `FlightPriceStore`.
- */
-
-  function Dispatcher() {
-    this.$Dispatcher_callbacks = {};
-    this.$Dispatcher_isPending = {};
-    this.$Dispatcher_isHandled = {};
-    this.$Dispatcher_isDispatching = false;
-    this.$Dispatcher_pendingPayload = null;
-  }
-
-  /**
-   * Registers a callback to be invoked with every dispatched payload. Returns
-   * a token that can be used with `waitFor()`.
-   *
-   * @param {function} callback
-   * @return {string}
-   */
-  Dispatcher.prototype.register=function(callback) {
-    var id = _prefix + _lastID++;
-    this.$Dispatcher_callbacks[id] = callback;
-    return id;
-  };
-
-  /**
-   * Removes a callback based on its token.
-   *
-   * @param {string} id
-   */
-  Dispatcher.prototype.unregister=function(id) {
-    invariant(
-      this.$Dispatcher_callbacks[id],
-      'Dispatcher.unregister(...): `%s` does not map to a registered callback.',
-      id
-    );
-    delete this.$Dispatcher_callbacks[id];
-  };
-
-  /**
-   * Waits for the callbacks specified to be invoked before continuing execution
-   * of the current callback. This method should only be used by a callback in
-   * response to a dispatched payload.
-   *
-   * @param {array<string>} ids
-   */
-  Dispatcher.prototype.waitFor=function(ids) {
-    invariant(
-      this.$Dispatcher_isDispatching,
-      'Dispatcher.waitFor(...): Must be invoked while dispatching.'
-    );
-    for (var ii = 0; ii < ids.length; ii++) {
-      var id = ids[ii];
-      if (this.$Dispatcher_isPending[id]) {
-        invariant(
-          this.$Dispatcher_isHandled[id],
-          'Dispatcher.waitFor(...): Circular dependency detected while ' +
-          'waiting for `%s`.',
-          id
-        );
-        continue;
-      }
-      invariant(
-        this.$Dispatcher_callbacks[id],
-        'Dispatcher.waitFor(...): `%s` does not map to a registered callback.',
-        id
-      );
-      this.$Dispatcher_invokeCallback(id);
-    }
-  };
-
-  /**
-   * Dispatches a payload to all registered callbacks.
-   *
-   * @param {object} payload
-   */
-  Dispatcher.prototype.dispatch=function(payload) {
-    invariant(
-      !this.$Dispatcher_isDispatching,
-      'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.'
-    );
-    this.$Dispatcher_startDispatching(payload);
-    try {
-      for (var id in this.$Dispatcher_callbacks) {
-        if (this.$Dispatcher_isPending[id]) {
-          continue;
-        }
-        this.$Dispatcher_invokeCallback(id);
-      }
-    } finally {
-      this.$Dispatcher_stopDispatching();
-    }
-  };
-
-  /**
-   * Is this Dispatcher currently dispatching.
-   *
-   * @return {boolean}
-   */
-  Dispatcher.prototype.isDispatching=function() {
-    return this.$Dispatcher_isDispatching;
-  };
-
-  /**
-   * Call the callback stored with the given id. Also do some internal
-   * bookkeeping.
-   *
-   * @param {string} id
-   * @internal
-   */
-  Dispatcher.prototype.$Dispatcher_invokeCallback=function(id) {
-    this.$Dispatcher_isPending[id] = true;
-    this.$Dispatcher_callbacks[id](this.$Dispatcher_pendingPayload);
-    this.$Dispatcher_isHandled[id] = true;
-  };
-
-  /**
-   * Set up bookkeeping needed when dispatching.
-   *
-   * @param {object} payload
-   * @internal
-   */
-  Dispatcher.prototype.$Dispatcher_startDispatching=function(payload) {
-    for (var id in this.$Dispatcher_callbacks) {
-      this.$Dispatcher_isPending[id] = false;
-      this.$Dispatcher_isHandled[id] = false;
-    }
-    this.$Dispatcher_pendingPayload = payload;
-    this.$Dispatcher_isDispatching = true;
-  };
-
-  /**
-   * Clear bookkeeping used for dispatching.
-   *
-   * @internal
-   */
-  Dispatcher.prototype.$Dispatcher_stopDispatching=function() {
-    this.$Dispatcher_pendingPayload = null;
-    this.$Dispatcher_isDispatching = false;
-  };
-
-
-module.exports = Dispatcher;
-
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/Flux/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/Flux/lib/invariant.js":[function(require,module,exports){
-/**
- * Copyright (c) 2014, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule invariant
- */
-
-"use strict";
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var invariant = function(condition, format, a, b, c, d, e, f) {
-  if (false) {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  }
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error(
-        'Minified exception occurred; use the non-minified dev environment ' +
-        'for the full error message and additional helpful warnings.'
-      );
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(
-        'Invariant Violation: ' +
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-};
-
-module.exports = invariant;
-
-},{}],"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
+},{"./react/react-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/react-bundle.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","flux":"/home/vagrant/bridge-controller/node_modules/flux/index.js"}],"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
 // Backbone React Component
 // ========================
 //
@@ -2933,6 +2614,325 @@ process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
+
+},{}],"/home/vagrant/bridge-controller/node_modules/flux/index.js":[function(require,module,exports){
+/**
+ * Copyright (c) 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+module.exports.Dispatcher = require('./lib/Dispatcher')
+
+},{"./lib/Dispatcher":"/home/vagrant/bridge-controller/node_modules/flux/lib/Dispatcher.js"}],"/home/vagrant/bridge-controller/node_modules/flux/lib/Dispatcher.js":[function(require,module,exports){
+/*
+ * Copyright (c) 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule Dispatcher
+ * @typechecks
+ */
+
+"use strict";
+
+var invariant = require('./invariant');
+
+var _lastID = 1;
+var _prefix = 'ID_';
+
+/**
+ * Dispatcher is used to broadcast payloads to registered callbacks. This is
+ * different from generic pub-sub systems in two ways:
+ *
+ *   1) Callbacks are not subscribed to particular events. Every payload is
+ *      dispatched to every registered callback.
+ *   2) Callbacks can be deferred in whole or part until other callbacks have
+ *      been executed.
+ *
+ * For example, consider this hypothetical flight destination form, which
+ * selects a default city when a country is selected:
+ *
+ *   var flightDispatcher = new Dispatcher();
+ *
+ *   // Keeps track of which country is selected
+ *   var CountryStore = {country: null};
+ *
+ *   // Keeps track of which city is selected
+ *   var CityStore = {city: null};
+ *
+ *   // Keeps track of the base flight price of the selected city
+ *   var FlightPriceStore = {price: null}
+ *
+ * When a user changes the selected city, we dispatch the payload:
+ *
+ *   flightDispatcher.dispatch({
+ *     actionType: 'city-update',
+ *     selectedCity: 'paris'
+ *   });
+ *
+ * This payload is digested by `CityStore`:
+ *
+ *   flightDispatcher.register(function(payload) {
+ *     if (payload.actionType === 'city-update') {
+ *       CityStore.city = payload.selectedCity;
+ *     }
+ *   });
+ *
+ * When the user selects a country, we dispatch the payload:
+ *
+ *   flightDispatcher.dispatch({
+ *     actionType: 'country-update',
+ *     selectedCountry: 'australia'
+ *   });
+ *
+ * This payload is digested by both stores:
+ *
+ *    CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+ *     if (payload.actionType === 'country-update') {
+ *       CountryStore.country = payload.selectedCountry;
+ *     }
+ *   });
+ *
+ * When the callback to update `CountryStore` is registered, we save a reference
+ * to the returned token. Using this token with `waitFor()`, we can guarantee
+ * that `CountryStore` is updated before the callback that updates `CityStore`
+ * needs to query its data.
+ *
+ *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+ *     if (payload.actionType === 'country-update') {
+ *       // `CountryStore.country` may not be updated.
+ *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+ *       // `CountryStore.country` is now guaranteed to be updated.
+ *
+ *       // Select the default city for the new country
+ *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+ *     }
+ *   });
+ *
+ * The usage of `waitFor()` can be chained, for example:
+ *
+ *   FlightPriceStore.dispatchToken =
+ *     flightDispatcher.register(function(payload) {
+ *       switch (payload.actionType) {
+ *         case 'country-update':
+ *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+ *           FlightPriceStore.price =
+ *             getFlightPriceStore(CountryStore.country, CityStore.city);
+ *           break;
+ *
+ *         case 'city-update':
+ *           FlightPriceStore.price =
+ *             FlightPriceStore(CountryStore.country, CityStore.city);
+ *           break;
+ *     }
+ *   });
+ *
+ * The `country-update` payload will be guaranteed to invoke the stores'
+ * registered callbacks in order: `CountryStore`, `CityStore`, then
+ * `FlightPriceStore`.
+ */
+
+  function Dispatcher() {
+    this.$Dispatcher_callbacks = {};
+    this.$Dispatcher_isPending = {};
+    this.$Dispatcher_isHandled = {};
+    this.$Dispatcher_isDispatching = false;
+    this.$Dispatcher_pendingPayload = null;
+  }
+
+  /**
+   * Registers a callback to be invoked with every dispatched payload. Returns
+   * a token that can be used with `waitFor()`.
+   *
+   * @param {function} callback
+   * @return {string}
+   */
+  Dispatcher.prototype.register=function(callback) {
+    var id = _prefix + _lastID++;
+    this.$Dispatcher_callbacks[id] = callback;
+    return id;
+  };
+
+  /**
+   * Removes a callback based on its token.
+   *
+   * @param {string} id
+   */
+  Dispatcher.prototype.unregister=function(id) {
+    invariant(
+      this.$Dispatcher_callbacks[id],
+      'Dispatcher.unregister(...): `%s` does not map to a registered callback.',
+      id
+    );
+    delete this.$Dispatcher_callbacks[id];
+  };
+
+  /**
+   * Waits for the callbacks specified to be invoked before continuing execution
+   * of the current callback. This method should only be used by a callback in
+   * response to a dispatched payload.
+   *
+   * @param {array<string>} ids
+   */
+  Dispatcher.prototype.waitFor=function(ids) {
+    invariant(
+      this.$Dispatcher_isDispatching,
+      'Dispatcher.waitFor(...): Must be invoked while dispatching.'
+    );
+    for (var ii = 0; ii < ids.length; ii++) {
+      var id = ids[ii];
+      if (this.$Dispatcher_isPending[id]) {
+        invariant(
+          this.$Dispatcher_isHandled[id],
+          'Dispatcher.waitFor(...): Circular dependency detected while ' +
+          'waiting for `%s`.',
+          id
+        );
+        continue;
+      }
+      invariant(
+        this.$Dispatcher_callbacks[id],
+        'Dispatcher.waitFor(...): `%s` does not map to a registered callback.',
+        id
+      );
+      this.$Dispatcher_invokeCallback(id);
+    }
+  };
+
+  /**
+   * Dispatches a payload to all registered callbacks.
+   *
+   * @param {object} payload
+   */
+  Dispatcher.prototype.dispatch=function(payload) {
+    invariant(
+      !this.$Dispatcher_isDispatching,
+      'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.'
+    );
+    this.$Dispatcher_startDispatching(payload);
+    try {
+      for (var id in this.$Dispatcher_callbacks) {
+        if (this.$Dispatcher_isPending[id]) {
+          continue;
+        }
+        this.$Dispatcher_invokeCallback(id);
+      }
+    } finally {
+      this.$Dispatcher_stopDispatching();
+    }
+  };
+
+  /**
+   * Is this Dispatcher currently dispatching.
+   *
+   * @return {boolean}
+   */
+  Dispatcher.prototype.isDispatching=function() {
+    return this.$Dispatcher_isDispatching;
+  };
+
+  /**
+   * Call the callback stored with the given id. Also do some internal
+   * bookkeeping.
+   *
+   * @param {string} id
+   * @internal
+   */
+  Dispatcher.prototype.$Dispatcher_invokeCallback=function(id) {
+    this.$Dispatcher_isPending[id] = true;
+    this.$Dispatcher_callbacks[id](this.$Dispatcher_pendingPayload);
+    this.$Dispatcher_isHandled[id] = true;
+  };
+
+  /**
+   * Set up bookkeeping needed when dispatching.
+   *
+   * @param {object} payload
+   * @internal
+   */
+  Dispatcher.prototype.$Dispatcher_startDispatching=function(payload) {
+    for (var id in this.$Dispatcher_callbacks) {
+      this.$Dispatcher_isPending[id] = false;
+      this.$Dispatcher_isHandled[id] = false;
+    }
+    this.$Dispatcher_pendingPayload = payload;
+    this.$Dispatcher_isDispatching = true;
+  };
+
+  /**
+   * Clear bookkeeping used for dispatching.
+   *
+   * @internal
+   */
+  Dispatcher.prototype.$Dispatcher_stopDispatching=function() {
+    this.$Dispatcher_pendingPayload = null;
+    this.$Dispatcher_isDispatching = false;
+  };
+
+
+module.exports = Dispatcher;
+
+},{"./invariant":"/home/vagrant/bridge-controller/node_modules/flux/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/flux/lib/invariant.js":[function(require,module,exports){
+/**
+ * Copyright (c) 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule invariant
+ */
+
+"use strict";
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if (false) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        'Invariant Violation: ' +
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
 
 },{}],"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
@@ -46575,9 +46575,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                if (this.instance.id == 2) {
-                    console.log('this in findRelated', this );
-                }
+
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = Portal[initializeCollection];
                 }
@@ -46608,9 +46606,6 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
         options = _.defaults( { parse: this.options.parse }, options );
 
-        if (this.instance.id == 2) {
-            console.log('findRelated keyContents', this.keyContents);
-        }
 
         // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
         if ( this.keyContents instanceof Backbone.Collection ) {
@@ -46620,10 +46615,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
         // Otherwise, 'this.keyContents' should be an array of related object ids.
         // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
         else {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
 
-                    console.log('findRelated this.keyContents', this.keyContents);
-                }
                 var toAdd = [];
 
                 _.each( this.keyContents, function( attributes ) {
@@ -46663,20 +46655,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
                 }, this );
 
                 if ( this.related instanceof Backbone.Collection ) {
-                        console.log('related = this.related');
                         related = this.related;
                 }
                 else {
-                        console.log('this._prepareCollection');
                         related = this._prepareCollection();
-                }
-
-                if (this.instance.id == 2) {
-                    if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-
-                        console.log('findRelated toAdd length', JSON.stringify(toAdd));
-                        console.log('findRelated related length', JSON.stringify(related));
-                    }
                 }
 
                 // By now, both `merge` and `parse` will already have been executed for models if they were specified.
@@ -46950,9 +46932,9 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 // Required for backbone deferred
 Q = require('q');
 
-require('./backbone-cb-model');
-
 require('backbone-deferred');
+
+require('./backbone-cb-model');
 
 Backbone.Collection = Backbone.Deferred.Collection;
 
@@ -47015,13 +46997,14 @@ var CBCollection = OriginalCollection.extend({
                 this.delete(message.payload);
                 break;
 
-            default:
-                console.warn('Unrecognised message actionType', message);
-            /*
             // Actions from app views
             case 'create':
                 this.create(message.payload);
 
+            default:
+                console.warn('Unrecognised message actionType', message);
+
+            /*
             case 'update':
                 this.update(message.payload);
 
@@ -47213,7 +47196,7 @@ module.exports = {
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js":[function(require,module,exports){
 
-var OriginalModel = Backbone.RelationalModel;
+var OriginalModel = Backbone.Deferred.Model;
 
 var CBModel = OriginalModel.extend({
 
@@ -47235,6 +47218,7 @@ var CBModel = OriginalModel.extend({
         return OriginalModel.prototype.save.call(this, arguments).then(
             function(result) {
 
+                console.log('Save result', result);
                 //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
@@ -47242,7 +47226,13 @@ var CBModel = OriginalModel.extend({
                 //model.trigger('change');
             },
             function(error) {
-
+                console.error('Save error', error);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
                 self.resetAttributes();
             }
         )
@@ -47252,9 +47242,10 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
 
-        return OriginalModel.prototype.save.call(this, arguments).then(
+        return OriginalModel.prototype.fetch.call(this, arguments).then(
             function(result) {
 
+                console.log('Fetch result', result);
                 //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
@@ -47263,6 +47254,13 @@ var CBModel = OriginalModel.extend({
             },
             function(error) {
 
+                console.error('Fetch error', error);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
                 self.resetAttributes();
             }
         )
@@ -47323,7 +47321,7 @@ var CBModel = OriginalModel.extend({
     }
 });
 
-Backbone.RelationalModel = CBModel;
+Backbone.Deferred.Model = CBModel;
 },{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
 
 
@@ -48757,14 +48755,6 @@ Q = global.Q = require("q");
 
 		initialize: function( opts ) {
 
-            if (this.instance.id == 2) {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-
-                    console.log('hasMany initialize', this);
-                    console.log('hasMany initialize key', this.key);
-                }
-            }
-
 			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
 
 			// Handle a custom 'collectionType'
@@ -48779,11 +48769,6 @@ Q = global.Q = require("q");
 				throw new Error( '`collectionType` must inherit from Backbone.Collection' );
 			}
 			var related = this.findRelated( opts );
-            if (this.instance.id == 2) {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-                    console.log('relational related are', JSON.stringify(related));
-                }
-            }
 			this.setRelated( related );
 		},
 
@@ -48876,10 +48861,6 @@ Q = global.Q = require("q");
 			// Remove entries from `keyIds` that were already part of the relation (and are thus 'unchanged')
 			this.keyIds = _.difference( this.keyIds, _.pluck( related.models, 'id' ) );
 
-            if (this.instance.id == 2) {
-                console.log('related is ', related);
-            }
-
 			return related;
 		},
 
@@ -48910,9 +48891,7 @@ Q = global.Q = require("q");
 		 */
 		onChange: function( model, attr, options ) {
 			options = options ? _.clone( options ) : {};
-            if (this.instance.id == 2) {
-                console.log('onChange ', this, 'attr ', attr);
-            }
+
 			this.setKeyContents( attr );
 			this.changed = false;
 
@@ -49746,17 +49725,6 @@ Q = global.Q = require("q");
 		var newModels = [],
 			toAdd = [];
 
-        if(this.backend) {
-            if (this.backend == 'deviceInstall') {
-                console.log('collection ', this.backend.name, 'set models ', models);
-                //throw "deviceInstall";
-            }
-            if (this.backend.name == 'appInstall') {
-
-                console.log('collection ', this.backend.name, 'set models ', models);
-                //throw "appInstall";
-            }
-        }
 
 		//console.debug( 'calling add on coll=%o; model=%o, options=%o', this, models, options );
 		_.each( models, function( model ) {

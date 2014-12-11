@@ -38,9 +38,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                if (this.instance.id == 2) {
-                    console.log('this in findRelated', this );
-                }
+
                 if ( _.isString( initializeCollection ) ) {
                         initializeCollection = Portal[initializeCollection];
                 }
@@ -71,9 +69,6 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
         options = _.defaults( { parse: this.options.parse }, options );
 
-        if (this.instance.id == 2) {
-            console.log('findRelated keyContents', this.keyContents);
-        }
 
         // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
         if ( this.keyContents instanceof Backbone.Collection ) {
@@ -83,10 +78,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
         // Otherwise, 'this.keyContents' should be an array of related object ids.
         // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
         else {
-                if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
 
-                    console.log('findRelated this.keyContents', this.keyContents);
-                }
                 var toAdd = [];
 
                 _.each( this.keyContents, function( attributes ) {
@@ -126,20 +118,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
                 }, this );
 
                 if ( this.related instanceof Backbone.Collection ) {
-                        console.log('related = this.related');
                         related = this.related;
                 }
                 else {
-                        console.log('this._prepareCollection');
                         related = this._prepareCollection();
-                }
-
-                if (this.instance.id == 2) {
-                    if (this.key == 'deviceInstalls' || this.key == 'appInstalls') {
-
-                        console.log('findRelated toAdd length', JSON.stringify(toAdd));
-                        console.log('findRelated related length', JSON.stringify(related));
-                    }
                 }
 
                 // By now, both `merge` and `parse` will already have been executed for models if they were specified.

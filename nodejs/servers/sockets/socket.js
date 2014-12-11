@@ -67,7 +67,7 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConf
             getConfig(sessionID).then(function(config) {
                 data.config = config;
                 //data.config.address = data.address;
-                console.log('Legacy getConnectionConfig config', config);
+                //console.log('Legacy getConnectionConfig config', config);
                 accept(null, true);
             }, function(error) {
 

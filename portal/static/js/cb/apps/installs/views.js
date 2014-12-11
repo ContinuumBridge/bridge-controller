@@ -20,24 +20,42 @@ Portal.AppInstallView = React.createClass({
 
         console.log('AppInstallView render body', this);
 
-        var devicePermissions = this.props.devicePermissions;
+        //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.appInstall;
+        var appInstall = this.props.model;
+
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        console.log('deviceInstalls', deviceInstalls);
 
         deviceInstalls.each(function(deviceInstall) {
 
-            if(!devicePermissions.findWhere({deviceInstall: deviceInstall})) {
-                var permission = new Portal.AppDevicePermission({
-                    deviceInstall: deviceInstall,
-                    appInstall: appInstall
-                });
-                console.log('permission is', permission );
-                devicePermissions.add(permission);
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
             }
+            adp = devicePermissions.findWhere(adpData)
+            console.log('existing adp', adp);
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                console.log('created adp', adp);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
         });
 
+        console.log('devicePermissions are', devicePermissions);
+
         return (
-            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+            < Portal.AppDevicePermissionListView collection={appInstall.get('devicePermissions')} />
         );
     },
 
@@ -70,18 +88,17 @@ Portal.AppInstallListView = React.createClass({
     createItem: function (item) {
         var cid = item.cid;
 
-        var appInstalls = this.getCollection();
-        var appInstall = appInstalls.get({cid: cid});
+        var appInstall = this.getCollection().get({cid: cid});;
+        //var appInstalls = this.getCollection();
+        //var appInstall = appInstalls.get({cid: cid});
 
         var app = appInstall.get('app');
         var title = app.get('name');
 
         var deviceInstalls = this.props.deviceInstalls;
-        var devicePermissions = appInstall.get('devicePermissions');
 
-
-        return < Portal.AppInstallView key={cid} title={title} appInstall={item}
-                    deviceInstalls={deviceInstalls} devicePermissions={devicePermissions} model={item} />
+        return < Portal.AppInstallView key={cid} title={title}
+                    deviceInstalls={deviceInstalls} model={appInstall} />
     }
 });
 

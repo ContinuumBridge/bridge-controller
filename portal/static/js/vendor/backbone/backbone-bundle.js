@@ -34,9 +34,9 @@ Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView)
 // Required for backbone deferred
 Q = require('q');
 
-require('./backbone-cb-model');
-
 require('backbone-deferred');
+
+require('./backbone-cb-model');
 
 Backbone.Collection = Backbone.Deferred.Collection;
 

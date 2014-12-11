@@ -46,7 +46,7 @@ Server.prototype.getConnectionConfig = function(authURL, sessionID) {
 
         //console.log('authData is', authData);
         var config = self.formatConfig(authData);
-        console.log('getConnectionConfig config is', config);
+        //console.log('getConnectionConfig config is', config);
         config.sessionID = sessionID;
         deferredConfig.resolve(config);
 

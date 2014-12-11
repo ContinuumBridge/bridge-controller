@@ -29,13 +29,13 @@ Router.prototype.setupRoutes = function() {
     var subscriptionAddress = connection.config.subscriptionAddress;
     var publicationAddresses = connection.config.publicationAddresses;
 
-    logger.log('debug', 'Router setupRoutes config', self.connection.config);
+    //logger.log('debug', 'Router setupRoutes config', self.connection.config);
 
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
 
-        logger.log('debug', 'Matched cbAddress', message.toJSONString());
+        //logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
     });
 
@@ -47,7 +47,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('cb', function(message) {
 
-        logger.log('debug', 'Matched cb', message);
+        //logger.log('debug', 'Matched cb', message);
         if (self.matchCB) {
             self.matchCB(message)
         } else {
@@ -57,7 +57,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
-        logger.log('debug', 'message for broadcast', message);
+        logger.log('debug', 'broadcast message', message.get('source'), message.get('destination'));
         if (message.get('source') == 'cb') {
             self.connection.toClient.push(message);
         }
@@ -78,18 +78,18 @@ Router.prototype.setupRoutes = function() {
 
 Router.prototype.dispatch = function(message) {
 
-    logger.log('debug', 'Dispatch message', message);
-    logger.log('debug', 'Dispatch message config', this.connection.config);
+    //logger.log('debug', 'Dispatch message', message);
+    //logger.log('debug', 'Dispatch message config', this.connection.config);
 
     // Authorization could sit here?
 
     var destination = message.get('destination');
     // Check if the destination is the client route
     if (message.findDestination(this.connection.config.cbid)) {
-        logger.log('debug', 'Push to client');
+        //logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
-        logger.log('debug', 'dispatch destination is', destination);
+        //logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
     /*

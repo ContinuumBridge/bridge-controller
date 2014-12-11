@@ -1,5 +1,5 @@
 
-Dispatcher = require('Flux').Dispatcher;
+Dispatcher = require('flux').Dispatcher;
 
 React = require('./react/react-bundle');
 
