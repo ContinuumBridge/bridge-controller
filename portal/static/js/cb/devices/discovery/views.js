@@ -12,7 +12,7 @@ Portal.DiscoveredDeviceListView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
         return {
             title: 'Discovered Devices',
             handleButtonClick: this.handleButtonClick,
@@ -20,8 +20,16 @@ Portal.DiscoveredDeviceListView = React.createClass({
                 name: 'Rescan',
                 type: 'bold',
                 onClick: this.rescan
+            }, {
+                name: 'Back to my devices',
+                onClick: this.stopDiscoveringDevices
             }]
         };
+    },
+
+    stopDiscoveringDevices: function() {
+
+        Portal.Config.controller.stopDiscoveringDevices();
     },
 
     rescan: function() {

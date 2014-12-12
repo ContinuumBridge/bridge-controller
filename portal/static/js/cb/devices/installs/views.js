@@ -22,7 +22,8 @@ Portal.DeviceInstallListView = React.createClass({
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
     //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
+        //console.log('getDefaultProps this', this);
         return {
             title: 'Devices',
             buttons: [{
@@ -31,6 +32,12 @@ Portal.DeviceInstallListView = React.createClass({
                 type: 'bold'
             }]
         };
+    },
+
+    discoverDevices: function() {
+
+        console.log('discoverDevices click');
+        Portal.Config.controller.discoverDevices();
     },
 
     createItem: function (item) {

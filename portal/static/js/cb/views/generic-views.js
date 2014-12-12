@@ -111,16 +111,17 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
-        var onClick = button.onClick || function(){};
+        console.log('renderButton onClick', button.onClick);
+        //var onClick = button.onClick || function(){};
 
         return (
-            <div className={className} onClick={onClick}>{button.name}</div>
+            <div className={className} onClick={button.onClick}>{button.name}</div>
         );
     },
 
     renderButtons: function() {
 
-        var buttons = this.props.buttons || [];
+        var buttons = this.state.buttons || [];
 
         return (
             <div class="topcoat-button-bar">

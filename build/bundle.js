@@ -23104,7 +23104,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
         return {
             title: 'Apps',
             buttons: [{
@@ -24964,7 +24964,7 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
         return {
             title: 'Discovered Devices',
             handleButtonClick: this.handleButtonClick,
@@ -24972,8 +24972,16 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
                 name: 'Rescan',
                 type: 'bold',
                 onClick: this.rescan
+            }, {
+                name: 'Back to my devices',
+                onClick: this.stopDiscoveringDevices
             }]
         };
+    },
+
+    stopDiscoveringDevices: function() {
+
+        Portal.Config.controller.stopDiscoveringDevices();
     },
 
     rescan: function() {
@@ -25263,7 +25271,8 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
     //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
+        //console.log('getDefaultProps this', this);
         return {
             title: 'Devices',
             buttons: [{
@@ -25272,6 +25281,12 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
                 type: 'bold'
             }]
         };
+    },
+
+    discoverDevices: function() {
+
+        console.log('discoverDevices click');
+        Portal.Config.controller.discoverDevices();
     },
 
     createItem: function (item) {
@@ -28326,16 +28341,17 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
-        var onClick = button.onClick || function(){};
+        console.log('renderButton onClick', button.onClick);
+        //var onClick = button.onClick || function(){};
 
         return (
-            React.createElement("div", {className: className, onClick: onClick}, button.name)
+            React.createElement("div", {className: className, onClick: button.onClick}, button.name)
         );
     },
 
     renderButtons: function() {
 
-        var buttons = this.props.buttons || [];
+        var buttons = this.state.buttons || [];
 
         return (
             React.createElement("div", {class: "topcoat-button-bar"}, 

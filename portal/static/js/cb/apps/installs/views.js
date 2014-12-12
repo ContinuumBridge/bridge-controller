@@ -84,7 +84,7 @@ Portal.AppInstallListView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    getDefaultProps: function () {
+    getInitialState: function () {
         return {
             title: 'Apps',
             buttons: [{
