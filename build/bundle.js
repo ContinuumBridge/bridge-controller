@@ -22664,7 +22664,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
                 keySource: 'app_permissions',
                 keyDestination: 'app_permissions',
                 collectionType: 'Portal.AppDevicePermissionCollection',
-                includeInJSON: 'resource_uri',
+                includeInJSON: false,
                 initializeCollection: 'appDevicePermissionCollection'
             }
         },
@@ -22677,7 +22677,16 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'devicePermissions',
+                keySource: 'device_permissions',
+                keyDestination: 'device_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                //includeInJSON: 'resource_uri',
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         }
     ]
 }, { modelType: "appDevicePermission" });
@@ -22710,12 +22719,14 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
         console.log('handleClick model', model);
 
-        if (model.isNew()) {
-            console.log('handleClick save');
-            model.save();
-        } else {
-            console.log('handleClick destroyOnServer');
-            model.destroyOnServer();
+        if (!model.isSyncing()) {
+            if (model.isNew()) {
+                console.log('handleClick save');
+                model.save();
+            } else {
+                console.log('handleClick destroyOnServer');
+                model.destroyOnServer();
+            }
         }
     },
 
@@ -22727,7 +22738,7 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
         var label = this.props.label;
 
         //var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
-        var disabled = model.isSyncing();
+        var disabled = model.isSyncing() ? 'disabled' : '';;
         var active = !model.get('isGhost') ? 'active' : '';
         var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
 
@@ -22935,6 +22946,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 initializeCollection: 'appInstallCollection',
             }   
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'devicePermissions',
@@ -22943,7 +22955,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppDevicePermission',
             collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -22955,8 +22967,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'licence',
@@ -25815,8 +25827,10 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
                 React.createElement("h2", null, "Bridge Messages"), 
 
                 React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
-                    React.createElement("table", {id: "messages-table", className: "table-condensed table-hover table-striped"}, 
+                    React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
+                        React.createElement("tbody", null, 
                         this.props.collection.map(this.createMessage)
+                        )
                     )
                 ), 
 
@@ -26333,39 +26347,7 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
-    /*
-    regions: {
-        appSection: {
-            selector: '.app-section',
-            regionType: Portal.Regions.Fade
-        },
-        deviceSection: '.device-section',
-        messageSection: '.message-section',
-        bridgeSection: '.bridge-section'
-    },
-
-    bindings: {
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasWings',
-            onGet: 'formatWings'
-          }, {
-            name: 'readonly',
-            observe: 'isLocked'
-          }]
-        }
-      },
-    */
-
     initialize: function() {
-
-        //this.appInstallListView = new Portal.AppInstallListView();
-        //this.bridgeView = new Portal.BridgeListView();
-        // View which manages device installs and device discovery
-        //this.devicesView = new DevicesView();
-        //this.messageListView = new Portal.MessageListView();
-
         /*
         Portal.getCurrentUser().then(function(currentUser) {
             Portal.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
@@ -26407,26 +26389,9 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
-        //this.showDeviceDiscovery();
         this.showDeviceInstalls();
-        /*
-        var discoveredDevices = currentBridge.get('discoveredDevices');
-
-        console.log('config discoveredDevices ', discoveredDevices );
-
-        React.render(
-            <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
-            self.$('.device-section')[0]
-        );
-        */
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
-        /*
-        React.render(
-            <Portal.DeviceInstallListView collection={deviceInstalls} />,
-            self.$('.device-section')[0]
-        );
-        */
 
         var appInstalls = currentBridge.get('appInstalls');
 
@@ -26435,47 +26400,21 @@ module.exports.Main = Marionette.Layout.extend({
             self.$('.app-section')[0]
         );
 
-        //var messages = currentBridge.get('')
         var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
-        console.log('filteredMessages', messages);
 
         React.render(
             React.createElement(Portal.MessageListView, {collection: messages}),
             self.$('.message-section')[0]
         );
 
-        currentBridge.fetch().done(function(currentBridgeResolved) {
+        /*
+         var bridgeCollection = new Portal.BridgeCollection(currentBridge);
+         console.log('bridgeCollection is', bridgeCollection);
+         self.bridgeView.setCollection(bridgeCollection);
+         self.bridgeView.render();
+        */
 
-            var currentBridge = currentBridgeResolved.model;
-
-            console.log('getCurrentBridge fetched', currentBridge);
-
-            /*
-            deviceInstalls.setQuery('bridge', {bridge: currentBridge});
-            deviceInstalls.fetched = true;
-
-            discoveredDeviceInstalls.setQuery('bridge', {bridge: currentBridge});
-            discoveredDeviceInstalls.fetched = true;
-
-            var liveAppInstalls = appInstalls.findAllLive({isGhost: false})
-            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
-            //liveAppInstallCollection.setQuery({isGhost: false});
-
-            console.log('liveAppInstalls', liveAppInstalls );
-            self.appInstallListView.setCollection(liveAppInstalls);
-            self.appInstallListView.render();
-
-            //Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
-            var currentBridgeMessageCollection = Portal.messageCollection.findAllLive({bridge:currentBridge});
-            self.messageListView.setCollection(currentBridgeMessageCollection, true);
-            self.messageListView.render();
-
-            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
-            console.log('bridgeCollection is', bridgeCollection);
-            self.bridgeView.setCollection(bridgeCollection);
-            self.bridgeView.render();
-             */
-        });
+        currentBridge.fetch();
     }
 
 });

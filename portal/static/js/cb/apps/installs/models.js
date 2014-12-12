@@ -67,6 +67,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 initializeCollection: 'appInstallCollection',
             }   
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'devicePermissions',
@@ -75,7 +76,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppDevicePermission',
             collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -87,8 +88,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'licence',

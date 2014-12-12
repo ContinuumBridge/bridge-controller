@@ -66,7 +66,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
                 keySource: 'app_permissions',
                 keyDestination: 'app_permissions',
                 collectionType: 'Portal.AppDevicePermissionCollection',
-                includeInJSON: 'resource_uri',
+                includeInJSON: false,
                 initializeCollection: 'appDevicePermissionCollection'
             }
         },
@@ -79,7 +79,16 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'devicePermissions',
+                keySource: 'device_permissions',
+                keyDestination: 'device_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                //includeInJSON: 'resource_uri',
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         }
     ]
 }, { modelType: "appDevicePermission" });

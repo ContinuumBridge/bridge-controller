@@ -13,12 +13,14 @@ var PermissionSwitch = React.createClass({
 
         console.log('handleClick model', model);
 
-        if (model.isNew()) {
-            console.log('handleClick save');
-            model.save();
-        } else {
-            console.log('handleClick destroyOnServer');
-            model.destroyOnServer();
+        if (!model.isSyncing()) {
+            if (model.isNew()) {
+                console.log('handleClick save');
+                model.save();
+            } else {
+                console.log('handleClick destroyOnServer');
+                model.destroyOnServer();
+            }
         }
     },
 
@@ -30,7 +32,7 @@ var PermissionSwitch = React.createClass({
         var label = this.props.label;
 
         //var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
-        var disabled = model.isSyncing();
+        var disabled = model.isSyncing() ? 'disabled' : '';;
         var active = !model.get('isGhost') ? 'active' : '';
         var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
 
