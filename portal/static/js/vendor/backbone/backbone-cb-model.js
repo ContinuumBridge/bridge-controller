@@ -24,14 +24,15 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
         
-        //this.set({isGhost: true}, {trackit_silent:true});
+        this.set({isGhost: false}, {trackit_silent:true});
+        //this.trigger('change');
 
         return OriginalModel.prototype.save.call(this, arguments).then(
             function(result) {
 
-                console.log('Save result', result);
+                //console.log('Save result', result);
                 //var model = resolveModel.model;
-                result.model.set({'isGhost': false}, {trackit_silent:true});
+                //result.model.set({'isGhost': false}, {trackit_silent:true});
 
                 return result;
                 //model.trigger('change');
@@ -83,7 +84,8 @@ var CBModel = OriginalModel.extend({
       var success = options.success;
 
       // ADDED Set isGhost to true, indicating the model is being deleted on server
-      this.set('isGhost', true);
+      this.set({isGhost: true}, {trackit_silent:true});
+      //this.set('isGhost', true);
 
       //var destroy = function() {
       //  model.trigger('destroy', model, model.collection, options);

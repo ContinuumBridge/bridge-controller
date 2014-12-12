@@ -30,6 +30,7 @@ li [class*=" icon-"] {
 
 .item-body {
   padding-bottom: 0px;
+  padding-top: 0px;
 }
 
 .list-label {

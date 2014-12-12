@@ -22726,7 +22726,7 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
         var label = this.props.label;
 
-        var disabled = !!model.get('id') == model.isGhost ? 'disabled' : '';
+        var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
         var active = !model.get('isGhost') ? 'active' : '';
         var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
 
@@ -22992,7 +22992,32 @@ Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<h4 class=\"list-group-item-heading\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\" data-target=\"#";
+  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div id=\"";
+  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"panel-collapse collapse app-config\">\n    <li class=\"user-panel inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
 
 require('../device_permissions/views');
 
@@ -23012,6 +23037,8 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
     },
 
     renderBody: function() {
+
+        var self = this;
 
         console.log('AppInstallView render body', this);
 
@@ -23049,8 +23076,15 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         console.log('devicePermissions are', devicePermissions);
 
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+            console.log('event on deviceInstalls', event);
+            self.getCollection().trigger('change');
+        });
+
         return (
-            React.createElement(Portal.AppDevicePermissionListView, {collection: appInstall.get('devicePermissions')})
+            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
         );
     },
 
@@ -24296,31 +24330,8 @@ Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\" data-target=\"#";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div id=\"";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"panel-collapse collapse app-config\">\n    <li class=\"user-panel inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
