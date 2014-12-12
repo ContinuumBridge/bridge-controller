@@ -12,13 +12,13 @@ function SocketIOServer(getConfig, options) {
 
     var self = this;
 
-    var heartbeatInterval = options.heartbeatInterval || 25;
-    var heartbeatTimeout = options.heartbeatTimeout || 60;
+    var heartbeatInterval = options.heartbeatInterval || 25000;
+    var heartbeatTimeout = options.heartbeatTimeout || 60000;
 
     var httpServer = require('http').createServer();
     var socketServer = require('socket.io')(httpServer, {
-        'heartbeat interval': heartbeatInterval,
-        'heartbeat timeout': heartbeatTimeout
+        'pingInterval': heartbeatInterval,
+        'pingTimeout': heartbeatTimeout
     });
     httpServer.listen(options.port);
 
