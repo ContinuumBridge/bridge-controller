@@ -16,8 +16,8 @@ var Bridge = function(port, djangoRootURL) {
 
     var options = {
         port: port,
-        heartBeatInterval: 300,
-        heartBeatTimeout: 630
+        heartbeatInterval: 300000,
+        heartbeatTimeout: 630000
     }
 
     this.socketServer = this.createSocketServer(SocketIOServer, options);
