@@ -22,15 +22,16 @@ Portal.InnerItemView = {
     }
 }
 
+
 Portal.InnerListView = {
 
     render: function() {
         return (
             <div className="inner-item">
-                <h3>{this.props.title}</h3>
-                <div>
+                <h5>{this.props.title}</h5>
+                <ul className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
-                </div>
+                </ul>
             </div>
         );
     }
@@ -110,9 +111,10 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
 
         return (
-            <div className={className} onClick={this.handleButtonClick}>{button.name}</div>
+            <div className={className} onClick={onClick}>{button.name}</div>
         );
     },
 
@@ -135,9 +137,9 @@ Portal.ListView = {
         return (
             <div>
                 <h2>{this.props.title}</h2>
-                <div className="animated-list device-list">
+                <ul className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
-                </div>
+                </ul>
                 {this.renderButtons()}
             </div>
         );

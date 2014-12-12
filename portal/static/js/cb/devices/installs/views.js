@@ -27,6 +27,7 @@ Portal.DeviceInstallListView = React.createClass({
             title: 'Devices',
             buttons: [{
                 name: 'Discover Devices',
+                onClick: this.discoverDevices,
                 type: 'bold'
             }]
         };

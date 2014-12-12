@@ -79,7 +79,7 @@ var ListItem = React.createClass({
 
     renderBody: function () {
         return (
-            <div className="panel-body" ref="body">
+            <div className="panel-body item-body" ref="body">
         {this.props.children}
             </div>
         );

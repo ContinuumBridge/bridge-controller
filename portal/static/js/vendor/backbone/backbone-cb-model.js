@@ -1,6 +1,14 @@
 
 var OriginalModel = Backbone.Deferred.Model;
 
+var wrapError = function(model, options) {
+    var error = options.error;
+    options.error = function(resp) {
+        if (error) error(model, resp, options);
+        model.trigger('error', model, resp, options);
+    };
+};
+
 var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
@@ -90,7 +98,7 @@ var CBModel = OriginalModel.extend({
         }
         if (success) success(model, resp, options);
         // ADDED Reset trackit
-        if (model.unsavedAttributes()) model.restartTracking();
+        model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 

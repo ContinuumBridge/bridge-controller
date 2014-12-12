@@ -22705,16 +22705,34 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
     handleClick: function() {
 
+        console.log('handleClick');
+        var model = this.getModel();
+
+        console.log('handleClick model', model);
+
+        if (model.isNew()) {
+            console.log('handleClick save');
+            model.save();
+        } else {
+            console.log('handleClick destroyOnServer');
+            model.destroyOnServer();
+        }
     },
 
     render: function() {
 
-        console.log('PermissionSwitch render');
+        var model = this.props.model;
+        console.log('PermissionSwitch render model ', model);
 
         var label = this.props.label;
+
+        var disabled = !!model.get('id') == model.isGhost ? 'disabled' : '';
+        var active = !model.get('isGhost') ? 'active' : '';
+        var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
+
         return (
             React.createElement("li", {className: "inner-item"}, 
-                React.createElement("div", {className: "left theme-green animate toggle-switch active", onClick: this.handleClick}), 
+                React.createElement("div", {className: switchClass, onClick: this.handleClick}), 
                 React.createElement("div", {className: "list-label"}, label)
             )
         )
@@ -22731,7 +22749,7 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
 
     getDefaultProps: function () {
         return {
-            title: 'Device connections'
+            title: 'Connect devices'
         };
     },
 
@@ -22746,10 +22764,7 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
         var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 
-        //return < PermissionSwitch key={cid} label={label} model={adp} />
-        return (
-            React.createElement("div", null, "\"createItem\"")
-        )
+        return React.createElement(PermissionSwitch, {key: cid, label: label, model: adp})
     }
 });
 
@@ -24944,14 +24959,14 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
             handleButtonClick: this.handleButtonClick,
             buttons: [{
                 name: 'Rescan',
-                type: 'bold'
+                type: 'bold',
+                onClick: this.rescan
             }]
         };
     },
 
-    handleButtonClick: function() {
+    rescan: function() {
 
-        console.log('discoveredDevices handleButtonClick');
         Portal.Config.controller.discoverDevices();
     },
 
@@ -25242,6 +25257,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
             title: 'Devices',
             buttons: [{
                 name: 'Discover Devices',
+                onClick: this.discoverDevices,
                 type: 'bold'
             }]
         };
@@ -28210,13 +28226,14 @@ Portal.InnerItemView = {
     }
 }
 
+
 Portal.InnerListView = {
 
     render: function() {
         return (
             React.createElement("div", {className: "inner-item"}, 
-                React.createElement("h3", null, this.props.title), 
-                React.createElement("div", null, 
+                React.createElement("h5", null, this.props.title), 
+                React.createElement("ul", {className: "animated-list device-list"}, 
                     this.props.collection.map(this.createItem)
                 )
             )
@@ -28298,9 +28315,10 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
 
         return (
-            React.createElement("div", {className: className, onClick: this.handleButtonClick}, button.name)
+            React.createElement("div", {className: className, onClick: onClick}, button.name)
         );
     },
 
@@ -28323,7 +28341,7 @@ Portal.ListView = {
         return (
             React.createElement("div", null, 
                 React.createElement("h2", null, this.props.title), 
-                React.createElement("div", {className: "animated-list device-list"}, 
+                React.createElement("ul", {className: "animated-list device-list"}, 
                     this.props.collection.map(this.createItem)
                 ), 
                 this.renderButtons()

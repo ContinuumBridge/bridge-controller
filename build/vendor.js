@@ -270,7 +270,7 @@ Marionette = require('backbone.marionette');
       if (collection) {
         if (collection.models)
           this
-            .listenTo(collection, 'add remove change sort reset',
+            .listenTo(collection, 'add remove change sort reset relational:add relational:remove relational:reset',
               _.partial(this.setPropsBackbone, collection, key, void 0))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)
@@ -46951,6 +46951,7 @@ QueryEngine = require('query-engine');
 
 require('backbone-react-component');
 
+
 /*
 var TrackableModelMixin = require('./backbone-trackable');
 Cocktail.mixin(Backbone.Deferred.Model, TrackableModelMixin);
@@ -47198,6 +47199,14 @@ module.exports = {
 
 var OriginalModel = Backbone.Deferred.Model;
 
+var wrapError = function(model, options) {
+    var error = options.error;
+    options.error = function(resp) {
+        if (error) error(model, resp, options);
+        model.trigger('error', model, resp, options);
+    };
+};
+
 var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
@@ -47287,7 +47296,7 @@ var CBModel = OriginalModel.extend({
         }
         if (success) success(model, resp, options);
         // ADDED Reset trackit
-        if (model.unsavedAttributes()) model.restartTracking();
+        model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
@@ -54202,7 +54211,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
 
     renderBody: function () {
         return (
-            React.createElement("div", {className: "panel-body", ref: "body"}, 
+            React.createElement("div", {className: "panel-body item-body", ref: "body"}, 
         this.props.children
             )
         );

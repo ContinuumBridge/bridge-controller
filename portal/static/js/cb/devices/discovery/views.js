@@ -18,14 +18,14 @@ Portal.DiscoveredDeviceListView = React.createClass({
             handleButtonClick: this.handleButtonClick,
             buttons: [{
                 name: 'Rescan',
-                type: 'bold'
+                type: 'bold',
+                onClick: this.rescan
             }]
         };
     },
 
-    handleButtonClick: function() {
+    rescan: function() {
 
-        console.log('discoveredDevices handleButtonClick');
         Portal.Config.controller.discoverDevices();
     },
 

@@ -8,16 +8,34 @@ var PermissionSwitch = React.createClass({
 
     handleClick: function() {
 
+        console.log('handleClick');
+        var model = this.getModel();
+
+        console.log('handleClick model', model);
+
+        if (model.isNew()) {
+            console.log('handleClick save');
+            model.save();
+        } else {
+            console.log('handleClick destroyOnServer');
+            model.destroyOnServer();
+        }
     },
 
     render: function() {
 
-        console.log('PermissionSwitch render');
+        var model = this.props.model;
+        console.log('PermissionSwitch render model ', model);
 
         var label = this.props.label;
+
+        var disabled = !!model.get('id') == model.isGhost ? 'disabled' : '';
+        var active = !model.get('isGhost') ? 'active' : '';
+        var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
+
         return (
             <li className="inner-item">
-                <div className="left theme-green animate toggle-switch active" onClick={this.handleClick}></div>
+                <div className={switchClass} onClick={this.handleClick}></div>
                 <div className="list-label">{label}</div>
             </li>
         )
@@ -34,7 +52,7 @@ Portal.AppDevicePermissionListView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            title: 'Device connections'
+            title: 'Connect devices'
         };
     },
 
@@ -49,10 +67,7 @@ Portal.AppDevicePermissionListView = React.createClass({
         var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 
-        //return < PermissionSwitch key={cid} label={label} model={adp} />
-        return (
-            <div>"createItem"</div>
-        )
+        return < PermissionSwitch key={cid} label={label} model={adp} />
     }
 });
 
