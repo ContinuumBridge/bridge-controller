@@ -20,6 +20,10 @@ var CBModel = OriginalModel.extend({
         this.startTracking();
     },
 
+    isSyncing: function() {
+        return !!model.get('id') == model.get('isGhost');
+    },
+
     save: function(key, val, options) {
 
         var self = this;

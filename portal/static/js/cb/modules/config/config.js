@@ -71,7 +71,7 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       stopDiscoveringDevices: function() {
 
-          Config.mainLayoutView.devicesView.showDeviceInstalls();
+          Config.mainLayoutView.showDeviceInstalls();
       },
       installDevice: function(discoveredDeviceInstall) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({

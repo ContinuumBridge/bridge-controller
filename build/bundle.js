@@ -22726,7 +22726,8 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
         var label = this.props.label;
 
-        var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
+        //var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
+        var disabled = model.isSyncing();
         var active = !model.get('isGhost') ? 'active' : '';
         var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
 
@@ -24949,7 +24950,9 @@ Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
 
 require('../../components/buttons');
 
@@ -26279,7 +26282,7 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       stopDiscoveringDevices: function() {
 
-          Config.mainLayoutView.devicesView.showDeviceInstalls();
+          Config.mainLayoutView.showDeviceInstalls();
       },
       installDevice: function(discoveredDeviceInstall) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({
@@ -28365,9 +28368,11 @@ Portal.ListView = {
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
 
+        var title = this.state.title || "";
+
         return (
             React.createElement("div", null, 
-                React.createElement("h2", null, this.props.title), 
+                React.createElement("h2", null, title), 
                 React.createElement("ul", {className: "animated-list device-list"}, 
                     this.props.collection.map(this.createItem)
                 ), 
@@ -28417,8 +28422,8 @@ Portal.Regions.Fade = Marionette.Region.extend({
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
-},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
+},{"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

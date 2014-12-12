@@ -135,9 +135,11 @@ Portal.ListView = {
         console.log('render mapped collection', this.props.collection.map(this.createItem));
         console.log('react getCollection ', this.getCollection());
 
+        var title = this.state.title || "";
+
         return (
             <div>
-                <h2>{this.props.title}</h2>
+                <h2>{title}</h2>
                 <ul className="animated-list device-list">
                     {this.props.collection.map(this.createItem)}
                 </ul>

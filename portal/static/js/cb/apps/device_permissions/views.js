@@ -29,7 +29,8 @@ var PermissionSwitch = React.createClass({
 
         var label = this.props.label;
 
-        var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
+        //var disabled = !!model.get('id') == model.get('isGhost') ? 'disabled' : '';
+        var disabled = model.isSyncing();
         var active = !model.get('isGhost') ? 'active' : '';
         var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
 
