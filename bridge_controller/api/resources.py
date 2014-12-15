@@ -104,9 +104,9 @@ class CBResource(ModelResource):
             filters['user'] = str(bundle.request.user.id)
 
         # Update filters with the provided kwargs.
-        print "filter kwargs are", kwargs
+        #print "filter kwargs are", kwargs
         filters.update(kwargs)
-        print "filter filters are", filters
+        #print "filter filters are", filters
         applicable_filters = self.build_filters(filters=filters)
 
         try:
@@ -237,7 +237,7 @@ class LoggedInResource(CBResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
-        print "user id is", request.user.id
+        #print "user id is", request.user.id
         # ADDED Set the request pk to the id of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id
@@ -448,7 +448,7 @@ class AuthResource(LoggedInResource):
                 login(request, client)
                 # Return the client's data
                 bundle = self.build_bundle(obj=client, request=request)
-                print "bundle.request is", bundle.request
+                #print "bundle.request is", bundle.request
 
                 bundle = self.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)

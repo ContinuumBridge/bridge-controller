@@ -12,49 +12,99 @@ require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
+
+module.exports.Main = React.createClass({
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function () {
+        return {
+            discoveringDevices: false,
+            installingDevice: false,
+            installingApp: false
+        };
+    },
+
+    /*
+    componentWillMount: function () {
+        var currentBridge = this.getModel();
+        for (var collection in this.getCollections()) {
+
+        }
+    },
+
+    componentWillUnmount: function () {
+    },
+    */
+
+    getCollections: function(currentBridge) {
+
+        if (!this.collections) {
+            var currentBridge = this.getModel();
+            this.collections = {
+                appInstalls: currentBridge.get('appInstalls'),
+                deviceInstalls: currentBridge.get('deviceInstalls'),
+                discoveredDevices: currentBridge.get('discoveredDevices'),
+                messages: Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')})
+            }
+        }
+        return this.collections;
+    },
+
+    render: function() {
+
+        //var currentBridge = this.getModel();
+
+        //var appInstalls = currentBridge.get('appInstalls');
+        var appInstalls = this.getCollections().appInstalls;
+
+        var deviceInstalls = this.getCollections().deviceInstalls;
+
+        var deviceView;
+        if (this.state.discoveringDevices) {
+            //var discoveredDevices = currentBridge.get('discoveredDevices');
+            var discoveredDevices = this.getCollections().discoveredDevices;
+            deviceView = <Portal.DiscoveredDeviceListView collection={discoveredDevices} />;
+        } else {
+            //var deviceInstalls = currentBridge.get('deviceInstalls');
+            deviceView =  <Portal.DeviceInstallListView collection={deviceInstalls} />;
+        }
+
+        //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
+        var messages = this.getCollections().messages;
+
+        return (
+            <div>
+                <div className="row">
+                    <div ref="appSection" className="app-section col-md-6">
+                        <Portal.AppInstallListView collection={appInstalls} deviceInstalls={deviceInstalls} />
+                    </div>
+                    <div ref="deviceSection" className="device-section col-md-6">
+                        {deviceView}
+                    </div>
+                </div>
+                <div className="row">
+                    <div ref="messageSection" className="message-section col-md-6">
+                        <Portal.MessageListView collection={messages} />
+                    </div>
+                    <div ref="bridgeSection" className="bridge-section col-md-6"></div>
+                </div>
+            </div>
+        )
+    }
+});
+
+/*
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
-    /*
-    regions: {
-        appSection: {
-            selector: '.app-section',
-            regionType: Portal.Regions.Fade
-        },
-        deviceSection: '.device-section',
-        messageSection: '.message-section',
-        bridgeSection: '.bridge-section'
-    },
-
-    bindings: {
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasWings',
-            onGet: 'formatWings'
-          }, {
-            name: 'readonly',
-            observe: 'isLocked'
-          }]
-        }
-      },
-    */
-
     initialize: function() {
-
-        //this.appInstallListView = new Portal.AppInstallListView();
-        //this.bridgeView = new Portal.BridgeListView();
-        // View which manages device installs and device discovery
-        //this.devicesView = new DevicesView();
-        //this.messageListView = new Portal.MessageListView();
-
         /*
         Portal.getCurrentUser().then(function(currentUser) {
             Portal.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
             //Portal.clientCollection.fetch()
         }).done();
-        */
     },
 
     showDeviceDiscovery: function() {
@@ -90,26 +140,9 @@ module.exports.Main = Marionette.Layout.extend({
 
         console.log('calling getCurrentBridge ');
 
-        //this.showDeviceDiscovery();
         this.showDeviceInstalls();
-        /*
-        var discoveredDevices = currentBridge.get('discoveredDevices');
-
-        console.log('config discoveredDevices ', discoveredDevices );
-
-        React.render(
-            <Portal.DiscoveredDeviceListView collection={discoveredDevices} />,
-            self.$('.device-section')[0]
-        );
-        */
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
-        /*
-        React.render(
-            <Portal.DeviceInstallListView collection={deviceInstalls} />,
-            self.$('.device-section')[0]
-        );
-        */
 
         var appInstalls = currentBridge.get('appInstalls');
 
@@ -118,148 +151,23 @@ module.exports.Main = Marionette.Layout.extend({
             self.$('.app-section')[0]
         );
 
-        //var messages = currentBridge.get('')
         var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
-        console.log('filteredMessages', messages);
 
         React.render(
             <Portal.MessageListView collection={messages} />,
             self.$('.message-section')[0]
         );
 
-        currentBridge.fetch().done(function(currentBridgeResolved) {
+        /*
+         var bridgeCollection = new Portal.BridgeCollection(currentBridge);
+         console.log('bridgeCollection is', bridgeCollection);
+         self.bridgeView.setCollection(bridgeCollection);
+         self.bridgeView.render();
 
-            var currentBridge = currentBridgeResolved.model;
-
-            console.log('getCurrentBridge fetched', currentBridge);
-
-            /*
-            deviceInstalls.setQuery('bridge', {bridge: currentBridge});
-            deviceInstalls.fetched = true;
-
-            discoveredDeviceInstalls.setQuery('bridge', {bridge: currentBridge});
-            discoveredDeviceInstalls.fetched = true;
-
-            var liveAppInstalls = appInstalls.findAllLive({isGhost: false})
-            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
-            //liveAppInstallCollection.setQuery({isGhost: false});
-
-            console.log('liveAppInstalls', liveAppInstalls );
-            self.appInstallListView.setCollection(liveAppInstalls);
-            self.appInstallListView.render();
-
-            //Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
-            var currentBridgeMessageCollection = Portal.messageCollection.findAllLive({bridge:currentBridge});
-            self.messageListView.setCollection(currentBridgeMessageCollection, true);
-            self.messageListView.render();
-
-            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
-            console.log('bridgeCollection is', bridgeCollection);
-            self.bridgeView.setCollection(bridgeCollection);
-            self.bridgeView.render();
-             */
-        });
-    }
-
-});
-
-var DevicesView = React.createClass({
-
-    //mixins: [Backbone.React.Component.mixin],
-    /*
-    getCurrentView: function() {
-
-        var self = this;
-
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            var deviceInstallCollection = currentBridge.get('deviceInstalls');
-            self.deviceInstallListView.setCollection(deviceInstallCollection);
-
-            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
-            self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
-        });
-        //self.discoveredDeviceInstallListView.render();
-    },
-
-     */
-    componentDidMount: function () {
-        console.log('DevicesView will mount');
-        var self = this;
-        this.props.deviceInstalls.on('all', setTimeout(this.forceUpdate, 0));
-        //this.props.deviceInstalls.on('add remove change sort reset', self.setProps(self.props.deviceInstalls));
-    },
-
-    render: function() {
-        //return <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
-        console.log('DeviceView this', this);
-        //var deviceInstalls = Portal.getCurrentBridge().get('deviceInstalls');
-        console.log('DevicesView deviceInstalls ', this.props.deviceInstalls);
-        return (
-            <Portal.DeviceInstallListView collection={this.props.deviceInstalls} />
-            //< Portal.DeviceInstallListView />
-        );
+        currentBridge.fetch();
     }
 });
-
-/*
-var DevicesView = Marionette.ItemView.extend({
-
-    template: require('./templates/devicesView.html'),
-
-    initialize: function() {
-
-        this.deviceInstallListView = new Portal.DeviceInstallListView();
-        this.discoveredDeviceInstallListView = new Portal.DiscoveredDeviceListView();
-        this.currentView = this.deviceInstallListView;
-
-        //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
-    },
-
-    showDeviceDiscovery: function() {
-
-        this.currentView = this.discoveredDeviceInstallListView;
-        this.render();
-    },
-
-    showDeviceInstalls: function() {
-
-        this.currentView = this.deviceInstallListView;
-        this.render();
-    },
-
-    populateViews: function() {
-
-        var self = this;
-
-    },
-
-    render: function() {
-
-        this.$el.html(this.template());
-        this.currentView.setElement(this.$('.current-view')).render();
-        //this.$el.append(this.currentView.render().$el);
-
-        var self = this;
-
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            var deviceInstallCollection = currentBridge.get('deviceInstalls');
-            self.deviceInstallListView.setCollection(deviceInstallCollection);
-            //self.deviceInstallListView.render();
-
-            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
-            self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
-            //self.discoveredDeviceInstallListView.render();
-
-            self.currentView.setElement(this.$('.current-view')).render();
-        });
-
-        //self.currentView.render();
-
-        return this;
-    }
-})
+*/
 
 module.exports.InstallAppModal = Backbone.Modal.extend({
 
@@ -320,5 +228,4 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         Portal.Config.controller.stopDiscoveringDevices();
     }
 });
-*/
 

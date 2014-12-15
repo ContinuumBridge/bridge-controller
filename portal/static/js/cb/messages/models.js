@@ -75,7 +75,7 @@ Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
         console.log('sendCommand', command);
         var message = new Portal.Message({
-            destination: Portal.getCurrentBridge().get('cbid'),
+            destination: 'BID' + Portal.getCurrentBridge().get('id'),
             body: {command: command}
         });
         this.send(message);

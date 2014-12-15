@@ -20,8 +20,9 @@ var CBModel = OriginalModel.extend({
         this.startTracking();
     },
 
+
     isSyncing: function() {
-        return !!model.get('id') == model.get('isGhost');
+        return !!this.get('id') == this.get('isGhost');
     },
 
     save: function(key, val, options) {
@@ -94,9 +95,12 @@ var CBModel = OriginalModel.extend({
       //var destroy = function() {
       //  model.trigger('destroy', model, model.collection, options);
       //};
-
+      var destroyOnServer = function() {
+          model.trigger('change', model, model.collection, options);
+      }
       options.success = function(resp) {
         //if (options.wait || model.isNew()) destroy();
+        destroyOnServer();
         // Remove the id from the local model
         if (!model.isNew()) {
             delete model.id;
@@ -120,6 +124,7 @@ var CBModel = OriginalModel.extend({
 
       var xhr = this.sync('delete', this, options);
       //if (!options.wait) destroy();
+      destroyOnServer();
       return xhr;
     },
 

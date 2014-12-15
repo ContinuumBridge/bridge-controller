@@ -6,9 +6,19 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     backend: 'appInstall',
 
     initialize: function() {
-        this.startTracking();
+
+        var self = this;
+
+        this.get('devicePermissions').on('change relational:change relational:add relational:remove', function(model, event) {
+
+            console.log('event on devicePermissions', event);
+            self.trigger('change', self);
+        });
+
+        //this.startTracking();
     },
 
+    /*
     install: function() {
 
         console.log('installing AppInstall');
@@ -36,6 +46,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             this.uninstall();
         }
     },
+    */
 
     relations: [
         {   
@@ -67,6 +78,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 initializeCollection: 'appInstallCollection',
             }   
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'devicePermissions',
@@ -75,7 +87,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppDevicePermission',
             collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -87,8 +99,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'licence',

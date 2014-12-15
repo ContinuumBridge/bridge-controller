@@ -95,12 +95,9 @@ Portal.CurrentUser = Portal.User.extend({
         // Set the current bridge
         //var currentBridge = bridgeControlArray.at(0).get('bridge');
         //currentBridge.set('current', true);
-        /*
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
-        })
-        */
-
+        });
     },
 
     relations: [

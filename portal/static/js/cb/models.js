@@ -39,7 +39,9 @@ Portal.addInitializer(function () {
   Portal.appInstallCollection = new Portal.AppInstallCollection();
   Portal.appInstallCollection.subscribe();
   //Portal.filteredAppInstallCollection = new Portal.FilteredCollection(Portal.appInstallCollection);
+
   Portal.appDevicePermissionCollection = new Portal.AppDevicePermissionCollection();
+  Portal.appDevicePermissionCollection.subscribe();
 
   Portal.appLicenceCollection = new Portal.AppLicenceCollection();
 

@@ -33,11 +33,15 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       showConfig: function() {
 
-          //console.log('showConfig bridgeID is', bridgeID);
-          Config.mainLayoutView = new ConfigViews.Main();
-          //var bridge = Portal.bridgeCollection.get(bridgeID);
-          //if (bridge) Portal.setCurrentBridge(bridge);
-          Portal.mainRegion.show(Config.mainLayoutView);
+          var currentBridge = Portal.getCurrentBridge();
+          currentBridge.fetch();
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+
+          //Config.mainLayoutView = new ConfigViews.Main();
+          //Portal.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
@@ -57,21 +61,15 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
 
-          /*
-          var message = new Portal.Message({
-              body: {
-                  command: 'discover'
-              }
-          });
-          Portal.messageCollection.sendMessage(message);
-          */
           Portal.messageCollection.sendCommand('discover');
 
-          Config.mainLayoutView.showDeviceDiscovery();
+          //Config.mainView.showDeviceDiscovery();
+          Config.mainView.setState({discoveringDevices: true});
       },
       stopDiscoveringDevices: function() {
 
-          Config.mainLayoutView.showDeviceInstalls();
+          //Config.mainView.showDeviceInstalls();
+          Config.mainView.setState({discoveringDevices: false});
       },
       installDevice: function(discoveredDeviceInstall) {
         var installDeviceModal = new ConfigViews.InstallDeviceModal({

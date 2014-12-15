@@ -5,6 +5,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
+    /*
     initialize: function() {
 
         this.startTracking();
@@ -48,6 +49,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
         var currentConnection = !this.isNew();
         this.setConnection(!currentConnection);
     },
+    */
 
     relations: [
         {
@@ -66,7 +68,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
                 keySource: 'app_permissions',
                 keyDestination: 'app_permissions',
                 collectionType: 'Portal.AppDevicePermissionCollection',
-                includeInJSON: 'resource_uri',
+                includeInJSON: false,
                 initializeCollection: 'appDevicePermissionCollection'
             }
         },
@@ -79,7 +81,16 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'devicePermissions',
+                keySource: 'device_permissions',
+                keyDestination: 'device_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                //includeInJSON: 'resource_uri',
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         }
     ]
 }, { modelType: "appDevicePermission" });
@@ -89,9 +100,11 @@ Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
     model: Portal.AppDevicePermission,
     backend: 'appDevicePermission',
 
+    /*
     initialize: function() {
 
         this.bindBackend();
     }
+    */
 
 });
