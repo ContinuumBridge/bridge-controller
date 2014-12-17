@@ -1,8 +1,14 @@
 from bridge_controller.settings.base import *
 
 ENVIRONMENT = "production"
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+'''
+ALLOWED_HOSTS = [
+    '.continuumbridge.com',  # Allow domain and subdomains
+]
+'''
 
 SERVER_ADDRESS = 'portal.continuumbridge.com'
 #SERVER_ADDRESS = '54.76.145.70'
