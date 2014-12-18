@@ -22597,11 +22597,14 @@ Portal.AppConnectionListView = Marionette.CollectionView.extend({
 
 },{"../../components/switches":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/switches.js","./templates/appConnection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
 
+
 Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
     idAttribute: 'id',
+
+    matchFields: ['app', 'device'],
 
     initialize: function() {
 

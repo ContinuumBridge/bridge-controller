@@ -1,9 +1,12 @@
 
+
 Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
     idAttribute: 'id',
+
+    matchFields: ['app', 'device'],
 
     initialize: function() {
 
