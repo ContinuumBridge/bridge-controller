@@ -57,9 +57,14 @@ Portal.ItemView = {
     getModel: function() {
 
         var owner = this._owner;
+        console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        return collection.get({cid: this.props.model.cid})
+        console.log('getModel collection', collection);
+        console.log('getModel item', this.props.model);
+        var item = this.props.model;
+        var query = item.id ? {id: item.id} : {cid: item.cid};
+        return collection.findWhere(query);
     },
 
     getCollection: function() {
@@ -69,26 +74,35 @@ Portal.ItemView = {
         return owner.getCollection();
     },
 
-    handleDelete: function() {
-
-        CBDispatcher.dispatch({actionType: 'delete',
-                               model: this.props.model,
-                               source: 'portal' });
+    handleDestroy: function() {
+        this.getModel().destroy();
     },
 
-    handleUpdate: function() {
-
-        CBDispatcher.dispatch({actionType: 'update',
-                               model: this.props.model,
-                               source: 'portal' });
+    handleDestroyOnServer: function() {
+        this.getModel().destroyOnServer();
     },
+
+    /*
+    renderButtons: function() {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
+
+        return (
+            <div className={className} onClick={button.onClick}>{button.name}</div>
+        );
+    },
+    */
 
     render: function() {
         console.log('ItemView props', this.props);
         var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
+        var buttons = this.state.buttons || [];
         return (
-            <React.ListItem header={this.props.title} bsStyle='' collapsable={this.props.openable} eventKey="1">
+            <React.ListItem header={this.props.title} buttons={buttons}
+                bsStyle='' collapsable={this.props.openable} eventKey="1">
                 {body}
             </React.ListItem>
         );

@@ -5,7 +5,49 @@ Portal.DiscoveredDeviceView = React.createClass({
 
     mixins: [Portal.ItemView],
 
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
 
+    getInitialState: function () {
+        var buttons = [];
+
+        console.log('device discovery getInitialState model', this.props.model);
+        var device = this.getModel().get('device');
+        console.log('getInitialState device is', device);
+        if (device && device.get('adaptorCompatibilities').at(0)) {
+            buttons.push({
+                onClick: this.installDevice,
+                type: 'text',
+                label: 'Install'
+            });
+        }
+
+        //var installLabel = this.props.model.device ? 'Install' : 'Device not found'
+        return {
+            buttons: buttons
+        };
+    },
+
+    installDevice: function() {
+
+        console.log('click installDevice')
+        var discoveredDevice = this.getModel();
+        console.log('installDevice discoveredDevice', discoveredDevice);
+        Portal.Config.controller.promptInstallDevice(discoveredDevice);
+    },
+
+    getTitle: function() {
+        return "Discovered device";
+        /*
+        var discoveredDevice = this.getModel();
+        console.log('DiscoveredDeviceView discoveredDevice ', discoveredDevice );
+        var device = discoveredDevice.get('device');
+        return device ? device.get('name') : discoveredDevice.get('name');
+        */
+    }
 });
 
 Portal.DiscoveredDeviceListView = React.createClass({
@@ -15,7 +57,6 @@ Portal.DiscoveredDeviceListView = React.createClass({
     getInitialState: function () {
         return {
             title: 'Discovered Devices',
-            handleButtonClick: this.handleButtonClick,
             buttons: [{
                 name: 'Rescan',
                 type: 'bold',
@@ -40,7 +81,12 @@ Portal.DiscoveredDeviceListView = React.createClass({
     createItem: function (item) {
 
         console.log('DiscoveredDeviceListView item', item);
-        return < Portal.DiscoveredDeviceView key={item.cid} model={item} />
+        var model = this.getCollection().findWhere({id: item.id});
+        console.log('DiscoveredDeviceListView item', model);
+        //var title = model.get('device')
+        //return <div> Hey </div>;
+        return < Portal.DiscoveredDeviceView key={item.cid} title={item.name} model={item} />
+        //return < Portal.AppInstallView key={item.cid} model={item} />
     }
 });
 

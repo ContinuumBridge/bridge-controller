@@ -32,7 +32,6 @@
     "jquery-browserify": "~1.8.1",
     "jsonfile": "~1.1.1",
     "node-redis": "^0.1.7",
-    "node-rest-client": "~0.7.0",
     "q": "~0.9.7",
     "query-engine": "^1.5.7",
     "querystring": "~0.2.0",

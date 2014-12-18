@@ -19,11 +19,21 @@
 
 .install-button {
   position: absolute;
-  top: 7px;
+  top: 13px;
   cursor: pointer;
-  right: 10px;
+  right: 13px;
 }
 
+.portal-modal {
+    padding-top: 120px;
+}
+
+.modal-container {
+    position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+    position: absolute;
+}
 /*
 .new-item.nested-item {
   color: #ffffff;

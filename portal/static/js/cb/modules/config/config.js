@@ -39,43 +39,42 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               < ConfigViews.Main model={currentBridge} />,
               $('#main-region')[0]
           );
-
-          //Config.mainLayoutView = new ConfigViews.Main();
-          //Portal.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
         var installAppModal = new ConfigViews.InstallAppModal();
-            /*
-            //model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-            */
 
         Portal.modalsRegion.show(installAppModal);
       },
       discoverDevices: function() {
 
+          /*
           Portal.discoveredDeviceCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
-
+          */
+          Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+              discoveredDevice.delete();
+          });
           Portal.messageCollection.sendCommand('discover');
-
-          //Config.mainView.showDeviceDiscovery();
           Config.mainView.setState({discoveringDevices: true});
       },
       stopDiscoveringDevices: function() {
-
-          //Config.mainView.showDeviceInstalls();
           Config.mainView.setState({discoveringDevices: false});
       },
-      installDevice: function(discoveredDeviceInstall) {
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-        });
-        Portal.modalsRegion.show(installDeviceModal);
+      promptInstallDevice: function(discoveredDevice) {
+          console.log('promptInstallDevice discoveredDevice', discoveredDevice);
+          Config.mainView.setState({installDevice: discoveredDevice});
+      },
+      installDevice: function(discoveredDevice, friendlyName) {
+          console.log('installDevice discoveredDevice', discoveredDevice);
+          discoveredDevice.install(friendlyName);
+          Config.mainView.setState({installDevice: false,
+                                    discoveringDevices: false});
+      },
+      cancelInstallDevice: function() {
+          console.log('cancelInstallDevice');
+          Config.mainView.setState({installDevice: false});
       }
     });
 

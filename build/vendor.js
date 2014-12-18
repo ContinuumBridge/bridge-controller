@@ -244,6 +244,9 @@ Marionette = require('backbone.marionette');
 
       if (key) {
         props[key] = newProps;
+        props.cid = modelOrCollection.cid;
+        props.modelType = modelOrCollection.modelType;
+
       } else if (modelOrCollection instanceof Backbone.Collection) {
         props.collection = newProps;
       } else {
@@ -270,7 +273,7 @@ Marionette = require('backbone.marionette');
       if (collection) {
         if (collection.models)
           this
-            .listenTo(collection, 'add remove change sort reset relational:add relational:remove relational:reset',
+            .listenTo(collection, 'add remove change sort reset relational:change relational:add relational:remove relational:reset',
               _.partial(this.setPropsBackbone, collection, key, void 0))
             .listenTo(collection, 'error', this.onError)
             .listenTo(collection, 'request', this.onRequest)
@@ -287,7 +290,7 @@ Marionette = require('backbone.marionette');
       if (model) {
         if (model.attributes)
           this
-            .listenTo(model, 'change',
+            .listenTo(model, 'change relational:change',
               _.partial(this.setPropsBackbone, model, key, void 0))
             .listenTo(model, 'error', this.onError)
             .listenTo(model, 'request', this.onRequest)
@@ -48122,6 +48125,54 @@ Backbone.Collection = Backbone.Collection.extend({
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
+    set: function( key, value, options ) {
+        Backbone.Relational.eventQueue.block();
+
+        // Duplicate backbone's behavior to allow separate key/value parameters, instead of a single 'attributes' object
+        var attributes;
+        if ( _.isObject( key ) || key == null ) {
+            attributes = key;
+            options = value;
+        }
+        else {
+            attributes = {};
+            attributes[ key ] = value;
+        }
+
+        try {
+            var id = this.id,
+                newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
+
+            // Check if we're not setting a duplicate id before actually calling `set`.
+            // ADDED If the ids are the same skip checking
+            if(id != newId) Backbone.Relational.store.checkId( this, newId );
+
+            var result = Backbone.Model.prototype.set.apply( this, arguments );
+
+            // Ideal place to set up relations, if this is the first time we're here for this model
+            if ( !this._isInitialized && !this.isLocked() ) {
+                this.constructor.initializeModelHierarchy();
+                Backbone.Relational.store.register( this );
+                this.initializeRelations( options );
+            }
+            // The store should know about an `id` update asap
+            else if ( newId && newId !== id ) {
+                Backbone.Relational.store.update( this );
+            }
+
+            if ( attributes ) {
+
+                this.updateRelations( attributes, options );
+            }
+        }
+        finally {
+            // Try to run the global queue holding external events
+            Backbone.Relational.eventQueue.unblock();
+        }
+
+        return result;
+    },
+
     /**
      * Initialize Relations present in this.relations; determine the type (HasOne/HasMany), then creates a new instance.
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
@@ -48149,27 +48200,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         this._isInitialized = true;
         this.release();
         this.processQueue();
-    },
-
-    relationalDestroy: function(options) {
-
-        options = options ? _.clone(options) : {};
-
-        var success = options.success;
-        var relations = this.getRelations();
-        var self = this;
-        options.success = function(resp) {
-
-            Backbone.Relational.store.unregister(self);
-            /*
-            _.forEach(relations, function(relation) {
-                // Delete relations on other models to this model
-                self.updateRelationToSelf(relation, {destroy: true});
-            });
-            */
-            if (success) success(model, resp, options);
-        }
-        Backbone.RelationalModel.prototype.destroy.call(this, options);
     },
 
     updateRelationToSelf: function(rel, options) {
@@ -48314,14 +48344,16 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 });
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
 
-var Backbone = require('backbone')
-    ,$ = require('jquery')
+var $ = require('jquery')
     ,_ = require('underscore')
     ,Cocktail = require('backbone-cocktail');
 
+Backbone = require('backbone');
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
+
+require('./backbone-cb-model-pre');
 
 require('./backbone.stickit');
 require('backbone.io');
@@ -48351,7 +48383,7 @@ Q = require('q');
 
 require('backbone-deferred');
 
-require('./backbone-cb-model');
+require('./backbone-cb-model-post');
 
 Backbone.Collection = Backbone.Deferred.Collection;
 
@@ -48386,7 +48418,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js","./backbone-cb-model-mixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-views":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js","query-engine":"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model-mixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-model-post":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js","./backbone-cb-model-pre":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js","./backbone-cb-views":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js","query-engine":"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
 
 var OriginalCollection = Backbone.Collection;
 
@@ -48434,6 +48466,7 @@ var CBCollection = OriginalCollection.extend({
 
     subscribe: function() {
 
+        this.ghosts = [];
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
         console.log('collection subscribed', this.backend.name);
@@ -48457,20 +48490,53 @@ var CBCollection = OriginalCollection.extend({
         console.log('updating models', this.backend.name, models);
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
-        //var model = this.findWhere({id: _.property(attrs, 'id')});
         options || (options = {});
         var i, l, index, model;
         for (i = 0, l = models.length; i < l; i++) {
-            model = this.get(models[i]);
+            var attrs = models[i];
+            var model = this.findWhere({id: _.property(attrs, 'id')});
+            if (!model) model = this.matchSyncing(attrs);
+
             if (model) {
-                model.set(models[i]);
+                model.set(attrs);
                 console.log('setting model', model);
             } else {
-                console.log('adding model', model);
-                if (!(model = this._prepareModel(model, options))) return false;
+                console.log('adding model', attrs);
+                if (!(model = this._prepareModel(attrs, options))) return false;
                 this.add(model);
                 console.log('model added', model);
             };
+        }
+    },
+
+    create: function(models, options) {
+        var self = this;
+        var singular = !_.isArray(models);
+        models = singular ? [models] : _.clone(models);
+        options = options ? _.clone(options) : {};
+        for (var i = 0; i < models.length; i++) {
+            //var attrs = models[i];
+            var model;
+            if (!(model = this._prepareModel(models[i], options))) return false;
+            if (options.matchFields) {
+                var matchQuery = {};
+                _.each(options.matchFields, function(matchField) {
+                    matchQuery[matchField] = model.get(matchField);
+                });
+                model = this.findWhere(matchQuery) || model;
+            }
+            this.registerSyncing(model);
+            var success = options.success;
+            options.success = function(model, resp) {
+                self.unregisterSyncing(model);
+                if (success) success(model, resp);
+            }
+            var error = options.errror;
+            options.error = function(model, options) {
+                self.unregisterSyncing(model);
+                if(error) error(model, options);
+            }
+            OriginalCollection.prototype.create.call(this, model, options);
         }
     },
 
@@ -48478,59 +48544,31 @@ var CBCollection = OriginalCollection.extend({
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
         options || (options = {});
-        var i, l, index, model;
-        for (i = 0, l = models.length; i < l; i++) {
-            model = this.get(models[i]);
-            model.delete();
+        for (var i = 0; i < models.length; i++) {
+            var attrs = models[i];
+            var model = this.findWhere({id: _.property(attrs, 'id')});
+            //model = this.get(models[i]);
+            if(model) model.delete();
         }
     },
-    /*
-    remove: function(models, options) {
-        var singular = !_.isArray(models);
-        models = singular ? [models] : _.clone(models);
-        options || (options = {});
-        var i, l, index, model;
-        for (i = 0, l = models.length; i < l; i++) {
-            model = models[i] = this.get(models[i]);
-            if (!model) continue;
-            delete this._byId[model.id];
-            delete this._byId[model.cid];
-            index = this.indexOf(model);
-            this.models.splice(index, 1);
-            this.length--;
-            if (!options.silent) {
-                options.index = index;
-                model.trigger('remove', model, this, options);
-            }
-            this._removeReference(model, options);
-        }
-        return singular ? models[0] : models;
+
+    registerSyncing: function(model) {
+        // Register a model as being created so that external update messages can update it
+        this.ghosts.push(model);
     },
-    */
-    /*
-    delete: function(models) {
 
-        // Delete models from collection and the server
-        var self = this;
-        models = models instanceof Array ? models : [ models ];
-        var existingModels = _.map(models, function(model) {
-
-            var cbid = _.property('cbid')(model) || model.get('cbid');
-            var idArray = Portal.filters.apiRegex.exec(cbid);
-            if (idArray && idArray[2]) {
-                return self.where({id: idArray[2]});
-            } else {
-                return false;
-            }
-        });
-        console.log('delete models ', models );
-        _.each(_.compact(existingModels), function(model) {
-
-            console.log('relationalDestroy model', model);
-            model.relationalDestroy();
-        });
+    unregisterSyncing: function(model) {
+        this.ghosts = _.without(this.ghosts, _.findWhere(this.ghosts, {cid: model.cid}));
     },
-    */
+
+    matchSyncing: function(attrs) {
+        // Check if the incoming attributes match any registered ghosts
+        var matchQuery = {};
+        _.each(this.matchFields, function(matchField) {
+            matchQuery[matchField] = _.property(matchField)(attrs);
+        });
+        return _.findWhere(this.ghosts, matchQuery);
+    },
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes
@@ -48612,7 +48650,7 @@ module.exports = {
 
 
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.Deferred.Model;
 
@@ -48635,7 +48673,6 @@ var CBModel = OriginalModel.extend({
         this.startTracking();
     },
 
-
     isSyncing: function() {
         return !!this.get('id') == this.get('isGhost');
     },
@@ -48647,12 +48684,8 @@ var CBModel = OriginalModel.extend({
         this.set({isGhost: false}, {trackit_silent:true});
         //this.trigger('change');
 
-        return OriginalModel.prototype.save.call(this, arguments).then(
+        return OriginalModel.prototype.save.apply(this, arguments).then(
             function(result) {
-
-                //console.log('Save result', result);
-                //var model = resolveModel.model;
-                //result.model.set({'isGhost': false}, {trackit_silent:true});
 
                 return result;
                 //model.trigger('change');
@@ -48674,11 +48707,10 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
 
-        return OriginalModel.prototype.fetch.call(this, arguments).then(
+        return OriginalModel.prototype.fetch.apply(this, arguments).then(
             function(result) {
 
                 console.log('Fetch result', result);
-                //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
                 return result;
@@ -48697,6 +48729,51 @@ var CBModel = OriginalModel.extend({
             }
         )
     },
+
+    destroy: function(options) {
+
+        var self = this;
+
+        self.set('isGhost', true);
+
+        return OriginalModel.prototype.destroy.call(this, options).then(
+            function(result) {
+                //Backbone.Relational.store.unregister(self);
+                return result;
+            },
+            function(error) {
+                self.set('isGhost', false);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
+            }
+        );
+    },
+
+    /*
+    relationalDestroy: function(options) {
+
+        options = options ? _.clone(options) : {};
+
+        var success = options.success;
+        var relations = this.getRelations();
+        var self = this;
+        options.success = function(resp) {
+
+            Backbone.Relational.store.unregister(self);
+            /*
+            _.forEach(relations, function(relation) {
+                // Delete relations on other models to this model
+                self.updateRelationToSelf(relation, {destroy: true});
+            });
+            if (success) success(model, resp, options);
+        }
+        OriginalModel.prototype.destroy.call(this, options);
+    },
+    */
 
     destroyOnServer: function(options) {
       options = options ? _.clone(options) : {};
@@ -48743,6 +48820,12 @@ var CBModel = OriginalModel.extend({
       return xhr;
     },
 
+    delete: function(options) {
+        options = options ? _.clone(options) : {};
+        this.stopListening();
+        this.trigger('destroy', this, this.collection, options);
+    },
+
     toJSONString: function(options) {
 
         // Return a string copy of the model's `attributes` object.
@@ -48759,6 +48842,186 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.Deferred.Model = CBModel;
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js":[function(require,module,exports){
+
+var OriginalModel = Backbone.Model;
+
+var wrapError = function(model, options) {
+    var error = options.error;
+    options.error = function(resp) {
+        if (error) error(model, resp, options);
+        model.trigger('error', model, resp, options);
+    };
+};
+
+var CBModel = OriginalModel.extend({
+
+    save: function(key, val, options) {
+
+        var attrs, method, xhr, attributes = this.attributes;
+
+        // Handle both `"key", value` and `{key: value}` -style arguments.
+        if (key == null || typeof key === 'object') {
+            attrs = key;
+            options = val;
+        } else {
+            (attrs = {})[key] = val;
+        }
+
+        options = _.extend({validate: true}, options);
+
+        // If we're not waiting and attributes exist, save acts as
+        // `set(attr).save(null, opts)` with validation. Otherwise, check if
+        // the model will be valid when the attributes, if any, are set.
+        if (attrs && !options.wait) {
+            if (!this.set(attrs, options)) return false;
+        } else {
+            if (!this._validate(attrs, options)) return false;
+        }
+
+        // Set temporary attributes if `{wait: true}`.
+        if (attrs && options.wait) {
+            this.attributes = _.extend({}, attributes, attrs);
+        }
+
+        // After a successful server-side save, the client is (optionally)
+        // updated with the server-side state.
+        if (options.parse === void 0) options.parse = true;
+        var model = this;
+        var success = options.success;
+        options.success = function(resp) {
+
+            // ADDED Dispatch an update, in case the model has already been created by an intervening update
+            var itemType = this.__proto__.constructor.modelType;
+            Portal.dispatch({
+                source: 'portal',
+                actionType: 'update',
+                itemType: itemType,
+                payload: resp
+            });
+            /*
+            // Ensure attributes are restored during synchronous saves.
+            model.attributes = attributes;
+            var serverAttrs = model.parse(resp, options);
+            if (options.wait) serverAttrs = _.extend(attrs || {}, serverAttrs);
+            if (_.isObject(serverAttrs) && !model.set(serverAttrs, options)) {
+                return false;
+            }
+            if (success) success(model, resp, options);
+            model.trigger('sync', model, resp, options);
+            */
+        };
+        wrapError(this, options);
+
+        method = this.isNew() ? 'create' : (options.patch ? 'patch' : 'update');
+        if (method === 'patch' && !options.attrs) options.attrs = attrs;
+        xhr = this.sync(method, this, options);
+
+        // Restore attributes.
+        if (attrs && options.wait) this.attributes = attributes;
+
+        return xhr;
+    }
+
+    /*
+    fetch: function(key, val, options) {
+
+        var self = this;
+
+        return OriginalModel.prototype.fetch.apply(this, arguments).then(
+            function(result) {
+
+                console.log('Fetch result', result);
+                result.model.set({'isGhost': false}, {trackit_silent:true});
+
+                return result;
+                //model.trigger('change');
+            },
+            function(error) {
+
+                console.error('Fetch error', error);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
+                self.resetAttributes();
+            }
+        )
+    },
+
+    destroy: function(options) {
+
+        var self = this;
+
+        self.set('isGhost', true);
+
+        return OriginalModel.prototype.destroy.call(this, options).then(
+            function(result) {
+                Backbone.Relational.store.unregister(self);
+                return result;
+            },
+            function(error) {
+                self.set('isGhost', false);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
+            }
+        );
+    },
+
+    destroyOnServer: function(options) {
+      options = options ? _.clone(options) : {};
+      var model = this;
+      var success = options.success;
+
+      // ADDED Set isGhost to true, indicating the model is being deleted on server
+      this.set({isGhost: true}, {trackit_silent:true});
+      //this.set('isGhost', true);
+
+      //var destroy = function() {
+      //  model.trigger('destroy', model, model.collection, options);
+      //};
+      var destroyOnServer = function() {
+          model.trigger('change', model, model.collection, options);
+      }
+      options.success = function(resp) {
+        //if (options.wait || model.isNew()) destroy();
+        destroyOnServer();
+        // Remove the id from the local model
+        if (!model.isNew()) {
+            delete model.id;
+            model.unset('id');
+        }
+        if (success) success(model, resp, options);
+        // ADDED Reset trackit
+        model.restartTracking();
+        if (!model.isNew()) model.trigger('sync', model, resp, options);
+      };
+
+      options.error = function(resp) {
+          model.resetAttributes();
+      }
+
+      if (this.isNew()) {
+        options.success();
+        return false;
+      }
+      wrapError(this, options);
+
+      var xhr = this.sync('delete', this, options);
+      //if (!options.wait) destroy();
+      destroyOnServer();
+      return xhr;
+    }
+    */
+});
+
+Backbone.Model = CBModel;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
 
 
@@ -55621,9 +55884,9 @@ var ListItem = React.createClass({displayName: 'ListItem',
         return (
             // ADDED replace div with li
             React.createElement("li", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), 
-                id: this.props.collapsable ? null : this.props.id, onSelect: null}), 
+                onSelect: null}), 
         this.renderHeading(), 
-        this.props.collapsable ? this.renderCollapsableBody() : this.renderBody(), 
+        this.props.collapsable ? this.renderCollapsableBody() : '', 
         this.renderFooter()
             )
         );
@@ -55684,12 +55947,36 @@ var ListItem = React.createClass({displayName: 'ListItem',
         );
     },
 
+    renderButton: function(button) {
+
+        var onClick = button.onClick || function() {};
+
+        switch(button.type) {
+            case 'delete':
+                return React.createElement("i", {className: "icon ion-trash-a uninstall-button", onClick: onClick})
+                break;
+            case 'text':
+                console.log('text button', button);
+                var label = button.label || "";
+                return (
+                    React.createElement("button", {className: "topcoat-button install-button", onClick: onClick}, 
+                        label
+                    )
+                )
+                break;
+            default:
+                console.log('Unrecognised button', button);
+                return;
+        }
+    },
+
     renderCollapsableTitle: function (header) {
+        var buttons = this.props.buttons || [];
         return (
             React.createElement("h4", {className: "panel-title"}, 
                 React.createElement("i", {className: "icon ion-chevron-right edit-button", onClick: this.handleSelect}), 
                 this.renderAnchor(header), 
-                React.createElement("i", {className: "icon ion-trash-a uninstall-button", onClick: this.handleDelete})
+                buttons.map(this.renderButton)
             )
         );
     },
@@ -55959,6 +56246,11 @@ var React = require('react')
     ;
 
 React.ListItem = require('./ListItem.jsx');
+React.Modal = require('react-bootstrap').Modal;
+React.ModalTrigger = require('react-bootstrap').ModalTrigger;
+React.OverlayMixin = require('react-bootstrap').OverlayMixin;
+
+React.Button = require('react-bootstrap').Button;
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');
 //React.Panel = require('react-bootstrap').Panel;
@@ -56002,4 +56294,4 @@ React.ListView = React.createClass({
 
 module.exports = React;
 
-},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
+},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js"}]},{},["./portal/static/js/vendor/vendor.js"]);

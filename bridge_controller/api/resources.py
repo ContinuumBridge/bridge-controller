@@ -54,9 +54,11 @@ class CBResource(ModelResource):
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
     def update_modified_by(self, bundle):
+        print "Update modified by obj meta fields", bundle.obj._meta.fields
         if 'created_by' in bundle.obj._meta.fields and not bundle.obj.pk:
             bundle.obj.created_by = bundle.request.user
         if 'updated_by' in bundle.obj._meta.fields:
+            print "Update updated_by"
             bundle.obj.modified_by = bundle.request.user
 
     def save(self, bundle, skip_errors=False):

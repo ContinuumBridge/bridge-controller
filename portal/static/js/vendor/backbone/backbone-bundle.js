@@ -1,12 +1,14 @@
 
-var Backbone = require('backbone')
-    ,$ = require('jquery')
+var $ = require('jquery')
     ,_ = require('underscore')
     ,Cocktail = require('backbone-cocktail');
 
+Backbone = require('backbone');
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
+
+require('./backbone-cb-model-pre');
 
 require('./backbone.stickit');
 require('backbone.io');
@@ -36,7 +38,7 @@ Q = require('q');
 
 require('backbone-deferred');
 
-require('./backbone-cb-model');
+require('./backbone-cb-model-post');
 
 Backbone.Collection = Backbone.Deferred.Collection;
 

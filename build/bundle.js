@@ -22603,12 +22603,17 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
     initialize: function() {
 
-        this.startTracking();
+        var self = this;
+        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.listenTo(this.get('deviceInstall'), 'destroy', function() {
+            console.log('ADP heard destroy on deviceInstall')
+            self.destroy();
+        });
     },
+    /*
 
     setConnection: function(connection) {
 
@@ -22714,7 +22719,6 @@ require('../../components/switches');
 var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
 
     mixins: [Portal.ReactBackboneMixin],
-
 
     handleClick: function() {
 
@@ -22889,12 +22893,17 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
         var self = this;
 
-        this.get('devicePermissions').on('change relational:change relational:add relational:remove', function(model, event) {
+        //change relational:change relational:add relational:remove
+        this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-            console.log('event on devicePermissions', event);
-            self.trigger('change', self);
+            console.log('event on devicePermissions', model, event, options);
+            console.log('AppInstall', self);
+            self.trigger('relational:change');
         });
 
+        this.on('change', function() {
+            console.log('Appinstall change event');
+        });
         //this.startTracking();
     },
 
@@ -23024,6 +23033,15 @@ require('../device_permissions/views');
 Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
     mixins: [Portal.ItemView],
     //mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete'
+            }]
+        };
+    },
+
     getTitle: function() {
         console.log('getTitle model is', this.props.model)
         //console.log('getTitle this.getModel', this.getModel());
@@ -23045,7 +23063,6 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.model;
-
 
         var devicePermissions = appInstall.get('devicePermissions');
 
@@ -23871,19 +23888,31 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
-        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
-        */
+
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             console.log('EVENT currentBridge appInstalls', name);
-            self.trigger('change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
             console.log('EVENT currentBridge deviceInstalls', name);
-            self.trigger('change');
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
+            console.log('EVENT currentBridge discoveredDevices', name);
+            self.trigger('relational:change');
+        });
+
+        var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        this.set('messages', messages);
+
+        this.listenTo(this.get('messages'), 'all', function(name) {
+            console.log('EVENT currentBridge messages', name);
+            self.trigger('relational:change');
         });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -23938,7 +23967,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Portal.Bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri'
+            }
         },
         {
             type: Backbone.HasMany,
@@ -24829,37 +24867,52 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 },{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
-Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
+Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
+
+    matchFields: ['device', 'bridge', 'address'],
 
     initialize: function() {
 
     },
 
-    installDevice: function(friendlyName) {
+    install: function(friendlyName) {
 
         var self = this;
 
+        /*
         console.log('this in installDevice is', this);
-
-
         console.log('adaptor in installDevice is', adaptor);
         console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
         console.log('device in installDevice is', this.get('device').get('resource_uri'));
         console.log('mac_addr in installDevice is', this.get('mac_addr'));
+        */
         //this.set('friendly_name', friendlyName);
         //this.set('adaptor', adaptor);
 
+        var device = this.get('device');
+        if(!device) return console.error('Cannot install device, no device found', this);
+        var adaptor = device.get('adaptorCompatibilities').at(0).get('adaptor');
         // Find if a device install already exists, otherwise create a one blank (to avoid instantiating relations now)
         var address = this.get('mac_addr') || this.get('address');
         var deviceInstallData = {
             bridge: this.get('bridge').get('resource_uri'),
-            device: this.get('device').get('resource_uri'),
-            address: address
+            device: device.get('resource_uri'),
+            address: address,
+            adaptor: adaptor,
+            friendly_name: friendlyName
         };
 
-        var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
+        var createOptions = {matchFields: this.matchFields};
+
+        Portal.deviceInstallCollection.create(deviceInstallData, createOptions);
+        /*
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData);
+        if (!deviceInstall) {
+            //deviceInstall = new
+        }
+        /*
         var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
             || new Portal.DeviceInstall({
                 bridge: this.get('bridge'),
@@ -24873,7 +24926,6 @@ Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
         var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
 
         });
-        */
 
 
         // Add the optional data in for saving
@@ -24890,26 +24942,6 @@ Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
         }, function(error) {
 
             console.error('Error saving deviceInstall', error);
-        });
-        //console.log('deviceInstall is', deviceInstall);
-
-        console.log('In installDevice');
-        // Create the device_install model on the server
-        /*
-        Portal.deviceInstallCollection.create(deviceInstall, {
-
-            wait: true,
-
-            success : function(resp){
-
-                console.log('device installed successfully', resp);
-                self.destroy();
-            },
-
-            error : function(err) {
-
-                console.error(err);
-            }
         });
         */
     },
@@ -24991,7 +25023,49 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
 
     mixins: [Portal.ItemView],
 
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
 
+    getInitialState: function () {
+        var buttons = [];
+
+        console.log('device discovery getInitialState model', this.props.model);
+        var device = this.getModel().get('device');
+        console.log('getInitialState device is', device);
+        if (device && device.get('adaptorCompatibilities').at(0)) {
+            buttons.push({
+                onClick: this.installDevice,
+                type: 'text',
+                label: 'Install'
+            });
+        }
+
+        //var installLabel = this.props.model.device ? 'Install' : 'Device not found'
+        return {
+            buttons: buttons
+        };
+    },
+
+    installDevice: function() {
+
+        console.log('click installDevice')
+        var discoveredDevice = this.getModel();
+        console.log('installDevice discoveredDevice', discoveredDevice);
+        Portal.Config.controller.promptInstallDevice(discoveredDevice);
+    },
+
+    getTitle: function() {
+        return "Discovered device";
+        /*
+        var discoveredDevice = this.getModel();
+        console.log('DiscoveredDeviceView discoveredDevice ', discoveredDevice );
+        var device = discoveredDevice.get('device');
+        return device ? device.get('name') : discoveredDevice.get('name');
+        */
+    }
 });
 
 Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDeviceListView',
@@ -25001,7 +25075,6 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
     getInitialState: function () {
         return {
             title: 'Discovered Devices',
-            handleButtonClick: this.handleButtonClick,
             buttons: [{
                 name: 'Rescan',
                 type: 'bold',
@@ -25026,7 +25099,12 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
     createItem: function (item) {
 
         console.log('DiscoveredDeviceListView item', item);
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, model: item})
+        var model = this.getCollection().findWhere({id: item.id});
+        console.log('DiscoveredDeviceListView item', model);
+        //var title = model.get('device')
+        //return <div> Hey </div>;
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: item.name, model: item})
+        //return < Portal.AppInstallView key={item.cid} model={item} />
     }
 });
 
@@ -25183,6 +25261,7 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     },
 
     relations: [
+        /*
         {
             type: Backbone.HasOne,
             key: 'bridge',
@@ -25198,8 +25277,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'device',
@@ -25283,12 +25362,21 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
 Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
+
     mixins: [Portal.ItemView],
-    //mixins: [Portal.ItemView],
 
     getDefaultProps: function () {
         return {
             openable: true
+        };
+    },
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
         };
     },
 
@@ -25303,10 +25391,8 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     itemView: Portal.DeviceInstallView,
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
-    //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
     getInitialState: function () {
-        //console.log('getDefaultProps this', this);
         return {
             title: 'Devices',
             buttons: [{
@@ -25319,7 +25405,6 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     discoverDevices: function() {
 
-        console.log('discoverDevices click');
         Portal.Config.controller.discoverDevices();
     },
 
@@ -25328,7 +25413,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         //console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
-        //console.log('DeviceInstallListView item cid', item.cid);
+        console.log('DeviceInstallListView item', item);
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
     }
@@ -25441,9 +25526,9 @@ Portal.Device = Backbone.Deferred.Model.extend({
     relations: [
         {
             type: Backbone.HasMany,
-            key: 'adaptorCompatibility',
-            keySource: 'adaptor_compatibility',
-            keyDestination: 'adaptor_compatibility',
+            key: 'adaptorCompatibilities',
+            keySource: 'adaptor_compatibilities',
+            keyDestination: 'adaptor_compatibilities',
             relatedModel: 'Portal.AdaptorCompatibility',
             collectionType: 'Portal.AdaptorCompatibilityCollection',
             createModels: true,
@@ -26285,43 +26370,42 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               React.createElement(ConfigViews.Main, {model: currentBridge}),
               $('#main-region')[0]
           );
-
-          //Config.mainLayoutView = new ConfigViews.Main();
-          //Portal.mainRegion.show(Config.mainLayoutView);
       },
       showAppLicences: function() {
 
         var installAppModal = new ConfigViews.InstallAppModal();
-            /*
-            //model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-            */
 
         Portal.modalsRegion.show(installAppModal);
       },
       discoverDevices: function() {
 
+          /*
           Portal.discoveredDeviceCollection.forEach(function(discoveredDeviceInstall) {
               Backbone.Relational.store.unregister(discoveredDeviceInstall);
           });
-
+          */
+          Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+              discoveredDevice.delete();
+          });
           Portal.messageCollection.sendCommand('discover');
-
-          //Config.mainView.showDeviceDiscovery();
           Config.mainView.setState({discoveringDevices: true});
       },
       stopDiscoveringDevices: function() {
-
-          //Config.mainView.showDeviceInstalls();
           Config.mainView.setState({discoveringDevices: false});
       },
-      installDevice: function(discoveredDeviceInstall) {
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-        });
-        Portal.modalsRegion.show(installDeviceModal);
+      promptInstallDevice: function(discoveredDevice) {
+          console.log('promptInstallDevice discoveredDevice', discoveredDevice);
+          Config.mainView.setState({installDevice: discoveredDevice});
+      },
+      installDevice: function(discoveredDevice, friendlyName) {
+          console.log('installDevice discoveredDevice', discoveredDevice);
+          discoveredDevice.install(friendlyName);
+          Config.mainView.setState({installDevice: false,
+                                    discoveringDevices: false});
+      },
+      cancelInstallDevice: function() {
+          console.log('cancelInstallDevice');
+          Config.mainView.setState({installDevice: false});
       }
     });
 
@@ -26335,31 +26419,7 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbm-modal__topbar\">\n    <h3 class=\"bbm-modal__title\">Install App</h3>\n</div>\n<div class=\"bbm-modal__section\">\n    <div class=\"licence-section\"></div>\n</div>\n<div class=\"bbm-modal__bottombar\">\n    <a href=\"#\" class=\"bbm-button store-button\">App Store</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -26382,61 +26442,51 @@ module.exports.Main = React.createClass({displayName: 'Main',
     getInitialState: function () {
         return {
             discoveringDevices: false,
-            installingDevice: false,
-            installingApp: false
+            installDevice: false,
+            installApp: false
         };
     },
 
-    /*
-    componentWillMount: function () {
-        var currentBridge = this.getModel();
-        for (var collection in this.getCollections()) {
+    renderModals: function () {
+
+        var installDevice = this.state.installDevice;
+        var installApp = this.state.installApp;
+        if (installDevice) {
+            return React.createElement(InstallDeviceModal, {container: this, model: installDevice});
+        } else if (installApp) {
 
         }
-    },
+        //var $portalBody = $('#portal-body');
+        //console.log('$portalBody ', $portalBody );
 
-    componentWillUnmount: function () {
-    },
-    */
+        //var installDevice = Portal.Config.installDevice;
+        //var cancelInstall = Portal.Config.cancelInstallDevice;
 
-    getCollections: function(currentBridge) {
-
-        if (!this.collections) {
-            var currentBridge = this.getModel();
-            this.collections = {
-                appInstalls: currentBridge.get('appInstalls'),
-                deviceInstalls: currentBridge.get('deviceInstalls'),
-                discoveredDevices: currentBridge.get('discoveredDevices'),
-                messages: Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')})
-            }
-        }
-        return this.collections;
     },
 
     render: function() {
 
-        //var currentBridge = this.getModel();
+        console.log('config mainView render');
+        var currentBridge = this.getModel();
 
-        //var appInstalls = currentBridge.get('appInstalls');
-        var appInstalls = this.getCollections().appInstalls;
+        var appInstalls = currentBridge.get('appInstalls');
 
-        var deviceInstalls = this.getCollections().deviceInstalls;
+        var deviceInstalls = currentBridge.get('deviceInstalls');
 
         var deviceView;
         if (this.state.discoveringDevices) {
-            //var discoveredDevices = currentBridge.get('discoveredDevices');
-            var discoveredDevices = this.getCollections().discoveredDevices;
+            var discoveredDevices = currentBridge.get('discoveredDevices');
             deviceView = React.createElement(Portal.DiscoveredDeviceListView, {collection: discoveredDevices});
         } else {
-            //var deviceInstalls = currentBridge.get('deviceInstalls');
-            deviceView =  React.createElement(Portal.DeviceInstallListView, {collection: deviceInstalls});
+            deviceView = React.createElement(Portal.DeviceInstallListView, {collection: deviceInstalls});
         }
 
         //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
-        var messages = this.getCollections().messages;
+        var messages = currentBridge.get('messages');
 
         return (
             React.createElement("div", null, 
+                this.renderModals(), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
                         React.createElement(Portal.AppInstallListView, {collection: appInstalls, deviceInstalls: deviceInstalls})
@@ -26456,6 +26506,55 @@ module.exports.Main = React.createClass({displayName: 'Main',
     }
 });
 
+var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function() {
+        return {
+            friendlyName: ""
+        }
+    },
+
+    handleFriendlyName: function(event) {
+        this.setState({friendlyName: event.target.value});
+    },
+
+    installDevice: function() {
+        console.log('Submitted installDevice modal');
+        //var friendlyName = this.$('#friendly-name').val();
+        //this.props.discoveredDevice.installDevice(friendlyName);
+        var discoveredDevice = this.getModel();
+        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+    },
+
+    cancelInstall: function() {
+
+        Portal.Config.controller.cancelInstallDevice();
+    },
+
+    render: function() {
+
+        var friendlyName = this.state.friendlyName;
+        var device = this.getModel().get('device');
+        var title = device ? "Install " + device.get('name') : "Unknown device";
+
+        return (
+            React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
+                onRequestHide: this.cancelInstall, animation: false}, 
+                React.createElement("div", {className: "modal-body"}, 
+                    React.createElement("div", null, "Type a name to help you remember this device ie. Kitchen Thermometer"), 
+                    React.createElement("br", null), 
+                    React.createElement("input", {type: "text", value: friendlyName, onChange: this.handleFriendlyName})
+                ), 
+                React.createElement("div", {className: "modal-footer"}, 
+                    React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
+                    React.createElement(React.Button, {onClick: this.installDevice}, "Install")
+                )
+            )
+        )
+    }
+});
 /*
 module.exports.Main = Marionette.Layout.extend({
 
@@ -26529,7 +26628,6 @@ module.exports.Main = Marionette.Layout.extend({
         currentBridge.fetch();
     }
 });
-*/
 
 module.exports.InstallAppModal = Backbone.Modal.extend({
 
@@ -26590,9 +26688,9 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         Portal.Config.controller.stopDiscoveringDevices();
     }
 });
+ */
 
-
-},{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/discoveryModal.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html","./templates/installAppModal.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
+},{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
 
 var DeveloperViews = require('./views');
 
@@ -28239,9 +28337,14 @@ Portal.ItemView = {
     getModel: function() {
 
         var owner = this._owner;
+        console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        return collection.get({cid: this.props.model.cid})
+        console.log('getModel collection', collection);
+        console.log('getModel item', this.props.model);
+        var item = this.props.model;
+        var query = item.id ? {id: item.id} : {cid: item.cid};
+        return collection.findWhere(query);
     },
 
     getCollection: function() {
@@ -28251,26 +28354,35 @@ Portal.ItemView = {
         return owner.getCollection();
     },
 
-    handleDelete: function() {
-
-        CBDispatcher.dispatch({actionType: 'delete',
-                               model: this.props.model,
-                               source: 'portal' });
+    handleDestroy: function() {
+        this.getModel().destroy();
     },
 
-    handleUpdate: function() {
-
-        CBDispatcher.dispatch({actionType: 'update',
-                               model: this.props.model,
-                               source: 'portal' });
+    handleDestroyOnServer: function() {
+        this.getModel().destroyOnServer();
     },
+
+    /*
+    renderButtons: function() {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
+
+        return (
+            <div className={className} onClick={button.onClick}>{button.name}</div>
+        );
+    },
+    */
 
     render: function() {
         console.log('ItemView props', this.props);
         var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
+        var buttons = this.state.buttons || [];
         return (
-            React.createElement(React.ListItem, {header: this.props.title, bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
+            React.createElement(React.ListItem, {header: this.props.title, buttons: buttons, 
+                bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
                 body
             )
         );

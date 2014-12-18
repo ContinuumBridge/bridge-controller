@@ -45,6 +45,7 @@ var CBCollection = OriginalCollection.extend({
 
     subscribe: function() {
 
+        this.ghosts = [];
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
         console.log('collection subscribed', this.backend.name);
@@ -68,20 +69,53 @@ var CBCollection = OriginalCollection.extend({
         console.log('updating models', this.backend.name, models);
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
-        //var model = this.findWhere({id: _.property(attrs, 'id')});
         options || (options = {});
         var i, l, index, model;
         for (i = 0, l = models.length; i < l; i++) {
-            model = this.get(models[i]);
+            var attrs = models[i];
+            var model = this.findWhere({id: _.property(attrs, 'id')});
+            if (!model) model = this.matchSyncing(attrs);
+
             if (model) {
-                model.set(models[i]);
+                model.set(attrs);
                 console.log('setting model', model);
             } else {
-                console.log('adding model', model);
-                if (!(model = this._prepareModel(model, options))) return false;
+                console.log('adding model', attrs);
+                if (!(model = this._prepareModel(attrs, options))) return false;
                 this.add(model);
                 console.log('model added', model);
             };
+        }
+    },
+
+    create: function(models, options) {
+        var self = this;
+        var singular = !_.isArray(models);
+        models = singular ? [models] : _.clone(models);
+        options = options ? _.clone(options) : {};
+        for (var i = 0; i < models.length; i++) {
+            //var attrs = models[i];
+            var model;
+            if (!(model = this._prepareModel(models[i], options))) return false;
+            if (options.matchFields) {
+                var matchQuery = {};
+                _.each(options.matchFields, function(matchField) {
+                    matchQuery[matchField] = model.get(matchField);
+                });
+                model = this.findWhere(matchQuery) || model;
+            }
+            this.registerSyncing(model);
+            var success = options.success;
+            options.success = function(model, resp) {
+                self.unregisterSyncing(model);
+                if (success) success(model, resp);
+            }
+            var error = options.errror;
+            options.error = function(model, options) {
+                self.unregisterSyncing(model);
+                if(error) error(model, options);
+            }
+            OriginalCollection.prototype.create.call(this, model, options);
         }
     },
 
@@ -89,59 +123,31 @@ var CBCollection = OriginalCollection.extend({
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
         options || (options = {});
-        var i, l, index, model;
-        for (i = 0, l = models.length; i < l; i++) {
-            model = this.get(models[i]);
-            model.delete();
+        for (var i = 0; i < models.length; i++) {
+            var attrs = models[i];
+            var model = this.findWhere({id: _.property(attrs, 'id')});
+            //model = this.get(models[i]);
+            if(model) model.delete();
         }
     },
-    /*
-    remove: function(models, options) {
-        var singular = !_.isArray(models);
-        models = singular ? [models] : _.clone(models);
-        options || (options = {});
-        var i, l, index, model;
-        for (i = 0, l = models.length; i < l; i++) {
-            model = models[i] = this.get(models[i]);
-            if (!model) continue;
-            delete this._byId[model.id];
-            delete this._byId[model.cid];
-            index = this.indexOf(model);
-            this.models.splice(index, 1);
-            this.length--;
-            if (!options.silent) {
-                options.index = index;
-                model.trigger('remove', model, this, options);
-            }
-            this._removeReference(model, options);
-        }
-        return singular ? models[0] : models;
+
+    registerSyncing: function(model) {
+        // Register a model as being created so that external update messages can update it
+        this.ghosts.push(model);
     },
-    */
-    /*
-    delete: function(models) {
 
-        // Delete models from collection and the server
-        var self = this;
-        models = models instanceof Array ? models : [ models ];
-        var existingModels = _.map(models, function(model) {
-
-            var cbid = _.property('cbid')(model) || model.get('cbid');
-            var idArray = Portal.filters.apiRegex.exec(cbid);
-            if (idArray && idArray[2]) {
-                return self.where({id: idArray[2]});
-            } else {
-                return false;
-            }
-        });
-        console.log('delete models ', models );
-        _.each(_.compact(existingModels), function(model) {
-
-            console.log('relationalDestroy model', model);
-            model.relationalDestroy();
-        });
+    unregisterSyncing: function(model) {
+        this.ghosts = _.without(this.ghosts, _.findWhere(this.ghosts, {cid: model.cid}));
     },
-    */
+
+    matchSyncing: function(attrs) {
+        // Check if the incoming attributes match any registered ghosts
+        var matchQuery = {};
+        _.each(this.matchFields, function(matchField) {
+            matchQuery[matchField] = _.property(matchField)(attrs);
+        });
+        return _.findWhere(this.ghosts, matchQuery);
+    },
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes

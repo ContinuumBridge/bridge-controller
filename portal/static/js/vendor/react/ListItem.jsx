@@ -61,9 +61,9 @@ var ListItem = React.createClass({
         return (
             // ADDED replace div with li
             <li {...this.props} className={joinClasses(this.props.className, classSet(classes))}
-                id={this.props.collapsable ? null : this.props.id} onSelect={null}>
+                onSelect={null}>
         {this.renderHeading()}
-        {this.props.collapsable ? this.renderCollapsableBody() : this.renderBody()}
+        {this.props.collapsable ? this.renderCollapsableBody() : ''}
         {this.renderFooter()}
             </li>
         );
@@ -124,12 +124,36 @@ var ListItem = React.createClass({
         );
     },
 
+    renderButton: function(button) {
+
+        var onClick = button.onClick || function() {};
+
+        switch(button.type) {
+            case 'delete':
+                return <i className="icon ion-trash-a uninstall-button" onClick={onClick}/>
+                break;
+            case 'text':
+                console.log('text button', button);
+                var label = button.label || "";
+                return (
+                    <button className="topcoat-button install-button" onClick={onClick}>
+                        {label}
+                    </button>
+                )
+                break;
+            default:
+                console.log('Unrecognised button', button);
+                return;
+        }
+    },
+
     renderCollapsableTitle: function (header) {
+        var buttons = this.props.buttons || [];
         return (
             <h4 className="panel-title">
                 <i className="icon ion-chevron-right edit-button" onClick={this.handleSelect} />
                 {this.renderAnchor(header)}
-                <i className="icon ion-trash-a uninstall-button" onClick={this.handleDelete} />
+                {buttons.map(this.renderButton)}
             </h4>
         );
     },

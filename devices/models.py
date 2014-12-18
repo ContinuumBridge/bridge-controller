@@ -69,7 +69,7 @@ class DiscoveredDevice(BroadcastMixin, LoggedModel):
     address = models.CharField(_("address"), max_length = 255)
 
     bridge = models.ForeignKey(Bridge, related_name='discovered_devices')
-    device = models.ForeignKey(Device, related_name='discovered_devices')
+    device = models.ForeignKey(Device, null=True, related_name='discovered_devices')
 
     #hardware_revision = models.CharField(_("hardware_revision"), max_length = 255)
     #firmware_revision = models.CharField(_("firmware_revision"), max_length = 255)

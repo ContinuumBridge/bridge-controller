@@ -5,7 +5,6 @@ var PermissionSwitch = React.createClass({
 
     mixins: [Portal.ReactBackboneMixin],
 
-
     handleClick: function() {
 
         console.log('handleClick');

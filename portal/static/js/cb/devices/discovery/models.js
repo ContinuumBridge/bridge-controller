@@ -1,35 +1,50 @@
 
-Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
+Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
+
+    matchFields: ['device', 'bridge', 'address'],
 
     initialize: function() {
 
     },
 
-    installDevice: function(friendlyName) {
+    install: function(friendlyName) {
 
         var self = this;
 
+        /*
         console.log('this in installDevice is', this);
-
-
         console.log('adaptor in installDevice is', adaptor);
         console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
         console.log('device in installDevice is', this.get('device').get('resource_uri'));
         console.log('mac_addr in installDevice is', this.get('mac_addr'));
+        */
         //this.set('friendly_name', friendlyName);
         //this.set('adaptor', adaptor);
 
+        var device = this.get('device');
+        if(!device) return console.error('Cannot install device, no device found', this);
+        var adaptor = device.get('adaptorCompatibilities').at(0).get('adaptor');
         // Find if a device install already exists, otherwise create a one blank (to avoid instantiating relations now)
         var address = this.get('mac_addr') || this.get('address');
         var deviceInstallData = {
             bridge: this.get('bridge').get('resource_uri'),
-            device: this.get('device').get('resource_uri'),
-            address: address
+            device: device.get('resource_uri'),
+            address: address,
+            adaptor: adaptor,
+            friendly_name: friendlyName
         };
 
-        var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
+        var createOptions = {matchFields: this.matchFields};
+
+        Portal.deviceInstallCollection.create(deviceInstallData, createOptions);
+        /*
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData);
+        if (!deviceInstall) {
+            //deviceInstall = new
+        }
+        /*
         var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
             || new Portal.DeviceInstall({
                 bridge: this.get('bridge'),
@@ -43,7 +58,6 @@ Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
         var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
 
         });
-        */
 
 
         // Add the optional data in for saving
@@ -60,26 +74,6 @@ Portal.DiscoveredDevice = Backbone.RelationalModel.extend({
         }, function(error) {
 
             console.error('Error saving deviceInstall', error);
-        });
-        //console.log('deviceInstall is', deviceInstall);
-
-        console.log('In installDevice');
-        // Create the device_install model on the server
-        /*
-        Portal.deviceInstallCollection.create(deviceInstall, {
-
-            wait: true,
-
-            success : function(resp){
-
-                console.log('device installed successfully', resp);
-                self.destroy();
-            },
-
-            error : function(err) {
-
-                console.error(err);
-            }
         });
         */
     },

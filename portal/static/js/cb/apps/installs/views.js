@@ -4,6 +4,15 @@ require('../device_permissions/views');
 Portal.AppInstallView = React.createClass({
     mixins: [Portal.ItemView],
     //mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete'
+            }]
+        };
+    },
+
     getTitle: function() {
         console.log('getTitle model is', this.props.model)
         //console.log('getTitle this.getModel', this.getModel());
@@ -25,7 +34,6 @@ Portal.AppInstallView = React.createClass({
         //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.model;
-
 
         var devicePermissions = appInstall.get('devicePermissions');
 

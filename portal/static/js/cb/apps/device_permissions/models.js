@@ -5,12 +5,17 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
     initialize: function() {
 
-        this.startTracking();
+        var self = this;
+        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.listenTo(this.get('deviceInstall'), 'destroy', function() {
+            console.log('ADP heard destroy on deviceInstall')
+            self.destroy();
+        });
     },
+    /*
 
     setConnection: function(connection) {
 

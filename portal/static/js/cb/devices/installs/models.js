@@ -54,6 +54,7 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     },
 
     relations: [
+        /*
         {
             type: Backbone.HasOne,
             key: 'bridge',
@@ -69,8 +70,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'device',

@@ -43,6 +43,7 @@ class DeviceInstallAuthorization(CBAuthorization):
         return self.validate(object_list, bundle)
 
     def update_detail(self, object_list, bundle):
+        print "Device install auth", self.validate([bundle.obj], bundle)
         return bool(self.validate([bundle.obj], bundle))
 
     def delete_list(self, object_list, bundle):

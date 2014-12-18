@@ -34,8 +34,8 @@ class BroadcastMixin(CBIDModelMixin):
         for client_name in client_names:
             # Get clients directly related to this object
             try:
-                print "self is", self
-                print "client_name is", client_name
+                #print "self is", self
+                #print "client_name is", client_name
                 client = getattr(self, client_name)
                 related_cbids.append(client.cbid)
             except ObjectDoesNotExist:

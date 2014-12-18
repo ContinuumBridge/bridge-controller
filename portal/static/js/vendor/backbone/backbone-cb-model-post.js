@@ -20,7 +20,6 @@ var CBModel = OriginalModel.extend({
         this.startTracking();
     },
 
-
     isSyncing: function() {
         return !!this.get('id') == this.get('isGhost');
     },
@@ -32,12 +31,8 @@ var CBModel = OriginalModel.extend({
         this.set({isGhost: false}, {trackit_silent:true});
         //this.trigger('change');
 
-        return OriginalModel.prototype.save.call(this, arguments).then(
+        return OriginalModel.prototype.save.apply(this, arguments).then(
             function(result) {
-
-                //console.log('Save result', result);
-                //var model = resolveModel.model;
-                //result.model.set({'isGhost': false}, {trackit_silent:true});
 
                 return result;
                 //model.trigger('change');
@@ -59,11 +54,10 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
 
-        return OriginalModel.prototype.fetch.call(this, arguments).then(
+        return OriginalModel.prototype.fetch.apply(this, arguments).then(
             function(result) {
 
                 console.log('Fetch result', result);
-                //var model = resolveModel.model;
                 result.model.set({'isGhost': false}, {trackit_silent:true});
 
                 return result;
@@ -82,6 +76,51 @@ var CBModel = OriginalModel.extend({
             }
         )
     },
+
+    destroy: function(options) {
+
+        var self = this;
+
+        self.set('isGhost', true);
+
+        return OriginalModel.prototype.destroy.call(this, options).then(
+            function(result) {
+                //Backbone.Relational.store.unregister(self);
+                return result;
+            },
+            function(error) {
+                self.set('isGhost', false);
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: 'error',
+                    payload: error
+                });
+            }
+        );
+    },
+
+    /*
+    relationalDestroy: function(options) {
+
+        options = options ? _.clone(options) : {};
+
+        var success = options.success;
+        var relations = this.getRelations();
+        var self = this;
+        options.success = function(resp) {
+
+            Backbone.Relational.store.unregister(self);
+            /*
+            _.forEach(relations, function(relation) {
+                // Delete relations on other models to this model
+                self.updateRelationToSelf(relation, {destroy: true});
+            });
+            if (success) success(model, resp, options);
+        }
+        OriginalModel.prototype.destroy.call(this, options);
+    },
+    */
 
     destroyOnServer: function(options) {
       options = options ? _.clone(options) : {};
@@ -126,6 +165,12 @@ var CBModel = OriginalModel.extend({
       //if (!options.wait) destroy();
       destroyOnServer();
       return xhr;
+    },
+
+    delete: function(options) {
+        options = options ? _.clone(options) : {};
+        this.stopListening();
+        this.trigger('destroy', this, this.collection, options);
     },
 
     toJSONString: function(options) {

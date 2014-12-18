@@ -16,13 +16,18 @@ Django.prototype.request = function(request, sessionID) {
     var deferred = Q.defer();
 
     var verb = request.verb.toLowerCase() || "get";
+    var data = JSON.stringify(request.body);
+    //var method = verb == "get" ? verb : verb + "Json";
+
+    console.log('django request data', data);
     var djangoOptions = {
         method: verb,
         headers: {
-            'Content-type': 'application/json',
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'X_CB_SESSIONID': sessionID
-        }
+        },
+        data: data
     };
 
     var resource = request.url || request.resource;
@@ -30,7 +35,7 @@ Django.prototype.request = function(request, sessionID) {
 
     //console.log('Django request', requestURL);
 
-    rest.get(requestURL, djangoOptions).on('complete', function(data, response) {
+    rest[verb](requestURL, djangoOptions).on('complete', function(data, response) {
 
         if (response && response.statusCode) {
             //console.log('Django response', response);

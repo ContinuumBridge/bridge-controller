@@ -1,11 +1,20 @@
 
 Portal.DeviceInstallView = React.createClass({
+
     mixins: [Portal.ItemView],
-    //mixins: [Portal.ItemView],
 
     getDefaultProps: function () {
         return {
             openable: true
+        };
+    },
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
         };
     },
 
@@ -20,10 +29,8 @@ Portal.DeviceInstallListView = React.createClass({
     itemView: Portal.DeviceInstallView,
 
     mixins: [Backbone.React.Component.mixin, Portal.ListView],
-    //mixins: [Portal.FluxBoneMixin('collection'), Portal.ListView],
 
     getInitialState: function () {
-        //console.log('getDefaultProps this', this);
         return {
             title: 'Devices',
             buttons: [{
@@ -36,7 +43,6 @@ Portal.DeviceInstallListView = React.createClass({
 
     discoverDevices: function() {
 
-        console.log('discoverDevices click');
         Portal.Config.controller.discoverDevices();
     },
 
@@ -45,7 +51,7 @@ Portal.DeviceInstallListView = React.createClass({
         //console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
-        //console.log('DeviceInstallListView item cid', item.cid);
+        console.log('DeviceInstallListView item', item);
 
         return < Portal.DeviceInstallView key={cid} title={item.friendly_name} model={item} />
     }

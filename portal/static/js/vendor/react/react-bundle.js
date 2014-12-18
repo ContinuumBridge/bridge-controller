@@ -3,6 +3,11 @@ var React = require('react')
     ;
 
 React.ListItem = require('./ListItem.jsx');
+React.Modal = require('react-bootstrap').Modal;
+React.ModalTrigger = require('react-bootstrap').ModalTrigger;
+React.OverlayMixin = require('react-bootstrap').OverlayMixin;
+
+React.Button = require('react-bootstrap').Button;
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');
 //React.Panel = require('react-bootstrap').Panel;

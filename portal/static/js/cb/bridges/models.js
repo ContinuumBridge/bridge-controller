@@ -9,19 +9,31 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
-        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
-        */
+
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             console.log('EVENT currentBridge appInstalls', name);
-            self.trigger('change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
             console.log('EVENT currentBridge deviceInstalls', name);
-            self.trigger('change');
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
+            console.log('EVENT currentBridge discoveredDevices', name);
+            self.trigger('relational:change');
+        });
+
+        var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        this.set('messages', messages);
+
+        this.listenTo(this.get('messages'), 'all', function(name) {
+            console.log('EVENT currentBridge messages', name);
+            self.trigger('relational:change');
         });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
@@ -76,7 +88,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Portal.Bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri'
+            }
         },
         {
             type: Backbone.HasMany,

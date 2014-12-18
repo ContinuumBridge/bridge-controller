@@ -168,6 +168,54 @@ Backbone.Collection = Backbone.Collection.extend({
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
+    set: function( key, value, options ) {
+        Backbone.Relational.eventQueue.block();
+
+        // Duplicate backbone's behavior to allow separate key/value parameters, instead of a single 'attributes' object
+        var attributes;
+        if ( _.isObject( key ) || key == null ) {
+            attributes = key;
+            options = value;
+        }
+        else {
+            attributes = {};
+            attributes[ key ] = value;
+        }
+
+        try {
+            var id = this.id,
+                newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
+
+            // Check if we're not setting a duplicate id before actually calling `set`.
+            // ADDED If the ids are the same skip checking
+            if(id != newId) Backbone.Relational.store.checkId( this, newId );
+
+            var result = Backbone.Model.prototype.set.apply( this, arguments );
+
+            // Ideal place to set up relations, if this is the first time we're here for this model
+            if ( !this._isInitialized && !this.isLocked() ) {
+                this.constructor.initializeModelHierarchy();
+                Backbone.Relational.store.register( this );
+                this.initializeRelations( options );
+            }
+            // The store should know about an `id` update asap
+            else if ( newId && newId !== id ) {
+                Backbone.Relational.store.update( this );
+            }
+
+            if ( attributes ) {
+
+                this.updateRelations( attributes, options );
+            }
+        }
+        finally {
+            // Try to run the global queue holding external events
+            Backbone.Relational.eventQueue.unblock();
+        }
+
+        return result;
+    },
+
     /**
      * Initialize Relations present in this.relations; determine the type (HasOne/HasMany), then creates a new instance.
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
@@ -195,27 +243,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         this._isInitialized = true;
         this.release();
         this.processQueue();
-    },
-
-    relationalDestroy: function(options) {
-
-        options = options ? _.clone(options) : {};
-
-        var success = options.success;
-        var relations = this.getRelations();
-        var self = this;
-        options.success = function(resp) {
-
-            Backbone.Relational.store.unregister(self);
-            /*
-            _.forEach(relations, function(relation) {
-                // Delete relations on other models to this model
-                self.updateRelationToSelf(relation, {destroy: true});
-            });
-            */
-            if (success) success(model, resp, options);
-        }
-        Backbone.RelationalModel.prototype.destroy.call(this, options);
     },
 
     updateRelationToSelf: function(rel, options) {
