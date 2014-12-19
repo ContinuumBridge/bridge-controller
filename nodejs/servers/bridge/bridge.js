@@ -50,7 +50,7 @@ Bridge.prototype.formatConfig = function(authData) {
                 }
                 console.log('user uri is', user);
 
-                var resourceMatch = utils.apiRegex.exec(user);
+                var resourceMatch = user.match(utils.apiRegex);
                 var cbid = 'UID' + resourceMatch[2];
                 publicationAddresses.push(cbid);
             });

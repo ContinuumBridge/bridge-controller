@@ -57,11 +57,11 @@ Portal.ItemView = {
     getModel: function() {
 
         var owner = this._owner;
-        console.log('getModel owner', owner);
+        //console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        console.log('getModel collection', collection);
-        console.log('getModel item', this.props.model);
+        //console.log('getModel collection', collection);
+        //console.log('getModel item', this.props.model);
         var item = this.props.model;
         var query = item.id ? {id: item.id} : {cid: item.cid};
         return collection.findWhere(query);
@@ -96,7 +96,7 @@ Portal.ItemView = {
     */
 
     render: function() {
-        console.log('ItemView props', this.props);
+        //console.log('ItemView props', this.props);
         var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
@@ -125,7 +125,7 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
-        console.log('renderButton onClick', button.onClick);
+        //console.log('renderButton onClick', button.onClick);
         //var onClick = button.onClick || function(){};
 
         return (
@@ -145,9 +145,9 @@ Portal.ListView = {
     },
 
     render: function() {
-        console.log('render collection', this.props);
-        console.log('render mapped collection', this.props.collection.map(this.createItem));
-        console.log('react getCollection ', this.getCollection());
+        //console.log('render collection', this.props);
+        //console.log('render mapped collection', this.props.collection.map(this.createItem));
+        //console.log('react getCollection ', this.getCollection());
 
         var title = this.state.title || "";
 

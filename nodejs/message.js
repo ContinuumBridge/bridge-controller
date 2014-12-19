@@ -67,16 +67,25 @@ _.extend(Message.prototype, {
         this.set('source', newSource);
     },
 
-    findDestination: function(dest) {
+    findDestinations: function(destinations) {
 
-        var proposedDestination = this.get('destination');
-        if (typeof proposedDestination == 'string') {
-            proposedDestination = [ proposedDestination ];
-        }
-        var destRegex = new RegExp('^' + dest + '(.+)?');
-        return _.find(proposedDestination, function(proposedDest) {
-            return proposedDest.match(destRegex);
+        if(!_.isArray(destinations)) destinations = [destinations];
+        //console.log('findDestination dest', destinations);
+        var messageDestinations = this.get('destination');
+        //console.log('findDestination destinations', messageDestinations);
+        if(!_.isArray(messageDestinations)) messageDestinations = [messageDestinations];
+        //console.log('findDestination destinations', messageDestinations);
+        var matches = [];
+        _.each(destinations, function(destination) {
+            var destRegex = new RegExp('^' + destination + '(.+)?');
+            _.find(messageDestinations, function(messageDestination) {
+                var match = messageDestination.match(destRegex);
+                //console.log('findDestination match', match);
+                if (match) matches.push(messageDestination);
+                //return match;
+            });
         });
+        return matches;
     },
 
     filterDestination: function(destination) {

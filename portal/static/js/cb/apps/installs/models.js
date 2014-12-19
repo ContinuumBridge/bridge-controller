@@ -12,14 +12,16 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-            console.log('event on devicePermissions', model, event, options);
-            console.log('AppInstall', self);
+            //console.log('event on devicePermissions', model, event, options);
+            //console.log('AppInstall', self);
             self.trigger('relational:change');
         });
 
+        /*
         this.on('change', function() {
             console.log('Appinstall change event');
         });
+        */
         //this.startTracking();
     },
 

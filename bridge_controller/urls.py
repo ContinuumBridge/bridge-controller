@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -53,7 +54,8 @@ urlpatterns = patterns('',
     (r'^api/client/', include(clients_v1.urls)),
 
 
-    url(r'^$', HomeView.as_view(), name='index'),
+    #url(r'^$', HomeView.as_view(), name='index'),
+    url(r'^$', RedirectView.as_view(url='/portal/')),
     url(r'^success$', TemplateView.as_view(template_name='marketing/success.html'))
 )
 

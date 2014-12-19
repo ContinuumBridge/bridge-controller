@@ -46,6 +46,8 @@ var CBModel = OriginalModel.extend({
         var success = options.success;
         options.success = function(resp) {
 
+            if (success) success(model, resp, options);
+
             // ADDED Dispatch an update, in case the model has already been created by an intervening update
             var itemType = this.__proto__.constructor.modelType;
             Portal.dispatch({

@@ -9,22 +9,24 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
+        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
+        */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge appInstalls', name);
+            //console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge deviceInstalls', name);
+            //console.log('EVENT currentBridge deviceInstalls', name);
             self.trigger('relational:change');
         });
 
         this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
-            console.log('EVENT currentBridge discoveredDevices', name);
+            //console.log('EVENT currentBridge discoveredDevices', name);
             self.trigger('relational:change');
         });
 
@@ -32,7 +34,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.set('messages', messages);
 
         this.listenTo(this.get('messages'), 'all', function(name) {
-            console.log('EVENT currentBridge messages', name);
+            //console.log('EVENT currentBridge messages', name);
             self.trigger('relational:change');
         });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);

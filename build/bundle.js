@@ -22604,7 +22604,9 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    matchFields: ['app', 'device'],
+    backend: 'appDevicePermission',
+
+    matchFields: ['appInstall', 'deviceInstall'],
 
     initialize: function() {
 
@@ -22612,8 +22614,8 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
         //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
         this.listenTo(this.get('deviceInstall'), 'destroy', function() {
-            console.log('ADP heard destroy on deviceInstall')
-            self.destroy();
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
         });
     },
     /*
@@ -22733,7 +22735,13 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
         if (!model.isSyncing()) {
             if (model.isNew()) {
                 console.log('handleClick save');
-                model.save();
+                //model.save();
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: model.__proto__.constructor.modelType,
+                    payload: model
+                });
             } else {
                 console.log('handleClick destroyOnServer');
                 model.destroyOnServer();
@@ -22744,7 +22752,6 @@ var PermissionSwitch = React.createClass({displayName: 'PermissionSwitch',
     render: function() {
 
         var model = this.props.model;
-        console.log('PermissionSwitch render model ', model);
 
         var label = this.props.label;
 
@@ -22778,7 +22785,6 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
 
     createItem: function(item) {
 
-        console.log('AppDevicePermissionListView create item', item);
         var cid = item.cid;
 
         var adp = this.getCollection().get({cid: cid});;
@@ -22899,14 +22905,16 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-            console.log('event on devicePermissions', model, event, options);
-            console.log('AppInstall', self);
+            //console.log('event on devicePermissions', model, event, options);
+            //console.log('AppInstall', self);
             self.trigger('relational:change');
         });
 
+        /*
         this.on('change', function() {
             console.log('Appinstall change event');
         });
+        */
         //this.startTracking();
     },
 
@@ -23045,12 +23053,6 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         };
     },
 
-    getTitle: function() {
-        console.log('getTitle model is', this.props.model)
-        //console.log('getTitle this.getModel', this.getModel());
-        return this.props.model.title;
-    },
-
     getDefaultProps: function () {
         return {
             openable: true
@@ -23061,15 +23063,11 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         var self = this;
 
-        console.log('AppInstallView render body', this);
-
         //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.model;
 
         var devicePermissions = appInstall.get('devicePermissions');
-
-        console.log('deviceInstalls', deviceInstalls);
 
         deviceInstalls.each(function(deviceInstall) {
 
@@ -23079,10 +23077,8 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
                 appInstall: appInstall
             }
             adp = devicePermissions.findWhere(adpData)
-            console.log('existing adp', adp);
             if (!adp) {
                 adp = new Portal.AppDevicePermission(adpData);
-                console.log('created adp', adp);
                 appInstall.set('devicePermissions', adp, {remove: false});
             }
             /*
@@ -23093,8 +23089,6 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
             }
             */
         });
-
-        console.log('devicePermissions are', devicePermissions);
 
         /*
         var devicePermissions = appInstall.get('devicePermissions');
@@ -23891,22 +23885,24 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
+        /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
+        */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge appInstalls', name);
+            //console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge deviceInstalls', name);
+            //console.log('EVENT currentBridge deviceInstalls', name);
             self.trigger('relational:change');
         });
 
         this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
-            console.log('EVENT currentBridge discoveredDevices', name);
+            //console.log('EVENT currentBridge discoveredDevices', name);
             self.trigger('relational:change');
         });
 
@@ -23914,7 +23910,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.set('messages', messages);
 
         this.listenTo(this.get('messages'), 'all', function(name) {
-            console.log('EVENT currentBridge messages', name);
+            //console.log('EVENT currentBridge messages', name);
             self.trigger('relational:change');
         });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
@@ -25035,9 +25031,7 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
     getInitialState: function () {
         var buttons = [];
 
-        console.log('device discovery getInitialState model', this.props.model);
         var device = this.getModel().get('device');
-        console.log('getInitialState device is', device);
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
                 onClick: this.installDevice,
@@ -25058,16 +25052,6 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
         var discoveredDevice = this.getModel();
         console.log('installDevice discoveredDevice', discoveredDevice);
         Portal.Config.controller.promptInstallDevice(discoveredDevice);
-    },
-
-    getTitle: function() {
-        return "Discovered device";
-        /*
-        var discoveredDevice = this.getModel();
-        console.log('DiscoveredDeviceView discoveredDevice ', discoveredDevice );
-        var device = discoveredDevice.get('device');
-        return device ? device.get('name') : discoveredDevice.get('name');
-        */
     }
 });
 
@@ -25101,9 +25085,7 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
 
     createItem: function (item) {
 
-        console.log('DiscoveredDeviceListView item', item);
         var model = this.getCollection().findWhere({id: item.id});
-        console.log('DiscoveredDeviceListView item', model);
         //var title = model.get('device')
         //return <div> Hey </div>;
         return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: item.name, model: item})
@@ -25213,6 +25195,7 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
+    matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
 
     initialize: function() {
@@ -25381,11 +25364,6 @@ Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
                 type: 'delete'
             }]
         };
-    },
-
-    getTitle: function() {
-        console.log('DeviceInstallView ', this );
-        return this.props.model.friendly_name;
     }
 });
 
@@ -25415,8 +25393,6 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         //console.log('DeviceInstallListView createItem', this.itemView);
         //console.log('DeviceInstallListView item', item);
         var cid = item.cid;
-
-        console.log('DeviceInstallListView item', item);
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
     }
@@ -25875,7 +25851,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
     createMessage: function(message) {
 
-        console.log('createMessage', message);
+        //console.log('createMessage', message);
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
         return (
@@ -25899,7 +25875,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
     onButtonClick: function(e) {
 
-        console.log('onButtonClick', e.target.getAttribute('data-tag'));
+        //console.log('onButtonClick', e.target.getAttribute('data-tag'));
         var command = e.target.getAttribute('data-tag');
         this.sendCommand(command);
         this.setState({command: ''});
@@ -25908,9 +25884,9 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
         var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
-        console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
-        console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
+        //console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
+        //console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
+        //console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
         this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
     },
 
@@ -28341,11 +28317,11 @@ Portal.ItemView = {
     getModel: function() {
 
         var owner = this._owner;
-        console.log('getModel owner', owner);
+        //console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        console.log('getModel collection', collection);
-        console.log('getModel item', this.props.model);
+        //console.log('getModel collection', collection);
+        //console.log('getModel item', this.props.model);
         var item = this.props.model;
         var query = item.id ? {id: item.id} : {cid: item.cid};
         return collection.findWhere(query);
@@ -28380,7 +28356,7 @@ Portal.ItemView = {
     */
 
     render: function() {
-        console.log('ItemView props', this.props);
+        //console.log('ItemView props', this.props);
         var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
@@ -28409,7 +28385,7 @@ Portal.ListView = {
 
         var type = button.type == 'bold' ? '--cta' : '';
         var className = "topcoat-button" + type + " center full";
-        console.log('renderButton onClick', button.onClick);
+        //console.log('renderButton onClick', button.onClick);
         //var onClick = button.onClick || function(){};
 
         return (
@@ -28429,9 +28405,9 @@ Portal.ListView = {
     },
 
     render: function() {
-        console.log('render collection', this.props);
-        console.log('render mapped collection', this.props.collection.map(this.createItem));
-        console.log('react getCollection ', this.getCollection());
+        //console.log('render collection', this.props);
+        //console.log('render mapped collection', this.props.collection.map(this.createItem));
+        //console.log('react getCollection ', this.getCollection());
 
         var title = this.state.title || "";
 

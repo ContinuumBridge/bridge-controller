@@ -13,12 +13,6 @@ Portal.AppInstallView = React.createClass({
         };
     },
 
-    getTitle: function() {
-        console.log('getTitle model is', this.props.model)
-        //console.log('getTitle this.getModel', this.getModel());
-        return this.props.model.title;
-    },
-
     getDefaultProps: function () {
         return {
             openable: true
@@ -29,15 +23,11 @@ Portal.AppInstallView = React.createClass({
 
         var self = this;
 
-        console.log('AppInstallView render body', this);
-
         //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.model;
 
         var devicePermissions = appInstall.get('devicePermissions');
-
-        console.log('deviceInstalls', deviceInstalls);
 
         deviceInstalls.each(function(deviceInstall) {
 
@@ -47,10 +37,8 @@ Portal.AppInstallView = React.createClass({
                 appInstall: appInstall
             }
             adp = devicePermissions.findWhere(adpData)
-            console.log('existing adp', adp);
             if (!adp) {
                 adp = new Portal.AppDevicePermission(adpData);
-                console.log('created adp', adp);
                 appInstall.set('devicePermissions', adp, {remove: false});
             }
             /*
@@ -61,8 +49,6 @@ Portal.AppInstallView = React.createClass({
             }
             */
         });
-
-        console.log('devicePermissions are', devicePermissions);
 
         /*
         var devicePermissions = appInstall.get('devicePermissions');

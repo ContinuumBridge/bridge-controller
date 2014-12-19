@@ -6,7 +6,9 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    matchFields: ['app', 'device'],
+    backend: 'appDevicePermission',
+
+    matchFields: ['appInstall', 'deviceInstall'],
 
     initialize: function() {
 
@@ -14,8 +16,8 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
         //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
         this.listenTo(this.get('deviceInstall'), 'destroy', function() {
-            console.log('ADP heard destroy on deviceInstall')
-            self.destroy();
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
         });
     },
     /*

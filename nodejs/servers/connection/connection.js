@@ -138,9 +138,10 @@ Connection.prototype.setupRedis = function() {
 
             // Publish to the first part of the address
             //var addressArray = address.match();
-            var addressMatches = utils.cbidRegex.exec(address);
+            //var addressMatches = utils.cbidRegex.exec(address);
+            var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
-                //logger.log('debug', 'publish addressMatches', addressMatches);
+                logger.log('debug', 'publish addressMatches', addressMatches);
                 message = message.set('destination', address);
                 var jsonMessage = message.toJSONString();
                 redisPub.publish(addressMatches[1], jsonMessage)
@@ -163,8 +164,7 @@ Connection.prototype.setupRedis = function() {
             }, this);
         }
 
-        //logger.log('debug', 'Message config', self.config);
-        logger.log('message', source, '=>', destination, '    ');
+        //logger.log('message', source, '=>', destination, '    ');
     };
 
     var unsubscribeToRedis = this.toRedis.onValue(function(message) {
@@ -185,10 +185,17 @@ Connection.prototype.setupRedis = function() {
     redisSub.on('message', function(channel, jsonMessage) {
 
         //logger.log('debug', 'Redis received ', jsonMessage);
+
+        //var source = _.property('source')(jsonMessage);
+
         var message = new Message(jsonMessage);
+        logger.log('debug', 'redis source', message.get('source'), 'self.config.cbid', self.config.cbid);
+        // If this is a message from the client which has bounced back, do nothing
+        if(message.get('source') != self.config.cbid) {
+            self.router.dispatch(message);
+        }
         //logger.log('debug', 'Redis received', message.toJSON());
         //self.fromRedis.push(message);
-        self.router.dispatch(message);
     });
 
     this.disconnect = function() {

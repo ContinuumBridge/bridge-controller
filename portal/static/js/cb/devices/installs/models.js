@@ -3,6 +3,7 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
+    matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
 
     initialize: function() {

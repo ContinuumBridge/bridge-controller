@@ -48435,10 +48435,12 @@ var CBCollection = OriginalCollection.extend({
 
             // Actions from CB server
             case 'add':
+                console.log('adding', message.payload);
                 this.update(message.payload);
                 break;
 
             case 'update':
+                console.log('updating', message.payload);
                 this.update(message.payload);
                 break;
 
@@ -48449,7 +48451,9 @@ var CBCollection = OriginalCollection.extend({
 
             // Actions from app views
             case 'create':
+                console.log('creating', message.payload);
                 this.create(message.payload);
+                break;
 
             default:
                 console.warn('Unrecognised message actionType', message);
@@ -48495,6 +48499,7 @@ var CBCollection = OriginalCollection.extend({
         for (i = 0, l = models.length; i < l; i++) {
             var attrs = models[i];
             var model = this.findWhere({id: _.property(attrs, 'id')});
+            console.log('update match syncing', this.matchSyncing(attrs));
             if (!model) model = this.matchSyncing(attrs);
 
             if (model) {
@@ -48518,14 +48523,41 @@ var CBCollection = OriginalCollection.extend({
             //var attrs = models[i];
             var model;
             if (!(model = this._prepareModel(models[i], options))) return false;
-            if (options.matchFields) {
+            console.log('model matchFields', model.matchFields);
+            if (!model.cid && model.matchFields) {
                 var matchQuery = {};
-                _.each(options.matchFields, function(matchField) {
+                _.each(model.matchFields, function(matchField) {
                     matchQuery[matchField] = model.get(matchField);
                 });
                 model = this.findWhere(matchQuery) || model;
             }
             this.registerSyncing(model);
+            if (!options.wait) this.add(model, options);
+            var collection = this;
+            /*
+            var success = options.success;
+            options.success = function(model, resp) {
+                if (success) success(model, resp, options);
+            };
+            */
+            model.save(null, options).then(
+                function(result) {
+                    console.log('create success');
+                    if (options.wait) collection.add(model, options);
+                    collection.unregisterSyncing(model);
+                },
+                function(error) {
+                    console.log('create error', error);
+                    collection.unregisterSyncing(model);
+                    Portal.dispatch({
+                        source: 'portal',
+                        actionType: 'create',
+                        itemType: 'error',
+                        payload: error
+                    });
+                }
+            );
+            /*
             var success = options.success;
             options.success = function(model, resp) {
                 self.unregisterSyncing(model);
@@ -48536,7 +48568,9 @@ var CBCollection = OriginalCollection.extend({
                 self.unregisterSyncing(model);
                 if(error) error(model, options);
             }
+            console.log('create model', model);
             OriginalCollection.prototype.create.call(this, model, options);
+            */
         }
     },
 
@@ -48558,6 +48592,7 @@ var CBCollection = OriginalCollection.extend({
     },
 
     unregisterSyncing: function(model) {
+        console.log('unregisterSyncing', model);
         this.ghosts = _.without(this.ghosts, _.findWhere(this.ghosts, {cid: model.cid}));
     },
 
@@ -48682,12 +48717,14 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
         
-        this.set({isGhost: false}, {trackit_silent:true});
+        //this.set({isGhost: false}, {trackit_silent:true});
+        this.set({isGhost: false});
         //this.trigger('change');
 
         return OriginalModel.prototype.save.apply(this, arguments).then(
             function(result) {
 
+                console.log('Save successful', result);
                 return result;
                 //model.trigger('change');
             },
@@ -48891,6 +48928,8 @@ var CBModel = OriginalModel.extend({
         var model = this;
         var success = options.success;
         options.success = function(resp) {
+
+            if (success) success(model, resp, options);
 
             // ADDED Dispatch an update, in case the model has already been created by an intervening update
             var itemType = this.__proto__.constructor.modelType;

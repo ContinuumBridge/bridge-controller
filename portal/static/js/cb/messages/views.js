@@ -61,7 +61,7 @@ Portal.MessageListView = React.createClass({
 
     createMessage: function(message) {
 
-        console.log('createMessage', message);
+        //console.log('createMessage', message);
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
         return (
@@ -85,7 +85,7 @@ Portal.MessageListView = React.createClass({
 
     onButtonClick: function(e) {
 
-        console.log('onButtonClick', e.target.getAttribute('data-tag'));
+        //console.log('onButtonClick', e.target.getAttribute('data-tag'));
         var command = e.target.getAttribute('data-tag');
         this.sendCommand(command);
         this.setState({command: ''});
@@ -94,9 +94,9 @@ Portal.MessageListView = React.createClass({
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
         var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
-        console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
-        console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
+        //console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
+        //console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
+        //console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
         this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
     },
 

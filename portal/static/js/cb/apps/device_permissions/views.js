@@ -15,7 +15,13 @@ var PermissionSwitch = React.createClass({
         if (!model.isSyncing()) {
             if (model.isNew()) {
                 console.log('handleClick save');
-                model.save();
+                //model.save();
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: model.__proto__.constructor.modelType,
+                    payload: model
+                });
             } else {
                 console.log('handleClick destroyOnServer');
                 model.destroyOnServer();
@@ -26,7 +32,6 @@ var PermissionSwitch = React.createClass({
     render: function() {
 
         var model = this.props.model;
-        console.log('PermissionSwitch render model ', model);
 
         var label = this.props.label;
 
@@ -60,7 +65,6 @@ Portal.AppDevicePermissionListView = React.createClass({
 
     createItem: function(item) {
 
-        console.log('AppDevicePermissionListView create item', item);
         var cid = item.cid;
 
         var adp = this.getCollection().get({cid: cid});;

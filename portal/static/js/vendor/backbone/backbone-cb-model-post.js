@@ -29,12 +29,14 @@ var CBModel = OriginalModel.extend({
 
         var self = this;
         
-        this.set({isGhost: false}, {trackit_silent:true});
+        //this.set({isGhost: false}, {trackit_silent:true});
+        this.set({isGhost: false});
         //this.trigger('change');
 
         return OriginalModel.prototype.save.apply(this, arguments).then(
             function(result) {
 
+                console.log('Save successful', result);
                 return result;
                 //model.trigger('change');
             },

@@ -84,12 +84,20 @@ Router.prototype.dispatch = function(message) {
     // Authorization could sit here?
 
     var destination = message.get('destination');
+    var source = message.get('source');
+    logger.log('message', source, '=>', destination, '    ');
+
+    logger.log('debug', 'this.connection.config', this.connection.config);
+    logger.log('debug', 'this.connection.config.cbid', this.connection.config.subscriptionAddresses);
+    logger.log('debug', "message.findDestination(this.connection.config.cbid) is", message.findDestinations(this.connection.config.subscriptionAddresses));
     // Check if the destination is the client route
-    if (message.findDestination(this.connection.config.cbid)) {
-        //logger.log('debug', 'Push to client');
+    var config = this.connection.config;
+    logger.log('debug', 'source', source, 'config cbid', config.cbid);
+    if (message.findDestinations(config.subscriptionAddresses) && source != config.cbid) {
+        logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
-        //logger.log('debug', 'dispatch destination is', destination);
+        logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
     /*
