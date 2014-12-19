@@ -1,3 +1,3 @@
 
-CBApp.Components = {};
+Portal.Components = {};
 

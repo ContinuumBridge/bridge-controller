@@ -1,5 +1,5 @@
 
-CBApp.App = Backbone.RelationalModel.extend({
+Portal.App = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -8,7 +8,7 @@ CBApp.App = Backbone.RelationalModel.extend({
         {
             type: Backbone.HasMany,
             key: 'appInstalls',
-            collectionType: 'CBApp.AppInstallCollection',
+            collectionType: 'Portal.AppInstallCollection',
             includeInJSON: false,
             initializeCollection: 'appInstallCollection'
         }
@@ -34,7 +34,7 @@ CBApp.App = Backbone.RelationalModel.extend({
 
     getInstall: function(bridge) {
 
-        var appInstall = CBApp.appInstallCollection.findOrCreate({
+        var appInstall = Portal.appInstallCollection.findOrCreate({
             app: this,
             bridge: bridge
         });
@@ -53,9 +53,9 @@ CBApp.App = Backbone.RelationalModel.extend({
     }
 }, { modelType: "app" });
 
-CBApp.AppCollection = Backbone.Collection.extend({
+Portal.AppCollection = Backbone.Collection.extend({
 
-    model: CBApp.App,
+    model: Portal.App,
     backend: 'app',
 
     initialize: function() {

@@ -139,11 +139,9 @@
       // Handle case where `observe` is in the form of a function.
       if (_.isFunction(binding.observe)) binding.observe = binding.observe.call(this);
 
-      console.log('stickit binding', binding);
       // Find all matching Stickit handlers that could apply to this element
       // and store in a config object.
       var config = getConfiguration($el, binding);
-      console.log('stickit config', config);
 
       // The attribute we're observing in our config.
       var modelAttr = config.observe;
@@ -225,10 +223,8 @@
 
       /*
       // ADDED Update the element when any of the modelEvents are triggered
-      console.log('stickit config is', config);
       if(config.modelEvents) {
         _.each(config.modelEvents, function(modelEvent) {
-            console.log('modelEvent is', modelEvent);
             /*
             var updateAttr = function() {
               var updateType = _.contains(props, config.name) ? 'prop' : 'attr',
@@ -302,9 +298,6 @@
   // in the view's _modelBindings.
   var observeModelEvent = function(model, event, config, fn) {
     var view = config.view;
-    console.log('observeModelEvent model', model);
-    console.log('observeModelEvent event', event);
-    console.log('observeModelEvent config', config);
     model.on(event, fn, view);
     view._modelBindings.push({model:model, event:event, fn:fn, config:config});
   };
@@ -338,20 +331,13 @@
   var getAttr = function(model, attr, config) {
     var view = config.view;
     var retrieveVal = function(field) {
-      console.log('model', model);
-      console.log('field', field);
-      /*
-      console.log('model[config.escape]', model[config.escape ? 'escape' : 'get'](field));
-      console.log('model escape', model['escape'](attr));
-      console.log('model get', model['get'](attr));
-      */
       return model[config.escape ? 'escape' : 'get'](field);
     };
     var sanitizeVal = function(val) {
       return val == null ? '' : val;
     };
     // ADDED Check for attr
-    console.log('getAttr attr is', attr);
+    //console.log('getAttr attr is', attr);
 
     if(attr) var val = _.isArray(attr) ? _.map(attr, retrieveVal) : retrieveVal(attr);
     if (config.onGet) val = applyViewFn.call(view, config.onGet, val || '', config);
@@ -369,20 +355,15 @@
       getVal: function($el, e, opts) { return $el[opts.updateMethod](); }
     }];
     var handlers2 = $.extend(true, {}, handlers);
-    console.log('stickit handlers 1', handlers2);
     handlers = handlers.concat(_.filter(Stickit._handlers, function(handler) {
-      console.log('handlers', $el.is(handler.selector), handler);
       return $el.is(handler.selector);
     }));
     var handlers3 = $.extend(true, {}, handlers);
-    console.log('stickit handlers 3', handlers3);
     handlers.push(binding);
     var handlers4 = $.extend(true, {}, handlers);
-    console.log('stickit handlers 4', handlers4);
 
     // Merge handlers into a single config object. Last props in wins.
     var config = _.extend.apply(_, handlers);
-    console.log('stickit handlers 4 config', config);
 
     // `updateView` is defaulted to false for configutrations with
     // `visible`; otherwise, `updateView` is defaulted to true.

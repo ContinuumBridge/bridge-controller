@@ -26,23 +26,21 @@ Backbone.HasOne = Backbone.HasOne.extend({
         else if ( this.keyContents || this.keyContents === 0 ) { // since 0 can be a valid `id` as well
                 
                 // ADDED If the keyContents are a uri, extract the id and create an object
-                var idArray = CBApp.filters.apiRegex.exec(this.keyContents);
-                if (idArray && idArray[1]) {
-                        this.keyContents = { id: idArray[1] };
+                var idArray = Portal.filters.apiRegex.exec(this.keyContents);
+                if (idArray && idArray[2]) {
+                        this.keyContents = { id: idArray[2] };
                 }
 
                 //var opts = _.defaults( { create: this.options.createModels }, options );
                 // Taken from the HasMany relation
                 var opts = _.extend( { merge: true }, options, { create: this.options.createModels } )
                 related = this.relatedModel.findOrCreate( this.keyContents, opts );
-                //console.log('ToOne related', related);
 
                  // ADDED Add model to initializeCollection
                 var initializeCollection = this.options.initializeCollection
-                //console.log('related is', related);
-                //console.log('initializeCollection is', initializeCollection);
+
                 if ( _.isString( initializeCollection ) ) {
-                        initializeCollection = CBApp[initializeCollection];
+                        initializeCollection = Portal[initializeCollection];
                 }
                 if (initializeCollection instanceof Backbone.Collection) {
                         initializeCollection.add(related);
@@ -50,7 +48,6 @@ Backbone.HasOne = Backbone.HasOne.extend({
 
                 // ADDED If the model only has an id, fetch the rest of it
                 if (related && related.isNew()) {
-                    //console.log('ToOne isNew!');
                         related.fetch();
                 }
         }
@@ -72,6 +69,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
 
         options = _.defaults( { parse: this.options.parse }, options );
 
+
         // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
         if ( this.keyContents instanceof Backbone.Collection ) {
                 this._prepareCollection( this.keyContents );
@@ -80,6 +78,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
         // Otherwise, 'this.keyContents' should be an array of related object ids.
         // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
         else {
+
                 var toAdd = [];
 
                 _.each( this.keyContents, function( attributes ) {
@@ -87,11 +86,10 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 var model = attributes;
                         }
                         else {
-                                //console.log('ToMany keyContents attributes', attributes);
                                 // ADDED If the keyContents are a uri, extract the id and create an object
-                                var idArray = CBApp.filters.apiRegex.exec(attributes);
-                                if (idArray && idArray[1]) {
-                                        attributes = { id: idArray[1] };
+                                var idArray = Portal.filters.apiRegex.exec(attributes);
+                                if (idArray && idArray[2]) {
+                                        attributes = { id: idArray[2] };
                                 }
 
                                 // If `merge` is true, update models here, instead of during update.
@@ -102,7 +100,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 // ADDED Add model to initializeCollection
                                 var initializeCollection = this.options.initializeCollection
                                 if ( _.isString( initializeCollection ) ) {
-                                        initializeCollection = CBApp[initializeCollection];
+                                        initializeCollection = Portal[initializeCollection];
                                 }
                                 if (initializeCollection instanceof Backbone.Collection) {
                                         initializeCollection.add(model);
@@ -139,11 +137,17 @@ Backbone.HasMany = Backbone.HasMany.extend({
 });
 
 
+/*
 Backbone.Collection = Backbone.Collection.extend({
 
     findUnique: function(attrs) {
         // Returns a model after verifying the uniqueness of the attributes
-        models = this.where(attrs);
+        var models;
+        if (attrs.id) {
+            models = this.where({id: attrs.id});
+        } else {
+            models = this.where(attrs);
+        }
         if(models.length > 1) { console.warn(attrs, 'is not unique') }
         return models[0] || void 0;
     },
@@ -151,7 +155,6 @@ Backbone.Collection = Backbone.Collection.extend({
     findOrAdd: function(attributes, options) {
 
         options = options ? _.clone(options) : {};
-        console.log('findOrAdd', attributes);
         var model = this.findUnique(attributes) ||
             new this.model(attributes, options);
         //this.create(attributes);
@@ -161,59 +164,85 @@ Backbone.Collection = Backbone.Collection.extend({
         return model;
     }
 });
+*/
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
+
+    set: function( key, value, options ) {
+        Backbone.Relational.eventQueue.block();
+
+        // Duplicate backbone's behavior to allow separate key/value parameters, instead of a single 'attributes' object
+        var attributes;
+        if ( _.isObject( key ) || key == null ) {
+            attributes = key;
+            options = value;
+        }
+        else {
+            attributes = {};
+            attributes[ key ] = value;
+        }
+
+        try {
+            var id = this.id,
+                newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
+
+            // Check if we're not setting a duplicate id before actually calling `set`.
+            // ADDED If the ids are the same skip checking
+            if(id != newId) Backbone.Relational.store.checkId( this, newId );
+
+            var result = Backbone.Model.prototype.set.apply( this, arguments );
+
+            // Ideal place to set up relations, if this is the first time we're here for this model
+            if ( !this._isInitialized && !this.isLocked() ) {
+                this.constructor.initializeModelHierarchy();
+                Backbone.Relational.store.register( this );
+                this.initializeRelations( options );
+            }
+            // The store should know about an `id` update asap
+            else if ( newId && newId !== id ) {
+                Backbone.Relational.store.update( this );
+            }
+
+            if ( attributes ) {
+
+                this.updateRelations( attributes, options );
+            }
+        }
+        finally {
+            // Try to run the global queue holding external events
+            Backbone.Relational.eventQueue.unblock();
+        }
+
+        return result;
+    },
 
     /**
      * Initialize Relations present in this.relations; determine the type (HasOne/HasMany), then creates a new instance.
      * Invoked in the first call so 'set' (which is made from the Backbone.Model constructor).
      */
     initializeRelations: function( options ) {
-        console.log('initializeRelations was called', options);
+
         this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
         this._relations = {};
 
         // Pass silent: true to suppress change events on initialisation
         options.silent = true;
         _.each( this.relations || [], function( rel ) {
-            console.log('Initialise relation', rel.key);
-            console.log('Initialise relation this', this);
-            console.log('Initialise relation options', options);
             Backbone.Relational.store.initializeRelation( this, rel, options );
 
             //this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
+            /*
             this.listenTo(this, 'all', function(event) {
 
                 //var name = this.collection ? this.collection.backend ? this.collection.backend.name : "" : "";
-                console.log('EVENT', event, ' on ', this);
             });
+            */
             //this.updateRelationToSelf(rel, options);
         }, this);
 
         this._isInitialized = true;
         this.release();
         this.processQueue();
-    },
-
-    relationalDestroy: function(options) {
-
-        options = options ? _.clone(options) : {};
-
-        var success = options.success;
-        var relations = this.getRelations();
-        var self = this;
-        options.success = function(resp) {
-
-            Backbone.Relational.store.unregister(self);
-            /*
-            _.forEach(relations, function(relation) {
-                // Delete relations on other models to this model
-                self.updateRelationToSelf(relation, {destroy: true});
-            });
-            */
-            if (success) success(model, resp, options);
-        }
-        Backbone.RelationalModel.prototype.destroy.call(this, options);
     },
 
     updateRelationToSelf: function(rel, options) {
@@ -225,7 +254,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         /*
         if (!models[0]) {
             // Not sure why keyContents is sometimes needed
-            console.log('rel.keyContents used', rel);
             models = [ rel.keyContents];
         }
         */
@@ -233,21 +261,17 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
         var model;
 
-        //console.log('Models are ', models);
         //for (i = 0; i < models.length; i++) {
         _.forEach(models, function(model) {
 
             // Iterate through models related to this model
             if (model) {
 
-                //console.log('model in updateRelationsToSelf related to ', this.collection.backend.name, ' is ', model.toJSON());
                 // Get the relation these related models have to this model
                 var plural = rel.related instanceof Backbone.Collection ? "" : "s";
                 var selfType = this.constructor.modelType + plural;
                 var reverseRelation = model.get(selfType);
-                console.log('selfType is', selfType, reverseRelation);
-                console.log('reverseRelation key is', rel.reverseRelation.key);
-                console.log('reverseRelation is', reverseRelation);
+
                 // If there is no reverse relation, there is nothing on any of the related models to update
                 if (!reverseRelation) return;
 
@@ -259,8 +283,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 var reverseModel = _.findWhere(reverseModels, this.toJSON());
                 if (!reverseModel) {
 
-                    console.log('this in updateRelationsToSelf', this.toJSON());
-                    console.log('reverseModel', reverseModels);
                     /*
                     if (reverseModels[0]) {
                         console.log('reverseModel JSON', reverseModels[0].toJSON());
@@ -270,7 +292,6 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                 if (reverseModel) {
 
-                    console.log('reverseModel is', reverseModel);
                     if (options && options.destroy) {
                         // Destroy the reverseModel if this model is being destroyed
                         if (reverseRelation instanceof Backbone.Collection) {
@@ -287,17 +308,13 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                 } else {
                     // Add the model to the reverse relation
                     if (reverseRelation instanceof Backbone.Collection) {
-                        console.log('updateRelationsToSelf reverseRelation is collection', reverseRelation, this);
                         reverseRelation.add(this);
                         //reverseRelation.models.push(this);
-                        //console.log('model', model);
-                        //console.log('rel.reverseRelation.key', rel.reverseRelation.key)
                         //model.set(rel.reverseRelation.key, this);
                         //reverseRelation.set(this);
                     } else {
 
                         // Use updateRelations: false here to stop the update recurring indefinitely, there is probs a better way?
-                        console.log('updateRelationsToSelf reverseRelation is not a collection', reverseRelation, this);
                         var attrs = {};
                         attrs[rel.reverseRelation.key] = this;
                         model.set(attrs, {skipUpdateRelations: true});
@@ -310,23 +327,22 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
     updateRelations: function( changedAttrs, options ) {
 
         // ADDED If skipUpdateRelations is true, don't update relations
-        //console.log('skipUpdateRelations', options.skipUpdateRelations);
         if (options && options.skipUpdateRelations) return;
-        //console.log('skipUpdateRelations did not skip');
 
         if ( this._isInitialized && !this.isLocked() ) {
+
+            var changeTriggers = [];
+
             _.each( this._relations, function( rel ) {
 
                 /*
                 // ADDED If the value is a uri, extract the id
-                var idArray = CBApp.filters.apiRegex.exec(value);
+                var idArray = Portal.filters.apiRegex.exec(value);
                 var id = (idArray && idArray[1]) ? idArray[1] : void 0;
 
                 if (id) {
 
-                    console.log('id is', id)
                     var reverseRelation = rel.getReverseRelations(rel.related);
-                    console.log('Reverse relation is', reverseRelation);
                     var model = rel.related.get(id);
                 }
                 */
@@ -336,45 +352,36 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
                     var value = this.attributes[ rel.keySource ] || this.attributes[ rel.key ],
                         attr = changedAttrs && ( changedAttrs[ rel.keySource ] || changedAttrs[ rel.key ] );
 
-                    //console.log('updateRelations value', value);
-                    //console.log('updateRelations rel', rel.related);
-                    //console.log('updateRelations comp', (rel.related !== value) );
+
                     // Update a relation if its value differs from this model's attributes, or it's been explicitly nullified.
                     // Which can also happen before the originally intended related model has been found (`val` is null).
                     if ( rel.related !== value || ( value === null && attr === null ) || changedAttrs ) {
-                        //console.log('updateRelations after comp', (rel.related !== value) );
-                        this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
 
-                        if (CBApp._isInitialized) {
+                        // ADDED Defer triggering the relation change and deleting attributes
+                        var changeTrigger = function(model, relation, val, opts) {
 
-                            this.updateRelationToSelf(rel);
-                            /*
+                            return function() {
 
-                            // ADDED automatically update related models
-                            if (value.id) {
+                                model.trigger( 'relational:change:' + relation.key, model, val, opts || {} );
 
-                                console.log('model is', model);
-                            }
-                            _.each(value, function (data) {
-                                //console.log('data is', data);
-                                /*
-                                var model = rel.related.get(data.id);
-                                if (model) {
-                                    model.set(data);
-                                } else {
-                                    rel.related.add(data);
+                                if ( relation.keySource !== relation.key ) {
+                                    delete model.attributes[ relation.keySource ];
                                 }
-                            });
-                        */
+
+                                // ADDED
+                                model.updateRelationToSelf(relation);
+                            }
                         }
+                        changeTriggers.push(changeTrigger(this, rel, value, options));
                     }
                 }
 
-                // Explicitly clear 'keySource', to prevent a leaky abstraction if 'keySource' differs from 'key'.
-                if ( rel.keySource !== rel.key ) {
-                    delete this.attributes[ rel.keySource ];
-                }
             }, this );
+
+            // Trigger change on the relations
+            _.each(changeTriggers, function(trigger) {
+                trigger();
+            });
         }
-    },
+    }
 });

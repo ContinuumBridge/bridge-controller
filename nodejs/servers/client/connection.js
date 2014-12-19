@@ -39,10 +39,8 @@ var ClientConnection = function(socket) {
         logger.log('debug', 'connectedMessage', connectedMessage);
         socket.emit('message', JSON.stringify(connectedMessage));
         //socket.sendUTF('message', JSON.stringify(connectedMessage));
+        self.logConnection('client');
 
-        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.log('info', 'New client connection. Subscribed to %s, publishing to %s'
-            ,config.subscriptionAddress, publicationAddressesString);
     }).done();
 };
 

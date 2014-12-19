@@ -1,15 +1,26 @@
 
-CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
+
+Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
     idAttribute: 'id',
 
+    backend: 'appDevicePermission',
+
+    matchFields: ['appInstall', 'deviceInstall'],
+
     initialize: function() {
 
-        this.startTracking();
+        var self = this;
+        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.listenTo(this.get('deviceInstall'), 'destroy', function() {
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
+        });
     },
+    /*
 
     setConnection: function(connection) {
 
@@ -48,6 +59,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
         var currentConnection = !this.isNew();
         this.setConnection(!currentConnection);
     },
+    */
 
     relations: [
         {
@@ -55,34 +67,54 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             key: 'deviceInstall',
             keySource: 'device_install',
             keyDestination: 'device_install',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'appPermissions',
+                keySource: 'app_permissions',
+                keyDestination: 'app_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                includeInJSON: false,
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         },
         {
             type: Backbone.HasOne,
             key: 'appInstall',
             keySource: 'app_install',
             keyDestination: 'app_install',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'devicePermissions',
+                keySource: 'device_permissions',
+                keyDestination: 'device_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                //includeInJSON: 'resource_uri',
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         }
     ]
 }, { modelType: "appDevicePermission" });
 
-CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
-    model: CBApp.AppDevicePermission,
+    model: Portal.AppDevicePermission,
     backend: 'appDevicePermission',
 
+    /*
     initialize: function() {
 
         this.bindBackend();
     }
+    */
 
 });

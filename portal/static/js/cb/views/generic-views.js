@@ -1,5 +1,43 @@
 
-CBApp.ItemView = {
+
+Portal.ReactBackboneMixin = {
+
+    getModel: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        return collection.get({cid: this.props.model.cid})
+    }
+}
+
+Portal.InnerItemView = {
+
+    render: function() {
+        return (
+            <div className="inner-item">
+                Inner Item
+            </div>
+        );
+    }
+}
+
+
+Portal.InnerListView = {
+
+    render: function() {
+        return (
+            <div className="inner-item">
+                <h5>{this.props.title}</h5>
+                <ul className="animated-list device-list">
+                    {this.props.collection.map(this.createItem)}
+                </ul>
+            </div>
+        );
+    }
+}
+
+Portal.ItemView = {
     //mixins: [Backbone.React.Component.mixin],
     /*
     getTitle: function() {
@@ -15,57 +53,138 @@ CBApp.ItemView = {
         return "Staff contents";
     },
     */
-    render: function() {
+
+    getModel: function() {
+
+        var owner = this._owner;
+        //console.log('getModel owner', owner);
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        //console.log('getModel collection', collection);
+        //console.log('getModel item', this.props.model);
+        var item = this.props.model;
+        var query = item.id ? {id: item.id} : {cid: item.cid};
+        return collection.findWhere(query);
+    },
+
+    getCollection: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        return owner.getCollection();
+    },
+
+    handleDestroy: function() {
+        this.getModel().destroy();
+    },
+
+    handleDestroyOnServer: function() {
+        this.getModel().destroyOnServer();
+    },
+
+    /*
+    renderButtons: function() {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
+
         return (
-            <div>
-                <h4 classname="list-group-item-heading">{this.getTitle()}</h4>
-                <i id="edit-button" classname="icon ion-edit edit-button" />
-                <i classname="icon ion-trash-a uninstall-button" />
-            </div>
+            <div className={className} onClick={button.onClick}>{button.name}</div>
+        );
+    },
+    */
+
+    render: function() {
+        //console.log('ItemView props', this.props);
+        var model = this.props.model;
+        var body = this.renderBody ? this.renderBody() : "";
+        var buttons = this.state.buttons || [];
+        return (
+            <React.ListItem header={this.props.title} buttons={buttons}
+                bsStyle='' collapsable={this.props.openable} eventKey="1">
+                {body}
+            </React.ListItem>
         );
     }
 };
 
-CBApp.ListView = {
-    //mixins: [Backbone.React.Component.mixin],
-    createItem: function (item) {
-        console.log('createItem itemView', this.itemView);
-        console.log('item', item);
-        return <div>{item}</div>;
+Portal.ListView = {
+
+    /*
+    propTypes: {
+        handleButtonClick: React.PropTypes.func
     },
+
     setCollection: function(collection) {
 
     },
-    /*
-    componentWillReceiveProps: function(newProps, oldProps){
-        this.setState(this.getInitialState(newProps));
+    */
+
+    renderButton: function(button) {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        //console.log('renderButton onClick', button.onClick);
+        //var onClick = button.onClick || function(){};
+
+        return (
+            <div className={className} onClick={button.onClick}>{button.name}</div>
+        );
     },
-    render: function () {
-        return <div>{this.props.collection.map(this.createItem)}</div>;
+
+    renderButtons: function() {
+
+        var buttons = this.state.buttons || [];
+
+        return (
+            <div class="topcoat-button-bar">
+                {buttons.map(this.renderButton)}
+            </div>
+        )
     },
-     */
+
     render: function() {
+        //console.log('render collection', this.props);
+        //console.log('render mapped collection', this.props.collection.map(this.createItem));
+        //console.log('react getCollection ', this.getCollection());
+
+        var title = this.state.title || "";
+
         return (
             <div>
-                <h4 classname="list-group-item-heading">Test</h4>
-                <i id="edit-button" classname="icon ion-edit edit-button" />
-                <i classname="icon ion-trash-a uninstall-button" />
+                <h2>{title}</h2>
+                <ul className="animated-list device-list">
+                    {this.props.collection.map(this.createItem)}
+                </ul>
+                {this.renderButtons()}
             </div>
         );
     }
 };
 
-CBApp.ListItemLoadingView = Marionette.ItemView.extend({
+Portal.FluxBoneMixin = function(propName) {
+    return {
+        componentDidMount: function() {
+            return this.props[propName].on("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        },
+        componentWillUnmount: function() {
+            return this.props[propName].off("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        }
+    };
+};
+
+Portal.ListItemLoadingView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'spinner',
     template: require('./templates/listItemLoading.html')
 });
-
-CBApp.ListView = Marionette.CompositeView.extend({
-
-    showLoading: function() {
-
-
-    }
-})

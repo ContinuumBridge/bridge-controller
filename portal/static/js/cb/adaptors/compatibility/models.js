@@ -1,5 +1,5 @@
 
-CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
+Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -8,9 +8,9 @@ CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
+Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
-    model: CBApp.AdaptorCompatibility,
+    model: Portal.AdaptorCompatibility,
     //backend: 'app',
 
     initialize: function() {
@@ -23,8 +23,8 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             initializeCollection: 'adaptorCollection',
             includeInJSON: true

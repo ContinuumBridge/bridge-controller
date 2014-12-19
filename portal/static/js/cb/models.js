@@ -26,65 +26,78 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-CBApp.addInitializer(function () {
+Portal.addInitializer(function () {
 
-  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
-  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
+  Portal.adaptorCollection = new Portal.AdaptorCollection();
+  Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
 
   //data
-  CBApp.appCollection = new CBApp.AppCollection();
+  Portal.appCollection = new Portal.AppCollection();
 
-  CBApp.appConnectionCollection = new CBApp.AppConnectionCollection();
+  Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
-  CBApp.appInstallCollection = new CBApp.AppInstallCollection();
-  //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
-  CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+  Portal.appInstallCollection = new Portal.AppInstallCollection();
+  Portal.appInstallCollection.subscribe();
+  //Portal.filteredAppInstallCollection = new Portal.FilteredCollection(Portal.appInstallCollection);
 
-  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
+  Portal.appDevicePermissionCollection = new Portal.AppDevicePermissionCollection();
+  Portal.appDevicePermissionCollection.subscribe();
 
-  CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
+  Portal.appLicenceCollection = new Portal.AppLicenceCollection();
 
-  CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
-  CBApp.bridgeCollection = new CBApp.BridgeCollection();
+  Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
-  CBApp.clientCollection = new CBApp.ClientCollection();
+  Portal.bridgeControlCollection = new Portal.BridgeControlCollection();
 
-  CBApp.clientControlCollection = new CBApp.ClientControlCollection();
+  Portal.bridgeCollection = new Portal.BridgeCollection();
+  Portal.bridgeCollection.subscribe();
 
-  CBApp.deviceCollection = new CBApp.DeviceCollection();
+  Portal.clientCollection = new Portal.ClientCollection();
 
-  CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  Portal.clientControlCollection = new Portal.ClientControlCollection();
 
-  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+  Portal.deviceCollection = new Portal.DeviceCollection();
 
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
+  Portal.deviceInstallCollection.subscribe();
+  //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
+  //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  CBApp.messageCollection = new CBApp.MessageCollection([
-      { body: "Test message 1", source: "BID8", destination: "UID2" },
-      { body: "Test message 2", source: "UID2", destination: "BID8" }
+  Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  Portal.discoveredDeviceCollection.subscribe();
+  //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
+
+  Portal.messageCollection = new Portal.MessageCollection([
+    { source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
+    { source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
   ]);
-  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+  //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
-  CBApp.notificationCollection = new CBApp.NotificationCollection([
-      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
+  Portal.notificationCollection = new Portal.NotificationCollection([
+      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
+  Portal.notificationCollection.subscribe();
 
-  CBApp.userCollection = new CBApp.UserCollection();
+  Portal.userCollection = new Portal.UserCollection();
 
-  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
-  CBApp.currentUserCollection.fetch().then(function() {
+  Portal.currentUserCollection = new Portal.CurrentUserCollection();
+  Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));
+  Portal.currentUserCollection.add(Portal.currentUser);
 
-      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+  /*
+  Portal.currentUserCollection.fetch().then(function() {
+
+      Portal.currentUser = Portal.currentUserCollection.at(0);
       setTimeout(function() {
-          CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+          Portal._isInitialized = true;
+          Portal.currentUserDeferred.resolve(Portal.currentUser);
       }, 500);
 
   }, function(error) {
 
-      CBApp.currentUserDeferred.reject(error);
+      Portal.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+  */
 });

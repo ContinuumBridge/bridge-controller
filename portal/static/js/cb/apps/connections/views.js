@@ -2,7 +2,7 @@
 require('../../components/switches');
 
 /*
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.ConnectionSwitch = Portal.Components.Switch.extend({
 
     template: require('../../components/templates/switch.html'),
 
@@ -22,7 +22,7 @@ CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
 });
 */
 
-CBApp.AppConnectionView = Marionette.ItemView.extend({
+Portal.AppConnectionView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'inner-item',
@@ -32,7 +32,7 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
 
         var self = this;
 
-        this.connectionSwitch = new CBApp.Components.ConnectionSwitch({
+        this.connectionSwitch = new Portal.Components.ConnectionSwitch({
             model: this.model
         });
 
@@ -53,12 +53,12 @@ CBApp.AppConnectionView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppConnectionListView = Marionette.CollectionView.extend({
+Portal.AppConnectionListView = Marionette.CollectionView.extend({
 
     //template: require('./templates/appConnectionSection.html'),
     tagName: 'ul',
     className: '',
-    itemView: CBApp.AppConnectionView,
+    itemView: Portal.AppConnectionView,
     //itemViewContainer: '.connection-list',
 
     initialize: function(options) {
@@ -73,7 +73,7 @@ CBApp.AppConnectionListView = Marionette.CollectionView.extend({
         //if (deviceInstall.isNew()) return void 0;
         console.log('buildItemView', client);
         // Create or fetch an app device permission
-        var appConnection = CBApp.appConnectionCollection.findOrAdd({
+        var appConnection = Portal.appConnectionCollection.findOrAdd({
             app: this.app,
             client: client
         });

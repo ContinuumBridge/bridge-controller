@@ -14,7 +14,7 @@ module.exports.Main = Marionette.Layout.extend({
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
 
@@ -22,12 +22,12 @@ module.exports.Main = Marionette.Layout.extend({
 
 
         this.appListView = new AppViews.AppListView({
-                                    collection: CBApp.appCollection
+                                    collection: Portal.appCollection
                                 });
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
-            CBApp.appCollection.fetch();
+            Portal.appCollection.fetch();
         }).done();
     },
 
@@ -38,11 +38,11 @@ module.exports.Main = Marionette.Layout.extend({
         this.appSection.show(this.appListView);
 
         /*
-        CBApp.appCollection.fetch().then(function(appCollection) {
+        Portal.appCollection.fetch().then(function(appCollection) {
 
             console.log('appCollection fetched', appCollection);
         });
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             self.listenToOnce(currentBridge, 'change:current', self.render);
 
@@ -70,7 +70,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 */

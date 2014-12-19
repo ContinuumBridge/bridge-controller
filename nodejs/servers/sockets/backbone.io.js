@@ -32,7 +32,7 @@ function BackboneIOServer(getConfig, options) {
         clientControl: 'client_control/',
         device: 'device/',
         deviceInstall: 'device_install/',
-        discoveredDeviceInstall: 'discovered_device_install/',
+        discoveredDevice: 'discovered_device/',
         bridge: 'bridge/',
         bridgeControl: 'bridge_control/',
         currentUser: 'current_user/'

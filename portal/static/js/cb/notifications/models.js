@@ -1,5 +1,5 @@
 
-CBApp.Notification = Backbone.Deferred.Model.extend({
+Portal.Notification = Backbone.Deferred.Model.extend({
 
 
     idAttribute: 'id',
@@ -12,14 +12,16 @@ CBApp.Notification = Backbone.Deferred.Model.extend({
 
 }, { modelType: "notification" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Notification,
+    model: Portal.Notification,
     backend: 'notification',
 
+    /*
     initialize: function() {
         //this.bindBackend();
-        CBApp.NotificationCollection.__super__.initialize.apply(this, arguments);
+        Portal.NotificationCollection.__super__.initialize.apply(this, arguments);
     }
+    */
 });

@@ -31,17 +31,43 @@ var vendorBuild = 'build/vendor';
 var requireFiles = './node_modules/react/react.js';
 
 gulp.task('vendor', function () {
-    console.log('bundling vendor');
 
-    var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js')
+    //var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js')
+    var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js', {
+        basedir: __dirname,
+        //debug: !production,
+        cache: {}, // required for watchify
+        packageCache: {}, // required for watchify
+        fullPaths: true // required to be true only for watchify
+    });
 
-    var stream = bundler.bundle()
-        .pipe(source('vendor.js'))
-        //.pipe(rename('vendor.js'))
-        .pipe(gulp.dest('build'))
-        .pipe(livereload());
-        ;
+    bundler = watchify(bundler);
 
+    bundler.transform(reactify);
+    // Used for react-bootstrap
+    //bundler.transform('folderify');
+
+    var rebundle = function() {
+        console.log('rebundling vendor');
+
+        var stream = bundler.bundle();
+        stream.on('error', function (err) { console.error(err) });
+
+        return stream.pipe(source('vendor.js'))
+            .pipe(gulp.dest('./build'))
+            .pipe(livereload());
+        /*
+        var stream = bundler.bundle()
+            .pipe(source('vendor.js'))
+            //.pipe(rename('vendor.js'))
+            .pipe(gulp.dest('build'))
+            .pipe(livereload());
+            ;
+        */
+    }
+
+    bundler.on('update', rebundle);
+    return rebundle();
     //return gulp.src(vendorFiles)
         //.pipe(source('vendor.js'))
 });
@@ -57,8 +83,7 @@ gulp.task('client', function() {
 
 function scripts(watch) {
 
-    var bundler, rebundle;
-    bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
+    var bundler = browserify(CLIENT_SCRIPTS + 'main.js', {
         basedir: __dirname,
         //debug: !production,
         cache: {}, // required for watchify
@@ -79,8 +104,8 @@ function scripts(watch) {
     //bundler.require(requireFiles);
     bundler.transform(reactify);
 
-    rebundle = function() {
-        console.log('rebundling');
+    var rebundle = function() {
+        console.log('rebundling client');
         var stream = bundler.bundle();
         stream.on('error', function (err) { console.error(err) });
         //stream.on('error', handleError('Browserify'));

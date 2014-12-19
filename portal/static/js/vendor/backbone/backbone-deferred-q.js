@@ -341,6 +341,6 @@
     return Collection;
 
       // ADDED Changed Backbone.Collection to QueryEngine.QueryCollection
-  })(QueryEngine.QueryCollection);
+  })(Backbone.Collection);
 
 }).call(this);

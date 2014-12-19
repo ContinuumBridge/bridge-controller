@@ -1,5 +1,5 @@
 
-CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
     require('bootstrap');
 
@@ -14,7 +14,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         showTopbar: function() {
 
             Nav.topbarView = new Nav.TopbarView();
-            CBApp.navRegion.show(Nav.topbarView);
+            Portal.navRegion.show(Nav.topbarView);
         },
         deactivateTopbar: function() {
             console.log('deactivateTopbar');
@@ -43,7 +43,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         },
 
         bridgeClick: function() {
-            CBApp.controller.setCurrentBridge(this.model);
+            Portal.controller.setCurrentBridge(this.model);
         },
 
         onRender: function() {
@@ -57,7 +57,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         tagName: 'li',
         className: 'dropdown',
-        itemView: CBApp.Nav.BridgeItemView,
+        itemView: Portal.Nav.BridgeItemView,
         itemViewContainer: '#bridge-list',
         template: require('./templates/bridgeDropdown.html'),
 
@@ -77,21 +77,18 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         addBridge: function() {
 
-            //CBApp.getCurrentBridge()
+            //Portal.getCurrentBridge()
             this.render();
         },
 
         onRender : function(){
 
-            var self = this;
-
-            CBApp.getCurrentBridge().then(function(currentBridge){
-
-                self.model = currentBridge;
-                self.listenToOnce(self.model, 'change', self.render);
-                //self.model.bind('change', self.render);
-                self.stickit();
-            });
+            this.model = Portal.getCurrentBridge();
+            //console.log('Portal.getCurrentBridge();', Portal.getCurrentBridge());
+            //this.listenToOnce(this.model, 'change', this.render);
+            this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
+            //self.model.bind('change', self.render);
+            this.stickit();
         }
     });
 
@@ -121,7 +118,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
             var navEvent = e.target.className + ':show';
             console.log('navigate', navEvent);
             //console.log('navigate', e.target.className);
-            CBApp.request(navEvent);
+            Portal.request(navEvent);
         },
 
         activateSection: function(section) {
@@ -143,7 +140,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
             var $navbarLeft = this.$('#navbar-left');
             this.bridgeDropdownView = new Nav.BridgeDropdownView({
-                collection: CBApp.bridgeCollection
+                collection: Portal.bridgeCollection
             });
             $navbarLeft.append(this.bridgeDropdownView.render().$el);
 

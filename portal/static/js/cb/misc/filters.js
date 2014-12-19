@@ -1,26 +1,26 @@
 
 require('q');
 
-CBApp.filters = {};
+Portal.filters = {};
 
-CBApp.filters.currentBridge = function() {
+Portal.filters.currentBridge = function() {
     
     return function(item) {
 
         var relation = item.get('bridge');
 
         // Add the item to the collection if it belongs to the bridge
-        if (relation === CBApp.getCurrentBridge()) {
+        if (relation === Portal.getCurrentBridge()) {
             return item;
         }
     }
 }
 
-CBApp.filters.currentBridgeMessageDeferred = function() {
+Portal.filters.currentBridgeMessageDeferred = function() {
 
     var iteratorDeferred = Q.defer();
 
-    CBApp.getCurrentBridge().then(function(currentBridge) {
+    Portal.getCurrentBridge().then(function(currentBridge) {
 
         var iterator = function(item) {
 
@@ -40,6 +40,8 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
     return iteratorDeferred.promise;
 }
 
-//CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
-CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+//Portal.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
+//Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/$/;
 
+Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;

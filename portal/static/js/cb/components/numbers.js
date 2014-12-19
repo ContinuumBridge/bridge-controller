@@ -1,7 +1,7 @@
 
 require('./components');
 
-CBApp.Components.NumberField = Marionette.ItemView.extend({
+Portal.Components.NumberField = Marionette.ItemView.extend({
 
     tagName: 'button',
 

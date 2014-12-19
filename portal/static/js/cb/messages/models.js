@@ -1,5 +1,5 @@
 
-CBApp.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -31,8 +31,8 @@ CBApp.Message = Backbone.RelationalModel.extend({
             key: 'source',
             keySource: 'source',
             keyDestination: 'source',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: false,
             includeInJSON: 'BID',
             initializeCollection: 'bridgeCollection',
@@ -41,39 +41,44 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-CBApp.MessageCollection = Backbone.Collection.extend({
+//Portal.MessageCollection = Backbone.Collection.extend({
+Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Message,
+    model: Portal.Message,
     //backend: 'message',
 
+    /*
     initialize: function() {
-        /*
         this.bindBackend();
 
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-        */
     },
-    
-    parse : function(response){
-        return response.objects;
-    },
+    */
 
-    sendMessage: function(message) {
+    send: function(message) {
 
-        console.log('sendMessage', message);
         var self = this;
 
-        var time = new Date();
-        var currentUserID = CBApp.currentUser.get('cbid');
-        message.set('source', currentUserID);
-        message.set('time_sent', time);
+        message.set('source', Portal.currentUser.get('cbid'));
+        message.set('time_sent', new Date());
 
-        console.log('publishMessage', message.toJSON());
+        Portal.socket.publish(message);
 
-        CBApp.socket.publish(message);
+        message.set('direction', 'outbound');
         this.add(message);
+    },
+
+    sendCommand: function(command) {
+
+        console.log('sendCommand', command);
+        var message = new Portal.Message({
+            destination: 'BID' + Portal.getCurrentBridge().get('id'),
+            body: {command: command}
+        });
+        this.send(message);
+        //message.set('destination', Portal.getCurrentBridge().get('cbid'));
     }
 });

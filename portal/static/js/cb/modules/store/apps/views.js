@@ -2,7 +2,7 @@
 require('../../../components/numbers');
 //require('./device_permissions/views');
 
-var InstallsPermittedField = CBApp.Components.NumberField.extend({
+var InstallsPermittedField = Portal.Components.NumberField.extend({
 
     initialize: function() {
 
@@ -82,21 +82,21 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
         this.installsPermittedField = new InstallsPermittedField();
         this.staffView = new StaffAppView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             // Create or find a licence, then bind to it
-            var licence = CBApp.appLicenceCollection.findWhere({
+            var licence = Portal.appLicenceCollection.findWhere({
                 app: self.model,
                 user: currentUser
             });
 
-            self.licence = licence || new CBApp.AppLicence({
+            self.licence = licence || new Portal.AppLicence({
                                                     app: self.model,
                                                     user: currentUser,
                                                     installs_permitted: 0
                                                 });
 
-            CBApp.appLicenceCollection.add(self.licence);
+            Portal.appLicenceCollection.add(self.licence);
 
             self.staffView.licence = self.licence;
             self.staffView.setModel(self.model);
@@ -135,12 +135,12 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
         this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
         /*
         self.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
+            new Portal.AppDevicePermissionListView({
                 collection: currentBridge.get('deviceInstalls'),
                 appInstall: self.model
             });
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().then(function(currentBridge) {
 
             var appID = '#APPID' + self.model.get('app').get('id');
             $appDevicePermissionList = self.$(appID);
@@ -151,7 +151,7 @@ var AppView = module.exports.AppView = Marionette.ItemView.extend({
 });
 
 /*
-module.exports.InstallAppView = CBApp.AppView.extend({
+module.exports.InstallAppView = Portal.AppView.extend({
 
     template: require('./templates/installApp.html'),
 });
@@ -163,7 +163,7 @@ module.exports.AppListView = Marionette.CompositeView.extend({
     itemView: AppView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     /*
     buildItemView: function(item, ItemViewType, itemViewOptions){

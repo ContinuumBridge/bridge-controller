@@ -29,22 +29,13 @@ Router.prototype.setupRoutes = function() {
     var subscriptionAddress = connection.config.subscriptionAddress;
     var publicationAddresses = connection.config.publicationAddresses;
 
-    logger.log('debug', 'Router setupRoutes config', self.connection.config);
-    // Capture destinations matching the client on this connection
-    /*
-    var clientRoute = subscriptionAddress + ":slug";
-    router.addRoute(clientRoute, function(message) {
+    //logger.log('debug', 'Router setupRoutes config', self.connection.config);
 
-        logger.log('debug', 'Matched clientRoute', message);
-        //self.connection.toClient.push(message);
-    });
-
-    */
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
 
-        logger.log('debug', 'Matched cbAddress', message.toJSONString());
+        //logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
     });
 
@@ -56,7 +47,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('cb', function(message) {
 
-        logger.log('debug', 'Matched cb', message);
+        //logger.log('debug', 'Matched cb', message);
         if (self.matchCB) {
             self.matchCB(message)
         } else {
@@ -66,7 +57,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
-        logger.log('debug', 'message for broadcast', message);
+        logger.log('debug', 'broadcast message', message.get('source'), message.get('destination'));
         if (message.get('source') == 'cb') {
             self.connection.toClient.push(message);
         }
@@ -87,14 +78,22 @@ Router.prototype.setupRoutes = function() {
 
 Router.prototype.dispatch = function(message) {
 
-    logger.log('debug', 'Dispatch message', message);
-    logger.log('debug', 'Dispatch message config', this.connection.config);
+    //logger.log('debug', 'Dispatch message', message);
+    //logger.log('debug', 'Dispatch message config', this.connection.config);
 
     // Authorization could sit here?
 
     var destination = message.get('destination');
+    var source = message.get('source');
+    logger.log('message', source, '=>', destination, '    ');
+
+    logger.log('debug', 'this.connection.config', this.connection.config);
+    logger.log('debug', 'this.connection.config.cbid', this.connection.config.subscriptionAddresses);
+    logger.log('debug', "message.findDestination(this.connection.config.cbid) is", message.findDestinations(this.connection.config.subscriptionAddresses));
     // Check if the destination is the client route
-    if (message.findDestination(this.connection.config.subscriptionAddress)) {
+    var config = this.connection.config;
+    logger.log('debug', 'source', source, 'config cbid', config.cbid);
+    if (message.findDestinations(config.subscriptionAddresses) && source != config.cbid) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
@@ -116,15 +115,5 @@ Router.prototype.dispatch = function(message) {
     */
 }
 
-/*
-var r = new Router();
-
-var Message = require('../message');
-var m = new Message({ destination: 'CID12'});
-r.dispatch(m);
-*/
-//r.parse('cb', ['test']);
-
-//console.log('r is', r);
 
 module.exports = Router;

@@ -23,21 +23,21 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+        this.appOwnershipListView = new Portal.AppOwnershipListView();
 
-        this.clientControlListView = new CBApp.ClientControlListView();
+        this.clientControlListView = new Portal.ClientControlListView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }})
+            //Portal.clientCollection.fetch()
         }).done();
 
         /*
-        this.bridgeView = new CBApp.BridgeListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
+        this.messageListView = new Portal.MessageListView();
         */
     },
 
@@ -54,7 +54,7 @@ module.exports.Main = Marionette.Layout.extend({
         this.bridgeSection.show(this.bridgeView);
          */
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             //self.listenToOnce(currentBridge, 'change:current', self.render);
             var appOwnershipCollection = currentUser.get('appOwnerships');
@@ -77,11 +77,11 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            self.messageListView.setCollection(Portal.filteredMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
@@ -106,20 +106,20 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
     initialize: function() {
 
         var self = this;
-        this.licenceListView = new CBApp.AppLicenceListView();
+        this.licenceListView = new Portal.AppLicenceListView();
 
     },
 
     clickStore: function() {
 
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
+        Portal.request('store:show');
+        //Portal.Controller.store();
     },
 
     onRender: function() {
 
         var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             console.log('promise in app modal initialize');
             var licenceCollection = currentUser.get('appLicences');
@@ -134,7 +134,7 @@ module.exports.InstallAppModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 
@@ -148,7 +148,7 @@ module.exports.InstallDeviceModal = Backbone.Modal.extend({
         console.log('Submitted modal', this);
         var friendlyName = this.$('#friendly-name').val();
         this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        Portal.Config.controller.stopDiscoveringDevices();
     }
 });
 

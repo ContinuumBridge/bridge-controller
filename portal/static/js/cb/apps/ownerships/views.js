@@ -3,7 +3,7 @@ require('../../components/buttons');
 
 require('../connections/views');
 
-CBApp.AppOwnershipView = Marionette.ItemView.extend({
+Portal.AppOwnershipView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -51,7 +51,7 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
         this.app = this.model.get('app');
 
         this.appConnectionListView =
-            new CBApp.AppConnectionListView({
+            new Portal.AppConnectionListView({
                 appOwnership: this.model
             });
     },
@@ -60,7 +60,7 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
 
         var self = this;
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             var clientControls = currentUser.get('clientControls');
             self.appConnectionListView.setCollection(clientControls);
@@ -75,13 +75,13 @@ CBApp.AppOwnershipView = Marionette.ItemView.extend({
 });
 
 
-CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
+Portal.AppOwnershipListView = Marionette.CompositeView.extend({
 
     template: require('./templates/ownershipSection.html'),
-    itemView: CBApp.AppOwnershipView,
+    itemView: Portal.AppOwnershipView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     onRender : function(){
 

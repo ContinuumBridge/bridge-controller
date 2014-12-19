@@ -2,7 +2,7 @@
 
 var HomeViews = require('./views');
 
-CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Home ran!');
     Home.addInitializer(function() {
@@ -21,15 +21,15 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
       index: function () {
         Home.mainLayoutView = new HomeViews.Main();
         console.log('mainLayoutView', Home.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Home.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Home.mainLayoutView);
         console.log('config index');
       },
       */
       showHome: function() {
 
           Home.mainLayoutView = new HomeViews.Main();
-          CBApp.mainRegion.show(Home.mainLayoutView);
+          Portal.mainRegion.show(Home.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -40,7 +40,7 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 

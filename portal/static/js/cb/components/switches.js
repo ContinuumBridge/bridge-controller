@@ -1,7 +1,7 @@
 
 require('./components');
 
-CBApp.Components.Switch = Marionette.ItemView.extend({
+Portal.Components.Switch = Marionette.ItemView.extend({
 
     //tagName: 'button',
 
@@ -33,7 +33,7 @@ CBApp.Components.Switch = Marionette.ItemView.extend({
     }
 });
 
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
+Portal.Components.ConnectionSwitch = Portal.Components.Switch.extend({
 
     template: require('./templates/switch.html'),
 

@@ -1,7 +1,7 @@
 
-CBApp.Regions = {};
+Portal.Regions = {};
 
-CBApp.Regions.Fade = Marionette.Region.extend({
+Portal.Regions.Fade = Marionette.Region.extend({
 
     open: function(view){
         this.$el.hide();

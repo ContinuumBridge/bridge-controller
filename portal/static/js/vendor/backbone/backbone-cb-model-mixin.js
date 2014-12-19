@@ -10,50 +10,6 @@ var wrapError = function(model, options) {
 
 module.exports = {
 
-    // Return a copy of the model's `attributes` object.
-    toJSONString: function(options) {
-
-      var jsonAttributes = JSON.stringify(_.clone(this.attributes));
-      return jsonAttributes;
-    },
-
-
-    destroyOnServer: function(options) {
-      options = options ? _.clone(options) : {};
-      var model = this;
-      var success = options.success;
-
-      // ADDED Set isGhost to true, indicating the model is being deleted on server
-      this.set('isGhost', true);
-
-      //var destroy = function() {
-      //  model.trigger('destroy', model, model.collection, options);
-      //};
-
-      options.success = function(resp) {
-        //if (options.wait || model.isNew()) destroy();
-        // Remove the id from the local model
-        if (!model.isNew()) {
-            delete model.id;
-            model.unset('id');
-        }
-        if (success) success(model, resp, options);
-        // ADDED Reset trackit
-        if (model.unsavedAttributes()) model.restartTracking();
-        if (!model.isNew()) model.trigger('sync', model, resp, options);
-      };
-
-      if (this.isNew()) {
-        options.success();
-        return false;
-      }
-      wrapError(this, options);
-
-      var xhr = this.sync('delete', this, options);
-      //if (!options.wait) destroy();
-      return xhr;
-    },
-
     /*
     initialize: function() {
       Backbone.Deferred.Model.prototype.initialize.apply(this, arguments);

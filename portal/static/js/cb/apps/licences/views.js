@@ -1,7 +1,7 @@
 
 require('../../components/buttons');
 
-CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
+Portal.Components.AppInstallButton = Portal.Components.Button.extend({
 
     //className: 'btn btn-default install-button',
 
@@ -50,7 +50,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
         console.log('onClick');
         this.model.toggleInstalled();
         /*
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        Portal.getCurrentBridge().then(function(currentBridge){
             console.log('onClick promise');
             self.model.toggleInstall(currentBridge);
             console.log('onClick promise 2');
@@ -68,7 +68,7 @@ CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
     }
 });
 
-CBApp.AppLicenceView = Marionette.ItemView.extend({
+Portal.AppLicenceView = Marionette.ItemView.extend({
 
     tagName: 'tr',
     //className: 'row',
@@ -100,27 +100,25 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
 
         this.app = this.model.get('app');
 
-        this.installButton = new CBApp.Components.AppInstallButton();
+        this.installButton = new Portal.Components.AppInstallButton();
 
-        CBApp.getCurrentBridge().then(function(currentBridge){
+        var currentBridge = Portal.getCurrentBridge();
 
-            self.installButton.bridge = currentBridge;
-            self.appInstall = CBApp.appInstallCollection.findOrAdd({
-                app: self.app,
-                bridge: currentBridge,
-                licence: self.model
-            });
-            // Trigger change events on the model, to cause the view to update
-            self.listenTo(self.appInstall, 'all', function(e) {
-                console.log('event on appInstall', e);
-            });
+        this.installButton.bridge = currentBridge;
+        this.appInstall = Portal.appInstallCollection.findOrAdd({
+            app: this.app,
+            bridge: currentBridge,
+            licence: this.model
+        });
+        // Trigger change events on the model, to cause the view to update
+        this.listenTo(this.appInstall, 'all', function(e) {
+            console.log('event on appInstall', e);
+        });
 
-            self.stickit(self.appInstall, self.appInstallBindings);
+        this.stickit(this.appInstall, this.appInstallBindings);
 
-            self.installButton.setModel(self.appInstall);
-            self.installButton.stickit();
-            //self.render();
-        }).done();
+        this.installButton.setModel(this.appInstall);
+        this.installButton.stickit();
     },
 
     getInstallsRemaining: function() {
@@ -150,13 +148,13 @@ CBApp.AppLicenceView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppLicenceListView = Marionette.CompositeView.extend({
+Portal.AppLicenceListView = Marionette.CompositeView.extend({
 
     template: require('./templates/licenceSection.html'),
-    itemView: CBApp.AppLicenceView,
+    itemView: Portal.AppLicenceView,
     //itemViewContainer: 'tbody',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     appendHtml: function(collectionView, itemView){
         collectionView.$("tbody").append(itemView.el);

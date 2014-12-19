@@ -7,17 +7,17 @@ var routers = require('./routers');
 //var Message = require('./message');
 
 
-CBApp.addInitializer(function() {
+Portal.addInitializer(function() {
 
-    CBApp.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
+    Portal.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
 
-    //CBApp.socket = Backbone.io('http://gfdsgfds:9453/');
+    //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
-    CBApp.socket.on('connect', function(){
+    Portal.socket.on('connect', function(){
         console.log('Socket connected');
     });
 
-    CBApp.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
+    Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');
@@ -25,34 +25,38 @@ CBApp.addInitializer(function() {
         console.log('foundDevices are', foundDevices);
         console.log('foundDevices are', JSON.toString(foundDevices));
 
-        CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.discoveredDeviceInstallCollection.reset(foundDevices);
+        var currentBridge = Portal.getCurrentBridge()
             // Trigger reset for the GUI
-            var collection = currentBridge.get('discoveredDeviceInstalls');
-            collection.trigger('reset');
-        });
+        var collection = currentBridge.get('discoveredDeviceInstalls');
+        collection.trigger('reset');
+
     });
 
-    CBApp.socket.publish = function(message) {
+    Portal.socket.publish = function(message) {
 
       var self = this;
 
-      CBApp.getCurrentBridge().then(function(currentBridge) {
+      console.log('Socket sending >', message.toJSON());
+
+      var jsonMessage = message.toJSON();
+
+      Portal.socket.emit('message', jsonMessage, function(data){
+          //logger.log('verbose', 'Sent to socket ' + data);
+      });
+      /*
+      Portal.getCurrentBridge().then(function(currentBridge) {
 
           var destination = "BID" + currentBridge.get('id');
           message.set('destination', destination);
           console.log('Message is', message);
-          var jsonMessage = message.toJSON();
-
-          CBApp.socket.emit('message', jsonMessage, function(data){
-              //logger.log('verbose', 'Sent to socket ' + data);
-          });
       });
+      */
     };
 
-    CBApp.messageRouter = new routers.MessageRouter();
+    Portal.messageRouter = new routers.MessageRouter();
 
-    CBApp.socket.on('message', function(jsonString) {
+    Portal.socket.on('message', function(jsonString) {
 
         try {
             var jsonMessage = JSON.parse(jsonString);
@@ -61,12 +65,15 @@ CBApp.addInitializer(function() {
             return;
         }
 
-        var message = new CBApp.Message(jsonMessage);
+        console.log('Server >', jsonMessage);
+        Portal.dispatch(jsonMessage);
+        /*
+        var message = new Portal.Message(jsonMessage);
 
         var date = new Date();
         message.set('time_received', date);
         console.log('Server >', message);
-        CBApp.messageCollection.add(message);
-
+        Portal.messageCollection.add(message);
+        */
     });
 });

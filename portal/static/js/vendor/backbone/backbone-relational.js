@@ -891,6 +891,7 @@
 		},
 
 		initialize: function( opts ) {
+
 			this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
 
 			// Handle a custom 'collectionType'
@@ -904,7 +905,6 @@
 			if ( this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
 				throw new Error( '`collectionType` must inherit from Backbone.Collection' );
 			}
-
 			var related = this.findRelated( opts );
 			this.setRelated( related );
 		},
@@ -1028,6 +1028,7 @@
 		 */
 		onChange: function( model, attr, options ) {
 			options = options ? _.clone( options ) : {};
+
 			this.setKeyContents( attr );
 			this.changed = false;
 
@@ -1455,7 +1456,6 @@
 			}
 
 			try {
-                console.log('set in relational model', key, value, options)
 				var id = this.id,
 					newId = attributes && this.idAttribute in attributes && attributes[ this.idAttribute ];
 
@@ -1476,6 +1476,7 @@
 				}
 
 				if ( attributes ) {
+
 					this.updateRelations( attributes, options );
 				}
 			}
@@ -1861,6 +1862,7 @@
 		var newModels = [],
 			toAdd = [];
 
+
 		//console.debug( 'calling add on coll=%o; model=%o, options=%o', this, models, options );
 		_.each( models, function( model ) {
 			if ( !( model instanceof Backbone.Model ) ) {
@@ -1991,7 +1993,7 @@
 	Backbone.RelationalModel.extend = function( protoProps, classProps ) {
 		var child = Backbone.Model.extend.apply( this, arguments );
 
-		child.setup( this );
+		child.setup(this );
 
 		return child;
 	};

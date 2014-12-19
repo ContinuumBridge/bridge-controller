@@ -1,22 +1,15 @@
 
-CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
+Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    /*
-    computeds: {
-
-        unconfirmed: function() {
-            var isNew = this.isNew();
-            return isNew || this.hasChangedSinceLastSync;
-        }
-    },
-    */
+    matchFields: ['bridge', 'device'],
+    backend: 'deviceInstall',
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
-        this.bind("change", this.changeHandler)
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        //this.bind("change", this.changeHandler)
 
     },
 
@@ -40,7 +33,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
 
         //var adp = appInstall.get('devicePermissions').findOrCreate({deviceInstall: this});
-        var adp = CBApp.appInstallCollection.findOrCreate({
+        var adp = Portal.appInstallCollection.findOrCreate({
             appInstall: appInstall,
             deviceInstall: this
         });
@@ -49,48 +42,51 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         if (adp) {
             adp.set({permission: true}, {silent: true});
         } else {
-            var adp = CBApp.AppDevicePermission.findOrCreate({
+            var adp = Portal.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
                 appInstall: appInstall,
                 permission: false
             });
         }
-        CBApp.appDevicePermissionCollection.add(adp);
+        Portal.appDevicePermissionCollection.add(adp);
         */
 
         return adp;
     },
 
     relations: [
+        /*
         {
             type: Backbone.HasOne,
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
-            createModels: false,
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
+            createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -100,15 +96,15 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -119,8 +115,8 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'appPermissions',
             //keySource: '',
             //keyDestination: 'bridge',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: false,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -129,22 +125,30 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DeviceInstall,
+    model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
-    initialize: function() {
+    /*
+    initialize: function(options) {
         var self = this;
 
+        //Portal.addInitializer(function(options) {
+
+        //});
+        /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
-        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
+    */
 
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });

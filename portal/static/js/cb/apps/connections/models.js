@@ -1,7 +1,7 @@
 
 require('../../common/models');
 
-CBApp.AppConnection = CBApp.ConnectionModel.extend({
+Portal.AppConnection = Portal.ConnectionModel.extend({
 
     backend: 'appConnection',
 
@@ -11,8 +11,8 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             initializeCollection: 'appCollection',
             includeInJSON: true
@@ -22,8 +22,8 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             initializeCollection: 'clientCollection',
             includeInJSON: true
@@ -31,14 +31,14 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
     ]
 }, { modelType: "appConnection" });
 
-CBApp.AppConnectionCollection = QueryEngine.QueryCollection.extend({
+Portal.AppConnectionCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppConnection,
+    model: Portal.AppConnection,
     backend: 'appConnection',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.AppConnectionCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppConnectionCollection.__super__.initialize.apply(this, arguments);
     }
 });
 

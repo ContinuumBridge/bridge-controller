@@ -1,14 +1,31 @@
 
-CBApp.AppInstall = Backbone.Deferred.Model.extend({
+Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'appInstall',
 
     initialize: function() {
-        this.startTracking();
+
+        var self = this;
+
+        //change relational:change relational:add relational:remove
+        this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
+
+            //console.log('event on devicePermissions', model, event, options);
+            //console.log('AppInstall', self);
+            self.trigger('relational:change');
+        });
+
+        /*
+        this.on('change', function() {
+            console.log('Appinstall change event');
+        });
+        */
+        //this.startTracking();
     },
 
+    /*
     install: function() {
 
         console.log('installing AppInstall');
@@ -16,7 +33,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             console.log('AppInstall successfully saved');
         }, function(error) {
             console.log('Error installing', error);
-            CBApp.Notifications.trigger('error:show', error);
+            Portal.Notifications.trigger('error:show', error);
         }).done();
     },
 
@@ -36,6 +53,7 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             this.uninstall();
         }
     },
+    */
 
     relations: [
         {   
@@ -43,8 +61,8 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -54,28 +72,29 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'appInstalls',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'appInstallCollection',
             }   
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'devicePermissions',
             keySource: 'device_permissions',
             keyDestination: 'device_permissions',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -83,19 +102,19 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstall',
                 keySource: 'app_install',
                 keyDestination: 'app_install',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'licence',
             keySource: 'licence',
             keyDestination: 'licence',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appLicenceCollection',
@@ -103,18 +122,24 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appInstall" });
 
-CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppInstall,
+    model: Portal.AppInstall,
     backend: 'appInstall',
 
+    /*
     initialize: function() {
+        /*
+        this.on('all', function(event, payload) {
+            console.log('AppInstall event ', event, payload);
+        });
         this.bindBackend();
-        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
     },
-    
+
     parse : function(response){
         return response.objects;
     }
+    */
 });
 

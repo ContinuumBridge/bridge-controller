@@ -29,11 +29,15 @@ var PortalConnection = function(socket) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
+        self.logConnection('portal');
 
         //var pa = config.publicationAddresses || [];
-        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
+        /*
+        var pubAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
+        var subAddressesString = config.subscriptionAddresses ? config.subscriptionAddresses.join(', ') : "";
         logger.log('info', 'New portal connection subscribed to %s (%s), publishing to %s'
-            ,config.subscriptionAddress, config.email, publicationAddressesString);
+            , subAddressesString, config.email, pubAddressesString);
+        */
     }).done();
 };
 

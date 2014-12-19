@@ -1,7 +1,114 @@
 
 require('../device_permissions/views');
 
-CBApp.AppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallView = React.createClass({
+    mixins: [Portal.ItemView],
+    //mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete'
+            }]
+        };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderBody: function() {
+
+        var self = this;
+
+        //var devicePermissions = this.props.devicePermissions;
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
+        });
+
+        /*
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+            console.log('event on deviceInstalls', event);
+            self.getCollection().trigger('change');
+        });
+        */
+
+        return (
+            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+        );
+    },
+
+    /*
+
+    getInitialState: function() {
+        return {
+            title: 'Apps'
+        };
+    }
+    */
+});
+
+Portal.AppInstallListView = React.createClass({
+
+    itemView: Portal.AppInstallView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps',
+            buttons: [{
+                name: 'Install Apps',
+                type: 'bold'
+            }]
+        };
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appInstall = this.getCollection().get({cid: cid});;
+        //var appInstalls = this.getCollection();
+        //var appInstall = appInstalls.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return < Portal.AppInstallView key={cid} title={title}
+                    deviceInstalls={deviceInstalls} model={appInstall} />
+    }
+});
+
+/*
+Portal.AppInstallView = Marionette.ItemView.extend({
 
     tagName: 'li',
     className: 'new-item',
@@ -14,12 +121,12 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffAppInstallView({
+        this.staffView = new Portal.StaffAppInstallView({
             model: this.model
         });
         this.staffView.licenceOwner = this.model.get('licence').get('user');
         this.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
+            new Portal.AppDevicePermissionListView({
                 appInstall: this.model
             });
     },
@@ -46,7 +153,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
 
         this.staffView.setElement(this.$('.staff-panel')).render();
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        Portal.getCurrentBridge().fetch(function(currentBridge) {
 
             console.log('AppInstall', currentBridge);
             var deviceInstalls = currentBridge.get('deviceInstalls');
@@ -58,7 +165,7 @@ CBApp.AppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+Portal.StaffAppInstallView = Marionette.ItemView.extend({
 
     tagName: 'table',
     template: require('./templates/staffAppInstall.html'),
@@ -73,13 +180,13 @@ CBApp.StaffAppInstallView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.AppInstallListView = Marionette.CompositeView.extend({
+Portal.AppInstallListView = Marionette.CompositeView.extend({
 
     template: require('./templates/appInstallSection.html'),
-    itemView: CBApp.AppInstallView,
+    itemView: Portal.AppInstallView,
     itemViewContainer: '.app-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
     events: {
         'click #install-apps': 'showLicences'
@@ -87,10 +194,12 @@ CBApp.AppInstallListView = Marionette.CompositeView.extend({
 
     showLicences: function() {
         console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
+        Portal.Config.controller.showAppLicences();
     },
 
     onRender : function(){
 
     }
 });
+
+*/

@@ -1,5 +1,5 @@
 
-CBApp.Device = Backbone.Deferred.Model.extend({
+Portal.Device = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
     
@@ -11,11 +11,11 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     relations: [
         {
             type: Backbone.HasMany,
-            key: 'adaptorCompatibility',
-            keySource: 'adaptor_compatibility',
-            keyDestination: 'adaptor_compatibility',
-            relatedModel: 'CBApp.AdaptorCompatibility',
-            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            key: 'adaptorCompatibilities',
+            keySource: 'adaptor_compatibilities',
+            keyDestination: 'adaptor_compatibilities',
+            relatedModel: 'Portal.AdaptorCompatibility',
+            collectionType: 'Portal.AdaptorCompatibilityCollection',
             createModels: true,
             initializeCollection: 'adaptorCompatibilityCollection',
             includeInJSON: true
@@ -26,8 +26,8 @@ CBApp.Device = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             //keySource: 'device_installs',
             //keyDestination: 'device_installs',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: false,
             initializeCollection: 'deviceInstallCollection',
             includeInJSON: true,
@@ -40,15 +40,15 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "device" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Device,
+    model: Portal.Device,
     backend: 'device',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.DeviceCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

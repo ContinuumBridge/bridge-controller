@@ -2,13 +2,41 @@
 //var logger = require('logger');
 var Q = require('q');
 
-CBApp.Bridge = Backbone.Deferred.Model.extend({
+Portal.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     initialize: function() {
 
-        var deviceInstalls = this.getRelation('deviceInstalls');
+        var self = this;
+        /*
+        this.on('all', function(event, payload) {
+            console.log('Bridge event ', event, payload);
+        });
+        */
+
+        this.listenTo(this.get('appInstalls'), 'all', function(name) {
+            //console.log('EVENT currentBridge appInstalls', name);
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
+            //console.log('EVENT currentBridge deviceInstalls', name);
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
+            //console.log('EVENT currentBridge discoveredDevices', name);
+            self.trigger('relational:change');
+        });
+
+        var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        this.set('messages', messages);
+
+        this.listenTo(this.get('messages'), 'all', function(name) {
+            //console.log('EVENT currentBridge messages', name);
+            self.trigger('relational:change');
+        });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
     },
@@ -26,12 +54,12 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
     },
 
     relations: [
-        {   
+        {
             type: Backbone.HasMany,
             key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            keySource: 'controllers',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection'
@@ -47,8 +75,8 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             key: 'appInstalls',
             keySource: 'apps',
             keyDestination: 'apps',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -58,69 +86,72 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             keySource: 'devices',
             keyDestination: 'devices',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Portal.Bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri'
+            }
         },
         {
             type: Backbone.HasMany,
-            key: 'discoveredDeviceInstalls',
+            key: 'discoveredDevices',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: 'CBApp.DiscoveredDeviceInstall',
-            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            relatedModel: 'Portal.DiscoveredDevice',
+            collectionType: 'Portal.DiscoveredDeviceCollection',
             createModels: true,
             //includeInJSON: true,
-            initializeCollection: 'discoveredDeviceInstallCollection'
+            initializeCollection: 'discoveredDeviceCollection'
         }
     ]
 }, { modelType: "bridge" });
 
-CBApp.BridgeCollection = Backbone.Collection.extend({
+Portal.BridgeCollection = Backbone.Collection.extend({
 
-    model: CBApp.Bridge,
-    backend: 'bridge',
+    model: Portal.Bridge,
+    backend: 'bridge'
 
+    /*
     initialize: function() {
         this.bindBackend();
     },
-    
+
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
+Portal.getCurrentBridge = function() {
 
-CBApp.getCurrentBridge = function() {
+    //var currentBridgeDeferred = Q.defer();
 
-    var currentBridgeDeferred = Q.defer();
+    var bridge = Portal.bridgeCollection.findWhere({current: true}) || Portal.bridgeCollection.at(2);
 
-    CBApp.getCurrentUser().then(function(result) {
+    if (!bridge) {
+        //logger.log('warn', 'There is no current bridge');
+        bridge = false;
+    } else {
+        bridge.set({current: true});
+    }
 
-        var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+    return bridge
+    //currentBridgeDeferred.resolve(bridge);
 
-        if (!bridge) {
-            //logger.log('warn', 'There is no current bridge');
-            bridge = false;
-        } else {
-            bridge.set({current: true});
-        }
-
-        currentBridgeDeferred.resolve(bridge);
-
-    }, function(error) {
-
-        console.log('Error fetching currentUser', error);
-        currentBridgeDeferred.reject(error);
-    });
-
-    return currentBridgeDeferred.promise;
+    //return currentBridgeDeferred.promise;
 }
 
 
-CBApp.BridgeControl = Backbone.RelationalModel.extend({
+Portal.BridgeControl = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -134,8 +165,8 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             initializeCollection: 'bridgeCollection',
             includeInJSON: true
@@ -145,8 +176,8 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'userCollection',
@@ -154,9 +185,9 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
     ]
 }); 
 
-CBApp.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = Backbone.Collection.extend({
 
-    model: CBApp.BridgeControl,
+    model: Portal.BridgeControl,
     backend: 'bridgeControl',
 
     initialize: function() {
