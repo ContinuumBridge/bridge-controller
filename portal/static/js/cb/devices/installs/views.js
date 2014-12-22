@@ -43,7 +43,7 @@ Portal.DeviceInstallListView = React.createClass({
 
     createItem: function (item) {
         //console.log('DeviceInstallListView createItem', this.itemView);
-        //console.log('DeviceInstallListView item', item);
+        console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
         return < Portal.DeviceInstallView key={cid} title={item.friendly_name} model={item} />

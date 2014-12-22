@@ -48744,12 +48744,14 @@ var CBModel = OriginalModel.extend({
     fetch: function(key, val, options) {
 
         var self = this;
+        if (this.fetched == true) return;
 
         return OriginalModel.prototype.fetch.apply(this, arguments).then(
             function(result) {
 
                 console.log('Fetch result', result);
                 result.model.set({'isGhost': false}, {trackit_silent:true});
+                self.fetched = true;
 
                 return result;
                 //model.trigger('change');

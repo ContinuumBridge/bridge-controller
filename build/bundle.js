@@ -23133,7 +23133,8 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
     createItem: function (item) {
         var cid = item.cid;
 
-        var appInstall = this.getCollection().get({cid: cid});;
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
         //var appInstalls = this.getCollection();
         //var appInstall = appInstalls.get({cid: cid});
 
@@ -25391,7 +25392,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     createItem: function (item) {
         //console.log('DeviceInstallListView createItem', this.itemView);
-        //console.log('DeviceInstallListView item', item);
+        console.log('DeviceInstallListView item', item);
         var cid = item.cid;
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
@@ -26343,11 +26344,27 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       showConfig: function() {
 
+          /*
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+
+          /*
           var currentBridge = Portal.getCurrentBridge();
           currentBridge.fetch();
           Config.mainView = React.render(
-              React.createElement(ConfigViews.Main, {model: currentBridge}),
+              < ConfigViews.Main model={currentBridge} />,
               $('#main-region')[0]
+          );
+          */
+          var $mainRegion = $('#main-region')[0];
+          React.unmountComponentAtNode($mainRegion[0]);
+          //$mainRegion.remove();
+          Config.mainView = React.render(
+              React.createElement(ConfigViews.Main, {collection: Portal.bridgeCollection}),
+              $mainRegion
           );
       },
       showAppLicences: function() {
@@ -26446,18 +26463,23 @@ module.exports.Main = React.createClass({displayName: 'Main',
     render: function() {
 
         console.log('config mainView render');
-        var currentBridge = this.getModel();
+        //var currentBridge = this.getModel();
+        var currentBridge = Portal.getCurrentBridge();
+        currentBridge.fetch();
 
         var appInstalls = currentBridge.get('appInstalls');
+        console.log('config mainView appInstalls', appInstalls);
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
 
         var deviceView;
         if (this.state.discoveringDevices) {
             var discoveredDevices = currentBridge.get('discoveredDevices');
-            deviceView = React.createElement(Portal.DiscoveredDeviceListView, {collection: discoveredDevices});
+            deviceView = React.createElement(Portal.DiscoveredDeviceListView, {key: currentBridge.cid, 
+                collection: discoveredDevices});
         } else {
-            deviceView = React.createElement(Portal.DeviceInstallListView, {collection: deviceInstalls});
+            deviceView = React.createElement(Portal.DeviceInstallListView, {key: currentBridge.cid, 
+                collection: deviceInstalls});
         }
 
         //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
@@ -26468,7 +26490,8 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 this.renderModals(), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
-                        React.createElement(Portal.AppInstallListView, {collection: appInstalls, deviceInstalls: deviceInstalls})
+                        React.createElement(Portal.AppInstallListView, {key: currentBridge.cid, 
+                            collection: appInstalls, deviceInstalls: deviceInstalls})
                     ), 
                     React.createElement("div", {ref: "deviceSection", className: "device-section col-md-6"}, 
                         deviceView
@@ -26476,7 +26499,8 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 ), 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {ref: "messageSection", className: "message-section col-md-6"}, 
-                        React.createElement(Portal.MessageListView, {collection: messages})
+                        React.createElement(Portal.MessageListView, {key: currentBridge.cid, 
+                            collection: messages})
                     ), 
                     React.createElement("div", {ref: "bridgeSection", className: "bridge-section col-md-6"})
                 )
@@ -28411,6 +28435,8 @@ Portal.ListView = {
 
         var title = this.state.title || "";
 
+        //var collection = this.getCollection();
+        //console.log('ListView collection', collection);
         return (
             React.createElement("div", null, 
                 React.createElement("h2", null, title), 
