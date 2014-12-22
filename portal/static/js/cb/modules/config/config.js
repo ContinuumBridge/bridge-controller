@@ -33,11 +33,27 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       showConfig: function() {
 
+          /*
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+
+          /*
           var currentBridge = Portal.getCurrentBridge();
           currentBridge.fetch();
           Config.mainView = React.render(
               < ConfigViews.Main model={currentBridge} />,
               $('#main-region')[0]
+          );
+          */
+          var $mainRegion = $('#main-region')[0];
+          React.unmountComponentAtNode($mainRegion[0]);
+          //$mainRegion.remove();
+          Config.mainView = React.render(
+              < ConfigViews.Main collection={Portal.bridgeCollection} />,
+              $mainRegion
           );
       },
       showAppLicences: function() {
