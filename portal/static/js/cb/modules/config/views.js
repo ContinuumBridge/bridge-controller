@@ -45,18 +45,23 @@ module.exports.Main = React.createClass({
     render: function() {
 
         console.log('config mainView render');
-        var currentBridge = this.getModel();
+        //var currentBridge = this.getModel();
+        var currentBridge = Portal.getCurrentBridge();
+        currentBridge.fetch();
 
         var appInstalls = currentBridge.get('appInstalls');
+        console.log('config mainView appInstalls', appInstalls);
 
         var deviceInstalls = currentBridge.get('deviceInstalls');
 
         var deviceView;
         if (this.state.discoveringDevices) {
             var discoveredDevices = currentBridge.get('discoveredDevices');
-            deviceView = <Portal.DiscoveredDeviceListView collection={discoveredDevices} />;
+            deviceView = <Portal.DiscoveredDeviceListView key={currentBridge.cid}
+                collection={discoveredDevices} />;
         } else {
-            deviceView = <Portal.DeviceInstallListView collection={deviceInstalls} />;
+            deviceView = <Portal.DeviceInstallListView key={currentBridge.cid}
+                collection={deviceInstalls} />;
         }
 
         //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
@@ -67,7 +72,8 @@ module.exports.Main = React.createClass({
                 {this.renderModals()}
                 <div className="row">
                     <div ref="appSection" className="app-section col-md-6">
-                        <Portal.AppInstallListView collection={appInstalls} deviceInstalls={deviceInstalls} />
+                        <Portal.AppInstallListView key={currentBridge.cid}
+                            collection={appInstalls} deviceInstalls={deviceInstalls} />
                     </div>
                     <div ref="deviceSection" className="device-section col-md-6">
                         {deviceView}
@@ -75,7 +81,8 @@ module.exports.Main = React.createClass({
                 </div>
                 <div className="row">
                     <div ref="messageSection" className="message-section col-md-6">
-                        <Portal.MessageListView collection={messages} />
+                        <Portal.MessageListView key={currentBridge.cid}
+                            collection={messages} />
                     </div>
                     <div ref="bridgeSection" className="bridge-section col-md-6"></div>
                 </div>

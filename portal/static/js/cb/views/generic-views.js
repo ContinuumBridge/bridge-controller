@@ -151,6 +151,8 @@ Portal.ListView = {
 
         var title = this.state.title || "";
 
+        //var collection = this.getCollection();
+        //console.log('ListView collection', collection);
         return (
             <div>
                 <h2>{title}</h2>
