@@ -75,5 +75,5 @@ class UserBridgeResource(CBResource):
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         excludes = ['is_staff', 'is_superuser', 'key', 'plaintext_key', 'uid']
-        #authorization = ReadOnlyAuthorization()
+        authorization = ReadOnlyAuthorization()
         resource_name = 'bridge'

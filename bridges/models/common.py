@@ -107,23 +107,23 @@ class BroadcastMixin(CBIDModelMixin):
         broadcast = kwargs.pop('broadcast', True)
         super(BroadcastMixin, self).save(*args, **kwargs)
         if broadcast:
-            if settings.ENVIRONMENT == "development":
+            #if settings.ENVIRONMENT == "development":
                 message = self.create_message(verb)
                 self.broadcast(message)
-            else:
+            #else:
                 # User the task queue if we're not in development
-                message = self.create_message(verb)
-                tasks.broadcast.delay(self, message)
+                #message = self.create_message(verb)
+                #tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
         message = self.create_message('delete')
         super(BroadcastMixin, self).delete(using=using)
         if broadcast:
-            if settings.ENVIRONMENT == "development":
-                self.broadcast(message)
-            else:
+            #if settings.ENVIRONMENT == "development":
+            self.broadcast(message)
+            #else:
                 # User the task queue if we're not in development
-                tasks.broadcast.delay(self, message)
+                #tasks.broadcast.delay(self, message)
 
 
 class LoggedModel(models.Model):

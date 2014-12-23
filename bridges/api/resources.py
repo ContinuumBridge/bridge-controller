@@ -80,6 +80,7 @@ class BridgeResource(CBResource, CBIDResourceMixin):
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         #authorization = BridgeAuthorization()
+        authorization = ReadOnlyAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
         fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
         user_related_through = 'controls'

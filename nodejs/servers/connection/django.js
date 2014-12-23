@@ -19,7 +19,8 @@ Django.prototype.request = function(request, sessionID) {
     var data = JSON.stringify(request.body);
     //var method = verb == "get" ? verb : verb + "Json";
 
-    console.log('django request data', data);
+    console.log('django request sessionID', sessionID);
+    logger.log('django request data', data);
     var djangoOptions = {
         method: verb,
         headers: {
