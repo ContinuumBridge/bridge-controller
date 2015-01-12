@@ -19,20 +19,20 @@ module.exports.Main = React.createClass({
 
     getInitialState: function () {
         return {
+            installingApps: false,
             discoveringDevices: false,
-            installDevice: false,
-            installApp: false
+            installDevice: false
         };
     },
 
     renderModals: function () {
 
         var installDevice = this.state.installDevice;
-        var installApp = this.state.installApp;
         if (installDevice) {
             return <InstallDeviceModal container={this} model={installDevice} />;
-        } else if (installApp) {
-
+        } else if (this.state.installingApps) {
+            console.log('rendering installingApps');
+            return <InstallAppModal containter={this} />;
         }
         //var $portalBody = $('#portal-body');
         //console.log('$portalBody ', $portalBody );
@@ -140,6 +140,61 @@ var InstallDeviceModal = React.createClass({
         )
     }
 });
+
+var InstallAppModal = React.createClass({
+
+    mixins: [Backbone.React.Component.mixin],
+
+    handleFriendlyName: function(event) {
+        this.setState({friendlyName: event.target.value});
+    },
+
+    installDevice: function() {
+        console.log('Submitted installDevice modal');
+        //var friendlyName = this.$('#friendly-name').val();
+        //this.props.discoveredDevice.installDevice(friendlyName);
+        var discoveredDevice = this.getModel();
+        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+    },
+
+    cancelInstall: function() {
+
+        Portal.Config.controller.cancelInstallApp();
+    },
+
+    render: function() {
+
+        var self = this;
+        /*
+        Portal.getCurrentUser().then(function(currentUser) {
+
+            console.log('promise in app modal initialize');
+            var licenceCollection = currentUser.get('appLicences');
+            self.licenceListView.setCollection(licenceCollection);
+            self.licenceListView.render();
+        }).done();
+        //this.licenceListView.setElement(this.$('licence-section')).render();
+        this.$('.licence-section').html(this.licenceListView.render().$el);
+
+        var friendlyName = this.state.friendlyName;
+        var device = this.getModel().get('device');
+        var title = device ? "Install " + device.get('name') : "Unknown device";
+        */
+
+        return (
+            <React.Modal className="portal-modal" title="Install Apps" container={this.props.container}
+                onRequestHide={this.cancelInstall} animation={false}>
+                <div className="modal-body">
+                </div>
+                <div className="modal-footer">
+                    <React.Button onClick={this.cancelInstall}>Close</React.Button>
+                    <React.Button onClick={this.installDevice}>Install</React.Button>
+                </div>
+            </ React.Modal>
+        )
+    }
+});
+
 /*
 module.exports.Main = Marionette.Layout.extend({
 

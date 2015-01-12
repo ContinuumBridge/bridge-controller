@@ -8,6 +8,8 @@ React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 React.Button = require('react-bootstrap').Button;
+React.Table = require('react-bootstrap').Table;
+
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');
 //React.Panel = require('react-bootstrap').Panel;

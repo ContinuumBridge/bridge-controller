@@ -1,4 +1,181 @@
 
+Portal.AppLicenceView = React.createClass({
+
+    //mixins: [Portal.ItemView],
+
+    render: function() {
+
+        var self = this;
+
+        //var devicePermissions = this.props.devicePermissions;
+        //var deviceInstalls = this.props.deviceInstalls;
+        var licence = this.props.model;
+        var name = this.props.name;
+
+        return (
+            <div>"Test licence"</div>
+        );
+    }
+});
+
+Portal.AppLicenceListView = React.createClass({
+
+    itemView: Portal.AppLicenceView,
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps'
+            /*
+            buttons: [{
+                name: 'Install Apps',
+                type: 'bold'
+            }]
+            */
+        };
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appLicenceCollection = this.getCollection()
+        var licence = appLicenceCollection.get({cid: cid});
+
+        var app = licence.get('app');
+        var name = app.get('name');
+
+        //var deviceInstalls = this.props.deviceInstalls;
+
+        return < Portal.AppLicenceView key={cid} name={name} model={licence} />
+    },
+
+    render: function() {
+
+        return (
+            <div>
+                <h4>My Licences</h4>
+
+                <React.Table>
+                    <thead>
+                        <td className="col-md-6">
+                            <div className="list-group-item-heading app-name">"App Name"</div>
+                        </td>
+                        <td className="col-md-2">
+                            <div className="installs-permitted">"Installs permitted"</div>
+                        </td>
+                        <td className="col-md-2">
+                            <div className="installs-remaining">"Installs remaining"</div>
+                        </td>
+                        <td className="col-md-2">
+                        </td>
+                    </thead>
+                    <tbody>
+                        <div></div>
+                    </tbody>
+                </React.Table>
+            </div>
+        )
+    }
+});
+
+/*
+ Portal.AppInstallView = Marionette.ItemView.extend({
+
+ tagName: 'li',
+ className: 'new-item',
+ template: require('./templates/appInstall.html'),
+
+ events: {
+ //'click': 'eventWrapperClick',
+ 'click .uninstall-button': 'uninstall'
+ },
+
+ initialize: function() {
+
+ this.staffView = new Portal.StaffAppInstallView({
+ model: this.model
+ });
+ this.staffView.licenceOwner = this.model.get('licence').get('user');
+ this.appDevicePermissionListView =
+ new Portal.AppDevicePermissionListView({
+ appInstall: this.model
+ });
+ },
+
+ serializeData: function() {
+
+ var data = {};
+ var app = this.model.get('app');
+ data.name = app.get('name');
+ data.appID = "AID" + app.get('id');
+ return data;
+ },
+
+ uninstall: function() {
+
+ console.log('uninstall in install view', this.model);
+ this.model.uninstall();
+ },
+
+ onRender : function(){
+
+ console.log('AppInstallView render', this);
+ var self = this;
+
+ this.staffView.setElement(this.$('.staff-panel')).render();
+
+ Portal.getCurrentBridge().fetch(function(currentBridge) {
+
+ console.log('AppInstall', currentBridge);
+ var deviceInstalls = currentBridge.get('deviceInstalls');
+ self.appDevicePermissionListView.setCollection(deviceInstalls);
+ var $appConfig = self.$('.user-panel');
+ console.log('$appConfig is', $appConfig);
+ self.appDevicePermissionListView.setElement($appConfig).render();
+ }).done();
+ }
+ });
+
+ Portal.StaffAppInstallView = Marionette.ItemView.extend({
+
+ tagName: 'table',
+ template: require('./templates/staffAppInstall.html'),
+
+ onRender: function() {
+ if (this.model) {
+ this.stickit();
+ }
+ if (this.licenceOwner) {
+ this.stickit(this.licenceOwner, this.licenceOwnerBindings);
+ }
+ }
+ });
+
+ Portal.AppInstallListView = Marionette.CompositeView.extend({
+
+ template: require('./templates/appInstallSection.html'),
+ itemView: Portal.AppInstallView,
+ itemViewContainer: '.app-list',
+
+ emptyView: Portal.ListItemLoadingView,
+
+ events: {
+ 'click #install-apps': 'showLicences'
+ },
+
+ showLicences: function() {
+ console.log('click showLicences');
+ Portal.Config.controller.showAppLicences();
+ },
+
+ onRender : function(){
+
+ }
+ });
+
+ */
+/*
 require('../../components/buttons');
 
 Portal.Components.AppInstallButton = Portal.Components.Button.extend({
@@ -13,18 +190,6 @@ Portal.Components.AppInstallButton = Portal.Components.Button.extend({
     initialize: function() {
 
     },
-
-    /*
-    getEnabled: function(val) {
-
-        console.log('getEnabled called', val);
-        //var isNew = this.model.isNew();
-        var enabled = this.model.unsavedAttributes() ? '' : 'disabled';
-        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
-
-        return enabled;
-    },
-    */
 
     getContent: function() {
 
@@ -49,13 +214,7 @@ Portal.Components.AppInstallButton = Portal.Components.Button.extend({
         var self = this;
         console.log('onClick');
         this.model.toggleInstalled();
-        /*
-        Portal.getCurrentBridge().then(function(currentBridge){
-            console.log('onClick promise');
-            self.model.toggleInstall(currentBridge);
-            console.log('onClick promise 2');
-        });
-        */
+
     },
 
     onRender: function() {
@@ -165,3 +324,4 @@ Portal.AppLicenceListView = Marionette.CompositeView.extend({
         console.log('AppLicenceListView', this.collection);
     }
 });
+*/

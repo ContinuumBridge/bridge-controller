@@ -56,19 +56,18 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
               $mainRegion
           );
       },
-      showAppLicences: function() {
+      installApps: function() {
 
-        var installAppModal = new ConfigViews.InstallAppModal();
-
-        Portal.modalsRegion.show(installAppModal);
+          console.log('controller installApps');
+        Config.mainView.setState({installingApps: true});
+        //var installAppModal = new ConfigViews.InstallAppModal();
+        //Portal.modalsRegion.show(installAppModal);
+      },
+      cancelInstallApps: function() {
+          Config.mainView.setState({installingApps: false});
       },
       discoverDevices: function() {
 
-          /*
-          Portal.discoveredDeviceCollection.forEach(function(discoveredDeviceInstall) {
-              Backbone.Relational.store.unregister(discoveredDeviceInstall);
-          });
-          */
           Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
               discoveredDevice.delete();
           });

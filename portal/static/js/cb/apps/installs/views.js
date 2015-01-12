@@ -85,9 +85,14 @@ Portal.AppInstallListView = React.createClass({
             title: 'Apps',
             buttons: [{
                 name: 'Install Apps',
+                onClick: this.installApps,
                 type: 'bold'
             }]
         };
+    },
+
+    installApps: function() {
+        Portal.Config.controller.installApps();
     },
 
     createItem: function (item) {
