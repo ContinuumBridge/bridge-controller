@@ -13,6 +13,7 @@ Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/generic-views');
 
+/*
 Portal.addRegions({
     navRegion: "#nav-region",
     mainRegion: "#main-region",
@@ -22,6 +23,7 @@ Portal.addRegions({
       regionType: Backbone.Marionette.Modals
     }
 });
+*/
 
 Portal._isInitialized = false;
 
@@ -76,10 +78,12 @@ Portal.addInitializer(function () {
 
   //router
   Portal.controller = new Portal.Controller();
+  /*
   Portal.router = new Portal.Router('portal', {
       controller : Portal.controller,
       createTrailingSlashRoutes: true
   });
+  */
 
 });
 
@@ -115,6 +119,7 @@ Portal.on("initialize:after", function () {
   */
 
   //for routing purposes
+  /*
   if(Backbone.history) {
 
       Backbone.history.start({pushState: true});
@@ -130,8 +135,10 @@ Portal.on("initialize:after", function () {
   } else {
       console.warn('Backbone.history was not started');
   }
+  */
 });
 
+/*
 Portal.Router = Marionette.SubRouter.extend({
 
   appRoutes: {
@@ -141,6 +148,7 @@ Portal.Router = Marionette.SubRouter.extend({
     'store(/:slug)': 'showStore'
   }
 });
+*/
 
 Portal.reqres.setHandler("config:show", function(){
     Portal.controller.showConfig();

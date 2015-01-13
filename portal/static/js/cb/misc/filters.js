@@ -42,6 +42,6 @@ Portal.filters.currentBridgeMessageDeferred = function() {
 
 //Portal.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
 //Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
-Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/$/;
+Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 
 Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
