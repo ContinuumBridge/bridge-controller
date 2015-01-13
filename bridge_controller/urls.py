@@ -44,18 +44,18 @@ urlpatterns = patterns('',
     #(r'^wiki/', get_wiki_pattern()),
 
 
-    (r'^portal/', include('portal.urls')),
+    #(r'^portal/', include('portal.urls')),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    (r'^api/user/', include(users_v1.urls)),
-    (r'^api/bridge/', include(bridges_v1.urls)),
-    (r'^api/client/', include(clients_v1.urls)),
+    url(r'^api/user/', include(users_v1.urls)),
+    url(r'^api/bridge/', include(bridges_v1.urls)),
+    url(r'^api/client/', include(clients_v1.urls)),
 
+    (r'^.*$', include('portal.urls')),
 
-    #url(r'^$', HomeView.as_view(), name='index'),
-    url(r'^$', RedirectView.as_view(url='/portal/')),
+    #url(r'^$', RedirectView.as_view(url='/portal/'))
     url(r'^success$', TemplateView.as_view(template_name='marketing/success.html'))
 )
 

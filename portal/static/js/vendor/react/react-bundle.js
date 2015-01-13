@@ -14,6 +14,11 @@ React.Table = require('react-bootstrap').Table;
 //React.Panel = require('./Panel.jsx');
 //React.Panel = require('react-bootstrap').Panel;
 
+//var Router = require('react-router');
+//React.Router = Router;
+//{ React.Route, React.DefaultRoute, React.RouteHandler, React.Link } = React.Router;
+//React.Route = Router.Route;
+
 module.exports = React;
 /*
 React.createBackboneClass = function(spec) {

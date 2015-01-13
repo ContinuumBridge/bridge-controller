@@ -6,7 +6,7 @@ var CBApp = require('index');
 require('./cb/modules/config/config');
 require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
-require('./cb/modules/store/store');
+require('./cb/modules/market/market');
 require('./cb/modules/nav/nav');
 require('./cb/modules/notifications/notifications');
 require('./cb/socket');
@@ -22,7 +22,7 @@ require('./cb/models');
 
 
 
-},{"./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/modules/store/store":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/store.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{"./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -25778,13 +25778,24 @@ Portal.getCurrentRoute = function(){
 
 Portal.on("initialize:after", function () {
 
-  Portal.Nav.trigger('topbar:show');
+  //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
 
+    /*
+  var routes = require('./router').routes;
+
+  Router.run(routes, Router.HistoryLocation, function (Handler) {
+      React.render(
+          <Handler/>,
+          document.getElementById('app')
+      );
+  });
+
   React.renderComponent(
-      React.createElement(Portal.NotificationListView, {collection: Portal.notificationCollection}),
+      <Portal.NotificationListView collection={Portal.notificationCollection} />,
       document.getElementById('notification-region')
   );
+  */
 
   //for routing purposes
   if(Backbone.history) {
@@ -27205,7 +27216,387 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
-},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
+},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/app.html":[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<h4 class=\"list-group-item-heading\">";
+  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</h4>\n<div id=\"";
+  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"panel-collapse\">\n    <li class=\"staff-panel panel inner-item\">\n    </li>\n    <li class=\"user-panel panel inner-item\">\n        <table class=\"table\">\n            <tr>\n                <td class=\"col-md-6 list-label\">\n                    My Licences\n                </td>\n                <td class=\"col-md-6\">\n                    <li class=\"installs-permitted input-group\">\n\n                    </li>\n                </td>\n            </tr>\n        </table>\n    </li>\n</div>\n\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/appSection.html":[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
+  });
+
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/staffApp.html":[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
+  });
+
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/views.js":[function(require,module,exports){
+
+require('../../../components/numbers');
+//require('./device_permissions/views');
+
+var InstallsPermittedField = Portal.Components.NumberField.extend({
+
+    initialize: function() {
+
+    },
+
+    getContent: function() {
+
+        console.log('InstallsPermittedField getContent');
+        return this.model.get('installs_permitted');
+    },
+
+    increment: function() {
+
+        this.model.changeInstallsPermitted(1);
+    },
+
+    decrement: function() {
+
+        this.model.changeInstallsPermitted(-1);
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+        }
+    }
+});
+
+var StaffAppView = Marionette.ItemView.extend({
+
+    tagName: 'table',
+    template: require('./templates/staffApp.html'),
+
+    bindings: {
+        '.app-id': {
+            observe: [],
+            onGet: function() {
+                return "App ID: " + this.model.get('id');
+            }
+        }
+    },
+
+    licenceBindings: {
+        '.licence-id': {
+            observe: [],
+            onGet: function() {
+                //return this.model.get('licence').get('id');
+                return "Licence ID: " + this.licence.get('id');
+            }
+        }
+    },
+
+    onRender: function() {
+        if (this.model) {
+            this.stickit();
+        }
+        if (this.licence) {
+            this.stickit(this.licence, this.licenceBindings);
+        }
+    }
+});
+
+var AppView = module.exports.AppView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: 'new-item',
+    template: require('./templates/app.html'),
+
+    events: {
+        //'click': 'eventWrapperClick',
+    },
+
+    initialize: function() {
+        // Proxy change events for stickit
+        var self = this;
+
+        this.installsPermittedField = new InstallsPermittedField();
+        this.staffView = new StaffAppView();
+
+        Portal.getCurrentUser().then(function(currentUser) {
+
+            // Create or find a licence, then bind to it
+            var licence = Portal.appLicenceCollection.findWhere({
+                app: self.model,
+                user: currentUser
+            });
+
+            self.licence = licence || new Portal.AppLicence({
+                                                    app: self.model,
+                                                    user: currentUser,
+                                                    installs_permitted: 0
+                                                });
+
+            Portal.appLicenceCollection.add(self.licence);
+
+            self.staffView.licence = self.licence;
+            self.staffView.setModel(self.model);
+            self.installsPermittedField.setModel(self.licence);
+
+            self.render();
+            /*
+            var licenceBindings = {
+                '.installs-permitted': {
+                  observe: ['installs_permitted'],
+                  onGet: function(installsPermitted) {
+                      return installsPermitted;
+                  },
+                  attributes: [{
+                    name: 'disabled',
+                    observe: ['installs_permitted', 'change'],
+                    onGet: 'getDisabled'
+                  }]
+                }
+            };
+
+            self.stickit(self.licence, licenceBindings);
+            */
+        });
+
+        this.model.on('unsavedChanges sync', function(e) {
+            self.model.trigger('change:change');
+        }, this);
+    },
+
+    onRender : function(){
+
+        var self = this;
+
+        this.staffView.setElement(this.$('.staff-panel')).render();
+        this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
+        /*
+        self.appDevicePermissionListView =
+            new Portal.AppDevicePermissionListView({
+                collection: currentBridge.get('deviceInstalls'),
+                appInstall: self.model
+            });
+
+        Portal.getCurrentBridge().then(function(currentBridge) {
+
+            var appID = '#APPID' + self.model.get('app').get('id');
+            $appDevicePermissionList = self.$(appID);
+            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
+        });
+         */
+    }
+});
+
+/*
+module.exports.InstallAppView = Portal.AppView.extend({
+
+    template: require('./templates/installApp.html'),
+});
+*/
+
+module.exports.AppListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/appSection.html'),
+    itemView: AppView,
+    itemViewContainer: '.app-list',
+
+    emptyView: Portal.ListItemLoadingView,
+
+    /*
+    buildItemView: function(item, ItemViewType, itemViewOptions){
+
+        var options = _.extend({model: item}, itemViewOptions);
+        var view = new ItemViewType(options);
+        //view.licence = "test";
+        return view;
+    },
+    */
+
+    onRender : function(){
+
+    }
+});
+
+},{"../../../components/numbers":"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js","./templates/app.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/app.html","./templates/appSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/appSection.html","./templates/staffApp.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/staffApp.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
+
+
+var StoreViews = require('./views');
+
+Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
+
+    console.log('Store ran!');
+    Store.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+        this.router = new this.Router('portal/store/', {
+            controller : this.controller,
+            createTrailingSlashRoutes: true
+        });
+    });
+
+    Store.Controller = Marionette.Controller.extend({
+
+      /*
+      index: function () {
+        Store.mainLayoutView = new StoreViews.Main();
+        console.log('mainLayoutView', Store.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
+        console.log('config index');
+      },
+      */
+      showStore: function() {
+
+          Store.mainLayoutView = new StoreViews.Main();
+          Portal.mainRegion.show(Store.mainLayoutView);
+      },
+      licenseApp: function(discoveredDeviceInstall) {
+        var that = this;
+        console.log('We got to the controller!');
+        var installDeviceModal = new ConfigViews.InstallDeviceModal({
+            model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+        });
+        Portal.modalsRegion.show(installDeviceModal);
+      }
+    });
+
+    Store.Router = Marionette.SubRouter.extend({
+
+        appRoutes: {
+          "": "showStore",
+          //"config/bridge/:bridge": "config",
+        }
+    });
+
+    Store.on('store:show', function(){
+        console.log('show store');
+        Store.controller.showStore();
+        Store.router.navigate('');
+    });
+});
+
+},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/templates/main.html":[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
+  });
+
+},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
+
+var Q = require('q');
+
+require('../../views/generic-views');
+require('../../views/regions');
+
+//require('../../apps/storeViews');
+var AppViews = require('./apps/views');
+
+module.exports.Main = Marionette.Layout.extend({
+
+    template: require('./templates/main.html'),
+
+    regions: {
+        appSection: {
+            selector: '#app-section',
+            regionType: Portal.Regions.Fade
+        }
+    },
+
+    initialize: function() {
+
+
+        this.appListView = new AppViews.AppListView({
+                                    collection: Portal.appCollection
+                                });
+
+        Portal.getCurrentUser().then(function(currentUser) {
+
+            Portal.appCollection.fetch();
+        }).done();
+    },
+
+    onRender: function() {
+
+        var self = this;
+
+        this.appSection.show(this.appListView);
+
+        /*
+        Portal.appCollection.fetch().then(function(appCollection) {
+
+            console.log('appCollection fetched', appCollection);
+        });
+        Portal.getCurrentBridge().then(function(currentBridge) {
+
+            self.listenToOnce(currentBridge, 'change:current', self.render);
+
+            var appCollection = currentBridge.get('appInstalls');
+            self.appInstallListView.collection = appInstallCollection;
+            self.appInstallListView._initialEvents();
+            self.appInstallListView.delegateEvents();
+            self.appInstallListView.render();
+            //self.appInstallListView.delegateEvents();
+            //self.appSection.show(self.appInstallListView);
+        });
+        */
+    }
+
+});
+
+/*
+module.exports.LicenseAppModal = Backbone.Modal.extend({
+
+    template: require('./templates/discoveryModal.html'),
+    cancelEl: '#cancel-button',
+    submitEl: '#submit-button',
+
+    submit: function() {
+        console.log('Submitted modal', this);
+        var friendlyName = this.$('#friendly-name').val();
+        this.model.installDevice(friendlyName);
+        Portal.Config.controller.stopDiscoveringDevices();
+    }
+});
+*/
+
+},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/views.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
 Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
@@ -27483,387 +27874,7 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
     });
 });
 
-},{"../../notifications/views":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<div id=\"";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"panel-collapse\">\n    <li class=\"staff-panel panel inner-item\">\n    </li>\n    <li class=\"user-panel panel inner-item\">\n        <table class=\"table\">\n            <tr>\n                <td class=\"col-md-6 list-label\">\n                    My Licences\n                </td>\n                <td class=\"col-md-6\">\n                    <li class=\"installs-permitted input-group\">\n\n                    </li>\n                </td>\n            </tr>\n        </table>\n    </li>\n</div>\n\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/views.js":[function(require,module,exports){
-
-require('../../../components/numbers');
-//require('./device_permissions/views');
-
-var InstallsPermittedField = Portal.Components.NumberField.extend({
-
-    initialize: function() {
-
-    },
-
-    getContent: function() {
-
-        console.log('InstallsPermittedField getContent');
-        return this.model.get('installs_permitted');
-    },
-
-    increment: function() {
-
-        this.model.changeInstallsPermitted(1);
-    },
-
-    decrement: function() {
-
-        this.model.changeInstallsPermitted(-1);
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-    }
-});
-
-var StaffAppView = Marionette.ItemView.extend({
-
-    tagName: 'table',
-    template: require('./templates/staffApp.html'),
-
-    bindings: {
-        '.app-id': {
-            observe: [],
-            onGet: function() {
-                return "App ID: " + this.model.get('id');
-            }
-        }
-    },
-
-    licenceBindings: {
-        '.licence-id': {
-            observe: [],
-            onGet: function() {
-                //return this.model.get('licence').get('id');
-                return "Licence ID: " + this.licence.get('id');
-            }
-        }
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licence) {
-            this.stickit(this.licence, this.licenceBindings);
-        }
-    }
-});
-
-var AppView = module.exports.AppView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/app.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-    },
-
-    initialize: function() {
-        // Proxy change events for stickit
-        var self = this;
-
-        this.installsPermittedField = new InstallsPermittedField();
-        this.staffView = new StaffAppView();
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            // Create or find a licence, then bind to it
-            var licence = Portal.appLicenceCollection.findWhere({
-                app: self.model,
-                user: currentUser
-            });
-
-            self.licence = licence || new Portal.AppLicence({
-                                                    app: self.model,
-                                                    user: currentUser,
-                                                    installs_permitted: 0
-                                                });
-
-            Portal.appLicenceCollection.add(self.licence);
-
-            self.staffView.licence = self.licence;
-            self.staffView.setModel(self.model);
-            self.installsPermittedField.setModel(self.licence);
-
-            self.render();
-            /*
-            var licenceBindings = {
-                '.installs-permitted': {
-                  observe: ['installs_permitted'],
-                  onGet: function(installsPermitted) {
-                      return installsPermitted;
-                  },
-                  attributes: [{
-                    name: 'disabled',
-                    observe: ['installs_permitted', 'change'],
-                    onGet: 'getDisabled'
-                  }]
-                }
-            };
-
-            self.stickit(self.licence, licenceBindings);
-            */
-        });
-
-        this.model.on('unsavedChanges sync', function(e) {
-            self.model.trigger('change:change');
-        }, this);
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        this.staffView.setElement(this.$('.staff-panel')).render();
-        this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
-        /*
-        self.appDevicePermissionListView =
-            new Portal.AppDevicePermissionListView({
-                collection: currentBridge.get('deviceInstalls'),
-                appInstall: self.model
-            });
-
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            var appID = '#APPID' + self.model.get('app').get('id');
-            $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
-        });
-         */
-    }
-});
-
-/*
-module.exports.InstallAppView = Portal.AppView.extend({
-
-    template: require('./templates/installApp.html'),
-});
-*/
-
-module.exports.AppListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appSection.html'),
-    itemView: AppView,
-    itemViewContainer: '.app-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-    /*
-    buildItemView: function(item, ItemViewType, itemViewOptions){
-
-        var options = _.extend({model: item}, itemViewOptions);
-        var view = new ItemViewType(options);
-        //view.licence = "test";
-        return view;
-    },
-    */
-
-    onRender : function(){
-
-    }
-});
-
-},{"../../../components/numbers":"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js","./templates/app.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html","./templates/appSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html","./templates/staffApp.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/store.js":[function(require,module,exports){
-
-
-var StoreViews = require('./views');
-
-Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
-
-    console.log('Store ran!');
-    Store.addInitializer(function() {
-
-        //router
-        this.controller = new this.Controller();
-        this.router = new this.Router('portal/store/', {
-            controller : this.controller,
-            createTrailingSlashRoutes: true
-        });
-    });
-
-    Store.Controller = Marionette.Controller.extend({
-
-      /*
-      index: function () {
-        Store.mainLayoutView = new StoreViews.Main();
-        console.log('mainLayoutView', Store.mainLayoutView);
-        console.log('portalLayout', Portal.portalLayout);
-        Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
-        console.log('config index');
-      },
-      */
-      showStore: function() {
-
-          Store.mainLayoutView = new StoreViews.Main();
-          Portal.mainRegion.show(Store.mainLayoutView);
-      },
-      licenseApp: function(discoveredDeviceInstall) {
-        var that = this;
-        console.log('We got to the controller!');
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-        });
-        Portal.modalsRegion.show(installDeviceModal);
-      }
-    });
-
-    Store.Router = Marionette.SubRouter.extend({
-
-        appRoutes: {
-          "": "showStore",
-          //"config/bridge/:bridge": "config",
-        }
-    });
-
-    Store.on('store:show', function(){
-        console.log('show store');
-        Store.controller.showStore();
-        Store.router.navigate('');
-    });
-});
-
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/views.js":[function(require,module,exports){
-
-var Q = require('q');
-
-require('../../views/generic-views');
-require('../../views/regions');
-
-//require('../../apps/storeViews');
-var AppViews = require('./apps/views');
-
-module.exports.Main = Marionette.Layout.extend({
-
-    template: require('./templates/main.html'),
-
-    regions: {
-        appSection: {
-            selector: '#app-section',
-            regionType: Portal.Regions.Fade
-        }
-    },
-
-    initialize: function() {
-
-
-        this.appListView = new AppViews.AppListView({
-                                    collection: Portal.appCollection
-                                });
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            Portal.appCollection.fetch();
-        }).done();
-    },
-
-    onRender: function() {
-
-        var self = this;
-
-        this.appSection.show(this.appListView);
-
-        /*
-        Portal.appCollection.fetch().then(function(appCollection) {
-
-            console.log('appCollection fetched', appCollection);
-        });
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
-            var appCollection = currentBridge.get('appInstalls');
-            self.appInstallListView.collection = appInstallCollection;
-            self.appInstallListView._initialEvents();
-            self.appInstallListView.delegateEvents();
-            self.appInstallListView.render();
-            //self.appInstallListView.delegateEvents();
-            //self.appSection.show(self.appInstallListView);
-        });
-        */
-    }
-
-});
-
-/*
-module.exports.LicenseAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        Portal.Config.controller.stopDiscoveringDevices();
-    }
-});
-*/
-
-},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/apps/views.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/store/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
+},{"../../notifications/views":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
 Portal.Notification = Backbone.Deferred.Model.extend({
 

@@ -95,13 +95,24 @@ Portal.getCurrentRoute = function(){
 
 Portal.on("initialize:after", function () {
 
-  Portal.Nav.trigger('topbar:show');
+  //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
+
+    /*
+  var routes = require('./router').routes;
+
+  Router.run(routes, Router.HistoryLocation, function (Handler) {
+      React.render(
+          <Handler/>,
+          document.getElementById('app')
+      );
+  });
 
   React.renderComponent(
       <Portal.NotificationListView collection={Portal.notificationCollection} />,
       document.getElementById('notification-region')
   );
+  */
 
   //for routing purposes
   if(Backbone.history) {

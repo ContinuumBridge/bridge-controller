@@ -238,4 +238,3 @@ Connection.prototype.unauthorizedResult = function(message, exception) {
 }
 
 module.exports = Connection;
-
