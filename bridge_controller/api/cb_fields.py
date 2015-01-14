@@ -13,7 +13,7 @@ from tastypie.fields import ApiField, RelatedField, ToOneField, ToManyField, NOT
 
 from django.utils import six
 
-class ToOneThroughField(ToOneField):
+class CBToOneField(ToOneField):
     
     def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,
                  null=False, blank=False, nonmodel=False,readonly=False, full=False,
@@ -21,7 +21,7 @@ class ToOneThroughField(ToOneField):
 
         self.nonmodel = nonmodel
 
-        super(ToOneThroughField, self).__init__(
+        super(CBToOneField, self).__init__(
             to, attribute, related_name=related_name, default=default,
             null=null, blank=blank, readonly=readonly, full=full,
             unique=unique, help_text=help_text, use_in=use_in,
@@ -35,6 +35,59 @@ class ToOneThroughField(ToOneField):
         dehydrate_model_id = getattr(bundle.obj, "%s_id" % self.attribute, None)
 
         return dehydrate_model_id
+
+    def build_related_resource(self, value, request=None, related_obj=None, related_name=None):
+        """
+        Returns a bundle of data built by the related resource, usually via
+        ``hydrate`` with the data provided.
+        Accepts either a URI, a data dictionary (or dictionary-like structure)
+        or an object with a ``pk``.
+        """
+        print "build_related_resource, related_obj", related_obj
+        print "build_related_resource, value", value
+        self.fk_resource = self.to_class()
+        kwargs = {
+            'request': request,
+            'related_obj': related_obj,
+            'related_name': related_name,
+        }
+
+        if isinstance(value, Bundle):
+            # Already hydrated, probably nested bundles. Just return.
+            return value
+        elif isinstance(value, six.string_types):
+            # We got a URI. Load the object and assign it.
+            print "resource_from_uri", self.resource_from_uri(self.fk_resource, value, **kwargs)
+            return self.resource_from_uri(self.fk_resource, value, **kwargs)
+        elif hasattr(value, 'items'):
+            # We've got a data dictionary.
+            # Since this leads to creation, this is the only one of these
+            # methods that might care about "parent" data.
+            return self.resource_from_data(self.fk_resource, value, **kwargs)
+        elif hasattr(value, 'pk'):
+            # We've got an object with a primary key.
+            return self.resource_from_pk(self.fk_resource, value, **kwargs)
+        else:
+            raise ApiFieldError("The '%s' field was given data that was not a URI, not a dictionary-alike and does not have a 'pk' attribute: %s." % (self.instance_name, value))
+
+    def resource_from_uri(self, fk_resource, uri, request=None, related_obj=None, related_name=None):
+        """
+        Given a URI is provided, the related resource is attempted to be
+        loaded based on the identifiers in the URI.
+        """
+        print "resource_from_uri uri", uri
+        try:
+            fk_resource.nested = True
+            print "fk_resource nested", getattr(fk_resource, 'nested')
+            obj = fk_resource.get_via_uri(uri, request=request)
+            bundle = fk_resource.build_bundle(
+                obj=obj,
+                request=request,
+            )
+            print "resource_from_uri obj", obj
+            return fk_resource.full_dehydrate(bundle)
+        except ObjectDoesNotExist:
+            raise ApiFieldError("Could not find the provided object via resource URI '%s'." % uri)
 
 class ToManyThroughField(ToManyField):
 

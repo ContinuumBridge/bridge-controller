@@ -18,7 +18,6 @@ class AdaptorResource(CBResource):
     class Meta(CBResource.Meta):
         queryset = Adaptor.objects.all()
         authorization = CBReadAllAuthorization()
-        user_related_through = 'adaptor_ownerships'
         related_user_permissions = ['read', 'create', 'update', 'delete']
         filtering = {
             "slug": ('exact', 'startswith',),
@@ -29,8 +28,8 @@ class AdaptorResource(CBResource):
 
 class AdaptorOwnershipResource(CBResource):
 
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
+    adaptor = cb_fields.CBToOneField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
     class Meta(CBResource.Meta):
         queryset = AdaptorOwnership.objects.all()
@@ -40,8 +39,8 @@ class AdaptorOwnershipResource(CBResource):
 
 class AdaptorDeviceCompatibilityResource(CBResource):
 
-    device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=False)
-    adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
+    device = cb_fields.CBToOneField('devices.api.resources.DeviceResource', 'device', full=False)
+    adaptor = cb_fields.CBToOneField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
     class Meta(CBResource.Meta):
         queryset = AdaptorCompatibility.objects.all()

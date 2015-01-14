@@ -38,8 +38,8 @@ from .authorization import BridgeControlAuthorization
 
 class BridgeControlResource(CBResource, CBIDResourceMixin):
 
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=True)
+    bridge = cb_fields.CBToOneField('bridges.api.resources.BridgeResource', 'bridge', full=False)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=True)
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
@@ -56,7 +56,6 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         #authorization = BridgeAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
         fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
-        user_related_through = 'bridge_controls'
         related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge'
 

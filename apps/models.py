@@ -62,6 +62,7 @@ class AppLicence(LoggedModel):
     class Meta:
         verbose_name = _('app_licence')
         verbose_name_plural = _('app_licences')
+        bridge_related_through = 'app_installs'
         app_label = 'apps'
 
     def get_installs(self):

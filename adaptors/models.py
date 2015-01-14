@@ -27,6 +27,7 @@ class Adaptor(LoggedModel):
     class Meta:
         verbose_name = _('adaptor')
         verbose_name_plural = _('adaptors')
+        user_related_through = 'adaptor_ownerships'
         app_label = 'adaptors'
 
     def save(self, *args, **kwargs):

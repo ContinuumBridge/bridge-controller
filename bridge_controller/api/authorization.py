@@ -28,8 +28,10 @@ class CBAuthorization(Authorization):
 
     def get_m2m_relation_query(self, related_objects, m2m_related, query_list, bundle):
 
+        print "get_m2m_relation_query m2m_related", m2m_related
         try:
             model = self.resource_meta.queryset.model
+            print "get_m2m_relation_query model", model
             #related_through = getattr(self.resource_meta, '{0}_related_through'.format(m2m_related))
             related_through = getattr(model._meta, '{0}_related_through'.format(m2m_related))
             print "related_through ", related_through
@@ -38,6 +40,7 @@ class CBAuthorization(Authorization):
             query_list.append((
                  '{0}__{1}{2}'.format(related_through, m2m_related, query_suffix), related_objects
             ))
+            print "query_list", query_list
             return query_list
             #object_filters.append(Q(**object_filter))
         except AttributeError:
@@ -58,6 +61,7 @@ class CBAuthorization(Authorization):
     def get_client_related_query(self, verb, query_list, bundle):
         #print "queryset is ", getattr(self.resource_meta, 'queryset').__class__
         requester = CBAuth.objects.get(id=bundle.request.user.id)
+        print "get_client_related_query verb", verb
         if isinstance(requester, CBUser):
             if verb in getattr(self.resource_meta, 'related_user_permissions', []):
                 query_list = self.get_relation_query(requester, 'user', query_list, bundle)
@@ -68,6 +72,7 @@ class CBAuthorization(Authorization):
             bridges = self.get_request_bridges(bundle)
             query_list = self.get_relation_query(bridges, 'bridge', query_list, bundle)
             query_list = self.get_m2m_relation_query(bridges, 'bridge', query_list, bundle)
+        print "query_list after", query_list
 
         return query_list
 

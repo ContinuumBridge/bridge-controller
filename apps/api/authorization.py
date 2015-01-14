@@ -65,18 +65,30 @@ class AppInstallAuthorization(CBAuthorization):
         print "end of validate app_install"
         return object_list
 
+    def read_list(self, object_list, bundle):
+        print "Read app install list authorization"
+        return self.validate(object_list, bundle)
+
+    def read_detail(self, object_list, bundle):
+        print "Read app install detail authorization"
+        return bool(self.validate([bundle.obj], bundle))
+        #return super(AppInstallAuthorization, self).create_detail(object_list, bundle)
+
     def create_list(self, object_list, bundle):
+        print "Create app install list authorization"
         return self.validate(object_list, bundle)
 
     def create_detail(self, object_list, bundle):
-        print "Create app install"
+        print "Create app install authorization"
         return bool(self.validate([bundle.obj], bundle))
         #return super(AppInstallAuthorization, self).create_detail(object_list, bundle)
 
     def update_list(self, object_list, bundle):
+        print "Update app install list authorization"
         return self.validate(object_list, bundle)
 
     def update_detail(self, object_list, bundle):
+        print "Update app install detail authorization"
         return bool(self.validate([bundle.obj], bundle))
 
     def delete_list(self, object_list, bundle):

@@ -10,6 +10,7 @@ from tastypie.authorization import Authorization
 
 from django.contrib.auth import authenticate, login, logout
 from django.conf.urls import url
+
 from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.utils import trailing_slash
 
@@ -58,6 +59,60 @@ class CBResource(ModelResource):
             bundle.obj.created_by = bundle.request.user
         if 'updated_by' in bundle.obj._meta.fields:
             bundle.obj.modified_by = bundle.request.user
+
+    def obj_create(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_create``.
+        """
+        bundle.obj = self._meta.object_class()
+
+        for key, value in kwargs.items():
+            setattr(bundle.obj, key, value)
+
+        print "obj_create", bundle.obj
+        bundle = self.full_hydrate(bundle)
+        return self.save(bundle)
+
+    def obj_get(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_get``.
+        Takes optional ``kwargs``, which are used to narrow the query to find
+        the instance.
+        """
+        try:
+            object_list = self.get_object_list(bundle.request).filter(**kwargs)
+            stringified_kwargs = ', '.join(["%s=%s" % (k, v) for k, v in kwargs.items()])
+
+            if len(object_list) <= 0:
+                raise self._meta.object_class.DoesNotExist("Couldn't find an instance of '%s' which matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
+            elif len(object_list) > 1:
+                raise MultipleObjectsReturned("More than '%s' matched '%s'." % (self._meta.object_class.__name__, stringified_kwargs))
+
+            bundle.obj = object_list[0]
+            self.authorized_read_detail(object_list, bundle)
+            return bundle.obj
+        except ValueError:
+            raise NotFound("Invalid resource lookup data provided (mismatched type).")
+
+    def authorized_read_detail(self, object_list, bundle):
+        """
+        Handles checking of permissions to see if the user has authorization
+        to GET this resource.
+        """
+        # ADDED If the resource is being used as nested then skip authorization on read
+        try:
+            if getattr(self, 'nested'):
+                return True
+        except AttributeError:
+            pass
+        try:
+            auth_result = self._meta.authorization.read_detail(object_list, bundle)
+            if not auth_result is True:
+                raise Unauthorized()
+        except Unauthorized as e:
+            self.unauthorized_result(e)
+
+        return auth_result
 
     def save(self, bundle, skip_errors=False):
         self.is_valid(bundle)
@@ -116,7 +171,9 @@ class CBResource(ModelResource):
     def create_user_through_model(self, bundle):
         # Create an appropriate through model between the current user and the current item
         try:
-            user_through = getattr(self._meta, 'user_related_through')
+            #user_through = getattr(self._meta, 'user_related_through')
+            # Untested
+            user_through = getattr(self._meta.queryset.model, 'user_related_through')
             if user_through:
                 through_model_manager = getattr(bundle.obj, user_through)
                 creation_parameters = {

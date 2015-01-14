@@ -33,8 +33,8 @@ class AppResource(CBResource, CBIDResourceMixin):
 
 class AppConnectionResource(CBResource):
 
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=False)
+    client = cb_fields.CBToOneField('clients.api.resources.ClientResource', 'client', full=False)
+    app = cb_fields.CBToOneField('apps.api.resources.AppResource', 'app', full=False)
 
     class Meta(CBResource.Meta):
         queryset = AppConnection.objects.all()
@@ -44,8 +44,8 @@ class AppConnectionResource(CBResource):
 
 class AppDevicePermissionResource(PostMatchMixin, CBResource):
 
-    device_install = cb_fields.ToOneThroughField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
-    app_install = cb_fields.ToOneThroughField('apps.api.resources.AppInstallResource', 'app_install', full=False)
+    device_install = cb_fields.CBToOneField('devices.api.resources.DeviceInstallResource', 'device_install', full=False)
+    app_install = cb_fields.CBToOneField('apps.api.resources.AppInstallResource', 'app_install', full=False)
     
     class Meta(CBResource.Meta):
        queryset = AppDevicePermission.objects.all()
@@ -57,8 +57,8 @@ class AppDevicePermissionResource(PostMatchMixin, CBResource):
 
 class AppOwnershipResource(CBResource):
 
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.CBToOneField('apps.api.resources.AppResource', 'app', full=True)
 
     class Meta(CBResource.Meta):
         queryset = AppOwnership.objects.all()
@@ -68,8 +68,8 @@ class AppOwnershipResource(CBResource):
 
 class AppLicenceResource(PostMatchMixin, CBResource):
 
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.CBToOneField('apps.api.resources.AppResource', 'app', full=True)
     #installs_permitted = fields.IntegerField()
 
     installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
@@ -79,7 +79,6 @@ class AppLicenceResource(PostMatchMixin, CBResource):
     class Meta(CBResource.Meta):
        queryset = AppLicence.objects.all()
        authorization = AppLicenceAuthorization()
-       bridge_related_through = 'app_installs'
        related_bridge_permissions = ['read']
        related_user_permissions = ['read', 'delete']
        resource_name = 'app_licence'
@@ -88,9 +87,9 @@ class AppLicenceResource(PostMatchMixin, CBResource):
 
 class AppInstallResource(CBResource, CBIDResourceMixin):
 
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    licence = cb_fields.ToOneThroughField('apps.api.resources.AppLicenceResource', 'licence', full=True)
+    bridge = cb_fields.CBToOneField('bridges.api.resources.BridgeResource', 'bridge', full=False)
+    app = cb_fields.CBToOneField('apps.api.resources.AppResource', 'app', full=True)
+    licence = cb_fields.CBToOneField('apps.api.resources.AppLicenceResource', 'licence', full=True)
 
     device_permissions = cb_fields.ToManyThroughField(AppDevicePermissionResource,
                     attribute=lambda bundle: bundle.obj.get_device_permissions() or bundle.obj.appdevicepermission_set, full=True,

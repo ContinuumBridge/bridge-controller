@@ -37,8 +37,8 @@ from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver4
 
 class UserBridgeControlResource(CBResource):
 
-    bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=True)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    bridge = cb_fields.CBToOneField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=True)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
@@ -51,8 +51,8 @@ class UserBridgeControlResource(CBResource):
 
 class UserAuthBridgeControlResource(CBResource):
 
-    bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=False)
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    bridge = cb_fields.CBToOneField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=False)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()

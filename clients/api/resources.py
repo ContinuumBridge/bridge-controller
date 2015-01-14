@@ -26,8 +26,8 @@ class ClientResource(CBResource):
 
 class ClientControlResource(CBResource):
 
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
+    client = cb_fields.CBToOneField('clients.api.resources.ClientResource', 'client', full=False)
 
     class Meta(CBResource.Meta):
         queryset = ClientControl.objects.all()

@@ -49,6 +49,7 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
 
     class Meta:
         verbose_name = _('bridge')
+        user_related_through = 'bridge_controls'
         default_resource = 'bridges.api.resources.BridgeResource'
         app_label = 'bridges'
 

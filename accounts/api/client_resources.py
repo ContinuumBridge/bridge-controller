@@ -20,8 +20,8 @@ class UserClientResource(RelatedUserObjectsResource):
 
 class UserClientControlResource(UserObjectsResource):
 
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=True)
+    user = cb_fields.CBToOneField('accounts.api.resources.UserResource', 'user', full=False)
+    client = cb_fields.CBToOneField('clients.api.resources.ClientResource', 'client', full=True)
 
     class Meta(UserObjectsResource.Meta):
         queryset = ClientControl.objects.all()

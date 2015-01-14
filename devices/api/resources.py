@@ -112,9 +112,9 @@ def convert_post_to_patch(request):
 
 class DeviceInstallResource(PostMatchMixin, CBResource):
 
-    bridge = cb_fields.ToOneThroughField('bridges.api.resources.BridgeResource', 'bridge', full=False)
-    device = cb_fields.ToOneThroughField('devices.api.resources.DeviceResource', 'device', full=True)
-    adaptor = cb_fields.ToOneThroughField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
+    bridge = cb_fields.CBToOneField('bridges.api.resources.BridgeResource', 'bridge', full=False)
+    device = cb_fields.CBToOneField('devices.api.resources.DeviceResource', 'device', full=True)
+    adaptor = cb_fields.CBToOneField('adaptors.api.resources.AdaptorResource', 'adaptor', full=True)
 
     class Meta(CBResource.Meta):
         queryset = DeviceInstall.objects.all()
