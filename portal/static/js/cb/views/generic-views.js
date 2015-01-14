@@ -165,6 +165,7 @@ Portal.ListView = {
     }
 };
 
+/*
 Portal.FluxBoneMixin = function(propName) {
     return {
         componentDidMount: function() {
@@ -190,3 +191,4 @@ Portal.ListItemLoadingView = Marionette.ItemView.extend({
     className: 'spinner',
     template: require('./templates/listItemLoading.html')
 });
+*/

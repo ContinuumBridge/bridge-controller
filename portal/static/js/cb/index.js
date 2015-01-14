@@ -102,16 +102,17 @@ Portal.on("initialize:after", function () {
   //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
 
-    /*
   var routes = require('./router').routes;
 
-  Router.run(routes, Router.HistoryLocation, function (Handler) {
+  Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+      var params = state.params;
       React.render(
-          <Handler/>,
+          <Handler params={params} />,
           document.getElementById('app')
       );
   });
 
+  /*
   React.renderComponent(
       <Portal.NotificationListView collection={Portal.notificationCollection} />,
       document.getElementById('notification-region')

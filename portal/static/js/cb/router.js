@@ -19,6 +19,7 @@ module.exports.routes = (
     <Route handler={MainView} path="/">
         <DefaultRoute handler={HomeView} />
         <Route name="config" handler={ConfigView} />
+        <Route name="dashboard" />
         <Route name="market" handler={MarketView} />
         <NotFoundRoute handler={NotFoundView}/>
     </Route>

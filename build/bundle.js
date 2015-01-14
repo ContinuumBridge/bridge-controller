@@ -25785,16 +25785,17 @@ Portal.on("initialize:after", function () {
   //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
 
-    /*
   var routes = require('./router').routes;
 
-  Router.run(routes, Router.HistoryLocation, function (Handler) {
+  Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+      var params = state.params;
       React.render(
-          <Handler/>,
+          React.createElement(Handler, {params: params}),
           document.getElementById('app')
       );
   });
 
+  /*
   React.renderComponent(
       <Portal.NotificationListView collection={Portal.notificationCollection} />,
       document.getElementById('notification-region')
@@ -25850,7 +25851,7 @@ Portal.reqres.setHandler("store:show", function(){
     Portal.controller.showStore();
 });
 module.exports = Portal;
-},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/vagrant/bridge-controller/portal/static/js/cb/router.js","./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
 Portal.Message = Backbone.RelationalModel.extend({
 
@@ -27986,7 +27987,36 @@ Portal.NotificationListView = Marionette.CompositeView.extend({
 });
 */
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
+
+var Route = Router.Route
+    ,DefaultRoute = Router.DefaultRoute
+    ,RouteHandler = Router.RouteHandler
+    ,NotFoundRoute = Router.NotFoundRoute
+    ,Link = Router.Link;
+
+require('./views/home');
+require('./views/main');
+
+var ConfigView = require('./modules/config/views').Main;
+var MainView = require('./views/main');
+var HomeView = require('./views/home');
+var MarketView = require('./modules/market/views').Main;
+var NotFoundView = require('./views/notFound');
+
+
+module.exports.routes = (
+    React.createElement(Route, {handler: MainView, path: "/"}, 
+        React.createElement(DefaultRoute, {handler: HomeView}), 
+        React.createElement(Route, {name: "config", handler: ConfigView}), 
+        React.createElement(Route, {name: "dashboard"}), 
+        React.createElement(Route, {name: "market", handler: MarketView}), 
+        React.createElement(NotFoundRoute, {handler: NotFoundView})
+    )
+);
+
+
+},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -28651,6 +28681,7 @@ Portal.ListView = {
     }
 };
 
+/*
 Portal.FluxBoneMixin = function(propName) {
     return {
         componentDidMount: function() {
@@ -28676,8 +28707,172 @@ Portal.ListItemLoadingView = Marionette.ItemView.extend({
     className: 'spinner',
     template: require('./templates/listItemLoading.html')
 });
+*/
 
-},{"./templates/listItemLoading.html":"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", {className: "welcome"}, 
+                React.createElement("div", {className: "welcome-text panel-body"}, 
+                    "Welcome to the ContinuumBridge portal."
+                )
+            )
+        );
+    }
+});
+
+/*
+ </br></br>
+ If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
+ </br></br>
+ If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
+ </br></br>
+ For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
+*/
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
+
+var Nav = require('./nav');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State ],
+
+    render: function () {
+        var activeSection = this.getParams().section;
+        console.log('mainView getParams()', this.getParams());
+        console.log('mainView params', this.props.params);
+        return (
+            React.createElement("div", null, 
+                React.createElement(Nav.Topbar, {activeSection: activeSection}), 
+                React.createElement("div", {className: "container"}, 
+                    React.createElement(Router.RouteHandler, null)
+                )
+            )
+        );
+    }
+});
+
+/*
+var ConfigViews = require('../modules/config/views');
+
+Portal.MainView = React.createClass({
+    mixins: [Backbone.React.Component.mixin],
+
+    render: function() {
+        var currentBridge = Portal.getCurrentBridge();
+        currentBridge.fetch();
+        return (
+            <ConfigViews.Main model={currentBridge} />
+        )
+    }
+});
+*/
+
+},{"./nav":"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
+
+module.exports.Topbar = React.createClass({displayName: 'Topbar',
+
+    mixins: [ Router.State ],
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "navbar navbar-inverse navbar-fixed-top"}, 
+                React.createElement("div", {className: "container"}, 
+                    React.createElement("div", {className: "navbar-header"}, 
+                        React.createElement("button", {type: "button", className: "navbar-toggle pull-right", 'data-toggle': "collapse", 'data-target': ".navbar-ex1-collapse"}, 
+                            React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
+                            React.createElement("span", {className: "icon-bar"}), 
+                            React.createElement("span", {className: "icon-bar"}), 
+                            React.createElement("span", {className: "icon-bar"})
+                        ), 
+                        React.createElement("a", {className: "home navbar-brand"}, React.createElement("strong", null, "Continuum Bridge"))
+                    ), 
+
+                    React.createElement("div", {className: "collapse navbar-collapse navbar-ex1-collapse", role: "navigation"}, 
+                        React.createElement("ul", {id: "navbar-left", className: "nav navbar-nav navbar-left"}, 
+                            React.createElement(BridgeList, {collection: Portal.bridgeCollection})
+                        ), 
+                        React.createElement("div", {id: "navbar-right", className: "nav navbar-nav navbar-right"}, 
+                            React.createElement(Tab, {to: "dashboard"}, "Dashboard"), 
+                            React.createElement(Tab, {to: "market"}, "App Market"), 
+                            React.createElement(Tab, {to: "config"}, "Config"), 
+                            React.createElement("li", {id: "account-dropdown", className: "dropdown"}, 
+                                React.createElement("a", {href: "#", className: "dropdown-toggle", 'data-toggle': "dropdown"}, 
+                                React.createElement("div", {className: "header-text"}, "My Account"), 
+                                    React.createElement("b", {className: "caret"})
+                                ), 
+                                React.createElement("ul", {className: "dropdown-menu"}, 
+                                    React.createElement("li", null, React.createElement("a", {className: "developer"}, "Developer")), 
+                                    React.createElement("li", {name: "logout"}, React.createElement("a", {href: "/accounts/logout"}, "Logout"))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    }
+});
+
+var BridgeList = React.createClass({displayName: 'BridgeList',
+
+    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+
+    createItem: function(bridge) {
+
+        console.log('createItem bridge is', bridge);
+        return React.createElement("li", null, React.createElement(Router.Link, {query: {bridge: bridge.cbid}}, bridge.name));
+    },
+
+    render: function () {
+
+        return (
+            React.createElement("li", {className: "dropdown"}, 
+                React.createElement("a", {href: "#", id: "bridge-header", className: "dropdown-toggle", 'data-toggle': "dropdown"}, 
+                    React.createElement("div", {className: "header-text"}, "Bridges "), React.createElement("b", {className: "caret"})
+                ), 
+                React.createElement("ul", {className: "dropdown-menu"}, 
+                    this.props.collection.map(this.createItem)
+                )
+            )
+        )
+    }
+});
+
+var Tab = React.createClass({displayName: 'Tab',
+
+    mixins: [ Router.State ],
+
+    render: function () {
+        var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
+        var className = isActive ? 'active' : '';
+        var link = Router.Link(this.props);
+        //var link = (
+        //    <Router.Link {...this.props} />
+        //);
+        return React.createElement("li", {className: className}, link);
+    }
+
+});
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", null, 
+                "Page Not Found"
+            )
+        );
+    }
+});
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
 Portal.Regions = {};
 
@@ -28690,9 +28885,7 @@ Portal.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html")
-},{"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

@@ -2,11 +2,13 @@
 var Nav = require('./nav');
 
 module.exports = React.createClass({
+
     mixins: [ Router.State ],
 
     render: function () {
         var activeSection = this.getParams().section;
-        console.log('mainView params', this.getParams());
+        console.log('mainView getParams()', this.getParams());
+        console.log('mainView params', this.props.params);
         return (
             <div>
                 <Nav.Topbar activeSection={activeSection}/>

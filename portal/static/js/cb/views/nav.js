@@ -1,6 +1,8 @@
 
 module.exports.Topbar = React.createClass({
 
+    mixins: [ Router.State ],
+
     render: function() {
         return (
             <div className="navbar navbar-inverse navbar-fixed-top">
@@ -17,12 +19,12 @@ module.exports.Topbar = React.createClass({
 
                     <div className="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
                         <ul id="navbar-left" className="nav navbar-nav navbar-left">
-                            <BridgeList />
+                            <BridgeList collection={Portal.bridgeCollection} />
                         </ul>
                         <div id="navbar-right" className="nav navbar-nav navbar-right">
-                            <li><a className="dashboard">Dashboard</a></li>
-                            <li><a className="store">App Store</a></li>
-                            <li><a className="config">Config</a></li>
+                            <Tab to="dashboard">Dashboard</Tab>
+                            <Tab to="market">App Market</Tab>
+                            <Tab to="config">Config</Tab>
                             <li id="account-dropdown" className="dropdown">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                                 <div className="header-text">My Account</div>
@@ -43,9 +45,12 @@ module.exports.Topbar = React.createClass({
 
 var BridgeList = React.createClass({
 
-    createItem: function() {
+    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
 
-        //{this.props.collection.map(this.createItem)}
+    createItem: function(bridge) {
+
+        console.log('createItem bridge is', bridge);
+        return <li><Router.Link query={{bridge: bridge.cbid}}>{bridge.name}</Router.Link></li>;
     },
 
     render: function () {
@@ -53,11 +58,28 @@ var BridgeList = React.createClass({
         return (
             <li className="dropdown">
                 <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
-                    <div class="header-text">Bridges </div><b class="caret"></b>
+                    <div className="header-text">Bridges </div><b className="caret"></b>
                 </a>
                 <ul className="dropdown-menu">
+                    {this.props.collection.map(this.createItem)}
                 </ul>
             </li>
         )
     }
+});
+
+var Tab = React.createClass({
+
+    mixins: [ Router.State ],
+
+    render: function () {
+        var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
+        var className = isActive ? 'active' : '';
+        var link = Router.Link(this.props);
+        //var link = (
+        //    <Router.Link {...this.props} />
+        //);
+        return <li className={className}>{link}</li>;
+    }
+
 });
