@@ -15,6 +15,10 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         });
         */
 
+        this.listenTo(this, 'all', function(name) {
+            console.log('EVENT bridge', name);
+        });
+
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
@@ -79,7 +83,14 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'bridgeCollection'
+            }
         },
         {
             type: Backbone.HasMany,
@@ -131,25 +142,44 @@ Portal.BridgeCollection = Backbone.Collection.extend({
     */
 });
 
+/*
 Portal.getCurrentBridge = function() {
 
-    //var currentBridgeDeferred = Q.defer();
+}
+*/
 
-    var bridge = Portal.bridgeCollection.findWhere({current: true}) || Portal.bridgeCollection.at(2);
+//router = require('../router');
 
-    if (!bridge) {
-        //logger.log('warn', 'There is no current bridge');
-        bridge = false;
-    } else {
-        bridge.set({current: true});
+
+Portal.getCurrentBridge = function() {
+
+    //console.log('getCurrentBridge router', router);
+    var bridge, query;
+
+    var query = Portal.route.query;
+
+    if (query && query.bridge) {
+        console.log('query bridge id', query.bridge);
+        bridge = Portal.bridgeCollection.getID(query.bridge) ||
+            Portal.currentBridge;
+        console.log('getCurrentBridge bridge found', bridge)
     }
 
-    return bridge
-    //currentBridgeDeferred.resolve(bridge);
+    if (!bridge) {
+        bridge = Portal.bridgeCollection.at(0);
+        Portal.setCurrentBridge(bridge);
+        console.log('getCurrentBridge bridge set', bridge);
+    }
 
-    //return currentBridgeDeferred.promise;
+    return bridge;
+    //return Portal.bridgeCollection.at(0);
 }
 
+Portal.setCurrentBridge = function(bridge) {
+
+    Portal.currentBridge = bridge;
+    Portal.router.setQuery({bridge: bridge.get('id')});
+}
 
 Portal.BridgeControl = Backbone.RelationalModel.extend({
 

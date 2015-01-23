@@ -11,7 +11,9 @@ Portal = new CBApp();
 Portal.dispatcher = new Dispatcher();
 Portal.setupCBIDTypes(cbidTypes);
 
-require('./views/generic-views');
+require('./views/mixins/backbone');
+require('./views/mixins/connector');
+require('./views/mixins/items');
 
 /*
 Portal.addRegions({
@@ -28,7 +30,7 @@ Portal.addRegions({
 Portal._isInitialized = false;
 
 Portal.Controller = Marionette.Controller.extend({
-
+  /*
   index: function () {
     console.log('index');
   },
@@ -63,16 +65,8 @@ Portal.Controller = Marionette.Controller.extend({
 
       bridge.set('current', true);
   }
+  */
 });
-
-/*
-var DevicesView = React.createClass({
-
-    render: function() {
-        return <div>Hello!</div>
-    }
-});
-*/
 
 Portal.addInitializer(function () {
 
@@ -87,6 +81,7 @@ Portal.addInitializer(function () {
 
 });
 
+/*
 Portal.navigate = function(route,  options){
   options || (options = {});
   Backbone.history.navigate(route, options);
@@ -95,21 +90,45 @@ Portal.navigate = function(route,  options){
 Portal.getCurrentRoute = function(){
   return Backbone.history.fragment
 };
+*/
 
 
-Portal.on("initialize:after", function () {
+var BaseView = require('./views/base');
+
+Portal.addInitializer(function () {
+//Portal.on("initialize:after", function () {
 
   //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
 
-  var routes = require('./router').routes;
+  Portal.appCollection.fetch();
 
-  Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+  Portal.router = require('./router');
+
+  Portal.router.run(function (Handler, state) {
+      Portal.route = state;
+      console.log('new state ', state);
       var params = state.params;
+      var currentBridge = Portal.getCurrentBridge();
+      currentBridge.fetch();
+      var apps = Portal.appCollection;
+      console.log('router currentBridge', currentBridge);
+
       React.render(
-          <Handler params={params} />,
+          <BaseView params={params} handler={Handler}
+              key={currentBridge.get('id')}
+              collection={apps} model={currentBridge} />,
           document.getElementById('app')
       );
+
+      /*
+      Portal.mainView = React.render(
+          <Handler params={params} key={currentBridge.get('id')} model={currentBridge} />,
+          document.getElementById('app')
+      );
+      */
+      //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
+      //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
   });
 
   /*
@@ -149,7 +168,6 @@ Portal.Router = Marionette.SubRouter.extend({
     'store(/:slug)': 'showStore'
   }
 });
-*/
 
 Portal.reqres.setHandler("config:show", function(){
     Portal.controller.showConfig();
@@ -163,8 +181,8 @@ Portal.reqres.setHandler("home:show", function(){
     Portal.controller.showHome();
 });
 
-
 Portal.reqres.setHandler("store:show", function(){
     Portal.controller.showStore();
 });
+*/
 module.exports = Portal;

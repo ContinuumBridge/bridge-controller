@@ -1,10 +1,11 @@
 
-Portal.App = Backbone.RelationalModel.extend({
+Portal.App = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     /*
     relations: [
+
         {
             type: Backbone.HasMany,
             key: 'appInstalls',
@@ -32,14 +33,20 @@ Portal.App = Backbone.RelationalModel.extend({
         }
     },
 
+    getLicence: function(user) {
+
+        return Portal.appLicenceCollection.findOrAdd({
+            app: this,
+            user: user
+        });
+    },
+
     getInstall: function(bridge) {
 
-        var appInstall = Portal.appInstallCollection.findOrCreate({
+        var appInstall = Portal.appInstallCollection.findOrAdd({
             app: this,
             bridge: bridge
         });
-
-        console.log('appInstall in getInstall is', appInstall);
 
         return appInstall;
     },

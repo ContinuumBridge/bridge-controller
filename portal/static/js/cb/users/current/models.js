@@ -67,7 +67,7 @@ Portal.getCurrentUser = function() {
 
     return user;
     */
-    return Portal.currentUserDeferred.promise;
+    //return Portal.currentUserDeferred.promise;
 };
 
 //Portal.U = Backbone.RelationalModel.extend({
@@ -112,7 +112,6 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeControlCollection'
         },
-        /*
         {
             type: Backbone.HasMany,
             key: 'appLicences',

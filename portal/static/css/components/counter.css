@@ -1,0 +1,11 @@
+
+.counter {
+    position: absolute;
+    width: 50px;
+    top: 12px;
+    right: 83px;
+}
+
+.counter .number {
+    width: 42px;
+}

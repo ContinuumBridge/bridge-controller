@@ -2,8 +2,8 @@
 require('../device_permissions/views');
 
 Portal.AppInstallView = React.createClass({
+
     mixins: [Portal.ItemView],
-    //mixins: [Portal.ItemView],
 
     getInitialState: function () {
         return {
@@ -62,16 +62,7 @@ Portal.AppInstallView = React.createClass({
         return (
             < Portal.AppDevicePermissionListView collection={devicePermissions} />
         );
-    },
-
-    /*
-
-    getInitialState: function() {
-        return {
-            title: 'Apps'
-        };
     }
-    */
 });
 
 Portal.AppInstallListView = React.createClass({
@@ -92,10 +83,12 @@ Portal.AppInstallListView = React.createClass({
     },
 
     installApps: function() {
-        Portal.Config.controller.installApps();
+        Portal.router.setParams({action: 'install-app'});
+        //Portal.Config.controller.installApps();
     },
 
     createItem: function (item) {
+        console.log('appInstallView createItem item', item);
         var cid = item.cid;
 
         var appInstallCollection = this.getCollection()

@@ -1,12 +1,37 @@
 
 var Q = require('q');
 
-require('../../views/generic-views');
-require('../../views/regions');
+//require('../../views/generic-views');
+//require('../../views/regions');
 
-//require('../../apps/storeViews');
-var AppViews = require('./apps/views');
+require('../../apps/views');
 
+
+module.exports.Main = React.createClass({
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    renderModals: function () {
+
+    },
+
+    render: function() {
+
+        var apps = Portal.appCollection;
+        console.log('Market View apps', apps);
+        return (
+            <div>
+                <div className="row">
+                    <div ref="appSection" className="app-section col-md-6">
+                        <Portal.AppListView collection={apps} />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+});
+
+/*
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
@@ -54,7 +79,6 @@ module.exports.Main = Marionette.Layout.extend({
             //self.appInstallListView.delegateEvents();
             //self.appSection.show(self.appInstallListView);
         });
-        */
     }
 
 });

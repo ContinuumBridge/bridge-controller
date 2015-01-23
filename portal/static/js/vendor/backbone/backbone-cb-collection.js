@@ -206,6 +206,21 @@ var CBCollection = OriginalCollection.extend({
         this.add(model);
 
         return model;
+    },
+
+    getID: function(id) {
+
+        // id can be a string or int
+        return this.findWhere({id: ''+id}) || this.findWhere({id: parseInt(id)});
+    },
+
+    getFiltered: function(name, filter) {
+
+        var collection = this.filtered || this.createLiveChildCollection();
+
+        this.filtered = collection.setFilter(name, filter);
+
+        return this.filtered;
     }
 });
 

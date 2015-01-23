@@ -22,6 +22,8 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
     bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserBridgeControlResource',
                                      'bridge_controls', full=True)
 
+    app_licences = fields.ToManyField('apps.api.resources.AppLicenceResource', 'app_licences', full=True)
+
     '''
     bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
                     attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,

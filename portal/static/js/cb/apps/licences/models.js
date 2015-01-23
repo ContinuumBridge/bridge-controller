@@ -3,11 +3,9 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
     defaults: {
         installs_permitted: 0,
     },
-    */
 
     relations: [
         {
@@ -23,7 +21,11 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'appLicence',
-                includeInJSON: 'resource_uri'
+                keySource: 'app_licence',
+                keyDestination: 'app_licence',
+                relatedModel: 'Portal.AppLicence',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'appLicenceCollection'
             }
         },
         {
@@ -62,8 +64,14 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        var self = this;
         console.log('initialize AppLicence');
-        this.startTracking();
+
+        this.on('all', function() {
+            var app = self.get('app');
+            if(app instanceof Backbone.Model) app.trigger('relational:change');
+        });
+        //this.startTracking();
     },
 
     toggleInstall: function(bridge) {
@@ -77,12 +85,21 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
     },
 
     getInstall: function(bridge) {
-        /* Gets the install for this licence and the given bridge */
+        /* Get or create the install for this licence and the given bridge */
 
+        var install;
+        var installData = {
+            bridge: bridge,
+            app: this.get('app'),
+            licence: this
+        }
         var licenceInstalls = this.get('installs');
-        return licenceInstalls.findWhere({
-            bridge: bridge
-        });
+        install = licenceInstalls.findWhere(installData);
+        if (!install) {
+            install = new Portal.AppInstall(installData);
+            this.set('installs', install, {remove: false});
+        }
+        return install;
     },
 
     testIfInstalled: function(bridge) {

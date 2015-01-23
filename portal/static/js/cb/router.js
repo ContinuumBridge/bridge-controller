@@ -11,17 +11,41 @@ require('./views/main');
 var ConfigView = require('./modules/config/views').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
+var DashboardView = require('./views/dashboard');
 var MarketView = require('./modules/market/views').Main;
 var NotFoundView = require('./views/notFound');
 
-
-module.exports.routes = (
+var routes = (
     <Route handler={MainView} path="/">
         <DefaultRoute handler={HomeView} />
-        <Route name="config" handler={ConfigView} />
-        <Route name="dashboard" />
+        <Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
+        <Route name="dashboard" handler={DashboardView} />
         <Route name="market" handler={MarketView} />
         <NotFoundRoute handler={NotFoundView}/>
     </Route>
 );
+
+var router = Router.create({
+    routes: routes,
+    location: Router.HistoryLocation
+});
+
+router.setQuery = function(query) {
+
+    var route = Portal.route;
+    Portal.router.transitionTo(route.pathname, route.params,
+        _.defaults(query, route.query));
+}
+
+router.setParams = function(params) {
+
+    var route = Portal.route;
+    // Remove any extra slashes in the pathname
+    //var pathnameMatch = route.pathname.replace(/\//g, '');
+    var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
+    console.log('pathnameMatch ', pathnameMatch );
+    Portal.router.transitionTo(pathnameMatch[1], params, route.query);
+}
+
+module.exports = router;
 

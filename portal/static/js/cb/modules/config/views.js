@@ -15,7 +15,7 @@ require('../../messages/views');
 
 module.exports.Main = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
     getInitialState: function () {
         return {
@@ -25,21 +25,65 @@ module.exports.Main = React.createClass({
         };
     },
 
+    discoverDevices: function() {
+
+        Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+            discoveredDevice.delete();
+        });
+        Portal.messageCollection.sendCommand('discover');
+        this.setState({discoveringDevices: true});
+    },
+
+    stopDiscoveringDevices: function() {
+        this.setState({discoveringDevices: false});
+    },
+
+    promptInstallDevice: function(discoveredDevice) {
+        this.setState({installDevice: discoveredDevice});
+    },
+
+    installDevice: function(discoveredDevice, friendlyName) {
+
+        discoveredDevice.install(friendlyName);
+        this.setState({ installDevice: false,
+                        discoveringDevices: false });
+    },
+
+    cancelInstallDevice: function() {
+
+        this.setState({ installDevice: false });
+    },
+
     renderModals: function () {
 
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        console.log('renderModals params', action);
+        switch (action) {
+            case "install-app":
+                return <InstallAppModal container={this} />;
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return <InstallDeviceModal container={this} model={discoveredDevice} />;
+                break;
+            default:
+                break;
+        }
+        /*
         var installDevice = this.state.installDevice;
         if (installDevice) {
             return <InstallDeviceModal container={this} model={installDevice} />;
         } else if (this.state.installingApps) {
             console.log('rendering installingApps');
-            return <InstallAppModal containter={this} />;
+            return <InstallAppModal container={this} />;
         }
+        */
         //var $portalBody = $('#portal-body');
         //console.log('$portalBody ', $portalBody );
 
         //var installDevice = Portal.Config.installDevice;
         //var cancelInstall = Portal.Config.cancelInstallDevice;
-
     },
 
     render: function() {
@@ -47,12 +91,20 @@ module.exports.Main = React.createClass({
         console.log('config mainView render');
         //var currentBridge = this.getModel();
         var currentBridge = Portal.getCurrentBridge();
-        currentBridge.fetch();
+        //var currentBridge = this.getModel();
+        console.log('currentBridge in config render', currentBridge);
+        //currentBridge.fetch();
 
-        var appInstalls = currentBridge.get('appInstalls');
+        var appInstalls = currentBridge.get('appInstalls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
         console.log('config mainView appInstalls', appInstalls);
 
-        var deviceInstalls = currentBridge.get('deviceInstalls');
+        var deviceInstalls = currentBridge.get('deviceInstalls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
 
         var deviceView;
         if (this.state.discoveringDevices) {
@@ -93,7 +145,7 @@ module.exports.Main = React.createClass({
 
 var InstallDeviceModal = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
     getInitialState: function() {
         return {
@@ -110,12 +162,15 @@ var InstallDeviceModal = React.createClass({
         //var friendlyName = this.$('#friendly-name').val();
         //this.props.discoveredDevice.installDevice(friendlyName);
         var discoveredDevice = this.getModel();
-        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+        discoveredDevice.install(this.state.friendlyName);
+        Portal.router.setParams({});
+        //Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
     },
 
     cancelInstall: function() {
 
-        Portal.Config.controller.cancelInstallDevice();
+        Portal.router.setParams({});
+        //Portal.Config.controller.cancelInstallDevice();
     },
 
     render: function() {
@@ -143,23 +198,21 @@ var InstallDeviceModal = React.createClass({
 
 var InstallAppModal = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Router.Navigation, Backbone.React.Component.mixin],
 
     handleFriendlyName: function(event) {
         this.setState({friendlyName: event.target.value});
     },
 
-    installDevice: function() {
-        console.log('Submitted installDevice modal');
-        //var friendlyName = this.$('#friendly-name').val();
-        //this.props.discoveredDevice.installDevice(friendlyName);
-        var discoveredDevice = this.getModel();
-        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+    showAppMarket: function() {
+
+        this.transitionTo('market', {}, this.getQuery());
     },
 
     cancelInstall: function() {
 
-        Portal.Config.controller.cancelInstallApp();
+        Portal.router.setParams({});
+        //Portal.Config.controller.cancelInstallApp();
     },
 
     render: function() {
@@ -180,15 +233,19 @@ var InstallAppModal = React.createClass({
         var device = this.getModel().get('device');
         var title = device ? "Install " + device.get('name') : "Unknown device";
         */
+        //var currentUser = Portal.getCurrentUser();
+        var licenceCollection = Portal.currentUser.get('appLicences');
+        var bridge = Portal.getCurrentBridge();
 
         return (
             <React.Modal className="portal-modal" title="Install Apps" container={this.props.container}
                 onRequestHide={this.cancelInstall} animation={false}>
                 <div className="modal-body">
+                    <Portal.AppLicenceListView collection={licenceCollection} bridge={bridge} />
                 </div>
                 <div className="modal-footer">
                     <React.Button onClick={this.cancelInstall}>Close</React.Button>
-                    <React.Button onClick={this.installDevice}>Install</React.Button>
+                    <React.Button onClick={this.showAppMarket}>App Market</React.Button>
                 </div>
             </ React.Modal>
         )

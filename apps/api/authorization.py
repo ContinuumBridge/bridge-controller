@@ -42,7 +42,6 @@ class AppInstallAuthorization(CBAuthorization):
             except AttributeError:
                 raise BadRequest("An AppInstall must have an app, licence and bridge")
 
-            print "validate app_install"
             requester = CBAuth.objects.get(pk=bundle.request.user.id)
 
             bridges = self.get_request_bridges(bundle)
@@ -56,12 +55,15 @@ class AppInstallAuthorization(CBAuthorization):
             # Ensure the licence is for this app
             if not licence.app.pk == app.pk:
                 raise Unauthorized("The licence supplied is not compatible with the app you are trying to install")
-            # Ensure the maximum number of installs is not exceeded
-            existing_install_count = licence.app_installs.count()
-            if not existing_install_count < licence.installs_permitted:
-                message = "Licence not valid for install. Your licence permits {0} installs, " \
-                          "you have used {1}".format(existing_install_count, licence.installs_permitted)
-                raise Unauthorized(message)
+
+            if bundle.request.method != "DELETE":
+                # Ensure the maximum number of installs is not exceeded
+                existing_install_count = licence.installs.count()
+                if not existing_install_count < licence.installs_permitted:
+                    message = "Licence not valid for install. Your licence permits {0} installs, " \
+                              "you have used {1}".format(existing_install_count, licence.installs_permitted)
+                    raise Unauthorized(message)
+
         print "end of validate app_install"
         return object_list
 

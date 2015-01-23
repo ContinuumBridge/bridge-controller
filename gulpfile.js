@@ -90,6 +90,10 @@ function scripts(watch) {
         packageCache: {}, // required for watchify
         fullPaths: true // required to be true only for watchify
     });
+
+    //var cssify = require('cssify');
+    //bundler.transform(cssify);
+
     if(watch) {
         bundler = watchify(bundler)
     }

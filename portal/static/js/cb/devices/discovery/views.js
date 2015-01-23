@@ -31,10 +31,12 @@ Portal.DiscoveredDeviceView = React.createClass({
 
     installDevice: function() {
 
-        console.log('click installDevice')
+        console.log('click installDevice');
         var discoveredDevice = this.getModel();
         console.log('installDevice discoveredDevice', discoveredDevice);
-        Portal.Config.controller.promptInstallDevice(discoveredDevice);
+        Portal.router.setParams({action: 'install-device',
+                                 item: discoveredDevice.get('id')});
+        //Portal.Config.controller.promptInstallDevice(discoveredDevice);
     }
 });
 

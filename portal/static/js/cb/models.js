@@ -26,13 +26,15 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-Portal.addInitializer(function () {
+//Portal.addInitializer(function () {
+Portal.on('initialize:before', function () {
 
   Portal.adaptorCollection = new Portal.AdaptorCollection();
   Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
 
   //data
   Portal.appCollection = new Portal.AppCollection();
+  Portal.appCollection.subscribe();
 
   Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
@@ -44,6 +46,7 @@ Portal.addInitializer(function () {
   Portal.appDevicePermissionCollection.subscribe();
 
   Portal.appLicenceCollection = new Portal.AppLicenceCollection();
+  Portal.appLicenceCollection.subscribe();
 
   Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 

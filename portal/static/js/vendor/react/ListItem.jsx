@@ -148,12 +148,21 @@ var ListItem = React.createClass({
     },
 
     renderCollapsableTitle: function (header) {
+
+        // Render custom buttons
+        var renderButtons = this.props.renderButtons;
+        var renderedButtons = renderButtons ? renderButtons() : "";
+
+        console.log('renderedButtons ', renderedButtons );
+        console.log('this.renderButtons ', this.renderButtons );
         var buttons = this.props.buttons || [];
+
         return (
             <h4 className="panel-title">
                 <i className="icon ion-chevron-right edit-button" onClick={this.handleSelect} />
                 {this.renderAnchor(header)}
                 {buttons.map(this.renderButton)}
+                {renderedButtons}
             </h4>
         );
     },

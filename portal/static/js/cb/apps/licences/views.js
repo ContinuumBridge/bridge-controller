@@ -1,4 +1,40 @@
 
+
+Portal.InstallButton = React.createClass({
+
+    mixins: [Portal.ConnectorMixin],
+
+    handleClick: function() {
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    render: function() {
+
+        //var contents = "Install";
+        //var contents = <Spinner />
+        console.log('Install button model', this.props);
+        //<div class="install-component btn btn-default app-install-button">Uninstall</div>
+        var model = this.props.model;
+
+        var syncing = model.isSyncing();
+        var label;
+        if (model.get('isGhost')) {
+            label = syncing ? "Uninstall" : "Install";
+        } else {
+            label = syncing ? "Install" : "Uninstall";
+        }
+        //var label = model.get('isGhost') ? "Install" :
+        var disabled = model.isSyncing() ? 'disabled' : '';;
+        var buttonClass = "btn btn-default " + disabled;
+
+        return (
+            <div className={buttonClass} onClick={this.handleClick} >
+                {label}
+            </div>
+        )
+    }
+});
+
 Portal.AppLicenceView = React.createClass({
 
     //mixins: [Portal.ItemView],
@@ -10,17 +46,29 @@ Portal.AppLicenceView = React.createClass({
         //var devicePermissions = this.props.devicePermissions;
         //var deviceInstalls = this.props.deviceInstalls;
         var licence = this.props.model;
+        var installsRemaining = licence.getInstallsRemaining();
+        var installsPermitted = licence.get('installs_permitted');
+
         var name = this.props.name;
+        var appInstall = this.props.appInstall;
+        console.log('AppLicenceView props', this.props);
+
+        var canInstall = installsPermitted > 0;
+        var installButton = canInstall ? <Portal.InstallButton model={appInstall} />
+                            : '';
 
         return (
-            <div>"Test licence"</div>
+            <tr>
+                <td className="app-name">{name}</td>
+                <td className="installs-permitted">{installsPermitted}</td>
+                <td className="installs-remaining">{installsRemaining}</td>
+                <td>{installButton}</td>
+            </tr>
         );
     }
 });
 
 Portal.AppLicenceListView = React.createClass({
-
-    itemView: Portal.AppLicenceView,
 
     mixins: [Backbone.React.Component.mixin],
 
@@ -45,9 +93,12 @@ Portal.AppLicenceListView = React.createClass({
         var app = licence.get('app');
         var name = app.get('name');
 
+        var appInstall = licence.getInstall(this.props.bridge);
+
         //var deviceInstalls = this.props.deviceInstalls;
 
-        return < Portal.AppLicenceView key={cid} name={name} model={licence} />
+        return < Portal.AppLicenceView key={cid} name={name}
+                    appInstall={appInstall} model={licence} />
     },
 
     render: function() {
@@ -59,19 +110,19 @@ Portal.AppLicenceListView = React.createClass({
                 <React.Table>
                     <thead>
                         <td className="col-md-6">
-                            <div className="list-group-item-heading app-name">"App Name"</div>
+                            <div className="list-group-item-heading app-name">App Name</div>
                         </td>
                         <td className="col-md-2">
-                            <div className="installs-permitted">"Installs permitted"</div>
+                            <div className="installs-permitted">Installs permitted</div>
                         </td>
                         <td className="col-md-2">
-                            <div className="installs-remaining">"Installs remaining"</div>
+                            <div className="installs-remaining">Installs remaining</div>
                         </td>
                         <td className="col-md-2">
                         </td>
                     </thead>
                     <tbody>
-                        <div></div>
+                        {this.props.collection.map(this.createItem)}
                     </tbody>
                 </React.Table>
             </div>

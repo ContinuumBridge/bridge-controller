@@ -3,6 +3,8 @@
 var $ = require('jquery-browserify');
 
 var CBApp = require('index');
+require('./cb/components/components');
+require('./cb/views/mixins/mixins');
 require('./cb/modules/config/config');
 require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
@@ -22,7 +24,7 @@ require('./cb/models');
 
 
 
-},{"./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{"./cb/components/components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","./cb/views/mixins/mixins":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/mixins.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -21032,1352 +21034,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
-//     Underscore.js 1.6.0
-//     http://underscorejs.org
-//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-//     Underscore may be freely distributed under the MIT license.
-
-(function() {
-
-  // Baseline setup
-  // --------------
-
-  // Establish the root object, `window` in the browser, or `exports` on the server.
-  var root = this;
-
-  // Save the previous value of the `_` variable.
-  var previousUnderscore = root._;
-
-  // Establish the object that gets returned to break out of a loop iteration.
-  var breaker = {};
-
-  // Save bytes in the minified (but not gzipped) version:
-  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
-
-  // Create quick reference variables for speed access to core prototypes.
-  var
-    push             = ArrayProto.push,
-    slice            = ArrayProto.slice,
-    concat           = ArrayProto.concat,
-    toString         = ObjProto.toString,
-    hasOwnProperty   = ObjProto.hasOwnProperty;
-
-  // All **ECMAScript 5** native function implementations that we hope to use
-  // are declared here.
-  var
-    nativeForEach      = ArrayProto.forEach,
-    nativeMap          = ArrayProto.map,
-    nativeReduce       = ArrayProto.reduce,
-    nativeReduceRight  = ArrayProto.reduceRight,
-    nativeFilter       = ArrayProto.filter,
-    nativeEvery        = ArrayProto.every,
-    nativeSome         = ArrayProto.some,
-    nativeIndexOf      = ArrayProto.indexOf,
-    nativeLastIndexOf  = ArrayProto.lastIndexOf,
-    nativeIsArray      = Array.isArray,
-    nativeKeys         = Object.keys,
-    nativeBind         = FuncProto.bind;
-
-  // Create a safe reference to the Underscore object for use below.
-  var _ = function(obj) {
-    if (obj instanceof _) return obj;
-    if (!(this instanceof _)) return new _(obj);
-    this._wrapped = obj;
-  };
-
-  // Export the Underscore object for **Node.js**, with
-  // backwards-compatibility for the old `require()` API. If we're in
-  // the browser, add `_` as a global object via a string identifier,
-  // for Closure Compiler "advanced" mode.
-  if (typeof exports !== 'undefined') {
-    if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = _;
-    }
-    exports._ = _;
-  } else {
-    root._ = _;
-  }
-
-  // Current version.
-  _.VERSION = '1.6.0';
-
-  // Collection Functions
-  // --------------------
-
-  // The cornerstone, an `each` implementation, aka `forEach`.
-  // Handles objects with the built-in `forEach`, arrays, and raw objects.
-  // Delegates to **ECMAScript 5**'s native `forEach` if available.
-  var each = _.each = _.forEach = function(obj, iterator, context) {
-    if (obj == null) return obj;
-    if (nativeForEach && obj.forEach === nativeForEach) {
-      obj.forEach(iterator, context);
-    } else if (obj.length === +obj.length) {
-      for (var i = 0, length = obj.length; i < length; i++) {
-        if (iterator.call(context, obj[i], i, obj) === breaker) return;
-      }
-    } else {
-      var keys = _.keys(obj);
-      for (var i = 0, length = keys.length; i < length; i++) {
-        if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
-      }
-    }
-    return obj;
-  };
-
-  // Return the results of applying the iterator to each element.
-  // Delegates to **ECMAScript 5**'s native `map` if available.
-  _.map = _.collect = function(obj, iterator, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-    each(obj, function(value, index, list) {
-      results.push(iterator.call(context, value, index, list));
-    });
-    return results;
-  };
-
-  var reduceError = 'Reduce of empty array with no initial value';
-
-  // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
-  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
-    if (obj == null) obj = [];
-    if (nativeReduce && obj.reduce === nativeReduce) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
-    }
-    each(obj, function(value, index, list) {
-      if (!initial) {
-        memo = value;
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, value, index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
-    return memo;
-  };
-
-  // The right-associative version of reduce, also known as `foldr`.
-  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
-  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
-    if (obj == null) obj = [];
-    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
-    }
-    var length = obj.length;
-    if (length !== +length) {
-      var keys = _.keys(obj);
-      length = keys.length;
-    }
-    each(obj, function(value, index, list) {
-      index = keys ? keys[--length] : --length;
-      if (!initial) {
-        memo = obj[index];
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, obj[index], index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
-    return memo;
-  };
-
-  // Return the first value which passes a truth test. Aliased as `detect`.
-  _.find = _.detect = function(obj, predicate, context) {
-    var result;
-    any(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) {
-        result = value;
-        return true;
-      }
-    });
-    return result;
-  };
-
-  // Return all the elements that pass a truth test.
-  // Delegates to **ECMAScript 5**'s native `filter` if available.
-  // Aliased as `select`.
-  _.filter = _.select = function(obj, predicate, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(predicate, context);
-    each(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) results.push(value);
-    });
-    return results;
-  };
-
-  // Return all the elements for which a truth test fails.
-  _.reject = function(obj, predicate, context) {
-    return _.filter(obj, function(value, index, list) {
-      return !predicate.call(context, value, index, list);
-    }, context);
-  };
-
-  // Determine whether all of the elements match a truth test.
-  // Delegates to **ECMAScript 5**'s native `every` if available.
-  // Aliased as `all`.
-  _.every = _.all = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = true;
-    if (obj == null) return result;
-    if (nativeEvery && obj.every === nativeEvery) return obj.every(predicate, context);
-    each(obj, function(value, index, list) {
-      if (!(result = result && predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
-  };
-
-  // Determine if at least one element in the object matches a truth test.
-  // Delegates to **ECMAScript 5**'s native `some` if available.
-  // Aliased as `any`.
-  var any = _.some = _.any = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = false;
-    if (obj == null) return result;
-    if (nativeSome && obj.some === nativeSome) return obj.some(predicate, context);
-    each(obj, function(value, index, list) {
-      if (result || (result = predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
-  };
-
-  // Determine if the array or object contains a given value (using `===`).
-  // Aliased as `include`.
-  _.contains = _.include = function(obj, target) {
-    if (obj == null) return false;
-    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
-    return any(obj, function(value) {
-      return value === target;
-    });
-  };
-
-  // Invoke a method (with arguments) on every item in a collection.
-  _.invoke = function(obj, method) {
-    var args = slice.call(arguments, 2);
-    var isFunc = _.isFunction(method);
-    return _.map(obj, function(value) {
-      return (isFunc ? method : value[method]).apply(value, args);
-    });
-  };
-
-  // Convenience version of a common use case of `map`: fetching a property.
-  _.pluck = function(obj, key) {
-    return _.map(obj, _.property(key));
-  };
-
-  // Convenience version of a common use case of `filter`: selecting only objects
-  // containing specific `key:value` pairs.
-  _.where = function(obj, attrs) {
-    return _.filter(obj, _.matches(attrs));
-  };
-
-  // Convenience version of a common use case of `find`: getting the first object
-  // containing specific `key:value` pairs.
-  _.findWhere = function(obj, attrs) {
-    return _.find(obj, _.matches(attrs));
-  };
-
-  // Return the maximum element or (element-based computation).
-  // Can't optimize arrays of integers longer than 65,535 elements.
-  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
-  _.max = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.max.apply(Math, obj);
-    }
-    var result = -Infinity, lastComputed = -Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed > lastComputed) {
-        result = value;
-        lastComputed = computed;
-      }
-    });
-    return result;
-  };
-
-  // Return the minimum element (or element-based computation).
-  _.min = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.min.apply(Math, obj);
-    }
-    var result = Infinity, lastComputed = Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed < lastComputed) {
-        result = value;
-        lastComputed = computed;
-      }
-    });
-    return result;
-  };
-
-  // Shuffle an array, using the modern version of the
-  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
-  _.shuffle = function(obj) {
-    var rand;
-    var index = 0;
-    var shuffled = [];
-    each(obj, function(value) {
-      rand = _.random(index++);
-      shuffled[index - 1] = shuffled[rand];
-      shuffled[rand] = value;
-    });
-    return shuffled;
-  };
-
-  // Sample **n** random values from a collection.
-  // If **n** is not specified, returns a single random element.
-  // The internal `guard` argument allows it to work with `map`.
-  _.sample = function(obj, n, guard) {
-    if (n == null || guard) {
-      if (obj.length !== +obj.length) obj = _.values(obj);
-      return obj[_.random(obj.length - 1)];
-    }
-    return _.shuffle(obj).slice(0, Math.max(0, n));
-  };
-
-  // An internal function to generate lookup iterators.
-  var lookupIterator = function(value) {
-    if (value == null) return _.identity;
-    if (_.isFunction(value)) return value;
-    return _.property(value);
-  };
-
-  // Sort the object's values by a criterion produced by an iterator.
-  _.sortBy = function(obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    return _.pluck(_.map(obj, function(value, index, list) {
-      return {
-        value: value,
-        index: index,
-        criteria: iterator.call(context, value, index, list)
-      };
-    }).sort(function(left, right) {
-      var a = left.criteria;
-      var b = right.criteria;
-      if (a !== b) {
-        if (a > b || a === void 0) return 1;
-        if (a < b || b === void 0) return -1;
-      }
-      return left.index - right.index;
-    }), 'value');
-  };
-
-  // An internal function used for aggregate "group by" operations.
-  var group = function(behavior) {
-    return function(obj, iterator, context) {
-      var result = {};
-      iterator = lookupIterator(iterator);
-      each(obj, function(value, index) {
-        var key = iterator.call(context, value, index, obj);
-        behavior(result, key, value);
-      });
-      return result;
-    };
-  };
-
-  // Groups the object's values by a criterion. Pass either a string attribute
-  // to group by, or a function that returns the criterion.
-  _.groupBy = group(function(result, key, value) {
-    _.has(result, key) ? result[key].push(value) : result[key] = [value];
-  });
-
-  // Indexes the object's values by a criterion, similar to `groupBy`, but for
-  // when you know that your index values will be unique.
-  _.indexBy = group(function(result, key, value) {
-    result[key] = value;
-  });
-
-  // Counts instances of an object that group by a certain criterion. Pass
-  // either a string attribute to count by, or a function that returns the
-  // criterion.
-  _.countBy = group(function(result, key) {
-    _.has(result, key) ? result[key]++ : result[key] = 1;
-  });
-
-  // Use a comparator function to figure out the smallest index at which
-  // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    var value = iterator.call(context, obj);
-    var low = 0, high = array.length;
-    while (low < high) {
-      var mid = (low + high) >>> 1;
-      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
-    }
-    return low;
-  };
-
-  // Safely create a real, live array from anything iterable.
-  _.toArray = function(obj) {
-    if (!obj) return [];
-    if (_.isArray(obj)) return slice.call(obj);
-    if (obj.length === +obj.length) return _.map(obj, _.identity);
-    return _.values(obj);
-  };
-
-  // Return the number of elements in an object.
-  _.size = function(obj) {
-    if (obj == null) return 0;
-    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
-  };
-
-  // Array Functions
-  // ---------------
-
-  // Get the first element of an array. Passing **n** will return the first N
-  // values in the array. Aliased as `head` and `take`. The **guard** check
-  // allows it to work with `_.map`.
-  _.first = _.head = _.take = function(array, n, guard) {
-    if (array == null) return void 0;
-    if ((n == null) || guard) return array[0];
-    if (n < 0) return [];
-    return slice.call(array, 0, n);
-  };
-
-  // Returns everything but the last entry of the array. Especially useful on
-  // the arguments object. Passing **n** will return all the values in
-  // the array, excluding the last N. The **guard** check allows it to work with
-  // `_.map`.
-  _.initial = function(array, n, guard) {
-    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
-  };
-
-  // Get the last element of an array. Passing **n** will return the last N
-  // values in the array. The **guard** check allows it to work with `_.map`.
-  _.last = function(array, n, guard) {
-    if (array == null) return void 0;
-    if ((n == null) || guard) return array[array.length - 1];
-    return slice.call(array, Math.max(array.length - n, 0));
-  };
-
-  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
-  // Especially useful on the arguments object. Passing an **n** will return
-  // the rest N values in the array. The **guard**
-  // check allows it to work with `_.map`.
-  _.rest = _.tail = _.drop = function(array, n, guard) {
-    return slice.call(array, (n == null) || guard ? 1 : n);
-  };
-
-  // Trim out all falsy values from an array.
-  _.compact = function(array) {
-    return _.filter(array, _.identity);
-  };
-
-  // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, output) {
-    if (shallow && _.every(input, _.isArray)) {
-      return concat.apply(output, input);
-    }
-    each(input, function(value) {
-      if (_.isArray(value) || _.isArguments(value)) {
-        shallow ? push.apply(output, value) : flatten(value, shallow, output);
-      } else {
-        output.push(value);
-      }
-    });
-    return output;
-  };
-
-  // Flatten out an array, either recursively (by default), or just one level.
-  _.flatten = function(array, shallow) {
-    return flatten(array, shallow, []);
-  };
-
-  // Return a version of the array that does not contain the specified value(s).
-  _.without = function(array) {
-    return _.difference(array, slice.call(arguments, 1));
-  };
-
-  // Split an array into two arrays: one whose elements all satisfy the given
-  // predicate, and one whose elements all do not satisfy the predicate.
-  _.partition = function(array, predicate) {
-    var pass = [], fail = [];
-    each(array, function(elem) {
-      (predicate(elem) ? pass : fail).push(elem);
-    });
-    return [pass, fail];
-  };
-
-  // Produce a duplicate-free version of the array. If the array has already
-  // been sorted, you have the option of using a faster algorithm.
-  // Aliased as `unique`.
-  _.uniq = _.unique = function(array, isSorted, iterator, context) {
-    if (_.isFunction(isSorted)) {
-      context = iterator;
-      iterator = isSorted;
-      isSorted = false;
-    }
-    var initial = iterator ? _.map(array, iterator, context) : array;
-    var results = [];
-    var seen = [];
-    each(initial, function(value, index) {
-      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
-        seen.push(value);
-        results.push(array[index]);
-      }
-    });
-    return results;
-  };
-
-  // Produce an array that contains the union: each distinct element from all of
-  // the passed-in arrays.
-  _.union = function() {
-    return _.uniq(_.flatten(arguments, true));
-  };
-
-  // Produce an array that contains every item shared between all the
-  // passed-in arrays.
-  _.intersection = function(array) {
-    var rest = slice.call(arguments, 1);
-    return _.filter(_.uniq(array), function(item) {
-      return _.every(rest, function(other) {
-        return _.contains(other, item);
-      });
-    });
-  };
-
-  // Take the difference between one array and a number of other arrays.
-  // Only the elements present in just the first array will remain.
-  _.difference = function(array) {
-    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
-    return _.filter(array, function(value){ return !_.contains(rest, value); });
-  };
-
-  // Zip together multiple lists into a single array -- elements that share
-  // an index go together.
-  _.zip = function() {
-    var length = _.max(_.pluck(arguments, 'length').concat(0));
-    var results = new Array(length);
-    for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, '' + i);
-    }
-    return results;
-  };
-
-  // Converts lists into objects. Pass either a single array of `[key, value]`
-  // pairs, or two parallel arrays of the same length -- one of keys, and one of
-  // the corresponding values.
-  _.object = function(list, values) {
-    if (list == null) return {};
-    var result = {};
-    for (var i = 0, length = list.length; i < length; i++) {
-      if (values) {
-        result[list[i]] = values[i];
-      } else {
-        result[list[i][0]] = list[i][1];
-      }
-    }
-    return result;
-  };
-
-  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
-  // we need this function. Return the position of the first occurrence of an
-  // item in an array, or -1 if the item is not included in the array.
-  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
-  // If the array is large and already in sort order, pass `true`
-  // for **isSorted** to use binary search.
-  _.indexOf = function(array, item, isSorted) {
-    if (array == null) return -1;
-    var i = 0, length = array.length;
-    if (isSorted) {
-      if (typeof isSorted == 'number') {
-        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
-      } else {
-        i = _.sortedIndex(array, item);
-        return array[i] === item ? i : -1;
-      }
-    }
-    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
-    for (; i < length; i++) if (array[i] === item) return i;
-    return -1;
-  };
-
-  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
-  _.lastIndexOf = function(array, item, from) {
-    if (array == null) return -1;
-    var hasIndex = from != null;
-    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
-      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
-    }
-    var i = (hasIndex ? from : array.length);
-    while (i--) if (array[i] === item) return i;
-    return -1;
-  };
-
-  // Generate an integer Array containing an arithmetic progression. A port of
-  // the native Python `range()` function. See
-  // [the Python documentation](http://docs.python.org/library/functions.html#range).
-  _.range = function(start, stop, step) {
-    if (arguments.length <= 1) {
-      stop = start || 0;
-      start = 0;
-    }
-    step = arguments[2] || 1;
-
-    var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var idx = 0;
-    var range = new Array(length);
-
-    while(idx < length) {
-      range[idx++] = start;
-      start += step;
-    }
-
-    return range;
-  };
-
-  // Function (ahem) Functions
-  // ------------------
-
-  // Reusable constructor function for prototype setting.
-  var ctor = function(){};
-
-  // Create a function bound to a given object (assigning `this`, and arguments,
-  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
-  // available.
-  _.bind = function(func, context) {
-    var args, bound;
-    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    if (!_.isFunction(func)) throw new TypeError;
-    args = slice.call(arguments, 2);
-    return bound = function() {
-      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      ctor.prototype = func.prototype;
-      var self = new ctor;
-      ctor.prototype = null;
-      var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (Object(result) === result) return result;
-      return self;
-    };
-  };
-
-  // Partially apply a function by creating a version that has had some of its
-  // arguments pre-filled, without changing its dynamic `this` context. _ acts
-  // as a placeholder, allowing any combination of arguments to be pre-filled.
-  _.partial = function(func) {
-    var boundArgs = slice.call(arguments, 1);
-    return function() {
-      var position = 0;
-      var args = boundArgs.slice();
-      for (var i = 0, length = args.length; i < length; i++) {
-        if (args[i] === _) args[i] = arguments[position++];
-      }
-      while (position < arguments.length) args.push(arguments[position++]);
-      return func.apply(this, args);
-    };
-  };
-
-  // Bind a number of an object's methods to that object. Remaining arguments
-  // are the method names to be bound. Useful for ensuring that all callbacks
-  // defined on an object belong to it.
-  _.bindAll = function(obj) {
-    var funcs = slice.call(arguments, 1);
-    if (funcs.length === 0) throw new Error('bindAll must be passed function names');
-    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
-    return obj;
-  };
-
-  // Memoize an expensive function by storing its results.
-  _.memoize = function(func, hasher) {
-    var memo = {};
-    hasher || (hasher = _.identity);
-    return function() {
-      var key = hasher.apply(this, arguments);
-      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
-    };
-  };
-
-  // Delays a function for the given number of milliseconds, and then calls
-  // it with the arguments supplied.
-  _.delay = function(func, wait) {
-    var args = slice.call(arguments, 2);
-    return setTimeout(function(){ return func.apply(null, args); }, wait);
-  };
-
-  // Defers a function, scheduling it to run after the current call stack has
-  // cleared.
-  _.defer = function(func) {
-    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
-  };
-
-  // Returns a function, that, when invoked, will only be triggered at most once
-  // during a given window of time. Normally, the throttled function will run
-  // as much as it can, without ever going more than once per `wait` duration;
-  // but if you'd like to disable the execution on the leading edge, pass
-  // `{leading: false}`. To disable execution on the trailing edge, ditto.
-  _.throttle = function(func, wait, options) {
-    var context, args, result;
-    var timeout = null;
-    var previous = 0;
-    options || (options = {});
-    var later = function() {
-      previous = options.leading === false ? 0 : _.now();
-      timeout = null;
-      result = func.apply(context, args);
-      context = args = null;
-    };
-    return function() {
-      var now = _.now();
-      if (!previous && options.leading === false) previous = now;
-      var remaining = wait - (now - previous);
-      context = this;
-      args = arguments;
-      if (remaining <= 0) {
-        clearTimeout(timeout);
-        timeout = null;
-        previous = now;
-        result = func.apply(context, args);
-        context = args = null;
-      } else if (!timeout && options.trailing !== false) {
-        timeout = setTimeout(later, remaining);
-      }
-      return result;
-    };
-  };
-
-  // Returns a function, that, as long as it continues to be invoked, will not
-  // be triggered. The function will be called after it stops being called for
-  // N milliseconds. If `immediate` is passed, trigger the function on the
-  // leading edge, instead of the trailing.
-  _.debounce = function(func, wait, immediate) {
-    var timeout, args, context, timestamp, result;
-
-    var later = function() {
-      var last = _.now() - timestamp;
-      if (last < wait) {
-        timeout = setTimeout(later, wait - last);
-      } else {
-        timeout = null;
-        if (!immediate) {
-          result = func.apply(context, args);
-          context = args = null;
-        }
-      }
-    };
-
-    return function() {
-      context = this;
-      args = arguments;
-      timestamp = _.now();
-      var callNow = immediate && !timeout;
-      if (!timeout) {
-        timeout = setTimeout(later, wait);
-      }
-      if (callNow) {
-        result = func.apply(context, args);
-        context = args = null;
-      }
-
-      return result;
-    };
-  };
-
-  // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
-  _.once = function(func) {
-    var ran = false, memo;
-    return function() {
-      if (ran) return memo;
-      ran = true;
-      memo = func.apply(this, arguments);
-      func = null;
-      return memo;
-    };
-  };
-
-  // Returns the first function passed as an argument to the second,
-  // allowing you to adjust arguments, run code before and after, and
-  // conditionally execute the original function.
-  _.wrap = function(func, wrapper) {
-    return _.partial(wrapper, func);
-  };
-
-  // Returns a function that is the composition of a list of functions, each
-  // consuming the return value of the function that follows.
-  _.compose = function() {
-    var funcs = arguments;
-    return function() {
-      var args = arguments;
-      for (var i = funcs.length - 1; i >= 0; i--) {
-        args = [funcs[i].apply(this, args)];
-      }
-      return args[0];
-    };
-  };
-
-  // Returns a function that will only be executed after being called N times.
-  _.after = function(times, func) {
-    return function() {
-      if (--times < 1) {
-        return func.apply(this, arguments);
-      }
-    };
-  };
-
-  // Object Functions
-  // ----------------
-
-  // Retrieve the names of an object's properties.
-  // Delegates to **ECMAScript 5**'s native `Object.keys`
-  _.keys = function(obj) {
-    if (!_.isObject(obj)) return [];
-    if (nativeKeys) return nativeKeys(obj);
-    var keys = [];
-    for (var key in obj) if (_.has(obj, key)) keys.push(key);
-    return keys;
-  };
-
-  // Retrieve the values of an object's properties.
-  _.values = function(obj) {
-    var keys = _.keys(obj);
-    var length = keys.length;
-    var values = new Array(length);
-    for (var i = 0; i < length; i++) {
-      values[i] = obj[keys[i]];
-    }
-    return values;
-  };
-
-  // Convert an object into a list of `[key, value]` pairs.
-  _.pairs = function(obj) {
-    var keys = _.keys(obj);
-    var length = keys.length;
-    var pairs = new Array(length);
-    for (var i = 0; i < length; i++) {
-      pairs[i] = [keys[i], obj[keys[i]]];
-    }
-    return pairs;
-  };
-
-  // Invert the keys and values of an object. The values must be serializable.
-  _.invert = function(obj) {
-    var result = {};
-    var keys = _.keys(obj);
-    for (var i = 0, length = keys.length; i < length; i++) {
-      result[obj[keys[i]]] = keys[i];
-    }
-    return result;
-  };
-
-  // Return a sorted list of the function names available on the object.
-  // Aliased as `methods`
-  _.functions = _.methods = function(obj) {
-    var names = [];
-    for (var key in obj) {
-      if (_.isFunction(obj[key])) names.push(key);
-    }
-    return names.sort();
-  };
-
-  // Extend a given object with all the properties in passed-in object(s).
-  _.extend = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          obj[prop] = source[prop];
-        }
-      }
-    });
-    return obj;
-  };
-
-  // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    each(keys, function(key) {
-      if (key in obj) copy[key] = obj[key];
-    });
-    return copy;
-  };
-
-   // Return a copy of the object without the blacklisted properties.
-  _.omit = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    for (var key in obj) {
-      if (!_.contains(keys, key)) copy[key] = obj[key];
-    }
-    return copy;
-  };
-
-  // Fill in a given object with default properties.
-  _.defaults = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          if (obj[prop] === void 0) obj[prop] = source[prop];
-        }
-      }
-    });
-    return obj;
-  };
-
-  // Create a (shallow-cloned) duplicate of an object.
-  _.clone = function(obj) {
-    if (!_.isObject(obj)) return obj;
-    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
-  };
-
-  // Invokes interceptor with the obj, and then returns obj.
-  // The primary purpose of this method is to "tap into" a method chain, in
-  // order to perform operations on intermediate results within the chain.
-  _.tap = function(obj, interceptor) {
-    interceptor(obj);
-    return obj;
-  };
-
-  // Internal recursive comparison function for `isEqual`.
-  var eq = function(a, b, aStack, bStack) {
-    // Identical objects are equal. `0 === -0`, but they aren't identical.
-    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-    if (a === b) return a !== 0 || 1 / a == 1 / b;
-    // A strict comparison is necessary because `null == undefined`.
-    if (a == null || b == null) return a === b;
-    // Unwrap any wrapped objects.
-    if (a instanceof _) a = a._wrapped;
-    if (b instanceof _) b = b._wrapped;
-    // Compare `[[Class]]` names.
-    var className = toString.call(a);
-    if (className != toString.call(b)) return false;
-    switch (className) {
-      // Strings, numbers, dates, and booleans are compared by value.
-      case '[object String]':
-        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-        // equivalent to `new String("5")`.
-        return a == String(b);
-      case '[object Number]':
-        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-        // other numeric values.
-        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
-      case '[object Date]':
-      case '[object Boolean]':
-        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-        // millisecond representations. Note that invalid dates with millisecond representations
-        // of `NaN` are not equivalent.
-        return +a == +b;
-      // RegExps are compared by their source patterns and flags.
-      case '[object RegExp]':
-        return a.source == b.source &&
-               a.global == b.global &&
-               a.multiline == b.multiline &&
-               a.ignoreCase == b.ignoreCase;
-    }
-    if (typeof a != 'object' || typeof b != 'object') return false;
-    // Assume equality for cyclic structures. The algorithm for detecting cyclic
-    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-    var length = aStack.length;
-    while (length--) {
-      // Linear search. Performance is inversely proportional to the number of
-      // unique nested structures.
-      if (aStack[length] == a) return bStack[length] == b;
-    }
-    // Objects with different constructors are not equivalent, but `Object`s
-    // from different frames are.
-    var aCtor = a.constructor, bCtor = b.constructor;
-    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
-      return false;
-    }
-    // Add the first object to the stack of traversed objects.
-    aStack.push(a);
-    bStack.push(b);
-    var size = 0, result = true;
-    // Recursively compare objects and arrays.
-    if (className == '[object Array]') {
-      // Compare array lengths to determine if a deep comparison is necessary.
-      size = a.length;
-      result = size == b.length;
-      if (result) {
-        // Deep compare the contents, ignoring non-numeric properties.
-        while (size--) {
-          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
-        }
-      }
-    } else {
-      // Deep compare objects.
-      for (var key in a) {
-        if (_.has(a, key)) {
-          // Count the expected number of properties.
-          size++;
-          // Deep compare each member.
-          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
-        }
-      }
-      // Ensure that both objects contain the same number of properties.
-      if (result) {
-        for (key in b) {
-          if (_.has(b, key) && !(size--)) break;
-        }
-        result = !size;
-      }
-    }
-    // Remove the first object from the stack of traversed objects.
-    aStack.pop();
-    bStack.pop();
-    return result;
-  };
-
-  // Perform a deep comparison to check if two objects are equal.
-  _.isEqual = function(a, b) {
-    return eq(a, b, [], []);
-  };
-
-  // Is a given array, string, or object empty?
-  // An "empty" object has no enumerable own-properties.
-  _.isEmpty = function(obj) {
-    if (obj == null) return true;
-    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
-    for (var key in obj) if (_.has(obj, key)) return false;
-    return true;
-  };
-
-  // Is a given value a DOM element?
-  _.isElement = function(obj) {
-    return !!(obj && obj.nodeType === 1);
-  };
-
-  // Is a given value an array?
-  // Delegates to ECMA5's native Array.isArray
-  _.isArray = nativeIsArray || function(obj) {
-    return toString.call(obj) == '[object Array]';
-  };
-
-  // Is a given variable an object?
-  _.isObject = function(obj) {
-    return obj === Object(obj);
-  };
-
-  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
-    _['is' + name] = function(obj) {
-      return toString.call(obj) == '[object ' + name + ']';
-    };
-  });
-
-  // Define a fallback version of the method in browsers (ahem, IE), where
-  // there isn't any inspectable "Arguments" type.
-  if (!_.isArguments(arguments)) {
-    _.isArguments = function(obj) {
-      return !!(obj && _.has(obj, 'callee'));
-    };
-  }
-
-  // Optimize `isFunction` if appropriate.
-  if (typeof (/./) !== 'function') {
-    _.isFunction = function(obj) {
-      return typeof obj === 'function';
-    };
-  }
-
-  // Is a given object a finite number?
-  _.isFinite = function(obj) {
-    return isFinite(obj) && !isNaN(parseFloat(obj));
-  };
-
-  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
-  _.isNaN = function(obj) {
-    return _.isNumber(obj) && obj != +obj;
-  };
-
-  // Is a given value a boolean?
-  _.isBoolean = function(obj) {
-    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
-  };
-
-  // Is a given value equal to null?
-  _.isNull = function(obj) {
-    return obj === null;
-  };
-
-  // Is a given variable undefined?
-  _.isUndefined = function(obj) {
-    return obj === void 0;
-  };
-
-  // Shortcut function for checking if an object has a given property directly
-  // on itself (in other words, not on a prototype).
-  _.has = function(obj, key) {
-    return hasOwnProperty.call(obj, key);
-  };
-
-  // Utility Functions
-  // -----------------
-
-  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
-  // previous owner. Returns a reference to the Underscore object.
-  _.noConflict = function() {
-    root._ = previousUnderscore;
-    return this;
-  };
-
-  // Keep the identity function around for default iterators.
-  _.identity = function(value) {
-    return value;
-  };
-
-  _.constant = function(value) {
-    return function () {
-      return value;
-    };
-  };
-
-  _.property = function(key) {
-    return function(obj) {
-      return obj[key];
-    };
-  };
-
-  // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
-  _.matches = function(attrs) {
-    return function(obj) {
-      if (obj === attrs) return true; //avoid comparing an object to itself.
-      for (var key in attrs) {
-        if (attrs[key] !== obj[key])
-          return false;
-      }
-      return true;
-    }
-  };
-
-  // Run a function **n** times.
-  _.times = function(n, iterator, context) {
-    var accum = Array(Math.max(0, n));
-    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
-    return accum;
-  };
-
-  // Return a random integer between min and max (inclusive).
-  _.random = function(min, max) {
-    if (max == null) {
-      max = min;
-      min = 0;
-    }
-    return min + Math.floor(Math.random() * (max - min + 1));
-  };
-
-  // A (possibly faster) way to get the current timestamp as an integer.
-  _.now = Date.now || function() { return new Date().getTime(); };
-
-  // List of HTML entities for escaping.
-  var entityMap = {
-    escape: {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;'
-    }
-  };
-  entityMap.unescape = _.invert(entityMap.escape);
-
-  // Regexes containing the keys and values listed immediately above.
-  var entityRegexes = {
-    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
-    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
-  };
-
-  // Functions for escaping and unescaping strings to/from HTML interpolation.
-  _.each(['escape', 'unescape'], function(method) {
-    _[method] = function(string) {
-      if (string == null) return '';
-      return ('' + string).replace(entityRegexes[method], function(match) {
-        return entityMap[method][match];
-      });
-    };
-  });
-
-  // If the value of the named `property` is a function then invoke it with the
-  // `object` as context; otherwise, return it.
-  _.result = function(object, property) {
-    if (object == null) return void 0;
-    var value = object[property];
-    return _.isFunction(value) ? value.call(object) : value;
-  };
-
-  // Add your own custom functions to the Underscore object.
-  _.mixin = function(obj) {
-    each(_.functions(obj), function(name) {
-      var func = _[name] = obj[name];
-      _.prototype[name] = function() {
-        var args = [this._wrapped];
-        push.apply(args, arguments);
-        return result.call(this, func.apply(_, args));
-      };
-    });
-  };
-
-  // Generate a unique integer id (unique within the entire client session).
-  // Useful for temporary DOM ids.
-  var idCounter = 0;
-  _.uniqueId = function(prefix) {
-    var id = ++idCounter + '';
-    return prefix ? prefix + id : id;
-  };
-
-  // By default, Underscore uses ERB-style template delimiters, change the
-  // following template settings to use alternative delimiters.
-  _.templateSettings = {
-    evaluate    : /<%([\s\S]+?)%>/g,
-    interpolate : /<%=([\s\S]+?)%>/g,
-    escape      : /<%-([\s\S]+?)%>/g
-  };
-
-  // When customizing `templateSettings`, if you don't want to define an
-  // interpolation, evaluation or escaping regex, we need one that is
-  // guaranteed not to match.
-  var noMatch = /(.)^/;
-
-  // Certain characters need to be escaped so that they can be put into a
-  // string literal.
-  var escapes = {
-    "'":      "'",
-    '\\':     '\\',
-    '\r':     'r',
-    '\n':     'n',
-    '\t':     't',
-    '\u2028': 'u2028',
-    '\u2029': 'u2029'
-  };
-
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
-
-  // JavaScript micro-templating, similar to John Resig's implementation.
-  // Underscore templating handles arbitrary delimiters, preserves whitespace,
-  // and correctly escapes quotes within interpolated code.
-  _.template = function(text, data, settings) {
-    var render;
-    settings = _.defaults({}, settings, _.templateSettings);
-
-    // Combine delimiters into one regular expression via alternation.
-    var matcher = new RegExp([
-      (settings.escape || noMatch).source,
-      (settings.interpolate || noMatch).source,
-      (settings.evaluate || noMatch).source
-    ].join('|') + '|$', 'g');
-
-    // Compile the template source, escaping string literals appropriately.
-    var index = 0;
-    var source = "__p+='";
-    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset)
-        .replace(escaper, function(match) { return '\\' + escapes[match]; });
-
-      if (escape) {
-        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-      }
-      if (interpolate) {
-        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-      }
-      if (evaluate) {
-        source += "';\n" + evaluate + "\n__p+='";
-      }
-      index = offset + match.length;
-      return match;
-    });
-    source += "';\n";
-
-    // If a variable is not specified, place data values in local scope.
-    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-
-    source = "var __t,__p='',__j=Array.prototype.join," +
-      "print=function(){__p+=__j.call(arguments,'');};\n" +
-      source + "return __p;\n";
-
-    try {
-      render = new Function(settings.variable || 'obj', '_', source);
-    } catch (e) {
-      e.source = source;
-      throw e;
-    }
-
-    if (data) return render(data, _);
-    var template = function(data) {
-      return render.call(this, data, _);
-    };
-
-    // Provide the compiled function source as a convenience for precompilation.
-    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
-
-    return template;
-  };
-
-  // Add a "chain" function, which will delegate to the wrapper.
-  _.chain = function(obj) {
-    return _(obj).chain();
-  };
-
-  // OOP
-  // ---------------
-  // If Underscore is called as a function, it returns a wrapped object that
-  // can be used OO-style. This wrapper holds altered versions of all the
-  // underscore functions. Wrapped objects may be chained.
-
-  // Helper function to continue chaining intermediate results.
-  var result = function(obj) {
-    return this._chain ? _(obj).chain() : obj;
-  };
-
-  // Add all of the Underscore functions to the wrapper object.
-  _.mixin(_);
-
-  // Add all mutator Array functions to the wrapper.
-  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
-    var method = ArrayProto[name];
-    _.prototype[name] = function() {
-      var obj = this._wrapped;
-      method.apply(obj, arguments);
-      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
-      return result.call(this, obj);
-    };
-  });
-
-  // Add all accessor Array functions to the wrapper.
-  each(['concat', 'join', 'slice'], function(name) {
-    var method = ArrayProto[name];
-    _.prototype[name] = function() {
-      return result.call(this, method.apply(this._wrapped, arguments));
-    };
-  });
-
-  _.extend(_.prototype, {
-
-    // Start chaining a wrapped Underscore object.
-    chain: function() {
-      this._chain = true;
-      return this;
-    },
-
-    // Extracts the result from a wrapped and chained object.
-    value: function() {
-      return this._wrapped;
-    }
-
-  });
-
-  // AMD registration happens at the end for compatibility with AMD loaders
-  // that may not enforce next-turn semantics on modules. Even though general
-  // practice for AMD registration is to be anonymous, underscore registers
-  // as a named module because, like jQuery, it is a base library that is
-  // popular enough to be bundled in a third party lib, but not be part of
-  // an AMD load request. Those cases could generate an error when an
-  // anonymous define() is called outside of a loader request.
-  if (typeof define === 'function' && define.amd) {
-    define('underscore', [], function() {
-      return _;
-    });
-  }
-}).call(this);
-
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
+},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
 
 Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
@@ -22613,6 +21270,11 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
         var self = this;
         //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.listenTo(this.get('appInstall'), 'destroy', function() {
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
+        });
+
         this.listenTo(this.get('deviceInstall'), 'destroy', function() {
             //console.log('ADP heard destroy on deviceInstall')
             self.delete();
@@ -22898,6 +21560,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     backend: 'appInstall',
 
+    matchFields: ['bridge', 'app'],
+
     initialize: function() {
 
         var self = this;
@@ -22905,8 +21569,6 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-            //console.log('event on devicePermissions', model, event, options);
-            //console.log('AppInstall', self);
             self.trigger('relational:change');
         });
 
@@ -22949,6 +21611,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     */
 
     relations: [
+        /*
         {   
             type: Backbone.HasOne,
             key: 'bridge',
@@ -22960,7 +21623,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
         },
-        {   
+        */
+        {
             type: Backbone.HasOne,
             key: 'app',
             keySource: 'app',
@@ -23042,8 +21706,8 @@ Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 require('../device_permissions/views');
 
 Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
+
     mixins: [Portal.ItemView],
-    //mixins: [Portal.ItemView],
 
     getInitialState: function () {
         return {
@@ -23102,16 +21766,7 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         return (
             React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
         );
-    },
-
-    /*
-
-    getInitialState: function() {
-        return {
-            title: 'Apps'
-        };
     }
-    */
 });
 
 Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView',
@@ -23132,10 +21787,12 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
     },
 
     installApps: function() {
-        Portal.Config.controller.installApps();
+        Portal.router.setParams({action: 'install-app'});
+        //Portal.Config.controller.installApps();
     },
 
     createItem: function (item) {
+        console.log('appInstallView createItem item', item);
         var cid = item.cid;
 
         var appInstallCollection = this.getCollection()
@@ -23255,11 +21912,9 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
     defaults: {
         installs_permitted: 0,
     },
-    */
 
     relations: [
         {
@@ -23275,7 +21930,11 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'appLicence',
-                includeInJSON: 'resource_uri'
+                keySource: 'app_licence',
+                keyDestination: 'app_licence',
+                relatedModel: 'Portal.AppLicence',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'appLicenceCollection'
             }
         },
         {
@@ -23314,8 +21973,14 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        var self = this;
         console.log('initialize AppLicence');
-        this.startTracking();
+
+        this.on('all', function() {
+            var app = self.get('app');
+            if(app instanceof Backbone.Model) app.trigger('relational:change');
+        });
+        //this.startTracking();
     },
 
     toggleInstall: function(bridge) {
@@ -23329,12 +21994,21 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
     },
 
     getInstall: function(bridge) {
-        /* Gets the install for this licence and the given bridge */
+        /* Get or create the install for this licence and the given bridge */
 
+        var install;
+        var installData = {
+            bridge: bridge,
+            app: this.get('app'),
+            licence: this
+        }
         var licenceInstalls = this.get('installs');
-        return licenceInstalls.findWhere({
-            bridge: bridge
-        });
+        install = licenceInstalls.findWhere(installData);
+        if (!install) {
+            install = new Portal.AppInstall(installData);
+            this.set('installs', install, {remove: false});
+        }
+        return install;
     },
 
     testIfInstalled: function(bridge) {
@@ -23415,6 +22089,42 @@ Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
 
+
+Portal.InstallButton = React.createClass({displayName: 'InstallButton',
+
+    mixins: [Portal.ConnectorMixin],
+
+    handleClick: function() {
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    render: function() {
+
+        //var contents = "Install";
+        //var contents = <Spinner />
+        console.log('Install button model', this.props);
+        //<div class="install-component btn btn-default app-install-button">Uninstall</div>
+        var model = this.props.model;
+
+        var syncing = model.isSyncing();
+        var label;
+        if (model.get('isGhost')) {
+            label = syncing ? "Uninstall" : "Install";
+        } else {
+            label = syncing ? "Install" : "Uninstall";
+        }
+        //var label = model.get('isGhost') ? "Install" :
+        var disabled = model.isSyncing() ? 'disabled' : '';;
+        var buttonClass = "btn btn-default " + disabled;
+
+        return (
+            React.createElement("div", {className: buttonClass, onClick: this.handleClick}, 
+                label
+            )
+        )
+    }
+});
+
 Portal.AppLicenceView = React.createClass({displayName: 'AppLicenceView',
 
     //mixins: [Portal.ItemView],
@@ -23426,17 +22136,29 @@ Portal.AppLicenceView = React.createClass({displayName: 'AppLicenceView',
         //var devicePermissions = this.props.devicePermissions;
         //var deviceInstalls = this.props.deviceInstalls;
         var licence = this.props.model;
+        var installsRemaining = licence.getInstallsRemaining();
+        var installsPermitted = licence.get('installs_permitted');
+
         var name = this.props.name;
+        var appInstall = this.props.appInstall;
+        console.log('AppLicenceView props', this.props);
+
+        var canInstall = installsPermitted > 0;
+        var installButton = canInstall ? React.createElement(Portal.InstallButton, {model: appInstall})
+                            : '';
 
         return (
-            React.createElement("div", null, "\"Test licence\"")
+            React.createElement("tr", null, 
+                React.createElement("td", {className: "app-name"}, name), 
+                React.createElement("td", {className: "installs-permitted"}, installsPermitted), 
+                React.createElement("td", {className: "installs-remaining"}, installsRemaining), 
+                React.createElement("td", null, installButton)
+            )
         );
     }
 });
 
 Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView',
-
-    itemView: Portal.AppLicenceView,
 
     mixins: [Backbone.React.Component.mixin],
 
@@ -23461,9 +22183,12 @@ Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView'
         var app = licence.get('app');
         var name = app.get('name');
 
+        var appInstall = licence.getInstall(this.props.bridge);
+
         //var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppLicenceView, {key: cid, name: name, model: licence})
+        return React.createElement(Portal.AppLicenceView, {key: cid, name: name, 
+                    appInstall: appInstall, model: licence})
     },
 
     render: function() {
@@ -23475,19 +22200,19 @@ Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView'
                 React.createElement(React.Table, null, 
                     React.createElement("thead", null, 
                         React.createElement("td", {className: "col-md-6"}, 
-                            React.createElement("div", {className: "list-group-item-heading app-name"}, "\"App Name\"")
+                            React.createElement("div", {className: "list-group-item-heading app-name"}, "App Name")
                         ), 
                         React.createElement("td", {className: "col-md-2"}, 
-                            React.createElement("div", {className: "installs-permitted"}, "\"Installs permitted\"")
+                            React.createElement("div", {className: "installs-permitted"}, "Installs permitted")
                         ), 
                         React.createElement("td", {className: "col-md-2"}, 
-                            React.createElement("div", {className: "installs-remaining"}, "\"Installs remaining\"")
+                            React.createElement("div", {className: "installs-remaining"}, "Installs remaining")
                         ), 
                         React.createElement("td", {className: "col-md-2"}
                         )
                     ), 
                     React.createElement("tbody", null, 
-                        React.createElement("div", null)
+                        this.props.collection.map(this.createItem)
                     )
                 )
             )
@@ -23744,12 +22469,13 @@ Portal.AppLicenceListView = Marionette.CompositeView.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
-Portal.App = Backbone.RelationalModel.extend({
+Portal.App = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     /*
     relations: [
+
         {
             type: Backbone.HasMany,
             key: 'appInstalls',
@@ -23777,14 +22503,20 @@ Portal.App = Backbone.RelationalModel.extend({
         }
     },
 
+    getLicence: function(user) {
+
+        return Portal.appLicenceCollection.findOrAdd({
+            app: this,
+            user: user
+        });
+    },
+
     getInstall: function(bridge) {
 
-        var appInstall = Portal.appInstallCollection.findOrCreate({
+        var appInstall = Portal.appInstallCollection.findOrAdd({
             app: this,
             bridge: bridge
         });
-
-        console.log('appInstall in getInstall is', appInstall);
 
         return appInstall;
     },
@@ -24003,7 +22735,111 @@ Portal.AppOwnershipListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","../connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","./templates/ownership.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html","./templates/ownershipSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
+},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","../connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","./templates/ownership.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html","./templates/ownershipSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
+
+Portal.Components.Counter = React.createClass({displayName: 'Counter',
+
+    mixins: [ Portal.Mixins.Counter ],
+
+    handleIncrement: function() {
+        this.incrementField(this.props.model, 'installs_permitted', 1);
+    },
+
+    handleDecrement: function() {
+        this.incrementField(this.props.model, 'installs_permitted', -1);
+    },
+
+    render: function() {
+
+        var licence = this.props.model;
+
+        var installsPermitted = licence.get('installs_permitted');
+        var disabled = licence.isSyncing();
+
+        return (
+            React.createElement("div", {className: "input-group counter"}, 
+                React.createElement("span", {className: "input-group-btn data-dwn"}, 
+                    React.createElement("button", {className: "btn btn-default btn-info", 
+                            onClick: this.handleDecrement, 'data-increment': "-1"}, 
+                        React.createElement("span", {className: "glyphicon glyphicon-minus"})
+                    )
+                ), 
+                React.createElement("input", {type: "text", className: "form-control number text-center", 
+                    readonly: "true", disabled: disabled, value: installsPermitted}), 
+                React.createElement("span", {className: "input-group-btn data-up"}, 
+                    React.createElement("button", {className: "btn btn-default btn-info", 
+                            onClick: this.handleIncrement, 'data-increment': "1"}, 
+                        React.createElement("span", {className: "glyphicon glyphicon-plus"})
+                    )
+                )
+            )
+        )
+    }
+});
+
+Portal.AppView = React.createClass({displayName: 'AppView',
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'counter',
+                element: Portal.Components.Counter
+            }]
+        };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderButtons: function() {
+
+        console.log('AppView renderButtons');
+        var app = this.props.model;
+        var licence = app.getLicence(Portal.currentUser);
+        return React.createElement(Portal.Components.Counter, {model: licence})
+    },
+
+    renderBody: function() {
+
+        var self = this;
+
+        return (
+            React.createElement("div", null)
+        );
+    }
+});
+
+Portal.AppListView = React.createClass({displayName: 'AppListView',
+
+    itemView: Portal.AppView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps'
+        };
+    },
+
+    createItem: function (item) {
+        console.log('appView createItem item', item);
+        var cid = item.cid;
+
+        var app = Portal.appCollection.get({cid: cid});
+
+        var title = app.get('name');
+
+        return React.createElement(Portal.AppView, {key: cid, title: title, 
+                    model: app})
+    }
+});
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -24020,6 +22856,10 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             console.log('Bridge event ', event, payload);
         });
         */
+
+        this.listenTo(this, 'all', function(name) {
+            console.log('EVENT bridge', name);
+        });
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
@@ -24085,7 +22925,14 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'bridgeCollection'
+            }
         },
         {
             type: Backbone.HasMany,
@@ -24137,25 +22984,44 @@ Portal.BridgeCollection = Backbone.Collection.extend({
     */
 });
 
+/*
 Portal.getCurrentBridge = function() {
 
-    //var currentBridgeDeferred = Q.defer();
+}
+*/
 
-    var bridge = Portal.bridgeCollection.findWhere({current: true}) || Portal.bridgeCollection.at(2);
+//router = require('../router');
 
-    if (!bridge) {
-        //logger.log('warn', 'There is no current bridge');
-        bridge = false;
-    } else {
-        bridge.set({current: true});
+
+Portal.getCurrentBridge = function() {
+
+    //console.log('getCurrentBridge router', router);
+    var bridge, query;
+
+    var query = Portal.route.query;
+
+    if (query && query.bridge) {
+        console.log('query bridge id', query.bridge);
+        bridge = Portal.bridgeCollection.getID(query.bridge) ||
+            Portal.currentBridge;
+        console.log('getCurrentBridge bridge found', bridge)
     }
 
-    return bridge
-    //currentBridgeDeferred.resolve(bridge);
+    if (!bridge) {
+        bridge = Portal.bridgeCollection.at(0);
+        Portal.setCurrentBridge(bridge);
+        console.log('getCurrentBridge bridge set', bridge);
+    }
 
-    //return currentBridgeDeferred.promise;
+    return bridge;
+    //return Portal.bridgeCollection.at(0);
 }
 
+Portal.setCurrentBridge = function(bridge) {
+
+    Portal.currentBridge = bridge;
+    Portal.router.setQuery({bridge: bridge.get('id')});
+}
 
 Portal.BridgeControl = Backbone.RelationalModel.extend({
 
@@ -24869,53 +23735,7 @@ Portal.Components.Button = Marionette.ItemView.extend({
 Portal.Components = {};
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js":[function(require,module,exports){
-
-require('./components');
-
-Portal.Components.NumberField = Marionette.ItemView.extend({
-
-    tagName: 'button',
-
-    template: require('./templates/numberField.html'),
-
-    events: {
-        'click .inc': 'increment',
-        'click .dec': 'decrement'
-    },
-
-    bindings: {
-        '.bfh-number': {
-            attributes: [{
-                name: 'disabled',
-                //observe: ['change', 'change:relational', 'installs_permitted'],
-                modelEvents: ['change'],
-                onGet: 'getDisabled'
-            }],
-            observe: ['installs_permitted'],
-            events: ['change'],
-            onGet: 'getContent'
-        }
-    },
-
-    /*
-    getClass: function() {
-
-        var enabled = this.getEnabled() || "";
-
-        return "form-control bfh-number app-form-input installs-permitted" + enabled;
-    },
-    */
-
-    getDisabled: function(val) {
-
-        console.log('numbers getDisabled');
-        //testModel = this.model;
-        //return this.model.unsavedAttributes() ? true : false;
-        return false;
-    }
-});
-},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./templates/numberField.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/numberField.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/switches.js":[function(require,module,exports){
 
 require('./components');
 
@@ -24970,19 +23790,7 @@ Portal.Components.ConnectionSwitch = Portal.Components.Switch.extend({
     }
 });
 
-},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/numberField.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<input type=\"text\" class=\"form-control bfh-number app-form-input installs-permitted\">\n<span class=\"input-group-addon bfh-number-btn inc\"><span class=\"glyphicon glyphicon-chevron-up\"></span></span>\n<span class=\"input-group-addon bfh-number-btn dec\"><span class=\"glyphicon glyphicon-chevron-down\"></span></span>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":[function(require,module,exports){
+},{"./components":"/home/vagrant/bridge-controller/portal/static/js/cb/components/components.js","./templates/switch.html":"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/components/templates/switch.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -25178,10 +23986,12 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
 
     installDevice: function() {
 
-        console.log('click installDevice')
+        console.log('click installDevice');
         var discoveredDevice = this.getModel();
         console.log('installDevice discoveredDevice', discoveredDevice);
-        Portal.Config.controller.promptInstallDevice(discoveredDevice);
+        Portal.router.setParams({action: 'install-device',
+                                 item: discoveredDevice.get('id')});
+        //Portal.Config.controller.promptInstallDevice(discoveredDevice);
     }
 });
 
@@ -25516,7 +24326,8 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     discoverDevices: function() {
 
-        Portal.Config.controller.discoverDevices();
+        Portal.router.setParams({action: 'discover-devices'});
+        //Portal.Config.controller.discoverDevices();
     },
 
     createItem: function (item) {
@@ -25694,7 +24505,9 @@ Portal = new CBApp();
 Portal.dispatcher = new Dispatcher();
 Portal.setupCBIDTypes(cbidTypes);
 
-require('./views/generic-views');
+require('./views/mixins/backbone');
+require('./views/mixins/connector');
+require('./views/mixins/items');
 
 /*
 Portal.addRegions({
@@ -25711,7 +24524,7 @@ Portal.addRegions({
 Portal._isInitialized = false;
 
 Portal.Controller = Marionette.Controller.extend({
-
+  /*
   index: function () {
     console.log('index');
   },
@@ -25746,16 +24559,8 @@ Portal.Controller = Marionette.Controller.extend({
 
       bridge.set('current', true);
   }
+  */
 });
-
-/*
-var DevicesView = React.createClass({
-
-    render: function() {
-        return <div>Hello!</div>
-    }
-});
-*/
 
 Portal.addInitializer(function () {
 
@@ -25770,6 +24575,7 @@ Portal.addInitializer(function () {
 
 });
 
+/*
 Portal.navigate = function(route,  options){
   options || (options = {});
   Backbone.history.navigate(route, options);
@@ -25778,21 +24584,45 @@ Portal.navigate = function(route,  options){
 Portal.getCurrentRoute = function(){
   return Backbone.history.fragment
 };
+*/
 
 
-Portal.on("initialize:after", function () {
+var BaseView = require('./views/base');
+
+Portal.addInitializer(function () {
+//Portal.on("initialize:after", function () {
 
   //Portal.Nav.trigger('topbar:show');
   //Portal.Notifications.trigger('show');
 
-  var routes = require('./router').routes;
+  Portal.appCollection.fetch();
 
-  Router.run(routes, Router.HistoryLocation, function (Handler, state) {
+  Portal.router = require('./router');
+
+  Portal.router.run(function (Handler, state) {
+      Portal.route = state;
+      console.log('new state ', state);
       var params = state.params;
+      var currentBridge = Portal.getCurrentBridge();
+      currentBridge.fetch();
+      var apps = Portal.appCollection;
+      console.log('router currentBridge', currentBridge);
+
       React.render(
-          React.createElement(Handler, {params: params}),
+          React.createElement(BaseView, {params: params, handler: Handler, 
+              key: currentBridge.get('id'), 
+              collection: apps, model: currentBridge}),
           document.getElementById('app')
       );
+
+      /*
+      Portal.mainView = React.render(
+          <Handler params={params} key={currentBridge.get('id')} model={currentBridge} />,
+          document.getElementById('app')
+      );
+      */
+      //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
+      //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
   });
 
   /*
@@ -25832,7 +24662,6 @@ Portal.Router = Marionette.SubRouter.extend({
     'store(/:slug)': 'showStore'
   }
 });
-*/
 
 Portal.reqres.setHandler("config:show", function(){
     Portal.controller.showConfig();
@@ -25846,12 +24675,12 @@ Portal.reqres.setHandler("home:show", function(){
     Portal.controller.showHome();
 });
 
-
 Portal.reqres.setHandler("store:show", function(){
     Portal.controller.showStore();
 });
+*/
 module.exports = Portal;
-},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/vagrant/bridge-controller/portal/static/js/cb/router.js","./views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/vagrant/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/vagrant/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
 Portal.Message = Backbone.RelationalModel.extend({
 
@@ -26381,13 +25210,15 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-Portal.addInitializer(function () {
+//Portal.addInitializer(function () {
+Portal.on('initialize:before', function () {
 
   Portal.adaptorCollection = new Portal.AdaptorCollection();
   Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
 
   //data
   Portal.appCollection = new Portal.AppCollection();
+  Portal.appCollection.subscribe();
 
   Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
@@ -26399,6 +25230,7 @@ Portal.addInitializer(function () {
   Portal.appDevicePermissionCollection.subscribe();
 
   Portal.appLicenceCollection = new Portal.AppLicenceCollection();
+  Portal.appLicenceCollection.subscribe();
 
   Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
@@ -26581,7 +25413,7 @@ require('../../messages/views');
 
 module.exports.Main = React.createClass({displayName: 'Main',
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
     getInitialState: function () {
         return {
@@ -26591,21 +25423,65 @@ module.exports.Main = React.createClass({displayName: 'Main',
         };
     },
 
+    discoverDevices: function() {
+
+        Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+            discoveredDevice.delete();
+        });
+        Portal.messageCollection.sendCommand('discover');
+        this.setState({discoveringDevices: true});
+    },
+
+    stopDiscoveringDevices: function() {
+        this.setState({discoveringDevices: false});
+    },
+
+    promptInstallDevice: function(discoveredDevice) {
+        this.setState({installDevice: discoveredDevice});
+    },
+
+    installDevice: function(discoveredDevice, friendlyName) {
+
+        discoveredDevice.install(friendlyName);
+        this.setState({ installDevice: false,
+                        discoveringDevices: false });
+    },
+
+    cancelInstallDevice: function() {
+
+        this.setState({ installDevice: false });
+    },
+
     renderModals: function () {
 
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        console.log('renderModals params', action);
+        switch (action) {
+            case "install-app":
+                return React.createElement(InstallAppModal, {container: this});
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
+                break;
+            default:
+                break;
+        }
+        /*
         var installDevice = this.state.installDevice;
         if (installDevice) {
-            return React.createElement(InstallDeviceModal, {container: this, model: installDevice});
+            return <InstallDeviceModal container={this} model={installDevice} />;
         } else if (this.state.installingApps) {
             console.log('rendering installingApps');
-            return React.createElement(InstallAppModal, {containter: this});
+            return <InstallAppModal container={this} />;
         }
+        */
         //var $portalBody = $('#portal-body');
         //console.log('$portalBody ', $portalBody );
 
         //var installDevice = Portal.Config.installDevice;
         //var cancelInstall = Portal.Config.cancelInstallDevice;
-
     },
 
     render: function() {
@@ -26613,12 +25489,20 @@ module.exports.Main = React.createClass({displayName: 'Main',
         console.log('config mainView render');
         //var currentBridge = this.getModel();
         var currentBridge = Portal.getCurrentBridge();
-        currentBridge.fetch();
+        //var currentBridge = this.getModel();
+        console.log('currentBridge in config render', currentBridge);
+        //currentBridge.fetch();
 
-        var appInstalls = currentBridge.get('appInstalls');
+        var appInstalls = currentBridge.get('appInstalls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
         console.log('config mainView appInstalls', appInstalls);
 
-        var deviceInstalls = currentBridge.get('deviceInstalls');
+        var deviceInstalls = currentBridge.get('deviceInstalls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
 
         var deviceView;
         if (this.state.discoveringDevices) {
@@ -26659,7 +25543,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
 var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
     getInitialState: function() {
         return {
@@ -26676,12 +25560,15 @@ var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
         //var friendlyName = this.$('#friendly-name').val();
         //this.props.discoveredDevice.installDevice(friendlyName);
         var discoveredDevice = this.getModel();
-        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+        discoveredDevice.install(this.state.friendlyName);
+        Portal.router.setParams({});
+        //Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
     },
 
     cancelInstall: function() {
 
-        Portal.Config.controller.cancelInstallDevice();
+        Portal.router.setParams({});
+        //Portal.Config.controller.cancelInstallDevice();
     },
 
     render: function() {
@@ -26709,23 +25596,21 @@ var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
 
 var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [ Router.State, Router.Navigation, Backbone.React.Component.mixin],
 
     handleFriendlyName: function(event) {
         this.setState({friendlyName: event.target.value});
     },
 
-    installDevice: function() {
-        console.log('Submitted installDevice modal');
-        //var friendlyName = this.$('#friendly-name').val();
-        //this.props.discoveredDevice.installDevice(friendlyName);
-        var discoveredDevice = this.getModel();
-        Portal.Config.controller.installDevice(discoveredDevice, this.state.friendlyName);
+    showAppMarket: function() {
+
+        this.transitionTo('market', {}, this.getQuery());
     },
 
     cancelInstall: function() {
 
-        Portal.Config.controller.cancelInstallApp();
+        Portal.router.setParams({});
+        //Portal.Config.controller.cancelInstallApp();
     },
 
     render: function() {
@@ -26746,15 +25631,19 @@ var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
         var device = this.getModel().get('device');
         var title = device ? "Install " + device.get('name') : "Unknown device";
         */
+        //var currentUser = Portal.getCurrentUser();
+        var licenceCollection = Portal.currentUser.get('appLicences');
+        var bridge = Portal.getCurrentBridge();
 
         return (
             React.createElement(React.Modal, {className: "portal-modal", title: "Install Apps", container: this.props.container, 
                 onRequestHide: this.cancelInstall, animation: false}, 
-                React.createElement("div", {className: "modal-body"}
+                React.createElement("div", {className: "modal-body"}, 
+                    React.createElement(Portal.AppLicenceListView, {collection: licenceCollection, bridge: bridge})
                 ), 
                 React.createElement("div", {className: "modal-footer"}, 
                     React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
-                    React.createElement(React.Button, {onClick: this.installDevice}, "Install")
+                    React.createElement(React.Button, {onClick: this.showAppMarket}, "App Market")
                 )
             )
         )
@@ -27225,235 +26114,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
-},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/app.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<div id=\"";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"panel-collapse\">\n    <li class=\"staff-panel panel inner-item\">\n    </li>\n    <li class=\"user-panel panel inner-item\">\n        <table class=\"table\">\n            <tr>\n                <td class=\"col-md-6 list-label\">\n                    My Licences\n                </td>\n                <td class=\"col-md-6\">\n                    <li class=\"installs-permitted input-group\">\n\n                    </li>\n                </td>\n            </tr>\n        </table>\n    </li>\n</div>\n\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/appSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/staffApp.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/views.js":[function(require,module,exports){
-
-require('../../../components/numbers');
-//require('./device_permissions/views');
-
-var InstallsPermittedField = Portal.Components.NumberField.extend({
-
-    initialize: function() {
-
-    },
-
-    getContent: function() {
-
-        console.log('InstallsPermittedField getContent');
-        return this.model.get('installs_permitted');
-    },
-
-    increment: function() {
-
-        this.model.changeInstallsPermitted(1);
-    },
-
-    decrement: function() {
-
-        this.model.changeInstallsPermitted(-1);
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-    }
-});
-
-var StaffAppView = Marionette.ItemView.extend({
-
-    tagName: 'table',
-    template: require('./templates/staffApp.html'),
-
-    bindings: {
-        '.app-id': {
-            observe: [],
-            onGet: function() {
-                return "App ID: " + this.model.get('id');
-            }
-        }
-    },
-
-    licenceBindings: {
-        '.licence-id': {
-            observe: [],
-            onGet: function() {
-                //return this.model.get('licence').get('id');
-                return "Licence ID: " + this.licence.get('id');
-            }
-        }
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licence) {
-            this.stickit(this.licence, this.licenceBindings);
-        }
-    }
-});
-
-var AppView = module.exports.AppView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/app.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-    },
-
-    initialize: function() {
-        // Proxy change events for stickit
-        var self = this;
-
-        this.installsPermittedField = new InstallsPermittedField();
-        this.staffView = new StaffAppView();
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            // Create or find a licence, then bind to it
-            var licence = Portal.appLicenceCollection.findWhere({
-                app: self.model,
-                user: currentUser
-            });
-
-            self.licence = licence || new Portal.AppLicence({
-                                                    app: self.model,
-                                                    user: currentUser,
-                                                    installs_permitted: 0
-                                                });
-
-            Portal.appLicenceCollection.add(self.licence);
-
-            self.staffView.licence = self.licence;
-            self.staffView.setModel(self.model);
-            self.installsPermittedField.setModel(self.licence);
-
-            self.render();
-            /*
-            var licenceBindings = {
-                '.installs-permitted': {
-                  observe: ['installs_permitted'],
-                  onGet: function(installsPermitted) {
-                      return installsPermitted;
-                  },
-                  attributes: [{
-                    name: 'disabled',
-                    observe: ['installs_permitted', 'change'],
-                    onGet: 'getDisabled'
-                  }]
-                }
-            };
-
-            self.stickit(self.licence, licenceBindings);
-            */
-        });
-
-        this.model.on('unsavedChanges sync', function(e) {
-            self.model.trigger('change:change');
-        }, this);
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        this.staffView.setElement(this.$('.staff-panel')).render();
-        this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
-        /*
-        self.appDevicePermissionListView =
-            new Portal.AppDevicePermissionListView({
-                collection: currentBridge.get('deviceInstalls'),
-                appInstall: self.model
-            });
-
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            var appID = '#APPID' + self.model.get('app').get('id');
-            $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
-        });
-         */
-    }
-});
-
-/*
-module.exports.InstallAppView = Portal.AppView.extend({
-
-    template: require('./templates/installApp.html'),
-});
-*/
-
-module.exports.AppListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appSection.html'),
-    itemView: AppView,
-    itemViewContainer: '.app-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-    /*
-    buildItemView: function(item, ItemViewType, itemViewOptions){
-
-        var options = _.extend({model: item}, itemViewOptions);
-        var view = new ItemViewType(options);
-        //view.licence = "test";
-        return view;
-    },
-    */
-
-    onRender : function(){
-
-    }
-});
-
-},{"../../../components/numbers":"/home/vagrant/bridge-controller/portal/static/js/cb/components/numbers.js","./templates/app.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/app.html","./templates/appSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/appSection.html","./templates/staffApp.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/templates/staffApp.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
+},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -27515,28 +26176,41 @@ Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
+},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
-require('../../views/generic-views');
-require('../../views/regions');
+//require('../../views/generic-views');
+//require('../../views/regions');
 
-//require('../../apps/storeViews');
-var AppViews = require('./apps/views');
+require('../../apps/views');
 
+
+module.exports.Main = React.createClass({displayName: 'Main',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    renderModals: function () {
+
+    },
+
+    render: function() {
+
+        var apps = Portal.appCollection;
+        console.log('Market View apps', apps);
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
+                        React.createElement(Portal.AppListView, {collection: apps})
+                    )
+                )
+            )
+        )
+    }
+});
+
+/*
 module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
@@ -27584,7 +26258,6 @@ module.exports.Main = Marionette.Layout.extend({
             //self.appInstallListView.delegateEvents();
             //self.appSection.show(self.appInstallListView);
         });
-        */
     }
 
 });
@@ -27605,7 +26278,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/apps/views.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
+},{"../../apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
 Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
@@ -28001,222 +26674,52 @@ require('./views/main');
 var ConfigView = require('./modules/config/views').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
+var DashboardView = require('./views/dashboard');
 var MarketView = require('./modules/market/views').Main;
 var NotFoundView = require('./views/notFound');
 
-
-module.exports.routes = (
+var routes = (
     React.createElement(Route, {handler: MainView, path: "/"}, 
         React.createElement(DefaultRoute, {handler: HomeView}), 
-        React.createElement(Route, {name: "config", handler: ConfigView}), 
-        React.createElement(Route, {name: "dashboard"}), 
+        React.createElement(Route, {name: "config", path: "config/?:action?/?:item?", handler: ConfigView}), 
+        React.createElement(Route, {name: "dashboard", handler: DashboardView}), 
         React.createElement(Route, {name: "market", handler: MarketView}), 
         React.createElement(NotFoundRoute, {handler: NotFoundView})
     )
 );
 
+var router = Router.create({
+    routes: routes,
+    location: Router.HistoryLocation
+});
 
-},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
+router.setQuery = function(query) {
 
-var _ = require('underscore');
-
-var Router = function(options) {
-    options || (options = {});
-    if (options.routes) this.routes = options.routes;
-    this.handlers = [];
-    this._bindRoutes();
-    this.initialize.apply(this, arguments);
+    var route = Portal.route;
+    Portal.router.transitionTo(route.pathname, route.params,
+        _.defaults(query, route.query));
 }
 
-var optionalParam = /\((.*?)\)/g;
-var namedParam    = /(\(\?)?:\w+/g;
-var splatParam    = /\*\w+/g;
-var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+router.setParams = function(params) {
 
-_.extend(Router.prototype, Backbone.Events, {
+    var route = Portal.route;
+    // Remove any extra slashes in the pathname
+    //var pathnameMatch = route.pathname.replace(/\//g, '');
+    var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
+    console.log('pathnameMatch ', pathnameMatch );
+    Portal.router.transitionTo(pathnameMatch[1], params, route.query);
+}
 
-    initialize: function() {},
+module.exports = router;
 
-    _bindRoutes: function() {
-        if (!this.routes) return;
-        this.routes = _.result(this, 'routes');
-        var route, routes = _.keys(this.routes);
-        while ((route = routes.pop()) != null) {
-            this.route(route, this.routes[route]);
-        }
-    },
 
-    _routeToRegExp: function(route) {
-        route = route.replace(escapeRegExp, '\\$&')
-            .replace(optionalParam, '(?:$1)?')
-            .replace(namedParam, function(match, optional) {
-                return optional ? match : '([^/?]+)';
-            })
-            .replace(splatParam, '([^?]*?)');
-        return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-    },
-
-    route: function(route, callback) {
-        if (!_.isRegExp(route)) route = this._routeToRegExp(route);
-        if (!_.isFunction(callback)) callback = this[callback];
-        var router = this;
-        this.handlers.unshift({route: route, callback: callback});
-    },
-
-    dispatch: function(message) {
-
-        console.log('message in dispatch', message);
-
-        var self = this;
-        //var message = new Portal.Message(jsonMessage);
-        var route = this.getRoute(message);
-        var formattedMessage = this.formatMessage(message);
-        _.any(this.handlers, function(handler) {
-            console.log('handler is', handler);
-            if (handler.route.test(route)) {
-                console.log('Matched', route)
-                console.log('Callback is', handler.callback);
-                console.log('this in dispatch is', this);
-                console.log('message for callback', message);
-                handler.callback.call(self, formattedMessage);
-                return true;
-            }
-        });
-    },
-
-    getRoute: function(message) {
-        // Overide this
-    },
-
-    formatMessage: function(message) {
-        return message;
-    }
-});
-
-Router.extend = Backbone.Model.extend;
-
-var updateCollection = function(collectionName) {
-
-    console.log('collection', collectionName);
-    return function(message) {
-        console.log('updateCollection message', message );
-        var messageBody = _.property('body')(message);
-        var verb = _.property('verb')(messageBody);
-        var jsonModels = _.property('body')(messageBody);
-        console.log('updateCollection jsonModels', jsonModels );
-        var collection = Portal[collectionName];
-        console.log('collection', collection);
-        if (verb != 'delete') {
-            collection.update(jsonModels);
-        } else if (verb == 'delete') {
-            collection.delete(jsonModels);
-        }
-    }
-};
-
-var PortalRouter = Router.extend({
-
-    routes: {
-        'BID:b/UID:u': updateCollection('bridgeControlCollection'),
-        'BID:b/DID:u': updateCollection('deviceInstallCollection'),
-        'message': 'updateMessageCollection'
-    },
-
-    updateMessageCollection: function(message) {
-        console.log('updateMessageCollection', message);
-        Portal.messageCollection.add(message);
-    },
-
-    /*
-        'AID[0-9]+': 'app',
-        'ACID[0-9]+': 'appConnection',
-        'BID[0-9]+/AID[0-9]+': 'appInstall',
-        'ADPID[0-9]+': 'appDevicePermission',
-        'ALID[0-9]+': 'appLicence',
-        'AOID[0-9]+': 'appOwnership',
-        'BID[0-9]+': 'bridge',
-        'CID[0-9]+': 'client',
-        'CCID[0-9]+': 'clientControl',
-        'DID[0-9]+': 'device',
-        'BID[0-9]+/DID[0-9]+': 'deviceInstall',
-        'DDID[0-9]+': 'discoveredDevice',
-        'UID[0-9]+': 'currentUser'
-    */
-
-    getRoute: function(message) {
-
-        var portalMessage = _.property('body')(message);
-        console.log('portalMessage ', portalMessage );
-        var verb = _.property('body')(message);
-        var jsonModels = _.property('body')(portalMessage);
-        console.log('jsonModels ', jsonModels );
-
-        if (!jsonModels) {
-            console.warn('Message received has no inner body', transportMessage);
-            return;
-        }
-        var model = jsonModels[0] || jsonModels;
-
-        console.log('model ', model );
-        var cbid = _.property('cbid')(model);
-        console.log('cbid ', cbid );
-        if (!cbid) {
-            return "message";
-        } else {
-            return cbid;
-        }
-    }
-});
-
-var MessageRouter = module.exports.MessageRouter = Router.extend({
-
-    routes: {
-        'broadcast': 'toPortal'
-    },
-
-    initialize: function() {
-
-        var self = this;
-
-        this.portalRouter = new PortalRouter();
-
-        console.log('portalRouter is', this.portalRouter );
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            var uid = currentUser.get('cbid');
-            self.route(uid, "portal", self.toPortal);
-            self.route(uid + '/:webapp', "webapp", self.toWebApps);
-        });
-    },
-
-    getRoute: function(message) {
-
-        console.log('getRoute message', message);
-        return _.property('destination')(message);
-    },
-
-    toPortal: function(message, fragment) {
-
-        console.log('Message for portal', message);
-        console.log('fragment', fragment);
-        console.log('this in portal', this);
-        this.portalRouter.dispatch(message);
-    },
-
-    toWebApps: function(message, webapp) {
-
-        console.log('Message for webapp', webapp, message);
-    }
-});
-
-},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
+},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/dashboard":"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var CBApp = require('index')
     ;
 
 require('./messages/models');
-var routers = require('./routers');
+//var routers = require('./routers');
 //var Message = require('./message');
 
 
@@ -28267,7 +26770,7 @@ Portal.addInitializer(function() {
       */
     };
 
-    Portal.messageRouter = new routers.MessageRouter();
+    //Portal.messageRouter = new routers.MessageRouter();
 
     Portal.socket.on('message', function(jsonString) {
 
@@ -28291,7 +26794,7 @@ Portal.addInitializer(function() {
     });
 });
 
-},{"./messages/models":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js","./routers":"/home/vagrant/bridge-controller/portal/static/js/cb/routers.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
+},{"./messages/models":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 
@@ -28361,7 +26864,7 @@ Portal.getCurrentUser = function() {
 
     return user;
     */
-    return Portal.currentUserDeferred.promise;
+    //return Portal.currentUserDeferred.promise;
 };
 
 //Portal.U = Backbone.RelationalModel.extend({
@@ -28406,7 +26909,6 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeControlCollection'
         },
-        /*
         {
             type: Backbone.HasMany,
             key: 'appLicences',
@@ -28513,8 +27015,149 @@ module.exports.underscoredToCamelCase = function(underscored) {
     console.log('underscoredToCamelCase camelCased ', camelCased );
     return camelCased;
 }
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/base.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    render: function () {
+
+        var Handler = this.props.handler;
+        console.log('Handler in base', Handler);
+        var params = this.props.params;
+        console.log('params in base', params);
+        var currentBridge = this.getModel();
+        console.log('currentBridge in base', currentBridge);
+        //currentBridge.fetch();
+
+        return (
+            React.createElement(Handler, {params: params})
+        );
+    }
+});
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", null
+            )
+        );
+    }
+});
+
+/*
+ </br></br>
+ If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
+ </br></br>
+ If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
+ </br></br>
+ For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
+*/
+
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
+
+/*
+Portal.FluxBoneMixin = function(propName) {
+    return {
+        componentDidMount: function() {
+            return this.props[propName].on("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        },
+        componentWillUnmount: function() {
+            return this.props[propName].off("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        }
+    };
+};
+
+Portal.ListItemLoadingView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: 'spinner',
+    template: require('./templates/listItemLoading.html')
+});
+*/
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", {className: "welcome"}, 
+                React.createElement("div", {className: "welcome-text panel-body"}, 
+                    "Welcome to the ContinuumBridge portal."
+                )
+            )
+        );
+    }
+});
+
+/*
+ </br></br>
+ If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
+ </br></br>
+ If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
+ </br></br>
+ For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
+*/
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
+
+var Nav = require('./nav');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State, Router.Navigation ],
+
+    render: function () {
+        //Portal.mainView = this;
+        //mainView = this;
+        var activeSection = this.getParams().section;
+        console.log('mainView getParams()', this.getParams());
+        console.log('mainView params', this.props.params);
+        //console.log('mainView model', this.getModel());
+
+        //var currentBridge = Portal.getCurrentBridge();
+        return (
+            React.createElement("div", null, 
+                React.createElement(Nav.Topbar, {activeSection: activeSection}), 
+                React.createElement("div", {className: "container"}, 
+                    React.createElement(Router.RouteHandler, null)
+                )
+            )
+        );
+    }
+});
+
+/*
+var ConfigViews = require('../modules/config/views');
+
+Portal.MainView = React.createClass({
+    mixins: [Backbone.React.Component.mixin],
+
+    render: function() {
+        var currentBridge = Portal.getCurrentBridge();
+        currentBridge.fetch();
+        return (
+            <ConfigViews.Main model={currentBridge} />
+        )
+    }
+});
+*/
+
+},{"./nav":"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/backbone.js":[function(require,module,exports){
 
 Portal.ReactBackboneMixin = {
 
@@ -28526,6 +27169,75 @@ Portal.ReactBackboneMixin = {
         return collection.get({cid: this.props.model.cid})
     }
 }
+
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/connector.js":[function(require,module,exports){
+
+Portal.ConnectorMixin = {
+
+    toggleExistenceOnServer: function(model) {
+
+        if (!model.isSyncing()) {
+            if (model.isNew()) {
+                console.log('toggleExistenceOnServer save');
+                //model.save();
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: model.__proto__.constructor.modelType,
+                    payload: model
+                });
+            } else {
+                console.log('toggleExistenceOnServer destroyOnServer');
+                model.destroyOnServer();
+            }
+        }
+    }
+}
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js":[function(require,module,exports){
+
+module.exports = {
+
+    incrementField: function(model, fieldName, increment) {
+
+        if (!model.isSyncing()) {
+
+            var currentValue = model.get(fieldName);
+
+            console.log('incrementField currentValue', currentValue);
+            console.log('incrementField increment', increment);
+            if (!currentValue) currentValue = 0;
+
+            var nextValue = parseInt(currentValue) + parseInt(increment);
+            if (nextValue < 0) nextValue = 0;
+            model.set(fieldName, nextValue);
+
+            console.log('incrementField nextValue', nextValue);
+            console.log('incrementField model.isNew()', model.isNew());
+
+            if (nextValue > 0) {
+                console.log('incrementField create');
+                if (model.isNew()) {
+                    Portal.dispatch({
+                        source: 'portal',
+                        actionType: 'create',
+                        itemType: model.__proto__.constructor.modelType,
+                        payload: model
+                    });
+                } else {
+                    console.log('incrementField save');
+                    model.save();
+                }
+            } else {
+                if (!model.isNew()) {
+                    console.log('incrementField destroyOnServer');
+                    model.destroyOnServer();
+                }
+            }
+        }
+    }
+}
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/items.js":[function(require,module,exports){
 
 Portal.InnerItemView = {
 
@@ -28618,6 +27330,7 @@ Portal.ItemView = {
         var buttons = this.state.buttons || [];
         return (
             React.createElement(React.ListItem, {header: this.props.title, buttons: buttons, 
+                renderButtons: this.renderButtons, 
                 bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
                 body
             )
@@ -28681,98 +27394,19 @@ Portal.ListView = {
     }
 };
 
-/*
-Portal.FluxBoneMixin = function(propName) {
-    return {
-        componentDidMount: function() {
-            return this.props[propName].on("all", (function(_this) {
-                return function() {
-                    return _this.forceUpdate();
-                };
-            })(this), this);
-        },
-        componentWillUnmount: function() {
-            return this.props[propName].off("all", (function(_this) {
-                return function() {
-                    return _this.forceUpdate();
-                };
-            })(this), this);
-        }
-    };
-};
 
-Portal.ListItemLoadingView = Marionette.ItemView.extend({
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/mixins.js":[function(require,module,exports){
 
-    tagName: 'li',
-    className: 'spinner',
-    template: require('./templates/listItemLoading.html')
-});
-*/
+var Mixins = {};
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
+Mixins.Counter = require('./counter');
 
-module.exports = React.createClass({displayName: 'exports',
 
-    render: function () {
-        return (
-            React.createElement("div", {className: "welcome"}, 
-                React.createElement("div", {className: "welcome-text panel-body"}, 
-                    "Welcome to the ContinuumBridge portal."
-                )
-            )
-        );
-    }
-});
 
-/*
- </br></br>
- If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
- </br></br>
- If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
- </br></br>
- For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
-*/
+Portal.Mixins = Mixins;
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
 
-var Nav = require('./nav');
-
-module.exports = React.createClass({displayName: 'exports',
-
-    mixins: [ Router.State ],
-
-    render: function () {
-        var activeSection = this.getParams().section;
-        console.log('mainView getParams()', this.getParams());
-        console.log('mainView params', this.props.params);
-        return (
-            React.createElement("div", null, 
-                React.createElement(Nav.Topbar, {activeSection: activeSection}), 
-                React.createElement("div", {className: "container"}, 
-                    React.createElement(Router.RouteHandler, null)
-                )
-            )
-        );
-    }
-});
-
-/*
-var ConfigViews = require('../modules/config/views');
-
-Portal.MainView = React.createClass({
-    mixins: [Backbone.React.Component.mixin],
-
-    render: function() {
-        var currentBridge = Portal.getCurrentBridge();
-        currentBridge.fetch();
-        return (
-            <ConfigViews.Main model={currentBridge} />
-        )
-    }
-});
-*/
-
-},{"./nav":"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
+},{"./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
 
 module.exports.Topbar = React.createClass({displayName: 'Topbar',
 
@@ -28789,7 +27423,7 @@ module.exports.Topbar = React.createClass({displayName: 'Topbar',
                             React.createElement("span", {className: "icon-bar"}), 
                             React.createElement("span", {className: "icon-bar"})
                         ), 
-                        React.createElement("a", {className: "home navbar-brand"}, React.createElement("strong", null, "Continuum Bridge"))
+                        React.createElement("a", {className: "home navbar-brand"}, React.createElement("strong", null, "ContinuumBridge"))
                     ), 
 
                     React.createElement("div", {className: "collapse navbar-collapse navbar-ex1-collapse", role: "navigation"}, 
@@ -28822,18 +27456,43 @@ var BridgeList = React.createClass({displayName: 'BridgeList',
 
     mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
 
+    bridgeClick: function(e) {
+        console.log('bridgeClick event target', e.target);
+        var bridgeID = parseInt(e.target.getAttribute('data-tag'));
+        console.log('bridgeClick bridgeID', bridgeID);
+        var bridge = Portal.bridgeCollection.getID(bridgeID);
+        console.log('bridgeClick bridge', bridge);
+        Portal.setCurrentBridge(bridge);
+    },
+
     createItem: function(bridge) {
 
-        console.log('createItem bridge is', bridge);
-        return React.createElement("li", null, React.createElement(Router.Link, {query: {bridge: bridge.cbid}}, bridge.name));
+        //console.log('createItem bridge is', bridge);
+        return (
+            React.createElement("li", {key: bridge.id}, 
+                React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, bridge.name)
+            )
+        );
+        /*
+        if (bridge.id != this.currentBridgeID) {
+        } else {
+            return;
+        }
+        */
+        //return <li><Router.Link query={{bridge: bridge.cbid}}>{bridge.name}</Router.Link></li>;
     },
 
     render: function () {
 
+        var currentBridge = Portal.getCurrentBridge();
+        var bridgeName = currentBridge.get('name');
+        this.currentBridgeID = currentBridge.get('id');
+        //console.log('nav bridgeCollection ', this.props.collection);
+        //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
             React.createElement("li", {className: "dropdown"}, 
                 React.createElement("a", {href: "#", id: "bridge-header", className: "dropdown-toggle", 'data-toggle': "dropdown"}, 
-                    React.createElement("div", {className: "header-text"}, "Bridges "), React.createElement("b", {className: "caret"})
+                    React.createElement("div", {className: "header-text"}, bridgeName), React.createElement("b", {className: "caret"})
                 ), 
                 React.createElement("ul", {className: "dropdown-menu"}, 
                     this.props.collection.map(this.createItem)
@@ -28845,18 +27504,29 @@ var BridgeList = React.createClass({displayName: 'BridgeList',
 
 var Tab = React.createClass({displayName: 'Tab',
 
-    mixins: [ Router.State ],
+    mixins: [ Router.State, Router.Navigation ],
+
+    onClick: function() {
+
+        console.log('onClick nav query', this.getQuery());
+        this.transitionTo(this.props.to, {}, this.getQuery());
+    },
 
     render: function () {
         var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
         var className = isActive ? 'active' : '';
-        var link = Router.Link(this.props);
+        //console.log('link props', this.props);
+        //var link = Router.Link(this.props);
         //var link = (
         //    <Router.Link {...this.props} />
         //);
-        return React.createElement("li", {className: className}, link);
-    }
 
+        return (
+            React.createElement("li", {className: className}, 
+                React.createElement(Router.Link, React.__spread({},  this.props))
+            )
+        );
+    }
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js":[function(require,module,exports){

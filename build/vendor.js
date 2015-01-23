@@ -192,6 +192,7 @@ Marionette = require('backbone.marionette');
     // 1:1 relation with the `component`
     this.component = component;
     // Start listeners if this is a root node and if there's DOM
+    //if (!component._owner && typeof document !== 'undefined') {
     if (!component._owner && typeof document !== 'undefined') {
       this.startModelListeners();
       this.startCollectionListeners();
@@ -243,15 +244,19 @@ Marionette = require('backbone.marionette');
       var props = {};
       var newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
+      console.log('modelOrCollection 0', modelOrCollection);
       if (key) {
         props[key] = newProps;
+        console.log('modelOrCollection 1', modelOrCollection);
         props.cid = modelOrCollection.cid;
         props.modelType = modelOrCollection.modelType;
 
       } else if (modelOrCollection instanceof Backbone.Collection) {
+        console.log('modelOrCollection 2', modelOrCollection);
         props.collection = newProps;
       } else {
         props = newProps;
+        console.log('modelOrCollection 3', modelOrCollection);
         props.cid = modelOrCollection.cid;
         props.modelType = modelOrCollection.modelType;
       }
@@ -52177,6 +52182,21 @@ var CBCollection = OriginalCollection.extend({
         this.add(model);
 
         return model;
+    },
+
+    getID: function(id) {
+
+        // id can be a string or int
+        return this.findWhere({id: ''+id}) || this.findWhere({id: parseInt(id)});
+    },
+
+    getFiltered: function(name, filter) {
+
+        var collection = this.filtered || this.createLiveChildCollection();
+
+        this.filtered = collection.setFilter(name, filter);
+
+        return this.filtered;
     }
 });
 
@@ -59563,12 +59583,21 @@ var ListItem = React.createClass({displayName: 'ListItem',
     },
 
     renderCollapsableTitle: function (header) {
+
+        // Render custom buttons
+        var renderButtons = this.props.renderButtons;
+        var renderedButtons = renderButtons ? renderButtons() : "";
+
+        console.log('renderedButtons ', renderedButtons );
+        console.log('this.renderButtons ', this.renderButtons );
         var buttons = this.props.buttons || [];
+
         return (
             React.createElement("h4", {className: "panel-title"}, 
                 React.createElement("i", {className: "icon ion-chevron-right edit-button", onClick: this.handleSelect}), 
                 this.renderAnchor(header), 
-                buttons.map(this.renderButton)
+                buttons.map(this.renderButton), 
+                renderedButtons
             )
         );
     },

@@ -3,17 +3,22 @@ var Nav = require('./nav');
 
 module.exports = React.createClass({
 
-    mixins: [ Router.State ],
+    mixins: [ Router.State, Router.Navigation ],
 
     render: function () {
+        //Portal.mainView = this;
+        //mainView = this;
         var activeSection = this.getParams().section;
         console.log('mainView getParams()', this.getParams());
         console.log('mainView params', this.props.params);
+        //console.log('mainView model', this.getModel());
+
+        //var currentBridge = Portal.getCurrentBridge();
         return (
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
                 <div className="container">
-                    <Router.RouteHandler/>
+                    <Router.RouteHandler />
                 </div>
             </div>
         );

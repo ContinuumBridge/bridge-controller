@@ -3,7 +3,7 @@ var CBApp = require('index')
     ;
 
 require('./messages/models');
-var routers = require('./routers');
+//var routers = require('./routers');
 //var Message = require('./message');
 
 
@@ -54,7 +54,7 @@ Portal.addInitializer(function() {
       */
     };
 
-    Portal.messageRouter = new routers.MessageRouter();
+    //Portal.messageRouter = new routers.MessageRouter();
 
     Portal.socket.on('message', function(jsonString) {
 

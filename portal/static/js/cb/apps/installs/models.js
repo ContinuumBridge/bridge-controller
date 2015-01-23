@@ -5,6 +5,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     backend: 'appInstall',
 
+    matchFields: ['bridge', 'app'],
+
     initialize: function() {
 
         var self = this;
@@ -12,8 +14,6 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-            //console.log('event on devicePermissions', model, event, options);
-            //console.log('AppInstall', self);
             self.trigger('relational:change');
         });
 
@@ -56,6 +56,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     */
 
     relations: [
+        /*
         {   
             type: Backbone.HasOne,
             key: 'bridge',
@@ -67,7 +68,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
         },
-        {   
+        */
+        {
             type: Backbone.HasOne,
             key: 'app',
             keySource: 'app',
