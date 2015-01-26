@@ -221,7 +221,7 @@ var CBCollection = OriginalCollection.extend({
         var collection = this.filtered || this.createLiveChildCollection(this.models);
 
         //var collection = this.filtered || this.createLiveChildCollection();
-        //collection.setFilter(name, filter);
+        collection.setFilter(name, filter);
 
         this.filtered = collection;
 
