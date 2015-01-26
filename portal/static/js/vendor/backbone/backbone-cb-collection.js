@@ -216,9 +216,14 @@ var CBCollection = OriginalCollection.extend({
 
     getFiltered: function(name, filter) {
 
-        var collection = this.filtered || this.createLiveChildCollection();
+        //return this.createLiveChildCollection();
 
-        this.filtered = collection.setFilter(name, filter);
+        var collection = this.filtered || this.createLiveChildCollection(this.models);
+
+        //var collection = this.filtered || this.createLiveChildCollection();
+        //collection.setFilter(name, filter);
+
+        this.filtered = collection;
 
         return this.filtered;
     }

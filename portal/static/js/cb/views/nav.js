@@ -32,7 +32,7 @@ module.exports.Topbar = React.createClass({
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li><a className="developer">Developer</a></li>
-                                    <li name="logout"><a href="/accounts/logout">Logout</a></li>
+                                    <li name="logout"><a href="/accounts/logout/">Logout</a></li>
                                 </ul>
                             </li>
                         </div>

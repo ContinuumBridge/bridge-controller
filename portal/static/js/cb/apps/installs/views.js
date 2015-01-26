@@ -3,12 +3,13 @@ require('../device_permissions/views');
 
 Portal.AppInstallView = React.createClass({
 
-    mixins: [Portal.ItemView],
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
     getInitialState: function () {
         return {
             buttons: [{
-                type: 'delete'
+                type: 'delete',
+                onClick: this.uninstall
             }]
         };
     },
@@ -17,6 +18,11 @@ Portal.AppInstallView = React.createClass({
         return {
             openable: true
         };
+    },
+
+    uninstall: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
     },
 
     renderBody: function() {

@@ -21707,12 +21707,13 @@ require('../device_permissions/views');
 
 Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
-    mixins: [Portal.ItemView],
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
     getInitialState: function () {
         return {
             buttons: [{
-                type: 'delete'
+                type: 'delete',
+                onClick: this.uninstall
             }]
         };
     },
@@ -21721,6 +21722,11 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         return {
             openable: true
         };
+    },
+
+    uninstall: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
     },
 
     renderBody: function() {
@@ -23001,16 +23007,18 @@ Portal.getCurrentBridge = function() {
     var query = Portal.route.query;
 
     if (query && query.bridge) {
-        console.log('query bridge id', query.bridge);
-        bridge = Portal.bridgeCollection.getID(query.bridge) ||
-            Portal.currentBridge;
-        console.log('getCurrentBridge bridge found', bridge)
+        bridge = Portal.bridgeCollection.getID(query.bridge);
+        Portal.currentBridge = bridge;
+    }
+
+    if (!bridge && Portal.currentBridge) {
+        bridge = Portal.currentBridge;
+        Portal.setCurrentBridge(bridge);
     }
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
         Portal.setCurrentBridge(bridge);
-        console.log('getCurrentBridge bridge set', bridge);
     }
 
     return bridge;
@@ -24015,12 +24023,14 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
 
     stopDiscoveringDevices: function() {
 
-        Portal.Config.controller.stopDiscoveringDevices();
+        Portal.router.setParams({action: ''});
+        //Portal.Config.controller.stopDiscoveringDevices();
     },
 
     rescan: function() {
 
-        Portal.Config.controller.discoverDevices();
+        this.props.rescan();
+        //Portal.Config.controller.discoverDevices();
     },
 
     createItem: function (item) {
@@ -25423,13 +25433,36 @@ module.exports.Main = React.createClass({displayName: 'Main',
         };
     },
 
+    willTransitionTo: function(transition, params) {
+
+        console.log('willTransitionTo', params);
+    },
+
+    componentWillReceiveParams: function(params) {
+
+        console.log('config componentWillReceiveParams', params);
+
+        if (this.action != params.action) {
+            if (params.action == 'discover-devices') {
+                this.discoverDevices();
+            }
+            this.action = params.action;
+        }
+    },
+
     discoverDevices: function() {
 
+        console.log('config discoverDevices');
         Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
             discoveredDevice.delete();
         });
         Portal.messageCollection.sendCommand('discover');
-        this.setState({discoveringDevices: true});
+        //this.setState({discoveringDevices: true});
+    },
+
+    discoverDevicesRescan: function() {
+
+        Portal.messageCollection.sendCommand('discover');
     },
 
     stopDiscoveringDevices: function() {
@@ -25443,13 +25476,15 @@ module.exports.Main = React.createClass({displayName: 'Main',
     installDevice: function(discoveredDevice, friendlyName) {
 
         discoveredDevice.install(friendlyName);
-        this.setState({ installDevice: false,
-                        discoveringDevices: false });
+        Portal.router.setParams({action: ''});
+        //this.setState({ installDevice: false,
+        //                discoveringDevices: false });
     },
 
     cancelInstallDevice: function() {
 
-        this.setState({ installDevice: false });
+        Portal.router.setParams({action: ''});
+        //this.setState({ installDevice: false });
     },
 
     renderModals: function () {
@@ -25505,13 +25540,14 @@ module.exports.Main = React.createClass({displayName: 'Main',
             });
 
         var deviceView;
-        if (this.state.discoveringDevices) {
+        if (this.getParams().action == 'discover-devices') {
             var discoveredDevices = currentBridge.get('discoveredDevices');
             deviceView = React.createElement(Portal.DiscoveredDeviceListView, {key: currentBridge.cid, 
+                rescan: this.discoverDevicesRescan, stopDiscoveringDevices: this.stopDiscoveringDevices, 
                 collection: discoveredDevices});
         } else {
             deviceView = React.createElement(Portal.DeviceInstallListView, {key: currentBridge.cid, 
-                collection: deviceInstalls});
+                collection: deviceInstalls, discoverDevices: this.discoverDevices});
         }
 
         //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});
@@ -27097,7 +27133,13 @@ module.exports = React.createClass({displayName: 'exports',
         return (
             React.createElement("div", {className: "welcome"}, 
                 React.createElement("div", {className: "welcome-text panel-body"}, 
-                    "Welcome to the ContinuumBridge portal."
+                    "Welcome to the ContinuumBridge portal.", 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "If this is the first time you have logged-in and you don\\'t have any bridges, please click ", React.createElement("a", {href: "http://continuumbridge.readme.io/v1.0/docs/start-here"}, "here"), 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "If you have a bridge, click ", React.createElement("a", {href: "http://portal.continuumbridge.com/portal/config/"}, "here"), " to see what devices and apps you have and add more.", 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "For further information on how to use this portal, click ", React.createElement("a", {href: "http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal"}, "here")
                 )
             )
         );
@@ -27105,12 +27147,6 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 /*
- </br></br>
- If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
- </br></br>
- If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
- </br></br>
- For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
 */
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
@@ -27134,7 +27170,7 @@ module.exports = React.createClass({displayName: 'exports',
             React.createElement("div", null, 
                 React.createElement(Nav.Topbar, {activeSection: activeSection}), 
                 React.createElement("div", {className: "container"}, 
-                    React.createElement(Router.RouteHandler, null)
+                    React.createElement(Router.RouteHandler, {params: this.props.params})
                 )
             )
         );
@@ -27441,7 +27477,7 @@ module.exports.Topbar = React.createClass({displayName: 'Topbar',
                                 ), 
                                 React.createElement("ul", {className: "dropdown-menu"}, 
                                     React.createElement("li", null, React.createElement("a", {className: "developer"}, "Developer")), 
-                                    React.createElement("li", {name: "logout"}, React.createElement("a", {href: "/accounts/logout"}, "Logout"))
+                                    React.createElement("li", {name: "logout"}, React.createElement("a", {href: "/accounts/logout/"}, "Logout"))
                                 )
                             )
                         )

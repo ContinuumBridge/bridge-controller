@@ -159,16 +159,18 @@ Portal.getCurrentBridge = function() {
     var query = Portal.route.query;
 
     if (query && query.bridge) {
-        console.log('query bridge id', query.bridge);
-        bridge = Portal.bridgeCollection.getID(query.bridge) ||
-            Portal.currentBridge;
-        console.log('getCurrentBridge bridge found', bridge)
+        bridge = Portal.bridgeCollection.getID(query.bridge);
+        Portal.currentBridge = bridge;
+    }
+
+    if (!bridge && Portal.currentBridge) {
+        bridge = Portal.currentBridge;
+        Portal.setCurrentBridge(bridge);
     }
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
         Portal.setCurrentBridge(bridge);
-        console.log('getCurrentBridge bridge set', bridge);
     }
 
     return bridge;

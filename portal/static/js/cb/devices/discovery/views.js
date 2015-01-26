@@ -60,12 +60,14 @@ Portal.DiscoveredDeviceListView = React.createClass({
 
     stopDiscoveringDevices: function() {
 
-        Portal.Config.controller.stopDiscoveringDevices();
+        Portal.router.setParams({action: ''});
+        //Portal.Config.controller.stopDiscoveringDevices();
     },
 
     rescan: function() {
 
-        Portal.Config.controller.discoverDevices();
+        this.props.rescan();
+        //Portal.Config.controller.discoverDevices();
     },
 
     createItem: function (item) {

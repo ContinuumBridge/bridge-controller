@@ -25,13 +25,36 @@ module.exports.Main = React.createClass({
         };
     },
 
+    willTransitionTo: function(transition, params) {
+
+        console.log('willTransitionTo', params);
+    },
+
+    componentWillReceiveParams: function(params) {
+
+        console.log('config componentWillReceiveParams', params);
+
+        if (this.action != params.action) {
+            if (params.action == 'discover-devices') {
+                this.discoverDevices();
+            }
+            this.action = params.action;
+        }
+    },
+
     discoverDevices: function() {
 
+        console.log('config discoverDevices');
         Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
             discoveredDevice.delete();
         });
         Portal.messageCollection.sendCommand('discover');
-        this.setState({discoveringDevices: true});
+        //this.setState({discoveringDevices: true});
+    },
+
+    discoverDevicesRescan: function() {
+
+        Portal.messageCollection.sendCommand('discover');
     },
 
     stopDiscoveringDevices: function() {
@@ -45,13 +68,15 @@ module.exports.Main = React.createClass({
     installDevice: function(discoveredDevice, friendlyName) {
 
         discoveredDevice.install(friendlyName);
-        this.setState({ installDevice: false,
-                        discoveringDevices: false });
+        Portal.router.setParams({action: ''});
+        //this.setState({ installDevice: false,
+        //                discoveringDevices: false });
     },
 
     cancelInstallDevice: function() {
 
-        this.setState({ installDevice: false });
+        Portal.router.setParams({action: ''});
+        //this.setState({ installDevice: false });
     },
 
     renderModals: function () {
@@ -107,13 +132,14 @@ module.exports.Main = React.createClass({
             });
 
         var deviceView;
-        if (this.state.discoveringDevices) {
+        if (this.getParams().action == 'discover-devices') {
             var discoveredDevices = currentBridge.get('discoveredDevices');
             deviceView = <Portal.DiscoveredDeviceListView key={currentBridge.cid}
+                rescan={this.discoverDevicesRescan} stopDiscoveringDevices={this.stopDiscoveringDevices}
                 collection={discoveredDevices} />;
         } else {
             deviceView = <Portal.DeviceInstallListView key={currentBridge.cid}
-                collection={deviceInstalls} />;
+                collection={deviceInstalls} discoverDevices={this.discoverDevices} />;
         }
 
         //var messages = Portal.messageCollection.findAllLive({destination: currentBridge.get('cbid')});

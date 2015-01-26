@@ -62,15 +62,9 @@ class UserAuthBridgeControlResource(CBResource):
 
 class UserBridgeResource(CBResource):
 
-    '''
-    apps = cb_fields.ToManyThroughField(AppInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-    '''
+    """
+    Used for fetching bootstrapped data on intial load
+    """
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()

@@ -112,6 +112,13 @@ Marionette = require('backbone.marionette');
           }
         }
       }
+
+      // ADDED pass on parameters
+      console.log('componentWillReceiveParams ', this.componentWillReceiveParams);
+      if (this.componentWillReceiveParams && nextProps.params) {
+          console.log('componentWillReceiveParams ', nextProps);
+          this.componentWillReceiveParams(nextProps.params);
+      }
     },
     // Shortcut to `this.$el.find`. Inspired by `Backbone.View`.
     $: function () {
@@ -244,19 +251,15 @@ Marionette = require('backbone.marionette');
       var props = {};
       var newProps = modelOrCollection.toJSON ? modelOrCollection.toJSON() : modelOrCollection;
 
-      console.log('modelOrCollection 0', modelOrCollection);
       if (key) {
         props[key] = newProps;
-        console.log('modelOrCollection 1', modelOrCollection);
         props.cid = modelOrCollection.cid;
         props.modelType = modelOrCollection.modelType;
 
       } else if (modelOrCollection instanceof Backbone.Collection) {
-        console.log('modelOrCollection 2', modelOrCollection);
         props.collection = newProps;
       } else {
         props = newProps;
-        console.log('modelOrCollection 3', modelOrCollection);
         props.cid = modelOrCollection.cid;
         props.modelType = modelOrCollection.modelType;
       }
@@ -52192,9 +52195,14 @@ var CBCollection = OriginalCollection.extend({
 
     getFiltered: function(name, filter) {
 
-        var collection = this.filtered || this.createLiveChildCollection();
+        //return this.createLiveChildCollection();
 
-        this.filtered = collection.setFilter(name, filter);
+        var collection = this.filtered || this.createLiveChildCollection(this.models);
+
+        //var collection = this.filtered || this.createLiveChildCollection();
+        //collection.setFilter(name, filter);
+
+        this.filtered = collection;
 
         return this.filtered;
     }

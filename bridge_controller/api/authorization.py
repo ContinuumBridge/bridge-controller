@@ -10,7 +10,21 @@ from tastypie.exceptions import Unauthorized
 from accounts.models import CBAuth, CBUser
 from bridges.models import Bridge
 
-class CBAuthorization(Authorization):
+
+class CBCommonAuthorizationMixin:
+
+    def get_request_bridges(self, bundle):
+        requester = CBAuth.objects.get(id=bundle.request.user.id)
+        try:
+            # Assume user is a human and get bridges associated with it
+            bridge_controls = requester.bridge_controls.all()
+            bridges = Bridge.objects.filter(controls=bridge_controls)
+        except AttributeError:
+            # User is a bridge
+            bridges = Bridge.objects.filter(pk=requester.pk)
+        return bridges
+
+class CBAuthorization(Authorization, CBCommonAuthorizationMixin):
 
     def get_relation_query(self, related_objects, related, query_list, bundle):
 
@@ -43,17 +57,6 @@ class CBAuthorization(Authorization):
         except AttributeError:
             print "Through relation to ", m2m_related, " not present"
             return query_list
-
-    def get_request_bridges(self, bundle):
-        requester = CBAuth.objects.get(id=bundle.request.user.id)
-        try:
-            # Assume user is a human and get bridges associated with it
-            bridge_controls = requester.bridge_controls.all()
-            bridges = Bridge.objects.filter(controls=bridge_controls)
-        except AttributeError:
-            # User is a bridge
-            bridges = Bridge.objects.filter(pk=requester.pk)
-        return bridges
 
     def get_client_related_query(self, verb, query_list, bundle):
         #print "queryset is ", getattr(self.resource_meta, 'queryset').__class__
@@ -248,6 +251,30 @@ class CBAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         query_list = self.get_query_list('delete', bundle)
         return bool(self.filter_with_querylist(object_list, query_list, bundle))
+
+class CBValidateAuthorization(Authorization, CBCommonAuthorizationMixin):
+
+    def validate(self, object_list, bundle):
+        return object_list
+
+    def create_list(self, object_list, bundle):
+        return self.validate(object_list, bundle)
+
+    def create_detail(self, object_list, bundle):
+        return bool(self.validate([bundle.obj], bundle))
+
+    def update_list(self, object_list, bundle):
+        return self.validate(object_list, bundle)
+
+    def update_detail(self, object_list, bundle):
+        return bool(self.validate([bundle.obj], bundle))
+
+    def delete_list(self, object_list, bundle):
+        # Sorry user, no deletes for you!
+        raise Unauthorized("Sorry, no list deletes.")
+
+    def delete_detail(self, object_list, bundle):
+        return bool(self.validate([bundle.obj], bundle))
 
 
 class CBReadAllAuthorization(CBAuthorization):

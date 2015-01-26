@@ -18,7 +18,7 @@ module.exports = React.createClass({
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
                 <div className="container">
-                    <Router.RouteHandler />
+                    <Router.RouteHandler params={this.props.params} />
                 </div>
             </div>
         );
