@@ -25,14 +25,7 @@ module.exports.Main = React.createClass({
         };
     },
 
-    willTransitionTo: function(transition, params) {
-
-        console.log('willTransitionTo', params);
-    },
-
     componentWillReceiveParams: function(params) {
-
-        console.log('config componentWillReceiveParams', params);
 
         if (this.action != params.action) {
             if (params.action == 'discover-devices') {

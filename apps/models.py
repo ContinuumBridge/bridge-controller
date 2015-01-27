@@ -42,7 +42,7 @@ class App(BroadcastMixin, LoggedModel, CBIDModelMixin):
 
 class AppOwnership(LoggedModel):
 
-    user = models.ForeignKey(CBUser)
+    user = models.ForeignKey(CBUser, related_name='app_ownerships')
     app = models.ForeignKey(App, related_name='app_ownerships')
 
     class Meta:
@@ -117,7 +117,7 @@ class AppInstallConnection(LoggedModel):
 class AppConnection(LoggedModel):
 
     client = models.ForeignKey(CBAuth, related_name='app_connections')
-    app = models.ForeignKey(App, related_name='app_connections')
+    app = models.ForeignKey(App, related_name='client_connections')
 
     class Meta:
         verbose_name = _('app_connection')

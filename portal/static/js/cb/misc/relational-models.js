@@ -188,7 +188,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
             // Check if we're not setting a duplicate id before actually calling `set`.
             // ADDED If the ids are the same skip checking
-            if(id != newId) Backbone.Relational.store.checkId( this, newId );
+            if(id && id != newId) Backbone.Relational.store.checkId( this, newId );
 
             var result = Backbone.Model.prototype.set.apply( this, arguments );
 

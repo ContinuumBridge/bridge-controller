@@ -20,25 +20,14 @@ from accounts.api.authorization import CurrentUserAuthorization
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
     bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserBridgeControlResource',
-                                     'bridge_controls', full=True)
+                                         'bridge_controls', full=True)
+
+    #client_controls = fields.ToManyField('accounts.api.client_resources.UserClientControlResource',
+    #                                     'client_controls', full=True)
 
     app_licences = fields.ToManyField('apps.api.resources.AppLicenceResource', 'app_licences', full=True)
 
-    '''
-    bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
-                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
-                    null=True, readonly=True, nonmodel=True)
-    '''
-
-    '''
-    app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
-                     attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
-                     null=True, readonly=True, nonmodel=True)
-
-    app_ownerships = cb_fields.ToManyThroughField(AppOwnershipResource,
-                                                attribute=lambda bundle: bundle.obj.get_app_ownerships() or bundle.obj.appownership_set, full=True,
-                                                null=True, readonly=True, nonmodel=True)
-    '''
+    #app_ownerships = fields.ToManyField('apps.api.resources.AppOwnershipResource', 'app_ownerships', full=True)
 
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'

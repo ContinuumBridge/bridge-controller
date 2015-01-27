@@ -31,7 +31,7 @@ module.exports.Topbar = React.createClass({
                                     <b className="caret"></b>
                                 </a>
                                 <ul className="dropdown-menu">
-                                    <li><a className="developer">Developer</a></li>
+                                    <Tab to="developer">Developer</Tab>
                                     <li name="logout"><a href="/accounts/logout/">Logout</a></li>
                                 </ul>
                             </li>

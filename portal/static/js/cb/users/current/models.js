@@ -1,8 +1,6 @@
 
 require('../models');
 
-//Portal.CurrentUser = Backbone.Deferred.Model.extend({
-/*
 Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
@@ -13,88 +11,6 @@ Portal.CurrentUser = Portal.User.extend({
 
     initialize: function() {
 
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
-
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'Portal.AppLicence',
-            collectionType: 'Portal.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'Portal.BridgeControl',
-            collectionType: 'Portal.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection'
-        }
-    ]
-
-});
-*/
-
-Portal.currentUserDeferred = Q.defer();
-
-Portal.getCurrentUser = function() {
-
-    /*
-    var user = Portal.currentUserCollection.findWhere({current: true}) || Portal.currentUserCollection.at(0);
-
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
-    }
-
-    return user;
-    */
-    //return Portal.currentUserDeferred.promise;
-};
-
-//Portal.U = Backbone.RelationalModel.extend({
-//Portal.U = Backbone.Deferred.Model.extend({
-
-//Portal.CurrentUser = Portal.User.extend({
-//Portal.LoggedInUser = Backbone.Deferred.Model.extend({
-Portal.CurrentUser = Portal.User.extend({
-
-    idAttribute: 'id',
-
-    backend: 'currentUser',
-
-    defaults: {
-        type: 'loggedInUser'
-    },
-
-    //partOfModel: Portal.User,
-
-    initialize: function() {
-
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
         });
@@ -134,9 +50,15 @@ Portal.CurrentUser = Portal.User.extend({
             createModels: true,
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
-            initializeCollection: 'appOwnershipCollection'
+            initializeCollection: 'appOwnershipCollection',reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.CurrentUser',
+                collectionType: 'Portal.CurrentUserCollectionCollection',
+            }
         },
-        /*
         {
             type: Backbone.HasMany,
             key: 'clientControls',
@@ -148,7 +70,6 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientControlCollection'
         }
-        */
     ]
 }, { modelType: "currentUser" });
 

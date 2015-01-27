@@ -15,11 +15,17 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appOwnership',
-                includeInJSON: 'resource_uri'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                includeInJSON: 'resource_uri',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
+                initializeCollection: 'appOwnershipCollection'
             }
         },
+        /*
         {
             type: Backbone.HasOne,
             key: 'user',
@@ -28,14 +34,17 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.User',
             collectionType: 'Portal.UserCollection',
             createModels: true,
-            includeInJSON: 'resource_uri'
-            /*
+            includeInJSON: 'resource_uri',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
             }
-            */
         }
+        */
     ],
 
     initialize: function() {

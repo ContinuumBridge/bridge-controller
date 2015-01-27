@@ -88,7 +88,7 @@ Portal.AppListView = React.createClass({
         };
     },
 
-    createItem: function (item) {
+    renderItem: function (item) {
         console.log('appView createItem item', item);
         var cid = item.cid;
 

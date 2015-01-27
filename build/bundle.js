@@ -21733,7 +21733,6 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         var self = this;
 
-        //var devicePermissions = this.props.devicePermissions;
         var deviceInstalls = this.props.deviceInstalls;
         var appInstall = this.props.model;
 
@@ -21751,23 +21750,16 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
                 adp = new Portal.AppDevicePermission(adpData);
                 appInstall.set('devicePermissions', adp, {remove: false});
             }
-            /*
-            if(!devicePermissions.findWhere(adpData)) {
-                //var permission = new Portal.AppDevicePermission(adpData);
-                //console.log('permission is', permission );
-                //devicePermissions.add(permission);
-            }
-            */
         });
 
         /*
-        var devicePermissions = appInstall.get('devicePermissions');
+         var devicePermissions = appInstall.get('devicePermissions');
 
-        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-            console.log('event on deviceInstalls', event);
-            self.getCollection().trigger('change');
-        });
-        */
+         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+         console.log('event on deviceInstalls', event);
+         self.getCollection().trigger('change');
+         });
+         */
 
         return (
             React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
@@ -21794,17 +21786,14 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     installApps: function() {
         Portal.router.setParams({action: 'install-app'});
-        //Portal.Config.controller.installApps();
     },
 
-    createItem: function (item) {
+    renderItem: function (item) {
         console.log('appInstallView createItem item', item);
         var cid = item.cid;
 
         var appInstallCollection = this.getCollection()
         var appInstall = appInstallCollection.get({cid: cid});
-        //var appInstalls = this.getCollection();
-        //var appInstall = appInstalls.get({cid: cid});
 
         var app = appInstall.get('app');
         var title = app.get('name');
@@ -21812,106 +21801,10 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
         var deviceInstalls = this.props.deviceInstalls;
 
         return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
-                    deviceInstalls: deviceInstalls, model: appInstall})
+            deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
 
-/*
-Portal.AppInstallView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/appInstall.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-        'click .uninstall-button': 'uninstall'
-    },
-
-    initialize: function() {
-
-        this.staffView = new Portal.StaffAppInstallView({
-            model: this.model
-        });
-        this.staffView.licenceOwner = this.model.get('licence').get('user');
-        this.appDevicePermissionListView =
-            new Portal.AppDevicePermissionListView({
-                appInstall: this.model
-            });
-    },
-
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "AID" + app.get('id');
-      return data;
-    },
-
-    uninstall: function() {
-
-        console.log('uninstall in install view', this.model);
-        this.model.uninstall();
-    },
-
-    onRender : function(){
-
-        console.log('AppInstallView render', this);
-        var self = this;
-
-        this.staffView.setElement(this.$('.staff-panel')).render();
-
-        Portal.getCurrentBridge().fetch(function(currentBridge) {
-
-            console.log('AppInstall', currentBridge);
-            var deviceInstalls = currentBridge.get('deviceInstalls');
-            self.appDevicePermissionListView.setCollection(deviceInstalls);
-            var $appConfig = self.$('.user-panel');
-            console.log('$appConfig is', $appConfig);
-            self.appDevicePermissionListView.setElement($appConfig).render();
-        }).done();
-    }
-});
-
-Portal.StaffAppInstallView = Marionette.ItemView.extend({
-
-    tagName: 'table',
-    template: require('./templates/staffAppInstall.html'),
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licenceOwner) {
-            this.stickit(this.licenceOwner, this.licenceOwnerBindings);
-        }
-    }
-});
-
-Portal.AppInstallListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appInstallSection.html'),
-    itemView: Portal.AppInstallView,
-    itemViewContainer: '.app-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-    events: {
-        'click #install-apps': 'showLicences'
-    },
-
-    showLicences: function() {
-        console.log('click showLicences');
-        Portal.Config.controller.showAppLicences();
-    },
-
-    onRender : function(){
-
-    }
-});
-
-*/
 },{"../device_permissions/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
 
 Portal.AppLicence = Backbone.Deferred.Model.extend({
@@ -22574,11 +22467,17 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appOwnership',
-                includeInJSON: 'resource_uri'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                includeInJSON: 'resource_uri',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
+                initializeCollection: 'appOwnershipCollection'
             }
         },
+        /*
         {
             type: Backbone.HasOne,
             key: 'user',
@@ -22587,14 +22486,17 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.User',
             collectionType: 'Portal.UserCollection',
             createModels: true,
-            includeInJSON: 'resource_uri'
-            /*
+            includeInJSON: 'resource_uri',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
             }
-            */
         }
+        */
     ],
 
     initialize: function() {
@@ -22625,32 +22527,102 @@ Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
 
 
-  return "<h4 class=\"app-name list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div class=\"panel-collapse collapse app-config\">\n    <li class=\"client-connections inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>";
-  });
+Portal.AppOwnershipView = React.createClass({displayName: 'AppOwnershipView',
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.disown
+            }]
+        };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    disown: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    renderBody: function() {
+
+        var self = this;
+
+        //var devicePermissions = this.props.devicePermissions;
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+        });
+
+        return (
+            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
+        );
+    }
+});
+
+Portal.AppOwnershipListView = React.createClass({displayName: 'AppOwnershipListView',
+
+    itemView: Portal.AppOwnershipView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps I Own',
+            buttons: [{
+                name: 'Create New App',
+                onClick: this.createApp,
+                type: 'bold'
+            }]
+        };
+    },
+
+    createApp: function() {
+        Portal.router.setParams({action: 'create-app'});
+    },
+
+    renderItem: function (item) {
+        console.log('appInstallView createItem item', item);
+        var cid = item.cid;
+
+        var appOwnershipCollection = this.getCollection()
+        var appOwnership = appOwnershipCollection.get({cid: cid});
+
+        var app = appOwnership.get('app');
+        var title = app.get('name');
+
+        return React.createElement(Portal.AppOwnershipView, {key: cid, title: title, 
+                    model: appOwnership})
+    }
+});
 
 
-  return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"create-app\"  class=\"topcoat-button--cta center full\">Create App</div></br>\n";
-  });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
-
+/*
 require('../../components/buttons');
 
 require('../connections/views');
@@ -22740,8 +22712,9 @@ Portal.AppOwnershipListView = Marionette.CompositeView.extend({
         console.log('AppLicenceListView', this.collection);
     }
 });
+*/
 
-},{"../../components/buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/components/buttons.js","../connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","./templates/ownership.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html","./templates/ownershipSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
 
 Portal.Components.Counter = React.createClass({displayName: 'Counter',
 
@@ -22832,7 +22805,7 @@ Portal.AppListView = React.createClass({displayName: 'AppListView',
         };
     },
 
-    createItem: function (item) {
+    renderItem: function (item) {
         console.log('appView createItem item', item);
         var cid = item.cid;
 
@@ -23519,123 +23492,118 @@ Portal.ClientCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/client.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
 
 
-  return "<h4 class=\"list-group-item-heading name\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
-  });
+Portal.ClientView = React.createClass({displayName: 'ClientView',
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-
-  return "<h2>Devices</h2>\n\n<div class=\"animated-list device-list\"></div>\n<div class=\"topcoat-button--cta center full discover-devices-button\">Connect to a Device</div></br>\n";
-  });
-
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
-
-Portal.ClientView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/client.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.uninstall
+            }]
+        };
     },
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    getClass: function(val) {
+    uninstall: function() {
 
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
+        this.toggleExistenceOnServer(this.props.model);
     },
 
-    delete: function() {
-        this.model.delete();
-    },
+    renderBody: function() {
 
-    onRender: function() {
-        this.stickit();
-    }
-});
+        var self = this;
 
+        //var devicePermissions = this.props.devicePermissions;
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
 
-Portal.ClientListView = Marionette.CompositeView.extend({
+        var devicePermissions = appInstall.get('devicePermissions');
 
-    template: require('./templates/clientSection.html'),
-    itemView: Portal.ClientView,
-    itemViewContainer: '.client-list',
+        deviceInstalls.each(function(deviceInstall) {
 
-    emptyView: Portal.ListItemLoadingView,
-
-
-    events: {
-        'click .add-client': 'addClient'
-    },
-
-    addClient : function() {
-        Portal.Config.controller.addClient();
-    },
-
-    onRender : function() {
-
-    }
-});
-
-/*
-Portal.DeviceLayoutView = Marionette.Layout.extend({
-
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        Portal.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new Portal.DeviceListView({
-            collection: this.collection
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
         });
-        
-        this.deviceList.show(deviceListView);
+
+        /*
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+            console.log('event on deviceInstalls', event);
+            self.getCollection().trigger('change');
+        });
+        */
+
+        return (
+            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
+        );
     }
-})
- */
+});
+
+Portal.ClientListView = React.createClass({displayName: 'ClientListView',
+
+    itemView: Portal.ClientView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Clients',
+            buttons: [{
+                name: 'Create Client',
+                onClick: this.createClient,
+                type: 'bold'
+            }]
+        };
+    },
+
+    createClient: function() {
+        Portal.router.setParams({action: 'create-client'});
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return React.createElement(Portal.ClientView, {key: cid, title: title, 
+                    deviceInstalls: deviceInstalls, model: appInstall})
+    }
+});
 
 
-},{"./templates/client.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/client.html","./templates/clientSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
 
 Portal.ConnectionModel = Backbone.Deferred.Model.extend({
 
@@ -24340,107 +24308,12 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         //Portal.Config.controller.discoverDevices();
     },
 
-    createItem: function (item) {
-        //console.log('DeviceInstallListView createItem', this.itemView);
-        console.log('DeviceInstallListView item', item);
+    renderItem: function (item) {
         var cid = item.cid;
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
     }
 });
-
-/*
-Portal.DeviceInstallView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/deviceInstall.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
-    },
-
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    },
-
-    getClass: function(val) {
-
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
-    },
-
-    uninstall: function() {
-        this.model.uninstall();
-    },
-
-    onRender: function() {
-        this.stickit();
-    }
-});
-
-
-Portal.DeviceInstallListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/deviceInstallSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: Portal.DeviceInstallView,
-    itemViewContainer: '.device-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
-    },
-
-    discoverDevices: function() {
-        Portal.Config.controller.discoverDevices();
-    },
-
-    onRender : function() {
-
-    }
-});
-
-/*
-Portal.DeviceLayoutView = Marionette.Layout.extend({
-
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        Portal.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new Portal.DeviceListView({
-            collection: this.collection
-        });
-        
-        this.deviceList.show(deviceListView);
-    }
-})
- */
-
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
@@ -25433,14 +25306,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
         };
     },
 
-    willTransitionTo: function(transition, params) {
-
-        console.log('willTransitionTo', params);
-    },
-
     componentWillReceiveParams: function(params) {
-
-        console.log('config componentWillReceiveParams', params);
 
         if (this.action != params.action) {
             if (params.action == 'discover-devices') {
@@ -26711,6 +26577,7 @@ var ConfigView = require('./modules/config/views').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
 var DashboardView = require('./views/dashboard');
+var DeveloperView = require('./views/developer');
 var MarketView = require('./modules/market/views').Main;
 var NotFoundView = require('./views/notFound');
 
@@ -26719,6 +26586,7 @@ var routes = (
         React.createElement(DefaultRoute, {handler: HomeView}), 
         React.createElement(Route, {name: "config", path: "config/?:action?/?:item?", handler: ConfigView}), 
         React.createElement(Route, {name: "dashboard", handler: DashboardView}), 
+        React.createElement(Route, {name: "developer", handler: DeveloperView}), 
         React.createElement(Route, {name: "market", handler: MarketView}), 
         React.createElement(NotFoundRoute, {handler: NotFoundView})
     )
@@ -26749,7 +26617,7 @@ router.setParams = function(params) {
 module.exports = router;
 
 
-},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/dashboard":"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
+},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/dashboard":"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/views/developer.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var CBApp = require('index')
     ;
@@ -26834,8 +26702,6 @@ Portal.addInitializer(function() {
 
 require('../models');
 
-//Portal.CurrentUser = Backbone.Deferred.Model.extend({
-/*
 Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
@@ -26846,88 +26712,6 @@ Portal.CurrentUser = Portal.User.extend({
 
     initialize: function() {
 
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
-
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'Portal.AppLicence',
-            collectionType: 'Portal.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'Portal.BridgeControl',
-            collectionType: 'Portal.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection'
-        }
-    ]
-
-});
-*/
-
-Portal.currentUserDeferred = Q.defer();
-
-Portal.getCurrentUser = function() {
-
-    /*
-    var user = Portal.currentUserCollection.findWhere({current: true}) || Portal.currentUserCollection.at(0);
-
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
-    }
-
-    return user;
-    */
-    //return Portal.currentUserDeferred.promise;
-};
-
-//Portal.U = Backbone.RelationalModel.extend({
-//Portal.U = Backbone.Deferred.Model.extend({
-
-//Portal.CurrentUser = Portal.User.extend({
-//Portal.LoggedInUser = Backbone.Deferred.Model.extend({
-Portal.CurrentUser = Portal.User.extend({
-
-    idAttribute: 'id',
-
-    backend: 'currentUser',
-
-    defaults: {
-        type: 'loggedInUser'
-    },
-
-    //partOfModel: Portal.User,
-
-    initialize: function() {
-
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
         });
@@ -26967,9 +26751,15 @@ Portal.CurrentUser = Portal.User.extend({
             createModels: true,
             includeInJSON: 'resource_uri',
             //includeInJSON: false,
-            initializeCollection: 'appOwnershipCollection'
+            initializeCollection: 'appOwnershipCollection',reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.CurrentUser',
+                collectionType: 'Portal.CurrentUserCollectionCollection',
+            }
         },
-        /*
         {
             type: Backbone.HasMany,
             key: 'clientControls',
@@ -26981,7 +26771,6 @@ Portal.CurrentUser = Portal.User.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientControlCollection'
         }
-        */
     ]
 }, { modelType: "currentUser" });
 
@@ -26998,7 +26787,6 @@ Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
 },{"../models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
 
-//Portal.User = Backbone.Deferred.Model.extend({
 Portal.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
@@ -27093,6 +26881,82 @@ module.exports = React.createClass({displayName: 'exports',
  </br></br>
  For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
 */
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
+
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    componentWillReceiveParams: function(params) {
+
+        if (this.action != params.action) {
+            if (params.action == 'discover-devices') {
+                this.discoverDevices();
+            }
+            this.action = params.action;
+        }
+    },
+
+    renderModals: function () {
+
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        console.log('renderModals params', action);
+        switch (action) {
+            case "install-app":
+                return React.createElement(InstallAppModal, {container: this});
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
+                break;
+            default:
+                break;
+        }
+    },
+
+    render: function() {
+
+        var currentUser = Portal.currentUser;
+
+        var appOwnerships = currentUser.get('appOwnerships')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
+
+        /*
+        var clientControls = currentBridge.get('clientControls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
+        */
+
+        return (
+            React.createElement("div", null, 
+                this.renderModals(), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
+                        React.createElement(Portal.AppInstallListView, {key: currentBridge.cid, 
+                            collection: appInstalls, deviceInstalls: deviceInstalls})
+                    ), 
+                    React.createElement("div", {ref: "deviceSection", className: "device-section col-md-6"}, 
+                        deviceView
+                    )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "messageSection", className: "message-section col-md-6"}, 
+                        React.createElement(Portal.MessageListView, {key: currentBridge.cid, 
+                            collection: messages})
+                    ), 
+                    React.createElement("div", {ref: "bridgeSection", className: "bridge-section col-md-6"})
+                )
+            )
+        )
+    }
+});
+
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
@@ -27422,7 +27286,7 @@ Portal.ListView = {
             React.createElement("div", null, 
                 React.createElement("h2", null, title), 
                 React.createElement("ul", {className: "animated-list device-list"}, 
-                    this.props.collection.map(this.createItem)
+                    this.props.collection.map(this.renderItem)
                 ), 
                 this.renderButtons()
             )
@@ -27476,7 +27340,7 @@ module.exports.Topbar = React.createClass({displayName: 'Topbar',
                                     React.createElement("b", {className: "caret"})
                                 ), 
                                 React.createElement("ul", {className: "dropdown-menu"}, 
-                                    React.createElement("li", null, React.createElement("a", {className: "developer"}, "Developer")), 
+                                    React.createElement(Tab, {to: "developer"}, "Developer"), 
                                     React.createElement("li", {name: "logout"}, React.createElement("a", {href: "/accounts/logout/"}, "Logout"))
                                 )
                             )

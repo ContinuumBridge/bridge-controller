@@ -1,90 +1,109 @@
 
-Portal.ClientView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/client.html'),
 
-    events: {
-        'click .uninstall-button': 'uninstall'
+Portal.ClientView = React.createClass({
+
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.uninstall
+            }]
+        };
     },
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    getClass: function(val) {
+    uninstall: function() {
 
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
+        this.toggleExistenceOnServer(this.props.model);
     },
 
-    delete: function() {
-        this.model.delete();
-    },
+    renderBody: function() {
 
-    onRender: function() {
-        this.stickit();
-    }
-});
+        var self = this;
 
+        //var devicePermissions = this.props.devicePermissions;
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
 
-Portal.ClientListView = Marionette.CompositeView.extend({
+        var devicePermissions = appInstall.get('devicePermissions');
 
-    template: require('./templates/clientSection.html'),
-    itemView: Portal.ClientView,
-    itemViewContainer: '.client-list',
+        deviceInstalls.each(function(deviceInstall) {
 
-    emptyView: Portal.ListItemLoadingView,
-
-
-    events: {
-        'click .add-client': 'addClient'
-    },
-
-    addClient : function() {
-        Portal.Config.controller.addClient();
-    },
-
-    onRender : function() {
-
-    }
-});
-
-/*
-Portal.DeviceLayoutView = Marionette.Layout.extend({
-
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        Portal.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new Portal.DeviceListView({
-            collection: this.collection
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
         });
-        
-        this.deviceList.show(deviceListView);
+
+        /*
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+            console.log('event on deviceInstalls', event);
+            self.getCollection().trigger('change');
+        });
+        */
+
+        return (
+            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+        );
     }
-})
- */
+});
+
+Portal.ClientListView = React.createClass({
+
+    itemView: Portal.ClientView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Clients',
+            buttons: [{
+                name: 'Create Client',
+                onClick: this.createClient,
+                type: 'bold'
+            }]
+        };
+    },
+
+    createClient: function() {
+        Portal.router.setParams({action: 'create-client'});
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return < Portal.ClientView key={cid} title={title}
+                    deviceInstalls={deviceInstalls} model={appInstall} />
+    }
+});
 

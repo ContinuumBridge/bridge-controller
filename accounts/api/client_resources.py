@@ -7,7 +7,7 @@ from bridge_controller.api.resources import CBResource, ThroughModelResource, Au
 
 from clients.models import Client, ClientControl
 
-class UserClientResource(RelatedUserObjectsResource):
+class UserClientResource(CBResource):
 
     class Meta(CBResource.Meta):
         queryset = Client.objects.all()
@@ -18,12 +18,12 @@ class UserClientResource(RelatedUserObjectsResource):
         resource_name = 'client'
 
 
-class UserClientControlResource(UserObjectsResource):
+class UserClientControlResource(CBResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=True)
 
-    class Meta(UserObjectsResource.Meta):
+    class Meta(CBResource.Meta):
         queryset = ClientControl.objects.all()
         resource_name = 'client_control'
 

@@ -146,7 +146,7 @@ Portal.ListView = {
             <div>
                 <h2>{title}</h2>
                 <ul className="animated-list device-list">
-                    {this.props.collection.map(this.createItem)}
+                    {this.props.collection.map(this.renderItem)}
                 </ul>
                 {this.renderButtons()}
             </div>

@@ -12,6 +12,7 @@ var ConfigView = require('./modules/config/views').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
 var DashboardView = require('./views/dashboard');
+var DeveloperView = require('./views/developer');
 var MarketView = require('./modules/market/views').Main;
 var NotFoundView = require('./views/notFound');
 
@@ -20,6 +21,7 @@ var routes = (
         <DefaultRoute handler={HomeView} />
         <Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
         <Route name="dashboard" handler={DashboardView} />
+        <Route name="developer" handler={DeveloperView} />
         <Route name="market" handler={MarketView} />
         <NotFoundRoute handler={NotFoundView}/>
     </Route>

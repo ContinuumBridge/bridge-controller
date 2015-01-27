@@ -1,5 +1,4 @@
 
-//Portal.User = Backbone.Deferred.Model.extend({
 Portal.User = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
