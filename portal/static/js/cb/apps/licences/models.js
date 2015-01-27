@@ -14,16 +14,16 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             keySource: 'app',
             keyDestination: 'app',
             relatedModel: 'Portal.App',
-            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence',
+                type: Backbone.HasMany,
+                key: 'appLicences',
                 keySource: 'app_licence',
                 keyDestination: 'app_licence',
                 relatedModel: 'Portal.AppLicence',
+                collectionType: 'Portal.AppLicenceCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appLicenceCollection'
             }
