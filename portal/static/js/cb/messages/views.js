@@ -59,9 +59,9 @@ Portal.MessageListView = React.createClass({
         }
     },
 
-    createMessage: function(message) {
+    renderMessage: function(message) {
 
-        //console.log('createMessage', message);
+        //console.log('renderMessage', message);
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
         return (
@@ -72,7 +72,7 @@ Portal.MessageListView = React.createClass({
         )
     },
 
-    createButton: function(name) {
+    renderButton: function(name) {
 
         //var label = name.charAt(0).toUpperCase() + name.slice(1);
         var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -122,7 +122,7 @@ Portal.MessageListView = React.createClass({
                 <div ref="messagesWrapper" id="messages-wrapper">
                     <table className="table-condensed table-hover table-striped">
                         <tbody>
-                        {this.props.collection.map(this.createMessage)}
+                        {this.props.collection.map(this.renderMessage)}
                         </tbody>
                     </table>
                 </div>
@@ -136,10 +136,10 @@ Portal.MessageListView = React.createClass({
                     </span>
                 </div>
                 <div className="topcoat-button-bar">
-                    {topButtons.map(this.createButton)}
+                    {topButtons.map(this.renderButton)}
                 </div>
                 <div className="topcoat-button-bar">
-                    {bottomButtons.map(this.createButton)}
+                    {bottomButtons.map(this.renderButton)}
                 </div>
             </div>
         )

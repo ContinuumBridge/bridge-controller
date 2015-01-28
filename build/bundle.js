@@ -21800,7 +21800,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
+        return React.createElement(Portal.AppInstallView, {key: cid, header: title, 
             deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
@@ -24265,6 +24265,48 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
+Portal.Components.Textbox = React.createClass({displayName: 'Textbox',
+
+    getInitialState: function() {
+        return {title: 'Hello!'};
+    },
+
+    handleChange: function(e) {
+        this.setState({value: e.target.value});
+    },
+
+    handleBlur: function(e) {
+        this.setState({value: e.target.value});
+        this.submit();
+    },
+
+    handleKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            this.submit();
+        }
+    },
+
+    submit: function() {
+        var model = this.props.model;
+        var value = this.state.value;
+        console.log('TextBox submit model', model );
+        if (value != model.get(this.props.field)) {
+            model.set(this.props.field, value);
+            model.save();
+            //this.setState({value: void 0});
+        }
+    },
+
+    render: function() {
+
+        var model = this.props.model;
+        var value = this.state.value || this.props.model.get(this.props.field);
+        var disabled = model.isSyncing();
+        return React.createElement("input", {type: "text", className: "item-title-box", value: value, disabled: disabled, 
+                      onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown});
+    }
+});
+
 Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
 
     mixins: [Portal.ItemView],
@@ -24310,7 +24352,12 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     renderItem: function (item) {
         var cid = item.cid;
 
-        return React.createElement(Portal.DeviceInstallView, {key: cid, title: item.friendly_name, model: item})
+        var deviceInstall = this.getCollection().get({cid: cid});
+        var header = React.createElement(Portal.Components.Textbox, {model: deviceInstall, field: "friendly_name"});
+        //var header = <Portal.Components.Textbox />;
+
+        return React.createElement(Portal.DeviceInstallView, {key: cid, 
+                    header: header, model: item})
     }
 });
 
@@ -24710,9 +24757,9 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
         }
     },
 
-    createMessage: function(message) {
+    renderMessage: function(message) {
 
-        //console.log('createMessage', message);
+        //console.log('renderMessage', message);
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
         return (
@@ -24723,7 +24770,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
         )
     },
 
-    createButton: function(name) {
+    renderButton: function(name) {
 
         //var label = name.charAt(0).toUpperCase() + name.slice(1);
         var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -24773,7 +24820,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
                 React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
                     React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
                         React.createElement("tbody", null, 
-                        this.props.collection.map(this.createMessage)
+                        this.props.collection.map(this.renderMessage)
                         )
                     )
                 ), 
@@ -24787,10 +24834,10 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
                     )
                 ), 
                 React.createElement("div", {className: "topcoat-button-bar"}, 
-                    topButtons.map(this.createButton)
+                    topButtons.map(this.renderButton)
                 ), 
                 React.createElement("div", {className: "topcoat-button-bar"}, 
-                    bottomButtons.map(this.createButton)
+                    bottomButtons.map(this.renderButton)
                 )
             )
         )
@@ -27228,7 +27275,7 @@ Portal.ItemView = {
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         return (
-            React.createElement(React.ListItem, {header: this.props.title, buttons: buttons, 
+            React.createElement(React.ListItem, {header: this.props.header, buttons: buttons, 
                 renderButtons: this.renderButtons, 
                 bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
                 body

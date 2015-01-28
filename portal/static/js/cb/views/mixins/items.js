@@ -89,7 +89,7 @@ Portal.ItemView = {
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         return (
-            <React.ListItem header={this.props.title} buttons={buttons}
+            <React.ListItem header={this.props.header} buttons={buttons}
                 renderButtons={this.renderButtons}
                 bsStyle='' collapsable={this.props.openable} eventKey="1">
                 {body}

@@ -75,7 +75,7 @@ Portal.DiscoveredDeviceListView = React.createClass({
         var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device')
         //return <div> Hey </div>;
-        return < Portal.DiscoveredDeviceView key={item.cid} title={item.name} model={item} />
+        return < Portal.DiscoveredDeviceView key={item.cid} header={item.name} model={item} />
         //return < Portal.AppInstallView key={item.cid} model={item} />
     }
 });

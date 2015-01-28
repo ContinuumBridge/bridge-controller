@@ -96,7 +96,7 @@ Portal.AppInstallListView = React.createClass({
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return < Portal.AppInstallView key={cid} title={title}
+        return < Portal.AppInstallView key={cid} header={title}
             deviceInstalls={deviceInstalls} model={appInstall} />
     }
 });

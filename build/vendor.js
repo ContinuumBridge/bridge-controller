@@ -59535,14 +59535,21 @@ var ListItem = React.createClass({displayName: 'ListItem',
             return null;
         }
 
+        /*
         if (!React.isValidElement(header) || Array.isArray(header)) {
             header = this.props.collapsable ?
                 this.renderCollapsableTitle(header) : header;
         } else if (this.props.collapsable) {
+            */
+        if (this.props.collapsable) {
+            header = this.props.collapsable ?
+                this.renderCollapsableTitle(header) : header;
+            /*
             header = cloneWithProps(header, {
                 className: 'panel-title',
                 children: this.renderAnchor(header.props.children)
             });
+            */
         } else {
             header = cloneWithProps(header, {
                 className: 'panel-title'
