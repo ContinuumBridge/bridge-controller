@@ -70,7 +70,7 @@ Portal.DiscoveredDeviceListView = React.createClass({
         //Portal.Config.controller.discoverDevices();
     },
 
-    createItem: function (item) {
+    renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device')

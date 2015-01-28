@@ -24001,7 +24001,7 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
         //Portal.Config.controller.discoverDevices();
     },
 
-    createItem: function (item) {
+    renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device')
@@ -24305,7 +24305,6 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     discoverDevices: function() {
 
         Portal.router.setParams({action: 'discover-devices'});
-        //Portal.Config.controller.discoverDevices();
     },
 
     renderItem: function (item) {
