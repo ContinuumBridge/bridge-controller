@@ -8,69 +8,25 @@ Portal.CurrentUser = Portal.User.extend({
     backend: 'currentUser',
 
     //partOfModel: Portal.User,
+    defaults: {
+        type: 'currentUser'
+    },
+
+    relations: Portal.User.prototype.relations.concat([{}]),
 
     initialize: function() {
 
+        var self = this;
+        /*
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
         });
-    },
+        */
 
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'Portal.BridgeControl',
-            collectionType: 'Portal.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeControlCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'Portal.AppLicence',
-            collectionType: 'Portal.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'appOwnerships',
-            keySource: 'app_ownerships',
-            keyDestination: 'app_ownerships',
-            relatedModel: 'Portal.AppOwnership',
-            collectionType: 'Portal.AppOwnershipCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appOwnershipCollection',reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'user',
-                keySource: 'user',
-                keyDestination: 'user',
-                relatedModel: 'Portal.CurrentUser',
-                collectionType: 'Portal.CurrentUserCollectionCollection',
-            }
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'clientControls',
-            keySource: 'client_controls',
-            keyDestination: 'client_controls',
-            relatedModel: 'Portal.ClientControl',
-            collectionType: 'Portal.ClientControlCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'clientControlCollection'
-        }
-    ]
+        this.listenTo(this.get('appOwnerships'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
+    }
 }, { modelType: "currentUser" });
 
 Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({

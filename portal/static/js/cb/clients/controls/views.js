@@ -1,62 +1,55 @@
 
-Portal.ClientControlView = Marionette.ItemView.extend({
 
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/clientControl.html'),
+Portal.ClientControlView = React.createClass({
 
-    events: {
-        //'click': 'eventWrapperClick',
-        'click .uninstall-button': 'uninstall'
+    mixins: [Portal.ItemView],
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    initialize: function() {
-
-    },
-
-    /*
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "AID" + app.get('id');
-      return data;
-    },
-    */
-
-    delete: function() {
-
-        console.log('uninstall in install view', this.model);
-        this.model.uninstall();
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        //var $appConfig = self.$('.user-panel');
-        //self.appDevicePermissionListView.setElement($appConfig).render();
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
+        };
     }
 });
 
-Portal.ClientControlListView = Marionette.CompositeView.extend({
+Portal.ClientControlListView = React.createClass({
 
-    template: require('./templates/clientControlSection.html'),
-    itemView: Portal.ClientControlView,
-    itemViewContainer: '.client-list',
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    emptyView: Portal.ListItemLoadingView,
-
-    events: {
-        'click #create-client': 'createClient'
+    getInitialState: function () {
+        return {
+            title: 'Clients',
+            buttons: [{
+                name: 'Create Client',
+                onClick: this.createClient,
+                type: 'bold'
+            }]
+        };
     },
 
     createClient: function() {
-        Portal.Config.controller.createClient();
+
+        Portal.router.setParams({action: 'create-client'});
     },
 
-    onRender : function(){
+    renderItem: function (item) {
+        var cid = item.cid;
 
+        var clientControl = this.getCollection().get({cid: cid});
+        var client = clientControl.get('client');
+        var header = "Client";
+        //var header = <Portal.Components.TextInput model={client} field="name" />;
+
+        return < Portal.ClientControlView key={cid}
+                    header={header} model={clientControl} />
     }
 });
+

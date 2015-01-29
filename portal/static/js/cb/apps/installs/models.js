@@ -127,21 +127,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.AppInstall,
-    backend: 'appInstall',
+    backend: 'appInstall'
 
-    /*
-    initialize: function() {
-        /*
-        this.on('all', function(event, payload) {
-            console.log('AppInstall event ', event, payload);
-        });
-        this.bindBackend();
-        Portal.AppInstallCollection.__super__.initialize.apply(this, arguments);
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });
 

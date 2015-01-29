@@ -61,7 +61,6 @@ Portal.MessageListView = React.createClass({
 
     renderMessage: function(message) {
 
-        //console.log('renderMessage', message);
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
         return (
@@ -74,7 +73,6 @@ Portal.MessageListView = React.createClass({
 
     renderButton: function(name) {
 
-        //var label = name.charAt(0).toUpperCase() + name.slice(1);
         var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         return (
             <div className="topcoat-button-bar__item">
@@ -85,7 +83,6 @@ Portal.MessageListView = React.createClass({
 
     onButtonClick: function(e) {
 
-        //console.log('onButtonClick', e.target.getAttribute('data-tag'));
         var command = e.target.getAttribute('data-tag');
         this.sendCommand(command);
         this.setState({command: ''});
@@ -94,9 +91,6 @@ Portal.MessageListView = React.createClass({
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
         var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        //console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
-        //console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
-        //console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
         this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
     },
 
@@ -145,103 +139,4 @@ Portal.MessageListView = React.createClass({
         )
     }
 });
-/*
-Portal.MessageView = Marionette.ItemView.extend({
 
-    tagName: 'tr',
-    className: '',
-    template: require('./templates/message.html'),
-
-    serializeData: function() {
-
-      console.log('serializeData');
-      //var bridgeID = "BID" + this.model.get('bridge').get('id');
-      var data = {};
-      var incoming = Boolean(this.model.get('time_received'));
-      data.direction = incoming ? "=>" : "<=";
-      data.remote = incoming ? this.model.get('source') : this.model.get('destination');
-      var body = this.model.get('body');
-      // Check if this is a command
-      data.body = body instanceof Object ? body.command || body.status : body;
-      return data;
-    }
-})
-
-Portal.MessageListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/messageSection.html'),
-    id: 'messages',
-    //tagName: 'table',
-    //className: 'table-condensed table-hover table-striped',
-    itemView: Portal.MessageView,
-    itemViewContainer: '#messages-table',
-
-    events: {
-        'click #send-button': 'clickSend',
-        'keyup #command-input' : 'keyPressEventHandler',
-        'click #start': 'clickCommand',
-        'click #stop': 'clickCommand',
-        'click #update_config': 'clickCommand',
-        'click #send_log': 'clickCommand',
-        'click #z-exclude': 'clickCommand',
-        'click #restart': 'clickCommand',
-        'click #reboot': 'clickCommand',
-        'click #upgrade': 'clickCommand'
-    },
-
-    collectionEvents: {
-        "relational:reset": "scrollMessages"
-    },
-
-    initialize: function() {
-
-        //this.listenTo(this.collection, 'after:item:added', this.scrollMessages)
-    },
-
-    onRender: function() {
-
-        this.$commandInput = this.$('#command-input');
-        this.$messagesWrapper = this.$('#messages-wrapper');
-    },
-
-    scrollMessages: function(){
-
-        if (this.$messagesWrapper && this.$messagesWrapper[0]) {
-            this.$messagesWrapper[0].scrollTop = this.$messagesWrapper[0].scrollHeight;
-        }
-    },
-
-    sendCommand: function(command) {
-
-        console.log('sendCommand', command);
-        var destination = Portal.getCurrentBridge().get('cbid');
-        var message = new Portal.Message({
-            destination: destination,
-            body: {
-                command: command
-            }
-        });
-        Portal.messageCollection.sendMessage(message);
-    },
-
-    clickCommand: function(e) {
-        //console.log('clickCommand', e);
-        var command = $(e.currentTarget).attr('id');
-        console.log('clickCommand', command);
-        this.sendCommand(command);
-    },
-
-    clickSend: function() {
-        var command = this.$commandInput.val();
-        this.$commandInput.value = "";
-        this.sendCommand(command);
-    },
-
-    keyPressEventHandler: function(event){
-        // When enter is pressed in the input, send the message
-        if(event.keyCode == 13){
-            this.clickSend();
-        }
-    }
-});
-*/

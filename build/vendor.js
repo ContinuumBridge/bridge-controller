@@ -114,9 +114,7 @@ Marionette = require('backbone.marionette');
       }
 
       // ADDED pass on parameters
-      console.log('componentWillReceiveParams ', this.componentWillReceiveParams);
       if (this.componentWillReceiveParams && nextProps.params) {
-          console.log('componentWillReceiveParams ', nextProps);
           this.componentWillReceiveParams(nextProps.params);
       }
     },
@@ -52279,9 +52277,12 @@ var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
 
-        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
+        var attrs = attributes || {};
+        options || (options = {});
 
-        OriginalModel.call(this, attributes, options);
+        attrs.isGhost = attrs[ this.idAttribute ] ? false : true;
+
+        OriginalModel.call(this, attrs, options);
 
         this.startTracking();
     },

@@ -3,8 +3,6 @@ var Q = require('q');
 
 var CBApp = require('index');
 
-require('./components/buttons');
-
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');

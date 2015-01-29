@@ -25,16 +25,7 @@ module.exports.Topbar = React.createClass({
                             <Tab to="dashboard">Dashboard</Tab>
                             <Tab to="market">App Market</Tab>
                             <Tab to="config">Config</Tab>
-                            <li id="account-dropdown" className="dropdown">
-                                <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                                <div className="header-text">My Account</div>
-                                    <b className="caret"></b>
-                                </a>
-                                <ul className="dropdown-menu">
-                                    <Tab to="developer">Developer</Tab>
-                                    <li name="logout"><a href="/accounts/logout/">Logout</a></li>
-                                </ul>
-                            </li>
+                            <AccountList />
                         </div>
                     </div>
                 </div>
@@ -92,6 +83,33 @@ var BridgeList = React.createClass({
         )
     }
 });
+
+var AccountList = React.createClass({
+
+    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+
+    render: function () {
+
+        var firstName = Portal.currentUser.get('first_name');
+        var lastName = Portal.currentUser.get('last_name');
+
+        return (
+            <li id="account-dropdown" className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+                    <div className="header-text">{firstName} {lastName}</div>
+                    <b className="caret"></b>
+                </a>
+                <ul className="dropdown-menu">
+                    <Tab to="account">My Account</Tab>
+                    <Tab to="developer">Developer</Tab>
+                    <li name="logout">
+                        <a href="/accounts/logout/">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        )
+    }
+})
 
 var Tab = React.createClass({
 

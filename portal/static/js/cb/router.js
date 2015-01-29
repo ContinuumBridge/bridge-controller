@@ -8,6 +8,7 @@ var Route = Router.Route
 require('./views/home');
 require('./views/main');
 
+var AccountView = require('./views/account');
 var ConfigView = require('./modules/config/views').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
@@ -19,6 +20,7 @@ var NotFoundView = require('./views/notFound');
 var routes = (
     <Route handler={MainView} path="/">
         <DefaultRoute handler={HomeView} />
+        <Route name="account" handler={AccountView} />
         <Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
         <Route name="dashboard" handler={DashboardView} />
         <Route name="developer" handler={DeveloperView} />
