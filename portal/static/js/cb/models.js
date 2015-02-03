@@ -81,6 +81,7 @@ Portal.on('initialize:before', function () {
   Portal.notificationCollection.subscribe();
 
   Portal.userCollection = new Portal.UserCollection();
+  Portal.userCollection.subscribe();
 
   Portal.currentUserCollection = new Portal.CurrentUserCollection();
   Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));

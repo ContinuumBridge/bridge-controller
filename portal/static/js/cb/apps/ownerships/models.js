@@ -62,8 +62,9 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
 Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.AppOwnership,
-    backend: 'appOwnership',
+    backend: 'appOwnership'
 
+    /*
     initialize: function() {
         this.bindBackend();
 
@@ -73,4 +74,5 @@ Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
     parse : function(response){
         return response.objects;
     }
+    */
 });

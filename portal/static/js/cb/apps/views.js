@@ -23,7 +23,8 @@ Portal.AppView = React.createClass({
         console.log('AppView renderButtons');
         var app = this.props.model;
         var licence = app.getLicence(Portal.currentUser);
-        return <Portal.Components.Counter model={licence} />
+        return <Portal.Components.Counter model={licence}
+                        size="large" field="installs_permitted" />
     },
 
     renderBody: function() {

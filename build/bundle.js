@@ -21723,6 +21723,8 @@ Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
 Portal.AppLicenceView = React.createClass({displayName: 'AppLicenceView',
 
+    // Used in the App Market
+
     mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
     getInitialState: function () {
@@ -21790,6 +21792,8 @@ Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView'
 });
 
 Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
+
+    // Used for installing apps modal in config
 
     render: function() {
 
@@ -21871,6 +21875,101 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
         )
     }
 });
+
+/*
+Portal.AppLicenceNestedRowView = React.createClass({
+
+    // Used in developer section
+
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
+
+    renderBody: function() {
+
+        var self = this;
+
+        /*
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+        });
+        */
+
+        /*
+         var devicePermissions = appInstall.get('devicePermissions');
+
+         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+         console.log('event on deviceInstalls', event);
+         self.getCollection().trigger('change');
+         });
+
+        return (
+            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+        );
+    }
+});
+*/
+
+Portal.AppLicenceNestedTableView = React.createClass({displayName: 'AppLicenceNestedTableView',
+
+    mixins: [Backbone.React.Component.mixin, Portal.TableView ],
+
+    getInitialState: function () {
+        return {
+            title: 'Licences'
+        };
+    },
+
+    renderHeader: function() {
+
+        var userCollection = this.getCollection();
+
+        return (
+            React.createElement("div", {className: "form-group form-group-sm"}, 
+                React.createElement(Portal.Components.SearchInput, {collection: userCollection})
+            )
+        )
+        //<input className="form-control" type="text" value={searchString} />
+    },
+
+    renderRow: function (item) {
+        console.log('UserLicenceTableView createItem item', item);
+        var cid = item.cid;
+
+        //var app = this.props.app;
+
+        var licenceCollection = this.getCollection();
+        var licence = licenceCollection.get({cid: cid});
+
+        var user = licence.get('user');
+        var userName = user.get('first_name') + " " + user.get('last_name');
+        //var appLicence = app.getLicence(user);
+        //var title = app.get('name');
+
+        var installsPermitted = appLicence.get('installs_permitted');
+
+        return (
+            React.createElement("tr", {key: cid}, 
+                React.createElement("td", {className: "shrink"}, userName), 
+                React.createElement("td", {className: "expand"}, installsPermitted)
+            )
+        );
+    }
+});
+
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
@@ -22020,8 +22119,9 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
 Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.AppOwnership,
-    backend: 'appOwnership',
+    backend: 'appOwnership'
 
+    /*
     initialize: function() {
         this.bindBackend();
 
@@ -22031,6 +22131,7 @@ Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
@@ -22069,13 +22170,20 @@ Portal.AppOwnershipView = React.createClass({displayName: 'AppOwnershipView',
 
         var app = this.props.app;
 
-        var users = Portal.userCollection
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+        var licences = app.get('appLicences');
+
+        var users = Portal.userCollection;
+            /*
+            .getFiltered('search', function(model, searchString) {
+                //return !model.isNew();
+                var searchRegex = QueryEngine.createSafeRegex(searchString)
+                var pass = searchRegex.test(model.get('title'));// || searchRegex.test(model.get('content'))
+                return pass
             });
+            */
 
         return (
-            React.createElement(Portal.UserLicenceTableView, {collection: users, app: app})
+            React.createElement(Portal.UserLicenceTableView, {collection: users, app: app, size: "small"})
         );
     }
 });
@@ -22142,7 +22250,8 @@ Portal.AppView = React.createClass({displayName: 'AppView',
         console.log('AppView renderButtons');
         var app = this.props.model;
         var licence = app.getLicence(Portal.currentUser);
-        return React.createElement(Portal.Components.Counter, {model: licence})
+        return React.createElement(Portal.Components.Counter, {model: licence, 
+                        size: "large", field: "installs_permitted"})
     },
 
     renderBody: function() {
@@ -23573,17 +23682,20 @@ Portal.addInitializer(function () {
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
       currentBridge.fetch();
-      var apps = Portal.appCollection;
       console.log('router currentBridge', currentBridge);
       var models = {
           currentBridge: currentBridge,
           currentUser: Portal.currentUser
       }
+      var collections = {
+          apps: Portal.appCollection,
+          users: Portal.userCollection
+      }
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
               key: currentBridge.get('id'), 
-              collection: apps, model: models}),
+              collection: collections, model: models}),
           document.getElementById('app')
       );
 
@@ -24132,6 +24244,7 @@ Portal.on('initialize:before', function () {
   Portal.notificationCollection.subscribe();
 
   Portal.userCollection = new Portal.UserCollection();
+  Portal.userCollection.subscribe();
 
   Portal.currentUserCollection = new Portal.CurrentUserCollection();
   Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));
@@ -25671,99 +25784,75 @@ Portal.UserCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/views.js":[function(require,module,exports){
 
-Portal.UserLicenceView = React.createClass({displayName: 'UserLicenceView',
-
-    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
-
-    getInitialState: function () {
-        return {
-            buttons: [{
-                type: 'delete',
-                onClick: this.uninstall
-            }]
-        };
-    },
-
-    getDefaultProps: function () {
-        return {
-            openable: true
-        };
-    },
-
-    uninstall: function() {
-
-        this.toggleExistenceOnServer(this.props.model);
-    },
-
-    renderBody: function() {
-
-        var self = this;
-
-        /*
-        var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.model;
-
-        var devicePermissions = appInstall.get('devicePermissions');
-
-        deviceInstalls.each(function(deviceInstall) {
-
-            var adp;
-            var adpData = {
-                deviceInstall: deviceInstall,
-                appInstall: appInstall
-            }
-            adp = devicePermissions.findWhere(adpData)
-            if (!adp) {
-                adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
-            }
-        });
-        */
-
-        /*
-         var devicePermissions = appInstall.get('devicePermissions');
-
-         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-         console.log('event on deviceInstalls', event);
-         self.getCollection().trigger('change');
-         });
-         */
-
-        return (
-            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
-        );
-    }
-});
-
 Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableView',
 
-    mixins: [Backbone.React.Component.mixin, Portal.TableView ],
+    mixins: [ Portal.TableView ],
 
     getInitialState: function () {
         return {
-            title: 'Licences'
+            title: 'Licences',
+            rows: 3,
+            filters: {
+                search: {
+                    prefixes: ['user:', ''],
+                    callback: function(model, searchString) {
+                        console.log('UserLicenceTableView searchString', searchString);
+                        console.log('UserLicenceTableView model', model);
+                        var filterRegex = searchString.toLowerCase() + ".*";
+                        var searchRegex = QueryEngine.createSafeRegex(filterRegex);
+                        var pass = false;
+                        _.each(['first_name', 'last_name', 'email'], function(field) {
+                            if (searchRegex.test(model.get(field).toLowerCase())) {
+                                pass = true;
+                            }
+                        });
+                        return pass;
+                    }
+                }
+            }
         };
     },
 
-    renderRow: function (item) {
-        console.log('UserLicenceTableView createItem item', item);
-        var cid = item.cid;
+    renderHeader: function() {
+
+        var filteredCollection = this.getFilteredCollection();
+        var collection = this.props.collection;
+
+        console.log('renderHeader filteredCollection ', filteredCollection );
+        console.log('renderHeader collection ', collection );
+
+        return (
+            React.createElement("div", {className: "form-group form-group-sm"}, 
+                React.createElement(Portal.Components.SearchInput, {collection: collection, 
+                    filteredCollection: filteredCollection})
+            )
+        )
+        //<input className="form-control" type="text" value={searchString} />
+    },
+
+    renderRow: function (user) {
+        var cid = user.cid;
 
         var app = this.props.app;
 
-        var userCollection = this.getCollection()
+        /*
+        var userCollection = this.getCollection();
         var user = userCollection.get({cid: cid});
+        */
 
         var userName = user.get('first_name') + " " + user.get('last_name');
+
         var appLicence = app.getLicence(user);
-        //var title = app.get('name');
 
         var installsPermitted = appLicence.get('installs_permitted');
 
         return (
             React.createElement("tr", {key: cid}, 
                 React.createElement("td", {className: "shrink"}, userName), 
-                React.createElement("td", {className: "expand"}, installsPermitted)
+                React.createElement("td", {className: "expand"}, 
+                    React.createElement(Portal.Components.Counter, {model: appLicence, 
+                        field: "installs_permitted"})
+                )
             )
         );
     }
@@ -25922,36 +26011,30 @@ var Components = {};
 
 Components.Counter = require('./counter');
 Components.Switch = require('./switch');
-Components.TextInput = require('./text');
+Components.TextInput = require('./text').TextInput;
+Components.SearchInput = require('./search').SearchInput;
 
 Components.InstallButton = require('./buttons').InstallButton;
 
 Portal.Components = Components;
 
 
-},{"./buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/buttons.js","./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js","./switch":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/switch.js","./text":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/text.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js":[function(require,module,exports){
+},{"./buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/buttons.js","./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js","./search":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/search.js","./switch":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/switch.js","./text":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/text.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
     mixins: [ Portal.Mixins.Counter ],
 
-    handleIncrement: function() {
-        this.incrementField(this.props.model, 'installs_permitted', 1);
-    },
-
-    handleDecrement: function() {
-        this.incrementField(this.props.model, 'installs_permitted', -1);
-    },
-
     render: function() {
 
-        var licence = this.props.model;
+        var model = this.props.model;
 
-        var installsPermitted = licence.get('installs_permitted');
-        var disabled = licence.isSyncing();
+        var value = model.get(this.props.field);
+        var disabled = model.isSyncing();
 
+        var counterClass = "input-group counter-" + this.props.size;
         return (
-            React.createElement("div", {className: "input-group counter"}, 
+            React.createElement("div", {className: counterClass}, 
                 React.createElement("span", {className: "input-group-btn data-dwn"}, 
                     React.createElement("button", {className: "btn btn-default btn-info", 
                             onClick: this.handleDecrement, 'data-increment': "-1"}, 
@@ -25959,7 +26042,7 @@ module.exports = React.createClass({displayName: 'exports',
                     )
                 ), 
                 React.createElement("input", {type: "text", className: "form-control number text-center", 
-                    readonly: "true", disabled: disabled, value: installsPermitted}), 
+                    readonly: "true", disabled: disabled, value: value}), 
                 React.createElement("span", {className: "input-group-btn data-up"}, 
                     React.createElement("button", {className: "btn btn-default btn-info", 
                             onClick: this.handleIncrement, 'data-increment': "1"}, 
@@ -25971,6 +26054,91 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
+
+
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/search.js":[function(require,module,exports){
+
+module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
+
+    getInitialState: function() {
+        return {searchString: ''};
+    },
+
+    handleChange: function(e) {
+        var searchString = e.target.value;
+        this.setState({searchString: searchString});
+        //this.filter();
+    },
+
+    handleBlur: function(e) {
+        this.setState({searchString: e.target.value});
+        //this.search();
+    },
+
+    handleKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            this.search();
+        }
+        this.filter();
+    },
+
+    filter: function(searchString ) {
+
+        var searchString = this.state.searchString;
+        console.log('filter searchString', searchString);
+        var filteredCollection = this.props.filteredCollection;
+        filteredCollection.setSearchString('user:' + searchString);
+        filteredCollection.query();
+    },
+
+    /*
+    getFilteredCollection: function() {
+
+        var collection = this.props.collection;
+
+        var filteredCollection = this.filteredCollection
+            || collection.createLiveChildCollection(collection.models);
+
+        collection.setFilter('search', filter);
+
+        filteredCollection.parent = collection;
+    },
+    */
+
+    search: function() {
+        console.log('Search!');
+        var collection = this.props.collection;
+        var searchString = this.state.searchString;
+        collection.fetch({data: { 'first_name__istartswith': searchString }});
+        /*
+        var model = this.props.model;
+        var value = this.state.value;
+        console.log('SearchBox submit model', model );
+        if (value != model.get(this.props.field)) {
+            model.set(this.props.field, value);
+            model.save();
+            //this.setState({value: void 0});
+        }
+        */
+    },
+
+    render: function() {
+
+        //var model = this.props.model;
+        var searchString = this.state.searchString;
+        //var disabled = model.isSyncing();
+        return (
+            React.createElement("div", {className: "input-group"}, 
+                React.createElement("input", {type: "text", className: "form-control", value: searchString, 
+                    onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
+                React.createElement("span", {className: "input-group-btn"}, 
+                    React.createElement("button", {className: "btn btn-default", 
+                        type: "button", onClick: this.search}, "Search")
+                )
+            )
+        )
+    }
+});
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/switch.js":[function(require,module,exports){
 
@@ -26021,7 +26189,7 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/text.js":[function(require,module,exports){
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports.TextInput = React.createClass({displayName: 'TextInput',
 
     getInitialState: function() {
         return {title: 'Hello!'};
@@ -26270,7 +26438,7 @@ Portal.ReactBackboneMixin = {
         if (!owner) return false;
         var collection = owner.getCollection();
         return collection.get({cid: this.props.model.cid})
-    }
+    },
 }
 
 
@@ -26300,6 +26468,14 @@ Portal.ConnectorMixin = {
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js":[function(require,module,exports){
 
 module.exports = {
+
+    handleIncrement: function() {
+        this.incrementField(this.props.model, this.props.field, 1);
+    },
+
+    handleDecrement: function() {
+        this.incrementField(this.props.model, this.props.field, -1);
+    },
 
     incrementField: function(model, fieldName, increment) {
 
@@ -26338,6 +26514,21 @@ module.exports = {
                 }
             }
         }
+    }
+}
+},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/filter.js":[function(require,module,exports){
+
+
+module.exports = {
+
+    getFilteredCollection: function(name, filter) {
+
+        this.filteredCollection = this.filteredCollection || this.getCollection()
+                        .createLiveChildCollection(this.getCollection().models);
+
+        this.filteredCollection.setFilter(name, filter);
+
+        return this.filteredCollection;
     }
 }
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/items.js":[function(require,module,exports){
@@ -26503,13 +26694,14 @@ Portal.ListView = {
 var Mixins = {};
 
 Mixins.Counter = require('./counter');
+Mixins.Filter = require('./filter');
 
 Portal.Mixins = Mixins;
 
 Portal.RowView = require('./table').RowView;
 Portal.TableView = require('./table').TableView;
 
-},{"./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./table":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
+},{"./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
 
 module.exports.RowView = {
 
@@ -26555,17 +26747,52 @@ module.exports.RowView = {
 
 module.exports.TableView = {
 
+    getFilteredCollection: function() {
+
+        var self = this;
+
+        if (this.filteredCollection) {
+            return this.filteredCollection;
+        } else {
+
+            var collection = this.props.collection;
+
+            this.filteredCollection = collection.createLiveChildCollection(collection.models);
+
+            /*
+            this.filteredCollection.on('all', function(event) {
+                console.log('filteredCollection event', event)
+                //collection.trigger('change');
+            });
+            */
+
+            this.filteredCollection.setPills(this.state.filters);
+            /*
+            _.each(this.state.filters, function(filter) {
+                self.filteredCollection.setFilter(filter.name, filter.filter);
+            });
+            */
+
+            return this.filteredCollection;
+        }
+    },
+
     render: function() {
 
         var title = this.state.title || "";
 
+        var header = this.renderHeader ? this.renderHeader() : '';
+
+        console.log('TableView render filteredCollection ', this.getFilteredCollection());
+
         return (
             React.createElement("div", null, 
                 React.createElement("h4", null, title), 
+                header, 
                 React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
                     React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
                         React.createElement("tbody", null, 
-                        this.props.collection.map(this.renderRow)
+                        this.getFilteredCollection().map(this.renderRow)
                         )
                     )
                 )

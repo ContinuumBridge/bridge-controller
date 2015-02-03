@@ -52032,6 +52032,17 @@ var CBCollection = OriginalCollection.extend({
         console.log('collection subscribed', this.backend.name);
     },
 
+    fetch: function(options) {
+        // Set default behaviour to not remove models on fetch
+        options = options ? _.clone(options) : {};
+        if (options.remove === void 0) options.remove = false;
+
+        return OriginalCollection.prototype.fetch.call(this, options);
+    },
+
+    parse : function(response){
+        return response.objects;
+    },
     /*
     update: function(models) {
         // Update models in collection and persist them to the server
@@ -52200,6 +52211,7 @@ var CBCollection = OriginalCollection.extend({
         //var collection = this.filtered || this.createLiveChildCollection();
         collection.setFilter(name, filter);
 
+        collection.parent = this;
         this.filtered = collection;
 
         return this.filtered;

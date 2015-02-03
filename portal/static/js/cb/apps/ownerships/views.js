@@ -33,13 +33,20 @@ Portal.AppOwnershipView = React.createClass({
 
         var app = this.props.app;
 
-        var users = Portal.userCollection
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+        var licences = app.get('appLicences');
+
+        var users = Portal.userCollection;
+            /*
+            .getFiltered('search', function(model, searchString) {
+                //return !model.isNew();
+                var searchRegex = QueryEngine.createSafeRegex(searchString)
+                var pass = searchRegex.test(model.get('title'));// || searchRegex.test(model.get('content'))
+                return pass
             });
+            */
 
         return (
-            <Portal.UserLicenceTableView collection={users} app={app} />
+            <Portal.UserLicenceTableView collection={users} app={app} size="small" />
         );
     }
 });

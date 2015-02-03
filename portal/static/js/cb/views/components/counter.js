@@ -3,23 +3,16 @@ module.exports = React.createClass({
 
     mixins: [ Portal.Mixins.Counter ],
 
-    handleIncrement: function() {
-        this.incrementField(this.props.model, 'installs_permitted', 1);
-    },
-
-    handleDecrement: function() {
-        this.incrementField(this.props.model, 'installs_permitted', -1);
-    },
-
     render: function() {
 
-        var licence = this.props.model;
+        var model = this.props.model;
 
-        var installsPermitted = licence.get('installs_permitted');
-        var disabled = licence.isSyncing();
+        var value = model.get(this.props.field);
+        var disabled = model.isSyncing();
 
+        var counterClass = "input-group counter-" + this.props.size;
         return (
-            <div className="input-group counter">
+            <div className={counterClass}>
                 <span className="input-group-btn data-dwn">
                     <button className="btn btn-default btn-info"
                             onClick={this.handleDecrement} data-increment="-1">
@@ -27,7 +20,7 @@ module.exports = React.createClass({
                     </button>
                 </span>
                 <input type="text" className="form-control number text-center"
-                    readonly="true" disabled={disabled} value={installsPermitted} />
+                    readonly="true" disabled={disabled} value={value} />
                 <span className="input-group-btn data-up">
                     <button className="btn btn-default btn-info"
                             onClick={this.handleIncrement} data-increment="1">
@@ -38,4 +31,5 @@ module.exports = React.createClass({
         )
     }
 });
+
 

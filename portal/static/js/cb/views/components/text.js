@@ -1,5 +1,5 @@
 
-module.exports = React.createClass({
+module.exports.TextInput = React.createClass({
 
     getInitialState: function() {
         return {title: 'Hello!'};

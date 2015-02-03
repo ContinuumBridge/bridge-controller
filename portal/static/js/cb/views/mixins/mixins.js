@@ -2,6 +2,7 @@
 var Mixins = {};
 
 Mixins.Counter = require('./counter');
+Mixins.Filter = require('./filter');
 
 Portal.Mixins = Mixins;
 

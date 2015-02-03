@@ -43,17 +43,52 @@ module.exports.RowView = {
 
 module.exports.TableView = {
 
+    getFilteredCollection: function() {
+
+        var self = this;
+
+        if (this.filteredCollection) {
+            return this.filteredCollection;
+        } else {
+
+            var collection = this.props.collection;
+
+            this.filteredCollection = collection.createLiveChildCollection(collection.models);
+
+            /*
+            this.filteredCollection.on('all', function(event) {
+                console.log('filteredCollection event', event)
+                //collection.trigger('change');
+            });
+            */
+
+            this.filteredCollection.setPills(this.state.filters);
+            /*
+            _.each(this.state.filters, function(filter) {
+                self.filteredCollection.setFilter(filter.name, filter.filter);
+            });
+            */
+
+            return this.filteredCollection;
+        }
+    },
+
     render: function() {
 
         var title = this.state.title || "";
 
+        var header = this.renderHeader ? this.renderHeader() : '';
+
+        console.log('TableView render filteredCollection ', this.getFilteredCollection());
+
         return (
             <div>
                 <h4>{title}</h4>
+                {header}
                 <div ref="messagesWrapper" id="messages-wrapper">
                     <table className="table-condensed table-hover table-striped">
                         <tbody>
-                        {this.props.collection.map(this.renderRow)}
+                        {this.getFilteredCollection().map(this.renderRow)}
                         </tbody>
                     </table>
                 </div>

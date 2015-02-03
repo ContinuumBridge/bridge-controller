@@ -1,97 +1,73 @@
 
-Portal.UserLicenceView = React.createClass({
-
-    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
-
-    getInitialState: function () {
-        return {
-            buttons: [{
-                type: 'delete',
-                onClick: this.uninstall
-            }]
-        };
-    },
-
-    getDefaultProps: function () {
-        return {
-            openable: true
-        };
-    },
-
-    uninstall: function() {
-
-        this.toggleExistenceOnServer(this.props.model);
-    },
-
-    renderBody: function() {
-
-        var self = this;
-
-        /*
-        var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.model;
-
-        var devicePermissions = appInstall.get('devicePermissions');
-
-        deviceInstalls.each(function(deviceInstall) {
-
-            var adp;
-            var adpData = {
-                deviceInstall: deviceInstall,
-                appInstall: appInstall
-            }
-            adp = devicePermissions.findWhere(adpData)
-            if (!adp) {
-                adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
-            }
-        });
-        */
-
-        /*
-         var devicePermissions = appInstall.get('devicePermissions');
-
-         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-         console.log('event on deviceInstalls', event);
-         self.getCollection().trigger('change');
-         });
-         */
-
-        return (
-            < Portal.AppDevicePermissionListView collection={devicePermissions} />
-        );
-    }
-});
-
 Portal.UserLicenceTableView = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin, Portal.TableView ],
+    mixins: [ Portal.TableView ],
 
     getInitialState: function () {
         return {
-            title: 'Licences'
+            title: 'Licences',
+            rows: 3,
+            filters: {
+                search: {
+                    prefixes: ['user:', ''],
+                    callback: function(model, searchString) {
+                        console.log('UserLicenceTableView searchString', searchString);
+                        console.log('UserLicenceTableView model', model);
+                        var filterRegex = searchString.toLowerCase() + ".*";
+                        var searchRegex = QueryEngine.createSafeRegex(filterRegex);
+                        var pass = false;
+                        _.each(['first_name', 'last_name', 'email'], function(field) {
+                            if (searchRegex.test(model.get(field).toLowerCase())) {
+                                pass = true;
+                            }
+                        });
+                        return pass;
+                    }
+                }
+            }
         };
     },
 
-    renderRow: function (item) {
-        console.log('UserLicenceTableView createItem item', item);
-        var cid = item.cid;
+    renderHeader: function() {
+
+        var filteredCollection = this.getFilteredCollection();
+        var collection = this.props.collection;
+
+        console.log('renderHeader filteredCollection ', filteredCollection );
+        console.log('renderHeader collection ', collection );
+
+        return (
+            <div className="form-group form-group-sm">
+                <Portal.Components.SearchInput collection={collection}
+                    filteredCollection={filteredCollection} />
+            </div>
+        )
+        //<input className="form-control" type="text" value={searchString} />
+    },
+
+    renderRow: function (user) {
+        var cid = user.cid;
 
         var app = this.props.app;
 
-        var userCollection = this.getCollection()
+        /*
+        var userCollection = this.getCollection();
         var user = userCollection.get({cid: cid});
+        */
 
         var userName = user.get('first_name') + " " + user.get('last_name');
+
         var appLicence = app.getLicence(user);
-        //var title = app.get('name');
 
         var installsPermitted = appLicence.get('installs_permitted');
 
         return (
             <tr key={cid}>
                 <td className="shrink">{userName}</td>
-                <td className="expand">{installsPermitted}</td>
+                <td className="expand">
+                    <Portal.Components.Counter model={appLicence}
+                        field="installs_permitted" />
+                </td>
             </tr>
         );
     }
