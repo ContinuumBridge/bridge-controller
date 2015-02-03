@@ -24003,11 +24003,10 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
 
     renderItem: function (item) {
 
-        var model = this.getCollection().findWhere({id: item.id});
-        //var title = model.get('device')
-        //return <div> Hey </div>;
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: item.name, model: item})
-        //return < Portal.AppInstallView key={item.cid} model={item} />
+        //var model = this.getCollection().findWhere({id: item.id});
+        var title = item.device ? item.name : item.name + " (Unknown device)";
+
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: title, model: item})
     }
 });
 

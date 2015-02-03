@@ -44,11 +44,11 @@ Bridge.prototype.formatConfig = function(authData) {
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
                 var user = controller.user;
-                console.log('user is', user);
+                //console.log('user is', user);
                 if (user.resource_uri) {
                     user = user.resource_uri;
                 }
-                console.log('user uri is', user);
+                //console.log('user uri is', user);
 
                 var resourceMatch = user.match(utils.apiRegex);
                 var cbid = 'UID' + resourceMatch[2];

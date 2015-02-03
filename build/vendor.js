@@ -114,9 +114,7 @@ Marionette = require('backbone.marionette');
       }
 
       // ADDED pass on parameters
-      console.log('componentWillReceiveParams ', this.componentWillReceiveParams);
       if (this.componentWillReceiveParams && nextProps.params) {
-          console.log('componentWillReceiveParams ', nextProps);
           this.componentWillReceiveParams(nextProps.params);
       }
     },

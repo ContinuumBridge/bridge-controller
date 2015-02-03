@@ -20,7 +20,7 @@ Django.prototype.request = function(request, sessionID) {
     //var method = verb == "get" ? verb : verb + "Json";
 
     console.log('django request sessionID', sessionID);
-    logger.log('django request data', data);
+    logger.log('debug', 'django request data', data);
     var djangoOptions = {
         method: verb,
         headers: {
@@ -39,12 +39,12 @@ Django.prototype.request = function(request, sessionID) {
     rest[verb](requestURL, djangoOptions).on('complete', function(data, response) {
 
         if (response && response.statusCode) {
-            //console.log('Django response', response);
-            if (response.statusCode == 200) {
+            //logger.log('debug', 'Django data response', data);
+            if (response.statusCode >= 200 && response.statusCode <= 300) {
                 //logger.log('debug', 'Message response in request is', response);
                 deferred.resolve(data, response);
             } else if (response.statusCode == 404) {
-                var error = new Errors.Unauthorized('Authorization with Django failed');
+                var error = new Errors.Unauthorized('Authorization with Django failed, or URI not found');
                 deferred.reject(error);
             } else {
                 var error = new Errors.DjangoError(response);
