@@ -88,36 +88,26 @@ module.exports.Main = React.createClass({
             default:
                 break;
         }
-        /*
-        var installDevice = this.state.installDevice;
-        if (installDevice) {
-            return <InstallDeviceModal container={this} model={installDevice} />;
-        } else if (this.state.installingApps) {
-            console.log('rendering installingApps');
-            return <InstallAppModal container={this} />;
-        }
-        */
-        //var $portalBody = $('#portal-body');
-        //console.log('$portalBody ', $portalBody );
-
-        //var installDevice = Portal.Config.installDevice;
-        //var cancelInstall = Portal.Config.cancelInstallDevice;
     },
 
     render: function() {
 
-        console.log('config mainView render');
-        //var currentBridge = this.getModel();
         var currentBridge = Portal.getCurrentBridge();
-        //var currentBridge = this.getModel();
-        console.log('currentBridge in config render', currentBridge);
-        //currentBridge.fetch();
+
+        if (!currentBridge) {
+            return (
+                <div className="welcome">
+                    <div className="welcome-text panel-body">
+                        You don't have any bridges to configure yet
+                    </div>
+                </div>
+            );
+        }
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
                 return !model.isNew();
             });
-        console.log('config mainView appInstalls', appInstalls);
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
             .getFiltered('isNew', function(model, searchString) {

@@ -119,7 +119,7 @@ var ListItem = React.createClass({
                 href={'#' + (this.props.id || '')}
                 className={this.isExpanded() ? null : 'collapsed'}
                 onClick={this.handleSelect}>
-        {header}
+                {header}
             </a>
         );
     },

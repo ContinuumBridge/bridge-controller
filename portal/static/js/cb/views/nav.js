@@ -58,27 +58,19 @@ var BridgeList = React.createClass({
 
     createItem: function(bridge) {
 
-        //console.log('createItem bridge is', bridge);
         return (
             <li key={bridge.id}>
                 <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.name}</a>
             </li>
         );
-        /*
-        if (bridge.id != this.currentBridgeID) {
-        } else {
-            return;
-        }
-        */
-        //return <li><Router.Link query={{bridge: bridge.cbid}}>{bridge.name}</Router.Link></li>;
     },
 
     render: function () {
 
         var currentBridge = Portal.getCurrentBridge();
-        var bridgeName = currentBridge.get('name');
-        this.currentBridgeID = currentBridge.get('id');
-        //console.log('nav bridgeCollection ', this.props.collection);
+        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
+        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
+
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
             <li className="dropdown">

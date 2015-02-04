@@ -59560,7 +59560,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
                 href: '#' + (this.props.id || ''), 
                 className: this.isExpanded() ? null : 'collapsed', 
                 onClick: this.handleSelect}, 
-        header
+                header
             )
         );
     },

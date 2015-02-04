@@ -22991,7 +22991,7 @@ Portal.getCurrentBridge = function() {
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
-        Portal.setCurrentBridge(bridge);
+        if (bridge) Portal.setCurrentBridge(bridge);
     }
 
     return bridge;
@@ -23000,8 +23000,10 @@ Portal.getCurrentBridge = function() {
 
 Portal.setCurrentBridge = function(bridge) {
 
-    Portal.currentBridge = bridge;
-    Portal.router.setQuery({bridge: bridge.get('id')});
+    if (bridge) {
+        Portal.currentBridge = bridge;
+        Portal.router.setQuery({bridge: bridge.get('id')});
+    }
 }
 
 Portal.BridgeControl = Backbone.RelationalModel.extend({
@@ -23945,7 +23947,8 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
     getInitialState: function () {
         var buttons = [];
 
-        var device = this.getModel().get('device');
+        var discoveredDevice = this.getModel();
+        var device = discoveredDevice.get('device');
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
                 onClick: this.installDevice,
@@ -24004,7 +24007,8 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
     renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
-        var title = model.get('device') ? item.name : item.name + " (Unknown device)";
+        var name = item.name + " (" + item.address.slice(item.address.length-5) + ")";
+        var title = model.get('device') ? name : name + " (Unknown device)";
 
         return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: title, model: item})
     }
@@ -24485,13 +24489,15 @@ Portal.addInitializer(function () {
       console.log('new state ', state);
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
-      currentBridge.fetch();
+      if(currentBridge) currentBridge.fetch();
       var apps = Portal.appCollection;
       console.log('router currentBridge', currentBridge);
 
+      var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
+
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
-              key: currentBridge.get('id'), 
+              key: currentBridgeID, 
               collection: apps, model: currentBridge}),
           document.getElementById('app')
       );
@@ -24743,11 +24749,10 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
-        var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        //console.log('messagesWrapper scrollTop', messagesWrapper.scrollTop );
-        //console.log('messagesWrapper offsetHeight', messagesWrapper.offsetHeight);
-        //console.log('messagesWrapper scrollHeight', messagesWrapper.scrollHeight);
-        this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        // Temporarily remove checking to fix windows chrome bug
+        this.shouldScrollBottom = true;
     },
 
     componentDidUpdate: function() {
@@ -25367,36 +25372,26 @@ module.exports.Main = React.createClass({displayName: 'Main',
             default:
                 break;
         }
-        /*
-        var installDevice = this.state.installDevice;
-        if (installDevice) {
-            return <InstallDeviceModal container={this} model={installDevice} />;
-        } else if (this.state.installingApps) {
-            console.log('rendering installingApps');
-            return <InstallAppModal container={this} />;
-        }
-        */
-        //var $portalBody = $('#portal-body');
-        //console.log('$portalBody ', $portalBody );
-
-        //var installDevice = Portal.Config.installDevice;
-        //var cancelInstall = Portal.Config.cancelInstallDevice;
     },
 
     render: function() {
 
-        console.log('config mainView render');
-        //var currentBridge = this.getModel();
         var currentBridge = Portal.getCurrentBridge();
-        //var currentBridge = this.getModel();
-        console.log('currentBridge in config render', currentBridge);
-        //currentBridge.fetch();
+
+        if (!currentBridge) {
+            return (
+                React.createElement("div", {className: "welcome"}, 
+                    React.createElement("div", {className: "welcome-text panel-body"}, 
+                        "You don't have any bridges to configure yet"
+                    )
+                )
+            );
+        }
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
                 return !model.isNew();
             });
-        console.log('config mainView appInstalls', appInstalls);
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
             .getFiltered('isNew', function(model, searchString) {
@@ -26849,8 +26844,8 @@ module.exports = React.createClass({displayName: 'exports',
         console.log('Handler in base', Handler);
         var params = this.props.params;
         console.log('params in base', params);
-        var currentBridge = this.getModel();
-        console.log('currentBridge in base', currentBridge);
+        //var currentBridge = this.getModel();
+        //console.log('currentBridge in base', currentBridge);
         //currentBridge.fetch();
 
         return (
@@ -27365,27 +27360,19 @@ var BridgeList = React.createClass({displayName: 'BridgeList',
 
     createItem: function(bridge) {
 
-        //console.log('createItem bridge is', bridge);
         return (
             React.createElement("li", {key: bridge.id}, 
                 React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, bridge.name)
             )
         );
-        /*
-        if (bridge.id != this.currentBridgeID) {
-        } else {
-            return;
-        }
-        */
-        //return <li><Router.Link query={{bridge: bridge.cbid}}>{bridge.name}</Router.Link></li>;
     },
 
     render: function () {
 
         var currentBridge = Portal.getCurrentBridge();
-        var bridgeName = currentBridge.get('name');
-        this.currentBridgeID = currentBridge.get('id');
-        //console.log('nav bridgeCollection ', this.props.collection);
+        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
+        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
+
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
             React.createElement("li", {className: "dropdown"}, 

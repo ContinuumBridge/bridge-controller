@@ -14,7 +14,8 @@ Portal.DiscoveredDeviceView = React.createClass({
     getInitialState: function () {
         var buttons = [];
 
-        var device = this.getModel().get('device');
+        var discoveredDevice = this.getModel();
+        var device = discoveredDevice.get('device');
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
                 onClick: this.installDevice,
@@ -73,7 +74,8 @@ Portal.DiscoveredDeviceListView = React.createClass({
     renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
-        var title = model.get('device') ? item.name : item.name + " (Unknown device)";
+        var name = item.name + " (" + item.address.slice(item.address.length-5) + ")";
+        var title = model.get('device') ? name : name + " (Unknown device)";
 
         return < Portal.DiscoveredDeviceView key={item.cid} title={title} model={item} />
     }
