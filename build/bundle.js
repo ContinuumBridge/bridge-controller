@@ -21921,9 +21921,8 @@ Portal.AppLicenceNestedRowView = React.createClass({
         );
     }
 });
-*/
 
-Portal.AppLicenceNestedTableView = React.createClass({displayName: 'AppLicenceNestedTableView',
+Portal.AppLicenceNestedTableView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Portal.TableView ],
 
@@ -21938,9 +21937,9 @@ Portal.AppLicenceNestedTableView = React.createClass({displayName: 'AppLicenceNe
         var userCollection = this.getCollection();
 
         return (
-            React.createElement("div", {className: "form-group form-group-sm"}, 
-                React.createElement(Portal.Components.SearchInput, {collection: userCollection})
-            )
+            <div className="form-group form-group-sm">
+                <Portal.Components.SearchInput collection={userCollection} />
+            </div>
         )
         //<input className="form-control" type="text" value={searchString} />
     },
@@ -21962,13 +21961,14 @@ Portal.AppLicenceNestedTableView = React.createClass({displayName: 'AppLicenceNe
         var installsPermitted = appLicence.get('installs_permitted');
 
         return (
-            React.createElement("tr", {key: cid}, 
-                React.createElement("td", {className: "shrink"}, userName), 
-                React.createElement("td", {className: "expand"}, installsPermitted)
-            )
+            <tr key={cid}>
+                <td className="shrink">{userName}</td>
+                <td className="expand">{installsPermitted}</td>
+            </tr>
         );
     }
 });
+*/
 
 
 },{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
@@ -25700,7 +25700,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.BridgeControl',
             collectionType: 'Portal.BridgeControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'bridgeControlCollection'
         },
         {
@@ -25711,7 +25711,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppLicence',
             collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
             initializeCollection: 'appLicenceCollection'
         },
@@ -25723,7 +25723,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppOwnership',
             collectionType: 'Portal.AppOwnershipCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
             initializeCollection: 'appOwnershipCollection',
             reverseRelation: {
@@ -25743,7 +25743,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.ClientControl',
             collectionType: 'Portal.ClientControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'clientControlCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
@@ -25786,7 +25786,7 @@ Portal.UserCollection = QueryEngine.QueryCollection.extend({
 
 Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableView',
 
-    mixins: [ Portal.TableView ],
+    mixins: [ Portal.Mixins.TableView ],
 
     getInitialState: function () {
         return {
@@ -25818,11 +25818,11 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
         var filteredCollection = this.getFilteredCollection();
         var collection = this.props.collection;
 
-        console.log('renderHeader filteredCollection ', filteredCollection );
-        console.log('renderHeader collection ', collection );
+        //console.log('renderHeader filteredCollection ', filteredCollection );
+        //console.log('renderHeader collection ', collection );
 
         return (
-            React.createElement("div", {className: "form-group form-group-sm"}, 
+            React.createElement("div", {className: "form-group form-group-sm search-group"}, 
                 React.createElement(Portal.Components.SearchInput, {collection: collection, 
                     filteredCollection: filteredCollection})
             )
@@ -25848,10 +25848,10 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
 
         return (
             React.createElement("tr", {key: cid}, 
-                React.createElement("td", {className: "shrink"}, userName), 
-                React.createElement("td", {className: "expand"}, 
+                React.createElement("td", {className: "expand"}, userName), 
+                React.createElement("td", null, 
                     React.createElement(Portal.Components.Counter, {model: appLicence, 
-                        field: "installs_permitted"})
+                        field: "installs_permitted", size: "small"})
                 )
             )
         );
@@ -26036,17 +26036,17 @@ module.exports = React.createClass({displayName: 'exports',
         return (
             React.createElement("div", {className: counterClass}, 
                 React.createElement("span", {className: "input-group-btn data-dwn"}, 
-                    React.createElement("button", {className: "btn btn-default btn-info", 
+                    React.createElement("button", {className: "btn btn-default", 
                             onClick: this.handleDecrement, 'data-increment': "-1"}, 
-                        React.createElement("span", {className: "glyphicon glyphicon-minus"})
+                        React.createElement("span", {className: "glyphicon glyphicon-minus btn-icon"})
                     )
                 ), 
                 React.createElement("input", {type: "text", className: "form-control number text-center", 
                     readonly: "true", disabled: disabled, value: value}), 
                 React.createElement("span", {className: "input-group-btn data-up"}, 
-                    React.createElement("button", {className: "btn btn-default btn-info", 
+                    React.createElement("button", {className: "btn btn-default", 
                             onClick: this.handleIncrement, 'data-increment': "1"}, 
-                        React.createElement("span", {className: "glyphicon glyphicon-plus"})
+                        React.createElement("span", {className: "glyphicon glyphicon-plus btn-icon"})
                     )
                 )
             )
@@ -26106,8 +26106,8 @@ module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
     */
 
     search: function() {
-        console.log('Search!');
         var collection = this.props.collection;
+        console.log('Search collection', collection);
         var searchString = this.state.searchString;
         collection.fetch({data: { 'first_name__istartswith': searchString }});
         /*
@@ -26129,7 +26129,7 @@ module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
         //var disabled = model.isSyncing();
         return (
             React.createElement("div", {className: "input-group"}, 
-                React.createElement("input", {type: "text", className: "form-control", value: searchString, 
+                React.createElement("input", {type: "text", className: "form-control input-text", value: searchString, 
                     onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
                 React.createElement("span", {className: "input-group-btn"}, 
                     React.createElement("button", {className: "btn btn-default", 
@@ -26191,16 +26191,15 @@ module.exports = React.createClass({displayName: 'exports',
 
 module.exports.TextInput = React.createClass({displayName: 'TextInput',
 
-    getInitialState: function() {
-        return {title: 'Hello!'};
-    },
-
     handleChange: function(e) {
-        this.setState({value: e.target.value});
+        //this.setState({value: e.target.value});
+        //this.props.model
+        this.setValue(e.target.value);
     },
 
     handleBlur: function(e) {
-        this.setState({value: e.target.value});
+        //this.setState({value: e.target.value});
+        this.setValue(e.target.value);
         this.submit();
     },
 
@@ -26210,22 +26209,36 @@ module.exports.TextInput = React.createClass({displayName: 'TextInput',
         }
     },
 
+    setValue: function(value) {
+
+        this.props.model.set(this.props.field, value);
+    },
+
     submit: function() {
-        var model = this.props.model;
-        var value = this.state.value;
+
+        this.props.model.save();
+
+        //var model = this.props.model;
+        //model.save();
+
+        /*
         console.log('TextBox submit model', model );
         if (value != model.get(this.props.field)) {
             model.set(this.props.field, value);
             model.save();
             //this.setState({value: void 0});
         }
+        */
     },
 
     render: function() {
 
         var model = this.props.model;
-        var value = this.state.value || this.props.model.get(this.props.field);
+        var value = model.get(this.props.field);
         var disabled = model.isSyncing();
+        //return <React.AutoSizeInput className="item-title-box" value={value} disabled={disabled}
+        //              onChange={this.handleChange} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+
         return React.createElement("input", {type: "text", className: "item-title-box", value: value, disabled: disabled, 
                       onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown});
     }
@@ -26695,11 +26708,11 @@ var Mixins = {};
 
 Mixins.Counter = require('./counter');
 Mixins.Filter = require('./filter');
+Mixins.RowView = require('./table').RowView;
+Mixins.TableView = require('./table').TableView;
 
 Portal.Mixins = Mixins;
 
-Portal.RowView = require('./table').RowView;
-Portal.TableView = require('./table').TableView;
 
 },{"./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
 
@@ -26789,7 +26802,7 @@ module.exports.TableView = {
             React.createElement("div", null, 
                 React.createElement("h4", null, title), 
                 header, 
-                React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
+                React.createElement("div", {className: "table-nested"}, 
                     React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
                         React.createElement("tbody", null, 
                         this.getFilteredCollection().map(this.renderRow)

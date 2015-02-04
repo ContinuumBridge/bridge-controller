@@ -200,7 +200,6 @@ Portal.AppLicenceNestedRowView = React.createClass({
         );
     }
 });
-*/
 
 Portal.AppLicenceNestedTableView = React.createClass({
 
@@ -248,4 +247,5 @@ Portal.AppLicenceNestedTableView = React.createClass({
         );
     }
 });
+*/
 

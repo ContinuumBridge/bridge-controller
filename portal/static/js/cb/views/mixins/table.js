@@ -85,7 +85,7 @@ module.exports.TableView = {
             <div>
                 <h4>{title}</h4>
                 {header}
-                <div ref="messagesWrapper" id="messages-wrapper">
+                <div className="table-nested" >
                     <table className="table-condensed table-hover table-striped">
                         <tbody>
                         {this.getFilteredCollection().map(this.renderRow)}

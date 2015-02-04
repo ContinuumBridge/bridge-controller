@@ -6,13 +6,36 @@
     right: 83px;
 }
 
+.counter-large .number {
+    width: 42px;
+}
+
 .counter-small {
     position: relative;
     /*width: 50px;*/
     top: 0px;
-    right: -129px;
 }
 
-.counter .number {
+.counter-small .number {
     width: 42px;
+    height: inherit;
+}
+
+.btn-icon {
+    color: #838383;
+    cursor: pointer;
+}
+
+.input-group-btn:first-child > .btn {
+    margin-right: -2px;
+}
+
+.input-text {
+    height: inherit;
+}
+
+/* Search */
+
+.search-group {
+    margin-bottom: 0px;
 }

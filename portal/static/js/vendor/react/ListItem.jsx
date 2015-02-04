@@ -140,7 +140,6 @@ var ListItem = React.createClass({
                 return <i className="icon ion-trash-a uninstall-button" onClick={onClick}/>
                 break;
             case 'text':
-                console.log('text button', button);
                 var label = button.label || "";
                 return (
                     <button className="topcoat-button install-button" onClick={onClick}>
@@ -160,8 +159,6 @@ var ListItem = React.createClass({
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
-        console.log('renderedButtons ', renderedButtons );
-        console.log('this.renderButtons ', this.renderButtons );
         var buttons = this.props.buttons || [];
 
         return (

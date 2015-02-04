@@ -229,7 +229,7 @@ class LoggedInResource(CBResource):
 
     class Meta(CBResource.Meta):
         list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
+        detail_allowed_methods = ['get', 'patch']
         excludes = ['password', 'is_staff', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()

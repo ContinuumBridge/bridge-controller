@@ -25,6 +25,7 @@ var CBModel = OriginalModel.extend({
 
 
     isSyncing: function() {
+        // TODO make this work for counters etc.
         return !!this.get('id') == this.get('isGhost');
     },
 

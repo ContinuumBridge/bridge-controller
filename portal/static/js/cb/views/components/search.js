@@ -47,8 +47,8 @@ module.exports.SearchInput = React.createClass({
     */
 
     search: function() {
-        console.log('Search!');
         var collection = this.props.collection;
+        console.log('Search collection', collection);
         var searchString = this.state.searchString;
         collection.fetch({data: { 'first_name__istartswith': searchString }});
         /*
@@ -70,7 +70,7 @@ module.exports.SearchInput = React.createClass({
         //var disabled = model.isSyncing();
         return (
             <div className="input-group">
-                <input type="text" className="form-control" value={searchString}
+                <input type="text" className="form-control input-text" value={searchString}
                     onChange={this.handleChange} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
                 <span className="input-group-btn">
                     <button className="btn btn-default"

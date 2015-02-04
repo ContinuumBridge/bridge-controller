@@ -20,7 +20,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.BridgeControl',
             collectionType: 'Portal.BridgeControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'bridgeControlCollection'
         },
         {
@@ -31,7 +31,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppLicence',
             collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
             initializeCollection: 'appLicenceCollection'
         },
@@ -43,7 +43,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.AppOwnership',
             collectionType: 'Portal.AppOwnershipCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
             initializeCollection: 'appOwnershipCollection',
             reverseRelation: {
@@ -63,7 +63,7 @@ Portal.User = Backbone.Deferred.Model.extend({
             relatedModel: 'Portal.ClientControl',
             collectionType: 'Portal.ClientControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'clientControlCollection',
             reverseRelation: {
                 type: Backbone.HasOne,

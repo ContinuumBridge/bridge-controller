@@ -1,7 +1,7 @@
 
 Portal.UserLicenceTableView = React.createClass({
 
-    mixins: [ Portal.TableView ],
+    mixins: [ Portal.Mixins.TableView ],
 
     getInitialState: function () {
         return {
@@ -33,11 +33,11 @@ Portal.UserLicenceTableView = React.createClass({
         var filteredCollection = this.getFilteredCollection();
         var collection = this.props.collection;
 
-        console.log('renderHeader filteredCollection ', filteredCollection );
-        console.log('renderHeader collection ', collection );
+        //console.log('renderHeader filteredCollection ', filteredCollection );
+        //console.log('renderHeader collection ', collection );
 
         return (
-            <div className="form-group form-group-sm">
+            <div className="form-group form-group-sm search-group">
                 <Portal.Components.SearchInput collection={collection}
                     filteredCollection={filteredCollection} />
             </div>
@@ -63,10 +63,10 @@ Portal.UserLicenceTableView = React.createClass({
 
         return (
             <tr key={cid}>
-                <td className="shrink">{userName}</td>
-                <td className="expand">
+                <td className="expand">{userName}</td>
+                <td>
                     <Portal.Components.Counter model={appLicence}
-                        field="installs_permitted" />
+                        field="installs_permitted" size="small" />
                 </td>
             </tr>
         );
