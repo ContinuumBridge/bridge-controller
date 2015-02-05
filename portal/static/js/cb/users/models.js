@@ -33,7 +33,17 @@ Portal.User = Backbone.Deferred.Model.extend({
             createModels: true,
             includeInJSON: false,
             //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
+            initializeCollection: 'appLicenceCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.User',
+                //createModels: true,
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection'
+            }
         },
         {
             type: Backbone.HasMany,
@@ -51,8 +61,10 @@ Portal.User = Backbone.Deferred.Model.extend({
                 key: 'user',
                 keySource: 'user',
                 keyDestination: 'user',
-                relatedModel: 'Portal.CurrentUser',
-                collectionType: 'Portal.CurrentUserCollectionCollection',
+                relatedModel: 'Portal.User',
+                createModels: true,
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection'
             }
         },
         {
@@ -70,10 +82,10 @@ Portal.User = Backbone.Deferred.Model.extend({
                 key: 'user',
                 keySource: 'user',
                 keyDestination: 'user',
-                relatedModel: 'Portal.CurrentUser',
+                relatedModel: 'Portal.User',
                 createModels: true,
-                includeInJSON: 'resource_uri'
-                //initializeCollection: 'userCollection',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection',
             }
         }
     ],

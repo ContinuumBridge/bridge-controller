@@ -45,6 +45,8 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
 class UserResource(CBResource, CBIDResourceMixin):
 
+    app_licences = fields.ToManyField('accounts.api.app_resources.UserAppLicenceResource', 'app_licences', full=True)
+
     class Meta(CBResource.Meta):
         queryset = CBUser.objects.all()
         fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']

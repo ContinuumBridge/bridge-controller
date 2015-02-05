@@ -66,14 +66,7 @@ class AppOwnershipResource(CBResource):
         resource_name = 'app_ownership'
 
 
-class AppLicenceResource(PostMatchMixin, CBResource):
-
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    #installs_permitted = fields.IntegerField()
-
-    installs = fields.ToManyField('apps.api.resources.AppInstallResource',
-                                  'installs', full=False)
+class ProtoAppLicenceResource(PostMatchMixin, CBResource):
 
     class Meta(CBResource.Meta):
        queryset = AppLicence.objects.all()
@@ -83,6 +76,18 @@ class AppLicenceResource(PostMatchMixin, CBResource):
        related_user_permissions = ['read', 'delete']
        resource_name = 'app_licence'
        post_match = ['app', 'user']
+
+
+class AppLicenceResource(ProtoAppLicenceResource):
+
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+
+    installs = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                  'installs', full=False)
+
+    class Meta(ProtoAppLicenceResource.Meta):
+        pass
 
 
 class AppInstallResource(CBResource, CBIDResourceMixin):
