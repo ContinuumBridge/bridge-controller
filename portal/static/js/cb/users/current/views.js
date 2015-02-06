@@ -15,9 +15,15 @@ Portal.CurrentUserView = React.createClass({
                 <h2>{title}</h2>
                 <ul className="animated-list">
                     <li className="panel">
-                        <TextInput model={currentUser} field="first_name" />
-                        <TextInput model={currentUser} field="last_name" />
-                        <TextInput model={currentUser} field="email" />
+                        <ul className="animated-list device-list">
+                            <li>
+                                <TextInput model={currentUser} field="first_name" />
+                                <TextInput model={currentUser} field="last_name" />
+                            </li>
+                            <li>
+                                <TextInput model={currentUser} field="email" />
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

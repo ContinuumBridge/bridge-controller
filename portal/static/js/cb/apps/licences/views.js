@@ -87,7 +87,7 @@ Portal.AppLicenceRowView = React.createClass({
         console.log('AppLicenceView props', this.props);
 
         var canInstall = installsPermitted > 0;
-        var installButton = canInstall ? <Portal.InstallButton model={appInstall} />
+        var installButton = canInstall ? <Portal.Components.InstallButton model={appInstall} />
                             : '';
 
         return (
