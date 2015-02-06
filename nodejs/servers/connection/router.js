@@ -93,13 +93,18 @@ Router.prototype.dispatch = function(message) {
     // Check if the destination is the client route
     var config = this.connection.config;
     //logger.log('debug', 'source', source, 'config cbid', config.cbid);
-    if (message.findDestinations(config.subscriptionAddresses) && source != config.cbid) {
-        //logger.log('debug', 'Push to client');
+    //logger.log('debug', 'config.subscriptionAddresses', config.subscriptionAddresses);
+    //logger.log('debug', 'source', source);
+    //logger.log('debug', 'config.cbid', config.cbid);
+    // source != config.cbid
+    if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
+        logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
-        //logger.log('debug', 'dispatch destination is', destination);
+        logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
+
     /*
     var clientRoute = new RegExp('^' + this.connection.config.subscriptionAddress + '(.+)?');
     logger.log('debug', 'subscriptionAddress is', this.connection.config.subscriptionAddress);
