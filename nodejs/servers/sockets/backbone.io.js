@@ -15,7 +15,9 @@ var SocketServer = require('./socket')
     ,MessageUtils = require('../../message_utils')
     ;
 
-function BackboneIOServer(port, getConfig, djangoURL) {
+function BackboneIOServer(getConfig, options) {
+
+    var djangoURL = options.djangoURL;
 
     var httpServer = http.createServer();
 
@@ -54,7 +56,7 @@ function BackboneIOServer(port, getConfig, djangoURL) {
     var socketServer = backboneio.listen(httpServer, controllers);
     //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
-    httpServer.listen(port);
+    httpServer.listen(options.port);
     // Set the socket io log level
     //socketServer.set('log level', 1);
 

@@ -14,8 +14,14 @@ var Client = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/client/v1/';
     this.authURL = this.djangoURL + 'current_client/client/';
 
-    this.socketServer = this.createSocketServer(SocketIOServer, port);
-    this.wsServer = this.createSocketServer(WSServer, port + 1)
+    var ioOptions = {
+        port: port
+    }
+    this.socketServer = this.createSocketServer(SocketIOServer, ioOptions);
+    var wsOptions = {
+        port: port + 1
+    }
+    this.wsServer = this.createSocketServer(WSServer, wsOptions);
 };
 
 Client.prototype = new Server();
