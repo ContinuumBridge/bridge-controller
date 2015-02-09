@@ -45,9 +45,9 @@ Portal.DeviceInstallListView = React.createClass({
         var cid = item.cid;
 
         var deviceInstall = this.getCollection().get({cid: cid});
-        var header = <Portal.Components.TextInput model={deviceInstall} field="friendly_name" />;
+        var title = <Portal.Components.TextInput model={deviceInstall} field="friendly_name" />;
 
         return < Portal.DeviceInstallView key={cid}
-                    header={header} model={item} />
+                    title={title} model={item} />
     }
 });

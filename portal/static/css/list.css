@@ -1,14 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,100,400);
 
-*{
-    /*
-    padding:0;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    outline: 1px solid transparent;
-    */
-  /*list-style: none;*/
-}
 li [class^=icon-],
 li [class*=" icon-"] {
   width: 40px !important;
@@ -22,6 +13,10 @@ li [class*=" icon-"] {
     /*padding: 12px;*/
     position: relative;
     list-style: none;
+}
+
+.item-heading {
+    padding: 0 15px;
 }
 
 .panel {
@@ -93,73 +88,38 @@ header p{
   color:rgba(255,255,255,.6);
 }
 
-/*
-.reminder-container {
-  margin: 0 auto;
-  width: 500px;
-  text-align: center
-}
+.item-heading {
 
-input[type='submit']{
-  height:50px;
-  width:70px;
-  padding:10px;
-  text-align:center;
-  background-color: rgba(0,0,0,.25);
-  border:0;
-  border-left:0;
-  color: white;
-  cursor:pointer;
-  padding:0;
-  vertical-align:bottom;
-  font:300 18px "Lato", "Arial", sans-serif;
 }
-
-button::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-
-input[type='text']:focus {
-  outline: none;
-}
-.icon-trash,
-.icon-pencil,
-.icon-save {
-  position: absolute;
-  top: 3px;
-  font-size: 20px;
-  color: #aaa;
-  cursor: pointer;
-  right: 40px
-}
-
-.icon-trash {
-  right: 10px
-}
-*/
 
 .item-title {
+    float: left;
+    /*
     margin-top: 4px;
     margin-bottom: 5px;
     margin-left: 18px;
+    */
 }
 
-.edit-button,
-.uninstall-button {
-    position: absolute;
-    color: #aaa;
+.item-anchor {
+    position: relative;
+    float: left;
+    right: 10px;
+    /*top: 21px;*/
+    font-size: 15px;
     cursor: pointer;
 }
-.edit-button {
-    left: 10px;
-    top: 21px;
-    font-size: 15px;
-}
-.uninstall-button {
+
+.item-button {
     font-size: 20px;
-    top: 18px;
-    right: 17px;
+    color: #aaa;
+    cursor: pointer;
+    float: right;
+    overflow: hidden;
+    /*
+    margin-left: auto;
+    margin-right: 0px;
+    */
 }
 
 .nested-item .onoffswitch {
@@ -169,18 +129,8 @@ input[type='text']:focus {
     cursor: pointer;
     right: 8px;
 }
+
 /*
-.notification {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  z-index: 3;
-  padding: 5px 10px;
-  color: white;
-  display: none;
-  box-shadow: 0 4px 0 -2px rgba(0, 0, 0, 0.1)
-}
-*/
 .undo-button{
   background-color: orange;
   cursor: pointer;
@@ -190,6 +140,7 @@ input[type='text']:focus {
   background-color: #2ecc71;
   margin-left: -50px;
 }
+*/
 
 button .icon-trash {
   float: none;
@@ -218,15 +169,9 @@ button .icon-trash {
   background-color: white;
   margin-bottom: 10px;
   padding: 10px;
-  padding-right: 60px;
   position: relative;
   word-wrap: break-word;
-  /*
-  opacity: 0;
-  -webkit-transition: all .1s ease;
-  -o-transition: all .1s ease;
-  transition: all .1s ease
-  */
+
 }
 
 .animated-list>li:focus {
@@ -235,194 +180,6 @@ button .icon-trash {
 li[contenteditable='true']{
   color:black;
 }
-
-/* Demo 2 */
-
-/*
-@import "http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css";
-
-@import url(http://fonts.googleapis.com/css?family=Lato:300,100,400);
-
-html {
-  height: 100%;
-  position: relative
-}
-
-body {
-  background-color: #8e44ad;
-  font-family: "Lato", sans-serif;
-  height: 2000px;
-  color: white
-}
-
-li.new-item {
-  opacity: 0;
-  -webkit-animation: fadeIn .3s linear forwards;
-  -o-animation: fadeIn .3s linear forwards;
-  animation: fadeIn .3s linear forwards
-}
-
-li.disabled {
-    opacity: 0.5;
-    -webkit-animation: fadeSlightly .3s linear forwards;
-    -o-animation: fadeSlightly .3s linear forwards;
-    animation: fadeSlightly .3s linear forwards
-}
-
-@keyframes fadeSlightly {
-    to {
-        opacity: 1
-    }
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1
-  }
-}
-
-li.restored-item {
-  -webkit-animation: openspace .3s ease forwards, 
-    restored-item-animation .3s .3s ease-out forwards;
-  -o-animation: openspace .3s ease forwards, 
-    restored-item-animation .3s .3s ease-out forwards;
-  animation: openspace .3s ease forwards, 
-    restored-item-animation .3s .3s ease-out forwards
-}
-
-@keyframes openspace {
-  to {
-    height: auto
-  }
-}
-
-@keyframes restored-item-animation {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(4);
-    -ms-transform: scale(4);
-    -o-transform: scale(4);
-    transform: scale(4)
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1)
-  }
-}
-
-li.removed-item {
-  -webkit-animation: removed-item-animation .6s ease-out forwards;
-  -o-animation: removed-item-animation .6s ease-out forwards;
-  animation: removed-item-animation .6s ease-out forwards;
-  -webkit-transform-origin: 50% 50%;
-  -ms-transform-origin: 50% 50%;
-  -o-transform-origin: 50% 50%;
-  transform-origin: 50% 50%
-}
-
-@keyframes removed-item-animation {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1)
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: scale(4);
-    -ms-transform: scale(4);
-    -o-transform: scale(4);
-    transform: scale(4)
-  }
-}
-
-
-@-webkit-keyframes fadeIn {
-  to {
-    opacity: 1
-  }
-}
-
-@-o-keyframes fadeIn {
-  to {
-    opacity: 1
-  }
-}
-
-@-webkit-keyframes openspace {
-  to {
-    height: auto
-  }
-}
-
-@-o-keyframes openspace {
-  to {
-    height: auto
-  }
-}
-
-@-webkit-keyframes restored-item-animation {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(4);
-    transform: scale(4)
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1)
-  }
-}
-
-@-o-keyframes restored-item-animation {
-  0% {
-    opacity: 0;
-    -o-transform: scale(4);
-    transform: scale(4)
-  }
-
-  100% {
-    opacity: 1;
-    -o-transform: scale(1);
-    transform: scale(1)
-  }
-}
-
-@-webkit-keyframes removed-item-animation {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1)
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: scale(4);
-    transform: scale(4)
-  }
-}
-
-@-o-keyframes removed-item-animation {
-  0% {
-    opacity: 1;
-    -o-transform: scale(1);
-    transform: scale(1)
-  }
-
-  100% {
-    opacity: 0;
-    -o-transform: scale(4);
-    transform: scale(4)
-  }
-}
-*/
 
 /* Loading */
 .spinner {

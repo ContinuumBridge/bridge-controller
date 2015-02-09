@@ -48,15 +48,6 @@ Portal.AppInstallView = React.createClass({
             }
         });
 
-        /*
-         var devicePermissions = appInstall.get('devicePermissions');
-
-         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-         console.log('event on deviceInstalls', event);
-         self.getCollection().trigger('change');
-         });
-         */
-
         return (
             < Portal.AppDevicePermissionListView collection={devicePermissions} />
         );
@@ -96,7 +87,7 @@ Portal.AppInstallListView = React.createClass({
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return < Portal.AppInstallView key={cid} header={title}
+        return < Portal.AppInstallView key={cid} title={title}
             deviceInstalls={deviceInstalls} model={appInstall} />
     }
 });

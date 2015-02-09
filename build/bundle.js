@@ -21484,15 +21484,6 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
             }
         });
 
-        /*
-         var devicePermissions = appInstall.get('devicePermissions');
-
-         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-         console.log('event on deviceInstalls', event);
-         self.getCollection().trigger('change');
-         });
-         */
-
         return (
             React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
         );
@@ -21532,7 +21523,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppInstallView, {key: cid, header: title, 
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
             deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
@@ -23502,10 +23493,10 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         var cid = item.cid;
 
         var deviceInstall = this.getCollection().get({cid: cid});
-        var header = React.createElement(Portal.Components.TextInput, {model: deviceInstall, field: "friendly_name"});
+        var title = React.createElement(Portal.Components.TextInput, {model: deviceInstall, field: "friendly_name"});
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, 
-                    header: header, model: item})
+                    title: title, model: item})
     }
 });
 
@@ -26253,18 +26244,21 @@ module.exports.TextInput = React.createClass({displayName: 'TextInput',
         var value = model.get(this.props.field);
         var disabled = model.isSyncing();
 
-        var style = { padding: 5 };
-        var inputStyle = { padding: 3, borderRadius: 3 }
+        var style = {};
+        var inputStyle = {};
+        //var inputStyle = { padding: 3, borderRadius: 3 }
             //fontSize: 14 };
         if (this.state.focused) {
             style.background = "#eee";
-            style.borderRadius= 5;
+            //style.borderRadius= 5;
             inputStyle.border = "1px solid #999";
         } else {
-            inputStyle.border = "none";
+            style.background = "transparent";
+            inputStyle.border = "1px solid transparent";
         }
 
-        return React.createElement(AutosizeInput, {className: "item-title-box", value: value, disabled: disabled, 
+        return React.createElement(AutosizeInput, {value: value, disabled: disabled, 
+                            className: "input-text-wrapper", inputClassName: "input-text", 
                             style: style, inputStyle: inputStyle, 
                             onFocus: this.handleFocus, onBlur: this.handleBlur, 
                             onChange: this.handleChange, onKeyDown: this.handleKeyDown})
@@ -26763,8 +26757,8 @@ Portal.ItemView = {
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         return (
-            React.createElement(React.ListItem, {header: this.props.header, buttons: buttons, 
-                renderButtons: this.renderButtons, 
+            React.createElement(React.ListItem, {title: this.props.title, subTitle: this.props.subTitle, 
+                buttons: buttons, renderButtons: this.renderButtons, 
                 bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
                 body
             )

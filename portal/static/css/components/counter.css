@@ -30,8 +30,22 @@
     margin-right: -2px;
 }
 
+/* Text Input */
+
 .input-text {
     height: inherit;
+    padding: 3px;
+    border-radius: 3px;
+    font-family: 'Lato', sans-serif !important;
+    font-weight: bold;
+    text-rendering: optimizelegibility;
+}
+
+.input-text-wrapper {
+    /*border: none;*/
+    border-radius: 5px;
+    padding: 5px;
+    background: #eee;
 }
 
 /* Search */
@@ -39,3 +53,4 @@
 .search-group {
     margin-bottom: 0px;
 }
+

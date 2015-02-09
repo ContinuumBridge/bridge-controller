@@ -45,18 +45,21 @@ module.exports.TextInput = React.createClass({
         var value = model.get(this.props.field);
         var disabled = model.isSyncing();
 
-        var style = { padding: 5 };
-        var inputStyle = { padding: 3, borderRadius: 3 }
+        var style = {};
+        var inputStyle = {};
+        //var inputStyle = { padding: 3, borderRadius: 3 }
             //fontSize: 14 };
         if (this.state.focused) {
             style.background = "#eee";
-            style.borderRadius= 5;
+            //style.borderRadius= 5;
             inputStyle.border = "1px solid #999";
         } else {
-            inputStyle.border = "none";
+            style.background = "transparent";
+            inputStyle.border = "1px solid transparent";
         }
 
-        return <AutosizeInput className="item-title-box" value={value} disabled={disabled}
+        return <AutosizeInput value={value} disabled={disabled}
+                            className="input-text-wrapper" inputClassName="input-text"
                             style={style} inputStyle={inputStyle}
                             onFocus={this.handleFocus} onBlur={this.handleBlur}
                             onChange={this.handleChange} onKeyDown={this.handleKeyDown} />

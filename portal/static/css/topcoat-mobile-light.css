@@ -3524,10 +3524,12 @@ body {
   */
 }
 
+/*
 :focus {
   outline-color: transparent;
   outline-style: none;
 }
+*/
 
 .topcoat-icon--menu-stack {
   background: url("../img/hamburger_dark.svg") no-repeat;
