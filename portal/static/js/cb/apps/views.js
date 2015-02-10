@@ -57,7 +57,7 @@ Portal.AppListView = React.createClass({
 
         var title = app.get('name');
 
-        return < Portal.AppView key={cid} header={title}
+        return < Portal.AppView key={cid} title={title}
                     model={app} />
     }
 });

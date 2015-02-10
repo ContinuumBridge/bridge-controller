@@ -81,7 +81,7 @@ Portal.AppOwnershipListView = React.createClass({
         var app = appOwnership.get('app');
         var title = app.get('name');
 
-        return < Portal.AppOwnershipView key={cid} header={title}
+        return < Portal.AppOwnershipView key={cid} title={title}
                     model={appOwnership} app={app} />
     }
 });

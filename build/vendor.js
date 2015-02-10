@@ -59574,6 +59574,12 @@ var ListItem = React.createClass({displayName: 'ListItem',
         var renderedTitle = React.isValidElement(title) ? title
             : React.createElement("div", {className: "inner-item-title"}, title);
 
+        var subtitle = this.props.subtitle;
+        console.log('subtitle is', subtitle);
+        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+            : React.createElement("div", {className: "inner-item-subtitle"}, subtitle);
+        console.log('rendered subtitle is', renderedSubtitle);
+
         console.log('renderHeading renderedTitle', renderedTitle );
 
         // Render custom buttons
@@ -59586,8 +59592,15 @@ var ListItem = React.createClass({displayName: 'ListItem',
             React.createElement("div", {className: "panel-heading item-heading"}, 
                 this.renderAnchor(), 
                 React.createElement("h4", {className: "item-title"}, renderedTitle), 
-                buttons.map(this.renderButton), 
-                renderedButtons
+                React.createElement("h4", {className: "item-subtitle"}, 
+                    React.createElement("small", null, 
+                        renderedSubtitle
+                    )
+                ), 
+                React.createElement("div", {className: "item-buttons"}, 
+                    buttons.map(this.renderButton), 
+                    renderedButtons
+                )
             )
         );
     },

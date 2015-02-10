@@ -117,6 +117,12 @@ var ListItem = React.createClass({
         var renderedTitle = React.isValidElement(title) ? title
             : <div className="inner-item-title">{title}</div>;
 
+        var subtitle = this.props.subtitle;
+        console.log('subtitle is', subtitle);
+        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+            : <div className="inner-item-subtitle">{subtitle}</div>;
+        console.log('rendered subtitle is', renderedSubtitle);
+
         console.log('renderHeading renderedTitle', renderedTitle );
 
         // Render custom buttons
@@ -129,8 +135,15 @@ var ListItem = React.createClass({
             <div className="panel-heading item-heading">
                 {this.renderAnchor()}
                 <h4 className="item-title">{renderedTitle}</h4>
-                {buttons.map(this.renderButton)}
-                {renderedButtons}
+                <h4 className="item-subtitle">
+                    <small>
+                        {renderedSubtitle}
+                    </small>
+                </h4>
+                <div className="item-buttons">
+                    {buttons.map(this.renderButton)}
+                    {renderedButtons}
+                </div>
             </div>
         );
     },

@@ -65,7 +65,7 @@ Portal.AppLicenceListView = React.createClass({
 
         var installs = appLicence.get('installs');
 
-        return < Portal.AppLicenceView key={cid} header={title}
+        return < Portal.AppLicenceView key={cid} title={title}
                  model={appLicence} installs={installs} />
     }
 });

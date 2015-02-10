@@ -45,11 +45,11 @@ Portal.ClientControlListView = React.createClass({
 
         var clientControl = this.getCollection().get({cid: cid});
         var client = clientControl.get('client');
-        var header = "Client";
+        var title = "Client";
         //var header = <Portal.Components.TextInput model={client} field="name" />;
 
         return < Portal.ClientControlView key={cid}
-                    header={header} model={clientControl} />
+                    title={title} model={clientControl} />
     }
 });
 

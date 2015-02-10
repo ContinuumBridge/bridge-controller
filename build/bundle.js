@@ -21520,10 +21520,11 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
         var app = appInstall.get('app');
         var title = app.get('name');
+        var subtitle = "Test subtitle";
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, subtitle: subtitle, 
             deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
@@ -21777,7 +21778,7 @@ Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView'
 
         var installs = appLicence.get('installs');
 
-        return React.createElement(Portal.AppLicenceView, {key: cid, header: title, 
+        return React.createElement(Portal.AppLicenceView, {key: cid, title: title, 
                  model: appLicence, installs: installs})
     }
 });
@@ -22209,7 +22210,7 @@ Portal.AppOwnershipListView = React.createClass({displayName: 'AppOwnershipListV
         var app = appOwnership.get('app');
         var title = app.get('name');
 
-        return React.createElement(Portal.AppOwnershipView, {key: cid, header: title, 
+        return React.createElement(Portal.AppOwnershipView, {key: cid, title: title, 
                     model: appOwnership, app: app})
     }
 });
@@ -22275,7 +22276,7 @@ Portal.AppListView = React.createClass({displayName: 'AppListView',
 
         var title = app.get('name');
 
-        return React.createElement(Portal.AppView, {key: cid, header: title, 
+        return React.createElement(Portal.AppView, {key: cid, title: title, 
                     model: app})
     }
 });
@@ -22852,11 +22853,11 @@ Portal.ClientControlListView = React.createClass({displayName: 'ClientControlLis
 
         var clientControl = this.getCollection().get({cid: cid});
         var client = clientControl.get('client');
-        var header = "Client";
+        var title = "Client";
         //var header = <Portal.Components.TextInput model={client} field="name" />;
 
         return React.createElement(Portal.ClientControlView, {key: cid, 
-                    header: header, model: clientControl})
+                    title: title, model: clientControl})
     }
 });
 
@@ -25658,10 +25659,12 @@ Portal.CurrentUserView = React.createClass({displayName: 'CurrentUserView',
                 React.createElement("h2", null, title), 
                 React.createElement("ul", {className: "animated-list"}, 
                     React.createElement("li", {className: "panel"}, 
-                        React.createElement("ul", {className: "animated-list device-list"}, 
+                        React.createElement("ul", {className: "nested-list"}, 
                             React.createElement("li", null, 
-                                React.createElement(TextInput, {model: currentUser, field: "first_name"}), 
-                                React.createElement(TextInput, {model: currentUser, field: "last_name"})
+                                React.createElement(TextInput, {model: currentUser, 
+                                    autosize: true, field: "first_name"}), 
+                                React.createElement(TextInput, {model: currentUser, 
+                                    autosize: true, field: "last_name"})
                             ), 
                             React.createElement("li", null, 
                                 React.createElement(TextInput, {model: currentUser, field: "email"})
@@ -26257,14 +26260,24 @@ module.exports.TextInput = React.createClass({displayName: 'TextInput',
             inputStyle.border = "1px solid transparent";
         }
 
-        return React.createElement(AutosizeInput, {value: value, disabled: disabled, 
-                            className: "input-text-wrapper", inputClassName: "input-text", 
-                            style: style, inputStyle: inputStyle, 
+        if (this.props.autosize) {
+
+            return React.createElement(AutosizeInput, {value: value, disabled: disabled, 
+                        className: "input-text-wrapper", inputClassName: "input-text", 
+                        style: style, inputStyle: inputStyle, 
+                        onFocus: this.handleFocus, onBlur: this.handleBlur, 
+                        onChange: this.handleChange, onKeyDown: this.handleKeyDown})
+        } else {
+
+            return (
+                React.createElement("div", {className: "input-text-wrapper", style: style}, 
+                       React.createElement("input", {type: "text", className: "input-text", value: value, disabled: disabled, 
+                            style: inputStyle, 
                             onFocus: this.handleFocus, onBlur: this.handleBlur, 
                             onChange: this.handleChange, onKeyDown: this.handleKeyDown})
-
-        //return <input type="text" className="item-title-box" value={value} disabled={disabled}
-        //              onChange={this.handleChange} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />;
+                )
+            )
+        }
     }
 });
 
@@ -26321,7 +26334,7 @@ var AutosizeInput = React.createClass({
         if (!this.isMounted()) {
             return;
         }
-        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 8;
+        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 12;
         if (newInputWidth < this.props.minWidth) {
             newInputWidth = this.props.minWidth;
         }
@@ -26757,7 +26770,7 @@ Portal.ItemView = {
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         return (
-            React.createElement(React.ListItem, {title: this.props.title, subTitle: this.props.subTitle, 
+            React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
                 bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
                 body

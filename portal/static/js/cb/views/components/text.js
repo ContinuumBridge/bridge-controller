@@ -58,14 +58,24 @@ module.exports.TextInput = React.createClass({
             inputStyle.border = "1px solid transparent";
         }
 
-        return <AutosizeInput value={value} disabled={disabled}
-                            className="input-text-wrapper" inputClassName="input-text"
-                            style={style} inputStyle={inputStyle}
+        if (this.props.autosize) {
+
+            return <AutosizeInput value={value} disabled={disabled}
+                        className="input-text-wrapper" inputClassName="input-text"
+                        style={style} inputStyle={inputStyle}
+                        onFocus={this.handleFocus} onBlur={this.handleBlur}
+                        onChange={this.handleChange} onKeyDown={this.handleKeyDown} />
+        } else {
+
+            return (
+                <div className="input-text-wrapper" style={style}>
+                       <input type="text" className="input-text" value={value} disabled={disabled}
+                            style={inputStyle}
                             onFocus={this.handleFocus} onBlur={this.handleBlur}
                             onChange={this.handleChange} onKeyDown={this.handleKeyDown} />
-
-        //return <input type="text" className="item-title-box" value={value} disabled={disabled}
-        //              onChange={this.handleChange} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />;
+                </div>
+            )
+        }
     }
 });
 
@@ -122,7 +132,7 @@ var AutosizeInput = React.createClass({
         if (!this.isMounted()) {
             return;
         }
-        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 8;
+        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 12;
         if (newInputWidth < this.props.minWidth) {
             newInputWidth = this.props.minWidth;
         }
