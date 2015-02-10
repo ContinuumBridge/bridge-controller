@@ -82,6 +82,16 @@ module.exports.Main = React.createClass({
 
         var currentBridge = Portal.getCurrentBridge();
 
+        if (!currentBridge) {
+            return (
+                <div className="welcome">
+                    <div className="welcome-text panel-body">
+                        You don't have any bridges to configure yet
+                    </div>
+                </div>
+            );
+        }
+
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
                 return !model.isNew();

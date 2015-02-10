@@ -90,8 +90,10 @@ Portal.MessageListView = React.createClass({
 
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
-        var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        // Temporarily remove checking to fix windows chrome bug
+        this.shouldScrollBottom = true;
     },
 
     componentDidUpdate: function() {

@@ -79,10 +79,10 @@ _.extend(Message.prototype, {
         _.each(destinations, function(destination) {
             var destRegex = new RegExp('^' + destination + '(.+)?');
             _.find(messageDestinations, function(messageDestination) {
-                var match = messageDestination.match(destRegex);
-                //console.log('findDestination match', match);
-                if (match) matches.push(messageDestination);
-                //return match;
+                if (messageDestination) {
+                    var match = messageDestination.match(destRegex);
+                    if (match) matches.push(messageDestination);
+                }
             });
         });
         return matches;

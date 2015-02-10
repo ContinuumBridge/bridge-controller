@@ -57,7 +57,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
-        logger.log('debug', 'broadcast message', message.get('source'), message.get('destination'));
+        //logger.log('debug', 'broadcast message', message.get('source'), message.get('destination'));
         if (message.get('source') == 'cb') {
             self.connection.toClient.push(message);
         }
@@ -66,7 +66,7 @@ Router.prototype.setupRoutes = function() {
     });
     //this.bypassed.add(console.log, console);
     router.bypassed.add(function(message) {
-        logger.log('message_error', 'Route not matched', message.toJSON());
+        //logger.log('message_error', 'Route not matched', message.toJSON());
     });
 
     /*
@@ -85,21 +85,26 @@ Router.prototype.dispatch = function(message) {
 
     var destination = message.get('destination');
     var source = message.get('source');
-    logger.log('message', source, '=>', destination, '    ');
+    logger.log('message', source, '=>', destination, '    ', message.toJSON());
 
-    logger.log('debug', 'this.connection.config', this.connection.config);
-    logger.log('debug', 'this.connection.config.cbid', this.connection.config.subscriptionAddresses);
-    logger.log('debug', "message.findDestination(this.connection.config.cbid) is", message.findDestinations(this.connection.config.subscriptionAddresses));
+    //logger.log('debug', 'this.connection.config', this.connection.config);
+    //logger.log('debug', 'this.connection.config.cbid', this.connection.config.subscriptionAddresses);
+    //logger.log('debug', "message.findDestination(this.connection.config.cbid) is", message.findDestinations(this.connection.config.subscriptionAddresses));
     // Check if the destination is the client route
     var config = this.connection.config;
-    logger.log('debug', 'source', source, 'config cbid', config.cbid);
-    if (message.findDestinations(config.subscriptionAddresses) && source != config.cbid) {
+    //logger.log('debug', 'source', source, 'config cbid', config.cbid);
+    //logger.log('debug', 'config.subscriptionAddresses', config.subscriptionAddresses);
+    //logger.log('debug', 'source', source);
+    //logger.log('debug', 'config.cbid', config.cbid);
+    // source != config.cbid
+    if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
         logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
+
     /*
     var clientRoute = new RegExp('^' + this.connection.config.subscriptionAddress + '(.+)?');
     logger.log('debug', 'subscriptionAddress is', this.connection.config.subscriptionAddress);

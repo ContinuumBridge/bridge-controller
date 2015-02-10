@@ -23,6 +23,7 @@ BridgeRouter.prototype.matchCB = function(message) {
     var self = this;
 
     self.connection.django.messageRequest(message);
+    /*
     var body = message.get('body');
     var resource = body.url || body.resource;
     if (resource && resource == '/api/bridge/v1/device_discovery/') {
@@ -31,7 +32,6 @@ BridgeRouter.prototype.matchCB = function(message) {
         body.url = "/api/bridge/v1/device_discovery/";
 
         self.connection.django.messageRequest(message);
-        /*
         this.connection.deviceDiscovery(message).then(function(message) {
 
             logger.log('debug', 'message in request_router is', message.toJSONString());
@@ -42,10 +42,10 @@ BridgeRouter.prototype.matchCB = function(message) {
 
             logger.error('Error in deviceDiscovery', error);
         });
-        */
     } else {
         self.connection.django.messageRequest(message);
     }
+    */
 }
 
 module.exports = BridgeRouter;

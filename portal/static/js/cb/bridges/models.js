@@ -168,7 +168,7 @@ Portal.getCurrentBridge = function() {
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
-        Portal.setCurrentBridge(bridge);
+        if (bridge) Portal.setCurrentBridge(bridge);
     }
 
     return bridge;
@@ -177,8 +177,10 @@ Portal.getCurrentBridge = function() {
 
 Portal.setCurrentBridge = function(bridge) {
 
-    Portal.currentBridge = bridge;
-    Portal.router.setQuery({bridge: bridge.get('id')});
+    if (bridge) {
+        Portal.currentBridge = bridge;
+        Portal.router.setQuery({bridge: bridge.get('id')});
+    }
 }
 
 Portal.BridgeControl = Backbone.RelationalModel.extend({

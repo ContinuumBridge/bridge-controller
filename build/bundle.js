@@ -22452,7 +22452,7 @@ Portal.getCurrentBridge = function() {
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
-        Portal.setCurrentBridge(bridge);
+        if (bridge) Portal.setCurrentBridge(bridge);
     }
 
     return bridge;
@@ -22461,8 +22461,10 @@ Portal.getCurrentBridge = function() {
 
 Portal.setCurrentBridge = function(bridge) {
 
-    Portal.currentBridge = bridge;
-    Portal.router.setQuery({bridge: bridge.get('id')});
+    if (bridge) {
+        Portal.currentBridge = bridge;
+        Portal.router.setQuery({bridge: bridge.get('id')});
+    }
 }
 
 Portal.BridgeControl = Backbone.RelationalModel.extend({
@@ -23228,7 +23230,8 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
     getInitialState: function () {
         var buttons = [];
 
-        var device = this.getModel().get('device');
+        var discoveredDevice = this.getModel();
+        var device = discoveredDevice.get('device');
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
                 onClick: this.installDevice,
@@ -23286,7 +23289,109 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
     renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
+<<<<<<< HEAD
         return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, header: item.name, model: item})
+=======
+        var name = item.name + " (" + item.address.slice(item.address.length-5) + ")";
+        var title = model.get('device') ? name : name + " (Unknown device)";
+
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: title, model: item})
+    }
+});
+
+/*
+Portal.Components.DeviceInstallButton = Portal.Components.Button.extend({
+
+    template: require('./templates/installButton.html'),
+
+    extraClass: "install-button",
+
+    initialize: function() {
+
+    },
+
+    onClick: function(e) {
+
+        e.preventDefault();
+        Portal.Config.controller.installDevice(this.model);
+    },
+
+    getContent: function() {
+
+        return this.model.get('device') ? 'Install' : 'Request an adaptor';
+    },
+
+    onRender: function() {
+
+        this.stickit();
+    }
+});
+
+Portal.DiscoveredDeviceItemView = Marionette.ItemView.extend({
+    
+    tagName: 'li',
+    className: 'new-item',
+    template: require('./templates/discoveredDevice.html'),
+    //template: '#discoveredDeviceItemViewTemplate',
+
+    bindings: {
+        '.device-address': {
+            observe: ['mac_addr', 'address'],
+            onGet: 'formatAddress'
+        }
+    },
+
+    initialize: function() {
+
+        this.installButton = new Portal.Components.DeviceInstallButton({
+            model: this.model
+        });
+    },
+
+    formatAddress: function(address) {
+
+        // Retain backwards compatibility with using mac_addr
+        var addr = address[0] || address[1];
+        return addr.slice(addr.length-5);
+    },
+
+    onRender: function() {
+
+        this.stickit();
+        var device = this.model.get('device');
+        this.stickit(device, {'.device-name': 'name'});
+
+        this.installButton.setElement(this.$('.install-button')).render();
+    },
+});
+
+
+Portal.DiscoveredDeviceListView = Marionette.CompositeView.extend({
+
+    template: require('./templates/discoveredDeviceSection.html'),
+    itemView: Portal.DiscoveredDeviceItemView,
+    itemViewContainer: '#discovered-device-list',
+
+    emptyView: Portal.ListItemLoadingView,
+
+    events: {
+        'click #devices': 'clickDevices',
+        'click #rescan': 'clickDiscover'
+    },
+
+    clickDevices: function() {
+
+        Portal.Config.controller.stopDiscoveringDevices();
+    },
+
+    clickDiscover: function() {
+
+        Portal.Config.controller.discoverDevices();
+    },
+
+    onRender : function(){
+
+>>>>>>> production
     }
 });
 
@@ -23673,7 +23778,12 @@ Portal.addInitializer(function () {
       console.log('new state ', state);
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
+<<<<<<< HEAD
       currentBridge.fetch();
+=======
+      if(currentBridge) currentBridge.fetch();
+      var apps = Portal.appCollection;
+>>>>>>> production
       console.log('router currentBridge', currentBridge);
       var models = {
           currentBridge: currentBridge,
@@ -23684,10 +23794,17 @@ Portal.addInitializer(function () {
           users: Portal.userCollection
       }
 
+      var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
+
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
+<<<<<<< HEAD
               key: currentBridge.get('id'), 
               collection: collections, model: models}),
+=======
+              key: currentBridgeID, 
+              collection: apps, model: currentBridge}),
+>>>>>>> production
           document.getElementById('app')
       );
 
@@ -23935,8 +24052,15 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
+<<<<<<< HEAD
         var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
         this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+=======
+        //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        // Temporarily remove checking to fix windows chrome bug
+        this.shouldScrollBottom = true;
+>>>>>>> production
     },
 
     componentDidUpdate: function() {
@@ -24449,6 +24573,19 @@ module.exports.Main = React.createClass({displayName: 'Main',
     render: function() {
 
         var currentBridge = Portal.getCurrentBridge();
+<<<<<<< HEAD
+=======
+
+        if (!currentBridge) {
+            return (
+                React.createElement("div", {className: "welcome"}, 
+                    React.createElement("div", {className: "welcome-text panel-body"}, 
+                        "You don't have any bridges to configure yet"
+                    )
+                )
+            );
+        }
+>>>>>>> production
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
@@ -25825,7 +25962,17 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
         };
     },
 
+<<<<<<< HEAD
     renderHeader: function() {
+=======
+        var Handler = this.props.handler;
+        console.log('Handler in base', Handler);
+        var params = this.props.params;
+        console.log('params in base', params);
+        //var currentBridge = this.getModel();
+        //console.log('currentBridge in base', currentBridge);
+        //currentBridge.fetch();
+>>>>>>> production
 
         var filteredCollection = this.getFilteredCollection();
         var collection = this.props.collection;
@@ -27001,27 +27148,19 @@ var BridgeList = React.createClass({displayName: 'BridgeList',
 
     createItem: function(bridge) {
 
-        //console.log('createItem bridge is', bridge);
         return (
             React.createElement("li", {key: bridge.id}, 
                 React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, bridge.name)
             )
         );
-        /*
-        if (bridge.id != this.currentBridgeID) {
-        } else {
-            return;
-        }
-        */
-        //return <li><Router.Link query={{bridge: bridge.cbid}}>{bridge.name}</Router.Link></li>;
     },
 
     render: function () {
 
         var currentBridge = Portal.getCurrentBridge();
-        var bridgeName = currentBridge.get('name');
-        this.currentBridgeID = currentBridge.get('id');
-        //console.log('nav bridgeCollection ', this.props.collection);
+        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
+        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
+
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
             React.createElement("li", {className: "dropdown"}, 

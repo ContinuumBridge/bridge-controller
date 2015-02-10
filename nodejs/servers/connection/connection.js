@@ -38,7 +38,7 @@ Connection.prototype.setupSocket = function() {
     logger.log('debug', 'setupSocket');
     socket.on('message', function (rawMessage) {
 
-        //logger.log('debug', 'Socket message', rawMessage);
+        logger.log('debug', 'Socket message', rawMessage);
         if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
             //console.log('Received Message: ' + rawMessage.utf8Data);
             rawMessage = rawMessage.utf8Data;
@@ -189,7 +189,7 @@ Connection.prototype.setupRedis = function() {
         //var source = _.property('source')(jsonMessage);
 
         var message = new Message(jsonMessage);
-        logger.log('debug', 'redis source', message.get('source'), 'self.config.cbid', self.config.cbid);
+        //logger.log('debug', 'redis source', message.get('source'), 'self.config.cbid', self.config.cbid);
         // If this is a message from the client which has bounced back, do nothing
         if(message.get('source') != self.config.cbid) {
             self.router.dispatch(message);
