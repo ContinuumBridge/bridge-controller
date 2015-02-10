@@ -57,6 +57,7 @@ var ListItem = React.createClass({
     render: function () {
         var classes = this.getBsClassSet();
         classes['panel'] = true;
+        //classes = joinClasses(classes, this.props.className);
 
         return (
             // ADDED replace div with li
@@ -113,17 +114,12 @@ var ListItem = React.createClass({
         */
         var title = this.props.title;
 
-        console.log('renderHeading title', title);
         var renderedTitle = React.isValidElement(title) ? title
             : <div className="inner-item-title">{title}</div>;
 
         var subtitle = this.props.subtitle;
-        console.log('subtitle is', subtitle);
         var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
             : <div className="inner-item-subtitle">{subtitle}</div>;
-        console.log('rendered subtitle is', renderedSubtitle);
-
-        console.log('renderHeading renderedTitle', renderedTitle );
 
         // Render custom buttons
         var renderButtons = this.props.renderButtons;
@@ -193,12 +189,14 @@ var ListItem = React.createClass({
 
         switch(button.type) {
             case 'delete':
-                return <i className="icon ion-trash-a item-button" onClick={onClick}/>
+                return <i className="icon ion-trash-a item-icon-button" onClick={onClick}/>
                 break;
             case 'text':
                 var label = button.label || "";
+                var disabled = button.disabled ? "disabled" : "";
+                var buttonClass = "btn btn-default " + disabled;
                 return (
-                    <button className="topcoat-button item-button" onClick={onClick}>
+                    <button className={buttonClass} disabled={disabled} onClick={onClick}>
                         {label}
                     </button>
                 )

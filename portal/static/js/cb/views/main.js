@@ -1,5 +1,6 @@
 
 var Nav = require('./nav');
+require('../notifications/views');
 
 module.exports = React.createClass({
 
@@ -20,6 +21,7 @@ module.exports = React.createClass({
                 <div className="container">
                     <Router.RouteHandler params={this.props.params} />
                 </div>
+                <Portal.NotificationListView />
             </div>
         );
     }

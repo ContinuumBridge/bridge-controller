@@ -13,8 +13,19 @@ Portal.addInitializer(function() {
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
+    var connectionStatus = new Portal.ConnectionStatus();
+
     Portal.socket.on('connect', function(){
         console.log('Socket connected');
+        connectionStatus.set('connected', true);
+    });
+
+    Portal.socket.on('connect_error', function(){
+        connectionStatus.set('error', true);
+    });
+
+    Portal.socket.on('connect_timeout', function(){
+        connectionStatus.set('timeout', true);
     });
 
     Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
@@ -42,7 +53,7 @@ Portal.addInitializer(function() {
       var jsonMessage = message.toJSON();
 
       Portal.socket.emit('message', jsonMessage, function(data){
-          //logger.log('verbose', 'Sent to socket ' + data);
+          console.log('data from socket emit', data);
       });
       /*
       Portal.getCurrentBridge().then(function(currentBridge) {

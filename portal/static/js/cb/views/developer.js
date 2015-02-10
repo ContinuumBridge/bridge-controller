@@ -6,7 +6,10 @@ module.exports = React.createClass({
 
     componentWillReceiveParams: function(params) {
 
-        if (this.params != params) {
+        console.log('developer will receive params', params);
+        console.log('developer will receive this.params', this.params);
+        if (!this.params || this.params != params) {
+            console.log('developer fetch collections');
             Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
             Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
         }

@@ -2,36 +2,63 @@
 
 Portal.NotificationView = React.createClass({
 
-    //mixins: [Portal.ItemView],
+    mixins: [Portal.ItemView],
 
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'text',
+                label: 'Close',
+                onClick: this.close
+            }]
+        };
+    },
+
+    renderIcon: function() {
+
+    },
+
+    /*
     render: function() {
 
+        var notification = this.props.model;
+
         return (
-            <li>
-                <h4 class="list-group-item-heading"></h4>
-                <i class="icon ion-information-circled"></i>
-                <i class="icon ion-alert-circled"></i>
+            <li className="panel">
+                <div className="item-heading">
+                    <i className="icon ion-information-circled notification-icon"></i>
+                    <i className="icon ion-alert-circled notification-icon"></i>
+                    <h4 className="item-title">Alert!</h4>
+                </div>
             </li>
         )
     }
+    */
 });
 
 Portal.NotificationListView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin],
 
-    renderNotification: function(item) {
+    renderNotification: function(model) {
 
+        var title = model.get('title');
         return (
-            < Portal.NotificationView model={item} />
+            <Portal.NotificationView title={title}
+                className="notification" model={model} />
         )
     },
 
     render: function() {
 
+        var collection = Portal.notificationCollection;
+
+
         return (
-            <div class="animated-list notification-list">
-                {this.props.collection.map(this.renderNotification)}
+            <div className="notification-region">
+                <div className="animated-list notification-list">
+                    {collection.map(this.renderNotification)}
+                </div>
             </div>
         )
     }

@@ -1838,6 +1838,7 @@ limitations under the License.
 *
 */
 
+/*
 .notification {
   position: relative;
   display: inline-block;
@@ -1861,6 +1862,7 @@ limitations under the License.
   overflow: hidden;
   text-decoration: none;
 }
+*/
 
 /*
 Copyright 2012 Adobe Systems Inc.;
@@ -1895,6 +1897,7 @@ limitations under the License.
 *
 */
 
+/*
 .notification,
 .topcoat-notification {
   position: relative;
@@ -1919,6 +1922,7 @@ limitations under the License.
   overflow: hidden;
   text-decoration: none;
 }
+*/
 
 /* topdoc
   name: Notification

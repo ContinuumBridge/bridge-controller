@@ -10,7 +10,7 @@ require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
 require('./cb/modules/market/market');
 require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
+//require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
 //require('./cb/views');
@@ -24,7 +24,7 @@ require('./cb/models');
 
 
 
-},{"./cb/models":"/home/vagrant/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/socket":"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js","./cb/views/components/components":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/components.js","./cb/views/mixins/mixins":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/mixins.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{"./cb/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/socket":"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js","./cb/views/components/components":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/components.js","./cb/views/mixins/mixins":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/mixins.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -89,7 +89,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js":[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -122,7 +122,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./handlebars/exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./handlebars/runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js","./handlebars/safe-string":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js","./handlebars/utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js":[function(require,module,exports){
+},{"./handlebars/base":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./handlebars/exception":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./handlebars/runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js","./handlebars/safe-string":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js","./handlebars/utils":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -303,7 +303,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js":[function(require,module,exports){
+},{"./exception":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js":[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -332,7 +332,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/runtime.js":[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -470,7 +470,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./exception":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js":[function(require,module,exports){
+},{"./base":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/base.js","./exception":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/exception.js","./utils":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js"}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js":[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -482,7 +482,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/utils.js":[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -559,15 +559,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js"}],"/home/vagrant/bridge-controller/node_modules/handlebars/runtime.js":[function(require,module,exports){
+},{"./safe-string":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars/safe-string.js"}],"/home/ubuntu/bridge-controller/node_modules/handlebars/runtime.js":[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js"}],"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js":[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js"}],"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js":[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":"/home/vagrant/bridge-controller/node_modules/handlebars/runtime.js"}],"/home/vagrant/bridge-controller/node_modules/jquery-browserify/lib/jquery.js":[function(require,module,exports){
+},{"handlebars/runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/runtime.js"}],"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js":[function(require,module,exports){
 // Uses Node, AMD or browser globals to create a module.
 
 // If you want something that will work in other stricter CommonJS environments,
@@ -9901,7 +9901,7 @@ return jQuery;
 
 })( window ); }));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -19093,7 +19093,7 @@ return jQuery;
 
 }));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -21034,7 +21034,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
 
 Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
@@ -21074,7 +21074,7 @@ Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js":[function(require,module,exports){
 
 Portal.Adaptor = Backbone.RelationalModel.extend({
 
@@ -21094,7 +21094,7 @@ Portal.AdaptorCollection = Backbone.Collection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js":[function(require,module,exports){
 
 require('../../common/models');
 
@@ -21140,10 +21140,10 @@ Portal.AppConnectionCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{"../../common/models":"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js":[function(require,module,exports){
+},{"../../common/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js":[function(require,module,exports){
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
 
 
 Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
@@ -21270,7 +21270,7 @@ Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js":[function(require,module,exports){
 
 Portal.AppDevicePermissionView = React.createClass({displayName: 'AppDevicePermissionView',
     mixins: [Portal.InnerItemView],
@@ -21298,7 +21298,7 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
 
 Portal.AppInstall = Backbone.Deferred.Model.extend({
 
@@ -21433,7 +21433,7 @@ Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
 
 require('../device_permissions/views');
 
@@ -21529,7 +21529,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
     }
 });
 
-},{"../device_permissions/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
+},{"../device_permissions/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
 
 Portal.AppLicence = Backbone.Deferred.Model.extend({
 
@@ -21710,7 +21710,7 @@ Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
 
 
 Portal.AppLicenceView = React.createClass({displayName: 'AppLicenceView',
@@ -21963,7 +21963,7 @@ Portal.AppLicenceNestedTableView = React.createClass({
 */
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
 Portal.App = Backbone.Deferred.Model.extend({
 
@@ -22046,7 +22046,7 @@ Portal.AppCollection = Backbone.Collection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js":[function(require,module,exports){
 
 Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
@@ -22126,7 +22126,7 @@ Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
     */
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
 
 require('../../users/views');
 
@@ -22216,7 +22216,7 @@ Portal.AppOwnershipListView = React.createClass({displayName: 'AppOwnershipListV
 });
 
 
-},{"../../users/views":"/home/vagrant/bridge-controller/portal/static/js/cb/users/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
+},{"../../users/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
 
 Portal.AppView = React.createClass({displayName: 'AppView',
 
@@ -22281,7 +22281,7 @@ Portal.AppListView = React.createClass({displayName: 'AppListView',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
@@ -22516,7 +22516,7 @@ Portal.BridgeControlCollection = Backbone.Collection.extend({
 }, { modelType: "bridgeControl" });
 
 
-},{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html":[function(require,module,exports){
+},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -22533,7 +22533,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -22545,7 +22545,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -22557,7 +22557,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge name:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-name\">\n        </td>\n    </tr>\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge ID:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-id\">\n        </td>\n    </tr>\n</table>\n\n";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
 
 Portal.StaffBridgeView = Marionette.ItemView.extend({
@@ -22647,7 +22647,7 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
+},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
 var utils = require('./utils');
 
@@ -22760,7 +22760,7 @@ var CBApp = Marionette.Application.extend({
 
 module.exports = CBApp;
 
-},{"./utils":"/home/vagrant/bridge-controller/portal/static/js/cb/utils.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
 
 Portal.ClientControl = Backbone.Deferred.Model.extend({
 
@@ -22807,7 +22807,7 @@ Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
 
 
 Portal.ClientControlView = React.createClass({displayName: 'ClientControlView',
@@ -22864,7 +22864,7 @@ Portal.ClientControlListView = React.createClass({displayName: 'ClientControlLis
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
 
 Portal.Client = Backbone.Deferred.Model.extend({
     
@@ -22901,7 +22901,7 @@ Portal.ClientCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
 
 
 Portal.ClientView = React.createClass({displayName: 'ClientView',
@@ -23012,7 +23012,7 @@ Portal.ClientListView = React.createClass({displayName: 'ClientListView',
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
 
 Portal.ConnectionModel = Backbone.Deferred.Model.extend({
 
@@ -23065,7 +23065,7 @@ Portal.ConnectionModel = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "connectionModel" });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
 Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
@@ -23215,7 +23215,7 @@ Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
 
 Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceView',
 
@@ -23237,6 +23237,12 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
                 onClick: this.installDevice,
                 type: 'text',
                 label: 'Install'
+            });
+        } else {
+            buttons.push({
+                //onClick: this.installDevice,
+                type: 'text',
+                label: 'Unknown Device'
             });
         }
 
@@ -23289,113 +23295,16 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
     renderItem: function (item) {
 
         var model = this.getCollection().findWhere({id: item.id});
-<<<<<<< HEAD
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, header: item.name, model: item})
-=======
-        var name = item.name + " (" + item.address.slice(item.address.length-5) + ")";
-        var title = model.get('device') ? name : name + " (Unknown device)";
+        //var title = model.get('device') ? name : name + " (Unknown device)";
+        var title = item.name;
+        var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
 
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, title: title, model: item})
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, 
+                    title: title, subtitle: subtitle, model: item})
     }
 });
 
-/*
-Portal.Components.DeviceInstallButton = Portal.Components.Button.extend({
-
-    template: require('./templates/installButton.html'),
-
-    extraClass: "install-button",
-
-    initialize: function() {
-
-    },
-
-    onClick: function(e) {
-
-        e.preventDefault();
-        Portal.Config.controller.installDevice(this.model);
-    },
-
-    getContent: function() {
-
-        return this.model.get('device') ? 'Install' : 'Request an adaptor';
-    },
-
-    onRender: function() {
-
-        this.stickit();
-    }
-});
-
-Portal.DiscoveredDeviceItemView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/discoveredDevice.html'),
-    //template: '#discoveredDeviceItemViewTemplate',
-
-    bindings: {
-        '.device-address': {
-            observe: ['mac_addr', 'address'],
-            onGet: 'formatAddress'
-        }
-    },
-
-    initialize: function() {
-
-        this.installButton = new Portal.Components.DeviceInstallButton({
-            model: this.model
-        });
-    },
-
-    formatAddress: function(address) {
-
-        // Retain backwards compatibility with using mac_addr
-        var addr = address[0] || address[1];
-        return addr.slice(addr.length-5);
-    },
-
-    onRender: function() {
-
-        this.stickit();
-        var device = this.model.get('device');
-        this.stickit(device, {'.device-name': 'name'});
-
-        this.installButton.setElement(this.$('.install-button')).render();
-    },
-});
-
-
-Portal.DiscoveredDeviceListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/discoveredDeviceSection.html'),
-    itemView: Portal.DiscoveredDeviceItemView,
-    itemViewContainer: '#discovered-device-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-    events: {
-        'click #devices': 'clickDevices',
-        'click #rescan': 'clickDiscover'
-    },
-
-    clickDevices: function() {
-
-        Portal.Config.controller.stopDiscoveringDevices();
-    },
-
-    clickDiscover: function() {
-
-        Portal.Config.controller.discoverDevices();
-    },
-
-    onRender : function(){
-
->>>>>>> production
-    }
-});
-
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
 
 Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
@@ -23551,7 +23460,7 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
     */
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
 Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
 
@@ -23606,7 +23515,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
 Portal.Device = Backbone.Deferred.Model.extend({
     
@@ -23665,7 +23574,7 @@ Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
 var CBApp = require('./cbApp')
 
@@ -23778,12 +23687,8 @@ Portal.addInitializer(function () {
       console.log('new state ', state);
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
-<<<<<<< HEAD
-      currentBridge.fetch();
-=======
       if(currentBridge) currentBridge.fetch();
-      var apps = Portal.appCollection;
->>>>>>> production
+      //var apps = Portal.appCollection;
       console.log('router currentBridge', currentBridge);
       var models = {
           currentBridge: currentBridge,
@@ -23798,13 +23703,8 @@ Portal.addInitializer(function () {
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
-<<<<<<< HEAD
               key: currentBridge.get('id'), 
               collection: collections, model: models}),
-=======
-              key: currentBridgeID, 
-              collection: apps, model: currentBridge}),
->>>>>>> production
           document.getElementById('app')
       );
 
@@ -23873,7 +23773,7 @@ Portal.reqres.setHandler("store:show", function(){
 });
 */
 module.exports = Portal;
-},{"./cbApp":"/home/vagrant/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/vagrant/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/vagrant/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+},{"./cbApp":"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
 Portal.Message = Backbone.RelationalModel.extend({
 
@@ -23959,7 +23859,7 @@ Portal.MessageCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
 
 //var Message = require('./message');
 
@@ -24052,15 +23952,10 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
     componentWillUpdate: function() {
         // Check if the message window is already at the bottom
-<<<<<<< HEAD
-        var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
-        this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
-=======
         //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
         //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
         // Temporarily remove checking to fix windows chrome bug
         this.shouldScrollBottom = true;
->>>>>>> production
     },
 
     componentDidUpdate: function() {
@@ -24110,7 +24005,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
 
 Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
@@ -24227,7 +24122,7 @@ Portal.FilteredCollection = function(original){
 
     return filtered;
 }
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/filters.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js":[function(require,module,exports){
 
 require('q');
 
@@ -24276,7 +24171,7 @@ Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 
 Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
 
-},{"q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
+},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -24383,7 +24278,7 @@ Portal.on('initialize:before', function () {
   */
 });
 
-},{"./adaptors/compatibility/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/vagrant/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -24489,7 +24384,7 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -24573,8 +24468,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
     render: function() {
 
         var currentBridge = Portal.getCurrentBridge();
-<<<<<<< HEAD
-=======
 
         if (!currentBridge) {
             return (
@@ -24585,7 +24478,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 )
             );
         }
->>>>>>> production
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
@@ -24723,7 +24615,7 @@ var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
     }
 });
 
-},{"../../apps/installs/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/vagrant/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/vagrant/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
+},{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
 
 var DeveloperViews = require('./views');
 
@@ -24775,7 +24667,7 @@ Portal.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _
     });
 });
 
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -24787,7 +24679,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -24881,70 +24773,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
-/*
-module.exports.InstallAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/installAppModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    events: {
-        'click .store-button': 'clickStore'
-    },
-
-
-    initialize: function() {
-
-        var self = this;
-        this.licenceListView = new Portal.AppLicenceListView();
-
-    },
-
-    clickStore: function() {
-
-        Portal.request('store:show');
-        //Portal.Controller.store();
-    },
-
-    onRender: function() {
-
-        var self = this;
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            console.log('promise in app modal initialize');
-            var licenceCollection = currentUser.get('appLicences');
-            self.licenceListView.setCollection(licenceCollection);
-            self.licenceListView.render();
-        }).done();
-        //this.licenceListView.setElement(this.$('licence-section')).render();
-        this.$('.licence-section').html(this.licenceListView.render().$el);
-    },
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        Portal.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-module.exports.InstallDeviceModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        Portal.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-*/
-
-},{"../../apps/connections/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/connections/views.js","../../apps/ownerships/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../../clients/controls/views":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/controls/views.js","../../clients/views":"/home/vagrant/bridge-controller/portal/static/js/cb/clients/views.js","../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
+},{"../../apps/connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","../../apps/ownerships/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../../clients/controls/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js","../../clients/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
 
 
 var HomeViews = require('./views');
@@ -25006,7 +24835,7 @@ Portal.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -25018,7 +24847,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"welcome\">\n    <div class=\"welcome-text panel-body\">\n        Welcome to the ContinuumBridge portal.\n        <br><br>\n        If this is the first time you have logged-in and you don't have any bridges, please click <a href=\"http://continuumbridge.readme.io/v1.0/docs/start-here\">here</a>\n        <br><br>\n        If you have a bridge, click <a href=\"http://portal.continuumbridge.com/portal/config/\">here</a> to see what devices and apps you have and add more.\n        <br><br>\n        For further information on how to use this portal, click <a href=\"http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal\">here</a>\n    </div>\n</div>\n";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -25051,7 +24880,7 @@ module.exports.Main = Marionette.Layout.extend({
 
 });
 
-},{"../../views/generic-views":"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
+},{"../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -25113,7 +24942,7 @@ Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -25215,7 +25044,7 @@ module.exports.LicenseAppModal = Backbone.Modal.extend({
 });
 */
 
-},{"../../apps/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/views.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
+},{"../../apps/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/views.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
 Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
@@ -25379,7 +25208,7 @@ Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
 });
 
-},{"./templates/bridgeDropdown.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html","./templates/bridgeItem.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html","./templates/navSection.html":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html","bootstrap":"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html":[function(require,module,exports){
+},{"./templates/bridgeDropdown.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html","./templates/bridgeItem.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html","./templates/navSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html","bootstrap":"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeDropdown.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -25391,7 +25220,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<a href=\"#\" id=\"bridge-header\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><div class=\"header-text\">Bridges </div><b class=\"caret\"></b></a>\n<ul id=\"bridge-list\" class=\"dropdown-menu\">\n</ul>\n";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/bridgeItem.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -25408,7 +25237,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/templates/navSection.html":[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -25420,143 +25249,101 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>Continuum Bridge</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":"/home/vagrant/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js":[function(require,module,exports){
-
-require('../../notifications/views');
-//var Models = require('./models');
-//var Views = require('./views');
-
-Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
-
-    Notifications.addInitializer(function() {
-
-        console.log('Notifications Initializer');
-        //router
-        this.controller = new this.Controller();
-
-        //this.collection = new Portal.NotificationCollection();
-    });
-
-    Notifications.Controller = Marionette.Controller.extend({
-        showNotifications: function() {
-
-            /*
-            console.log('notificationCollection', Portal.notificationCollection);
-            Notifications.notificationsListView = new Portal.NotificationListView({
-                collection: Portal.notificationCollection
-            });
-
-            console.log('notificationsListView ', Notifications.notificationsListView);
-            Portal.notificationRegion.show(Notifications.notificationsListView);
-            */
-        },
-        showInformation: function(message, title) {
-            console.log('We got to the notification controller!');
-            this.collection.add({
-                title: title,
-                message: message
-            });
-            var notificationView = new Backbone.Notify.Notification();
-        },
-        showError: function(error) {
-            var err = error && error.response && error.response.error || error || {};
-            console.log('We got to the error notification controller!', err);
-            var notification = new Portal.Notification({
-                name: err.name || "Error",
-                message: err.message || "Error message",
-                response: err.response || "Error response"
-            });
-            console.log('ErrorNotification controller model is', notification);
-            var notificationView = new Backbone.Notify.Error();
-            notificationView.model = notification;
-            console.log('notificationView is', notificationView);
-            Portal.notificationsRegion.show(notificationView);
-        },
-    });
-
-    Notifications.on('show', function(){
-        Notifications.controller.showNotifications();
-    });
-
-    Notifications.on('show:information', function(information){
-
-        this.collection.add({
-            title: information.title,
-            message: information.message,
-            type: 'information'
-        });
-        //Notifications.controller.showInformation(message, title);
-    });
-
-    Notifications.on('add:error', function(error){
-        Notifications.controller.showError(error);
-    });
-});
-
-},{"../../notifications/views":"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
 Portal.Notification = Backbone.Deferred.Model.extend({
-
 
     idAttribute: 'id',
 
     backend: 'notification',
 
-    initialize: function() {
-        //this.startTracking();
-    }
+    subModelTypes: {
+		'connectionStatus': 'Portal.ConnectionStatus'
+	}
 
 }, { modelType: "notification" });
+
+
+Portal.ConnectionStatus = Portal.Notification.extend({
+
+    defaults: {
+        type: 'connectionStatus',
+        connected: false,
+        error: false,
+        timeout: false
+    }
+
+}, { modelType: "connectionStatus" });
 
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
 Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.Notification,
-    backend: 'notification',
-
-    /*
-    initialize: function() {
-        //this.bindBackend();
-        Portal.NotificationCollection.__super__.initialize.apply(this, arguments);
-    }
-    */
+    backend: 'notification'
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
 
 
 Portal.NotificationView = React.createClass({displayName: 'NotificationView',
 
-    //mixins: [Portal.ItemView],
+    mixins: [Portal.ItemView],
 
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'text',
+                label: 'Close',
+                onClick: this.close
+            }]
+        };
+    },
+
+    renderIcon: function() {
+
+    },
+
+    /*
     render: function() {
 
+        var notification = this.props.model;
+
         return (
-            React.createElement("li", null, 
-                React.createElement("h4", {class: "list-group-item-heading"}), 
-                React.createElement("i", {class: "icon ion-information-circled"}), 
-                React.createElement("i", {class: "icon ion-alert-circled"})
-            )
+            <li className="panel">
+                <div className="item-heading">
+                    <i className="icon ion-information-circled notification-icon"></i>
+                    <i className="icon ion-alert-circled notification-icon"></i>
+                    <h4 className="item-title">Alert!</h4>
+                </div>
+            </li>
         )
     }
+    */
 });
 
 Portal.NotificationListView = React.createClass({displayName: 'NotificationListView',
 
     mixins: [Backbone.React.Component.mixin],
 
-    renderNotification: function(item) {
+    renderNotification: function(model) {
 
+        var title = model.get('title');
         return (
-            React.createElement(Portal.NotificationView, {model: item})
+            React.createElement(Portal.NotificationView, {title: title, 
+                className: "notification", model: model})
         )
     },
 
     render: function() {
 
+        var collection = Portal.notificationCollection;
+
+
         return (
-            React.createElement("div", {class: "animated-list notification-list"}, 
-                this.props.collection.map(this.renderNotification)
+            React.createElement("div", {className: "notification-region"}, 
+                React.createElement("div", {className: "animated-list notification-list"}, 
+                    collection.map(this.renderNotification)
+                )
             )
         )
     }
@@ -25597,7 +25384,7 @@ Portal.NotificationListView = Marionette.CompositeView.extend({
 });
 */
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
 
 var Route = Router.Route
     ,DefaultRoute = Router.DefaultRoute
@@ -25654,7 +25441,7 @@ router.setParams = function(params) {
 module.exports = router;
 
 
-},{"./modules/config/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/vagrant/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/account":"/home/vagrant/bridge-controller/portal/static/js/cb/views/account.js","./views/dashboard":"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/developer":"/home/vagrant/bridge-controller/portal/static/js/cb/views/developer.js","./views/home":"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
+},{"./modules/config/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/account":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js","./views/dashboard":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js","./views/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var CBApp = require('index')
     ;
@@ -25670,8 +25457,19 @@ Portal.addInitializer(function() {
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
+    var connectionStatus = new Portal.ConnectionStatus();
+
     Portal.socket.on('connect', function(){
         console.log('Socket connected');
+        connectionStatus.set('connected', true);
+    });
+
+    Portal.socket.on('connect_error', function(){
+        connectionStatus.set('error', true);
+    });
+
+    Portal.socket.on('connect_timeout', function(){
+        connectionStatus.set('timeout', true);
     });
 
     Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
@@ -25699,7 +25497,7 @@ Portal.addInitializer(function() {
       var jsonMessage = message.toJSON();
 
       Portal.socket.emit('message', jsonMessage, function(data){
-          //logger.log('verbose', 'Sent to socket ' + data);
+          console.log('data from socket emit', data);
       });
       /*
       Portal.getCurrentBridge().then(function(currentBridge) {
@@ -25735,7 +25533,7 @@ Portal.addInitializer(function() {
     });
 });
 
-},{"./messages/models":"/home/vagrant/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/vagrant/bridge-controller/portal/static/js/cb/index.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
+},{"./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 
@@ -25778,7 +25576,7 @@ Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 });
 
 
-},{"../models":"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/views.js":[function(require,module,exports){
+},{"../models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/views.js":[function(require,module,exports){
 
 
 Portal.CurrentUserView = React.createClass({displayName: 'CurrentUserView',
@@ -25814,7 +25612,7 @@ Portal.CurrentUserView = React.createClass({displayName: 'CurrentUserView',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
 
 Portal.User = Backbone.Deferred.Model.extend({
 
@@ -25931,7 +25729,7 @@ Portal.UserCollection = QueryEngine.QueryCollection.extend({
 
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/users/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/views.js":[function(require,module,exports){
 
 Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableView',
 
@@ -25962,17 +25760,7 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
         };
     },
 
-<<<<<<< HEAD
     renderHeader: function() {
-=======
-        var Handler = this.props.handler;
-        console.log('Handler in base', Handler);
-        var params = this.props.params;
-        console.log('params in base', params);
-        //var currentBridge = this.getModel();
-        //console.log('currentBridge in base', currentBridge);
-        //currentBridge.fetch();
->>>>>>> production
 
         var filteredCollection = this.getFilteredCollection();
         var collection = this.props.collection;
@@ -26017,14 +25805,14 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/utils.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js":[function(require,module,exports){
 
 module.exports.underscoredToCamelCase = function(underscored) {
     var camelCased = underscored.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
     console.log('underscoredToCamelCase camelCased ', camelCased );
     return camelCased;
 }
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/account.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js":[function(require,module,exports){
 
 require('../users/current/views');
 require('../apps/licences/views');
@@ -26104,7 +25892,7 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 
-},{"../apps/licences/views":"/home/vagrant/bridge-controller/portal/static/js/cb/apps/licences/views.js","../users/current/views":"/home/vagrant/bridge-controller/portal/static/js/cb/users/current/views.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/base.js":[function(require,module,exports){
+},{"../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../users/current/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26126,7 +25914,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/buttons.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/buttons.js":[function(require,module,exports){
 
 module.exports.InstallButton = React.createClass({displayName: 'InstallButton',
 
@@ -26164,7 +25952,7 @@ module.exports.InstallButton = React.createClass({displayName: 'InstallButton',
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/components.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/components.js":[function(require,module,exports){
 
 var Components = {};
 
@@ -26178,7 +25966,7 @@ Components.InstallButton = require('./buttons').InstallButton;
 Portal.Components = Components;
 
 
-},{"./buttons":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/buttons.js","./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js","./search":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/search.js","./switch":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/switch.js","./text":"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/text.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/counter.js":[function(require,module,exports){
+},{"./buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/buttons.js","./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/counter.js","./search":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/search.js","./switch":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/switch.js","./text":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/text.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/counter.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26215,7 +26003,7 @@ module.exports = React.createClass({displayName: 'exports',
 
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/search.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/search.js":[function(require,module,exports){
 
 module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
 
@@ -26299,7 +26087,7 @@ module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/switch.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/switch.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26346,7 +26134,7 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/components/text.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/text.js":[function(require,module,exports){
 
 module.exports.TextInput = React.createClass({displayName: 'TextInput',
 
@@ -26526,7 +26314,7 @@ var AutosizeInput = React.createClass({
 });
 
 module.exports.AutosizeInput = AutosizeInput;
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26547,7 +26335,7 @@ module.exports = React.createClass({displayName: 'exports',
  For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
 */
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
 
 
 module.exports = React.createClass({displayName: 'exports',
@@ -26556,7 +26344,10 @@ module.exports = React.createClass({displayName: 'exports',
 
     componentWillReceiveParams: function(params) {
 
-        if (this.params != params) {
+        console.log('developer will receive params', params);
+        console.log('developer will receive this.params', this.params);
+        if (!this.params || this.params != params) {
+            console.log('developer fetch collections');
             Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
             Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
         }
@@ -26623,7 +26414,7 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
 
 /*
@@ -26654,7 +26445,7 @@ Portal.ListItemLoadingView = Marionette.ItemView.extend({
 });
 */
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26678,9 +26469,10 @@ module.exports = React.createClass({displayName: 'exports',
 /*
 */
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
 
 var Nav = require('./nav');
+require('../notifications/views');
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -26700,7 +26492,8 @@ module.exports = React.createClass({displayName: 'exports',
                 React.createElement(Nav.Topbar, {activeSection: activeSection}), 
                 React.createElement("div", {className: "container"}, 
                     React.createElement(Router.RouteHandler, {params: this.props.params})
-                )
+                ), 
+                React.createElement(Portal.NotificationListView, null)
             )
         );
     }
@@ -26722,7 +26515,7 @@ Portal.MainView = React.createClass({
 });
 */
 
-},{"./nav":"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/backbone.js":[function(require,module,exports){
+},{"../notifications/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js","./nav":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js":[function(require,module,exports){
 
 Portal.ReactBackboneMixin = {
 
@@ -26736,7 +26529,7 @@ Portal.ReactBackboneMixin = {
 }
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/connector.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js":[function(require,module,exports){
 
 Portal.ConnectorMixin = {
 
@@ -26759,7 +26552,7 @@ Portal.ConnectorMixin = {
         }
     }
 }
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js":[function(require,module,exports){
 
 module.exports = {
 
@@ -26810,7 +26603,7 @@ module.exports = {
         }
     }
 }
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/filter.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js":[function(require,module,exports){
 
 
 module.exports = {
@@ -26825,7 +26618,7 @@ module.exports = {
         return this.filteredCollection;
     }
 }
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/items.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js":[function(require,module,exports){
 
 Portal.InnerItemView = {
 
@@ -26916,10 +26709,12 @@ Portal.ItemView = {
         var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
+        var className = this.props.className;
         return (
             React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
-                bsStyle: "", collapsable: this.props.openable, eventKey: "1"}, 
+                className: className, bsStyle: "", 
+                collapsable: this.props.openable, eventKey: "1"}, 
                 body
             )
         );
@@ -26983,7 +26778,7 @@ Portal.ListView = {
 };
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/mixins.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/mixins.js":[function(require,module,exports){
 
 var Mixins = {};
 
@@ -26995,7 +26790,7 @@ Mixins.TableView = require('./table').TableView;
 Portal.Mixins = Mixins;
 
 
-},{"./counter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
+},{"./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
 
 module.exports.RowView = {
 
@@ -27096,7 +26891,7 @@ module.exports.TableView = {
 };
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
 
 module.exports.Topbar = React.createClass({displayName: 'Topbar',
 
@@ -27229,7 +27024,7 @@ var Tab = React.createClass({displayName: 'Tab',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/notFound.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/notFound.js":[function(require,module,exports){
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -27242,7 +27037,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
 Portal.Regions = {};
 
@@ -27255,7 +27050,7 @@ Portal.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");
@@ -29217,4 +29012,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js"}]},{},["./portal/static/js/main.js"]);
+},{"jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js"}]},{},["./portal/static/js/main.js"]);

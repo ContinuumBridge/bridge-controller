@@ -9,7 +9,7 @@ require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
 require('./cb/modules/market/market');
 require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
+//require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
 //require('./cb/views');

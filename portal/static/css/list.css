@@ -107,7 +107,8 @@ header p{
 
 .item-subtitle {
     margin: 0px;
-    margin-left: auto;
+    margin-left: 10px;
+    margin-top: 3px;
     align-self: center;
 }
 
@@ -128,25 +129,24 @@ header p{
 }
 
 .item-buttons {
-    /* margin-left: auto; */
+    margin-left: auto;
     margin-right: 0px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     align-self: center;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.item-button {
-    font-size: 20px;
-    color: #aaa;
+.item-buttons * {
     cursor: pointer;
     float: right;
     overflow: hidden;
-    /*
-    margin-left: auto;
-    margin-right: 0px;
-    */
+}
+
+.item-icon-button {
+    font-size: 20px;
+    color: #aaa;
 }
 
 .nested-item .onoffswitch {

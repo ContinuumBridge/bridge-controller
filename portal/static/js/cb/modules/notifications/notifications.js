@@ -1,4 +1,5 @@
 
+/*
 require('../../notifications/views');
 //var Models = require('./models');
 //var Views = require('./views');
@@ -25,7 +26,6 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
 
             console.log('notificationsListView ', Notifications.notificationsListView);
             Portal.notificationRegion.show(Notifications.notificationsListView);
-            */
         },
         showInformation: function(message, title) {
             console.log('We got to the notification controller!');
@@ -69,3 +69,4 @@ Portal.module('Notifications', function(Notifications, CBApp, Backbone, Marionet
         Notifications.controller.showError(error);
     });
 });
+*/
