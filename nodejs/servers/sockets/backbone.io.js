@@ -35,7 +35,8 @@ function BackboneIOServer(getConfig, options) {
         discoveredDevice: 'discovered_device/',
         bridge: 'bridge/',
         bridgeControl: 'bridge_control/',
-        currentUser: 'current_user/'
+        currentUser: 'current_user/',
+        user: 'user/'
     }
 
     /*

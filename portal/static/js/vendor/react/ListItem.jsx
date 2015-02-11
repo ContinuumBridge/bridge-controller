@@ -57,6 +57,7 @@ var ListItem = React.createClass({
     render: function () {
         var classes = this.getBsClassSet();
         classes['panel'] = true;
+        //classes = joinClasses(classes, this.props.className);
 
         return (
             // ADDED replace div with li
@@ -86,8 +87,9 @@ var ListItem = React.createClass({
     },
 
     renderHeading: function () {
-        var header = this.props.header;
+        //var header = this.props.header;
 
+        /*
         if (!header) {
             return null;
         }
@@ -96,73 +98,75 @@ var ListItem = React.createClass({
             header = this.props.collapsable ?
                 this.renderCollapsableTitle(header) : header;
         } else if (this.props.collapsable) {
+        if (this.props.collapsable) {
+            header = this.props.collapsable ?
+                this.renderTitle(header) : header;
+            /*
             header = cloneWithProps(header, {
                 className: 'panel-title',
                 children: this.renderAnchor(header.props.children)
             });
         } else {
             header = cloneWithProps(header, {
-                className: 'panel-title'
+                className: 'panel-title item-title'
             });
         }
+        */
+        var title = this.props.title;
 
-        return (
-            <div className="panel-heading">
-        {header}
-            </div>
-        );
-    },
+        var renderedTitle = React.isValidElement(title) ? title
+            : <div className="inner-item-title">{title}</div>;
 
-    renderAnchor: function (header) {
-        return (
-            <a
-                href={'#' + (this.props.id || '')}
-                className={this.isExpanded() ? null : 'collapsed'}
-                onClick={this.handleSelect}>
-                {header}
-            </a>
-        );
-    },
-
-    renderButton: function(button) {
-
-        var onClick = button.onClick || function() {};
-
-        switch(button.type) {
-            case 'delete':
-                return <i className="icon ion-trash-a uninstall-button" onClick={onClick}/>
-                break;
-            case 'text':
-                console.log('text button', button);
-                var label = button.label || "";
-                return (
-                    <button className="topcoat-button install-button" onClick={onClick}>
-                        {label}
-                    </button>
-                )
-                break;
-            default:
-                console.log('Unrecognised button', button);
-                return;
-        }
-    },
-
-    renderCollapsableTitle: function (header) {
+        var subtitle = this.props.subtitle;
+        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+            : <div className="inner-item-subtitle">{subtitle}</div>;
 
         // Render custom buttons
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
-        console.log('renderedButtons ', renderedButtons );
-        console.log('this.renderButtons ', this.renderButtons );
         var buttons = this.props.buttons || [];
 
         return (
-            <h4 className="panel-title">
-                <i className="icon ion-chevron-right edit-button" onClick={this.handleSelect} />
-                {this.renderAnchor(header)}
-                {buttons.map(this.renderButton)}
-                {renderedButtons}
+            <div className="panel-heading item-heading">
+                {this.renderAnchor()}
+                <h4 className="item-title">{renderedTitle}</h4>
+                <h4 className="item-subtitle">
+                    <small>
+                        {renderedSubtitle}
+                    </small>
+                </h4>
+                <div className="item-buttons">
+                    {buttons.map(this.renderButton)}
+                    {renderedButtons}
+                </div>
+            </div>
+        );
+    },
+
+    renderAnchor: function () {
+        return (
+            <a
+                href={'#' + (this.props.id || '')}
+                className={this.isExpanded() ? null : 'collapsed'}
+                onClick={this.handleSelect}>
+                <i className="icon ion-chevron-right item-anchor" />
+            </a>
+        );
+    },
+
+
+    renderTitle: function () {
+
+        var title = this.props.title;
+        var subTitle = this.props.subTitle;
+
+        var renderedTitle = !React.isValidElement(title) ? title
+            : <div className="panel-title item-title">{title}</div>;
+
+        return (
+            <h4 className="panel-title item-title">
+                {renderedTitle}
             </h4>
         );
     },
@@ -177,6 +181,30 @@ var ListItem = React.createClass({
         {this.props.footer}
             </div>
         );
+    },
+
+    renderButton: function(button) {
+
+        var onClick = button.onClick || function() {};
+
+        switch(button.type) {
+            case 'delete':
+                return <i className="icon ion-trash-a icon-trash item-icon-button" onClick={onClick}/>
+                break;
+            case 'text':
+                var label = button.label || "";
+                var disabled = button.disabled ? "disabled" : "";
+                var buttonClass = "btn btn-default " + disabled;
+                return (
+                    <button className={buttonClass} disabled={disabled} onClick={onClick}>
+                        {label}
+                    </button>
+                )
+                break;
+            default:
+                console.log('Unrecognised button', button);
+                return;
+        }
     }
 });
 

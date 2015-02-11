@@ -23,14 +23,23 @@ class ClientResource(CBResource):
         detail_allowed_methods = ['get']
         resource_name = 'client'
 
+def requester_is_user(bundle):
+
+    try:
+        getattr(bundle.request.user, 'client_controls')
+        return True
+    except AttributeError:
+        return False
 
 class ClientControlResource(CBResource):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource', 'client', full=False)
+    client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource',
+                                         'client', full=True, use_in=requester_is_user)
 
     class Meta(CBResource.Meta):
         queryset = ClientControl.objects.all()
+        authorization = ReadOnlyAuthorization()
         resource_name = 'client_control'
 
 

@@ -6,18 +6,8 @@ Portal.ClientControl = Backbone.Deferred.Model.extend({
     backend: 'clientControl',
 
     relations: [
-        {   
-            type: Backbone.HasOne,
-            key: 'user',
-            keySource: 'user',
-            keyDestination: 'user',
-            relatedModel: 'Portal.User',
-            collectionType: 'Portal.UserCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'userCollection',
-        },
-        {   
+
+        {
             type: Backbone.HasOne,
             key: 'client',
             keySource: 'client',

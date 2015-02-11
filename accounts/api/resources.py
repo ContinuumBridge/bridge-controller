@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.conf.urls import url, include
 
 from tastypie import fields
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.utils import trailing_slash
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
@@ -44,12 +45,19 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
 class UserResource(CBResource, CBIDResourceMixin):
 
+    app_licences = fields.ToManyField('accounts.api.app_resources.UserAppLicenceResource', 'app_licences', full=True)
+
     class Meta(CBResource.Meta):
-        resource_name = 'user'
         queryset = CBUser.objects.all()
         fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = ReadOnlyAuthorization()
+        filtering = {
+            "first_name": ALL,
+            "last_name": ALL,
+            "email": ALL
+        }
+        resource_name = 'user'
 
 
 class UserAuthResource(AuthResource, CBIDResourceMixin):

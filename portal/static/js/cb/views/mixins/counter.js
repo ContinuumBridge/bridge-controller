@@ -1,6 +1,14 @@
 
 module.exports = {
 
+    handleIncrement: function() {
+        this.incrementField(this.props.model, this.props.field, 1);
+    },
+
+    handleDecrement: function() {
+        this.incrementField(this.props.model, this.props.field, -1);
+    },
+
     incrementField: function(model, fieldName, increment) {
 
         if (!model.isSyncing()) {

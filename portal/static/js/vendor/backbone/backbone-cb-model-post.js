@@ -13,15 +13,19 @@ var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
 
-        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
+        var attrs = attributes || {};
+        options || (options = {});
 
-        OriginalModel.call(this, attributes, options);
+        attrs.isGhost = attrs[ this.idAttribute ] ? false : true;
+
+        OriginalModel.call(this, attrs, options);
 
         this.startTracking();
     },
 
 
     isSyncing: function() {
+        // TODO make this work for counters etc.
         return !!this.get('id') == this.get('isGhost');
     },
 

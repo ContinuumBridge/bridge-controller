@@ -3,8 +3,6 @@ var Q = require('q');
 
 var CBApp = require('index');
 
-require('./components/buttons');
-
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
@@ -77,12 +75,13 @@ Portal.on('initialize:before', function () {
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
   Portal.notificationCollection = new Portal.NotificationCollection([
-      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
+      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
   Portal.notificationCollection.subscribe();
 
   Portal.userCollection = new Portal.UserCollection();
+  Portal.userCollection.subscribe();
 
   Portal.currentUserCollection = new Portal.CurrentUserCollection();
   Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));

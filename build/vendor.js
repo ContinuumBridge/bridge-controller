@@ -14,7 +14,7 @@ Marionette = require('backbone.marionette');
 
 
 
-},{"./react/react-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/react-bundle.js","backbone-bundle":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","flux":"/home/vagrant/bridge-controller/node_modules/flux/index.js","react-router":"/home/vagrant/bridge-controller/node_modules/react-router/modules/index.js"}],"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
+},{"./react/react-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js","backbone-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","flux":"/home/ubuntu/bridge-controller/node_modules/flux/index.js","react-router":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/index.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
 // Backbone React Component
 // ========================
 //
@@ -314,7 +314,1424 @@ Marionette = require('backbone.marionette');
 }));
 // <a href="https://github.com/magalhas/backbone-react-component"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","underscore":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/underscore/underscore.js":[function(require,module,exports){
+//     Underscore.js 1.7.0
+//     http://underscorejs.org
+//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     Underscore may be freely distributed under the MIT license.
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `exports` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var
+    push             = ArrayProto.push,
+    slice            = ArrayProto.slice,
+    concat           = ArrayProto.concat,
+    toString         = ObjProto.toString,
+    hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind;
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root._ = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.7.0';
+
+  // Internal function that returns an efficient (for current engines) version
+  // of the passed-in callback, to be repeatedly applied in other Underscore
+  // functions.
+  var createCallback = function(func, context, argCount) {
+    if (context === void 0) return func;
+    switch (argCount == null ? 3 : argCount) {
+      case 1: return function(value) {
+        return func.call(context, value);
+      };
+      case 2: return function(value, other) {
+        return func.call(context, value, other);
+      };
+      case 3: return function(value, index, collection) {
+        return func.call(context, value, index, collection);
+      };
+      case 4: return function(accumulator, value, index, collection) {
+        return func.call(context, accumulator, value, index, collection);
+      };
+    }
+    return function() {
+      return func.apply(context, arguments);
+    };
+  };
+
+  // A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+  _.iteratee = function(value, context, argCount) {
+    if (value == null) return _.identity;
+    if (_.isFunction(value)) return createCallback(value, context, argCount);
+    if (_.isObject(value)) return _.matches(value);
+    return _.property(value);
+  };
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles raw objects in addition to array-likes. Treats all
+  // sparse array-likes as if they were dense.
+  _.each = _.forEach = function(obj, iteratee, context) {
+    if (obj == null) return obj;
+    iteratee = createCallback(iteratee, context);
+    var i, length = obj.length;
+    if (length === +length) {
+      for (i = 0; i < length; i++) {
+        iteratee(obj[i], i, obj);
+      }
+    } else {
+      var keys = _.keys(obj);
+      for (i = 0, length = keys.length; i < length; i++) {
+        iteratee(obj[keys[i]], keys[i], obj);
+      }
+    }
+    return obj;
+  };
+
+  // Return the results of applying the iteratee to each element.
+  _.map = _.collect = function(obj, iteratee, context) {
+    if (obj == null) return [];
+    iteratee = _.iteratee(iteratee, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        results = Array(length),
+        currentKey;
+    for (var index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      results[index] = iteratee(obj[currentKey], currentKey, obj);
+    }
+    return results;
+  };
+
+  var reduceError = 'Reduce of empty array with no initial value';
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`.
+  _.reduce = _.foldl = _.inject = function(obj, iteratee, memo, context) {
+    if (obj == null) obj = [];
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index = 0, currentKey;
+    if (arguments.length < 3) {
+      if (!length) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[index++] : index++];
+    }
+    for (; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
+    return memo;
+  };
+
+  // The right-associative version of reduce, also known as `foldr`.
+  _.reduceRight = _.foldr = function(obj, iteratee, memo, context) {
+    if (obj == null) obj = [];
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== + obj.length && _.keys(obj),
+        index = (keys || obj).length,
+        currentKey;
+    if (arguments.length < 3) {
+      if (!index) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[--index] : --index];
+    }
+    while (index--) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
+    return memo;
+  };
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, predicate, context) {
+    var result;
+    predicate = _.iteratee(predicate, context);
+    _.some(obj, function(value, index, list) {
+      if (predicate(value, index, list)) {
+        result = value;
+        return true;
+      }
+    });
+    return result;
+  };
+
+  // Return all the elements that pass a truth test.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, predicate, context) {
+    var results = [];
+    if (obj == null) return results;
+    predicate = _.iteratee(predicate, context);
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value);
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, predicate, context) {
+    return _.filter(obj, _.negate(_.iteratee(predicate)), context);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, predicate, context) {
+    if (obj == null) return true;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (!predicate(obj[currentKey], currentKey, obj)) return false;
+    }
+    return true;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Aliased as `any`.
+  _.some = _.any = function(obj, predicate, context) {
+    if (obj == null) return false;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (predicate(obj[currentKey], currentKey, obj)) return true;
+    }
+    return false;
+  };
+
+  // Determine if the array or object contains a given value (using `===`).
+  // Aliased as `include`.
+  _.contains = _.include = function(obj, target) {
+    if (obj == null) return false;
+    if (obj.length !== +obj.length) obj = _.values(obj);
+    return _.indexOf(obj, target) >= 0;
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    var isFunc = _.isFunction(method);
+    return _.map(obj, function(value) {
+      return (isFunc ? method : value[method]).apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, _.property(key));
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // containing specific `key:value` pairs.
+  _.where = function(obj, attrs) {
+    return _.filter(obj, _.matches(attrs));
+  };
+
+  // Convenience version of a common use case of `find`: getting the first object
+  // containing specific `key:value` pairs.
+  _.findWhere = function(obj, attrs) {
+    return _.find(obj, _.matches(attrs));
+  };
+
+  // Return the maximum element (or element-based computation).
+  _.max = function(obj, iteratee, context) {
+    var result = -Infinity, lastComputed = -Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value > result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iteratee, context) {
+    var result = Infinity, lastComputed = Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value < result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed < lastComputed || computed === Infinity && result === Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Shuffle a collection, using the modern version of the
+  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
+  _.shuffle = function(obj) {
+    var set = obj && obj.length === +obj.length ? obj : _.values(obj);
+    var length = set.length;
+    var shuffled = Array(length);
+    for (var index = 0, rand; index < length; index++) {
+      rand = _.random(0, index);
+      if (rand !== index) shuffled[index] = shuffled[rand];
+      shuffled[rand] = set[index];
+    }
+    return shuffled;
+  };
+
+  // Sample **n** random values from a collection.
+  // If **n** is not specified, returns a single random element.
+  // The internal `guard` argument allows it to work with `map`.
+  _.sample = function(obj, n, guard) {
+    if (n == null || guard) {
+      if (obj.length !== +obj.length) obj = _.values(obj);
+      return obj[_.random(obj.length - 1)];
+    }
+    return _.shuffle(obj).slice(0, Math.max(0, n));
+  };
+
+  // Sort the object's values by a criterion produced by an iteratee.
+  _.sortBy = function(obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value: value,
+        index: index,
+        criteria: iteratee(value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index - right.index;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(behavior) {
+    return function(obj, iteratee, context) {
+      var result = {};
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index) {
+        var key = iteratee(value, index, obj);
+        behavior(result, value, key);
+      });
+      return result;
+    };
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key].push(value); else result[key] = [value];
+  });
+
+  // Indexes the object's values by a criterion, similar to `groupBy`, but for
+  // when you know that your index values will be unique.
+  _.indexBy = group(function(result, value, key) {
+    result[key] = value;
+  });
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key]++; else result[key] = 1;
+  });
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context, 1);
+    var value = iteratee(obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = low + high >>> 1;
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+    }
+    return low;
+  };
+
+  // Safely create a real, live array from anything iterable.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (_.isArray(obj)) return slice.call(obj);
+    if (obj.length === +obj.length) return _.map(obj, _.identity);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    if (obj == null) return 0;
+    return obj.length === +obj.length ? obj.length : _.keys(obj).length;
+  };
+
+  // Split a collection into two arrays: one whose elements all satisfy the given
+  // predicate, and one whose elements all do not satisfy the predicate.
+  _.partition = function(obj, predicate, context) {
+    predicate = _.iteratee(predicate, context);
+    var pass = [], fail = [];
+    _.each(obj, function(value, key, obj) {
+      (predicate(value, key, obj) ? pass : fail).push(value);
+    });
+    return [pass, fail];
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[0];
+    if (n < 0) return [];
+    return slice.call(array, 0, n);
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N. The **guard** check allows it to work with
+  // `_.map`.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array. The **guard** check allows it to work with `_.map`.
+  _.last = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[array.length - 1];
+    return slice.call(array, Math.max(array.length - n, 0));
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array. The **guard**
+  // check allows it to work with `_.map`.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, n == null || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, _.identity);
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, strict, output) {
+    if (shallow && _.every(input, _.isArray)) {
+      return concat.apply(output, input);
+    }
+    for (var i = 0, length = input.length; i < length; i++) {
+      var value = input[i];
+      if (!_.isArray(value) && !_.isArguments(value)) {
+        if (!strict) output.push(value);
+      } else if (shallow) {
+        push.apply(output, value);
+      } else {
+        flatten(value, shallow, strict, output);
+      }
+    }
+    return output;
+  };
+
+  // Flatten out an array, either recursively (by default), or just one level.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, false, []);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    if (array == null) return [];
+    if (!_.isBoolean(isSorted)) {
+      context = iteratee;
+      iteratee = isSorted;
+      isSorted = false;
+    }
+    if (iteratee != null) iteratee = _.iteratee(iteratee, context);
+    var result = [];
+    var seen = [];
+    for (var i = 0, length = array.length; i < length; i++) {
+      var value = array[i];
+      if (isSorted) {
+        if (!i || seen !== value) result.push(value);
+        seen = value;
+      } else if (iteratee) {
+        var computed = iteratee(value, i, array);
+        if (_.indexOf(seen, computed) < 0) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (_.indexOf(result, value) < 0) {
+        result.push(value);
+      }
+    }
+    return result;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(flatten(arguments, true, true, []));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    if (array == null) return [];
+    var result = [];
+    var argsLength = arguments.length;
+    for (var i = 0, length = array.length; i < length; i++) {
+      var item = array[i];
+      if (_.contains(result, item)) continue;
+      for (var j = 1; j < argsLength; j++) {
+        if (!_.contains(arguments[j], item)) break;
+      }
+      if (j === argsLength) result.push(item);
+    }
+    return result;
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = flatten(slice.call(arguments, 1), true, true, []);
+    return _.filter(array, function(value){
+      return !_.contains(rest, value);
+    });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function(array) {
+    if (array == null) return [];
+    var length = _.max(arguments, 'length').length;
+    var results = Array(length);
+    for (var i = 0; i < length; i++) {
+      results[i] = _.pluck(arguments, i);
+    }
+    return results;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    if (list == null) return {};
+    var result = {};
+    for (var i = 0, length = list.length; i < length; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = function(array, item, isSorted) {
+    if (array == null) return -1;
+    var i = 0, length = array.length;
+    if (isSorted) {
+      if (typeof isSorted == 'number') {
+        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+      } else {
+        i = _.sortedIndex(array, item);
+        return array[i] === item ? i : -1;
+      }
+    }
+    for (; i < length; i++) if (array[i] === item) return i;
+    return -1;
+  };
+
+  _.lastIndexOf = function(array, item, from) {
+    if (array == null) return -1;
+    var idx = array.length;
+    if (typeof from == 'number') {
+      idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
+    }
+    while (--idx >= 0) if (array[idx] === item) return idx;
+    return -1;
+  };
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (arguments.length <= 1) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = step || 1;
+
+    var length = Math.max(Math.ceil((stop - start) / step), 0);
+    var range = Array(length);
+
+    for (var idx = 0; idx < length; idx++, start += step) {
+      range[idx] = start;
+    }
+
+    return range;
+  };
+
+  // Function (ahem) Functions
+  // ------------------
+
+  // Reusable constructor function for prototype setting.
+  var Ctor = function(){};
+
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+  // available.
+  _.bind = function(func, context) {
+    var args, bound;
+    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
+    args = slice.call(arguments, 2);
+    bound = function() {
+      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+      Ctor.prototype = func.prototype;
+      var self = new Ctor;
+      Ctor.prototype = null;
+      var result = func.apply(self, args.concat(slice.call(arguments)));
+      if (_.isObject(result)) return result;
+      return self;
+    };
+    return bound;
+  };
+
+  // Partially apply a function by creating a version that has had some of its
+  // arguments pre-filled, without changing its dynamic `this` context. _ acts
+  // as a placeholder, allowing any combination of arguments to be pre-filled.
+  _.partial = function(func) {
+    var boundArgs = slice.call(arguments, 1);
+    return function() {
+      var position = 0;
+      var args = boundArgs.slice();
+      for (var i = 0, length = args.length; i < length; i++) {
+        if (args[i] === _) args[i] = arguments[position++];
+      }
+      while (position < arguments.length) args.push(arguments[position++]);
+      return func.apply(this, args);
+    };
+  };
+
+  // Bind a number of an object's methods to that object. Remaining arguments
+  // are the method names to be bound. Useful for ensuring that all callbacks
+  // defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var i, length = arguments.length, key;
+    if (length <= 1) throw new Error('bindAll must be passed function names');
+    for (i = 1; i < length; i++) {
+      key = arguments[i];
+      obj[key] = _.bind(obj[key], obj);
+    }
+    return obj;
+  };
+
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memoize = function(key) {
+      var cache = memoize.cache;
+      var address = hasher ? hasher.apply(this, arguments) : key;
+      if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+      return cache[address];
+    };
+    memoize.cache = {};
+    return memoize;
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = function(func) {
+    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
+  };
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time. Normally, the throttled function will run
+  // as much as it can, without ever going more than once per `wait` duration;
+  // but if you'd like to disable the execution on the leading edge, pass
+  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  _.throttle = function(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    var previous = 0;
+    if (!options) options = {};
+    var later = function() {
+      previous = options.leading === false ? 0 : _.now();
+      timeout = null;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    };
+    return function() {
+      var now = _.now();
+      if (!previous && options.leading === false) previous = now;
+      var remaining = wait - (now - previous);
+      context = this;
+      args = arguments;
+      if (remaining <= 0 || remaining > wait) {
+        clearTimeout(timeout);
+        timeout = null;
+        previous = now;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining);
+      }
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+
+    var later = function() {
+      var last = _.now() - timestamp;
+
+      if (last < wait && last > 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        }
+      }
+    };
+
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = _.now();
+      var callNow = immediate && !timeout;
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+
+      return result;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return _.partial(wrapper, func);
+  };
+
+  // Returns a negated version of the passed-in predicate.
+  _.negate = function(predicate) {
+    return function() {
+      return !predicate.apply(this, arguments);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var args = arguments;
+    var start = args.length - 1;
+    return function() {
+      var i = start;
+      var result = args[start].apply(this, arguments);
+      while (i--) result = args[i].call(this, result);
+      return result;
+    };
+  };
+
+  // Returns a function that will only be executed after being called N times.
+  _.after = function(times, func) {
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Returns a function that will only be executed before being called N times.
+  _.before = function(times, func) {
+    var memo;
+    return function() {
+      if (--times > 0) {
+        memo = func.apply(this, arguments);
+      } else {
+        func = null;
+      }
+      return memo;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = _.partial(_.before, 2);
+
+  // Object Functions
+  // ----------------
+
+  // Retrieve the names of an object's properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    if (nativeKeys) return nativeKeys(obj);
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var values = Array(length);
+    for (var i = 0; i < length; i++) {
+      values[i] = obj[keys[i]];
+    }
+    return values;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var pairs = Array(length);
+    for (var i = 0; i < length; i++) {
+      pairs[i] = [keys[i], obj[keys[i]]];
+    }
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    var keys = _.keys(obj);
+    for (var i = 0, length = keys.length; i < length; i++) {
+      result[obj[keys[i]]] = keys[i];
+    }
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      source = arguments[i];
+      for (prop in source) {
+        if (hasOwnProperty.call(source, prop)) {
+            obj[prop] = source[prop];
+        }
+      }
+    }
+    return obj;
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(obj, iteratee, context) {
+    var result = {}, key;
+    if (obj == null) return result;
+    if (_.isFunction(iteratee)) {
+      iteratee = createCallback(iteratee, context);
+      for (key in obj) {
+        var value = obj[key];
+        if (iteratee(value, key, obj)) result[key] = value;
+      }
+    } else {
+      var keys = concat.apply([], slice.call(arguments, 1));
+      obj = new Object(obj);
+      for (var i = 0, length = keys.length; i < length; i++) {
+        key = keys[i];
+        if (key in obj) result[key] = obj[key];
+      }
+    }
+    return result;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj, iteratee, context) {
+    if (_.isFunction(iteratee)) {
+      iteratee = _.negate(iteratee);
+    } else {
+      var keys = _.map(concat.apply([], slice.call(arguments, 1)), String);
+      iteratee = function(value, key) {
+        return !_.contains(keys, key);
+      };
+    }
+    return _.pick(obj, iteratee, context);
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      var source = arguments[i];
+      for (var prop in source) {
+        if (obj[prop] === void 0) obj[prop] = source[prop];
+      }
+    }
+    return obj;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    if (a === b) return a !== 0 || 1 / a === 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className !== toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+      case '[object RegExp]':
+      // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return '' + a === '' + b;
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive.
+        // Object(NaN) is equivalent to NaN
+        if (+a !== +a) return +b !== +b;
+        // An `egal` comparison is performed for other numeric values.
+        return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a === +b;
+    }
+    if (typeof a != 'object' || typeof b != 'object') return false;
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] === a) return bStack[length] === b;
+    }
+    // Objects with different constructors are not equivalent, but `Object`s
+    // from different frames are.
+    var aCtor = a.constructor, bCtor = b.constructor;
+    if (
+      aCtor !== bCtor &&
+      // Handle Object.create(x) cases
+      'constructor' in a && 'constructor' in b &&
+      !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+        _.isFunction(bCtor) && bCtor instanceof bCtor)
+    ) {
+      return false;
+    }
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+    var size, result;
+    // Recursively compare objects and arrays.
+    if (className === '[object Array]') {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      size = a.length;
+      result = size === b.length;
+      if (result) {
+        // Deep compare the contents, ignoring non-numeric properties.
+        while (size--) {
+          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+        }
+      }
+    } else {
+      // Deep compare objects.
+      var keys = _.keys(a), key;
+      size = keys.length;
+      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      result = _.keys(b).length === size;
+      if (result) {
+        while (size--) {
+          // Deep compare each member
+          key = keys[size];
+          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+        }
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return result;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b, [], []);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)) return obj.length === 0;
+    for (var key in obj) if (_.has(obj, key)) return false;
+    return true;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) === '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) === '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return _.has(obj, 'callee');
+    };
+  }
+
+  // Optimize `isFunction` if appropriate. Work around an IE 11 bug.
+  if (typeof /./ !== 'function') {
+    _.isFunction = function(obj) {
+      return typeof obj == 'function' || false;
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return isFinite(obj) && !isNaN(parseFloat(obj));
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj !== +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iteratees.
+  _.identity = function(value) {
+    return value;
+  };
+
+  _.constant = function(value) {
+    return function() {
+      return value;
+    };
+  };
+
+  _.noop = function(){};
+
+  _.property = function(key) {
+    return function(obj) {
+      return obj[key];
+    };
+  };
+
+  // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
+  _.matches = function(attrs) {
+    var pairs = _.pairs(attrs), length = pairs.length;
+    return function(obj) {
+      if (obj == null) return !length;
+      obj = new Object(obj);
+      for (var i = 0; i < length; i++) {
+        var pair = pairs[i], key = pair[0];
+        if (pair[1] !== obj[key] || !(key in obj)) return false;
+      }
+      return true;
+    };
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iteratee, context) {
+    var accum = Array(Math.max(0, n));
+    iteratee = createCallback(iteratee, context, 1);
+    for (var i = 0; i < n; i++) accum[i] = iteratee(i);
+    return accum;
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
+  // A (possibly faster) way to get the current timestamp as an integer.
+  _.now = Date.now || function() {
+    return new Date().getTime();
+  };
+
+   // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
+  };
+  var unescapeMap = _.invert(escapeMap);
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
+    };
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + _.keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+  _.escape = createEscaper(escapeMap);
+  _.unescape = createEscaper(unescapeMap);
+
+  // If the value of the named `property` is a function then invoke it with the
+  // `object` as context; otherwise, return it.
+  _.result = function(object, property) {
+    if (object == null) return void 0;
+    var value = object[property];
+    return _.isFunction(value) ? object[property]() : value;
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escapeChar = function(match) {
+    return '\\' + escapes[match];
+  };
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  // NB: `oldSettings` only exists for backwards compatibility.
+  _.template = function(text, settings, oldSettings) {
+    if (!settings && oldSettings) settings = oldSettings;
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset).replace(escaper, escapeChar);
+      index = offset + match.length;
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+      } else if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      } else if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+
+      // Adobe VMs need the match returned to produce the correct offest.
+      return match;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + 'return __p;\n';
+
+    try {
+      var render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled source as a convenience for precompilation.
+    var argument = settings.variable || 'obj';
+    template.source = 'function(' + argument + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function. Start chaining a wrapped Underscore object.
+  _.chain = function(obj) {
+    var instance = _(obj);
+    instance._chain = true;
+    return instance;
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(obj) {
+    return this._chain ? _(obj).chain() : obj;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    _.each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
+      return result.call(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  _.each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result.call(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  // Extracts the result from a wrapped and chained object.
+  _.prototype.value = function() {
+    return this._wrapped;
+  };
+
+  // AMD registration happens at the end for compatibility with AMD loaders
+  // that may not enforce next-turn semantics on modules. Even though general
+  // practice for AMD registration is to be anonymous, underscore registers
+  // as a named module because, like jQuery, it is a base library that is
+  // popular enough to be bundled in a third party lib, but not be part of
+  // an AMD load request. Those cases could generate an error when an
+  // anonymous define() is called outside of a loader request.
+  if (typeof define === 'function' && define.amd) {
+    define('underscore', [], function() {
+      return _;
+    });
+  }
+}.call(this));
+
+},{}],"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js":[function(require,module,exports){
 // Backbone.BabySitter
 // -------------------
 // v0.1.5
@@ -506,7 +1923,7 @@ Marionette = require('backbone.marionette');
 
 }));
 
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js":[function(require,module,exports){
 // Backbone.Wreqr (Backbone.Marionette)
 // ----------------------------------
 // v1.3.1
@@ -948,7 +2365,7 @@ Marionette = require('backbone.marionette');
 
 }));
 
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js":[function(require,module,exports){
 //     Backbone.js 1.1.2
 
 //     (c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -2558,9 +3975,9 @@ Marionette = require('backbone.marionette');
 
 }));
 
-},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js":[function(require,module,exports){
+},{"underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js":[function(require,module,exports){
 
-},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/index.js":[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -3613,7 +5030,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","ieee754":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","is-array":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js"}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js":[function(require,module,exports){
+},{"base64-js":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","ieee754":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","is-array":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js"}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js":[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -3735,7 +5152,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js":[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -3821,7 +5238,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/node_modules/is-array/index.js":[function(require,module,exports){
 
 /**
  * isArray
@@ -3856,7 +5273,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3921,7 +5338,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/flux/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/flux/index.js":[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -3933,7 +5350,7 @@ process.chdir = function (dir) {
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":"/home/vagrant/bridge-controller/node_modules/flux/lib/Dispatcher.js"}],"/home/vagrant/bridge-controller/node_modules/flux/lib/Dispatcher.js":[function(require,module,exports){
+},{"./lib/Dispatcher":"/home/ubuntu/bridge-controller/node_modules/flux/lib/Dispatcher.js"}],"/home/ubuntu/bridge-controller/node_modules/flux/lib/Dispatcher.js":[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -4185,7 +5602,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/flux/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/flux/lib/invariant.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/flux/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/flux/lib/invariant.js":[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -4240,7 +5657,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -13432,7 +14849,7 @@ return jQuery;
 
 }));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/q/q.js":[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -15373,7 +16790,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js":[function(require,module,exports){
 (function() {
   var Backbone, Criteria, Hash, Pill, Query, QueryCollection, queryEngine, util, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -17065,7 +18482,7 @@ return Q;
 
 }).call(this);
 
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Accordion.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Accordion.js":[function(require,module,exports){
 var React = require('react');
 var PanelGroup = require('./PanelGroup');
 
@@ -17080,7 +18497,7 @@ var Accordion = React.createClass({displayName: 'Accordion',
 });
 
 module.exports = Accordion;
-},{"./PanelGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Affix.js":[function(require,module,exports){
+},{"./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Affix.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var AffixMixin = require('./AffixMixin');
@@ -17104,7 +18521,7 @@ var Affix = React.createClass({displayName: 'Affix',
 });
 
 module.exports = Affix;
-},{"./AffixMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./utils/domUtils":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/AffixMixin.js":[function(require,module,exports){
+},{"./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js":[function(require,module,exports){
 /* global window, document */
 
 var React = require('react');
@@ -17236,7 +18653,7 @@ var AffixMixin = {
 };
 
 module.exports = AffixMixin;
-},{"./utils/EventListener":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/domUtils":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Alert.js":[function(require,module,exports){
+},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Alert.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17296,7 +18713,7 @@ var Alert = React.createClass({displayName: 'Alert',
 });
 
 module.exports = Alert;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Badge.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Badge.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var ValidComponentChildren = require('./utils/ValidComponentChildren');
@@ -17325,7 +18742,7 @@ var Badge = React.createClass({displayName: 'Badge',
 
 module.exports = Badge;
 
-},{"./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js":[function(require,module,exports){
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js":[function(require,module,exports){
 var React = require('react');
 var constants = require('./constants');
 
@@ -17361,7 +18778,7 @@ var BootstrapMixin = {
 };
 
 module.exports = BootstrapMixin;
-},{"./constants":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/constants.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js":[function(require,module,exports){
+},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17448,7 +18865,7 @@ var Button = React.createClass({displayName: 'Button',
 
 module.exports = Button;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17486,7 +18903,7 @@ var ButtonGroup = React.createClass({displayName: 'ButtonGroup',
 });
 
 module.exports = ButtonGroup;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17517,7 +18934,7 @@ var ButtonToolbar = React.createClass({displayName: 'ButtonToolbar',
 });
 
 module.exports = ButtonToolbar;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Carousel.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Carousel.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17807,7 +19224,7 @@ var Carousel = React.createClass({displayName: 'Carousel',
 });
 
 module.exports = Carousel;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CarouselItem.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CarouselItem.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17901,7 +19318,7 @@ var CarouselItem = React.createClass({displayName: 'CarouselItem',
 });
 
 module.exports = CarouselItem;
-},{"./utils/TransitionEvents":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Col.js":[function(require,module,exports){
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Col.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -17976,7 +19393,7 @@ var Col = React.createClass({displayName: 'Col',
 });
 
 module.exports = Col;
-},{"./constants":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js":[function(require,module,exports){
+},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js":[function(require,module,exports){
 var React = require('react');
 var TransitionEvents = require('./utils/TransitionEvents');
 
@@ -18098,7 +19515,7 @@ var CollapsableMixin = {
 
 module.exports = CollapsableMixin;
 
-},{"./utils/TransitionEvents":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownButton.js":[function(require,module,exports){
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownButton.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -18222,7 +19639,7 @@ var DropdownButton = React.createClass({displayName: 'DropdownButton',
 });
 
 module.exports = DropdownButton;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -18269,7 +19686,7 @@ var DropdownMenu = React.createClass({displayName: 'DropdownMenu',
 });
 
 module.exports = DropdownMenu;
-},{"./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js":[function(require,module,exports){
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js":[function(require,module,exports){
 var React = require('react');
 var EventListener = require('./utils/EventListener');
 
@@ -18350,7 +19767,7 @@ var DropdownStateMixin = {
 };
 
 module.exports = DropdownStateMixin;
-},{"./utils/EventListener":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/FadeMixin.js":[function(require,module,exports){
+},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js":[function(require,module,exports){
 /*global document */
 // TODO: listen for onTransitionEnd to remove el
 function getElementsAndSelf (root, classes){
@@ -18421,7 +19838,7 @@ module.exports = {
   }
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Glyphicon.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Glyphicon.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -18455,7 +19872,7 @@ var Glyphicon = React.createClass({displayName: 'Glyphicon',
 });
 
 module.exports = Glyphicon;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./constants":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Grid.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Grid.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 
@@ -18486,7 +19903,7 @@ var Grid = React.createClass({displayName: 'Grid',
 });
 
 module.exports = Grid;
-},{"./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Input.js":[function(require,module,exports){
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Input.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -18723,7 +20140,7 @@ var Input = React.createClass({displayName: 'Input',
 
 module.exports = Input;
 
-},{"./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Interpolate.js":[function(require,module,exports){
+},{"./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js":[function(require,module,exports){
 // https://www.npmjs.org/package/react-interpolate-component
 'use strict';
 
@@ -18807,7 +20224,7 @@ var Interpolate = React.createClass({
 
 module.exports = Interpolate;
 
-},{"./utils/Object.assign":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Jumbotron.js":[function(require,module,exports){
+},{"./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Jumbotron.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 
@@ -18823,7 +20240,7 @@ var Jumbotron = React.createClass({displayName: 'Jumbotron',
 });
 
 module.exports = Jumbotron;
-},{"./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Label.js":[function(require,module,exports){
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Label.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -18851,7 +20268,7 @@ var Label = React.createClass({displayName: 'Label',
 });
 
 module.exports = Label;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ListGroup.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroup.js":[function(require,module,exports){
 var React = require('react');
 var classSet = require('./utils/classSet');
 var cloneWithProps = require('./utils/cloneWithProps');
@@ -18883,7 +20300,7 @@ var ListGroup = React.createClass({displayName: 'ListGroup',
 
 module.exports = ListGroup;
 
-},{"./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js":[function(require,module,exports){
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var BootstrapMixin = require('./BootstrapMixin');
@@ -18978,7 +20395,7 @@ var ListGroupItem = React.createClass({displayName: 'ListGroupItem',
 
 module.exports = ListGroupItem;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/MenuItem.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/MenuItem.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -19037,7 +20454,7 @@ var MenuItem = React.createClass({displayName: 'MenuItem',
 });
 
 module.exports = MenuItem;
-},{"./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Modal.js":[function(require,module,exports){
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Modal.js":[function(require,module,exports){
 /* global document:false */
 
 var React = require('react');
@@ -19196,7 +20613,7 @@ var Modal = React.createClass({displayName: 'Modal',
 
 module.exports = Modal;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./FadeMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./utils/EventListener":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js":[function(require,module,exports){
 var React = require('react');
 var OverlayMixin = require('./OverlayMixin');
 var cloneWithProps = require('./utils/cloneWithProps');
@@ -19259,7 +20676,7 @@ var ModalTrigger = React.createClass({displayName: 'ModalTrigger',
 });
 
 module.exports = ModalTrigger;
-},{"./OverlayMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Nav.js":[function(require,module,exports){
+},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var BootstrapMixin = require('./BootstrapMixin');
@@ -19373,7 +20790,7 @@ var Nav = React.createClass({displayName: 'Nav',
 
 module.exports = Nav;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/NavItem.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -19435,7 +20852,7 @@ var NavItem = React.createClass({displayName: 'NavItem',
 });
 
 module.exports = NavItem;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Navbar.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Navbar.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var BootstrapMixin = require('./BootstrapMixin');
@@ -19576,7 +20993,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
 
 module.exports = Navbar;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Nav.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js":[function(require,module,exports){
 var React = require('react');
 var CustomPropTypes = require('./utils/CustomPropTypes');
 
@@ -19651,7 +21068,7 @@ module.exports = {
   }
 };
 
-},{"./utils/CustomPropTypes":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js":[function(require,module,exports){
+},{"./utils/CustomPropTypes":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js":[function(require,module,exports){
 var React = require('react');
 var OverlayMixin = require('./OverlayMixin');
 var domUtils = require('./utils/domUtils');
@@ -19875,7 +21292,7 @@ var OverlayTrigger = React.createClass({displayName: 'OverlayTrigger',
 });
 
 module.exports = OverlayTrigger;
-},{"./OverlayMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/Object.assign":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PageHeader.js":[function(require,module,exports){
+},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageHeader.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 
@@ -19891,7 +21308,7 @@ var PageHeader = React.createClass({displayName: 'PageHeader',
 });
 
 module.exports = PageHeader;
-},{"./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PageItem.js":[function(require,module,exports){
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageItem.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -19946,7 +21363,7 @@ var PageItem = React.createClass({displayName: 'PageItem',
 });
 
 module.exports = PageItem;
-},{"./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Pager.js":[function(require,module,exports){
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Pager.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var cloneWithProps = require('./utils/cloneWithProps');
@@ -19983,7 +21400,7 @@ var Pager = React.createClass({displayName: 'Pager',
 });
 
 module.exports = Pager;
-},{"./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Panel.js":[function(require,module,exports){
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Panel.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20130,7 +21547,7 @@ var Panel = React.createClass({displayName: 'Panel',
 });
 
 module.exports = Panel;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PanelGroup.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20217,7 +21634,7 @@ var PanelGroup = React.createClass({displayName: 'PanelGroup',
 });
 
 module.exports = PanelGroup;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Popover.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Popover.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20276,7 +21693,7 @@ var Popover = React.createClass({displayName: 'Popover',
 });
 
 module.exports = Popover;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ProgressBar.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ProgressBar.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var Interpolate = require('./Interpolate');
@@ -20411,7 +21828,7 @@ var ProgressBar = React.createClass({displayName: 'ProgressBar',
 
 module.exports = ProgressBar;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Interpolate":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Row.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Row.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 
@@ -20438,7 +21855,7 @@ var Row = React.createClass({displayName: 'Row',
 });
 
 module.exports = Row;
-},{"./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/SplitButton.js":[function(require,module,exports){
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SplitButton.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20542,7 +21959,7 @@ var SplitButton = React.createClass({displayName: 'SplitButton',
 
 module.exports = SplitButton;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/SubNav.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SubNav.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20672,7 +22089,7 @@ var SubNav = React.createClass({displayName: 'SubNav',
 
 module.exports = SubNav;
 
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/TabPane.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabPane.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20755,7 +22172,7 @@ var TabPane = React.createClass({displayName: 'TabPane',
 });
 
 module.exports = TabPane;
-},{"./utils/TransitionEvents":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/TabbedArea.js":[function(require,module,exports){
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabbedArea.js":[function(require,module,exports){
 var React = require('react');
 var BootstrapMixin = require('./BootstrapMixin');
 var cloneWithProps = require('./utils/cloneWithProps');
@@ -20895,7 +22312,7 @@ var TabbedArea = React.createClass({displayName: 'TabbedArea',
 });
 
 module.exports = TabbedArea;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/NavItem.js","./utils/ValidComponentChildren":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Table.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Table.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20932,7 +22349,7 @@ var Table = React.createClass({displayName: 'Table',
 });
 
 module.exports = Table;
-},{"./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Tooltip.js":[function(require,module,exports){
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Tooltip.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -20982,7 +22399,7 @@ var Tooltip = React.createClass({displayName: 'Tooltip',
 });
 
 module.exports = Tooltip;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Well.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Well.js":[function(require,module,exports){
 var React = require('react');
 var joinClasses = require('./utils/joinClasses');
 var classSet = require('./utils/classSet');
@@ -21009,7 +22426,7 @@ var Well = React.createClass({displayName: 'Well',
 });
 
 module.exports = Well;
-},{"./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/constants.js":[function(require,module,exports){
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js":[function(require,module,exports){
 module.exports = {
   CLASSES: {
     'alert': 'alert',
@@ -21253,7 +22670,7 @@ module.exports = {
   ]
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/main.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js":[function(require,module,exports){
 module.exports = {
   Accordion: require('./Accordion'),
   Affix: require('./Affix'),
@@ -21305,7 +22722,7 @@ module.exports = {
   Well: require('./Well')
 };
 
-},{"./Accordion":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Accordion.js","./Affix":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Affix.js","./AffixMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./Alert":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Alert.js","./Badge":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Badge.js","./BootstrapMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./ButtonToolbar":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js","./Carousel":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Carousel.js","./CarouselItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CarouselItem.js","./Col":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Col.js","./CollapsableMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./DropdownButton":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownButton.js","./DropdownMenu":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./FadeMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./Glyphicon":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Glyphicon.js","./Grid":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Grid.js","./Input":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Input.js","./Interpolate":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./Jumbotron":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Jumbotron.js","./Label":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Label.js","./ListGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ListGroup.js","./ListGroupItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js","./MenuItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/MenuItem.js","./Modal":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Modal.js","./ModalTrigger":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js","./Nav":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/NavItem.js","./Navbar":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Navbar.js","./OverlayMixin":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./OverlayTrigger":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js","./PageHeader":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PageHeader.js","./PageItem":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PageItem.js","./Pager":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Pager.js","./Panel":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Panel.js","./PanelGroup":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","./Popover":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Popover.js","./ProgressBar":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/ProgressBar.js","./Row":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Row.js","./SplitButton":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/SplitButton.js","./SubNav":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/SubNav.js","./TabPane":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/TabPane.js","./TabbedArea":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/TabbedArea.js","./Table":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Table.js","./Tooltip":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Tooltip.js","./Well":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/Well.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js":[function(require,module,exports){
+},{"./Accordion":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Accordion.js","./Affix":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Affix.js","./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./Alert":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Alert.js","./Badge":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Badge.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./ButtonToolbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js","./Carousel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Carousel.js","./CarouselItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CarouselItem.js","./Col":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Col.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./DropdownButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownButton.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./Glyphicon":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Glyphicon.js","./Grid":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Grid.js","./Input":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Input.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./Jumbotron":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Jumbotron.js","./Label":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Label.js","./ListGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroup.js","./ListGroupItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js","./MenuItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/MenuItem.js","./Modal":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Modal.js","./ModalTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js","./Navbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Navbar.js","./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./OverlayTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js","./PageHeader":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageHeader.js","./PageItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageItem.js","./Pager":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Pager.js","./Panel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Panel.js","./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","./Popover":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Popover.js","./ProgressBar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ProgressBar.js","./Row":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Row.js","./SplitButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SplitButton.js","./SubNav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SubNav.js","./TabPane":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabPane.js","./TabbedArea":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabbedArea.js","./Table":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Table.js","./Tooltip":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Tooltip.js","./Well":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Well.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js":[function(require,module,exports){
 var React = require('react');
 
 var ANONYMOUS = '<<anonymous>>';
@@ -21368,7 +22785,7 @@ function createMountableChecker() {
 }
 
 module.exports = CustomPropTypes;
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -21424,7 +22841,7 @@ var EventListener = {
 
 module.exports = EventListener;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -21473,7 +22890,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21588,7 +23005,7 @@ var ReactTransitionEvents = {
 
 module.exports = ReactTransitionEvents;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -21679,7 +23096,7 @@ module.exports = {
   numberOf: numberOfValidComponents,
   hasValidComponent: hasValidComponent
 };
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21719,7 +23136,7 @@ function cx(classNames) {
 }
 
 module.exports = cx;
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21863,7 +23280,7 @@ function cloneWithProps(child, props) {
 }
 
 module.exports = cloneWithProps;
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js":[function(require,module,exports){
 /**
  * Safe chained function
  *
@@ -21889,7 +23306,7 @@ function createChainedFunction(one, two) {
 }
 
 module.exports = createChainedFunction;
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js":[function(require,module,exports){
 
 /**
  * Shortcut to compute element style
@@ -21999,7 +23416,7 @@ module.exports = {
   getPosition: getPosition,
   offsetParent: offsetParent
 };
-},{}],"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22041,7 +23458,7 @@ function joinClasses(className/*, ... */) {
 
 module.exports = joinClasses;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js":[function(require,module,exports){
 /**
  * Actions that modify the URL.
  */
@@ -22066,7 +23483,7 @@ var LocationActions = {
 
 module.exports = LocationActions;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 
 /**
@@ -22095,7 +23512,7 @@ var ImitateBrowserBehavior = {
 
 module.exports = ImitateBrowserBehavior;
 
-},{"../actions/LocationActions":"/home/vagrant/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js":[function(require,module,exports){
 /**
  * A scroll behavior that always scrolls to the top of the page
  * after a transition.
@@ -22110,7 +23527,7 @@ var ScrollToTopBehavior = {
 
 module.exports = ScrollToTopBehavior;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js":[function(require,module,exports){
 var React = require('react');
 var FakeNode = require('../mixins/FakeNode');
 var PropTypes = require('../utils/PropTypes');
@@ -22137,7 +23554,7 @@ var DefaultRoute = React.createClass({
 
 module.exports = DefaultRoute;
 
-},{"../mixins/FakeNode":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Link.js":[function(require,module,exports){
+},{"../mixins/FakeNode":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Link.js":[function(require,module,exports){
 var React = require('react');
 var classSet = require('react/lib/cx');
 var assign = require('react/lib/Object.assign');
@@ -22246,7 +23663,7 @@ var Link = React.createClass({
 
 module.exports = Link;
 
-},{"../mixins/Navigation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js","../mixins/State":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/State.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react/lib/Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","react/lib/cx":"/home/vagrant/bridge-controller/node_modules/react/lib/cx.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js":[function(require,module,exports){
+},{"../mixins/Navigation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js","../mixins/State":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/State.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react/lib/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","react/lib/cx":"/home/ubuntu/bridge-controller/node_modules/react/lib/cx.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js":[function(require,module,exports){
 var React = require('react');
 var FakeNode = require('../mixins/FakeNode');
 var PropTypes = require('../utils/PropTypes');
@@ -22274,7 +23691,7 @@ var NotFoundRoute = React.createClass({
 
 module.exports = NotFoundRoute;
 
-},{"../mixins/FakeNode":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Redirect.js":[function(require,module,exports){
+},{"../mixins/FakeNode":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Redirect.js":[function(require,module,exports){
 var React = require('react');
 var FakeNode = require('../mixins/FakeNode');
 var PropTypes = require('../utils/PropTypes');
@@ -22300,7 +23717,7 @@ var Redirect = React.createClass({
 
 module.exports = Redirect;
 
-},{"../mixins/FakeNode":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Route.js":[function(require,module,exports){
+},{"../mixins/FakeNode":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","../utils/PropTypes":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Route.js":[function(require,module,exports){
 var React = require('react');
 var FakeNode = require('../mixins/FakeNode');
 
@@ -22359,7 +23776,7 @@ var Route = React.createClass({
 
 module.exports = Route;
 
-},{"../mixins/FakeNode":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js":[function(require,module,exports){
+},{"../mixins/FakeNode":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js":[function(require,module,exports){
 var React = require('react');
 var RouteHandlerMixin = require('../mixins/RouteHandler');
 
@@ -22387,7 +23804,7 @@ var RouteHandler = React.createClass({
 
 module.exports = RouteHandler;
 
-},{"../mixins/RouteHandler":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/RouteHandler.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/index.js":[function(require,module,exports){
+},{"../mixins/RouteHandler":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/RouteHandler.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/index.js":[function(require,module,exports){
 exports.DefaultRoute = require('./components/DefaultRoute');
 exports.Link = require('./components/Link');
 exports.NotFoundRoute = require('./components/NotFoundRoute');
@@ -22410,7 +23827,7 @@ exports.run = require('./utils/runRouter');
 
 exports.History = require('./utils/History');
 
-},{"./behaviors/ImitateBrowserBehavior":"/home/vagrant/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","./behaviors/ScrollToTopBehavior":"/home/vagrant/bridge-controller/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js","./components/DefaultRoute":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js","./components/Link":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Link.js","./components/NotFoundRoute":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js","./components/Redirect":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Redirect.js","./components/Route":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Route.js","./components/RouteHandler":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js","./locations/HashLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js","./locations/HistoryLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js","./locations/RefreshLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js","./mixins/Navigation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js","./mixins/State":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/State.js","./utils/History":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js","./utils/createRouter":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/createRouter.js","./utils/runRouter":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/runRouter.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js":[function(require,module,exports){
+},{"./behaviors/ImitateBrowserBehavior":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","./behaviors/ScrollToTopBehavior":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/behaviors/ScrollToTopBehavior.js","./components/DefaultRoute":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js","./components/Link":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Link.js","./components/NotFoundRoute":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js","./components/Redirect":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Redirect.js","./components/Route":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Route.js","./components/RouteHandler":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js","./locations/HashLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js","./locations/HistoryLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js","./locations/RefreshLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js","./mixins/Navigation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js","./mixins/State":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/State.js","./utils/History":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js","./utils/createRouter":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/createRouter.js","./utils/runRouter":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/runRouter.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 var History = require('../utils/History');
 var Path = require('../utils/Path');
@@ -22537,7 +23954,7 @@ var HashLocation = {
 
 module.exports = HashLocation;
 
-},{"../actions/LocationActions":"/home/vagrant/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../utils/History":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../utils/History":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js":[function(require,module,exports){
 var LocationActions = require('../actions/LocationActions');
 var History = require('../utils/History');
 var Path = require('../utils/Path');
@@ -22633,7 +24050,7 @@ var HistoryLocation = {
 
 module.exports = HistoryLocation;
 
-},{"../actions/LocationActions":"/home/vagrant/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../utils/History":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../utils/History":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js":[function(require,module,exports){
 var HistoryLocation = require('./HistoryLocation');
 var History = require('../utils/History');
 var Path = require('../utils/Path');
@@ -22665,7 +24082,7 @@ var RefreshLocation = {
 
 module.exports = RefreshLocation;
 
-},{"../utils/History":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js","./HistoryLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js":[function(require,module,exports){
+},{"../utils/History":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js","../utils/Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js","./HistoryLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/FakeNode.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 
 var FakeNode = {
@@ -22682,7 +24099,7 @@ var FakeNode = {
 
 module.exports = FakeNode;
 
-},{"react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js":[function(require,module,exports){
+},{"react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/Navigation.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -22756,7 +24173,7 @@ var Navigation = {
 
 module.exports = Navigation;
 
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/NavigationContext.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/NavigationContext.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -22786,7 +24203,7 @@ var NavigationContext = {
 
 module.exports = NavigationContext;
 
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/RouteHandler.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/RouteHandler.js":[function(require,module,exports){
 var React = require('react');
 
 module.exports = {
@@ -22829,7 +24246,7 @@ module.exports = {
     return route ? React.createElement(route.handler, props || this.props) : null;
   }
 };
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/Scrolling.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/Scrolling.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var canUseDOM = require('react/lib/ExecutionEnvironment').canUseDOM;
 var getWindowScrollPosition = require('../utils/getWindowScrollPosition');
@@ -22914,7 +24331,7 @@ var Scrolling = {
 
 module.exports = Scrolling;
 
-},{"../utils/getWindowScrollPosition":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/getWindowScrollPosition.js","react/lib/ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/State.js":[function(require,module,exports){
+},{"../utils/getWindowScrollPosition":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/getWindowScrollPosition.js","react/lib/ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/State.js":[function(require,module,exports){
 var React = require('react');
 
 /**
@@ -22993,7 +24410,7 @@ var State = {
 
 module.exports = State;
 
-},{"react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/StateContext.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/StateContext.js":[function(require,module,exports){
 var React = require('react');
 var assign = require('react/lib/Object.assign');
 var Path = require('../utils/Path');
@@ -23096,7 +24513,7 @@ var StateContext = {
 
 module.exports = StateContext;
 
-},{"../utils/Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react/lib/Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Cancellation.js":[function(require,module,exports){
+},{"../utils/Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react/lib/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Cancellation.js":[function(require,module,exports){
 /**
  * Represents a cancellation caused by navigating away
  * before the previous transition has fully resolved.
@@ -23105,7 +24522,7 @@ function Cancellation() { }
 
 module.exports = Cancellation;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var canUseDOM = require('react/lib/ExecutionEnvironment').canUseDOM;
 
@@ -23136,7 +24553,7 @@ var History = {
 
 module.exports = History;
 
-},{"react/lib/ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js":[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var merge = require('qs/lib/utils').merge;
 var qs = require('qs');
@@ -23316,7 +24733,7 @@ var Path = {
 
 module.exports = Path;
 
-},{"qs":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/index.js","qs/lib/utils":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Promise.js":[function(require,module,exports){
+},{"qs":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/index.js","qs/lib/utils":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Promise.js":[function(require,module,exports){
 var Promise = require('when/lib/Promise');
 
 // TODO: Use process.env.NODE_ENV check + envify to enable
@@ -23324,7 +24741,7 @@ var Promise = require('when/lib/Promise');
 
 module.exports = Promise;
 
-},{"when/lib/Promise":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Promise.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js":[function(require,module,exports){
+},{"when/lib/Promise":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Promise.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js":[function(require,module,exports){
 var PropTypes = {
 
   /**
@@ -23339,7 +24756,7 @@ var PropTypes = {
 
 module.exports = PropTypes;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Redirect.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Redirect.js":[function(require,module,exports){
 /**
  * Encapsulates a redirect to the given route.
  */
@@ -23351,7 +24768,7 @@ function Redirect(to, params, query) {
 
 module.exports = Redirect;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Transition.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Transition.js":[function(require,module,exports){
 var assign = require('react/lib/Object.assign');
 var reversedArray = require('./reversedArray');
 var Redirect = require('./Redirect');
@@ -23482,7 +24899,7 @@ assign(Transition.prototype, {
 
 module.exports = Transition;
 
-},{"./Promise":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Promise.js","./Redirect":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Redirect.js","./reversedArray":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/reversedArray.js","react/lib/Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/createRouter.js":[function(require,module,exports){
+},{"./Promise":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Promise.js","./Redirect":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Redirect.js","./reversedArray":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/reversedArray.js","react/lib/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/createRouter.js":[function(require,module,exports){
 (function (process){
 /* jshint -W058 */
 var React = require('react');
@@ -23980,7 +25397,7 @@ function createRouter(options) {
 module.exports = createRouter;
 
 }).call(this,require('_process'))
-},{"../actions/LocationActions":"/home/vagrant/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../behaviors/ImitateBrowserBehavior":"/home/vagrant/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","../components/RouteHandler":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js","../locations/HashLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js","../locations/HistoryLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js","../locations/RefreshLocation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js","../mixins/NavigationContext":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/NavigationContext.js","../mixins/Scrolling":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/Scrolling.js","../mixins/StateContext":"/home/vagrant/bridge-controller/node_modules/react-router/modules/mixins/StateContext.js","./Cancellation":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Cancellation.js","./History":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/History.js","./Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js","./PropTypes":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","./Redirect":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Redirect.js","./Transition":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Transition.js","./createRoutesFromChildren":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/createRoutesFromChildren.js","./supportsHistory":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/supportsHistory.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","react/lib/warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/createRoutesFromChildren.js":[function(require,module,exports){
+},{"../actions/LocationActions":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/actions/LocationActions.js","../behaviors/ImitateBrowserBehavior":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/behaviors/ImitateBrowserBehavior.js","../components/RouteHandler":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/RouteHandler.js","../locations/HashLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HashLocation.js","../locations/HistoryLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/HistoryLocation.js","../locations/RefreshLocation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/locations/RefreshLocation.js","../mixins/NavigationContext":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/NavigationContext.js","../mixins/Scrolling":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/Scrolling.js","../mixins/StateContext":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/mixins/StateContext.js","./Cancellation":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Cancellation.js","./History":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/History.js","./Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js","./PropTypes":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/PropTypes.js","./Redirect":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Redirect.js","./Transition":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Transition.js","./createRoutesFromChildren":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/createRoutesFromChildren.js","./supportsHistory":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/supportsHistory.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react/lib/ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","react/lib/warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/createRoutesFromChildren.js":[function(require,module,exports){
 /* jshint -W084 */
 var React = require('react');
 var warning = require('react/lib/warning');
@@ -24147,7 +25564,7 @@ function createRoutesFromChildren(children, parentRoute, namedRoutes) {
 
 module.exports = createRoutesFromChildren;
 
-},{"../components/DefaultRoute":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js","../components/NotFoundRoute":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js","../components/Redirect":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Redirect.js","../components/Route":"/home/vagrant/bridge-controller/node_modules/react-router/modules/components/Route.js","./Path":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/Path.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","react/lib/warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/getWindowScrollPosition.js":[function(require,module,exports){
+},{"../components/DefaultRoute":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/DefaultRoute.js","../components/NotFoundRoute":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/NotFoundRoute.js","../components/Redirect":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Redirect.js","../components/Route":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/components/Route.js","./Path":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/Path.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","react/lib/warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/getWindowScrollPosition.js":[function(require,module,exports){
 var invariant = require('react/lib/invariant');
 var canUseDOM = require('react/lib/ExecutionEnvironment').canUseDOM;
 
@@ -24168,14 +25585,14 @@ function getWindowScrollPosition() {
 
 module.exports = getWindowScrollPosition;
 
-},{"react/lib/ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/reversedArray.js":[function(require,module,exports){
+},{"react/lib/ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","react/lib/invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/reversedArray.js":[function(require,module,exports){
 function reversedArray(array) {
   return array.slice(0).reverse();
 }
 
 module.exports = reversedArray;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/runRouter.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/runRouter.js":[function(require,module,exports){
 var createRouter = require('./createRouter');
 
 /**
@@ -24225,7 +25642,7 @@ function runRouter(routes, location, callback) {
 
 module.exports = runRouter;
 
-},{"./createRouter":"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/createRouter.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/modules/utils/supportsHistory.js":[function(require,module,exports){
+},{"./createRouter":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/createRouter.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/modules/utils/supportsHistory.js":[function(require,module,exports){
 function supportsHistory() {
   /*! taken from modernizr
    * https://github.com/Modernizr/Modernizr/blob/master/LICENSE
@@ -24245,10 +25662,10 @@ function supportsHistory() {
 
 module.exports = supportsHistory;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/index.js":[function(require,module,exports){
 module.exports = require('./lib');
 
-},{"./lib":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/index.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/index.js":[function(require,module,exports){
+},{"./lib":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/index.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/index.js":[function(require,module,exports){
 // Load modules
 
 var Stringify = require('./stringify');
@@ -24265,7 +25682,7 @@ module.exports = {
     parse: Parse
 };
 
-},{"./parse":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/parse.js","./stringify":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/stringify.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/parse.js":[function(require,module,exports){
+},{"./parse":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/parse.js","./stringify":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/stringify.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/parse.js":[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -24421,7 +25838,7 @@ module.exports = function (str, options) {
     return Utils.compact(obj);
 };
 
-},{"./utils":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/stringify.js":[function(require,module,exports){
+},{"./utils":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/stringify.js":[function(require,module,exports){
 // Load modules
 
 var Utils = require('./utils');
@@ -24481,7 +25898,7 @@ module.exports = function (obj, options) {
     return keys.join(delimiter);
 };
 
-},{"./utils":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js":[function(require,module,exports){
+},{"./utils":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/qs/lib/utils.js":[function(require,module,exports){
 (function (Buffer){
 // Load modules
 
@@ -24624,7 +26041,7 @@ exports.isBuffer = function (obj) {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/buffer/index.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Promise.js":[function(require,module,exports){
+},{"buffer":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/buffer/index.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Promise.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -24643,7 +26060,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Scheduler.js","./async":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/async.js","./makePromise":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/makePromise.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Queue.js":[function(require,module,exports){
+},{"./Scheduler":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Scheduler.js","./async":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/async.js","./makePromise":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/makePromise.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Queue.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -24715,7 +26132,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Scheduler.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Scheduler.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -24799,7 +26216,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"./Queue":"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/Queue.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/async.js":[function(require,module,exports){
+},{"./Queue":"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/Queue.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/async.js":[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -24874,7 +26291,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react-router/node_modules/when/lib/makePromise.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react-router/node_modules/when/lib/makePromise.js":[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -25672,7 +27089,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25699,7 +27116,7 @@ var AutoFocusMixin = {
 
 module.exports = AutoFocusMixin;
 
-},{"./focusNode":"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
+},{"./focusNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/focusNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -25921,7 +27338,7 @@ var BeforeInputEventPlugin = {
 
 module.exports = BeforeInputEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./SyntheticInputEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26037,7 +27454,7 @@ var CSSProperty = {
 
 module.exports = CSSProperty;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -26172,7 +27589,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./CSSProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./camelizeStyleName":"/home/vagrant/bridge-controller/node_modules/react/lib/camelizeStyleName.js","./dangerousStyleValue":"/home/vagrant/bridge-controller/node_modules/react/lib/dangerousStyleValue.js","./hyphenateStyleName":"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenateStyleName.js","./memoizeStringOnly":"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
+},{"./CSSProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSProperty.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./camelizeStyleName":"/home/ubuntu/bridge-controller/node_modules/react/lib/camelizeStyleName.js","./dangerousStyleValue":"/home/ubuntu/bridge-controller/node_modules/react/lib/dangerousStyleValue.js","./hyphenateStyleName":"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenateStyleName.js","./memoizeStringOnly":"/home/ubuntu/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -26272,7 +27689,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 module.exports = CallbackQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26654,7 +28071,7 @@ var ChangeEventPlugin = {
 
 module.exports = ChangeEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js","./isTextInputElement":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./isEventSupported":"/home/ubuntu/bridge-controller/node_modules/react/lib/isEventSupported.js","./isTextInputElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26679,7 +28096,7 @@ var ClientReactRootIndex = {
 
 module.exports = ClientReactRootIndex;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26938,7 +28355,7 @@ var CompositionEventPlugin = {
 
 module.exports = CompositionEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticCompositionEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./ReactInputSelection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticCompositionEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js","./getTextContentAccessor":"/home/ubuntu/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27113,7 +28530,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 }).call(this,require('_process'))
-},{"./Danger":"/home/vagrant/bridge-controller/node_modules/react/lib/Danger.js","./ReactMultiChildUpdateTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
+},{"./Danger":"/home/ubuntu/bridge-controller/node_modules/react/lib/Danger.js","./ReactMultiChildUpdateTypes":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./getTextContentAccessor":"/home/ubuntu/bridge-controller/node_modules/react/lib/getTextContentAccessor.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27412,7 +28829,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27609,7 +29026,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./memoizeStringOnly":"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Danger.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./escapeTextForBrowser":"/home/ubuntu/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./memoizeStringOnly":"/home/ubuntu/bridge-controller/node_modules/react/lib/memoizeStringOnly.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Danger.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27795,7 +29212,7 @@ var Danger = {
 module.exports = Danger;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createNodesFromMarkup":"/home/vagrant/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./getMarkupWrap":"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createNodesFromMarkup":"/home/ubuntu/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","./getMarkupWrap":"/home/ubuntu/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27835,7 +29252,7 @@ var DefaultEventPluginOrder = [
 
 module.exports = DefaultEventPluginOrder;
 
-},{"./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
+},{"./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -27975,7 +29392,7 @@ var EnterLeaveEventPlugin = {
 
 module.exports = EnterLeaveEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./SyntheticMouseEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28047,7 +29464,7 @@ var EventConstants = {
 
 module.exports = EventConstants;
 
-},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventListener.js":[function(require,module,exports){
+},{"./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventListener.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014 Facebook, Inc.
@@ -28137,7 +29554,7 @@ var EventListener = {
 module.exports = EventListener;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
+},{"./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28413,7 +29830,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
+},{"./EventPluginRegistry":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./EventPluginUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./accumulateInto":"/home/ubuntu/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/ubuntu/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28693,7 +30110,7 @@ var EventPluginRegistry = {
 module.exports = EventPluginRegistry;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -28914,7 +30331,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29056,7 +30473,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js","./accumulateInto":"/home/ubuntu/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/ubuntu/bridge-controller/node_modules/react/lib/forEachAccumulated.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29101,7 +30518,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29287,7 +30704,7 @@ var HTMLDOMPropertyConfig = {
 
 module.exports = HTMLDOMPropertyConfig;
 
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29443,7 +30860,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 }).call(this,require('_process'))
-},{"./ReactPropTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
+},{"./ReactPropTypes":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -29493,7 +30910,7 @@ var LocalEventTrapMixin = {
 module.exports = LocalEventTrapMixin;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./accumulateInto":"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./accumulateInto":"/home/ubuntu/bridge-controller/node_modules/react/lib/accumulateInto.js","./forEachAccumulated":"/home/ubuntu/bridge-controller/node_modules/react/lib/forEachAccumulated.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -29551,7 +30968,7 @@ var MobileSafariClickEventPlugin = {
 
 module.exports = MobileSafariClickEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -29598,7 +31015,7 @@ function assign(target, sources) {
 
 module.exports = assign;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29714,7 +31131,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/React.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/React.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29902,7 +31319,7 @@ React.version = '0.12.0';
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactChildren.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactDOMComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDefaultInjection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./ReactServerRendering":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRendering.js","./ReactTextComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./onlyChild":"/home/vagrant/bridge-controller/node_modules/react/lib/onlyChild.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
+},{"./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./EventPluginUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactChildren":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactChildren.js","./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactContext":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactDOMComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDefaultInjection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTypes":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypes.js","./ReactServerRendering":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRendering.js","./ReactTextComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./deprecated":"/home/ubuntu/bridge-controller/node_modules/react/lib/deprecated.js","./onlyChild":"/home/ubuntu/bridge-controller/node_modules/react/lib/onlyChild.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29945,7 +31362,7 @@ var ReactBrowserComponentMixin = {
 module.exports = ReactBrowserComponentMixin;
 
 }).call(this,require('_process'))
-},{"./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
+},{"./ReactEmptyComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30300,7 +31717,7 @@ var ReactBrowserEventEmitter = assign({}, ReactEventEmitterMixin, {
 
 module.exports = ReactBrowserEventEmitter;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginHub":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js","./EventPluginRegistry":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginRegistry.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactEventEmitterMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js","./ViewportMetrics":"/home/ubuntu/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./isEventSupported":"/home/ubuntu/bridge-controller/node_modules/react/lib/isEventSupported.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -30450,7 +31867,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 }).call(this,require('_process'))
-},{"./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./traverseAllChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
+},{"./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./traverseAllChildren":"/home/ubuntu/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -30893,7 +32310,7 @@ var ReactComponent = {
 module.exports = ReactComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31015,7 +32432,7 @@ var ReactComponentBrowserEnvironment = {
 module.exports = ReactComponentBrowserEnvironment;
 
 }).call(this,require('_process'))
-},{"./ReactDOMIDOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js","./ReactMarkupChecksum":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactReconcileTransaction":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js","./getReactRootElementInContainer":"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
+},{"./ReactDOMIDOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js","./ReactMarkupChecksum":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactReconcileTransaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js","./getReactRootElementInContainer":"/home/ubuntu/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/ubuntu/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32455,7 +33872,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactErrorUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactErrorUtils.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTransferer":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTransferer.js","./ReactPropTypeLocationNames":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./ReactPropTypeLocations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./mapObject":"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactContext":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactEmptyComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactErrorUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactErrorUtils.js","./ReactLegacyElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactOwner.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactPropTransferer":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTransferer.js","./ReactPropTypeLocationNames":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./ReactPropTypeLocations":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./instantiateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js","./mapObject":"/home/ubuntu/bridge-controller/node_modules/react/lib/mapObject.js","./monitorCodeUse":"/home/ubuntu/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./shouldUpdateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32517,7 +33934,7 @@ var ReactContext = {
 
 module.exports = ReactContext;
 
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32551,7 +33968,7 @@ var ReactCurrentOwner = {
 
 module.exports = ReactCurrentOwner;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32734,7 +34151,7 @@ var ReactDOM = mapObject({
 module.exports = ReactDOM;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./mapObject":"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactElementValidator":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElementValidator.js","./ReactLegacyElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./mapObject":"/home/ubuntu/bridge-controller/node_modules/react/lib/mapObject.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32799,7 +34216,7 @@ var ReactDOMButton = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMButton;
 
-},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33286,7 +34703,7 @@ assign(
 module.exports = ReactDOMComponent;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./isEventSupported":"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
+},{"./CSSPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactMultiChild":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChild.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./escapeTextForBrowser":"/home/ubuntu/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./isEventSupported":"/home/ubuntu/bridge-controller/node_modules/react/lib/isEventSupported.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js","./monitorCodeUse":"/home/ubuntu/bridge-controller/node_modules/react/lib/monitorCodeUse.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33336,7 +34753,7 @@ var ReactDOMForm = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMForm;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33522,7 +34939,7 @@ var ReactDOMIDOperations = {
 module.exports = ReactDOMIDOperations;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMChildrenOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
+},{"./CSSPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js","./DOMChildrenOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js","./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./setInnerHTML":"/home/ubuntu/bridge-controller/node_modules/react/lib/setInnerHTML.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33570,7 +34987,7 @@ var ReactDOMImg = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMImg;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./LocalEventTrapMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33748,7 +35165,7 @@ var ReactDOMInput = ReactCompositeComponent.createClass({
 module.exports = ReactDOMInput;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33801,7 +35218,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 module.exports = ReactDOMOption;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33985,7 +35402,7 @@ var ReactDOMSelect = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMSelect;
 
-},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./LinkedValueUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34194,7 +35611,7 @@ var ReactDOMSelection = {
 
 module.exports = ReactDOMSelection;
 
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./getNodeForCharacterOffset":"/home/vagrant/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js","./getTextContentAccessor":"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./getNodeForCharacterOffset":"/home/ubuntu/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js","./getTextContentAccessor":"/home/ubuntu/bridge-controller/node_modules/react/lib/getTextContentAccessor.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -34335,7 +35752,7 @@ var ReactDOMTextarea = ReactCompositeComponent.createClass({
 module.exports = ReactDOMTextarea;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
+},{"./AutoFocusMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js","./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./LinkedValueUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/LinkedValueUtils.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactDOM":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34408,7 +35825,7 @@ var ReactDefaultBatchingStrategy = {
 
 module.exports = ReactDefaultBatchingStrategy;
 
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./Transaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -34537,7 +35954,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js","./ChangeEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js","./ClientReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js","./CompositionEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js","./DefaultEventPluginOrder":"/home/vagrant/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js","./EnterLeaveEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./HTMLDOMPropertyConfig":"/home/vagrant/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js","./MobileSafariClickEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js","./ReactBrowserComponentMixin":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactComponentBrowserEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js","./ReactDOMButton":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMButton.js","./ReactDOMComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDOMForm":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMForm.js","./ReactDOMImg":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMImg.js","./ReactDOMInput":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMInput.js","./ReactDOMOption":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMOption.js","./ReactDOMSelect":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelect.js","./ReactDOMTextarea":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js","./ReactDefaultBatchingStrategy":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js","./ReactDefaultPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js","./ReactEventListener":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventListener.js","./ReactInjection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInjection.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./SVGDOMPropertyConfig":"/home/vagrant/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js","./SelectEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/SelectEventPlugin.js","./ServerReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js","./SimpleEventPlugin":"/home/vagrant/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js","./createFullPageComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/createFullPageComponent.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
+},{"./BeforeInputEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js","./ChangeEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js","./ClientReactRootIndex":"/home/ubuntu/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js","./CompositionEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/CompositionEventPlugin.js","./DefaultEventPluginOrder":"/home/ubuntu/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js","./EnterLeaveEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./HTMLDOMPropertyConfig":"/home/ubuntu/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js","./MobileSafariClickEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js","./ReactBrowserComponentMixin":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js","./ReactComponentBrowserEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js","./ReactDOMButton":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMButton.js","./ReactDOMComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMComponent.js","./ReactDOMForm":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMForm.js","./ReactDOMImg":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMImg.js","./ReactDOMInput":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMInput.js","./ReactDOMOption":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMOption.js","./ReactDOMSelect":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelect.js","./ReactDOMTextarea":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js","./ReactDefaultBatchingStrategy":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js","./ReactDefaultPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js","./ReactEventListener":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventListener.js","./ReactInjection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInjection.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./SVGDOMPropertyConfig":"/home/ubuntu/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js","./SelectEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/SelectEventPlugin.js","./ServerReactRootIndex":"/home/ubuntu/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js","./SimpleEventPlugin":"/home/ubuntu/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js","./createFullPageComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/createFullPageComponent.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -34797,7 +36214,7 @@ var ReactDefaultPerf = {
 
 module.exports = ReactDefaultPerf;
 
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactDefaultPerfAnalysis":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./performanceNow":"/home/vagrant/bridge-controller/node_modules/react/lib/performanceNow.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactDefaultPerfAnalysis":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./performanceNow":"/home/ubuntu/bridge-controller/node_modules/react/lib/performanceNow.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35003,7 +36420,7 @@ var ReactDefaultPerfAnalysis = {
 
 module.exports = ReactDefaultPerfAnalysis;
 
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -35249,7 +36666,7 @@ ReactElement.isValidElement = function(object) {
 module.exports = ReactElement;
 
 }).call(this,require('_process'))
-},{"./ReactContext":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
+},{"./ReactContext":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactContext.js","./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -35517,7 +36934,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 
-},{"./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocations":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
+},{"./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocations":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js","./monitorCodeUse":"/home/ubuntu/bridge-controller/node_modules/react/lib/monitorCodeUse.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -35594,7 +37011,7 @@ var ReactEmptyComponent = {
 module.exports = ReactEmptyComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35626,7 +37043,7 @@ var ReactErrorUtils = {
 
 module.exports = ReactErrorUtils;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35676,7 +37093,7 @@ var ReactEventEmitterMixin = {
 
 module.exports = ReactEventEmitterMixin;
 
-},{"./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
+},{"./EventPluginHub":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35860,7 +37277,7 @@ var ReactEventListener = {
 
 module.exports = ReactEventListener;
 
-},{"./EventListener":"/home/vagrant/bridge-controller/node_modules/react/lib/EventListener.js","./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js","./getUnboundedScrollPosition":"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
+},{"./EventListener":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventListener.js","./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMount":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js","./getEventTarget":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventTarget.js","./getUnboundedScrollPosition":"/home/ubuntu/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -35900,7 +37317,7 @@ var ReactInjection = {
 
 module.exports = ReactInjection;
 
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./EventPluginHub":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginHub.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactNativeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./ReactUpdates":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./EventPluginHub":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js","./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactEmptyComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactNativeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./ReactRootIndex":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./ReactUpdates":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36036,7 +37453,7 @@ var ReactInputSelection = {
 
 module.exports = ReactInputSelection;
 
-},{"./ReactDOMSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactDOMSelection.js","./containsNode":"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js","./focusNode":"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js","./getActiveElement":"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
+},{"./ReactDOMSelection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelection.js","./containsNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/containsNode.js","./focusNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/focusNode.js","./getActiveElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/getActiveElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -36371,7 +37788,7 @@ var ReactInstanceHandles = {
 module.exports = ReactInstanceHandles;
 
 }).call(this,require('_process'))
-},{"./ReactRootIndex":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js":[function(require,module,exports){
+},{"./ReactRootIndex":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactRootIndex.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -36618,7 +38035,7 @@ ReactLegacyElementFactory._isLegacyCallWarningEnabled = true;
 module.exports = ReactLegacyElementFactory;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./monitorCodeUse":"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
+},{"./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./monitorCodeUse":"/home/ubuntu/bridge-controller/node_modules/react/lib/monitorCodeUse.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -36666,7 +38083,7 @@ var ReactMarkupChecksum = {
 
 module.exports = ReactMarkupChecksum;
 
-},{"./adler32":"/home/vagrant/bridge-controller/node_modules/react/lib/adler32.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
+},{"./adler32":"/home/ubuntu/bridge-controller/node_modules/react/lib/adler32.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -37364,7 +38781,7 @@ ReactMount.renderComponent = deprecated(
 module.exports = ReactMount;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./containsNode":"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./getReactRootElementInContainer":"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js","./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactLegacyElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./containsNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/containsNode.js","./deprecated":"/home/ubuntu/bridge-controller/node_modules/react/lib/deprecated.js","./getReactRootElementInContainer":"/home/ubuntu/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js","./instantiateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./shouldUpdateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37792,7 +39209,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 
-},{"./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMultiChildUpdateTypes":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./flattenChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/flattenChildren.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./shouldUpdateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
+},{"./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactMultiChildUpdateTypes":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js","./flattenChildren":"/home/ubuntu/bridge-controller/node_modules/react/lib/flattenChildren.js","./instantiateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./shouldUpdateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -37825,7 +39242,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 
 module.exports = ReactMultiChildUpdateTypes;
 
-},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
+},{"./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -37898,7 +39315,7 @@ var ReactNativeComponent = {
 module.exports = ReactNativeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38054,7 +39471,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 }).call(this,require('_process'))
-},{"./emptyObject":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyObject.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
+},{"./emptyObject":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyObject.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38138,7 +39555,7 @@ function _noMeasure(objName, fnName, func) {
 module.exports = ReactPerf;
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTransferer.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTransferer.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38305,7 +39722,7 @@ var ReactPropTransferer = {
 module.exports = ReactPropTransferer;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./joinClasses":"/home/vagrant/bridge-controller/node_modules/react/lib/joinClasses.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./joinClasses":"/home/ubuntu/bridge-controller/node_modules/react/lib/joinClasses.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -38333,7 +39750,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactPropTypeLocationNames;
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38357,7 +39774,7 @@ var ReactPropTypeLocations = keyMirror({
 
 module.exports = ReactPropTypeLocations;
 
-},{"./keyMirror":"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
+},{"./keyMirror":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38711,7 +40128,7 @@ function getPreciseType(propValue) {
 
 module.exports = ReactPropTypes;
 
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocationNames":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./deprecated":"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactPropTypeLocationNames":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js","./deprecated":"/home/ubuntu/bridge-controller/node_modules/react/lib/deprecated.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38767,7 +40184,7 @@ PooledClass.addPoolingTo(ReactPutListenerQueue);
 
 module.exports = ReactPutListenerQueue;
 
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38943,7 +40360,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
 
-},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./ReactPutListenerQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
+},{"./CallbackQueue":"/home/ubuntu/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactBrowserEventEmitter":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js","./ReactInputSelection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./ReactPutListenerQueue":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -38974,7 +40391,7 @@ var ReactRootIndex = {
 
 module.exports = ReactRootIndex;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39054,7 +40471,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMarkupChecksum":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactServerRenderingTransaction":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js","./instantiateReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./ReactMarkupChecksum":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js","./ReactServerRenderingTransaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js","./instantiateReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -39167,7 +40584,7 @@ PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
 
-},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactPutListenerQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js":[function(require,module,exports){
+},{"./CallbackQueue":"/home/ubuntu/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactPutListenerQueue":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js","./Transaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactTextComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39273,7 +40690,7 @@ ReactTextComponentFactory.type = ReactTextComponent;
 
 module.exports = ReactTextComponentFactory;
 
-},{"./DOMPropertyOperations":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
+},{"./DOMPropertyOperations":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./ReactComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./escapeTextForBrowser":"/home/ubuntu/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -39563,7 +40980,7 @@ var ReactUpdates = {
 module.exports = ReactUpdates;
 
 }).call(this,require('_process'))
-},{"./CallbackQueue":"/home/vagrant/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactCurrentOwner":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactPerf":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactPerf.js","./Transaction":"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
+},{"./CallbackQueue":"/home/ubuntu/bridge-controller/node_modules/react/lib/CallbackQueue.js","./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./ReactCurrentOwner":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js","./ReactPerf":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js","./Transaction":"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39655,7 +41072,7 @@ var SVGDOMPropertyConfig = {
 
 module.exports = SVGDOMPropertyConfig;
 
-},{"./DOMProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/DOMProperty.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
+},{"./DOMProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39850,7 +41267,7 @@ var SelectEventPlugin = {
 
 module.exports = SelectEventPlugin;
 
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactInputSelection":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getActiveElement":"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js","./isTextInputElement":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./shallowEqual":"/home/vagrant/bridge-controller/node_modules/react/lib/shallowEqual.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./ReactInputSelection":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInputSelection.js","./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getActiveElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/getActiveElement.js","./isTextInputElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextInputElement.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js","./shallowEqual":"/home/ubuntu/bridge-controller/node_modules/react/lib/shallowEqual.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -39881,7 +41298,7 @@ var ServerReactRootIndex = {
 
 module.exports = ServerReactRootIndex;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -40309,7 +41726,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 }).call(this,require('_process'))
-},{"./EventConstants":"/home/vagrant/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginUtils":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./EventPropagators":"/home/vagrant/bridge-controller/node_modules/react/lib/EventPropagators.js","./SyntheticClipboardEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js","./SyntheticDragEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js","./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./SyntheticFocusEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js","./SyntheticKeyboardEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js","./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./SyntheticTouchEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js","./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./SyntheticWheelEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js","./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","./keyOf":"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
+},{"./EventConstants":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js","./EventPluginUtils":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginUtils.js","./EventPropagators":"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js","./SyntheticClipboardEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js","./SyntheticDragEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js","./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./SyntheticFocusEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js","./SyntheticKeyboardEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js","./SyntheticMouseEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js","./SyntheticTouchEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js","./SyntheticUIEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./SyntheticWheelEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js","./getEventCharCode":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventCharCode.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","./keyOf":"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40355,7 +41772,7 @@ SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 module.exports = SyntheticClipboardEvent;
 
 
-},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40401,7 +41818,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticCompositionEvent;
 
 
-},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40440,7 +41857,7 @@ SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
 
-},{"./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40598,7 +42015,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
 
 module.exports = SyntheticEvent;
 
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/vagrant/bridge-controller/node_modules/react/lib/PooledClass.js","./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./PooledClass":"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js","./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","./getEventTarget":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40637,7 +42054,7 @@ SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
 
-},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -40684,7 +42101,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticInputEvent;
 
 
-},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40771,7 +42188,7 @@ SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
 
-},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js","./getEventKey":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventKey.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventCharCode":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventCharCode.js","./getEventKey":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventKey.js","./getEventModifierState":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40854,7 +42271,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
 
-},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./ViewportMetrics":"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./ViewportMetrics":"/home/ubuntu/bridge-controller/node_modules/react/lib/ViewportMetrics.js","./getEventModifierState":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40902,7 +42319,7 @@ SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
 
-},{"./SyntheticUIEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventModifierState":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
+},{"./SyntheticUIEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js","./getEventModifierState":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventModifierState.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -40964,7 +42381,7 @@ SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
 
-},{"./SyntheticEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getEventTarget":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
+},{"./SyntheticEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js","./getEventTarget":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventTarget.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41025,7 +42442,7 @@ SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
 
-},{"./SyntheticMouseEvent":"/home/vagrant/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/Transaction.js":[function(require,module,exports){
+},{"./SyntheticMouseEvent":"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -41266,7 +42683,7 @@ var Transaction = {
 module.exports = Transaction;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41298,7 +42715,7 @@ var ViewportMetrics = {
 
 module.exports = ViewportMetrics;
 
-},{"./getUnboundedScrollPosition":"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
+},{"./getUnboundedScrollPosition":"/home/ubuntu/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -41364,7 +42781,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/adler32.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/adler32.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41398,7 +42815,7 @@ function adler32(data) {
 
 module.exports = adler32;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/camelize.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/camelize.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41430,7 +42847,7 @@ function camelize(string) {
 
 module.exports = camelize;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -41472,7 +42889,7 @@ function camelizeStyleName(string) {
 
 module.exports = camelizeStyleName;
 
-},{"./camelize":"/home/vagrant/bridge-controller/node_modules/react/lib/camelize.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/containsNode.js":[function(require,module,exports){
+},{"./camelize":"/home/ubuntu/bridge-controller/node_modules/react/lib/camelize.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/containsNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41516,7 +42933,7 @@ function containsNode(outerNode, innerNode) {
 
 module.exports = containsNode;
 
-},{"./isTextNode":"/home/vagrant/bridge-controller/node_modules/react/lib/isTextNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
+},{"./isTextNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createArrayFrom.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41602,7 +43019,7 @@ function createArrayFrom(obj) {
 
 module.exports = createArrayFrom;
 
-},{"./toArray":"/home/vagrant/bridge-controller/node_modules/react/lib/toArray.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
+},{"./toArray":"/home/ubuntu/bridge-controller/node_modules/react/lib/toArray.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -41663,7 +43080,7 @@ function createFullPageComponent(tag) {
 module.exports = createFullPageComponent;
 
 }).call(this,require('_process'))
-},{"./ReactCompositeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
+},{"./ReactCompositeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js","./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -41753,7 +43170,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createArrayFrom":"/home/vagrant/bridge-controller/node_modules/react/lib/createArrayFrom.js","./getMarkupWrap":"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/cx.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./createArrayFrom":"/home/ubuntu/bridge-controller/node_modules/react/lib/createArrayFrom.js","./getMarkupWrap":"/home/ubuntu/bridge-controller/node_modules/react/lib/getMarkupWrap.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/cx.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41792,7 +43209,7 @@ function cx(classNames) {
 
 module.exports = cx;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41850,7 +43267,7 @@ function dangerousStyleValue(name, value) {
 
 module.exports = dangerousStyleValue;
 
-},{"./CSSProperty":"/home/vagrant/bridge-controller/node_modules/react/lib/CSSProperty.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/deprecated.js":[function(require,module,exports){
+},{"./CSSProperty":"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSProperty.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/deprecated.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -41901,7 +43318,7 @@ function deprecated(namespace, oldName, newName, ctx, fn) {
 module.exports = deprecated;
 
 }).call(this,require('_process'))
-},{"./Object.assign":"/home/vagrant/bridge-controller/node_modules/react/lib/Object.assign.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -41935,7 +43352,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -41959,7 +43376,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = emptyObject;
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/escapeTextForBrowser.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42000,7 +43417,7 @@ function escapeTextForBrowser(text) {
 
 module.exports = escapeTextForBrowser;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -42069,7 +43486,7 @@ function flattenChildren(children) {
 module.exports = flattenChildren;
 
 }).call(this,require('_process'))
-},{"./ReactTextComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./traverseAllChildren":"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/focusNode.js":[function(require,module,exports){
+},{"./ReactTextComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactTextComponent.js","./traverseAllChildren":"/home/ubuntu/bridge-controller/node_modules/react/lib/traverseAllChildren.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/focusNode.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -42098,7 +43515,7 @@ function focusNode(node) {
 
 module.exports = focusNode;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42129,7 +43546,7 @@ var forEachAccumulated = function(arr, cb, scope) {
 
 module.exports = forEachAccumulated;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42158,7 +43575,7 @@ function getActiveElement() /*?DOMElement*/ {
 
 module.exports = getActiveElement;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42210,7 +43627,7 @@ function getEventCharCode(nativeEvent) {
 
 module.exports = getEventCharCode;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42315,7 +43732,7 @@ function getEventKey(nativeEvent) {
 
 module.exports = getEventKey;
 
-},{"./getEventCharCode":"/home/vagrant/bridge-controller/node_modules/react/lib/getEventCharCode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
+},{"./getEventCharCode":"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventCharCode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  * All rights reserved.
@@ -42362,7 +43779,7 @@ function getEventModifierState(nativeEvent) {
 
 module.exports = getEventModifierState;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42393,7 +43810,7 @@ function getEventTarget(nativeEvent) {
 
 module.exports = getEventTarget;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -42510,7 +43927,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42585,7 +44002,7 @@ function getNodeForCharacterOffset(root, offset) {
 
 module.exports = getNodeForCharacterOffset;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42620,7 +44037,7 @@ function getReactRootElementInContainer(container) {
 
 module.exports = getReactRootElementInContainer;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42657,7 +44074,7 @@ function getTextContentAccessor() {
 
 module.exports = getTextContentAccessor;
 
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42697,7 +44114,7 @@ function getUnboundedScrollPosition(scrollable) {
 
 module.exports = getUnboundedScrollPosition;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42730,7 +44147,7 @@ function hyphenate(string) {
 
 module.exports = hyphenate;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -42771,7 +44188,7 @@ function hyphenateStyleName(string) {
 
 module.exports = hyphenateStyleName;
 
-},{"./hyphenate":"/home/vagrant/bridge-controller/node_modules/react/lib/hyphenate.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
+},{"./hyphenate":"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenate.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -42885,7 +44302,7 @@ function instantiateReactComponent(element, parentCompositeType) {
 module.exports = instantiateReactComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactEmptyComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactLegacyElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactNativeComponent":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./warning":"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactEmptyComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js","./ReactLegacyElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLegacyElement.js","./ReactNativeComponent":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactNativeComponent.js","./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -42942,7 +44359,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43007,7 +44424,7 @@ function isEventSupported(eventNameSuffix, capture) {
 
 module.exports = isEventSupported;
 
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/isNode.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43035,7 +44452,7 @@ function isNode(object) {
 
 module.exports = isNode;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43079,7 +44496,7 @@ function isTextInputElement(elem) {
 
 module.exports = isTextInputElement;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43104,7 +44521,7 @@ function isTextNode(object) {
 
 module.exports = isTextNode;
 
-},{"./isNode":"/home/vagrant/bridge-controller/node_modules/react/lib/isNode.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/joinClasses.js":[function(require,module,exports){
+},{"./isNode":"/home/ubuntu/bridge-controller/node_modules/react/lib/isNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/joinClasses.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43145,7 +44562,7 @@ function joinClasses(className/*, ... */) {
 
 module.exports = joinClasses;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -43200,7 +44617,7 @@ var keyMirror = function(obj) {
 module.exports = keyMirror;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/keyOf.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43236,7 +44653,7 @@ var keyOf = function(oneKeyObj) {
 
 module.exports = keyOf;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/mapObject.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/mapObject.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43289,7 +44706,7 @@ function mapObject(object, callback, context) {
 
 module.exports = mapObject;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43323,7 +44740,7 @@ function memoizeStringOnly(callback) {
 
 module.exports = memoizeStringOnly;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/monitorCodeUse.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -43357,7 +44774,7 @@ function monitorCodeUse(eventName, data) {
 module.exports = monitorCodeUse;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -43397,7 +44814,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/performance.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/performance.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43425,7 +44842,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = performance || {};
 
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43453,7 +44870,7 @@ var performanceNow = performance.now.bind(performance);
 
 module.exports = performanceNow;
 
-},{"./performance":"/home/vagrant/bridge-controller/node_modules/react/lib/performance.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
+},{"./performance":"/home/ubuntu/bridge-controller/node_modules/react/lib/performance.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43531,7 +44948,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = setInnerHTML;
 
-},{"./ExecutionEnvironment":"/home/vagrant/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
+},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43575,7 +44992,7 @@ function shallowEqual(objA, objB) {
 
 module.exports = shallowEqual;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -43613,7 +45030,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 
 module.exports = shouldUpdateReactComponent;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/react/lib/toArray.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/toArray.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -43685,7 +45102,7 @@ function toArray(obj) {
 module.exports = toArray;
 
 }).call(this,require('_process'))
-},{"./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
+},{"./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -43868,7 +45285,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 }).call(this,require('_process'))
-},{"./ReactElement":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/vagrant/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./invariant":"/home/vagrant/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/lib/warning.js":[function(require,module,exports){
+},{"./ReactElement":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js","./ReactInstanceHandles":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js","./invariant":"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js":[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -43913,14 +45330,14 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":"/home/vagrant/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/vagrant/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/vagrant/bridge-controller/node_modules/react/react.js":[function(require,module,exports){
+},{"./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/react.js":[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":"/home/vagrant/bridge-controller/node_modules/react/lib/React.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/index.js":[function(require,module,exports){
+},{"./lib/React":"/home/ubuntu/bridge-controller/node_modules/react/lib/React.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/index.js":[function(require,module,exports){
 
 module.exports = require('./lib/');
 
-},{"./lib/":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/index.js":[function(require,module,exports){
+},{"./lib/":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -44009,7 +45426,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/manager.js","./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/manager.js":[function(require,module,exports){
+},{"./manager":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/manager.js","./socket":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/url.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","socket.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/manager.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -44484,7 +45901,7 @@ Manager.prototype.onreconnect = function(){
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js","./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js","component-bind":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-client":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js","indexof":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","object-component":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js":[function(require,module,exports){
+},{"./on":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/on.js","./socket":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/socket.js","./url":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/url.js","component-bind":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-client":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js","indexof":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","object-component":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js","socket.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/on.js":[function(require,module,exports){
 
 /**
  * Module exports.
@@ -44510,7 +45927,7 @@ function on(obj, ev, fn) {
   };
 }
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/socket.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/socket.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -44896,7 +46313,7 @@ Socket.prototype.disconnect = function(){
   return this;
 };
 
-},{"./on":"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/on.js","component-bind":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","has-binary":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js","socket.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js","to-array":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/lib/url.js":[function(require,module,exports){
+},{"./on":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/on.js","component-bind":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js","component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","has-binary":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js","socket.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js","to-array":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/lib/url.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -44973,7 +46390,7 @@ function url(uri, loc){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","parseuri":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js":[function(require,module,exports){
+},{"debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","parseuri":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-bind/index.js":[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -44998,7 +46415,7 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js":[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -45164,7 +46581,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js":[function(require,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -45303,11 +46720,11 @@ try {
   if (window.localStorage) debug.enable(localStorage.debug);
 } catch(e){}
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/index.js":[function(require,module,exports){
 
 module.exports =  require('./lib/');
 
-},{"./lib/":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js":[function(require,module,exports){
+},{"./lib/":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/index.js":[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -45319,7 +46736,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js":[function(require,module,exports){
+},{"./socket":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js","engine.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/socket.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -46006,7 +47423,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","./transports":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","indexof":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","parsejson":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","parseuri":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js":[function(require,module,exports){
+},{"./transport":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","./transports":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js","component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","indexof":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js","parsejson":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js","parseqs":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","parseuri":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -46158,7 +47575,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports){
+},{"component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","engine.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies
@@ -46215,7 +47632,7 @@ function polling(opts){
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling-jsonp":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js","./polling-xhr":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js","./websocket":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js":[function(require,module,exports){
+},{"./polling-jsonp":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js","./polling-xhr":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js","./websocket":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js","xmlhttprequest":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-jsonp.js":[function(require,module,exports){
 (function (global){
 
 /**
@@ -46452,7 +47869,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js":[function(require,module,exports){
+},{"./polling":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling-xhr.js":[function(require,module,exports){
 (function (global){
 /**
  * Module requirements.
@@ -46807,7 +48224,7 @@ function unloadHandler() {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js":[function(require,module,exports){
+},{"./polling":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js","component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","component-inherit":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","xmlhttprequest":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/polling.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -47054,7 +48471,7 @@ Polling.prototype.uri = function(){
   return schema + '://' + this.hostname + port + this.path + query;
 };
 
-},{"../transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","xmlhttprequest":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports){
+},{"../transport":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","xmlhttprequest":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -47285,7 +48702,7 @@ WS.prototype.check = function(){
   return !!WebSocket && !('__initialize' in WebSocket && this.name === WS.prototype.name);
 };
 
-},{"../transport":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","ws":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js":[function(require,module,exports){
+},{"../transport":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/transport.js","component-inherit":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","engine.io-parser":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js","parseqs":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js","ws":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/lib/xmlhttprequest.js":[function(require,module,exports){
 // browser shim for xmlhttprequest module
 var hasCORS = require('has-cors');
 
@@ -47323,7 +48740,7 @@ module.exports = function(opts) {
   }
 }
 
-},{"has-cors":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js":[function(require,module,exports){
+},{"has-cors":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/component-inherit/index.js":[function(require,module,exports){
 
 module.exports = function(a, b){
   var fn = function(){};
@@ -47331,7 +48748,7 @@ module.exports = function(a, b){
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/browser.js":[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -47901,7 +49318,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./keys":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js","after":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js","arraybuffer.slice":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js","base64-arraybuffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js","blob":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js","utf8":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js":[function(require,module,exports){
+},{"./keys":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js","after":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js","arraybuffer.slice":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js","base64-arraybuffer":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js","blob":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js","utf8":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/lib/keys.js":[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -47922,7 +49339,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/after/index.js":[function(require,module,exports){
 module.exports = after
 
 function after(count, callback, err_cb) {
@@ -47952,7 +49369,7 @@ function after(count, callback, err_cb) {
 
 function noop() {}
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/arraybuffer.slice/index.js":[function(require,module,exports){
 /**
  * An abstraction for slicing an arraybuffer even when
  * ArrayBuffer.prototype.slice is not supported
@@ -47983,7 +49400,7 @@ module.exports = function(arraybuffer, start, end) {
   return result.buffer;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/base64-arraybuffer/lib/base64-arraybuffer.js":[function(require,module,exports){
 /*
  * base64-arraybuffer
  * https://github.com/niklasvh/base64-arraybuffer
@@ -48044,7 +49461,7 @@ module.exports = function(arraybuffer, start, end) {
   };
 })("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/blob/index.js":[function(require,module,exports){
 (function (global){
 /**
  * Create a blob builder even when vendor prefixes exist
@@ -48097,7 +49514,7 @@ module.exports = (function() {
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/engine.io-parser/node_modules/utf8/utf8.js":[function(require,module,exports){
 (function (global){
 /*! http://mths.be/utf8js v2.0.0 by @mathias */
 ;(function(root) {
@@ -48340,7 +49757,7 @@ module.exports = (function() {
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -48365,7 +49782,7 @@ try {
   module.exports = false;
 }
 
-},{"global":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js":[function(require,module,exports){
+},{"global":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/has-cors/node_modules/global/index.js":[function(require,module,exports){
 
 /**
  * Returns `this`. Execute this without a "context" (i.e. without it being
@@ -48375,7 +49792,7 @@ try {
 
 module.exports = (function () { return this; })();
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parsejson/index.js":[function(require,module,exports){
 (function (global){
 /**
  * JSON parse.
@@ -48410,7 +49827,7 @@ module.exports = function parsejson(data) {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseqs/index.js":[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -48449,7 +49866,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -48490,7 +49907,7 @@ module.exports = function parseuri(str) {
     return uri;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/lib/browser.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -48535,7 +49952,7 @@ function ws(uri, protocols, opts) {
 
 if (WebSocket) ws.prototype = WebSocket.prototype;
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/index.js":[function(require,module,exports){
 (function (global){
 
 /*
@@ -48597,12 +50014,12 @@ function hasBinary(data) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":[function(require,module,exports){
+},{"isarray":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/indexof/index.js":[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -48613,7 +50030,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/object-component/index.js":[function(require,module,exports){
 
 /**
  * HOP ref.
@@ -48698,7 +50115,7 @@ exports.length = function(obj){
 exports.isEmpty = function(obj){
   return 0 == exports.length(obj);
 };
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/parseuri/index.js":[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -48725,7 +50142,7 @@ module.exports = function parseuri(str) {
   return uri;
 };
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports){
 (function (global){
 /*global Blob,File*/
 
@@ -48870,7 +50287,7 @@ exports.removeBlobs = function(data, callback) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./is-buffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js":[function(require,module,exports){
+},{"./is-buffer":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","isarray":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/index.js":[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -49268,7 +50685,7 @@ function error(data){
   };
 }
 
-},{"./binary":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js","./is-buffer":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","component-emitter":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","isarray":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js","json3":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports){
+},{"./binary":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/binary.js","./is-buffer":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js","component-emitter":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/component-emitter/index.js","debug":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/debug/debug.js","isarray":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js","json3":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports){
 (function (global){
 
 module.exports = isBuf;
@@ -49285,9 +50702,9 @@ function isBuf(obj) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js":[function(require,module,exports){
-module.exports=require("/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js")
-},{"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/isarray/index.js":[function(require,module,exports){
+module.exports=require("/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js")
+},{"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/has-binary/node_modules/isarray/index.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/json3/lib/json3.js":[function(require,module,exports){
 /*! JSON v3.2.6 | http://bestiejs.github.io/json3 | Copyright 2012-2013, Kit Cambridge | http://kit.mit-license.org */
 ;(function (window) {
   // Convenience aliases.
@@ -50150,7 +51567,7 @@ module.exports=require("/home/vagrant/bridge-controller/node_modules/socket.io-c
   }
 }(this));
 
-},{}],"/home/vagrant/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/node_modules/to-array/index.js":[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -50165,7 +51582,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -51510,7 +52927,7 @@ function toArray(list, index) {
   }
 }).call(this);
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js":[function(require,module,exports){
 
 Backbone.HasOne = Backbone.HasOne.extend({
 
@@ -51898,7 +53315,7 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
         }
     }
 });
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
 
 var $ = require('jquery')
     ,_ = require('underscore')
@@ -51974,7 +53391,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":"/home/vagrant/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model-mixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-model-post":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js","./backbone-cb-model-pre":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js","./backbone-cb-views":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/vagrant/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/vagrant/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js","query-engine":"/home/vagrant/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model-mixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-model-post":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js","./backbone-cb-model-pre":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js","./backbone-cb-views":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js","query-engine":"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
 
 var OriginalCollection = Backbone.Collection;
 
@@ -52032,6 +53449,17 @@ var CBCollection = OriginalCollection.extend({
         console.log('collection subscribed', this.backend.name);
     },
 
+    fetch: function(options) {
+        // Set default behaviour to not remove models on fetch
+        options = options ? _.clone(options) : {};
+        if (options.remove === void 0) options.remove = false;
+
+        return OriginalCollection.prototype.fetch.call(this, options);
+    },
+
+    parse : function(response){
+        return response.objects;
+    },
     /*
     update: function(models) {
         // Update models in collection and persist them to the server
@@ -52200,6 +53628,7 @@ var CBCollection = OriginalCollection.extend({
         //var collection = this.filtered || this.createLiveChildCollection();
         collection.setFilter(name, filter);
 
+        collection.parent = this;
         this.filtered = collection;
 
         return this.filtered;
@@ -52207,7 +53636,7 @@ var CBCollection = OriginalCollection.extend({
 });
 
 Backbone.Collection = CBCollection;
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -52261,7 +53690,7 @@ module.exports = {
 
 
 
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.Deferred.Model;
 
@@ -52277,15 +53706,19 @@ var CBModel = OriginalModel.extend({
 
     constructor: function(attributes, options) {
 
-        attributes.isGhost = attributes[ this.idAttribute ] ? false : true;
+        var attrs = attributes || {};
+        options || (options = {});
 
-        OriginalModel.call(this, attributes, options);
+        attrs.isGhost = attrs[ this.idAttribute ] ? false : true;
+
+        OriginalModel.call(this, attrs, options);
 
         this.startTracking();
     },
 
 
     isSyncing: function() {
+        // TODO make this work for counters etc.
         return !!this.get('id') == this.get('isGhost');
     },
 
@@ -52458,7 +53891,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.Deferred.Model = CBModel;
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.Model;
 
@@ -52640,7 +54073,7 @@ var CBModel = OriginalModel.extend({
 });
 
 Backbone.Model = CBModel;
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js":[function(require,module,exports){
 
 
 var wrapError = function(model, options) {
@@ -52717,7 +54150,7 @@ module.exports.RelationalCollectionView = {
         this.delegateEvents();
     }
 };
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js":[function(require,module,exports){
 //     Cocktail.js 0.5.3
 //     (c) 2012 Onsi Fakhouri
 //     Cocktail.js may be freely distributed under the MIT license.
@@ -52820,7 +54253,7 @@ module.exports.RelationalCollectionView = {
 
     return Cocktail;
 }));
-},{"underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js":[function(require,module,exports){
+},{"underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -53178,7 +54611,7 @@ Q = global.Q = require("q");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","q":"/home/vagrant/bridge-controller/node_modules/q/q.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js":[function(require,module,exports){
 /* vim: set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab: */
 /**
  * Backbone-relational.js 0.8.7
@@ -55179,7 +56612,7 @@ Q = global.Q = require("q");
 		return child;
 	};
 })();
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -55375,7 +56808,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","socket.io-client":"/home/vagrant/bridge-controller/node_modules/socket.io-client/index.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","socket.io-client":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/index.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
@@ -57841,11 +59274,11 @@ _.extend(Marionette.Module, {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","backbone.babysitter":"/home/vagrant/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.wreqr":"/home/vagrant/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
-Marionette = global.Marionette = require("/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
+Marionette = global.Marionette = require("/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
 _ = global._ = require("underscore");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 // This is heavily based on Backbone.SubRoute 
@@ -57954,11 +59387,11 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js":[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
-Marionette = global.Marionette = require("/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
+Marionette = global.Marionette = require("/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js");
 _ = global._ = require("underscore");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 (function() {
@@ -58451,7 +59884,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js":[function(require,module,exports){
+},{"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js":[function(require,module,exports){
 // Backbone.Stickit v0.8.0, MIT Licensed
 // Copyright (c) 2012 The New York Times, CMS Group, Matthew DeLambo <delambo@gmail.com>
 
@@ -59208,7 +60641,7 @@ _ = global._ = require("underscore");
 
 }));
 
-},{"backbone":"/home/vagrant/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/vagrant/bridge-controller/node_modules/underscore/underscore.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js":[function(require,module,exports){
 (function() {
 
   // Unsaved Record Keeping
@@ -59401,7 +60834,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js":[function(require,module,exports){
 
 var React = require('react');
 var constants = require('./constants');
@@ -59438,7 +60871,7 @@ var BootstrapMixin = {
 };
 
 module.exports = BootstrapMixin;
-},{"./constants":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/constants.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
+},{"./constants":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
 var React = require('react');
 
 var joinClasses = require('../../../../../node_modules/react-bootstrap/utils/joinClasses');
@@ -59498,6 +60931,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
     render: function () {
         var classes = this.getBsClassSet();
         classes['panel'] = true;
+        //classes = joinClasses(classes, this.props.className);
 
         return (
             // ADDED replace div with li
@@ -59527,8 +60961,9 @@ var ListItem = React.createClass({displayName: 'ListItem',
     },
 
     renderHeading: function () {
-        var header = this.props.header;
+        //var header = this.props.header;
 
+        /*
         if (!header) {
             return null;
         }
@@ -59537,73 +60972,75 @@ var ListItem = React.createClass({displayName: 'ListItem',
             header = this.props.collapsable ?
                 this.renderCollapsableTitle(header) : header;
         } else if (this.props.collapsable) {
+        if (this.props.collapsable) {
+            header = this.props.collapsable ?
+                this.renderTitle(header) : header;
+            /*
             header = cloneWithProps(header, {
                 className: 'panel-title',
                 children: this.renderAnchor(header.props.children)
             });
         } else {
             header = cloneWithProps(header, {
-                className: 'panel-title'
+                className: 'panel-title item-title'
             });
         }
+        */
+        var title = this.props.title;
 
-        return (
-            React.createElement("div", {className: "panel-heading"}, 
-        header
-            )
-        );
-    },
+        var renderedTitle = React.isValidElement(title) ? title
+            : React.createElement("div", {className: "inner-item-title"}, title);
 
-    renderAnchor: function (header) {
-        return (
-            React.createElement("a", {
-                href: '#' + (this.props.id || ''), 
-                className: this.isExpanded() ? null : 'collapsed', 
-                onClick: this.handleSelect}, 
-                header
-            )
-        );
-    },
-
-    renderButton: function(button) {
-
-        var onClick = button.onClick || function() {};
-
-        switch(button.type) {
-            case 'delete':
-                return React.createElement("i", {className: "icon ion-trash-a uninstall-button", onClick: onClick})
-                break;
-            case 'text':
-                console.log('text button', button);
-                var label = button.label || "";
-                return (
-                    React.createElement("button", {className: "topcoat-button install-button", onClick: onClick}, 
-                        label
-                    )
-                )
-                break;
-            default:
-                console.log('Unrecognised button', button);
-                return;
-        }
-    },
-
-    renderCollapsableTitle: function (header) {
+        var subtitle = this.props.subtitle;
+        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+            : React.createElement("div", {className: "inner-item-subtitle"}, subtitle);
 
         // Render custom buttons
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
-        console.log('renderedButtons ', renderedButtons );
-        console.log('this.renderButtons ', this.renderButtons );
         var buttons = this.props.buttons || [];
 
         return (
-            React.createElement("h4", {className: "panel-title"}, 
-                React.createElement("i", {className: "icon ion-chevron-right edit-button", onClick: this.handleSelect}), 
-                this.renderAnchor(header), 
-                buttons.map(this.renderButton), 
-                renderedButtons
+            React.createElement("div", {className: "panel-heading item-heading"}, 
+                this.renderAnchor(), 
+                React.createElement("h4", {className: "item-title"}, renderedTitle), 
+                React.createElement("h4", {className: "item-subtitle"}, 
+                    React.createElement("small", null, 
+                        renderedSubtitle
+                    )
+                ), 
+                React.createElement("div", {className: "item-buttons"}, 
+                    buttons.map(this.renderButton), 
+                    renderedButtons
+                )
+            )
+        );
+    },
+
+    renderAnchor: function () {
+        return (
+            React.createElement("a", {
+                href: '#' + (this.props.id || ''), 
+                className: this.isExpanded() ? null : 'collapsed', 
+                onClick: this.handleSelect}, 
+                React.createElement("i", {className: "icon ion-chevron-right item-anchor"})
+            )
+        );
+    },
+
+
+    renderTitle: function () {
+
+        var title = this.props.title;
+        var subTitle = this.props.subTitle;
+
+        var renderedTitle = !React.isValidElement(title) ? title
+            : React.createElement("div", {className: "panel-title item-title"}, title);
+
+        return (
+            React.createElement("h4", {className: "panel-title item-title"}, 
+                renderedTitle
             )
         );
     },
@@ -59618,11 +61055,35 @@ var ListItem = React.createClass({displayName: 'ListItem',
         this.props.footer
             )
         );
+    },
+
+    renderButton: function(button) {
+
+        var onClick = button.onClick || function() {};
+
+        switch(button.type) {
+            case 'delete':
+                return React.createElement("i", {className: "icon ion-trash-a icon-trash item-icon-button", onClick: onClick})
+                break;
+            case 'text':
+                var label = button.label || "";
+                var disabled = button.disabled ? "disabled" : "";
+                var buttonClass = "btn btn-default " + disabled;
+                return (
+                    React.createElement("button", {className: buttonClass, disabled: disabled, onClick: onClick}, 
+                        label
+                    )
+                )
+                break;
+            default:
+                console.log('Unrecognised button', button);
+                return;
+        }
     }
 });
 
 module.exports = ListItem;
-},{"../../../../../node_modules/react-bootstrap/utils/classSet":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","../../../../../node_modules/react-bootstrap/utils/cloneWithProps":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","../../../../../node_modules/react-bootstrap/utils/joinClasses":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","./BootstrapMixin":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/main.js"}],"/home/vagrant/bridge-controller/portal/static/js/vendor/react/constants.js":[function(require,module,exports){
+},{"../../../../../node_modules/react-bootstrap/utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","../../../../../node_modules/react-bootstrap/utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","../../../../../node_modules/react-bootstrap/utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js":[function(require,module,exports){
 module.exports = {
     CLASSES: {
         'alert': 'alert',
@@ -59867,7 +61328,7 @@ module.exports = {
         'tree-deciduous'
     ]
 };
-},{}],"/home/vagrant/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
 
 var React = require('react')
     ;
@@ -59876,6 +61337,8 @@ React.ListItem = require('./ListItem.jsx');
 React.Modal = require('react-bootstrap').Modal;
 React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
+
+//React.AutosizeInput = require('react-input-autosize');
 
 React.Button = require('react-bootstrap').Button;
 React.Table = require('react-bootstrap').Table;
@@ -59928,4 +61391,4 @@ React.ListView = React.createClass({
 
 module.exports = React;
 
-},{"./ListItem.jsx":"/home/vagrant/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/vagrant/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/vagrant/bridge-controller/node_modules/react-bootstrap/main.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
+},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js"}]},{},["./portal/static/js/vendor/vendor.js"]);

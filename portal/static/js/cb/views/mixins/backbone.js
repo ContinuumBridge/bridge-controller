@@ -7,6 +7,6 @@ Portal.ReactBackboneMixin = {
         if (!owner) return false;
         var collection = owner.getCollection();
         return collection.get({cid: this.props.model.cid})
-    }
+    },
 }
 

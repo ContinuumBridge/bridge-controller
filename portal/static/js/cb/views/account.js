@@ -1,4 +1,6 @@
 
+require('../users/current/views');
+require('../apps/licences/views');
 
 module.exports = React.createClass({
 
@@ -6,27 +8,19 @@ module.exports = React.createClass({
 
     componentWillReceiveParams: function(params) {
 
-        console.log('developer will receive params', params);
-        console.log('developer will receive this.params', this.params);
-        if (!this.params || this.params != params) {
-            console.log('developer fetch collections');
+        /*
+        if (this.params != params) {
             Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
             Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
         }
 
         this.params = params;
-        /*
-        if (this.action != params.action) {
-            if (params.action == 'discover-devices') {
-                this.discoverDevices();
-            }
-            this.action = params.action;
-        }
         */
     },
 
     renderModals: function () {
 
+        /*
         var action = this.getParams().action;
         var itemID = this.getParams().item;
         console.log('renderModals params', action);
@@ -41,10 +35,12 @@ module.exports = React.createClass({
             default:
                 break;
         }
+        */
     },
 
     render: function() {
 
+        /*
         var currentUser = Portal.currentUser;
 
         var appOwnerships = currentUser.get('appOwnerships')
@@ -56,18 +52,23 @@ module.exports = React.createClass({
             .getFiltered('isNew', function(model, searchString) {
                 return !model.isNew();
             });
+        */
+        var currentUser = Portal.currentUser;
+
+        var appLicences = currentUser.get('appLicences')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
 
         return (
             <div>
                 {this.renderModals()}
                 <div className="row">
-                    <div ref="appSection" className="app-section col-md-6">
-                        <Portal.AppOwnershipListView key={currentUser.cid}
-                            collection={appOwnerships} />
+                    <div ref="profileSection" className="col-md-6">
+                        <Portal.CurrentUserView model={currentUser} />
                     </div>
-                    <div ref="clientSection" className="client-section col-md-6">
-                        <Portal.ClientControlListView key={currentUser.cid}
-                            collection={clientControls} />
+                    <div ref="appSection" className="col-md-6">
+                        <Portal.AppLicenceListView collection={appLicences} />
                     </div>
                 </div>
             </div>

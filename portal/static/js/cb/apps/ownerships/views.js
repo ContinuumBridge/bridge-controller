@@ -1,4 +1,5 @@
 
+require('../../users/views');
 
 Portal.AppOwnershipView = React.createClass({
 
@@ -28,28 +29,24 @@ Portal.AppOwnershipView = React.createClass({
 
         var self = this;
 
-        //var devicePermissions = this.props.devicePermissions;
-        var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.model;
+        console.log('AppOwnershipView renderBody');
 
-        var devicePermissions = appInstall.get('devicePermissions');
+        var app = this.props.app;
 
-        deviceInstalls.each(function(deviceInstall) {
+        var licences = app.get('appLicences');
 
-            var adp;
-            var adpData = {
-                deviceInstall: deviceInstall,
-                appInstall: appInstall
-            }
-            adp = devicePermissions.findWhere(adpData)
-            if (!adp) {
-                adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
-            }
-        });
+        var users = Portal.userCollection;
+            /*
+            .getFiltered('search', function(model, searchString) {
+                //return !model.isNew();
+                var searchRegex = QueryEngine.createSafeRegex(searchString)
+                var pass = searchRegex.test(model.get('title'));// || searchRegex.test(model.get('content'))
+                return pass
+            });
+            */
 
         return (
-            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+            <Portal.UserLicenceTableView collection={users} app={app} size="small" />
         );
     }
 });
@@ -62,9 +59,9 @@ Portal.AppOwnershipListView = React.createClass({
 
     getInitialState: function () {
         return {
-            title: 'Apps I Own',
+            title: 'Apps',
             buttons: [{
-                name: 'Create New App',
+                name: 'Create App',
                 onClick: this.createApp,
                 type: 'bold'
             }]
@@ -76,7 +73,6 @@ Portal.AppOwnershipListView = React.createClass({
     },
 
     renderItem: function (item) {
-        console.log('appInstallView createItem item', item);
         var cid = item.cid;
 
         var appOwnershipCollection = this.getCollection()
@@ -86,100 +82,7 @@ Portal.AppOwnershipListView = React.createClass({
         var title = app.get('name');
 
         return < Portal.AppOwnershipView key={cid} title={title}
-                    model={appOwnership} />
+                    model={appOwnership} app={app} />
     }
 });
 
-
-
-/*
-require('../../components/buttons');
-
-require('../connections/views');
-
-Portal.AppOwnershipView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/ownership.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-        //'click .install-button': 'toggleCurrentInstall'
-    },
-
-    bindings: {
-        '.installs-permitted': 'installs_permitted'
-    },
-
-    appBindings: {
-        '.app-name': 'name',
-        '.edit-button': {
-            attributes: [{
-                name: 'data-target',
-                observe: 'cbid',
-                onGet: function(value, options) {
-                    return "#" + value;
-                }
-            }]
-        },
-        '.app-config': {
-            attributes: [{
-                name: 'id',
-                observe: 'cbid'
-            }]
-        }
-    },
-
-    appConnectionBindings: {
-        '.installs-remaining': {
-            observe: ['change', 'change:relational', 'isGhost'],
-            onGet: 'getInstallsRemaining'
-        }
-    },
-
-    initialize: function() {
-
-        var self = this;
-
-        this.app = this.model.get('app');
-
-        this.appConnectionListView =
-            new Portal.AppConnectionListView({
-                appOwnership: this.model
-            });
-    },
-
-    onRender : function() {
-
-        var self = this;
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            var clientControls = currentUser.get('clientControls');
-            self.appConnectionListView.setCollection(clientControls);
-            var $clientConnections = self.$('.client-connections');
-            self.appConnectionListView.setElement($clientConnections).render();
-        }).done();
-
-        console.log('AppOwnershipView render', this);
-        this.stickit();
-        this.stickit(this.app, this.appBindings);
-    }
-});
-
-
-Portal.AppOwnershipListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/ownershipSection.html'),
-    itemView: Portal.AppOwnershipView,
-    itemViewContainer: '.app-list',
-
-    emptyView: Portal.ListItemLoadingView,
-
-    onRender : function(){
-
-        console.log('AppLicenceListView', this.collection);
-    }
-});
-*/

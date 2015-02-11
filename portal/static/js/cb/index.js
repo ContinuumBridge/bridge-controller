@@ -111,15 +111,25 @@ Portal.addInitializer(function () {
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
       if(currentBridge) currentBridge.fetch();
-      var apps = Portal.appCollection;
+      //var apps = Portal.appCollection;
       console.log('router currentBridge', currentBridge);
+      var models = {
+          currentBridge: currentBridge,
+          currentUser: Portal.currentUser
+      }
+      var collections = {
+          apps: Portal.appCollection,
+          users: Portal.userCollection,
+          notifications: Portal.notificationCollection
+      }
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
       React.render(
           <BaseView params={params} handler={Handler}
-              key={currentBridgeID}
-              collection={apps} model={currentBridge} />,
+              //key={currentBridge.get('id')}
+              key={state.path}
+              collection={collections} model={models} />,
           document.getElementById('app')
       );
 

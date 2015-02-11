@@ -1,11 +1,58 @@
 
-.counter {
+.counter-large {
     position: absolute;
     width: 50px;
     top: 12px;
     right: 83px;
 }
 
-.counter .number {
+.counter-large .number {
     width: 42px;
 }
+
+.counter-small {
+    position: relative;
+    /*width: 50px;*/
+    top: 0px;
+}
+
+.counter-small .number {
+    width: 42px;
+    height: inherit;
+}
+
+.btn-icon {
+    color: #838383;
+    cursor: pointer;
+}
+
+.input-group-btn:first-child > .btn {
+    margin-right: -2px;
+}
+
+/* Text Input */
+
+.input-text {
+    height: inherit;
+    padding: 3px;
+    border-radius: 3px;
+    font-family: 'Lato', sans-serif !important;
+    font-weight: bold;
+    text-rendering: optimizelegibility;
+}
+
+.input-text-wrapper {
+    /*border: none;*/
+    display: inline-block;
+    border-radius: 5px;
+    padding: 0px;
+    padding-right: 1px;
+    background: #eee;
+}
+
+/* Search */
+
+.search-group {
+    margin-bottom: 0px;
+}
+

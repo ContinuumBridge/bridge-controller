@@ -13,15 +13,47 @@ Portal.addInitializer(function() {
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
-    Portal.socket.on('connect', function(){
-        console.log('Socket connected');
+    var connectionStatus = new Portal.ConnectionStatus({socket: Portal.socket});
+    Portal.notificationCollection.add(connectionStatus);
+
+    _.each(['connect', 'reconnect'], function(event) {
+        Portal.socket.on(event, function() {
+            connectionStatus.set({
+                connected: true,
+                reconnecting: false,
+                error: false,
+                timeout: false
+            });
+        });
     });
 
+    _.each(['error', 'reconnect_error'], function(event) {
+        Portal.socket.on(event, function (error) {
+            connectionStatus.set({
+                connected: false,
+                error: error,
+                reconnecting: false
+            });
+        });
+    });
+
+    Portal.socket.on('reconnecting', function(){
+        connectionStatus.set('reconnecting', true);
+    });
+
+    Portal.socket.on('disconnect', function(){
+        connectionStatus.set('connected', false);
+    });
+
+    Portal.socket.on('reconnect_failed', function(){
+        connectionStatus.set('timeout', true);
+    });
+
+    /*
     Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');
-         */
         console.log('foundDevices are', foundDevices);
         console.log('foundDevices are', JSON.toString(foundDevices));
 
@@ -32,6 +64,7 @@ Portal.addInitializer(function() {
         collection.trigger('reset');
 
     });
+    */
 
     Portal.socket.publish = function(message) {
 
@@ -42,7 +75,7 @@ Portal.addInitializer(function() {
       var jsonMessage = message.toJSON();
 
       Portal.socket.emit('message', jsonMessage, function(data){
-          //logger.log('verbose', 'Sent to socket ' + data);
+          console.log('data from socket emit', data);
       });
       /*
       Portal.getCurrentBridge().then(function(currentBridge) {

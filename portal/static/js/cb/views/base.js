@@ -6,7 +6,7 @@ module.exports = React.createClass({
     render: function () {
 
         var Handler = this.props.handler;
-        console.log('Handler in base', Handler);
+        //console.log('Handler in base', Handler);
         var params = this.props.params;
         console.log('params in base', params);
         //var currentBridge = this.getModel();

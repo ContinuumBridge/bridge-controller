@@ -2,17 +2,29 @@
 
 Portal.NotificationView = React.createClass({
 
-    //mixins: [Portal.ItemView],
+    mixins: [Portal.ItemView],
 
-    render: function() {
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'text',
+                label: 'Close',
+                onClick: this.handleDelete
+            }]
+        };
+    }
+});
 
-        return (
-            <li>
-                <h4 class="list-group-item-heading"></h4>
-                <i class="icon ion-information-circled"></i>
-                <i class="icon ion-alert-circled"></i>
-            </li>
-        )
+Portal.ConnectionStatusView = React.createClass({
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {};
+    },
+
+    reconnect: function() {
+        this.get('socket').io.reconnect();
     }
 });
 
@@ -20,22 +32,38 @@ Portal.NotificationListView = React.createClass({
 
     mixins: [Backbone.React.Component.mixin],
 
-    renderNotification: function(item) {
+    renderNotification: function(model) {
 
-        return (
-            < Portal.NotificationView model={item} />
-        )
+        var title = model.getTitle();
+
+        switch (model.get('type')) {
+            case 'connectionStatus':
+                var subtitle = model.getSubtitle();
+                return <Portal.ConnectionStatusView title={title} subtitle={subtitle}
+                    model={model} className="notification" />
+                break;
+            default:
+                return <Portal.NotificationView title={title} subtitle={subtitle}
+                    model={model} className="notification" />
+                break;
+        }
     },
 
     render: function() {
 
+        var collection = Portal.notificationCollection
+                            .getFiltered('isVisible', function(model, searchString) {
+                                return model.isVisible();
+                            });
+
         return (
-            <div class="animated-list notification-list">
-                {this.props.collection.map(this.renderNotification)}
+            <div className="notification-region">
+                <div className="animated-list notification-list">
+                    {collection.map(this.renderNotification)}
+                </div>
             </div>
         )
     }
-
 });
 
 /*
