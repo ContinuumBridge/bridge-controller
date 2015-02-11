@@ -61063,7 +61063,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
 
         switch(button.type) {
             case 'delete':
-                return React.createElement("i", {className: "icon ion-trash-a item-icon-button", onClick: onClick})
+                return React.createElement("i", {className: "icon ion-trash-a icon-trash item-icon-button", onClick: onClick})
                 break;
             case 'text':
                 var label = button.label || "";

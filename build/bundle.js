@@ -21520,11 +21520,10 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
         var app = appInstall.get('app');
         var title = app.get('name');
-        var subtitle = "Test subtitle";
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppInstallView, {key: cid, title: title, subtitle: subtitle, 
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
             deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
@@ -23240,9 +23239,9 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
             });
         } else {
             buttons.push({
-                //onClick: this.installDevice,
                 type: 'text',
-                label: 'Unknown Device'
+                label: 'Unknown Device',
+                disabled: true
             });
         }
 
@@ -23696,14 +23695,16 @@ Portal.addInitializer(function () {
       }
       var collections = {
           apps: Portal.appCollection,
-          users: Portal.userCollection
+          users: Portal.userCollection,
+          notifications: Portal.notificationCollection
       }
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
-              key: currentBridge.get('id'), 
+              //key={currentBridge.get('id')}
+              key: state.path, 
               collection: collections, model: models}),
           document.getElementById('app')
       );
@@ -24249,8 +24250,8 @@ Portal.on('initialize:before', function () {
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
   Portal.notificationCollection = new Portal.NotificationCollection([
-      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
+      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
   Portal.notificationCollection.subscribe();
 
@@ -24976,74 +24977,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
     }
 });
 
-/*
-module.exports.Main = Marionette.Layout.extend({
-
-    template: require('./templates/main.html'),
-
-    regions: {
-        appSection: {
-            selector: '#app-section',
-            regionType: Portal.Regions.Fade
-        }
-    },
-
-    initialize: function() {
-
-
-        this.appListView = new AppViews.AppListView({
-                                    collection: Portal.appCollection
-                                });
-
-        Portal.getCurrentUser().then(function(currentUser) {
-
-            Portal.appCollection.fetch();
-        }).done();
-    },
-
-    onRender: function() {
-
-        var self = this;
-
-        this.appSection.show(this.appListView);
-
-        /*
-        Portal.appCollection.fetch().then(function(appCollection) {
-
-            console.log('appCollection fetched', appCollection);
-        });
-        Portal.getCurrentBridge().then(function(currentBridge) {
-
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
-            var appCollection = currentBridge.get('appInstalls');
-            self.appInstallListView.collection = appInstallCollection;
-            self.appInstallListView._initialEvents();
-            self.appInstallListView.delegateEvents();
-            self.appInstallListView.render();
-            //self.appInstallListView.delegateEvents();
-            //self.appSection.show(self.appInstallListView);
-        });
-    }
-
-});
-
-/*
-module.exports.LicenseAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        Portal.Config.controller.stopDiscoveringDevices();
-    }
-});
-*/
-
 },{"../../apps/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/views.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
 
 Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
@@ -25259,7 +25192,19 @@ Portal.Notification = Backbone.Deferred.Model.extend({
 
     subModelTypes: {
 		'connectionStatus': 'Portal.ConnectionStatus'
-	}
+	},
+
+    isVisible: function() {
+        return true;
+    },
+
+    getTitle: function() {
+        return this.get('title');
+    },
+
+    getSubtitle: function() {
+        return this.get('subTitle') || "";
+    }
 
 }, { modelType: "notification" });
 
@@ -25268,9 +25213,25 @@ Portal.ConnectionStatus = Portal.Notification.extend({
 
     defaults: {
         type: 'connectionStatus',
-        connected: false,
+        connected: true,
+        reconnecting: false,
         error: false,
         timeout: false
+    },
+
+    isVisible: function() {
+        return !this.get('connected');
+    },
+
+    getTitle: function() {
+
+        var error = this.get('error');
+        return error ? "Connection error" : "Connection lost"
+    },
+
+    getSubtitle: function() {
+        var reconnecting = this.get('reconnecting');
+        return reconnecting ? "reconnecting.." : "waiting to reconnect";
     }
 
 }, { modelType: "connectionStatus" });
@@ -25294,31 +25255,23 @@ Portal.NotificationView = React.createClass({displayName: 'NotificationView',
             buttons: [{
                 type: 'text',
                 label: 'Close',
-                onClick: this.close
+                onClick: this.handleDelete
             }]
         };
-    },
-
-    renderIcon: function() {
-
-    },
-
-    /*
-    render: function() {
-
-        var notification = this.props.model;
-
-        return (
-            <li className="panel">
-                <div className="item-heading">
-                    <i className="icon ion-information-circled notification-icon"></i>
-                    <i className="icon ion-alert-circled notification-icon"></i>
-                    <h4 className="item-title">Alert!</h4>
-                </div>
-            </li>
-        )
     }
-    */
+});
+
+Portal.ConnectionStatusView = React.createClass({displayName: 'ConnectionStatusView',
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {};
+    },
+
+    reconnect: function() {
+        this.get('socket').io.reconnect();
+    }
 });
 
 Portal.NotificationListView = React.createClass({displayName: 'NotificationListView',
@@ -25327,17 +25280,27 @@ Portal.NotificationListView = React.createClass({displayName: 'NotificationListV
 
     renderNotification: function(model) {
 
-        var title = model.get('title');
-        return (
-            React.createElement(Portal.NotificationView, {title: title, 
-                className: "notification", model: model})
-        )
+        var title = model.getTitle();
+
+        switch (model.get('type')) {
+            case 'connectionStatus':
+                var subtitle = model.getSubtitle();
+                return React.createElement(Portal.ConnectionStatusView, {title: title, subtitle: subtitle, 
+                    model: model, className: "notification"})
+                break;
+            default:
+                return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
+                    model: model, className: "notification"})
+                break;
+        }
     },
 
     render: function() {
 
-        var collection = Portal.notificationCollection;
-
+        var collection = Portal.notificationCollection
+                            .getFiltered('isVisible', function(model, searchString) {
+                                return model.isVisible();
+                            });
 
         return (
             React.createElement("div", {className: "notification-region"}, 
@@ -25347,7 +25310,6 @@ Portal.NotificationListView = React.createClass({displayName: 'NotificationListV
             )
         )
     }
-
 });
 
 /*
@@ -25457,26 +25419,47 @@ Portal.addInitializer(function() {
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
-    var connectionStatus = new Portal.ConnectionStatus();
+    var connectionStatus = new Portal.ConnectionStatus({socket: Portal.socket});
+    Portal.notificationCollection.add(connectionStatus);
 
-    Portal.socket.on('connect', function(){
-        console.log('Socket connected');
-        connectionStatus.set('connected', true);
+    _.each(['connect', 'reconnect'], function(event) {
+        Portal.socket.on(event, function() {
+            connectionStatus.set({
+                connected: true,
+                reconnecting: false,
+                error: false,
+                timeout: false
+            });
+        });
     });
 
-    Portal.socket.on('connect_error', function(){
-        connectionStatus.set('error', true);
+    _.each(['error', 'reconnect_error'], function(event) {
+        Portal.socket.on(event, function (error) {
+            connectionStatus.set({
+                connected: false,
+                error: error,
+                reconnecting: false
+            });
+        });
     });
 
-    Portal.socket.on('connect_timeout', function(){
+    Portal.socket.on('reconnecting', function(){
+        connectionStatus.set('reconnecting', true);
+    });
+
+    Portal.socket.on('disconnect', function(){
+        connectionStatus.set('connected', false);
+    });
+
+    Portal.socket.on('reconnect_failed', function(){
         connectionStatus.set('timeout', true);
     });
 
+    /*
     Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
         /*
         var message = new Message(foundDevices);
         var foundDevices = message.get('body');
-         */
         console.log('foundDevices are', foundDevices);
         console.log('foundDevices are', JSON.toString(foundDevices));
 
@@ -25487,6 +25470,7 @@ Portal.addInitializer(function() {
         collection.trigger('reset');
 
     });
+    */
 
     Portal.socket.publish = function(message) {
 
@@ -26038,45 +26022,19 @@ module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
         filteredCollection.query();
     },
 
-    /*
-    getFilteredCollection: function() {
-
-        var collection = this.props.collection;
-
-        var filteredCollection = this.filteredCollection
-            || collection.createLiveChildCollection(collection.models);
-
-        collection.setFilter('search', filter);
-
-        filteredCollection.parent = collection;
-    },
-    */
-
     search: function() {
         var collection = this.props.collection;
-        console.log('Search collection', collection);
         var searchString = this.state.searchString;
         collection.fetch({data: { 'first_name__istartswith': searchString }});
-        /*
-        var model = this.props.model;
-        var value = this.state.value;
-        console.log('SearchBox submit model', model );
-        if (value != model.get(this.props.field)) {
-            model.set(this.props.field, value);
-            model.save();
-            //this.setState({value: void 0});
-        }
-        */
+
     },
 
     render: function() {
 
-        //var model = this.props.model;
         var searchString = this.state.searchString;
-        //var disabled = model.isSyncing();
         return (
             React.createElement("div", {className: "input-group"}, 
-                React.createElement("input", {type: "text", className: "form-control input-text", value: searchString, 
+                React.createElement("input", {type: "text", className: "form-control", value: searchString, 
                     onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
                 React.createElement("span", {className: "input-group-btn"}, 
                     React.createElement("button", {className: "btn btn-default", 
@@ -26665,13 +26623,13 @@ Portal.ItemView = {
 
     getModel: function() {
 
+        var item = this.props.model;
+
+        if (item instanceof Backbone.Model) return item;
+
         var owner = this._owner;
-        //console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        //console.log('getModel collection', collection);
-        //console.log('getModel item', this.props.model);
-        var item = this.props.model;
         var query = item.id ? {id: item.id} : {cid: item.cid};
         return collection.findWhere(query);
     },
@@ -26681,6 +26639,10 @@ Portal.ItemView = {
         var owner = this._owner;
         if (!owner) return false;
         return owner.getCollection();
+    },
+
+    handleDelete: function() {
+        this.getModel().delete();
     },
 
     handleDestroy: function() {

@@ -9,31 +9,23 @@ Portal.NotificationView = React.createClass({
             buttons: [{
                 type: 'text',
                 label: 'Close',
-                onClick: this.close
+                onClick: this.handleDelete
             }]
         };
-    },
-
-    renderIcon: function() {
-
-    },
-
-    /*
-    render: function() {
-
-        var notification = this.props.model;
-
-        return (
-            <li className="panel">
-                <div className="item-heading">
-                    <i className="icon ion-information-circled notification-icon"></i>
-                    <i className="icon ion-alert-circled notification-icon"></i>
-                    <h4 className="item-title">Alert!</h4>
-                </div>
-            </li>
-        )
     }
-    */
+});
+
+Portal.ConnectionStatusView = React.createClass({
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {};
+    },
+
+    reconnect: function() {
+        this.get('socket').io.reconnect();
+    }
 });
 
 Portal.NotificationListView = React.createClass({
@@ -42,17 +34,27 @@ Portal.NotificationListView = React.createClass({
 
     renderNotification: function(model) {
 
-        var title = model.get('title');
-        return (
-            <Portal.NotificationView title={title}
-                className="notification" model={model} />
-        )
+        var title = model.getTitle();
+
+        switch (model.get('type')) {
+            case 'connectionStatus':
+                var subtitle = model.getSubtitle();
+                return <Portal.ConnectionStatusView title={title} subtitle={subtitle}
+                    model={model} className="notification" />
+                break;
+            default:
+                return <Portal.NotificationView title={title} subtitle={subtitle}
+                    model={model} className="notification" />
+                break;
+        }
     },
 
     render: function() {
 
-        var collection = Portal.notificationCollection;
-
+        var collection = Portal.notificationCollection
+                            .getFiltered('isVisible', function(model, searchString) {
+                                return model.isVisible();
+                            });
 
         return (
             <div className="notification-region">
@@ -62,7 +64,6 @@ Portal.NotificationListView = React.createClass({
             </div>
         )
     }
-
 });
 
 /*

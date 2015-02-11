@@ -119,14 +119,16 @@ Portal.addInitializer(function () {
       }
       var collections = {
           apps: Portal.appCollection,
-          users: Portal.userCollection
+          users: Portal.userCollection,
+          notifications: Portal.notificationCollection
       }
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
       React.render(
           <BaseView params={params} handler={Handler}
-              key={currentBridge.get('id')}
+              //key={currentBridge.get('id')}
+              key={state.path}
               collection={collections} model={models} />,
           document.getElementById('app')
       );

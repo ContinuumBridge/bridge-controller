@@ -22,9 +22,9 @@ Portal.DiscoveredDeviceView = React.createClass({
             });
         } else {
             buttons.push({
-                //onClick: this.installDevice,
                 type: 'text',
-                label: 'Unknown Device'
+                label: 'Unknown Device',
+                disabled: true
             });
         }
 

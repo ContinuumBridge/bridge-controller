@@ -75,8 +75,8 @@ Portal.on('initialize:before', function () {
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
   Portal.notificationCollection = new Portal.NotificationCollection([
-      { title: "Test Notification 1", body: "Test Body 1", type: "information" },
-      { title: "Test Notification 2", body: "Test Body 2", type: "error" }
+      //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
+      //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
   Portal.notificationCollection.subscribe();
 

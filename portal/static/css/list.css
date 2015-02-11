@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:300,100,400);
 
+/*
 li [class^=icon-],
 li [class*=" icon-"] {
   width: 40px !important;
@@ -8,6 +9,7 @@ li [class*=" icon-"] {
   position:absolute !important;
   float:none !important;
 }
+*/
 
 .inner-item {
     /*padding: 12px;*/
@@ -89,6 +91,7 @@ header p{
 }
 
 .item-heading {
+    padding: 0 0px 0px 15px;
     height: 38px;
     display: flex;
     flex-direction: row;
@@ -140,13 +143,22 @@ header p{
 
 .item-buttons * {
     cursor: pointer;
-    float: right;
     overflow: hidden;
 }
+
+/*
+.item-buttons .item-icon-button:last-child {
+    padding-right: 15px;
+}
+*/
 
 .item-icon-button {
     font-size: 20px;
     color: #aaa;
+}
+
+.icon-trash {
+    padding-right: 15px;
 }
 
 .nested-item .onoffswitch {
@@ -167,7 +179,6 @@ header p{
   background-color: #2ecc71;
   margin-left: -50px;
 }
-*/
 
 button .icon-trash {
   float: none;
@@ -175,6 +186,7 @@ button .icon-trash {
   opacity: 1 !important;
   position: static
 }
+*/
 
 .animated-list{
   list-style-type: none;

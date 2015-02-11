@@ -44,13 +44,13 @@ Portal.ItemView = {
 
     getModel: function() {
 
+        var item = this.props.model;
+
+        if (item instanceof Backbone.Model) return item;
+
         var owner = this._owner;
-        //console.log('getModel owner', owner);
         if (!owner) return false;
         var collection = owner.getCollection();
-        //console.log('getModel collection', collection);
-        //console.log('getModel item', this.props.model);
-        var item = this.props.model;
         var query = item.id ? {id: item.id} : {cid: item.cid};
         return collection.findWhere(query);
     },
@@ -60,6 +60,10 @@ Portal.ItemView = {
         var owner = this._owner;
         if (!owner) return false;
         return owner.getCollection();
+    },
+
+    handleDelete: function() {
+        this.getModel().delete();
     },
 
     handleDestroy: function() {

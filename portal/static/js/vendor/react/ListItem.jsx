@@ -189,7 +189,7 @@ var ListItem = React.createClass({
 
         switch(button.type) {
             case 'delete':
-                return <i className="icon ion-trash-a item-icon-button" onClick={onClick}/>
+                return <i className="icon ion-trash-a icon-trash item-icon-button" onClick={onClick}/>
                 break;
             case 'text':
                 var label = button.label || "";
