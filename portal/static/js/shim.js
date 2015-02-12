@@ -1,5 +1,10 @@
 
 module.exports = {
+    "caja": {
+        "exports": "caja",
+        "depends": {
+        }
+    },
     "jquery": "$",
     "underscore": "_",
     "backbone": {

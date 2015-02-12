@@ -1,5 +1,5 @@
 
-var _ = require('underscore');
+//var _ = require('underscore');
 
 var Router = function(options) {
     options || (options = {});

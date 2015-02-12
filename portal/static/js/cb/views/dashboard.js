@@ -1,9 +1,27 @@
 
+var PortalsAPI = require('../modules/portals/api');
+
+console.log('PortalsAPI is', PortalsAPI);
+
 module.exports = React.createClass({
 
+    componentDidMount: function() {
+
+        //var $portal = this.$('.portal');
+        var cajaSection = this.refs.caja.getDOMNode();
+        caja.load(cajaSection, undefined, function(frame) {
+            frame.code('/static/caja-test.html',
+                'text/html')
+                .api(PortalsAPI.tameAll())
+                //.api({ sayHello: tamedAlertGreeting })
+                .run();
+        });
+    },
+
     render: function () {
+
         return (
-            <div>
+            <div ref="caja">
             </div>
         );
     }

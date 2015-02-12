@@ -1,6 +1,4 @@
 
-var $ = require('jquery-browserify');
-
 var CBApp = require('index');
 require('./cb/views/mixins/mixins');
 require('./cb/views/components/components');
