@@ -52,7 +52,7 @@ var CBCollection = OriginalCollection.extend({
         this.ghosts = [];
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
-        console.log('collection subscribed', this.backend.name);
+        //console.log('collection subscribed', this.backend.name);
     },
 
     fetch: function(options) {

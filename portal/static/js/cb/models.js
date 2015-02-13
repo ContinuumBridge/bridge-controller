@@ -24,8 +24,7 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-//Portal.addInitializer(function () {
-Portal.on('initialize:before', function () {
+Portal.on('before:start', function () {
 
   Portal.adaptorCollection = new Portal.AdaptorCollection();
   Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();

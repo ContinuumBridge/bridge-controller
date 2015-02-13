@@ -1,20 +1,27 @@
 
 var utils = require('./utils');
+var Portals = require('./portals/models');
 
+/*
 var optionalParam = /\((.*?)\)/g;
 var namedParam    = /(\(\?)?:\w+/g;
 var splatParam    = /\*\w+/g;
 var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+*/
 
 var CBApp = Marionette.Application.extend({
 
-    initialize: function(options) {
-
-        var self = this;
+    initialize: function() {
 
         console.log('CBApp initialized');
 
+        var self = this;
+
+        this.dispatcher = new Dispatcher();
+
+        this.portals = new Portals();
     },
+    /*
 
     setupCBIDTypes: function(cbidTypes) {
 
@@ -36,6 +43,7 @@ var CBApp = Marionette.Application.extend({
             .replace(splatParam, '([^?]*?)');
         return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
     },
+    */
 
     dispatch: function(message) {
 
@@ -50,28 +58,16 @@ var CBApp = Marionette.Application.extend({
 
         } else if (source == 'cb') {
 
-            console.log('dispatch cb message', message);
-
-            console.log('body', body);
-
             var actionTypes = {
                 create: 'add',
                 delete: 'delete',
                 update: 'update'
             }
             var verb = _.property('verb')(body);
-            console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
-            console.log('actionType ', actionType );
             var uri = _.property('resource_uri')(body);
-            console.log('uri ', uri );
-            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
-            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
             var resourceMatches = uri.match(Portal.filters.apiRegex);
-            console.log('resourceMatches ', resourceMatches );
-            //var resource = resourceRegex.exec(resourceURI);
             var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
-            console.log('dispatch itemType ', itemType );
             var items = _.property('body')(body);
 
             var msg = {
@@ -82,19 +78,25 @@ var CBApp = Marionette.Application.extend({
 
             this.dispatcher.dispatch(msg);
 
-            //this.dispatchItems(items, actionType);
-
         } else if (source.match(Portal.filters.cbidRegex)) {
             // Message is from a bridge or an app on a bridge
-            console.log('Received message from ', source, message);
             message.direction = "inbound";
-            Portal.messageCollection.add(message);
+
+            var destination = _.property('destination')(message);
+            var destMatch = destination.match(Portal.filters.cbidRegex)
+            if (destMatch) {
+                if (destMatch[2]) {
+                    // The address has a second cbid - maybe an app!
+                    message.destination = destMatch[2];
+                    Portal.portals.dispatch(message);
+                } else {
+                    Portal.messageCollection.add(message);
+                }
+            }
 
         } else {
             console.warn('message source unrecognised', message);
         }
-
-        //this.dispatcher.dispatch(message);
     },
 
     register: function(callback) {

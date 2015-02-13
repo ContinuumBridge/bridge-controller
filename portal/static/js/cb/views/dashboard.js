@@ -1,8 +1,6 @@
 
 var PortalsAPI = require('../modules/portals/api');
 
-console.log('PortalsAPI is', PortalsAPI);
-
 module.exports = React.createClass({
 
     componentDidMount: function() {

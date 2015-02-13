@@ -12960,11 +12960,11 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
-        */
 
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT bridge', name);
         });
+        */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
@@ -13313,21 +13313,28 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
 },{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
 var utils = require('./utils');
+var Portals = require('./portals/models');
 
+/*
 var optionalParam = /\((.*?)\)/g;
 var namedParam    = /(\(\?)?:\w+/g;
 var splatParam    = /\*\w+/g;
 var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+*/
 
 var CBApp = Marionette.Application.extend({
 
-    initialize: function(options) {
-
-        var self = this;
+    initialize: function() {
 
         console.log('CBApp initialized');
 
+        var self = this;
+
+        this.dispatcher = new Dispatcher();
+
+        this.portals = new Portals();
     },
+    /*
 
     setupCBIDTypes: function(cbidTypes) {
 
@@ -13349,6 +13356,7 @@ var CBApp = Marionette.Application.extend({
             .replace(splatParam, '([^?]*?)');
         return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
     },
+    */
 
     dispatch: function(message) {
 
@@ -13363,28 +13371,16 @@ var CBApp = Marionette.Application.extend({
 
         } else if (source == 'cb') {
 
-            console.log('dispatch cb message', message);
-
-            console.log('body', body);
-
             var actionTypes = {
                 create: 'add',
                 delete: 'delete',
                 update: 'update'
             }
             var verb = _.property('verb')(body);
-            console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
-            console.log('actionType ', actionType );
             var uri = _.property('resource_uri')(body);
-            console.log('uri ', uri );
-            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
-            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
             var resourceMatches = uri.match(Portal.filters.apiRegex);
-            console.log('resourceMatches ', resourceMatches );
-            //var resource = resourceRegex.exec(resourceURI);
             var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
-            console.log('dispatch itemType ', itemType );
             var items = _.property('body')(body);
 
             var msg = {
@@ -13395,19 +13391,25 @@ var CBApp = Marionette.Application.extend({
 
             this.dispatcher.dispatch(msg);
 
-            //this.dispatchItems(items, actionType);
-
         } else if (source.match(Portal.filters.cbidRegex)) {
             // Message is from a bridge or an app on a bridge
-            console.log('Received message from ', source, message);
             message.direction = "inbound";
-            Portal.messageCollection.add(message);
+
+            var destination = _.property('destination')(message);
+            var destMatch = destination.match(Portal.filters.cbidRegex)
+            if (destMatch) {
+                if (destMatch[2]) {
+                    // The address has a second cbid - maybe an app!
+                    message.destination = destMatch[2];
+                    Portal.portals.dispatch(message);
+                } else {
+                    Portal.messageCollection.add(message);
+                }
+            }
 
         } else {
             console.warn('message source unrecognised', message);
         }
-
-        //this.dispatcher.dispatch(message);
     },
 
     register: function(callback) {
@@ -13423,7 +13425,7 @@ var CBApp = Marionette.Application.extend({
 
 module.exports = CBApp;
 
-},{"./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
 
 Portal.ClientControl = Backbone.Deferred.Model.extend({
 
@@ -14239,73 +14241,27 @@ Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
-var CBApp = require('./cbApp')
+CBApp = require('./cbApp')
 
+/*
 var cbidTypes = {
     'BID:b': 'bridge',
     'BID:b/UID:u': 'bridgeControl',
     'BID:b/DID:d': 'deviceInstall'
 }
+*/
 
 Portal = new CBApp();
-Portal.dispatcher = new Dispatcher();
-Portal.setupCBIDTypes(cbidTypes);
+//Portal.dispatcher = new Dispatcher();
+//Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/mixins/backbone');
 require('./views/mixins/connector');
 require('./views/mixins/items');
 
-/*
-Portal.addRegions({
-    navRegion: "#nav-region",
-    mainRegion: "#main-region",
-    notificationRegion: "#notification-region",
-    modalsRegion: {
-      selector: "#modals-region",
-      regionType: Backbone.Marionette.Modals
-    }
-});
-*/
-
 Portal._isInitialized = false;
 
 Portal.Controller = Marionette.Controller.extend({
-  /*
-  index: function () {
-    console.log('index');
-  },
-  showConfig: function(slug) {
-      Portal.modalsRegion.reset();
-      Portal.Nav.trigger('topbar:activate', 'config');
-      Portal.Config.trigger('config:show', slug);
-  },
-  showDeveloper: function(slug) {
-      Portal.modalsRegion.reset();
-      Portal.Nav.trigger('topbar:activate', '');
-      Portal.Developer.trigger('developer:show', slug);
-  },
-  showHome: function() {
-      Portal.modalsRegion.reset();
-      Portal.Nav.trigger('home:activate', '');
-      Portal.Home.trigger('developer:show', slug);
-  },
-  showStore: function(slug) {
-      Portal.modalsRegion.reset();
-      Portal.Nav.trigger('topbar:activate', 'store');
-      Portal.Store.trigger('store:show', slug);
-  },
-  setCurrentBridge: function(bridge) {
-
-      console.log('setCurrentBridge bridge', bridge);
-      var currentBridges = Portal.bridgeCollection.where({current: true})
-      for (i=0; i < currentBridges.length; i++) {
-          currentBridges[i].set('current', false, {silent: true});
-      }
-      console.log('setCurrentBridge currentBridges', currentBridges);
-
-      bridge.set('current', true);
-  }
-  */
 });
 
 Portal.addInitializer(function () {
@@ -14321,38 +14277,20 @@ Portal.addInitializer(function () {
 
 });
 
-/*
-Portal.navigate = function(route,  options){
-  options || (options = {});
-  Backbone.history.navigate(route, options);
-};
-
-Portal.getCurrentRoute = function(){
-  return Backbone.history.fragment
-};
-*/
-
-
 var BaseView = require('./views/base');
 
 Portal.addInitializer(function () {
 //Portal.on("initialize:after", function () {
 
-  //Portal.Nav.trigger('topbar:show');
-  //Portal.Notifications.trigger('show');
-
-  Portal.appCollection.fetch();
-
   Portal.router = require('./router');
 
   Portal.router.run(function (Handler, state) {
       Portal.route = state;
-      console.log('new state ', state);
+
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
       if(currentBridge) currentBridge.fetch();
-      //var apps = Portal.appCollection;
-      console.log('router currentBridge', currentBridge);
+
       var models = {
           currentBridge: currentBridge,
           currentUser: Portal.currentUser
@@ -14367,76 +14305,13 @@ Portal.addInitializer(function () {
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
-              //key={currentBridge.get('id')}
               key: state.path, 
               collection: collections, model: models}),
           document.getElementById('app')
       );
-
-      /*
-      Portal.mainView = React.render(
-          <Handler params={params} key={currentBridge.get('id')} model={currentBridge} />,
-          document.getElementById('app')
-      );
-      */
-      //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
-      //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
   });
-
-  /*
-  React.renderComponent(
-      <Portal.NotificationListView collection={Portal.notificationCollection} />,
-      document.getElementById('notification-region')
-  );
-  */
-
-  //for routing purposes
-  /*
-  if(Backbone.history) {
-
-      Backbone.history.start({pushState: true});
-                              //root: '/portal'});
-
-      console.log('Backbone.history.fragment', Backbone.history.fragment);
-      if (this.getCurrentRoute() === "") {
-          Portal.request('config:show');
-          //Backbone.history.navigate('index');
-
-      }
-
-  } else {
-      console.warn('Backbone.history was not started');
-  }
-  */
 });
 
-/*
-Portal.Router = Marionette.SubRouter.extend({
-
-  appRoutes: {
-    '': 'showHome',
-    'config(/:slug)': 'showConfig',
-    'developer(/:slug)': 'showDeveloper',
-    'store(/:slug)': 'showStore'
-  }
-});
-
-Portal.reqres.setHandler("config:show", function(){
-    Portal.controller.showConfig();
-});
-
-Portal.reqres.setHandler("developer:show", function(){
-    Portal.controller.showDeveloper();
-});
-
-Portal.reqres.setHandler("home:show", function(){
-    Portal.controller.showHome();
-});
-
-Portal.reqres.setHandler("store:show", function(){
-    Portal.controller.showStore();
-});
-*/
 module.exports = Portal;
 },{"./cbApp":"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
@@ -14863,8 +14738,7 @@ require('./users/current/models');
 require('./misc/decorators');
 require('./misc/filters');
 
-//Portal.addInitializer(function () {
-Portal.on('initialize:before', function () {
+Portal.on('before:start', function () {
 
   Portal.adaptorCollection = new Portal.AdaptorCollection();
   Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
@@ -15332,30 +15206,13 @@ Portal.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
 
-
-  return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
-
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
 require('../../views/regions');
-
-require('../../apps/ownerships/views');
-require('../../apps/connections/views');
-
-require('../../clients/views');
-require('../../clients/controls/views');
 
 //var AppViews = require('./apps/views');
 
@@ -15385,7 +15242,6 @@ module.exports.Main = Marionette.Layout.extend({
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new Portal.MessageListView();
-        */
     },
 
     onRender: function() {
@@ -15399,7 +15255,6 @@ module.exports.Main = Marionette.Layout.extend({
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
-         */
 
         Portal.getCurrentUser().then(function(currentUser) {
 
@@ -15432,13 +15287,13 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-             */
         }).done();
     }
 
 });
+*/
 
-},{"../../apps/connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","../../apps/ownerships/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../../clients/controls/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js","../../clients/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
 
 
 var HomeViews = require('./views');
@@ -15500,20 +15355,9 @@ Portal.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
 
-
-  return "<div class=\"welcome\">\n    <div class=\"welcome-text panel-body\">\n        Welcome to the ContinuumBridge portal.\n        <br><br>\n        If this is the first time you have logged-in and you don't have any bridges, please click <a href=\"http://continuumbridge.readme.io/v1.0/docs/start-here\">here</a>\n        <br><br>\n        If you have a bridge, click <a href=\"http://portal.continuumbridge.com/portal/config/\">here</a> to see what devices and apps you have and add more.\n        <br><br>\n        For further information on how to use this portal, click <a href=\"http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal\">here</a>\n    </div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
-
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
@@ -15525,14 +15369,12 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
-    /*
     regions: {
         appSection: {
             selector: '#app-section',
             regionType: Portal.Regions.Fade
         }
     },
-    */
 
     initialize: function() {
 
@@ -15544,8 +15386,9 @@ module.exports.Main = Marionette.Layout.extend({
     }
 
 });
+*/
 
-},{"../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
 
 
 var StoreViews = require('./views');
@@ -15620,6 +15463,17 @@ require('../../apps/views');
 module.exports.Main = React.createClass({displayName: 'Main',
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    componentWillReceiveParams: function(params) {
+
+        console.log('store will receive params', params);
+        if (!this.params || this.params != params) {
+            Portal.appCollection.fetch();
+            //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+
+        this.params = params;
+    },
 
     renderModals: function () {
 
@@ -15858,30 +15712,31 @@ var API = function(){
 */
 var API = {};
 
-var Socket = _.extend(Backbone.Events, {
+var Socket = function()  {
 
-    request: function(cbid) {
+}
 
-    },
-
-    publish: function() {
+Socket.prototype.publish = function(message) {
 
         //var destination = "BID" + currentBridge.get('id');
         //message.set('destination', destination);
-        console.log('Message is', message);
+        console.log('Caja socket publish message is', message);
         var jsonMessage = message.toJSON();
 
-        CBApp.socket.emit('message', jsonMessage, function(data){
+        Portal.socket.emit('message', jsonMessage, function(data){
             //logger.log('verbose', 'Sent to socket ' + data);
         });
-    },
+};
 
+/*
     subscribe: function(event, callback, channel) {
 
         var sub = channel ? channel + ':' + event : 'message:' + event;
         this.listenTo(this, sub, callback);
     }
-});
+*/
+
+_.extend(Socket, Backbone.Events);
 
 var Model = Backbone.Deferred.Model.extend({
 
@@ -15891,8 +15746,11 @@ var Collection = Backbone.Deferred.Collection.extend({
 
 });
 
-var tameCtor = function(ctor) {
+var tameCtor = function(ctor, methods) {
     caja.markCtor(ctor);
+    _.each(methods, function(method) {
+        caja.grantMethod(ctor, method);
+    });
     return caja.tame(ctor);
 }
 
@@ -15904,11 +15762,22 @@ var tameFunction = function(func) {
 API.tameAll = function() {
 
     var alertGreeting = function() { alert('Hello world'); };
+    var windowGreeting = function(o) { console.log('caja object is', o) };
+
+    var cajaConsole = {};
+
+    cajaConsole.log = tameFunction(console.log);
+
+    caja.markCtor(Socket);
+    caja.grantMethod(Socket.prototype, "publish");
 
     return {
-        Model: tameCtor(Model),
-        Collection: tameCtor(Collection),
-        sayHello: tameFunction(alertGreeting)
+        Model: tameCtor(Model, []),
+        Collection: tameCtor(Collection, []),
+        Socket: tameCtor(Socket, ['publish']),
+        sayHello: tameFunction(alertGreeting),
+        sayWindow: tameFunction(windowGreeting),
+        console: cajaConsole
     };
 }
 
@@ -16077,6 +15946,24 @@ Portal.NotificationListView = Marionette.CompositeView.extend({
 });
 */
 
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js":[function(require,module,exports){
+
+
+var Portals = function() {
+
+    this.dispatcher = new Dispatcher();
+}
+
+Portals.prototype.dispatch = function(message) {
+
+    this.dispatcher.dispatch(message);
+}
+
+Portals.prototype.register = function(callback) {
+    this.dispatcher.register(callback);
+}
+
+module.exports = Portals;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
 
 var Route = Router.Route
@@ -16616,12 +16503,7 @@ module.exports = React.createClass({displayName: 'exports',
     render: function () {
 
         var Handler = this.props.handler;
-        //console.log('Handler in base', Handler);
         var params = this.props.params;
-        console.log('params in base', params);
-        //var currentBridge = this.getModel();
-        //console.log('currentBridge in base', currentBridge);
-        //currentBridge.fetch();
 
         return (
             React.createElement(Handler, {params: params})
@@ -17007,8 +16889,6 @@ module.exports.AutosizeInput = AutosizeInput;
 
 var PortalsAPI = require('../modules/portals/api');
 
-console.log('PortalsAPI is', PortalsAPI);
-
 module.exports = React.createClass({displayName: 'exports',
 
     componentDidMount: function() {
@@ -17044,6 +16924,11 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"../modules/portals/api":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
 
+require('../apps/ownerships/views');
+require('../apps/connections/views');
+
+require('../clients/views');
+require('../clients/controls/views');
 
 module.exports = React.createClass({displayName: 'exports',
 
@@ -17121,7 +17006,7 @@ module.exports = React.createClass({displayName: 'exports',
 });
 
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
+},{"../apps/connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","../apps/ownerships/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../clients/controls/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js","../clients/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
 
 
 /*
@@ -17189,8 +17074,8 @@ module.exports = React.createClass({displayName: 'exports',
         //Portal.mainView = this;
         //mainView = this;
         var activeSection = this.getParams().section;
-        console.log('mainView getParams()', this.getParams());
-        console.log('mainView params', this.props.params);
+        //console.log('mainView getParams()', this.getParams());
+        //console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());
 
         //var currentBridge = Portal.getCurrentBridge();

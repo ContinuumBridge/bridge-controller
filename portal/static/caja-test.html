@@ -1,11 +1,20 @@
 <html>
 <head></head>
 <body>
-<input type="button" id="theButton" value="Say hello">
+<input type="button" id="theButton" value="Say publish">
 <script type="text/javascript">
     document.getElementById('theButton').onclick = function() {
-        sayHello();
+        //sayHello();
+        //for(var key in window) { sayWindow(key) }
+        //sayWindow(Model);
+        sayWindow(Socket);
+        var socket = new Socket();
+
+        sayWindow(socket);
+        socket.publish('Test publish from caja');
     };
+    //console.log('window is', window);
+
 </script>
 </body>
 </html>

@@ -11,6 +11,17 @@ module.exports.Main = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    componentWillReceiveParams: function(params) {
+
+        console.log('store will receive params', params);
+        if (!this.params || this.params != params) {
+            Portal.appCollection.fetch();
+            //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+
+        this.params = params;
+    },
+
     renderModals: function () {
 
     },

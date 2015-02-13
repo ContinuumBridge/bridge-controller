@@ -10,8 +10,8 @@ module.exports = React.createClass({
         //Portal.mainView = this;
         //mainView = this;
         var activeSection = this.getParams().section;
-        console.log('mainView getParams()', this.getParams());
-        console.log('mainView params', this.props.params);
+        //console.log('mainView getParams()', this.getParams());
+        //console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());
 
         //var currentBridge = Portal.getCurrentBridge();
