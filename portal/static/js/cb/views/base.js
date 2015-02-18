@@ -9,12 +9,13 @@ module.exports = React.createClass({
         //console.log('Handler in base', Handler);
         var params = this.props.params;
         console.log('params in base', params);
+        var path = this.props.path;
         //var currentBridge = this.getModel();
         //console.log('currentBridge in base', currentBridge);
         //currentBridge.fetch();
 
         return (
-            <Handler params={params} />
+            <Handler params={params} key={path} path={path} />
         );
     }
 });

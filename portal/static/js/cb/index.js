@@ -128,7 +128,7 @@ Portal.addInitializer(function () {
       React.render(
           <BaseView params={params} handler={Handler}
               //key={currentBridge.get('id')}
-              key={state.path}
+              key={state.path} path={state.path}
               collection={collections} model={models} />,
           document.getElementById('app')
       );

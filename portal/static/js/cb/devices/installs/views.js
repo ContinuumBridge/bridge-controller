@@ -38,7 +38,8 @@ Portal.DeviceInstallListView = React.createClass({
 
     discoverDevices: function() {
 
-        Portal.router.setParams({action: 'discover-devices'});
+        this.props.discoverDevices();
+        //Portal.router.setParams({action: 'discover-devices'});
     },
 
     renderItem: function (item) {

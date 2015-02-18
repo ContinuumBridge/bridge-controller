@@ -16,6 +16,7 @@ module.exports.Main = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    /*
     componentWillReceiveParams: function(params) {
 
         if (this.action != params.action) {
@@ -25,10 +26,14 @@ module.exports.Main = React.createClass({
             this.action = params.action;
         }
     },
+    */
 
     discoverDevices: function() {
 
         console.log('config discoverDevices');
+
+        Portal.router.setParams({action: 'discover-devices'});
+
         Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
             discoveredDevice.delete();
         });
@@ -71,7 +76,9 @@ module.exports.Main = React.createClass({
                 break;
             case "install-device":
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
-                return <InstallDeviceModal container={this} model={discoveredDevice} />;
+                console.log('discoveredDevice for modal is', discoveredDevice);
+                return <InstallDeviceModal container={this} installDevice={this.installDevice}
+                            model={discoveredDevice} />;
                 break;
             default:
                 break;
@@ -141,7 +148,7 @@ module.exports.Main = React.createClass({
 
 var InstallDeviceModal = React.createClass({
 
-    mixins: [ Router.State, Backbone.React.Component.mixin],
+    mixins: [ Router.State ],
 
     getInitialState: function() {
         return {
@@ -154,10 +161,12 @@ var InstallDeviceModal = React.createClass({
     },
 
     installDevice: function() {
-        console.log('Submitted installDevice modal');
-        var discoveredDevice = this.getModel();
-        discoveredDevice.install(this.state.friendlyName);
-        Portal.router.setParams({});
+        var model = this.props.model;
+        console.log('Submitted installDevice modal, props', this.props);
+        this.props.installDevice(model, this.state.friendlyName);
+        //var discoveredDevice = this.getModel();
+        //discoveredDevice.install(this.state.friendlyName);
+        //Portal.router.setParams({});
     },
 
     cancelInstall: function() {
@@ -168,7 +177,8 @@ var InstallDeviceModal = React.createClass({
     render: function() {
 
         var friendlyName = this.state.friendlyName;
-        var device = this.getModel().get('device');
+        //var device = this.getModel().get('device');
+        var device = this.props.model.get('device');
         var title = device ? "Install " + device.get('name') : "Unknown device";
 
         return (
