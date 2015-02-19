@@ -120,6 +120,7 @@ Portal.addInitializer(function () {
       var collections = {
           apps: Portal.appCollection,
           users: Portal.userCollection,
+          messages: Portal.messageCollection,
           notifications: Portal.notificationCollection
       }
 
@@ -127,8 +128,9 @@ Portal.addInitializer(function () {
 
       React.render(
           <BaseView params={params} handler={Handler}
+              path={state.path}
               //key={currentBridge.get('id')}
-              key={state.path}
+              //key={state.path}
               collection={collections} model={models} />,
           document.getElementById('app')
       );

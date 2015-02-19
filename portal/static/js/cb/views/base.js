@@ -12,9 +12,10 @@ module.exports = React.createClass({
         //var currentBridge = this.getModel();
         //console.log('currentBridge in base', currentBridge);
         //currentBridge.fetch();
+        var path = this.props.path;
 
         return (
-            <Handler params={params} />
+            <Handler params={params} path={path} />
         );
     }
 });

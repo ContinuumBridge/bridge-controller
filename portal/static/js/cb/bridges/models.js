@@ -13,11 +13,11 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
         });
-        */
 
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT bridge', name);
         });
+         */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);

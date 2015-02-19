@@ -16,36 +16,33 @@ module.exports.Main = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    componentWillReceiveParams: function(params) {
-
-        if (this.action != params.action) {
-            if (params.action == 'discover-devices') {
-                this.discoverDevices();
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo config view', transition, params);
+            switch (params.action) {
+                case "discover-devices":
+                    var model;
+                    while (model = Portal.getCurrentBridge().get('discoveredDevices').first()) {
+                        model.destroy();
+                    }
+                    //Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+                        //discoveredDevice.delete();
+                    //});
+                    Portal.messageCollection.sendCommand('discover');
+                    break;
+                default:
+                    break;
             }
-            this.action = params.action;
         }
     },
 
     discoverDevices: function() {
 
-        console.log('config discoverDevices');
-        Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
-            discoveredDevice.delete();
-        });
-        Portal.messageCollection.sendCommand('discover');
     },
 
     discoverDevicesRescan: function() {
 
         Portal.messageCollection.sendCommand('discover');
-    },
-
-    stopDiscoveringDevices: function() {
-        this.setState({discoveringDevices: false});
-    },
-
-    promptInstallDevice: function(discoveredDevice) {
-        this.setState({installDevice: discoveredDevice});
     },
 
     installDevice: function(discoveredDevice, friendlyName) {

@@ -4,6 +4,7 @@ module.exports = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    /*
     componentWillReceiveParams: function(params) {
 
         console.log('developer will receive params', params);
@@ -22,7 +23,15 @@ module.exports = React.createClass({
             }
             this.action = params.action;
         }
-        */
+    },
+    */
+
+    statics: {
+        willTransitionTo: function (transition, params) {
+
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
     },
 
     renderModals: function () {

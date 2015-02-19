@@ -110,7 +110,12 @@ var Tab = React.createClass({
     onClick: function() {
 
         console.log('onClick nav query', this.getQuery());
+        console.log('nave this.props.to', this.props.to);
+        var path = Portal.router.makePath(this.props.to, {}, Portal.route.query);
+        console.log('nav path', path);
         this.transitionTo(this.props.to, {}, this.getQuery());
+        // Stop the default transition from firing
+        return false;
     },
 
     render: function () {
@@ -124,7 +129,7 @@ var Tab = React.createClass({
 
         return (
             <li className={className}>
-                <Router.Link {...this.props}></Router.Link>
+                <Router.Link {...this.props} onClick={this.onClick} ></Router.Link>
             </li>
         );
     }
