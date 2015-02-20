@@ -14,12 +14,13 @@ module.exports = React.createClass({
         //console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());
 
+        var path = this.props.path;
         //var currentBridge = Portal.getCurrentBridge();
         return (
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
                 <div className="container">
-                    <Router.RouteHandler params={this.props.params} />
+                    <Router.RouteHandler key={path} params={this.props.params} />
                 </div>
                 <Portal.NotificationListView />
             </div>

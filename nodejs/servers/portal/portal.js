@@ -13,7 +13,12 @@ var Portal = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
 
-    this.socketServer =  this.createSocketServer(BackboneIOServer, port, this.djangoURL);
+    var options = {
+        port: port,
+        djangoURL: this.djangoURL
+    }
+    this.socketServer =  this.createSocketServer(BackboneIOServer, options);
+
     //console.log('portal socketserver is', this.socketServer);
 };
 

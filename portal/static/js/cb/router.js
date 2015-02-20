@@ -21,23 +21,24 @@ var routes = (
     <Route handler={MainView} path="/">
         <DefaultRoute handler={HomeView} />
         <Route name="account" handler={AccountView} />
-        <Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
+        <Route name="config" path="config/:action?/?:item?" handler={ConfigView} />
         <Route name="dashboard" handler={DashboardView} />
         <Route name="developer" handler={DeveloperView} />
         <Route name="market" handler={MarketView} />
         <NotFoundRoute handler={NotFoundView}/>
     </Route>
 );
+//<Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
 
 var router = Router.create({
     routes: routes,
     location: Router.HistoryLocation
 });
 
-router.setQuery = function(query) {
+router.setQuery = function(query, triggerTransition) {
 
     var route = Portal.route;
-    Portal.router.transitionTo(route.pathname, route.params,
+    Portal.router.replaceWith(route.pathname, route.params,
         _.defaults(query, route.query));
 }
 
@@ -48,7 +49,11 @@ router.setParams = function(params) {
     //var pathnameMatch = route.pathname.replace(/\//g, '');
     var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
     console.log('pathnameMatch ', pathnameMatch );
+    console.log('setParams', pathnameMatch[1], params, route.query);
+    //var path = Portal.router.makePath(pathnameMatch[1], params, route.query);
+    //console.log('setParams path', path);
     Portal.router.transitionTo(pathnameMatch[1], params, route.query);
+    //Portal.router.transitionTo(path);
 }
 
 module.exports = router;

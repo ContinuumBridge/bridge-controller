@@ -8,8 +8,10 @@ module.exports = React.createClass({
         var Handler = this.props.handler;
         var params = this.props.params;
 
+        var path = this.props.path;
+
         return (
-            <Handler params={params} />
+            <Handler params={params} path={path} />
         );
     }
 });

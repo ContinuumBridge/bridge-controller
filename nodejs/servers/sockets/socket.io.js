@@ -8,13 +8,22 @@ var SocketServer = require('./socket');
 
 var backendAuth = require('../../backendAuth.js');
 
-function SocketIOServer(port, getConfig) {
+function SocketIOServer(getConfig, options) {
 
     var self = this;
 
+    var heartbeatInterval = options.heartbeatInterval || 25000;
+    var heartbeatTimeout = options.heartbeatTimeout || 60000;
+
+    console.log('heartbeatInterval ', heartbeatInterval);
+    console.log('heartbeatTimeout', heartbeatTimeout);
+
     var httpServer = require('http').createServer();
-    var socketServer = require('socket.io')(httpServer);
-    httpServer.listen(port);
+    var socketServer = require('socket.io')(httpServer, {
+        'pingInterval': heartbeatInterval,
+        'pingTimeout': heartbeatTimeout
+    });
+    httpServer.listen(options.port);
 
     // Set the socket io log level
     //socketServer.set('log level', 1);

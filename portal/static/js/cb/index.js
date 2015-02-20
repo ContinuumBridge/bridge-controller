@@ -1,17 +1,7 @@
 
 CBApp = require('./cbApp')
 
-/*
-var cbidTypes = {
-    'BID:b': 'bridge',
-    'BID:b/UID:u': 'bridgeControl',
-    'BID:b/DID:d': 'deviceInstall'
-}
-*/
-
 Portal = new CBApp();
-//Portal.dispatcher = new Dispatcher();
-//Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/mixins/backbone');
 require('./views/mixins/connector');
@@ -56,6 +46,7 @@ Portal.addInitializer(function () {
       var collections = {
           apps: Portal.appCollection,
           users: Portal.userCollection,
+          messages: Portal.messageCollection,
           notifications: Portal.notificationCollection
       }
 
@@ -63,7 +54,8 @@ Portal.addInitializer(function () {
 
       React.render(
           <BaseView params={params} handler={Handler}
-              key={state.path}
+              path={state.path}
+              //key={state.path}
               collection={collections} model={models} />,
           document.getElementById('app')
       );

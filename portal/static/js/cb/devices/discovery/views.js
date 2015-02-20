@@ -62,9 +62,15 @@ Portal.DiscoveredDeviceListView = React.createClass({
         };
     },
 
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo device discovery', transition, params);
+        }
+    },
+
     stopDiscoveringDevices: function() {
 
-        Portal.router.setParams({action: ''});
+        Portal.router.setParams({});
         //Portal.Config.controller.stopDiscoveringDevices();
     },
 

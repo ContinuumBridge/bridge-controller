@@ -12964,7 +12964,11 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT bridge', name);
         });
+<<<<<<< HEAD
         */
+=======
+         */
+>>>>>>> staging-2
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
@@ -13945,9 +13949,15 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
         };
     },
 
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo device discovery', transition, params);
+        }
+    },
+
     stopDiscoveringDevices: function() {
 
-        Portal.router.setParams({action: ''});
+        Portal.router.setParams({});
         //Portal.Config.controller.stopDiscoveringDevices();
     },
 
@@ -14167,6 +14177,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
     discoverDevices: function() {
 
         Portal.router.setParams({action: 'discover-devices'});
+        //this.props.discoverDevices();
     },
 
     renderItem: function (item) {
@@ -14298,6 +14309,7 @@ Portal.addInitializer(function () {
       var collections = {
           apps: Portal.appCollection,
           users: Portal.userCollection,
+          messages: Portal.messageCollection,
           notifications: Portal.notificationCollection
       }
 
@@ -14305,7 +14317,13 @@ Portal.addInitializer(function () {
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
+<<<<<<< HEAD
               key: state.path, 
+=======
+              path: state.path, 
+              //key={currentBridge.get('id')}
+              //key={state.path}
+>>>>>>> staging-2
               collection: collections, model: models}),
           document.getElementById('app')
       );
@@ -14942,36 +14960,33 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    componentWillReceiveParams: function(params) {
-
-        if (this.action != params.action) {
-            if (params.action == 'discover-devices') {
-                this.discoverDevices();
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo config view', transition, params);
+            switch (params.action) {
+                case "discover-devices":
+                    var model;
+                    while (model = Portal.getCurrentBridge().get('discoveredDevices').first()) {
+                        model.destroy();
+                    }
+                    //Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+                        //discoveredDevice.delete();
+                    //});
+                    Portal.messageCollection.sendCommand('discover');
+                    break;
+                default:
+                    break;
             }
-            this.action = params.action;
         }
     },
 
     discoverDevices: function() {
 
-        console.log('config discoverDevices');
-        Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
-            discoveredDevice.delete();
-        });
-        Portal.messageCollection.sendCommand('discover');
     },
 
     discoverDevicesRescan: function() {
 
         Portal.messageCollection.sendCommand('discover');
-    },
-
-    stopDiscoveringDevices: function() {
-        this.setState({discoveringDevices: false});
-    },
-
-    promptInstallDevice: function(discoveredDevice) {
-        this.setState({installDevice: discoveredDevice});
     },
 
     installDevice: function(discoveredDevice, friendlyName) {
@@ -15988,23 +16003,24 @@ var routes = (
     React.createElement(Route, {handler: MainView, path: "/"}, 
         React.createElement(DefaultRoute, {handler: HomeView}), 
         React.createElement(Route, {name: "account", handler: AccountView}), 
-        React.createElement(Route, {name: "config", path: "config/?:action?/?:item?", handler: ConfigView}), 
+        React.createElement(Route, {name: "config", path: "config/:action?/?:item?", handler: ConfigView}), 
         React.createElement(Route, {name: "dashboard", handler: DashboardView}), 
         React.createElement(Route, {name: "developer", handler: DeveloperView}), 
         React.createElement(Route, {name: "market", handler: MarketView}), 
         React.createElement(NotFoundRoute, {handler: NotFoundView})
     )
 );
+//<Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
 
 var router = Router.create({
     routes: routes,
     location: Router.HistoryLocation
 });
 
-router.setQuery = function(query) {
+router.setQuery = function(query, triggerTransition) {
 
     var route = Portal.route;
-    Portal.router.transitionTo(route.pathname, route.params,
+    Portal.router.replaceWith(route.pathname, route.params,
         _.defaults(query, route.query));
 }
 
@@ -16015,7 +16031,11 @@ router.setParams = function(params) {
     //var pathnameMatch = route.pathname.replace(/\//g, '');
     var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
     console.log('pathnameMatch ', pathnameMatch );
+    console.log('setParams', pathnameMatch[1], params, route.query);
+    //var path = Portal.router.makePath(pathnameMatch[1], params, route.query);
+    //console.log('setParams path', path);
     Portal.router.transitionTo(pathnameMatch[1], params, route.query);
+    //Portal.router.transitionTo(path);
 }
 
 module.exports = router;
@@ -16423,18 +16443,6 @@ module.exports = React.createClass({displayName: 'exports',
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    componentWillReceiveParams: function(params) {
-
-        /*
-        if (this.params != params) {
-            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
-        }
-
-        this.params = params;
-        */
-    },
-
     renderModals: function () {
 
         /*
@@ -16504,9 +16512,17 @@ module.exports = React.createClass({displayName: 'exports',
 
         var Handler = this.props.handler;
         var params = this.props.params;
+<<<<<<< HEAD
+=======
+        console.log('params in base', params);
+        //var currentBridge = this.getModel();
+        //console.log('currentBridge in base', currentBridge);
+        //currentBridge.fetch();
+        var path = this.props.path;
+>>>>>>> staging-2
 
         return (
-            React.createElement(Handler, {params: params})
+            React.createElement(Handler, {params: params, path: path})
         );
     }
 });
@@ -16934,6 +16950,7 @@ module.exports = React.createClass({displayName: 'exports',
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    /*
     componentWillReceiveParams: function(params) {
 
         console.log('developer will receive params', params);
@@ -16952,7 +16969,15 @@ module.exports = React.createClass({displayName: 'exports',
             }
             this.action = params.action;
         }
-        */
+    },
+    */
+
+    statics: {
+        willTransitionTo: function (transition, params) {
+
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
     },
 
     renderModals: function () {
@@ -17078,12 +17103,13 @@ module.exports = React.createClass({displayName: 'exports',
         //console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());
 
+        var path = this.props.path;
         //var currentBridge = Portal.getCurrentBridge();
         return (
             React.createElement("div", null, 
                 React.createElement(Nav.Topbar, {activeSection: activeSection}), 
                 React.createElement("div", {className: "container"}, 
-                    React.createElement(Router.RouteHandler, {params: this.props.params})
+                    React.createElement(Router.RouteHandler, {key: path, params: this.props.params})
                 ), 
                 React.createElement(Portal.NotificationListView, null)
             )
@@ -17600,7 +17626,12 @@ var Tab = React.createClass({displayName: 'Tab',
     onClick: function() {
 
         console.log('onClick nav query', this.getQuery());
+        console.log('nave this.props.to', this.props.to);
+        var path = Portal.router.makePath(this.props.to, {}, Portal.route.query);
+        console.log('nav path', path);
         this.transitionTo(this.props.to, {}, this.getQuery());
+        // Stop the default transition from firing
+        return false;
     },
 
     render: function () {
@@ -17614,7 +17645,7 @@ var Tab = React.createClass({displayName: 'Tab',
 
         return (
             React.createElement("li", {className: className}, 
-                React.createElement(Router.Link, React.__spread({},  this.props))
+                React.createElement(Router.Link, React.__spread({},  this.props, {onClick: this.onClick}))
             )
         );
     }

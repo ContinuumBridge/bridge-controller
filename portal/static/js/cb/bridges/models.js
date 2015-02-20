@@ -17,7 +17,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT bridge', name);
         });
-        */
+         */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);

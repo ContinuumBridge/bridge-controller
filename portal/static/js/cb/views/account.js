@@ -6,18 +6,6 @@ module.exports = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    componentWillReceiveParams: function(params) {
-
-        /*
-        if (this.params != params) {
-            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
-        }
-
-        this.params = params;
-        */
-    },
-
     renderModals: function () {
 
         /*
