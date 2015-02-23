@@ -1,7 +1,8 @@
 
 var Q = require('q');
 
-var CBApp = require('index');
+//var CBApp = require('index');
+require('index');
 
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
@@ -18,6 +19,7 @@ require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
 require('./notifications/models');
+require('./portals/models');
 require('./users/models');
 require('./users/current/models');
 
@@ -78,6 +80,8 @@ Portal.on('before:start', function () {
       //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
   Portal.notificationCollection.subscribe();
+
+  Portal.portalCollection = new Portal.PortalCollection();
 
   Portal.userCollection = new Portal.UserCollection();
   Portal.userCollection.subscribe();

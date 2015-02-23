@@ -4,6 +4,7 @@ var CBApp = require('index');
 require('./cb/views/mixins/mixins');
 require('./cb/views/components/components');
 require('./cb/modules/config/config');
+//require('./cb/views/dashboard');
 require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
 require('./cb/modules/market/market');
@@ -11981,44 +11982,14 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
             self.trigger('relational:change');
         });
-
-        /*
-        this.on('change', function() {
-            console.log('Appinstall change event');
-        });
-        */
-        //this.startTracking();
     },
 
-    /*
-    install: function() {
+    getPortal: function() {
 
-        console.log('installing AppInstall');
-        this.save().then(function() {
-            console.log('AppInstall successfully saved');
-        }, function(error) {
-            console.log('Error installing', error);
-            Portal.Notifications.trigger('error:show', error);
-        }).done();
-    },
-
-    uninstall: function() {
-
-        console.log('uninstalling AppInstall', this);
-        this.destroyOnServer().then(function(model, response, options) {
-            console.log('AppInstall successfully destroyed', model, response, options);
+        return Portal.portalCollection.findOrAdd({
+            appInstall: this
         });
     },
-
-    toggleInstalled: function() {
-
-        if(this.isNew()) {
-            this.install();
-        } else {
-            this.uninstall();
-        }
-    },
-    */
 
     relations: [
         /*
@@ -12086,6 +12057,24 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             includeInJSON: 'resource_uri',
             initializeCollection: 'appLicenceCollection',
         },
+        {
+            type: Backbone.HasOne,
+            key: 'portal',
+            //keySource: 'app',
+            //keyDestination: 'app',
+            relatedModel: 'Portal.Portal',
+            collectionType: 'Portal.PortalCollection',
+            //createModels: true,
+            includeInJSON: false,
+            initializeCollection: 'portalCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appInstall',
+                collectionType: 'Portal.AppInstallCollection',
+                includeInJSON: false,
+                initializeCollection: 'appInstallCollection'
+            }
+        }
     ]
 }, { modelType: "appInstall" });
 
@@ -12964,11 +12953,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT bridge', name);
         });
-<<<<<<< HEAD
-        */
-=======
          */
->>>>>>> staging-2
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
@@ -13317,7 +13302,7 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
 },{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
 var utils = require('./utils');
-var Portals = require('./portals/models');
+//var Portals = require('./portals/models');
 
 /*
 var optionalParam = /\((.*?)\)/g;
@@ -13336,7 +13321,7 @@ var CBApp = Marionette.Application.extend({
 
         this.dispatcher = new Dispatcher();
 
-        this.portals = new Portals();
+        //this.portals = new Portals();
     },
     /*
 
@@ -13405,7 +13390,7 @@ var CBApp = Marionette.Application.extend({
                 if (destMatch[2]) {
                     // The address has a second cbid - maybe an app!
                     message.destination = destMatch[2];
-                    Portal.portals.dispatch(message);
+                    Portal.portalCollection.dispatch(message);
                 } else {
                     Portal.messageCollection.add(message);
                 }
@@ -13429,7 +13414,7 @@ var CBApp = Marionette.Application.extend({
 
 module.exports = CBApp;
 
-},{"./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
 
 Portal.ClientControl = Backbone.Deferred.Model.extend({
 
@@ -14254,17 +14239,7 @@ Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
 
 CBApp = require('./cbApp')
 
-/*
-var cbidTypes = {
-    'BID:b': 'bridge',
-    'BID:b/UID:u': 'bridgeControl',
-    'BID:b/DID:d': 'deviceInstall'
-}
-*/
-
 Portal = new CBApp();
-//Portal.dispatcher = new Dispatcher();
-//Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/mixins/backbone');
 require('./views/mixins/connector');
@@ -14317,13 +14292,8 @@ Portal.addInitializer(function () {
 
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
-<<<<<<< HEAD
-              key: state.path, 
-=======
               path: state.path, 
-              //key={currentBridge.get('id')}
               //key={state.path}
->>>>>>> staging-2
               collection: collections, model: models}),
           document.getElementById('app')
       );
@@ -14733,7 +14703,8 @@ Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
 
 var Q = require('q');
 
-var CBApp = require('index');
+//var CBApp = require('index');
+require('index');
 
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
@@ -14750,6 +14721,7 @@ require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
 require('./notifications/models');
+require('./portals/models');
 require('./users/models');
 require('./users/current/models');
 
@@ -14811,6 +14783,8 @@ Portal.on('before:start', function () {
   ]);
   Portal.notificationCollection.subscribe();
 
+  Portal.portalCollection = new Portal.PortalCollection();
+
   Portal.userCollection = new Portal.UserCollection();
   Portal.userCollection.subscribe();
 
@@ -14835,7 +14809,7 @@ Portal.on('before:start', function () {
   */
 });
 
-},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -15715,89 +15689,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>Continuum Bridge</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/portals/api.js":[function(require,module,exports){
-
-/*
-var API = function(){
-
-    this.socket = this.Socket();
-    this.Model = Model;
-    this.Collection = Collection;
-};
-*/
-var API = {};
-
-var Socket = function()  {
-
-}
-
-Socket.prototype.publish = function(message) {
-
-        //var destination = "BID" + currentBridge.get('id');
-        //message.set('destination', destination);
-        console.log('Caja socket publish message is', message);
-        var jsonMessage = message.toJSON();
-
-        Portal.socket.emit('message', jsonMessage, function(data){
-            //logger.log('verbose', 'Sent to socket ' + data);
-        });
-};
-
-/*
-    subscribe: function(event, callback, channel) {
-
-        var sub = channel ? channel + ':' + event : 'message:' + event;
-        this.listenTo(this, sub, callback);
-    }
-*/
-
-_.extend(Socket, Backbone.Events);
-
-var Model = Backbone.Deferred.Model.extend({
-
-});
-
-var Collection = Backbone.Deferred.Collection.extend({
-
-});
-
-var tameCtor = function(ctor, methods) {
-    caja.markCtor(ctor);
-    _.each(methods, function(method) {
-        caja.grantMethod(ctor, method);
-    });
-    return caja.tame(ctor);
-}
-
-var tameFunction = function(func) {
-    caja.markFunction(func);
-    return caja.tame(func);
-}
-
-API.tameAll = function() {
-
-    var alertGreeting = function() { alert('Hello world'); };
-    var windowGreeting = function(o) { console.log('caja object is', o) };
-
-    var cajaConsole = {};
-
-    cajaConsole.log = tameFunction(console.log);
-
-    caja.markCtor(Socket);
-    caja.grantMethod(Socket.prototype, "publish");
-
-    return {
-        Model: tameCtor(Model, []),
-        Collection: tameCtor(Collection, []),
-        Socket: tameCtor(Socket, ['publish']),
-        sayHello: tameFunction(alertGreeting),
-        sayWindow: tameFunction(windowGreeting),
-        console: cajaConsole
-    };
-}
-
-module.exports = API;
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
 Portal.Notification = Backbone.Deferred.Model.extend({
 
@@ -15961,24 +15853,231 @@ Portal.NotificationListView = Marionette.CompositeView.extend({
 });
 */
 
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js":[function(require,module,exports){
+
+var Socket = function()  {
+
+}
+
+Socket.prototype.publish = function(message) {
+
+        //var destination = "BID" + currentBridge.get('id');
+        //message.set('destination', destination);
+        console.log('Caja socket publish message is', message);
+        var jsonMessage = message.toJSON();
+
+        Portal.socket.emit('message', jsonMessage, function(data){
+            //logger.log('verbose', 'Sent to socket ' + data);
+        });
+};
+
+/*
+    subscribe: function(event, callback, channel) {
+
+        var sub = channel ? channel + ':' + event : 'message:' + event;
+        this.listenTo(this, sub, callback);
+    }
+*/
+
+_.extend(Socket, Backbone.Events);
+
+var Model = Backbone.Deferred.Model.extend({
+
+});
+
+var Collection = Backbone.Deferred.Collection.extend({
+
+});
+
+var tameCtor = function(ctor, methods) {
+    caja.markCtor(ctor);
+    _.each(methods, function(method) {
+        caja.grantMethod(ctor, method);
+    });
+    return caja.tame(ctor);
+}
+
+var tameFunction = function(func) {
+    caja.markFunction(func);
+    return caja.tame(func);
+}
+
+var tameAll = function() {
+
+    var alertGreeting = function() { alert('Hello world'); };
+    var windowGreeting = function(o) { console.log('caja object is', o) };
+
+    var cajaConsole = {};
+
+    cajaConsole.log = tameFunction(console.log);
+
+    caja.markCtor(Socket);
+    caja.grantMethod(Socket.prototype, "publish");
+
+    return {
+        Model: tameCtor(Model, []),
+        Collection: tameCtor(Collection, []),
+        //Socket: tameCtor(Socket, ['publish']),
+        sayHello: tameFunction(alertGreeting),
+        sayWindow: tameFunction(windowGreeting),
+        console: cajaConsole
+    };
+}
+
+var API = {
+
+    emit: function() {
+
+    },
+
+    register: function() {
+
+    }
+};
+
+var API = function() {
+
+    //this.
+}
+
+API.prototype.emit = function() {
+
+};
+
+API.prototype.register = function() {
+
+};
+
+caja.whenReady(function() {  // (1)
+    API = tameAll();
+});
+
+
+module.exports = API;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js":[function(require,module,exports){
 
+var PortalsAPI = require('./api');
 
-var Portals = function() {
+Portal.Portal = Backbone.Deferred.Model.extend({
 
-    this.dispatcher = new Dispatcher();
-}
+    idAttribute: 'id',
 
-Portals.prototype.dispatch = function(message) {
+    //backend: 'appInstall',
 
-    this.dispatcher.dispatch(message);
-}
+    initialize: function() {
 
-Portals.prototype.register = function(callback) {
-    this.dispatcher.register(callback);
-}
+        var BID = Portal.getCurrentBridge().get('cbid');
+        var AID = this.get('appInstall').get('app').get('cbid');
 
-module.exports = Portals;
+        //var cbidRegex = /\/?(BID[0-9]+)\/?(AID[0-9]+)?/;
+        var cbidRegex = new RegExp("\/?(" + BID + ")\/(" + AID + ")");
+        console.log('portal cbidRegex is ', cbidRegex);
+        this.set('cbidRegex', cbidRegex);
+
+        Portal.portalCollection.register(this.dispatchCallback);
+    },
+
+    getAPI: function() {
+        var API = PortalsAPI;
+    },
+
+    dispatchCallback: function(message) {
+
+        var destination = _.property('destination')(message);
+
+        var cbidRegex = this.get('cbidRegex');
+        var destMatch = destination.match(cbidRegex);
+
+    },
+
+}, { modelType: "portal" });
+
+Portal.PortalCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Portal,
+    //backend: ''
+
+    initialize: function() {
+
+        this.dispatcher = new Dispatcher();
+
+        Portal.PortalCollection.__super__.initialize.apply(this, arguments);
+    },
+
+    dispatch: function(message) {
+        this.dispatcher.dispatch(message);
+    },
+
+    register: function(callback) {
+        this.dispatcher.register(callback);
+    }
+});
+
+},{"./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
+
+
+Portal.PortalView = React.createClass({displayName: 'PortalView',
+
+    componentDidMount: function() {
+
+        var portal = this.props.model;
+
+        var API = portal.getAPI();
+        //var $portal = this.$('.portal');
+        var cajaSection = this.refs.caja.getDOMNode();
+        caja.load(cajaSection, undefined, function(frame) {
+            frame.code('/static/caja-test.html',
+                'text/html')
+                .api(API)
+                //.api({ sayHello: tamedAlertGreeting })
+                .run();
+        });
+    },
+
+    render: function() {
+
+        console.log('portal in portalview is', this.props.model);
+
+        return (
+                React.createElement("div", {ref: "caja"}
+                )
+        )
+    }
+});
+
+Portal.PortalTabbedView = React.createClass({displayName: 'PortalTabbedView',
+
+    renderTab: function(appInstall) {
+
+        var id = appInstall.get('id');
+        var app = appInstall.get('app');
+        var name = app.get('name');
+
+        var portal = appInstall.getPortal();
+
+        return (
+            React.createElement(React.TabPane, {eventKey: id, tab: name}, 
+                React.createElement(Portal.PortalView, {model: portal})
+            )
+        )
+    },
+
+    render: function() {
+
+        var handleSelect = function() {};
+
+        var collection = this.props.collection;
+        var appInstall = collection.at(0);
+        var startID = appInstall ? appInstall.get('id') : 0;
+
+        return (
+            React.createElement(React.TabbedArea, {activeKey: startID, animation: false, onSelect: handleSelect}, 
+                collection.map(this.renderTab)
+            )
+        )
+    }
+});
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
 
 var Route = Router.Route
@@ -16512,14 +16611,8 @@ module.exports = React.createClass({displayName: 'exports',
 
         var Handler = this.props.handler;
         var params = this.props.params;
-<<<<<<< HEAD
-=======
-        console.log('params in base', params);
-        //var currentBridge = this.getModel();
-        //console.log('currentBridge in base', currentBridge);
-        //currentBridge.fetch();
+
         var path = this.props.path;
->>>>>>> staging-2
 
         return (
             React.createElement(Handler, {params: params, path: path})
@@ -16903,28 +16996,16 @@ var AutosizeInput = React.createClass({
 module.exports.AutosizeInput = AutosizeInput;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
 
-var PortalsAPI = require('../modules/portals/api');
+require('../portals/views');
 
 module.exports = React.createClass({displayName: 'exports',
 
-    componentDidMount: function() {
-
-        //var $portal = this.$('.portal');
-        var cajaSection = this.refs.caja.getDOMNode();
-        caja.load(cajaSection, undefined, function(frame) {
-            frame.code('/static/caja-test.html',
-                'text/html')
-                .api(PortalsAPI.tameAll())
-                //.api({ sayHello: tamedAlertGreeting })
-                .run();
-        });
-    },
-
     render: function () {
 
+        var collection = Portal.getCurrentBridge().get('appInstalls');
+
         return (
-            React.createElement("div", {ref: "caja"}
-            )
+            React.createElement(Portal.PortalTabbedView, {collection: collection})
         );
     }
 });
@@ -16938,7 +17019,7 @@ module.exports = React.createClass({displayName: 'exports',
  For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
 */
 
-},{"../modules/portals/api":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
+},{"../portals/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
 
 require('../apps/ownerships/views');
 require('../apps/connections/views');

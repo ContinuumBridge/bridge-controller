@@ -32878,7 +32878,6 @@ function createRouter(options) {
        * a new URL onto the history stack.
        */
       transitionTo: function (to, params, query) {
-        console.log('transitionTo', to, params, query);
         invariant(
           typeof location !== 'string',
           'You cannot use transitionTo with a static location'
@@ -32886,7 +32885,6 @@ function createRouter(options) {
 
         var path = this.makePath(to, params, query);
 
-        console.log('transitionTo path', path);
         if (pendingTransition) {
           // Replace so pending location does not stay in history.
           location.replace(path);
@@ -32954,7 +32952,6 @@ function createRouter(options) {
       },
 
       handleLocationChange: function (change) {
-        console.log('handleLocationChange', change);
         this.dispatch(change.path, change.type);
       },
 
@@ -33057,7 +33054,6 @@ function createRouter(options) {
         );
 
         dispatchHandler = function (error, transition, newState) {
-          console.log('dispatchHandler called', error, transition, newState);
           if (error)
             Router.handleError(error);
 
@@ -33073,7 +33069,6 @@ function createRouter(options) {
           }
         };
 
-        console.log('react router location', location);
         if (typeof location === 'string') {
           Router.dispatch(location, null);
         } else {
@@ -33081,7 +33076,6 @@ function createRouter(options) {
             location.addChangeListener(Router.handleLocationChange);
 
           this.isRunning = true;
-          console.log('react router isRunning', this.isRunning);
 
           // Bootstrap using the current path.
           this.refresh();
@@ -33093,8 +33087,6 @@ function createRouter(options) {
       },
 
       stop: function () {
-        throw "router stopping!";
-        console.log('react router stop');
         this.cancelPendingTransition();
 
         if (location.removeChangeListener)
@@ -60380,8 +60372,8 @@ require('backbone.modal');
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb-model-mixin');
-Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+//var CBModelMixin = require('./backbone-cb-model-mixin');
+//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
@@ -60429,7 +60421,7 @@ module.exports = Backbone;
 
 
 
-},{"../../cb/misc/relational-models":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model-mixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js","./backbone-cb-model-post":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js","./backbone-cb-model-pre":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js","./backbone-cb-views":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js","query-engine":"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
+},{"../../cb/misc/relational-models":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/relational-models.js","./backbone-cb-collection":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js","./backbone-cb-model-post":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js","./backbone-cb-model-pre":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-pre.js","./backbone-cb-views":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-views.js","./backbone-relational":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-relational.js","./backbone.stickit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.stickit.js","./backbone.trackit":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.trackit.js","backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","backbone-cocktail":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cocktail.js","backbone-deferred":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-deferred-q.js","backbone-react-component":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js","backbone.babysitter":"/home/ubuntu/bridge-controller/node_modules/backbone.babysitter/lib/backbone.babysitter.js","backbone.io":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.io.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","backbone.marionette.subrouter":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.subrouter.js","backbone.modal":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.modal-bundled.js","backbone.wreqr":"/home/ubuntu/bridge-controller/node_modules/backbone.wreqr/lib/backbone.wreqr.js","jquery":"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js","query-engine":"/home/ubuntu/bridge-controller/node_modules/query-engine/out/lib/query-engine.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-collection.js":[function(require,module,exports){
 
 var OriginalCollection = Backbone.Collection;
 
@@ -60674,60 +60666,6 @@ var CBCollection = OriginalCollection.extend({
 });
 
 Backbone.Collection = CBCollection;
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-mixin.js":[function(require,module,exports){
-
-
-var wrapError = function(model, options) {
-    var error = options.error;
-    options.error = function(resp) {
-      if (error) error(model, resp, options);
-      model.trigger('error', model, resp, options);
-    };
-};
-
-module.exports = {
-
-    /*
-    initialize: function() {
-      Backbone.Deferred.Model.prototype.initialize.apply(this, arguments);
-      _.bindAll(this, "mark_to_revert", "revert");
-      return this.mark_to_revert();
-    },
-
-    save: function(attrs, options) {
-      var self, success, value;
-      self = this;
-      options || (options = {});
-      success = options.success;
-      options.success = function(resp) {
-        self.trigger("save:success", self);
-        if (success) {
-          success(self, resp);
-        }
-        return self.mark_to_revert();
-      };
-      this.trigger("save", this);
-      value = Backbone.Deferred.Model.prototype.save.call(this, attrs, options);
-      return value;
-    },
-
-    mark_to_revert: function() {
-      return this._revertAttributes = _.clone(this.attributes);
-    },
-
-    revert: function() {
-      if (this._revertAttributes) {
-        return this.set(this._revertAttributes, {
-          silent: true
-        });
-      }
-    }
-    */
-};
-
-
-
-
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-cb-model-post.js":[function(require,module,exports){
 
 var OriginalModel = Backbone.Deferred.Model;
@@ -69518,6 +69456,8 @@ React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 React.Button = require('react-bootstrap').Button;
 React.Table = require('react-bootstrap').Table;
+React.TabbedArea = require('react-bootstrap').TabbedArea;
+React.TabPane = require('react-bootstrap').TabPane;
 
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');

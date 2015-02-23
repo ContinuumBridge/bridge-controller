@@ -24,8 +24,8 @@ require('backbone.modal');
 require('./backbone-relational');
 require('../../cb/misc/relational-models');
 
-var CBModelMixin = require('./backbone-cb-model-mixin');
-Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+//var CBModelMixin = require('./backbone-cb-model-mixin');
+//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);

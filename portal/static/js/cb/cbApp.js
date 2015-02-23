@@ -1,6 +1,6 @@
 
 var utils = require('./utils');
-var Portals = require('./portals/models');
+//var Portals = require('./portals/models');
 
 /*
 var optionalParam = /\((.*?)\)/g;
@@ -19,7 +19,7 @@ var CBApp = Marionette.Application.extend({
 
         this.dispatcher = new Dispatcher();
 
-        this.portals = new Portals();
+        //this.portals = new Portals();
     },
     /*
 
@@ -88,7 +88,7 @@ var CBApp = Marionette.Application.extend({
                 if (destMatch[2]) {
                     // The address has a second cbid - maybe an app!
                     message.destination = destMatch[2];
-                    Portal.portals.dispatch(message);
+                    Portal.portalCollection.dispatch(message);
                 } else {
                     Portal.messageCollection.add(message);
                 }

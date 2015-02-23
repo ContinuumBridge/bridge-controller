@@ -3,6 +3,7 @@ var CBApp = require('index');
 require('./cb/views/mixins/mixins');
 require('./cb/views/components/components');
 require('./cb/modules/config/config');
+//require('./cb/views/dashboard');
 require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
 require('./cb/modules/market/market');

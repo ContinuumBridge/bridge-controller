@@ -1,14 +1,4 @@
 
-/*
-var API = function(){
-
-    this.socket = this.Socket();
-    this.Model = Model;
-    this.Collection = Collection;
-};
-*/
-var API = {};
-
 var Socket = function()  {
 
 }
@@ -56,7 +46,7 @@ var tameFunction = function(func) {
     return caja.tame(func);
 }
 
-API.tameAll = function() {
+var tameAll = function() {
 
     var alertGreeting = function() { alert('Hello world'); };
     var windowGreeting = function(o) { console.log('caja object is', o) };
@@ -71,11 +61,40 @@ API.tameAll = function() {
     return {
         Model: tameCtor(Model, []),
         Collection: tameCtor(Collection, []),
-        Socket: tameCtor(Socket, ['publish']),
+        //Socket: tameCtor(Socket, ['publish']),
         sayHello: tameFunction(alertGreeting),
         sayWindow: tameFunction(windowGreeting),
         console: cajaConsole
     };
 }
+
+var API = {
+
+    emit: function() {
+
+    },
+
+    register: function() {
+
+    }
+};
+
+var API = function() {
+
+    //this.
+}
+
+API.prototype.emit = function() {
+
+};
+
+API.prototype.register = function() {
+
+};
+
+caja.whenReady(function() {  // (1)
+    API = tameAll();
+});
+
 
 module.exports = API;
