@@ -6,10 +6,11 @@ Portal.PortalView = React.createClass({
 
         var portal = this.props.model;
 
-        var API = portal.getAPI();
         //var $portal = this.$('.portal');
         var cajaSection = this.refs.caja.getDOMNode();
         caja.load(cajaSection, undefined, function(frame) {
+            var API = portal.getAPI();
+            console.log('portal api is', API);
             frame.code('/static/caja-test.html',
                 'text/html')
                 .api(API)
@@ -20,7 +21,7 @@ Portal.PortalView = React.createClass({
 
     render: function() {
 
-        console.log('portal in portalview is', this.props.model);
+        //console.log('portal in portalview is', this.props.model);
 
         return (
                 <div ref="caja">

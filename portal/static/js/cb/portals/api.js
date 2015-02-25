@@ -49,11 +49,12 @@ var tameFunction = function(func) {
 var tameAll = function() {
 
     var alertGreeting = function() { alert('Hello world'); };
-    var windowGreeting = function(o) { console.log('caja object is', o) };
+    var log = function() { console.log('caja says', arguments) };
 
     var cajaConsole = {};
 
-    cajaConsole.log = tameFunction(console.log);
+    //var log = tameFunction(log);
+    //cajaConsole.log = tameFunction(console.log);
 
     caja.markCtor(Socket);
     caja.grantMethod(Socket.prototype, "publish");
@@ -63,38 +64,73 @@ var tameAll = function() {
         Collection: tameCtor(Collection, []),
         //Socket: tameCtor(Socket, ['publish']),
         sayHello: tameFunction(alertGreeting),
-        sayWindow: tameFunction(windowGreeting),
-        console: cajaConsole
+        log: tameFunction(log)
+        //sayWindow: tameFunction(windowGreeting),
+        //console: cajaConsole
     };
 }
 
-var API = {
+//var = _.extend({}, Backbone.Events);
+//var SingleDuplexSocket = _.extend(function() {}, Backbone.Events);
 
-    emit: function() {
+var Socket = function(hostMessageCallback) {
 
-    },
+    var self = this;
 
-    register: function() {
+    // Direction is from inside the web app
+    this.inboundSocket = _.extend({}, Backbone.Events);
+    this.outboundSocket = _.extend({}, Backbone.Events);
 
-    }
-};
+    this.dispatcher = new Dispatcher();
 
-var API = function() {
-
-    //this.
+    this.outboundSocket.on('message', hostMessageCallback);
+    //this.inboundSocket.on('all', function(message) {
+    //});
 }
 
-API.prototype.emit = function() {
-
+Socket.prototype.sayHi = function() {
+    return "Hi!";
 };
 
-API.prototype.register = function() {
+Socket.prototype.publish = function(channel, message) {
 
+    this.outboundSocket.trigger(channel, message);
 };
 
+Socket.prototype.onMessage = function(callback) {
+
+    this.inboundSocket.on('message', callback);
+};
+
+Socket.prototype.send = function(message) {
+
+    this.outboundSocket.trigger('message', message);
+};
+
+Socket.prototype.subscribe = function(channel, callback) {
+
+    this.inboundSocket.on(channel, callback);
+};
+
+Socket.prototype.register = function(dispatchCallback) {
+
+    this.dispatcher.register(dispatchCallback);
+    //this.inboundSocket.on('all', dispatchCallback);
+};
+
+module.exports.Socket = Socket;
+
+/*
+var API;
 caja.whenReady(function() {  // (1)
     API = tameAll();
 });
+*/
 
+var api;
+var getAPI = function() {
 
-module.exports = API;
+    api = api ? api : tameAll();
+    return api;
+}
+module.exports.getAPI = getAPI;

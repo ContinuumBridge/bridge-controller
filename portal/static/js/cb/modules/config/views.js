@@ -110,7 +110,14 @@ module.exports.Main = React.createClass({
                 collection={deviceInstalls} discoverDevices={this.discoverDevices} />;
         }
 
-        var messages = currentBridge.get('messages');
+        var currentBID = Portal.currentBridge.getCBID();
+        var messages = Portal.messageCollection
+            .getFiltered('isNew', function(model, searchString) {
+                console.log('test model', model)
+                return false;
+                //return model.get('source') == currentBID
+                //    || model.get('destination') == currentBID;
+            });
 
         return (
             <div>

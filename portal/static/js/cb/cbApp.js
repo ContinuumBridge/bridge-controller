@@ -85,9 +85,9 @@ var CBApp = Marionette.Application.extend({
             var destination = _.property('destination')(message);
             var destMatch = destination.match(Portal.filters.cbidRegex)
             if (destMatch) {
-                if (destMatch[2]) {
-                    // The address has a second cbid - maybe an app!
-                    message.destination = destMatch[2];
+                if (destMatch[3]) {
+                    // The address has a third cbid - maybe an app!
+                    message.destination = destMatch[2] + "/" + destMatch[3];
                     Portal.portalCollection.dispatch(message);
                 } else {
                     Portal.messageCollection.add(message);

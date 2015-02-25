@@ -13387,9 +13387,9 @@ var CBApp = Marionette.Application.extend({
             var destination = _.property('destination')(message);
             var destMatch = destination.match(Portal.filters.cbidRegex)
             if (destMatch) {
-                if (destMatch[2]) {
-                    // The address has a second cbid - maybe an app!
-                    message.destination = destMatch[2];
+                if (destMatch[3]) {
+                    // The address has a third cbid - maybe an app!
+                    message.destination = destMatch[2] + "/" + destMatch[3];
                     Portal.portalCollection.dispatch(message);
                 } else {
                     Portal.messageCollection.add(message);
@@ -14301,9 +14301,161 @@ Portal.addInitializer(function () {
 });
 
 module.exports = Portal;
-},{"./cbApp":"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+},{"./cbApp":"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js":[function(require,module,exports){
 
-Portal.Message = Backbone.RelationalModel.extend({
+//var _ = require('underscore')
+//    ;
+
+// Create local references to array methods we'll want to use later.
+var array = [];
+var slice = array.slice;
+
+Message = function(attributes, options) {
+
+    var unknownAttrs = attributes || {};
+    var attrs = (typeof(unknownAttrs) == 'string') ? JSON.parse(unknownAttrs) : unknownAttrs;
+    options || (options = {});
+    this.attributes = {};
+    //if (options.parse) attrs = this.parse(attrs, options) || {};
+    //attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
+    this.set(attrs, options);
+    this.changed = {};
+    this.initialize.apply(this, arguments);
+};
+
+_.extend(Message.prototype, {
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    toJSON: function(options) {
+      return _.clone(this.attributes);
+    },
+
+    // Return a copy of the model's `attributes` object.
+    toJSONString: function(options) {
+
+      var jsonAttributes = JSON.stringify(_.clone(this.attributes));
+      return jsonAttributes;
+    },
+
+    setJSON: function(jsonAttributes, options) {
+
+        if (typeof jsonAttributes == 'string') {
+            try {
+                var attributes = JSON.parse(jsonAttributes);
+            } catch (error) {
+                console.error(error);
+            }
+        } else if (typeof jsonAttributes == 'object') {
+            var attributes = jsonAttributes;
+        }
+
+        if (!options) options = {};
+
+        this.set(attributes, options);
+    },
+
+    returnToSource: function(source) {
+
+        // Switches the original source to the destination
+        var src = source || "";
+        var prevSource = this.get('source') || "";
+        this.set('destination', prevSource);
+        this.set('source', src);
+    },
+
+    returnError: function(error) {
+
+    },
+
+    // Get the value of an attribute.
+    get: function(attr) {
+      return this.attributes[attr];
+    },
+
+    set: function(key, val, options) {
+      var attr, attrs, unset, changes, silent, changing, prev, current;
+      if (key == null) return this;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (typeof key === 'object') {
+        attrs = key;
+        options = val;
+      } else {
+        (attrs = {})[key] = val;
+      }
+
+      options || (options = {});
+
+      // Run validation.
+      if (!this._validate(attrs, options)) return false;
+
+      // Extract attributes and options.
+      unset           = options.unset;
+      silent          = options.silent;
+      changes         = [];
+      changing        = this._changing;
+      this._changing  = true;
+
+      if (!changing) {
+        this._previousAttributes = _.clone(this.attributes);
+        this.changed = {};
+      }
+      current = this.attributes, prev = this._previousAttributes;
+
+      // For each `set` attribute, update or delete the current value.
+      for (attr in attrs) {
+        val = attrs[attr];
+        if (!_.isEqual(current[attr], val)) changes.push(attr);
+        if (!_.isEqual(prev[attr], val)) {
+          this.changed[attr] = val;
+        } else {
+          delete this.changed[attr];
+        }
+        unset ? delete current[attr] : current[attr] = val;
+      }
+
+      this._pending = false;
+      this._changing = false;
+      return this;
+    },
+
+    unset: function(attr, options) {
+      return this.set(attr, void 0, _.extend({}, options, {unset: true}));
+    },
+
+    _validate: function(attrs, options) {
+      if (!options.validate || !this.validate) return true;
+      attrs = _.extend({}, this.attributes, attrs);
+      var error = this.validationError = this.validate(attrs, options) || null;
+      if (!error) return true;
+      this.trigger('invalid', this, error, _.extend(options, {validationError: error}));
+      return false;
+    }
+
+})
+
+// Underscore methods that we want to implement on the Model.
+// Added defaults
+var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'defults'];
+
+// Mix in each Underscore method as a proxy to `Model#attributes`.
+_.each(modelMethods, function(method) {
+  if (!_[method]) return;
+    Message.prototype[method] = function() {
+      var args = slice.call(arguments);
+      args.unshift(this.attributes);
+      return _[method].apply(_, args);
+    };
+});
+
+module.exports = Message;
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
+
+Portal.Message = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -14697,7 +14849,8 @@ Portal.filters.currentBridgeMessageDeferred = function() {
 //Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 
-Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+//Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?\/?([A-Z]ID[0-9]+)?/;
 
 },{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
@@ -15028,7 +15181,14 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 collection: deviceInstalls, discoverDevices: this.discoverDevices});
         }
 
-        var messages = currentBridge.get('messages');
+        var currentBID = Portal.currentBridge.getCBID();
+        var messages = Portal.messageCollection
+            .getFiltered('isNew', function(model, searchString) {
+                console.log('test model', model)
+                return false;
+                //return model.get('source') == currentBID
+                //    || model.get('destination') == currentBID;
+            });
 
         return (
             React.createElement("div", null, 
@@ -15905,11 +16065,12 @@ var tameFunction = function(func) {
 var tameAll = function() {
 
     var alertGreeting = function() { alert('Hello world'); };
-    var windowGreeting = function(o) { console.log('caja object is', o) };
+    var log = function() { console.log('caja says', arguments) };
 
     var cajaConsole = {};
 
-    cajaConsole.log = tameFunction(console.log);
+    //var log = tameFunction(log);
+    //cajaConsole.log = tameFunction(console.log);
 
     caja.markCtor(Socket);
     caja.grantMethod(Socket.prototype, "publish");
@@ -15919,41 +16080,77 @@ var tameAll = function() {
         Collection: tameCtor(Collection, []),
         //Socket: tameCtor(Socket, ['publish']),
         sayHello: tameFunction(alertGreeting),
-        sayWindow: tameFunction(windowGreeting),
-        console: cajaConsole
+        log: tameFunction(log)
+        //sayWindow: tameFunction(windowGreeting),
+        //console: cajaConsole
     };
 }
 
-var API = {
+//var = _.extend({}, Backbone.Events);
+//var SingleDuplexSocket = _.extend(function() {}, Backbone.Events);
 
-    emit: function() {
+var Socket = function(hostMessageCallback) {
 
-    },
+    var self = this;
 
-    register: function() {
+    // Direction is from inside the web app
+    this.inboundSocket = _.extend({}, Backbone.Events);
+    this.outboundSocket = _.extend({}, Backbone.Events);
 
-    }
-};
+    this.dispatcher = new Dispatcher();
 
-var API = function() {
-
-    //this.
+    this.outboundSocket.on('message', hostMessageCallback);
+    //this.inboundSocket.on('all', function(message) {
+    //});
 }
 
-API.prototype.emit = function() {
-
+Socket.prototype.sayHi = function() {
+    return "Hi!";
 };
 
-API.prototype.register = function() {
+Socket.prototype.publish = function(channel, message) {
 
+    this.outboundSocket.trigger(channel, message);
 };
 
+Socket.prototype.onMessage = function(callback) {
+
+    this.inboundSocket.on('message', callback);
+};
+
+Socket.prototype.send = function(message) {
+
+    this.outboundSocket.trigger('message', message);
+};
+
+Socket.prototype.subscribe = function(channel, callback) {
+
+    this.inboundSocket.on(channel, callback);
+};
+
+Socket.prototype.register = function(dispatchCallback) {
+
+    this.dispatcher.register(dispatchCallback);
+    //this.inboundSocket.on('all', dispatchCallback);
+};
+
+module.exports.Socket = Socket;
+
+/*
+var API;
 caja.whenReady(function() {  // (1)
     API = tameAll();
 });
+*/
 
+var api;
+var getAPI = function() {
 
-module.exports = API;
+    api = api ? api : tameAll();
+    return api;
+}
+module.exports.getAPI = getAPI;
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js":[function(require,module,exports){
 
 var PortalsAPI = require('./api');
@@ -15966,6 +16163,8 @@ Portal.Portal = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        var self = this;
+
         var BID = Portal.getCurrentBridge().get('cbid');
         var AID = this.get('appInstall').get('app').get('cbid');
 
@@ -15974,21 +16173,49 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         console.log('portal cbidRegex is ', cbidRegex);
         this.set('cbidRegex', cbidRegex);
 
-        Portal.portalCollection.register(this.dispatchCallback);
+        Portal.portalCollection.register(function(msg) { self.inboundCallback(self, msg) });
     },
 
     getAPI: function() {
-        var API = PortalsAPI;
+        var API = PortalsAPI.getAPI();
+        var CB = API.CB = new PortalsAPI.Socket(this.outboundCallback);
+        this.inboundSocket = CB.inboundSocket;
+        this.outboundSocket = CB.outboundSocket;
+        this.dispatcher = CB.dispatcher;
+        return API;
     },
 
-    dispatchCallback: function(message) {
+    outboundCallback: function(message) {
+        // TODO sanitise the message
 
+        // Messages sent from inside the web app
+        console.log('message outbound from web app', message);
+
+        Portal.socket.publish(message);
+    },
+
+    inboundCallback: function(self, message) {
+
+        //console.log('portal dispatch callback got message', message);
         var destination = _.property('destination')(message);
 
-        var cbidRegex = this.get('cbidRegex');
+        var cbidRegex = self.get('cbidRegex');
+        //console.log('portal cbidRegex', cbidRegex);
         var destMatch = destination.match(cbidRegex);
+        //console.log('portal destMatch', destMatch);
+        if (destMatch && destMatch[2]) {
+            var body = _.property('body')(message);
+            var resource = _.property('resource')(body);
 
-    },
+            if (resource) {
+                console.log('sending to portal dispatcher', cbidRegex, body);
+                this.dispatcher.dispatch(body);
+            } else {
+                //console.log('sending to inbound socket', message);
+                this.inboundSocket.trigger('message', message);
+            }
+        }
+    }
 
 }, { modelType: "portal" });
 
@@ -16022,10 +16249,11 @@ Portal.PortalView = React.createClass({displayName: 'PortalView',
 
         var portal = this.props.model;
 
-        var API = portal.getAPI();
         //var $portal = this.$('.portal');
         var cajaSection = this.refs.caja.getDOMNode();
         caja.load(cajaSection, undefined, function(frame) {
+            var API = portal.getAPI();
+            console.log('portal api is', API);
             frame.code('/static/caja-test.html',
                 'text/html')
                 .api(API)
@@ -16036,7 +16264,7 @@ Portal.PortalView = React.createClass({displayName: 'PortalView',
 
     render: function() {
 
-        console.log('portal in portalview is', this.props.model);
+        //console.log('portal in portalview is', this.props.model);
 
         return (
                 React.createElement("div", {ref: "caja"}
@@ -16143,6 +16371,7 @@ module.exports = router;
 },{"./modules/config/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/account":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js","./views/dashboard":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js","./views/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var CBApp = require('index')
+    ,Message = require('./message')
     ;
 
 require('./messages/models');
@@ -16211,15 +16440,22 @@ Portal.addInitializer(function() {
 
     Portal.socket.publish = function(message) {
 
-      var self = this;
+        var self = this;
 
-      console.log('Socket sending >', message.toJSON());
+        var jsonMessage;
+        if (message instanceof Message) {
+            jsonMessage = message.toJSON();
+        } else if (typeof message == 'string') {
+            jsonMessage = message;
+        } else {
+            jsonMessage = JSON.stringify(message);
+        }
 
-      var jsonMessage = message.toJSON();
+        console.log('Socket sending >', jsonMessage);
 
-      Portal.socket.emit('message', jsonMessage, function(data){
-          console.log('data from socket emit', data);
-      });
+        Portal.socket.emit('message', jsonMessage, function(data){
+            console.log('data from socket emit', data);
+        });
       /*
       Portal.getCurrentBridge().then(function(currentBridge) {
 
@@ -16254,7 +16490,7 @@ Portal.addInitializer(function() {
     });
 });
 
-},{"./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
+},{"./message":"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js","./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 

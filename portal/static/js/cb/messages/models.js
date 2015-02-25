@@ -1,5 +1,5 @@
 
-Portal.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 

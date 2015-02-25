@@ -1,19 +1,19 @@
 <html>
 <head></head>
 <body>
-<input type="button" id="theButton" value="Say publish">
+
+<input type="button" id="theButton" value="Say log">
 <script type="text/javascript">
     document.getElementById('theButton').onclick = function() {
-        //sayHello();
-        //for(var key in window) { sayWindow(key) }
-        //sayWindow(Model);
-        sayWindow(Socket);
-        var socket = new Socket();
-
-        sayWindow(socket);
-        socket.publish('Test publish from caja');
+        log('Hi from inside caja');
     };
-    //console.log('window is', window);
+    log('CB is', CB.sayHi());
+
+    CB.onMessage(function(message) {
+        log('caja received message');
+        log('caja received json', JSON.stringify(message));
+        CB.send(JSON.stringify({destination: "CID46", source: "BID2/AID9", body: "Hey portal client"}))
+    });
 
 </script>
 </body>
