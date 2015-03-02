@@ -13381,6 +13381,8 @@ var CBApp = Marionette.Application.extend({
             this.dispatcher.dispatch(msg);
 
         } else if (source.match(Portal.filters.cbidRegex)) {
+
+            console.log('message from bridge, client or app on bridge', message);
             // Message is from a bridge or an app on a bridge
             message.direction = "inbound";
 
@@ -16089,7 +16091,7 @@ var tameAll = function() {
 //var = _.extend({}, Backbone.Events);
 //var SingleDuplexSocket = _.extend(function() {}, Backbone.Events);
 
-var Socket = function(hostMessageCallback) {
+var Socket = function(outboundCallback) {
 
     var self = this;
 
@@ -16099,7 +16101,7 @@ var Socket = function(hostMessageCallback) {
 
     this.dispatcher = new Dispatcher();
 
-    this.outboundSocket.on('message', hostMessageCallback);
+    this.outboundSocket.on('data', outboundCallback);
     //this.inboundSocket.on('all', function(message) {
     //});
 }
@@ -16123,6 +16125,7 @@ Socket.prototype.send = function(message) {
     this.outboundSocket.trigger('message', message);
 };
 
+/*
 Socket.prototype.subscribe = function(channel, callback) {
 
     this.inboundSocket.on(channel, callback);
@@ -16133,6 +16136,7 @@ Socket.prototype.register = function(dispatchCallback) {
     this.dispatcher.register(dispatchCallback);
     //this.inboundSocket.on('all', dispatchCallback);
 };
+*/
 
 module.exports.Socket = Socket;
 
@@ -16154,6 +16158,10 @@ module.exports.getAPI = getAPI;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js":[function(require,module,exports){
 
 var PortalsAPI = require('./api');
+var SwarmStream = require('../swarm/stream');
+var SwarmApp = require('../swarm/app');
+
+var Switch = require('../swarm/models').Switch;
 
 Portal.Portal = Backbone.Deferred.Model.extend({
 
@@ -16167,22 +16175,49 @@ Portal.Portal = Backbone.Deferred.Model.extend({
 
         var BID = Portal.getCurrentBridge().get('cbid');
         var AID = this.get('appInstall').get('app').get('cbid');
+        this.set('cbid', BID + '/' + AID);
 
-        //var cbidRegex = /\/?(BID[0-9]+)\/?(AID[0-9]+)?/;
         var cbidRegex = new RegExp("\/?(" + BID + ")\/(" + AID + ")");
-        console.log('portal cbidRegex is ', cbidRegex);
         this.set('cbidRegex', cbidRegex);
 
         Portal.portalCollection.register(function(msg) { self.inboundCallback(self, msg) });
+
+        //this.api = this.getAPI();
     },
 
     getAPI: function() {
         var API = PortalsAPI.getAPI();
         var CB = API.CB = new PortalsAPI.Socket(this.outboundCallback);
-        this.inboundSocket = CB.inboundSocket;
-        this.outboundSocket = CB.outboundSocket;
         this.dispatcher = CB.dispatcher;
         return API;
+    },
+
+    getSwarm: function() {
+
+        //var cbid = this.get('cbid');
+        var CB = new PortalsAPI.Socket(this.outboundCallback);
+        this.inboundSocket = CB.inboundSocket;
+        this.outboundSocket = CB.outboundSocket;
+        this.swarmStream = new SwarmStream(this.inboundSocket, this.outboundSocket);
+
+        var swarmApp = new SwarmApp("BID2AID9");
+        swarmApp.initSwarm(this.swarmStream);
+
+        genericSwitch = new Switch('1');
+
+        genericSwitch.on('.init', function() {
+            if (this._version!=='!0') {
+                console.log('genericSwitch init return', this._version);
+                return; // FIXME default values
+            }
+            genericSwitch.set({
+                value: false,
+                symbol: '1'
+            });
+        });
+
+        return swarmApp;
+        //swarmApp.connect(this.swarmStream);
     },
 
     outboundCallback: function(message) {
@@ -16191,7 +16226,13 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         // Messages sent from inside the web app
         console.log('message outbound from web app', message);
 
-        Portal.socket.publish(message);
+        var msg = {
+            body: message,
+            destination: 'CID46',
+            source: 'UID1/BID2/AID9'// + this.get('cbid')
+        }
+
+        Portal.socket.publish(msg);
     },
 
     inboundCallback: function(self, message) {
@@ -16204,16 +16245,23 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         var destMatch = destination.match(cbidRegex);
         //console.log('portal destMatch', destMatch);
         if (destMatch && destMatch[2]) {
+            console.log('portal', cbidRegex, 'got message', message);
             var body = _.property('body')(message);
-            var resource = _.property('resource')(body);
+            var swarm = _.property('swarm')(body);
 
+            if (swarm) {
+                this.inboundSocket.trigger('data', swarm);
+            }
+            /*
             if (resource) {
-                console.log('sending to portal dispatcher', cbidRegex, body);
-                this.dispatcher.dispatch(body);
+                //console.log('sending to portal dispatcher', cbidRegex, body);
+                //this.dispatcher.dispatch(body);
+                this.inboundSocket.trigger('data', message);
             } else {
                 //console.log('sending to inbound socket', message);
                 this.inboundSocket.trigger('message', message);
             }
+            */
         }
     }
 
@@ -16240,24 +16288,43 @@ Portal.PortalCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{"./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
+},{"../swarm/app":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/app.js","../swarm/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/models.js","../swarm/stream":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/stream.js","./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
 
+var SwitchView = require('../swarm/views');
 
 Portal.PortalView = React.createClass({displayName: 'PortalView',
 
+    getInitialState: function() {
+
+        return {
+            swarm: false
+        }
+    },
+
     componentDidMount: function() {
+
+        var self = this;
 
         var portal = this.props.model;
 
-        //var $portal = this.$('.portal');
+        caja.whenReady(function() {  // (1)
+            var swarmApp = portal.getSwarm();
+            console.log('caja swarmApp', swarmApp);
+            var switchCallback = function(spec, change, object) {
+                console.log('switchCallback', spec, change, object);
+                self.forceUpdate();
+            }
+            swarmApp.host.on('/Switch#1', switchCallback);
+            self.setState({swarm: swarmApp})
+        });
+
         var cajaSection = this.refs.caja.getDOMNode();
         caja.load(cajaSection, undefined, function(frame) {
-            var API = portal.getAPI();
-            console.log('portal api is', API);
+            //var API = portal.getAPI();
+            //console.log('portal api is', API);
             frame.code('/static/caja-test.html',
                 'text/html')
-                .api(API)
-                //.api({ sayHello: tamedAlertGreeting })
+                .api({})
                 .run();
         });
     },
@@ -16265,10 +16332,21 @@ Portal.PortalView = React.createClass({displayName: 'PortalView',
     render: function() {
 
         //console.log('portal in portalview is', this.props.model);
+        var portal = this.props.model;
 
+        //var key = portal.cid;
+        var key = 1;
+        //console.log('cid in portalview is', key);
+        var swarmApp = this.state.swarm;
+        console.log('Portal view swarmApp', swarmApp);
+        console.log('Portal view key', key);
+        var swarmView = swarmApp
+                    ? React.createElement(SwitchView, {app: swarmApp, spec: key})
+                    : "";
         return (
-                React.createElement("div", {ref: "caja"}
-                )
+            React.createElement("div", {ref: "caja"}, 
+                swarmView
+            )
         )
     }
 });
@@ -16284,8 +16362,8 @@ Portal.PortalTabbedView = React.createClass({displayName: 'PortalTabbedView',
         var portal = appInstall.getPortal();
 
         return (
-            React.createElement(React.TabPane, {eventKey: id, tab: name}, 
-                React.createElement(Portal.PortalView, {model: portal})
+            React.createElement(React.TabPane, {eventKey: id, key: id, tab: name}, 
+                React.createElement(Portal.PortalView, {key: id, model: portal})
             )
         )
     },
@@ -16298,15 +16376,18 @@ Portal.PortalTabbedView = React.createClass({displayName: 'PortalTabbedView',
         var appInstall = collection.at(0);
         var startID = appInstall ? appInstall.get('id') : 0;
 
+        var testTab = appInstall ? this.renderTab(appInstall) : "";
+
+        //{collection.map(this.renderTab)}
         return (
             React.createElement(React.TabbedArea, {activeKey: startID, animation: false, onSelect: handleSelect}, 
-                collection.map(this.renderTab)
+            testTab
             )
         )
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
+},{"../swarm/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
 
 var Route = Router.Route
     ,DefaultRoute = Router.DefaultRoute
@@ -16490,7 +16571,205 @@ Portal.addInitializer(function() {
     });
 });
 
-},{"./message":"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js","./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
+},{"./message":"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js","./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/app.js":[function(require,module,exports){
+
+var Spec = Swarm.Spec;
+
+var Mouse = require('./models').Mouse;
+var Mice = require('./models').Mice;
+
+function PortalApp (ssnid, listId) {
+    this.path = [];
+    this.active = false;
+    this.ssnid = ssnid;
+
+    //this.router = new TodoRouter();
+    //this.refreshBound = this.refresh.bind(this);
+    //this.initSwarm();
+    //this.parseUri();
+    this.isTouch = ('ontouchstart' in window)
+    || (navigator.MaxTouchPoints > 0)
+    || (navigator.msMaxTouchPoints > 0);
+}
+
+PortalApp.prototype.initSwarm = function (stream) {
+    //this.storage = null;
+    this.storage = new Swarm.SharedWebStorage('webst',{persistent:true});
+    //this.wsServerUri = 'ws://'+window.location.host;
+    this.host = Swarm.env.localhost = new Swarm.Host(this.ssnid,'',this.storage);
+    this.host.connect(stream, {delay: 50});
+};
+
+module.exports = PortalApp;
+
+},{"./models":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/models.js":[function(require,module,exports){
+"use strict";
+
+var Model = Swarm.Model;
+
+// Our key class: a mouse pointer :)
+module.exports.Switch = Model.extend('Switch', {
+    defaults: {
+        value: false,
+        symbol: '?',
+        ms: 0// last activity timestamp
+    }
+});
+
+var SyncSet = Swarm.Set;
+
+// this collection class has no functionality except for being a list
+// of all mice currently alive; we'll only use one singleton object
+// set mixin
+module.exports.Switches = SyncSet.extend('Switches', {
+
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/stream.js":[function(require,module,exports){
+
+function SwarmStream(inbound, outbound) {
+    var self = this,
+        ln = this.lstn = {},
+        buf = [];
+
+    this.inbound = inbound;
+    this.outbound = outbound;
+
+    this.inbound.on('data', function(data) {
+        console.log('Stream socket received', data);
+        try {
+            ln.data && ln.data(data);
+        } catch (ex) {
+            console.error('message processing fails', ex);
+            ln.error && ln.error(ex.message);
+        }
+    });
+
+    /*
+    ws.on('open', function () {
+        buf.reverse();
+        self.buf = null;
+        while (buf.length) {
+            self.write(buf.pop());
+        }
+    });
+    ws.on('close', function () { ln.close && ln.close(); });
+    ws.on('message', function (msg) {
+        try {
+            ln.data && ln.data(msg);
+        } catch (ex) {
+            console.error('message processing fails', ex);
+            ln.error && ln.error(ex.message);
+        }
+    });
+    ws.on('error', function (msg) { ln.error && ln.error(msg); });
+    */
+}
+
+module.exports = SwarmStream;
+
+SwarmStream.prototype.on = function (evname, fn) {
+    if (evname in this.lstn) {
+        throw new Error('not supported');
+    }
+    this.lstn[evname] = fn;
+};
+
+SwarmStream.prototype.write = function (data) {
+
+    console.log('SwarmStream write', data);
+
+    this.outbound.trigger('data', {
+        swarm: data
+    });
+    /*
+    if (this.buf) {
+        this.buf.push(data.toString());
+    } else {
+        this.ws.send(data.toString());
+    }
+    */
+};
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/views.js":[function(require,module,exports){
+
+//var cx = require('react/lib/cx');
+
+var SwitchView = React.createClass({displayName: 'SwitchView',
+
+    mixins: [ Swarm.ReactMixin ],
+
+    statics: {
+        modelType: "Switch"
+    },
+
+    render: function() {
+
+        var cbSwitch = this.sync;
+
+        console.log('swarm react cbSwitch is', cbSwitch);
+        /*
+        var bookmark = <noscript/>;
+        var tab = this.props.app.isTouch
+            ? <span
+            className={todo.childList==="" ? "tab" : "tab child-list"}
+            onTouchEnd={this._onTabTouch}
+            onClick={this._onTabTouch}
+        >⇢</span>
+            : <noscript/>;
+
+        if (todo.childList) {
+            bookmark = <span className="bookmark"> </span>; //&#8594;
+        }
+        */
+
+        var label = cbSwitch.value ? "True" : "False";
+        return (
+            React.createElement("div", {className: "switch", key: cbSwitch._id}, 
+                "Test switch is ", label
+            )
+        );
+    },
+
+    _focus: function () {
+        var app = this.props.app;
+        app.go(this.props.listId, this.sync._id);
+    },
+
+    _onToggle: function () {
+        this.sync.toggle();
+    },
+
+    _onChange: function(event) {
+        var edit = event.target;
+        var text = edit.value;
+        var pos = edit.selectionStart;
+        // save it, send it to everybody
+        this.sync.set({text:text});
+        // a bit ugly, but React may wreck cursor pos
+        this.forceUpdate(function(){
+            edit.selectionStart = edit.selectionEnd = pos;
+        });
+    },
+
+    _onDestroyClick: function() {
+        if (this.sync.childList !== ""){
+            if (confirm("Sure?")) {
+                app.delete(this.props.listId, this.sync._id);
+            }
+        } else {
+            app.delete(this.props.listId, this.sync._id);
+        }
+    },
+
+    _onTabTouch: function(){
+        app.forward();
+    }
+
+});
+
+module.exports = SwitchView;
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 

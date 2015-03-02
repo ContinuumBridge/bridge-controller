@@ -73,7 +73,7 @@ var tameAll = function() {
 //var = _.extend({}, Backbone.Events);
 //var SingleDuplexSocket = _.extend(function() {}, Backbone.Events);
 
-var Socket = function(hostMessageCallback) {
+var Socket = function(outboundCallback) {
 
     var self = this;
 
@@ -83,7 +83,7 @@ var Socket = function(hostMessageCallback) {
 
     this.dispatcher = new Dispatcher();
 
-    this.outboundSocket.on('message', hostMessageCallback);
+    this.outboundSocket.on('data', outboundCallback);
     //this.inboundSocket.on('all', function(message) {
     //});
 }
@@ -107,6 +107,7 @@ Socket.prototype.send = function(message) {
     this.outboundSocket.trigger('message', message);
 };
 
+/*
 Socket.prototype.subscribe = function(channel, callback) {
 
     this.inboundSocket.on(channel, callback);
@@ -117,6 +118,7 @@ Socket.prototype.register = function(dispatchCallback) {
     this.dispatcher.register(dispatchCallback);
     //this.inboundSocket.on('all', dispatchCallback);
 };
+*/
 
 module.exports.Socket = Socket;
 

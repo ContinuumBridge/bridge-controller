@@ -22,16 +22,7 @@ var clean = require('gulp-clean');
 
 var production = false;
 
-var vendorFiles = [
-    'node_modules/react/dist/react-with-addons.js',
-    'node_modules/backbone-react-component/dist/backbone-react-component.js'
-];
-
 var VENDOR_SCRIPTS = './portal/static/js/vendor/';
-    //'node_modules/es6ify/node_modules/traceur/bin/traceur-runtime.js'];
-
-var vendorBuild = 'build/vendor';
-var requireFiles = './node_modules/react/react.js';
 
 gulp.task('vendor', function () {
 
@@ -44,9 +35,6 @@ gulp.task('vendor', function () {
     });
 
     bundler = watchify(bundler);
-
-    // Used for react-bootstrap
-    //bundler.transform('folderify');
 
     var rebundle = function() {
         console.log('rebundling vendor');
@@ -65,8 +53,6 @@ gulp.task('vendor', function () {
     bundler.on('update', rebundle);
     return rebundle();
 });
-
-//process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
 var CLIENT_SCRIPTS = './portal/static/js/';
 

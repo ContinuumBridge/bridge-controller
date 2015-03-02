@@ -15,4 +15,5 @@ Router = require('react-router');
 Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
 
+Swarm = require('swarm');
 

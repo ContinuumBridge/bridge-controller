@@ -1,5 +1,9 @@
 
 var PortalsAPI = require('./api');
+var SwarmStream = require('../swarm/stream');
+var SwarmApp = require('../swarm/app');
+
+var Switch = require('../swarm/models').Switch;
 
 Portal.Portal = Backbone.Deferred.Model.extend({
 
@@ -13,22 +17,49 @@ Portal.Portal = Backbone.Deferred.Model.extend({
 
         var BID = Portal.getCurrentBridge().get('cbid');
         var AID = this.get('appInstall').get('app').get('cbid');
+        this.set('cbid', BID + '/' + AID);
 
-        //var cbidRegex = /\/?(BID[0-9]+)\/?(AID[0-9]+)?/;
         var cbidRegex = new RegExp("\/?(" + BID + ")\/(" + AID + ")");
-        console.log('portal cbidRegex is ', cbidRegex);
         this.set('cbidRegex', cbidRegex);
 
         Portal.portalCollection.register(function(msg) { self.inboundCallback(self, msg) });
+
+        //this.api = this.getAPI();
     },
 
     getAPI: function() {
         var API = PortalsAPI.getAPI();
         var CB = API.CB = new PortalsAPI.Socket(this.outboundCallback);
-        this.inboundSocket = CB.inboundSocket;
-        this.outboundSocket = CB.outboundSocket;
         this.dispatcher = CB.dispatcher;
         return API;
+    },
+
+    getSwarm: function() {
+
+        //var cbid = this.get('cbid');
+        var CB = new PortalsAPI.Socket(this.outboundCallback);
+        this.inboundSocket = CB.inboundSocket;
+        this.outboundSocket = CB.outboundSocket;
+        this.swarmStream = new SwarmStream(this.inboundSocket, this.outboundSocket);
+
+        var swarmApp = new SwarmApp("BID2AID9");
+        swarmApp.initSwarm(this.swarmStream);
+
+        genericSwitch = new Switch('1');
+
+        genericSwitch.on('.init', function() {
+            if (this._version!=='!0') {
+                console.log('genericSwitch init return', this._version);
+                return; // FIXME default values
+            }
+            genericSwitch.set({
+                value: false,
+                symbol: '1'
+            });
+        });
+
+        return swarmApp;
+        //swarmApp.connect(this.swarmStream);
     },
 
     outboundCallback: function(message) {
@@ -37,7 +68,13 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         // Messages sent from inside the web app
         console.log('message outbound from web app', message);
 
-        Portal.socket.publish(message);
+        var msg = {
+            body: message,
+            destination: 'CID46',
+            source: 'UID1/BID2/AID9'// + this.get('cbid')
+        }
+
+        Portal.socket.publish(msg);
     },
 
     inboundCallback: function(self, message) {
@@ -50,16 +87,23 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         var destMatch = destination.match(cbidRegex);
         //console.log('portal destMatch', destMatch);
         if (destMatch && destMatch[2]) {
+            console.log('portal', cbidRegex, 'got message', message);
             var body = _.property('body')(message);
-            var resource = _.property('resource')(body);
+            var swarm = _.property('swarm')(body);
 
+            if (swarm) {
+                this.inboundSocket.trigger('data', swarm);
+            }
+            /*
             if (resource) {
-                console.log('sending to portal dispatcher', cbidRegex, body);
-                this.dispatcher.dispatch(body);
+                //console.log('sending to portal dispatcher', cbidRegex, body);
+                //this.dispatcher.dispatch(body);
+                this.inboundSocket.trigger('data', message);
             } else {
                 //console.log('sending to inbound socket', message);
                 this.inboundSocket.trigger('message', message);
             }
+            */
         }
     }
 

@@ -1,20 +1,39 @@
 
+var SwitchView = require('../swarm/views');
 
 Portal.PortalView = React.createClass({
 
+    getInitialState: function() {
+
+        return {
+            swarm: false
+        }
+    },
+
     componentDidMount: function() {
+
+        var self = this;
 
         var portal = this.props.model;
 
-        //var $portal = this.$('.portal');
+        caja.whenReady(function() {  // (1)
+            var swarmApp = portal.getSwarm();
+            console.log('caja swarmApp', swarmApp);
+            var switchCallback = function(spec, change, object) {
+                console.log('switchCallback', spec, change, object);
+                self.forceUpdate();
+            }
+            swarmApp.host.on('/Switch#1', switchCallback);
+            self.setState({swarm: swarmApp})
+        });
+
         var cajaSection = this.refs.caja.getDOMNode();
         caja.load(cajaSection, undefined, function(frame) {
-            var API = portal.getAPI();
-            console.log('portal api is', API);
+            //var API = portal.getAPI();
+            //console.log('portal api is', API);
             frame.code('/static/caja-test.html',
                 'text/html')
-                .api(API)
-                //.api({ sayHello: tamedAlertGreeting })
+                .api({})
                 .run();
         });
     },
@@ -22,10 +41,21 @@ Portal.PortalView = React.createClass({
     render: function() {
 
         //console.log('portal in portalview is', this.props.model);
+        var portal = this.props.model;
 
+        //var key = portal.cid;
+        var key = 1;
+        //console.log('cid in portalview is', key);
+        var swarmApp = this.state.swarm;
+        console.log('Portal view swarmApp', swarmApp);
+        console.log('Portal view key', key);
+        var swarmView = swarmApp
+                    ? <SwitchView app={swarmApp} spec={key}/>
+                    : "";
         return (
-                <div ref="caja">
-                </div>
+            <div ref="caja">
+                {swarmView}
+            </div>
         )
     }
 });
@@ -41,8 +71,8 @@ Portal.PortalTabbedView = React.createClass({
         var portal = appInstall.getPortal();
 
         return (
-            <React.TabPane eventKey={id} tab={name}>
-                <Portal.PortalView model={portal}/>
+            <React.TabPane eventKey={id} key={id} tab={name}>
+                <Portal.PortalView key={id} model={portal}/>
             </React.TabPane>
         )
     },
@@ -55,9 +85,12 @@ Portal.PortalTabbedView = React.createClass({
         var appInstall = collection.at(0);
         var startID = appInstall ? appInstall.get('id') : 0;
 
+        var testTab = appInstall ? this.renderTab(appInstall) : "";
+
+        //{collection.map(this.renderTab)}
         return (
             <React.TabbedArea activeKey={startID} animation={false} onSelect={handleSelect}>
-                {collection.map(this.renderTab)}
+            {testTab}
             </React.TabbedArea>
         )
     }
