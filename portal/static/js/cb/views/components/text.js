@@ -22,6 +22,7 @@ module.exports.TextInput = React.createClass({
     },
 
     handleKeyDown: function(e) {
+        console.log('handleKeyDown key', e.keyCode);
         if (e.keyCode == 13 ) {
             this.submit();
         }

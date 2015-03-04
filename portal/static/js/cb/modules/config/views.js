@@ -91,7 +91,7 @@ module.exports.Main = React.createClass({
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+                return model ? !model.isNew() : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
@@ -112,11 +112,13 @@ module.exports.Main = React.createClass({
 
         var currentBID = Portal.currentBridge.getCBID();
         var messages = Portal.messageCollection
-            .getFiltered('isNew', function(model, searchString) {
-                console.log('test model', model)
-                return false;
-                //return model.get('source') == currentBID
-                //    || model.get('destination') == currentBID;
+            .getFiltered('currentBridge', function(model, searchString) {
+                console.log('test model', currentBID, model);
+                //return false;
+                var passed = model.get('source') == currentBID
+                    || model.get('destination') == currentBID;
+                console.log('passed', passed);
+                return passed;
             });
 
         return (

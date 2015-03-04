@@ -12165,7 +12165,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
     },
 
     renderItem: function (item) {
-        console.log('appInstallView createItem item', item);
+
         var cid = item.cid;
 
         var appInstallCollection = this.getCollection()
@@ -14925,8 +14925,8 @@ Portal.on('before:start', function () {
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
   Portal.messageCollection = new Portal.MessageCollection([
-    { source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
-    { source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
+    //{ source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
+    //{ source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
   ]);
   //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
@@ -15162,7 +15162,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+                return model ? !model.isNew() : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
@@ -15183,11 +15183,13 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
         var currentBID = Portal.currentBridge.getCBID();
         var messages = Portal.messageCollection
-            .getFiltered('isNew', function(model, searchString) {
-                console.log('test model', model)
-                return false;
-                //return model.get('source') == currentBID
-                //    || model.get('destination') == currentBID;
+            .getFiltered('currentBridge', function(model, searchString) {
+                console.log('test model', currentBID, model);
+                //return false;
+                var passed = model.get('source') == currentBID
+                    || model.get('destination') == currentBID;
+                console.log('passed', passed);
+                return passed;
             });
 
         return (
@@ -17075,6 +17077,7 @@ module.exports.TextInput = React.createClass({displayName: 'TextInput',
     },
 
     handleKeyDown: function(e) {
+        console.log('handleKeyDown key', e.keyCode);
         if (e.keyCode == 13 ) {
             this.submit();
         }
