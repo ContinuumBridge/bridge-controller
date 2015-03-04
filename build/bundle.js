@@ -14460,7 +14460,13 @@ Portal.Message = Backbone.Deferred.Model.extend({
     idAttribute: 'id',
 
     initialize: function() {
-        
+
+        var body = this.get('body');
+        var status = body.status;
+        if (status) {
+            status = status.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+            this.set('body', {status: status})
+        }
     },
 
     getSourceID: function() {
@@ -14497,7 +14503,6 @@ Portal.Message = Backbone.Deferred.Model.extend({
     */
 });
 
-//Portal.MessageCollection = Backbone.Collection.extend({
 Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.Message,
@@ -14605,10 +14610,14 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
+
+        var body = message.body;
+        var content = body.status || body.command;
+
         return (
             React.createElement("tr", {key: message.cid}, 
                 React.createElement("td", {className: "shrink"}, remote, " ", direction), 
-                React.createElement("td", {className: "expand"}, message.body)
+                React.createElement("td", {className: "expand", dangerouslySetInnerHTML: {__html: content}})
             )
         )
     },
@@ -15132,7 +15141,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
         var action = this.getParams().action;
         var itemID = this.getParams().item;
-        console.log('renderModals params', action);
         switch (action) {
             case "install-app":
                 return React.createElement(InstallAppModal, {container: this});
@@ -15184,11 +15192,8 @@ module.exports.Main = React.createClass({displayName: 'Main',
         var currentBID = Portal.currentBridge.getCBID();
         var messages = Portal.messageCollection
             .getFiltered('currentBridge', function(model, searchString) {
-                console.log('test model', currentBID, model);
-                //return false;
                 var passed = model.get('source') == currentBID
                     || model.get('destination') == currentBID;
-                console.log('passed', passed);
                 return passed;
             });
 
@@ -15617,7 +15622,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
     componentWillReceiveParams: function(params) {
 
-        console.log('store will receive params', params);
         if (!this.params || this.params != params) {
             Portal.appCollection.fetch();
             //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
@@ -15633,7 +15637,6 @@ module.exports.Main = React.createClass({displayName: 'Main',
     render: function() {
 
         var apps = Portal.appCollection;
-        console.log('Market View apps', apps);
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "row"}, 
@@ -16768,7 +16771,6 @@ Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableV
 
 module.exports.underscoredToCamelCase = function(underscored) {
     var camelCased = underscored.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
-    console.log('underscoredToCamelCase camelCased ', camelCased );
     return camelCased;
 }
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js":[function(require,module,exports){
@@ -17077,7 +17079,6 @@ module.exports.TextInput = React.createClass({displayName: 'TextInput',
     },
 
     handleKeyDown: function(e) {
-        console.log('handleKeyDown key', e.keyCode);
         if (e.keyCode == 13 ) {
             this.submit();
         }

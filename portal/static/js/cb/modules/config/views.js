@@ -61,7 +61,6 @@ module.exports.Main = React.createClass({
 
         var action = this.getParams().action;
         var itemID = this.getParams().item;
-        console.log('renderModals params', action);
         switch (action) {
             case "install-app":
                 return <InstallAppModal container={this} />;
@@ -113,11 +112,8 @@ module.exports.Main = React.createClass({
         var currentBID = Portal.currentBridge.getCBID();
         var messages = Portal.messageCollection
             .getFiltered('currentBridge', function(model, searchString) {
-                console.log('test model', currentBID, model);
-                //return false;
                 var passed = model.get('source') == currentBID
                     || model.get('destination') == currentBID;
-                console.log('passed', passed);
                 return passed;
             });
 

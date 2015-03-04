@@ -13,7 +13,6 @@ module.exports.Main = React.createClass({
 
     componentWillReceiveParams: function(params) {
 
-        console.log('store will receive params', params);
         if (!this.params || this.params != params) {
             Portal.appCollection.fetch();
             //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
@@ -29,7 +28,6 @@ module.exports.Main = React.createClass({
     render: function() {
 
         var apps = Portal.appCollection;
-        console.log('Market View apps', apps);
         return (
             <div>
                 <div className="row">

@@ -103,12 +103,14 @@ header p{
     /*width: 300px;*/
 }
 
+/*
 .item-title > div {
-    width: 289px;
+    width: 280px;
 }
+*/
 
 .item-title > div > input {
-    width: 289px;
+    width: 290px;
 }
 
 .item-subtitle {
