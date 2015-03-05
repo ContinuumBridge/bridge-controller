@@ -49,14 +49,16 @@ class AppInstallAuthorization(CBAuthorization):
             if not bridge in bridges:
                 raise Unauthorized("You must control the bridge onto which you are attempting to install")
 
-            # Ensure the licence is owned by the requester
-            if not licence.user.pk == requester.pk:
-                raise Unauthorized("You must own the licence you are attempting to use for this install")
             # Ensure the licence is for this app
             if not licence.app.pk == app.pk:
                 raise Unauthorized("The licence supplied is not compatible with the app you are trying to install")
 
             if bundle.request.method != "DELETE":
+
+                # Ensure the licence is owned by the requester
+                if not licence.user.pk == requester.pk:
+                    raise Unauthorized("You must own the licence you are attempting to use for this install")
+
                 # Ensure the maximum number of installs is not exceeded
                 existing_install_count = licence.installs.count()
                 if not existing_install_count < licence.installs_permitted:

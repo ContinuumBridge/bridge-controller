@@ -48,7 +48,7 @@ var tameFunction = function(func) {
 
 var tameAll = function() {
 
-    var alertGreeting = function() { alert('Hello world'); };
+    var alertGreeting = function() { alert('Hello from inside caja'); };
     var log = function() { console.log('caja says', arguments) };
 
     var cajaConsole = {};

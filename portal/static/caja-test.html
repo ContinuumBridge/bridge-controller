@@ -2,12 +2,13 @@
 <head></head>
 <body>
 
-<input type="button" id="theButton" value="Say log">
+<input type="button" id="theButton" value="Say hi">
 <script type="text/javascript">
     document.getElementById('theButton').onclick = function() {
-        log('Hi from inside caja');
+        //log('Hi from inside caja');
+        sayHello();
     };
-    log('CB is', CB.sayHi());
+    //log('CB is', CB.sayHi());
 
     CB.onMessage(function(message) {
         log('caja received message');
