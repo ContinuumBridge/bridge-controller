@@ -61,7 +61,6 @@ module.exports.Main = React.createClass({
 
         var action = this.getParams().action;
         var itemID = this.getParams().item;
-        console.log('renderModals params', action);
         switch (action) {
             case "install-app":
                 return <InstallAppModal container={this} />;
@@ -91,7 +90,7 @@ module.exports.Main = React.createClass({
 
         var appInstalls = currentBridge.get('appInstalls')
             .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+                return model ? !model.isNew() : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
@@ -110,7 +109,13 @@ module.exports.Main = React.createClass({
                 collection={deviceInstalls} discoverDevices={this.discoverDevices} />;
         }
 
-        var messages = currentBridge.get('messages');
+        var currentBID = Portal.currentBridge.getCBID();
+        var messages = Portal.messageCollection
+            .getFiltered('currentBridge', function(model, searchString) {
+                var passed = model.get('source') == currentBID
+                    || model.get('destination') == currentBID;
+                return passed;
+            });
 
         return (
             <div>

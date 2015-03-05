@@ -11,6 +11,8 @@ React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 React.Button = require('react-bootstrap').Button;
 React.Table = require('react-bootstrap').Table;
+React.TabbedArea = require('react-bootstrap').TabbedArea;
+React.TabPane = require('react-bootstrap').TabPane;
 
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');

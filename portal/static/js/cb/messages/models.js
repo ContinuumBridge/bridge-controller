@@ -1,10 +1,16 @@
 
-Portal.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     initialize: function() {
-        
+
+        var body = this.get('body');
+        var status = body.status;
+        if (status) {
+            status = status.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+            this.set('body', {status: status})
+        }
     },
 
     getSourceID: function() {
@@ -41,7 +47,6 @@ Portal.Message = Backbone.RelationalModel.extend({
     */
 });
 
-//Portal.MessageCollection = Backbone.Collection.extend({
 Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.Message,

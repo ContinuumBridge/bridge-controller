@@ -52,7 +52,7 @@ var CBCollection = OriginalCollection.extend({
         this.ghosts = [];
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
-        console.log('collection subscribed', this.backend.name);
+        //console.log('collection subscribed', this.backend.name);
     },
 
     fetch: function(options) {
@@ -227,6 +227,7 @@ var CBCollection = OriginalCollection.extend({
 
     getFiltered: function(name, filter) {
 
+        var self = this;
         //return this.createLiveChildCollection();
 
         var collection = this.filtered || this.createLiveChildCollection(this.models);
@@ -234,8 +235,17 @@ var CBCollection = OriginalCollection.extend({
         //var collection = this.filtered || this.createLiveChildCollection();
         collection.setFilter(name, filter);
 
+        if (!this.filtered) {
+            // If the collection is newly created, proxy events
+            collection.on('reset', function(e) {
+                self.trigger('relational:change');
+            });
+        }
+
         collection.parent = this;
         this.filtered = collection;
+
+        collection.query();
 
         return this.filtered;
     }

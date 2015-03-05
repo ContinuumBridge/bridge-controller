@@ -1,5 +1,6 @@
 
 var CBApp = require('index')
+    ,Message = require('./message')
     ;
 
 require('./messages/models');
@@ -68,15 +69,22 @@ Portal.addInitializer(function() {
 
     Portal.socket.publish = function(message) {
 
-      var self = this;
+        var self = this;
 
-      console.log('Socket sending >', message.toJSON());
+        var jsonMessage;
+        if (message instanceof Message) {
+            jsonMessage = message.toJSON();
+        } else if (typeof message == 'string') {
+            jsonMessage = message;
+        } else {
+            jsonMessage = JSON.stringify(message);
+        }
 
-      var jsonMessage = message.toJSON();
+        console.log('Socket sending >', jsonMessage);
 
-      Portal.socket.emit('message', jsonMessage, function(data){
-          console.log('data from socket emit', data);
-      });
+        Portal.socket.emit('message', jsonMessage, function(data){
+            console.log('data from socket emit', data);
+        });
       /*
       Portal.getCurrentBridge().then(function(currentBridge) {
 

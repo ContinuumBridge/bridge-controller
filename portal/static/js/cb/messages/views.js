@@ -63,10 +63,14 @@ Portal.MessageListView = React.createClass({
 
         var direction = message.direction == 'outbound' ? '<=' : '=>';
         var remote = message.direction == 'outbound' ? message.destination : message.source;
+
+        var body = message.body;
+        var content = body.status || body.command;
+
         return (
             <tr key={message.cid}>
                 <td className="shrink">{remote} {direction}</td>
-                <td className="expand">{message.body}</td>
+                <td className="expand" dangerouslySetInnerHTML={{__html: content }}></td>
             </tr>
         )
     },

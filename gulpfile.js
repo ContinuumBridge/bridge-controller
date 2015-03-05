@@ -11,13 +11,16 @@ var gulp = require('gulp')
     ,reactify = require('reactify')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
+    ,uglify = require('gulp-uglify')
     ,watchify = require('watchify');
     ;
 
 var clean = require('gulp-clean');
 
-var production = process.env.NODE_ENV === 'production';
+//var production = process.env.NODE_ENV === 'production';
+//var production = process.argv.slice(2)[0] === 'production' ? true : false;
 
+var production = false;
 
 var vendorFiles = [
     'node_modules/react/dist/react-with-addons.js',
@@ -32,7 +35,6 @@ var requireFiles = './node_modules/react/react.js';
 
 gulp.task('vendor', function () {
 
-    //var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js')
     var bundler = browserify(VENDOR_SCRIPTS + 'vendor.js', {
         basedir: __dirname,
         //debug: !production,
@@ -43,33 +45,25 @@ gulp.task('vendor', function () {
 
     bundler = watchify(bundler);
 
-    bundler.transform(reactify);
     // Used for react-bootstrap
     //bundler.transform('folderify');
 
     var rebundle = function() {
         console.log('rebundling vendor');
 
+        bundler.transform(reactify);
         var stream = bundler.bundle();
         stream.on('error', function (err) { console.error(err) });
 
-        return stream.pipe(source('vendor.js'))
+        if (production) stream = stream.pipe(uglify());
+
+        stream.pipe(source('vendor.js'))
             .pipe(gulp.dest('./build'))
             .pipe(livereload());
-        /*
-        var stream = bundler.bundle()
-            .pipe(source('vendor.js'))
-            //.pipe(rename('vendor.js'))
-            .pipe(gulp.dest('build'))
-            .pipe(livereload());
-            ;
-        */
     }
 
     bundler.on('update', rebundle);
     return rebundle();
-    //return gulp.src(vendorFiles)
-        //.pipe(source('vendor.js'))
 });
 
 //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
@@ -101,21 +95,21 @@ function scripts(watch) {
     var hbsfy = require('hbsfy').configure({
         extensions: ["html"]
     });
-    bundler.transform(hbsfy);
-
-    bundler.external('react');
-    bundler.external('backbone-bundle');
     //bundler.require(requireFiles);
-    bundler.transform(reactify);
 
     var rebundle = function() {
         console.log('rebundling client');
+
+        bundler.transform(hbsfy);
+
+        bundler.external('react');
+        bundler.external('backbone-bundle');
+        bundler.transform(reactify);
+
         var stream = bundler.bundle();
         stream.on('error', function (err) { console.error(err) });
-        //stream.on('error', handleError('Browserify'));
-        //stream = stream.pipe(disc());
-        //var disc = stream.pipe(disc())
-        //    .pipe(fs.createWriteStream('./build/disc.html'));
+
+        //if (production) stream = stream.pipe(uglify());
 
         return stream.pipe(source('bundle.js'))
             .pipe(gulp.dest('./build'))
@@ -170,10 +164,18 @@ gulp.task('watch', function() {
 gulp.task('node_server', function () {
     nodemon({ script: './nodejs/index.js', watch: './nodejs/**'})
     //.on('restart', ['lint'])
-})
+});
+
 
 // Dev server
 gulp.task('default', ['client', 'vendor', 'node_server']);
+
+gulp.task('setProduction', function () {
+    production = true;
+});
+
+gulp.task('production', ['setProduction', 'default']);
+
 //gulp.task('default', ['client', 'node_server']);
 //gulp.task('default', ['client', 'node_server', 'watch']);
 

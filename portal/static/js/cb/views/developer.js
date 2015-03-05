@@ -1,4 +1,9 @@
 
+require('../apps/ownerships/views');
+require('../apps/connections/views');
+
+require('../clients/views');
+require('../clients/controls/views');
 
 module.exports = React.createClass({
 

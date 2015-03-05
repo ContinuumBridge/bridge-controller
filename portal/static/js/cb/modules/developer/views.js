@@ -1,14 +1,9 @@
 
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
 require('../../views/regions');
-
-require('../../apps/ownerships/views');
-require('../../apps/connections/views');
-
-require('../../clients/views');
-require('../../clients/controls/views');
 
 //var AppViews = require('./apps/views');
 
@@ -38,7 +33,6 @@ module.exports.Main = Marionette.Layout.extend({
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
         this.messageListView = new Portal.MessageListView();
-        */
     },
 
     onRender: function() {
@@ -52,7 +46,6 @@ module.exports.Main = Marionette.Layout.extend({
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
-         */
 
         Portal.getCurrentUser().then(function(currentUser) {
 
@@ -85,8 +78,8 @@ module.exports.Main = Marionette.Layout.extend({
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-             */
         }).done();
     }
 
 });
+*/

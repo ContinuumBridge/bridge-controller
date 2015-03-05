@@ -1,10 +1,14 @@
 
+require('../portals/views');
+
 module.exports = React.createClass({
 
     render: function () {
+
+        var collection = Portal.getCurrentBridge().get('appInstalls');
+
         return (
-            <div>
-            </div>
+            <Portal.PortalTabbedView collection={collection} />
         );
     }
 });

@@ -11,6 +11,16 @@ module.exports.Main = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    componentWillReceiveParams: function(params) {
+
+        if (!this.params || this.params != params) {
+            Portal.appCollection.fetch();
+            //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+
+        this.params = params;
+    },
+
     renderModals: function () {
 
     },
@@ -18,7 +28,6 @@ module.exports.Main = React.createClass({
     render: function() {
 
         var apps = Portal.appCollection;
-        console.log('Market View apps', apps);
         return (
             <div>
                 <div className="row">

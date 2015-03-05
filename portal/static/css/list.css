@@ -100,12 +100,17 @@ header p{
 
 .item-title {
     margin: 0px;
-    /*
-    float: left;
-    margin-top: 4px;
-    margin-bottom: 5px;
-    margin-left: 18px;
-    */
+    /*width: 300px;*/
+}
+
+/*
+.item-title > div {
+    width: 280px;
+}
+*/
+
+.item-title > div > input {
+    width: 290px;
 }
 
 .item-subtitle {
