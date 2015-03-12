@@ -97,6 +97,7 @@ Portal.ItemView = {
             <React.ListItem title={this.props.title} subtitle={this.props.subtitle}
                 buttons={buttons} renderButtons={this.renderButtons}
                 className={className} bsStyle=''
+                hideSubtitleOnExpanded={this.props.hideSubtitleOnExpanded}
                 collapsable={this.props.openable} eventKey="1">
                 {body}
             </React.ListItem>

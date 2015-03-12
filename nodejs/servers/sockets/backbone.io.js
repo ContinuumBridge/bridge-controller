@@ -39,11 +39,6 @@ function BackboneIOServer(getConfig, options) {
         user: 'user/'
     }
 
-    /*
-    var controllers = _.object(_.map(controllerURLs, function(name, url) {
-        return new djangoBackbone(djangoURL + url);
-    }));
-    */
     // Map the controllerURLs to create instances for them
     var controllers = _.reduce(controllerURLs, function(controller, url, name) {
         controller[name] = new djangoBackbone(djangoURL + url);
@@ -52,10 +47,8 @@ function BackboneIOServer(getConfig, options) {
 
     controllers.discoveredDevice = new DeviceDiscovery().backboneSocket;
 
-    //var currentUserController = new djangoBackbone(djangoURL + 'current_user/');
     // Start backbone io listening
     var socketServer = backboneio.listen(httpServer, controllers);
-    //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
     httpServer.listen(options.port);
     // Set the socket io log level

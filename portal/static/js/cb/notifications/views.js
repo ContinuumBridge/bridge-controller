@@ -12,6 +12,24 @@ Portal.NotificationView = React.createClass({
                 onClick: this.handleDelete
             }]
         };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderBody: function() {
+
+        var notification = this.props.model;
+        var error = notification.get('error');
+        if (error) {
+
+            return error.getMessage();
+        } else {
+            return "";
+        }
     }
 });
 
@@ -42,8 +60,15 @@ Portal.NotificationListView = React.createClass({
                 return <Portal.ConnectionStatusView title={title} subtitle={subtitle}
                     model={model} className="notification" />
                 break;
+            case 'error':
+                var subtitle = model.getSubtitle();
+                return <Portal.NotificationView title={title} subtitle={subtitle}
+                    hideSubtitleOnExpanded={true}
+                    model={model} className="notification" />
+                break;
             default:
                 return <Portal.NotificationView title={title} subtitle={subtitle}
+                    hideSubtitleOnExpanded={true}
                     model={model} className="notification" />
                 break;
         }

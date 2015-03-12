@@ -370,6 +370,9 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 
                                 // ADDED
                                 model.updateRelationToSelf(relation);
+
+                                // ADDED
+                                model.restartTracking();
                             }
                         }
                         changeTriggers.push(changeTrigger(this, rel, value, options));

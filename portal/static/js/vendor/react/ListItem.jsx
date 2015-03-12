@@ -118,9 +118,12 @@ var ListItem = React.createClass({
             : <div className="inner-item-title">{title}</div>;
 
         var subtitle = this.props.subtitle;
-        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
-            : <div className="inner-item-subtitle">{subtitle}</div>;
 
+        var renderedSubtitle = "";
+        if (!(this.state.expanded && this.props.hideSubtitleOnExpanded)) {
+            renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+                : <div className="inner-item-subtitle">{subtitle}</div>;
+        }
         // Render custom buttons
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";

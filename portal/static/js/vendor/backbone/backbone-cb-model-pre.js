@@ -78,90 +78,49 @@ var CBModel = OriginalModel.extend({
         if (attrs && options.wait) this.attributes = attributes;
 
         return xhr;
-    }
-
-    /*
-    fetch: function(key, val, options) {
-
-        var self = this;
-
-        return OriginalModel.prototype.fetch.apply(this, arguments).then(
-            function(result) {
-
-                console.log('Fetch result', result);
-                result.model.set({'isGhost': false}, {trackit_silent:true});
-
-                return result;
-                //model.trigger('change');
-            },
-            function(error) {
-
-                console.error('Fetch error', error);
-                Portal.dispatch({
-                    source: 'portal',
-                    actionType: 'create',
-                    itemType: 'error',
-                    payload: error
-                });
-                self.resetAttributes();
-            }
-        )
-    },
-
-    destroy: function(options) {
-
-        var self = this;
-
-        self.set('isGhost', true);
-
-        return OriginalModel.prototype.destroy.call(this, options).then(
-            function(result) {
-                Backbone.Relational.store.unregister(self);
-                return result;
-            },
-            function(error) {
-                self.set('isGhost', false);
-                Portal.dispatch({
-                    source: 'portal',
-                    actionType: 'create',
-                    itemType: 'error',
-                    payload: error
-                });
-            }
-        );
     },
 
     destroyOnServer: function(options) {
-      options = options ? _.clone(options) : {};
+      //options.wait || (options = {wait: true});
+      options = options ? _.defaults(options, {wait:true}) : {wait: true};
+      //options = options ? _.clone(options) : {};
       var model = this;
       var success = options.success;
 
       // ADDED Set isGhost to true, indicating the model is being deleted on server
-      this.set({isGhost: true}, {trackit_silent:true});
-      //this.set('isGhost', true);
+      //this.set({isGhost: true}, {trackit_silent:true});
+      this.set('isGhost', true);
 
-      //var destroy = function() {
-      //  model.trigger('destroy', model, model.collection, options);
-      //};
       var destroyOnServer = function() {
           model.trigger('change', model, model.collection, options);
-      }
+          // Remove the id from the local model
+          if (!model.isNew()) {
+              delete model.id;
+              model.unset('id');
+          }
+      };
+
       options.success = function(resp) {
+        console.log('destroyOnServer succeeded', resp);
         //if (options.wait || model.isNew()) destroy();
         destroyOnServer();
-        // Remove the id from the local model
-        if (!model.isNew()) {
-            delete model.id;
-            model.unset('id');
-        }
         if (success) success(model, resp, options);
         // ADDED Reset trackit
         model.restartTracking();
         if (!model.isNew()) model.trigger('sync', model, resp, options);
       };
 
-      options.error = function(resp) {
+      options.error = function(error) {
+          console.log('destroyOnServer error', error);
+          console.log('destroyOnServer unsavedAttributes', model.unsavedAttributes());
           model.resetAttributes();
+          model.set({isGhost: true}, {trackit_silent:true});
+          Portal.dispatch({
+              source: 'portal',
+              actionType: 'create',
+              itemType: 'error',
+              payload: error
+          });
       }
 
       if (this.isNew()) {
@@ -175,7 +134,6 @@ var CBModel = OriginalModel.extend({
       destroyOnServer();
       return xhr;
     }
-    */
 });
 
 Backbone.Model = CBModel;

@@ -20,7 +20,9 @@ var CBModel = OriginalModel.extend({
 
         OriginalModel.call(this, attrs, options);
 
+        //console.log('model constructor', this.unsavedAttributes());
         this.startTracking();
+        //console.log('model constructor 2', this.unsavedAttributes());
     },
 
 
@@ -69,6 +71,7 @@ var CBModel = OriginalModel.extend({
                 result.model.set({'isGhost': false}, {trackit_silent:true});
                 self.fetched = true;
 
+                self.restartTracking();
                 return result;
                 //model.trigger('change');
             },
@@ -92,12 +95,16 @@ var CBModel = OriginalModel.extend({
 
         self.set('isGhost', true);
 
+        options || (options = {wait: true});
+
         return OriginalModel.prototype.destroy.call(this, options).then(
             function(result) {
+                console.log('destroy succeeded', self);
                 //Backbone.Relational.store.unregister(self);
                 return result;
             },
             function(error) {
+                console.log('destroy failed', self);
                 self.set('isGhost', false);
                 Portal.dispatch({
                     source: 'portal',
@@ -109,72 +116,6 @@ var CBModel = OriginalModel.extend({
         );
     },
 
-    /*
-    relationalDestroy: function(options) {
-
-        options = options ? _.clone(options) : {};
-
-        var success = options.success;
-        var relations = this.getRelations();
-        var self = this;
-        options.success = function(resp) {
-
-            Backbone.Relational.store.unregister(self);
-            /*
-            _.forEach(relations, function(relation) {
-                // Delete relations on other models to this model
-                self.updateRelationToSelf(relation, {destroy: true});
-            });
-            if (success) success(model, resp, options);
-        }
-        OriginalModel.prototype.destroy.call(this, options);
-    },
-    */
-
-    destroyOnServer: function(options) {
-      options = options ? _.clone(options) : {};
-      var model = this;
-      var success = options.success;
-
-      // ADDED Set isGhost to true, indicating the model is being deleted on server
-      this.set({isGhost: true}, {trackit_silent:true});
-      //this.set('isGhost', true);
-
-      //var destroy = function() {
-      //  model.trigger('destroy', model, model.collection, options);
-      //};
-      var destroyOnServer = function() {
-          model.trigger('change', model, model.collection, options);
-      }
-      options.success = function(resp) {
-        //if (options.wait || model.isNew()) destroy();
-        destroyOnServer();
-        // Remove the id from the local model
-        if (!model.isNew()) {
-            delete model.id;
-            model.unset('id');
-        }
-        if (success) success(model, resp, options);
-        // ADDED Reset trackit
-        model.restartTracking();
-        if (!model.isNew()) model.trigger('sync', model, resp, options);
-      };
-
-      options.error = function(resp) {
-          model.resetAttributes();
-      }
-
-      if (this.isNew()) {
-        options.success();
-        return false;
-      }
-      wrapError(this, options);
-
-      var xhr = this.sync('delete', this, options);
-      //if (!options.wait) destroy();
-      destroyOnServer();
-      return xhr;
-    },
 
     delete: function(options) {
         options = options ? _.clone(options) : {};

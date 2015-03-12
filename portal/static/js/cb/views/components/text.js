@@ -177,3 +177,11 @@ var AutosizeInput = React.createClass({
 });
 
 module.exports.AutosizeInput = AutosizeInput;
+
+module.exports.Subtitle = React.createClass({
+
+    render: function() {
+
+
+    }
+});
