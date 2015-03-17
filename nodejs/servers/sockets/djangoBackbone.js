@@ -21,14 +21,14 @@ function DjangoBackbone(djangoURL, cbid) {
         return util.format('"%s %s %s" %s', response.req.method, response.req.path, httpVersion, response.statusCode);
     };
 
-    function DjangoError(message, response) {
+    function DjangoError(response, message) {
         this.name = "DjangoError";
-        this.message = (message || "");
         this.response = (response || "");
+        this.message = (message || "");
     }
     DjangoError.prototype = Error.prototype;
 
-    backboneSocket.handleResponse = function(res, data, djangoResponse) {
+    backboneSocket.handleResponse = function(res, next, data, djangoResponse) {
 
         if (djangoResponse) {
             if (200 <= djangoResponse.statusCode && djangoResponse.statusCode <= 300) {
@@ -38,17 +38,19 @@ function DjangoBackbone(djangoURL, cbid) {
             } else if (djangoResponse.statusCode) {
 
                 var error = new DjangoError(backboneSocket.formatLog(djangoResponse), djangoResponse.rawEncoded)
-                logger.log('warn', error);
-                res.error(error);
+                logger.log('warn', error.name, error.response, error.message);
+                //res.error(error);
+                next(error);
             } else {
                 var error = new Error('Django did not return a status code to django_backbone')
-                logger.log('error', error);
-                res.end(error);
+                logger.log('error', error.name, error.message);
+                next(error);
+                //res.end(error);
             }
         } else {
-            var error = new Error('Something went wrong with response in django_backbone');
-            logger.log('error', error);
-            res.end(error);
+            var error = new Error('Node could not connect to django');
+            logger.log('error', error.name, error.message);
+            next(error);
         }
     };
 
@@ -69,11 +71,9 @@ function DjangoBackbone(djangoURL, cbid) {
         next(); 
     });
 
-    backboneSocket.create(function(req, res) {
+    backboneSocket.create(function(req, res, next) {
 
-        var that = this;
-
-        // On a backboneio create function make a post request to Django 
+        // On a backboneio create function make a post request to Django
         var jsonData = JSON.stringify(req.model);
 
         var restOptions = {
@@ -86,24 +86,19 @@ function DjangoBackbone(djangoURL, cbid) {
             }
         };
 
+
         rest.post(djangoURL, restOptions).on('complete', function(data, response) {
 
-            backboneSocket.handleResponse(res, data, response)
+            backboneSocket.handleResponse(res, next, data, response)
         });
     }),
 
-    backboneSocket.read(function(req, res) {
+    backboneSocket.read(function(req, res, next) {
 
         // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
-        //console.log('request is', Object.keys(req));
-        //console.log('request options', req.options);
         var baseRequestURL = (req.model.id) ? djangoURL + req.model.id
-            //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
             : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
-        //console.log('baseRequestURL request is', baseRequestURL);
-
-        //console.log('config is', req.socket.manager);
         // Translate filters from backbone to tastypie
         var filters;
         var filtersString = "";
@@ -117,13 +112,8 @@ function DjangoBackbone(djangoURL, cbid) {
                 filtersString += filtersString ? "&" + filterString : "?" + filterString;
             };
         }
-        //console.log('filtersString is', filtersString);
-        //console.log('filtersString is', !!filtersString);
-        //console.log('baseRequestURL is', baseRequestURL);
         var requestURL = baseRequestURL + filtersString;
-        //var requestURL = baseRequestURL;
 
-        //console.log('requestURL is', requestURL);
         var djangoOptions = {
             method: "get",
             headers: {
@@ -136,21 +126,14 @@ function DjangoBackbone(djangoURL, cbid) {
         // Make a request to Django to get session data
         rest.get(requestURL, djangoOptions).on('complete', function(data, response) {
 
-            backboneSocket.handleResponse(res, data, response)
+            backboneSocket.handleResponse(res, next, data, response)
         });
     });
 
-    backboneSocket.update(function(req, res) {
-
-        //var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
-        // On a backboneio create function make a post request to Django
+    backboneSocket.update(function(req, res, next) {
 
         var requestURL = (req.model.id) ? djangoURL + req.model.id.toString() + "/" : djangoURL;
-        //var resourceURL = djangoURL + req.model.id.toString();
-        //console.log('requestURL in update is', requestURL, req);
         var jsonData = JSON.stringify(req.model);
-
-        //console.log('jsonData is', jsonData);
 
         var restOptions = {
             method: "patch",
@@ -164,17 +147,11 @@ function DjangoBackbone(djangoURL, cbid) {
 
         rest.json(requestURL, req.model, restOptions, 'patch').on('complete', function(data, response) {
 
-            backboneSocket.handleResponse(res, data, response)
-            //that.updateSuccess();
+            backboneSocket.handleResponse(res, next, data, response)
         });
-    }),
+    });
 
-    backboneSocket.delete(function(req, res) {
-
-        var that = this;
-
-        // On a backboneio delete function make a delete request to Django 
-        //console.log('Model data in controller.backboneBackend.create is', req.model);
+    backboneSocket.delete(function(req, res, next) {
 
         // Set the URL of the item to be deleted
         var resourceURL = djangoURL + req.model.id.toString();
@@ -190,9 +167,9 @@ function DjangoBackbone(djangoURL, cbid) {
 
         rest.del(resourceURL, restOptions).on('complete', function(data, response) {
 
-            backboneSocket.handleResponse(res, data, response)
+            backboneSocket.handleResponse(res, next, data, response)
         });
-    }),
+    });
 
     backboneSocket.use(backboneio.middleware.memoryStore());
 

@@ -62,13 +62,13 @@ module.exports = React.createClass({
         var currentUser = Portal.currentUser;
 
         var appOwnerships = currentUser.get('appOwnerships')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var clientControls = currentUser.get('clientControls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (

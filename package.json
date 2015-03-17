@@ -39,6 +39,7 @@
     "react-bootstrap": "^0.13.0",
     "react-router": "^0.11.6",
     "reactify": "^0.15.2",
+    "react-ellipsis": "git+https://git@github.com/ContinuumBridge/react-ellipsis.git#master",
     "redis": "^0.12.1",
     "restler": "~3.2.2",
     "socket.io": "^1.0.6",

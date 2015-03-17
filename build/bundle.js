@@ -14235,6 +14235,70 @@ Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js":[function(require,module,exports){
+
+Portal.Error = Backbone.RelationalModel.extend({
+
+    idAttribute: 'id',
+
+    initialize: function(attributes, options) {
+
+        console.log('error initialized', attributes);
+
+        if (attributes['type'] != "TransportError") {
+            var notification = new Portal.Notification({error: this,
+                type: 'error'});
+        }
+
+        Portal.notificationCollection.add(notification);
+    },
+
+    getName: function() {
+        return this.get('response').error.name;
+    },
+
+    getMessage: function() {
+        return this.get('response').error.message;
+    },
+
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'notification',
+            relatedModel: 'Portal.Notification',
+            collectionType: 'Portal.NotificationCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'notificcationCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'error',
+                includeInJSON: false,
+                initializeCollection: 'errorCollection'
+            }
+        }
+    ]
+}, { modelType: "error" });
+
+Portal.ErrorCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Error,
+    backend: 'error'
+
+    /*
+    initialize: function() {
+        this.bindBackend();
+
+        this.bind('backend:create', function(model) {
+            //logger.log('debug', 'AppCollection create', model);
+            self.add(model);
+        });
+    },
+    */
+
+});
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
 CBApp = require('./cbApp')
@@ -14882,6 +14946,7 @@ require('./clients/controls/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
+require('./errors/models');
 require('./notifications/models');
 require('./portals/models');
 require('./users/models');
@@ -14933,6 +14998,9 @@ Portal.on('before:start', function () {
   Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
 
+  Portal.errorCollection = new Portal.ErrorCollection();
+  Portal.errorCollection.subscribe();
+
   Portal.messageCollection = new Portal.MessageCollection([
     //{ source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
     //{ source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
@@ -14971,7 +15039,7 @@ Portal.on('before:start', function () {
   */
 });
 
-},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./errors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -15169,13 +15237,13 @@ module.exports.Main = React.createClass({displayName: 'Main',
         }
 
         var appInstalls = currentBridge.get('appInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return model ? !model.isNew() : false;
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceView;
@@ -15871,11 +15939,21 @@ Portal.Notification = Backbone.Deferred.Model.extend({
     },
 
     getTitle: function() {
-        return this.get('title');
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getName();
+        } else {
+            return this.get('title');
+        }
     },
 
     getSubtitle: function() {
-        return this.get('subTitle') || "";
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getMessage();
+        } else {
+            return this.get('subTitle') || "";
+        }
     }
 
 }, { modelType: "notification" });
@@ -15896,7 +15974,6 @@ Portal.ConnectionStatus = Portal.Notification.extend({
     },
 
     getTitle: function() {
-
         var error = this.get('error');
         return error ? "Connection error" : "Connection lost"
     },
@@ -15930,6 +16007,24 @@ Portal.NotificationView = React.createClass({displayName: 'NotificationView',
                 onClick: this.handleDelete
             }]
         };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderBody: function() {
+
+        var notification = this.props.model;
+        var error = notification.get('error');
+        if (error) {
+
+            return error.getMessage();
+        } else {
+            return "";
+        }
     }
 });
 
@@ -15960,8 +16055,15 @@ Portal.NotificationListView = React.createClass({displayName: 'NotificationListV
                 return React.createElement(Portal.ConnectionStatusView, {title: title, subtitle: subtitle, 
                     model: model, className: "notification"})
                 break;
+            case 'error':
+                var subtitle = model.getSubtitle();
+                return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
+                    hideSubtitleOnExpanded: true, 
+                    model: model, className: "notification"})
+                break;
             default:
                 return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
+                    hideSubtitleOnExpanded: true, 
                     model: model, className: "notification"})
                 break;
         }
@@ -16820,8 +16922,8 @@ module.exports = React.createClass({displayName: 'exports',
         var currentUser = Portal.currentUser;
 
         var appLicences = currentUser.get('appLicences')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (
@@ -17234,6 +17336,15 @@ var AutosizeInput = React.createClass({
 });
 
 module.exports.AutosizeInput = AutosizeInput;
+
+module.exports.Subtitle = React.createClass({displayName: 'Subtitle',
+
+    render: function() {
+
+
+    }
+});
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
 
 require('../portals/views');
@@ -17324,13 +17435,13 @@ module.exports = React.createClass({displayName: 'exports',
         var currentUser = Portal.currentUser;
 
         var appOwnerships = currentUser.get('appOwnerships')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var clientControls = currentUser.get('clientControls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (
@@ -17657,6 +17768,7 @@ Portal.ItemView = {
             React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
                 className: className, bsStyle: "", 
+                hideSubtitleOnExpanded: this.props.hideSubtitleOnExpanded, 
                 collapsable: this.props.openable, eventKey: "1"}, 
                 body
             )

@@ -14,11 +14,21 @@ Portal.Notification = Backbone.Deferred.Model.extend({
     },
 
     getTitle: function() {
-        return this.get('title');
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getName();
+        } else {
+            return this.get('title');
+        }
     },
 
     getSubtitle: function() {
-        return this.get('subTitle') || "";
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getMessage();
+        } else {
+            return this.get('subTitle') || "";
+        }
     }
 
 }, { modelType: "notification" });
@@ -39,7 +49,6 @@ Portal.ConnectionStatus = Portal.Notification.extend({
     },
 
     getTitle: function() {
-
         var error = this.get('error');
         return error ? "Connection error" : "Connection lost"
     },

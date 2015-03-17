@@ -18,6 +18,7 @@ require('./clients/controls/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
+require('./errors/models');
 require('./notifications/models');
 require('./portals/models');
 require('./users/models');
@@ -68,6 +69,9 @@ Portal.on('before:start', function () {
   Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
   Portal.discoveredDeviceCollection.subscribe();
   //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
+
+  Portal.errorCollection = new Portal.ErrorCollection();
+  Portal.errorCollection.subscribe();
 
   Portal.messageCollection = new Portal.MessageCollection([
     //{ source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},

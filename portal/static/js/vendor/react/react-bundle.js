@@ -14,6 +14,7 @@ React.Table = require('react-bootstrap').Table;
 React.TabbedArea = require('react-bootstrap').TabbedArea;
 React.TabPane = require('react-bootstrap').TabPane;
 
+React.Ellipsis = require('react-ellipsis')(React);
 //React.Accordion = require('./Accordion.jsx');
 //React.Panel = require('./Panel.jsx');
 //React.Panel = require('react-bootstrap').Panel;
