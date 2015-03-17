@@ -12,6 +12,8 @@ Router = require('react-router');
 //React.Forms.Property = ReactForms.schema.Property
 //caja = require('caja');
 
+io = require('socket.io-client');
+
 Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
 

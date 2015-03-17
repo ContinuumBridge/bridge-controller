@@ -15237,13 +15237,13 @@ module.exports.Main = React.createClass({displayName: 'Main',
         }
 
         var appInstalls = currentBridge.get('appInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return model ? !model.isNew() : false;
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceView;
@@ -16922,8 +16922,8 @@ module.exports = React.createClass({displayName: 'exports',
         var currentUser = Portal.currentUser;
 
         var appLicences = currentUser.get('appLicences')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (
@@ -17435,13 +17435,13 @@ module.exports = React.createClass({displayName: 'exports',
         var currentUser = Portal.currentUser;
 
         var appOwnerships = currentUser.get('appOwnerships')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var clientControls = currentUser.get('clientControls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (

@@ -13,12 +13,14 @@ Router = require('react-router');
 //React.Forms.Property = ReactForms.schema.Property
 //caja = require('caja');
 
+io = require('socket.io-client');
+
 Backbone = require('backbone-bundle');
 Marionette = require('backbone.marionette');
 
 
 
-},{"./react/react-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js","backbone-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","flux":"/home/ubuntu/bridge-controller/node_modules/flux/index.js","jquery-browserify":"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js","react-router":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/index.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
+},{"./react/react-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js","backbone-bundle":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js","backbone.marionette":"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js","flux":"/home/ubuntu/bridge-controller/node_modules/flux/index.js","jquery-browserify":"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js","react-router":"/home/ubuntu/bridge-controller/node_modules/react-router/modules/index.js","socket.io-client":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/index.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/lib/component.js":[function(require,module,exports){
 // Backbone React Component
 // ========================
 //
@@ -65997,7 +65999,6 @@ Q = global.Q = require("q");
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");
-io = global.io = require("socket.io-client");
 _ = global._ = require("underscore");
 ;__browserify_shim_require__=require;(function browserifyShim(module, exports, require, define, browserify_shim__define__module__export__) {
 (function() {
@@ -66189,7 +66190,7 @@ _ = global._ = require("underscore");
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","socket.io-client":"/home/ubuntu/bridge-controller/node_modules/socket.io-client/index.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/backbone/backbone.js","underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone.marionette.js":[function(require,module,exports){
 (function (global){
 
 ; Backbone = global.Backbone = require("backbone");

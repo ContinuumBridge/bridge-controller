@@ -35,6 +35,7 @@ class AppInstallAuthorization(CBAuthorization):
 
     def validate(self, object_list, bundle):
         for app_install in object_list:
+            #raise Unauthorized("Test unauthorised")
             try:
                 app = app_install.app
                 licence = app_install.licence

@@ -44,8 +44,8 @@ module.exports = React.createClass({
         var currentUser = Portal.currentUser;
 
         var appLicences = currentUser.get('appLicences')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         return (

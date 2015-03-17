@@ -21,10 +21,10 @@ function DjangoBackbone(djangoURL, cbid) {
         return util.format('"%s %s %s" %s', response.req.method, response.req.path, httpVersion, response.statusCode);
     };
 
-    function DjangoError(message, response) {
+    function DjangoError(response, message) {
         this.name = "DjangoError";
-        this.message = (message || "");
         this.response = (response || "");
+        this.message = (message || "");
     }
     DjangoError.prototype = Error.prototype;
 
@@ -38,7 +38,7 @@ function DjangoBackbone(djangoURL, cbid) {
             } else if (djangoResponse.statusCode) {
 
                 var error = new DjangoError(backboneSocket.formatLog(djangoResponse), djangoResponse.rawEncoded)
-                logger.log('warn', error.name, error.message);
+                logger.log('warn', error.name, error.response, error.message);
                 //res.error(error);
                 next(error);
             } else {

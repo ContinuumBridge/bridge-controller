@@ -89,13 +89,13 @@ module.exports.Main = React.createClass({
         }
 
         var appInstalls = currentBridge.get('appInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return model ? !model.isNew() : false;
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceInstalls = currentBridge.get('deviceInstalls')
-            .getFiltered('isNew', function(model, searchString) {
-                return !model.isNew();
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
             });
 
         var deviceView;

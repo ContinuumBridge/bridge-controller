@@ -63,7 +63,6 @@ module.exports = {
         "exports": "Backbone",
         "depends": {
             "backbone":"Backbone",
-            "socket.io-client": "io",
             "underscore":"_"
         }
     },
