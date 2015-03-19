@@ -36,13 +36,17 @@ Portal.addInitializer(function () {
       Portal.route = state;
 
       var params = state.params;
-      var currentBridge = Portal.getCurrentBridge();
-      if(currentBridge) currentBridge.fetch();
 
       var models = {
-          currentBridge: currentBridge,
           currentUser: Portal.currentUser
       }
+
+      var currentBridge = Portal.getCurrentBridge();
+      if(currentBridge) {
+          currentBridge.fetch();
+          models['currentBridge'] = currentBridge;
+      }
+
       var collections = {
           apps: Portal.appCollection,
           users: Portal.userCollection,
