@@ -23,7 +23,7 @@ module.exports.Main = React.createClass({
                 case "discover-devices":
                     var model;
                     while (model = Portal.getCurrentBridge().get('discoveredDevices').first()) {
-                        model.destroy();
+                        model.delete();
                     }
                     //Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
                         //discoveredDevice.delete();

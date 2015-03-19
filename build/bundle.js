@@ -14338,13 +14338,17 @@ Portal.addInitializer(function () {
       Portal.route = state;
 
       var params = state.params;
-      var currentBridge = Portal.getCurrentBridge();
-      if(currentBridge) currentBridge.fetch();
 
       var models = {
-          currentBridge: currentBridge,
           currentUser: Portal.currentUser
       }
+
+      var currentBridge = Portal.getCurrentBridge();
+      if(currentBridge) {
+          currentBridge.fetch();
+          models['currentBridge'] = currentBridge;
+      }
+
       var collections = {
           apps: Portal.appCollection,
           users: Portal.userCollection,
@@ -15171,7 +15175,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 case "discover-devices":
                     var model;
                     while (model = Portal.getCurrentBridge().get('discoveredDevices').first()) {
-                        model.destroy();
+                        model.delete();
                     }
                     //Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
                         //discoveredDevice.delete();
