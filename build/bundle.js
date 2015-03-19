@@ -16203,9 +16203,12 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         var swarmApp = new SwarmApp("BID2AID9");
         swarmApp.initSwarm(this.swarmStream);
 
-        genericSwitch = new Switch('1');
+        /*
+        genericSwitch = Swarm.env.localhost.get('/Switch#1');
 
         genericSwitch.on('.init', function() {
+
+            console.log('genericSwitch .init');
             if (this._version!=='!0') {
                 console.log('genericSwitch init return', this._version);
                 return; // FIXME default values
@@ -16215,6 +16218,7 @@ Portal.Portal = Backbone.Deferred.Model.extend({
                 symbol: '1'
             });
         });
+        */
 
         return swarmApp;
         //swarmApp.connect(this.swarmStream);
@@ -16288,9 +16292,102 @@ Portal.PortalCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{"../swarm/app":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/app.js","../swarm/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/models.js","../swarm/stream":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/stream.js","./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
+},{"../swarm/app":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/app.js","../swarm/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/models.js","../swarm/stream":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/stream.js","./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/test/views.js":[function(require,module,exports){
 
-var SwitchView = require('../swarm/views');
+//var cx = require('react/lib/cx');
+
+var SwitchView = React.createClass({displayName: 'SwitchView',
+
+    mixins: [ Swarm.ReactMixin ],
+
+    statics: {
+        modelType: "Switch"
+    },
+
+    render: function() {
+
+        var cbSwitch = this.sync;
+
+        console.log('swarm react cbSwitch is', cbSwitch);
+        /*
+        var bookmark = <noscript/>;
+        var tab = this.props.app.isTouch
+            ? <span
+            className={todo.childList==="" ? "tab" : "tab child-list"}
+            onTouchEnd={this._onTabTouch}
+            onClick={this._onTabTouch}
+        >⇢</span>
+            : <noscript/>;
+
+        if (todo.childList) {
+            bookmark = <span className="bookmark"> </span>; //&#8594;
+        }
+        */
+
+        var label = cbSwitch.value ? "True" : "False";
+        return (
+            React.createElement("div", {className: "switch", key: cbSwitch._id}, 
+                "Test switch is ", label
+            )
+        );
+    },
+
+    _focus: function () {
+        var app = this.props.app;
+        app.go(this.props.listId, this.sync._id);
+    },
+
+    _onToggle: function () {
+        this.sync.toggle();
+    },
+
+    _onChange: function(event) {
+        var edit = event.target;
+        var text = edit.value;
+        var pos = edit.selectionStart;
+        // save it, send it to everybody
+        this.sync.set({text:text});
+        // a bit ugly, but React may wreck cursor pos
+        this.forceUpdate(function(){
+            edit.selectionStart = edit.selectionEnd = pos;
+        });
+    },
+
+    _onDestroyClick: function() {
+        if (this.sync.childList !== ""){
+            if (confirm("Sure?")) {
+                app.delete(this.props.listId, this.sync._id);
+            }
+        } else {
+            app.delete(this.props.listId, this.sync._id);
+        }
+    },
+
+    _onTabTouch: function(){
+        app.forward();
+    }
+
+});
+
+var MainView = React.createClass({displayName: 'MainView',
+
+    render: function() {
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", null, "Test portal"), 
+                React.createElement(SwitchView, {spec: "/Switch#1"})
+            )
+        )
+    }
+});
+
+module.exports = MainView;
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
+
+var TestPortalView = require('./test/views');
 
 Portal.PortalView = React.createClass({displayName: 'PortalView',
 
@@ -16310,11 +16407,14 @@ Portal.PortalView = React.createClass({displayName: 'PortalView',
         caja.whenReady(function() {  // (1)
             var swarmApp = portal.getSwarm();
             console.log('caja swarmApp', swarmApp);
+            /*
             var switchCallback = function(spec, change, object) {
                 console.log('switchCallback', spec, change, object);
                 self.forceUpdate();
             }
-            swarmApp.host.on('/Switch#1', switchCallback);
+            //swarmApp.host.on('/Switch#1', switchCallback);
+            swarmApp.host.on(switchCallback);
+            */
             self.setState({swarm: swarmApp})
         });
 
@@ -16340,12 +16440,14 @@ Portal.PortalView = React.createClass({displayName: 'PortalView',
         var swarmApp = this.state.swarm;
         console.log('Portal view swarmApp', swarmApp);
         console.log('Portal view key', key);
+        /*
         var swarmView = swarmApp
-                    ? React.createElement(SwitchView, {app: swarmApp, spec: key})
+                    ? <SwitchView app={swarmApp} spec={key}/>
                     : "";
+        */
         return (
             React.createElement("div", {ref: "caja"}, 
-                swarmView
+                React.createElement(TestPortalView, null)
             )
         )
     }
@@ -16387,7 +16489,7 @@ Portal.PortalTabbedView = React.createClass({displayName: 'PortalTabbedView',
     }
 });
 
-},{"../swarm/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
+},{"./test/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/test/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
 
 var Route = Router.Route
     ,DefaultRoute = Router.DefaultRoute
@@ -16691,84 +16793,6 @@ SwarmStream.prototype.write = function (data) {
     */
 };
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/swarm/views.js":[function(require,module,exports){
-
-//var cx = require('react/lib/cx');
-
-var SwitchView = React.createClass({displayName: 'SwitchView',
-
-    mixins: [ Swarm.ReactMixin ],
-
-    statics: {
-        modelType: "Switch"
-    },
-
-    render: function() {
-
-        var cbSwitch = this.sync;
-
-        console.log('swarm react cbSwitch is', cbSwitch);
-        /*
-        var bookmark = <noscript/>;
-        var tab = this.props.app.isTouch
-            ? <span
-            className={todo.childList==="" ? "tab" : "tab child-list"}
-            onTouchEnd={this._onTabTouch}
-            onClick={this._onTabTouch}
-        >⇢</span>
-            : <noscript/>;
-
-        if (todo.childList) {
-            bookmark = <span className="bookmark"> </span>; //&#8594;
-        }
-        */
-
-        var label = cbSwitch.value ? "True" : "False";
-        return (
-            React.createElement("div", {className: "switch", key: cbSwitch._id}, 
-                "Test switch is ", label
-            )
-        );
-    },
-
-    _focus: function () {
-        var app = this.props.app;
-        app.go(this.props.listId, this.sync._id);
-    },
-
-    _onToggle: function () {
-        this.sync.toggle();
-    },
-
-    _onChange: function(event) {
-        var edit = event.target;
-        var text = edit.value;
-        var pos = edit.selectionStart;
-        // save it, send it to everybody
-        this.sync.set({text:text});
-        // a bit ugly, but React may wreck cursor pos
-        this.forceUpdate(function(){
-            edit.selectionStart = edit.selectionEnd = pos;
-        });
-    },
-
-    _onDestroyClick: function() {
-        if (this.sync.childList !== ""){
-            if (confirm("Sure?")) {
-                app.delete(this.props.listId, this.sync._id);
-            }
-        } else {
-            app.delete(this.props.listId, this.sync._id);
-        }
-    },
-
-    _onTabTouch: function(){
-        app.forward();
-    }
-
-});
-
-module.exports = SwitchView;
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');

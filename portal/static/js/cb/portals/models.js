@@ -45,9 +45,12 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         var swarmApp = new SwarmApp("BID2AID9");
         swarmApp.initSwarm(this.swarmStream);
 
-        genericSwitch = new Switch('1');
+        /*
+        genericSwitch = Swarm.env.localhost.get('/Switch#1');
 
         genericSwitch.on('.init', function() {
+
+            console.log('genericSwitch .init');
             if (this._version!=='!0') {
                 console.log('genericSwitch init return', this._version);
                 return; // FIXME default values
@@ -57,6 +60,7 @@ Portal.Portal = Backbone.Deferred.Model.extend({
                 symbol: '1'
             });
         });
+        */
 
         return swarmApp;
         //swarmApp.connect(this.swarmStream);

@@ -1,5 +1,5 @@
 
-var SwitchView = require('../swarm/views');
+var TestPortalView = require('./test/views');
 
 Portal.PortalView = React.createClass({
 
@@ -19,11 +19,14 @@ Portal.PortalView = React.createClass({
         caja.whenReady(function() {  // (1)
             var swarmApp = portal.getSwarm();
             console.log('caja swarmApp', swarmApp);
+            /*
             var switchCallback = function(spec, change, object) {
                 console.log('switchCallback', spec, change, object);
                 self.forceUpdate();
             }
-            swarmApp.host.on('/Switch#1', switchCallback);
+            //swarmApp.host.on('/Switch#1', switchCallback);
+            swarmApp.host.on(switchCallback);
+            */
             self.setState({swarm: swarmApp})
         });
 
@@ -49,12 +52,14 @@ Portal.PortalView = React.createClass({
         var swarmApp = this.state.swarm;
         console.log('Portal view swarmApp', swarmApp);
         console.log('Portal view key', key);
+        /*
         var swarmView = swarmApp
                     ? <SwitchView app={swarmApp} spec={key}/>
                     : "";
+        */
         return (
             <div ref="caja">
-                {swarmView}
+                <TestPortalView />
             </div>
         )
     }

@@ -74,4 +74,18 @@ var SwitchView = React.createClass({
 
 });
 
-module.exports = SwitchView;
+var MainView = React.createClass({
+
+    render: function() {
+
+        return (
+            <div>
+                <div>Test portal</div>
+                <SwitchView spec='/Switch#1'/>
+            </div>
+        )
+    }
+});
+
+module.exports = MainView;
+
