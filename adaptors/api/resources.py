@@ -19,6 +19,7 @@ class AdaptorResource(CBResource):
         queryset = Adaptor.objects.all()
         authorization = CBReadAllAuthorization()
         user_related_through = 'adaptor_ownerships'
+        create_user_through_model = True
         related_user_permissions = ['read', 'create', 'update', 'delete']
         filtering = {
             "slug": ('exact', 'startswith',),

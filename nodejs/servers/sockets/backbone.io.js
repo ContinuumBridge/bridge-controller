@@ -15,7 +15,9 @@ var SocketServer = require('./socket')
     ,MessageUtils = require('../../message_utils')
     ;
 
-function BackboneIOServer(port, getConfig, djangoURL) {
+function BackboneIOServer(getConfig, options) {
+
+    var djangoURL = options.djangoURL;
 
     var httpServer = http.createServer();
 
@@ -30,17 +32,13 @@ function BackboneIOServer(port, getConfig, djangoURL) {
         clientControl: 'client_control/',
         device: 'device/',
         deviceInstall: 'device_install/',
-        discoveredDeviceInstall: 'discovered_device_install/',
+        discoveredDevice: 'discovered_device/',
         bridge: 'bridge/',
         bridgeControl: 'bridge_control/',
-        currentUser: 'current_user/'
+        currentUser: 'current_user/',
+        user: 'user/'
     }
 
-    /*
-    var controllers = _.object(_.map(controllerURLs, function(name, url) {
-        return new djangoBackbone(djangoURL + url);
-    }));
-    */
     // Map the controllerURLs to create instances for them
     var controllers = _.reduce(controllerURLs, function(controller, url, name) {
         controller[name] = new djangoBackbone(djangoURL + url);
@@ -49,12 +47,10 @@ function BackboneIOServer(port, getConfig, djangoURL) {
 
     controllers.discoveredDevice = new DeviceDiscovery().backboneSocket;
 
-    //var currentUserController = new djangoBackbone(djangoURL + 'current_user/');
     // Start backbone io listening
     var socketServer = backboneio.listen(httpServer, controllers);
-    //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
-    httpServer.listen(port);
+    httpServer.listen(options.port);
     // Set the socket io log level
     //socketServer.set('log level', 1);
 

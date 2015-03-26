@@ -1,3 +1,0 @@
-
-CBApp.Components = {};
-

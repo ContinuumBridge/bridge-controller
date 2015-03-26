@@ -1,4 +1,5 @@
 
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
@@ -10,14 +11,12 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
-    /*
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
-    */
 
     initialize: function() {
 
@@ -29,3 +28,4 @@ module.exports.Main = Marionette.Layout.extend({
     }
 
 });
+*/

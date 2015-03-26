@@ -1,0 +1,21 @@
+<html>
+<head></head>
+<body>
+
+<input type="button" id="theButton" value="Say hi">
+<script type="text/javascript">
+    document.getElementById('theButton').onclick = function() {
+        //log('Hi from inside caja');
+        sayHello();
+    };
+    //log('CB is', CB.sayHi());
+
+    CB.onMessage(function(message) {
+        log('caja received message');
+        log('caja received json', JSON.stringify(message));
+        CB.send(JSON.stringify({destination: "CID46", source: "BID2/AID9", body: "Hey portal client"}))
+    });
+
+</script>
+</body>
+</html>

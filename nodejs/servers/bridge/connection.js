@@ -29,10 +29,8 @@ var BridgeConnection = function(socket) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
+        self.logConnection('bridge');
 
-        var publicationAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-        logger.log('info', 'New bridge connection. Subscribed to %s, publishing to %s'
-            ,config.subscriptionAddress, publicationAddressesString);
     }).done();
 };
 
@@ -77,7 +75,7 @@ BridgeConnection.prototype.deviceDiscovery = function(message) {
                     queryArray.push(matchField + '=' + discoveredDevice[matchField]);
                 }
             });
-            var deviceQueryURL = self.config.djangoURL + "device/" + '?' + queryArray.join('&');
+            var deviceQueryURL = self.djangoURL + "device/" + '?' + queryArray.join('&');
 
             var address = discoveredDevice.address || discoveredDevice.mac_addr;
             console.log('discovered address is', address);

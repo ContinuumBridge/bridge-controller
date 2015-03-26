@@ -1,107 +1,93 @@
 
-require('../../components/buttons');
+Portal.DiscoveredDeviceView = React.createClass({
 
+    mixins: [Portal.ItemView],
 
-/*
-CBApp.DiscoveredDeviceView = React.createClass({
-    mixins: [React.ItemView]
-});
-
-CBApp.DiscoveredDeviceListView = React.createClass({
-    mixins: [React.CollectionView]
-});
-*/
-
-CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
-
-    template: require('./templates/installButton.html'),
-
-    extraClass: "install-button",
-
-    initialize: function() {
-
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    onClick: function(e) {
+    getInitialState: function () {
+        var buttons = [];
 
-        e.preventDefault();
-        CBApp.Config.controller.installDevice(this.model);
+        var discoveredDevice = this.getModel();
+        var device = discoveredDevice.get('device');
+        if (device && device.get('adaptorCompatibilities').at(0)) {
+            buttons.push({
+                onClick: this.installDevice,
+                type: 'text',
+                label: 'Install'
+            });
+        } else {
+            buttons.push({
+                type: 'text',
+                label: 'Unknown Device',
+                disabled: true
+            });
+        }
+
+        //var installLabel = this.props.model.device ? 'Install' : 'Device not found'
+        return {
+            buttons: buttons
+        };
     },
 
-    getContent: function() {
+    installDevice: function() {
 
-        return this.model.get('device') ? 'Install' : 'Request an adaptor';
-    },
-
-    onRender: function() {
-
-        this.stickit();
+        console.log('click installDevice');
+        var discoveredDevice = this.getModel();
+        console.log('installDevice discoveredDevice', discoveredDevice);
+        Portal.router.setParams({action: 'install-device',
+                                 item: discoveredDevice.get('id')});
     }
 });
 
-CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/discoveredDevice.html'),
-    //template: '#discoveredDeviceItemViewTemplate',
+Portal.DiscoveredDeviceListView = React.createClass({
 
-    bindings: {
-        '.device-address': {
-            observe: ['mac_addr', 'address'],
-            onGet: 'formatAddress'
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Discovered Devices',
+            buttons: [{
+                name: 'Rescan',
+                type: 'bold',
+                onClick: this.rescan
+            }, {
+                name: 'Back to my devices',
+                onClick: this.stopDiscoveringDevices
+            }]
+        };
+    },
+
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo device discovery', transition, params);
         }
     },
 
-    initialize: function() {
+    stopDiscoveringDevices: function() {
 
-        this.installButton = new CBApp.Components.DeviceInstallButton({
-            model: this.model
-        });
+        Portal.router.setParams({});
+        //Portal.Config.controller.stopDiscoveringDevices();
     },
 
-    formatAddress: function(address) {
+    rescan: function() {
 
-        // Retain backwards compatibility with using mac_addr
-        var addr = address[0] || address[1];
-        return addr.slice(addr.length-5);
+        this.props.rescan();
+        //Portal.Config.controller.discoverDevices();
     },
 
-    onRender: function() {
+    renderItem: function (item) {
 
-        this.stickit();
-        var device = this.model.get('device');
-        this.stickit(device, {'.device-name': 'name'});
+        var model = this.getCollection().findWhere({id: item.id});
+        //var title = model.get('device') ? name : name + " (Unknown device)";
+        var title = item.name;
+        var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
 
-        this.installButton.setElement(this.$('.install-button')).render();
-    },
-});
-
-
-CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/discoveredDeviceSection.html'),
-    itemView: CBApp.DiscoveredDeviceItemView,
-    itemViewContainer: '#discovered-device-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #devices': 'clickDevices',
-        'click #rescan': 'clickDiscover'
-    },
-
-    clickDevices: function() {
-
-        CBApp.Config.controller.stopDiscoveringDevices();
-    },
-
-    clickDiscover: function() {
-
-        CBApp.Config.controller.discoverDevices();
-    },
-
-    onRender : function(){
-
+        return < Portal.DiscoveredDeviceView key={item.cid}
+                    title={title} subtitle={subtitle} model={item} />
     }
 });

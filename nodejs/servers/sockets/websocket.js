@@ -9,14 +9,14 @@ var backendAuth = require('../../backendAuth.js')
     ,Errors = require('../../errors')
     ;
 
-function WSServer(port, getConfig, djangoURL) {
+function WSServer(getConfig, options) {
 
     var httpServer = http.createServer(function(request, response) {
         console.log((new Date()) + ' Received request for ' + request.url);
         response.writeHead(404);
         response.end();
     });
-    httpServer.listen(port, function() {
+    httpServer.listen(options.port, function() {
         console.log((new Date()) + ' Server is listening on port 8080');
     });
 
@@ -108,6 +108,11 @@ var WSSocket = function(ws) {
         }
         //socket.sendUTF(message.utf8Data);
     });
+
+    this.server = {};
+    this.server.to = function() {
+        return self;
+    }
 }
 
 WSSocket.prototype.__proto__ = EventEmitter.prototype;
@@ -121,3 +126,4 @@ WSSocket.prototype.emit = function(ev) {
         this.ws.sendUTF(args.join())
     }
 }
+

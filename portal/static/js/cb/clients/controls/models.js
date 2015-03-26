@@ -1,36 +1,26 @@
 
-CBApp.ClientControl = Backbone.Deferred.Model.extend({
+Portal.ClientControl = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'clientControl',
 
     relations: [
-        {   
-            type: Backbone.HasOne,
-            key: 'user',
-            keySource: 'user',
-            keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'userCollection',
-        },
-        {   
+
+        {
             type: Backbone.HasOne,
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'clientControls',
-                collectionType: 'CBApp.ClientCollection',
+                collectionType: 'Portal.ClientCollection',
                 includeInJSON: false,
                 initializeCollection: 'clientCollection',
             }   
@@ -38,14 +28,14 @@ CBApp.ClientControl = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "clientControl" });
 
-CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
+Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.ClientControl,
+    model: Portal.ClientControl,
     backend: 'clientControl',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.ClientControlCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientControlCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){

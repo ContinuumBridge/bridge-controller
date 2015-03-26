@@ -103,6 +103,8 @@ header {
       left: 3px;
     }
     .navbar .container .collapse .nav .dropdown .dropdown-menu {
+      max-height: 1500%;
+      overflow: auto;
       background: #252528;
       -webkit-border-radius: 6px;
       -moz-border-radius: 6px;

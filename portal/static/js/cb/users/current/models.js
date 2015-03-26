@@ -1,169 +1,41 @@
 
 require('../models');
 
-//CBApp.CurrentUser = Backbone.Deferred.Model.extend({
-/*
-CBApp.CurrentUser = CBApp.User.extend({
+Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
 
     backend: 'currentUser',
 
-    //partOfModel: CBApp.User,
-
-    initialize: function() {
-
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
-
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection'
-        }
-    ]
-
-});
-*/
-
-CBApp.currentUserDeferred = Q.defer();
-
-CBApp.getCurrentUser = function() {
-
-    /*
-    var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
-
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
-    }
-
-    return user;
-    */
-    return CBApp.currentUserDeferred.promise;
-};
-
-//CBApp.U = Backbone.RelationalModel.extend({
-//CBApp.U = Backbone.Deferred.Model.extend({
-
-//CBApp.CurrentUser = CBApp.User.extend({
-//CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
-CBApp.CurrentUser = CBApp.User.extend({
-
-    idAttribute: 'id',
-
-    backend: 'currentUser',
-
+    //partOfModel: Portal.User,
     defaults: {
-        type: 'loggedInUser'
+        type: 'currentUser'
     },
 
-    //partOfModel: CBApp.User,
+    relations: Portal.User.prototype.relations.concat([{}]),
 
     initialize: function() {
 
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
+        var self = this;
         /*
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
-        })
+        });
         */
 
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeControlCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'appOwnerships',
-            keySource: 'app_ownerships',
-            keyDestination: 'app_ownerships',
-            relatedModel: 'CBApp.AppOwnership',
-            collectionType: 'CBApp.AppOwnershipCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appOwnershipCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'clientControls',
-            keySource: 'client_controls',
-            keyDestination: 'client_controls',
-            relatedModel: 'CBApp.ClientControl',
-            collectionType: 'CBApp.ClientControlCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'clientControlCollection'
-        }
-    ]
+        this.listenTo(this.get('appOwnerships'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
+    }
 }, { modelType: "currentUser" });
 
-CBApp.CurrentUserCollection = Backbone.QueryCollection.extend({
+Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
-    model: CBApp.CurrentUser,
+    model: Portal.CurrentUser,
     backend: 'currentUser',
 
     initialize: function() {
         this.bindBackend();
-    },
-
-    parse : function(response){
-        return response.objects;
     }
 });
 

@@ -1,90 +1,88 @@
 
-require('../../components/buttons');
+require('../../users/views');
 
-require('../connections/views');
+Portal.AppOwnershipView = React.createClass({
 
-CBApp.AppOwnershipView = Marionette.ItemView.extend({
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/ownership.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-        //'click .install-button': 'toggleCurrentInstall'
-    },
-
-    bindings: {
-        '.installs-permitted': 'installs_permitted'
-    },
-
-    appBindings: {
-        '.app-name': 'name',
-        '.edit-button': {
-            attributes: [{
-                name: 'data-target',
-                observe: 'cbid',
-                onGet: function(value, options) {
-                    return "#" + value;
-                }
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.disown
             }]
-        },
-        '.app-config': {
-            attributes: [{
-                name: 'id',
-                observe: 'cbid'
-            }]
-        }
+        };
     },
 
-    appConnectionBindings: {
-        '.installs-remaining': {
-            observe: ['change', 'change:relational', 'isGhost'],
-            onGet: 'getInstallsRemaining'
-        }
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    initialize: function() {
+    disown: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    renderBody: function() {
 
         var self = this;
 
-        this.app = this.model.get('app');
+        console.log('AppOwnershipView renderBody');
 
-        this.appConnectionListView =
-            new CBApp.AppConnectionListView({
-                appOwnership: this.model
+        var app = this.props.app;
+
+        var licences = app.get('appLicences');
+
+        var users = Portal.userCollection;
+            /*
+            .getFiltered('search', function(model, searchString) {
+                //return !model.isNew();
+                var searchRegex = QueryEngine.createSafeRegex(searchString)
+                var pass = searchRegex.test(model.get('title'));// || searchRegex.test(model.get('content'))
+                return pass
             });
+            */
+
+        return (
+            <Portal.UserLicenceTableView collection={users} app={app} size="small" />
+        );
+    }
+});
+
+Portal.AppOwnershipListView = React.createClass({
+
+    itemView: Portal.AppOwnershipView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps',
+            buttons: [{
+                name: 'Create App',
+                onClick: this.createApp,
+                type: 'bold'
+            }]
+        };
     },
 
-    onRender : function() {
+    createApp: function() {
+        Portal.router.setParams({action: 'create-app'});
+    },
 
-        var self = this;
+    renderItem: function (item) {
+        var cid = item.cid;
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        var appOwnershipCollection = this.getCollection()
+        var appOwnership = appOwnershipCollection.get({cid: cid});
 
-            var clientControls = currentUser.get('clientControls');
-            self.appConnectionListView.setCollection(clientControls);
-            var $clientConnections = self.$('.client-connections');
-            self.appConnectionListView.setElement($clientConnections).render();
-        }).done();
+        var app = appOwnership.get('app');
+        var title = app.get('name');
 
-        console.log('AppOwnershipView render', this);
-        this.stickit();
-        this.stickit(this.app, this.appBindings);
+        return < Portal.AppOwnershipView key={cid} title={title}
+                    model={appOwnership} app={app} />
     }
 });
 
-
-CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/ownershipSection.html'),
-    itemView: CBApp.AppOwnershipView,
-    itemViewContainer: '.app-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    onRender : function(){
-
-        console.log('AppLicenceListView', this.collection);
-    }
-});

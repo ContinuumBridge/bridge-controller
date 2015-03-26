@@ -1,40 +1,14 @@
 
-from django.core.exceptions import MultipleObjectsReturned, ValidationError
-
-from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden
-from django.conf.urls import url
-
-from django.conf.urls import patterns, url, include
-from django.http import HttpResponse, HttpResponseNotFound, Http404
-
-from tastypie.resources import ModelResource
-from tastypie.authorization import Authorization
-from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.exceptions import Unauthorized
-from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
-from tastypie.utils import is_valid_jsonp_callback_value, dict_strip_unicode_keys
 from tastypie import fields
 
-from tastypie.resources import ObjectDoesNotExist
-from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
-from tastypie import http
-
-from accounts.api.authorization import CurrentUserAuthorization
-from apps.api.resources import AppInstallResource
-from devices.api.resources import DeviceInstallResource
-
-from accounts.models import CBUser
 from bridges.models import Bridge, BridgeControl
 
-from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
 from bridge_controller.api.resources import CBResource, ThroughModelResource, AuthResource, LoggedInResource, CBIDResourceMixin
 
 from bridges.models import Bridge
 
-from .authorization import BridgeControlAuthorization
+from .authorization import BridgeControlAuthorization, BridgeAuthorization
 
 class BridgeControlResource(CBResource, CBIDResourceMixin):
 
@@ -48,24 +22,60 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
         #related_user_permissions = ['read', 'create', 'update', 'delete']
         related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
+def controlled_by_client(bundle):
+    #print "bundle.request.META['REQUEST_METHOD'] is", bundle.request
+    #if bundle.request.META['REQUEST_METHOD'] == "GET":
+    try:
+        return getattr(bundle, 'controlled_by_client')
+    except AttributeError:
+        try:
+            getattr(bundle, 'request')
+            controlled = bundle.obj.is_controlled_by(bundle.request.user)
+            bundle.controlled_by_client = controlled
+            return controlled
+        except AttributeError:
+            # The request is being made by the system
+            return True
+
+    #else:
+    #    return False
 
 class BridgeResource(CBResource, CBIDResourceMixin):
 
+    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
+                                 'controls', full=True, null=True, use_in=controlled_by_client)
+
+    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                 'app_installs', full=True, null=True, use_in=controlled_by_client)
+
+    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
+                                 'device_installs', full=True, null=True, use_in=controlled_by_client)
+
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
-        #authorization = BridgeAuthorization()
+        authorization = BridgeAuthorization()
+        #authorization = ReadOnlyAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
         fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
-        user_related_through = 'bridge_controls'
+        user_related_through = 'controls'
+        create_user_through_model = True
         related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge'
 
     def obj_create(self, bundle, **kwargs):
 
+        print "obj_create bundle type", type(bundle)
+        print "obj_create bundle", bundle
+        print "obj_create bundle obj", bundle.obj
+        print "obj_create bundle data", bundle.data
+
         # ADDED Create a bridge using manager method, but don't save it
         bundle.obj = Bridge.objects.create_bridge(save=False)
 
         bundle = self.full_hydrate(bundle)
+
+        # ADDED Create a bridge control to the current user
+        #self.create_user_through_model(bundle)
 
         return self.save(bundle)
 
@@ -78,30 +88,21 @@ class BridgeResource(CBResource, CBIDResourceMixin):
 
 
 class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
-    
-    controllers = cb_fields.ToManyThroughField(BridgeControlResource, 
-                    attribute=lambda bundle: bundle.obj.get_controllers() or bundle.obj.bridgecontrol_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
 
-    apps = cb_fields.ToManyThroughField(AppInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
-                    null=True, readonly=True, nonmodel=True)
+    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
+                                 'controls', full=True, use_in=controlled_by_client)
 
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource, 
-                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
+    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                 'app_installs', full=True, use_in=controlled_by_client)
+
+    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
+                                 'device_installs', full=True, use_in=controlled_by_client)
 
     class Meta(LoggedInResource.Meta):
         queryset = Bridge.objects.all()
         #fields = ['id', 'email', 'name', 'date_joined', 'last_login']
         excludes = ['key', 'plaintext_key']
         resource_name = 'current_bridge'
-
-    '''
-    def dehydrate(self, bundle):
-        bundle.data['cbid'] = "BID" + str(bundle.obj.id)
-        return bundle
-    '''
 
 
 class BridgeAuthResource(AuthResource, CBIDResourceMixin):
@@ -114,6 +115,7 @@ class BridgeAuthResource(AuthResource, CBIDResourceMixin):
         data_resource = CurrentBridgeResource()
         fields = ['first_name', 'last_name']
         resource_name = 'auth'
+
 
 class BridgeAuthAliasResource(BridgeAuthResource):
 

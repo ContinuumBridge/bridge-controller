@@ -1,5 +1,5 @@
 
-CBApp.AppOwnership = Backbone.Deferred.Model.extend({
+Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -9,33 +9,42 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appOwnership',
-                includeInJSON: 'resource_uri'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                includeInJSON: 'resource_uri',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
+                initializeCollection: 'appOwnershipCollection'
             }
         },
+        /*
         {
             type: Backbone.HasOne,
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
-            includeInJSON: 'resource_uri'
-            /*
+            includeInJSON: 'resource_uri',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
             }
-            */
         }
+        */
     ],
 
     initialize: function() {
@@ -50,18 +59,20 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appOwnership" });
 
-CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppOwnership,
-    backend: 'appOwnership',
+    model: Portal.AppOwnership,
+    backend: 'appOwnership'
 
+    /*
     initialize: function() {
         this.bindBackend();
 
-        CBApp.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){
         return response.objects;
     }
+    */
 });

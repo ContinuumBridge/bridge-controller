@@ -1,96 +1,93 @@
 
 require('../device_permissions/views');
 
-CBApp.AppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallView = React.createClass({
 
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/appInstall.html'),
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-    events: {
-        //'click': 'eventWrapperClick',
-        'click .uninstall-button': 'uninstall'
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.uninstall
+            }]
+        };
     },
 
-    initialize: function() {
-
-        this.staffView = new CBApp.StaffAppInstallView({
-            model: this.model
-        });
-        this.staffView.licenceOwner = this.model.get('licence').get('user');
-        this.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
-                appInstall: this.model
-            });
-    },
-
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "AID" + app.get('id');
-      return data;
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
     uninstall: function() {
 
-        console.log('uninstall in install view', this.model);
-        this.model.uninstall();
+        this.toggleExistenceOnServer(this.props.model);
     },
 
-    onRender : function(){
+    renderBody: function() {
 
-        console.log('AppInstallView render', this);
         var self = this;
 
-        this.staffView.setElement(this.$('.staff-panel')).render();
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        var devicePermissions = appInstall.get('devicePermissions');
 
-            console.log('AppInstall', currentBridge);
-            var deviceInstalls = currentBridge.get('deviceInstalls');
-            self.appDevicePermissionListView.setCollection(deviceInstalls);
-            var $appConfig = self.$('.user-panel');
-            console.log('$appConfig is', $appConfig);
-            self.appDevicePermissionListView.setElement($appConfig).render();
-        }).done();
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+        });
+
+        return (
+            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+        );
     }
 });
 
-CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallListView = React.createClass({
 
-    tagName: 'table',
-    template: require('./templates/staffAppInstall.html'),
+    itemView: Portal.AppInstallView,
 
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licenceOwner) {
-            this.stickit(this.licenceOwner, this.licenceOwnerBindings);
-        }
-    }
-});
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-CBApp.AppInstallListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appInstallSection.html'),
-    itemView: CBApp.AppInstallView,
-    itemViewContainer: '.app-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #install-apps': 'showLicences'
+    getInitialState: function () {
+        return {
+            title: 'Apps',
+            buttons: [{
+                name: 'Install Apps',
+                onClick: this.installApps,
+                type: 'bold'
+            }]
+        };
     },
 
-    showLicences: function() {
-        console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
+    installApps: function() {
+        Portal.router.setParams({action: 'install-app'});
     },
 
-    onRender : function(){
+    renderItem: function (item) {
 
+        var cid = item.cid;
+
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return < Portal.AppInstallView key={cid} title={title}
+            deviceInstalls={deviceInstalls} model={appInstall} />
     }
 });

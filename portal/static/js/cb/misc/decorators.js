@@ -1,5 +1,5 @@
 
-CBApp.FilteredCollection = function(original){
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
     
     // allow this object to have it's own events
@@ -57,7 +57,7 @@ CBApp.FilteredCollection = function(original){
     return filtered;
 }
 
-CBApp.FilteredCollection = function(original){
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
 
     // allow this object to have it's own events

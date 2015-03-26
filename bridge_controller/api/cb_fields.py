@@ -129,7 +129,7 @@ class ToManyThroughField(ToManyField):
         #elif callable(self.attribute):
         the_m2ms = self.attribute(bundle)
         #print "it is callable"
-        print "The m2ms iss %r" % the_m2ms
+        #print "The m2ms iss %r" % the_m2ms
 
         #print "the_m2ms is %r" % the_m2ms
 

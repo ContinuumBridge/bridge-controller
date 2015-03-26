@@ -1,6 +1,6 @@
 
-var _ = require('underscore')
-    ;
+//var _ = require('underscore')
+//    ;
 
 // Create local references to array methods we'll want to use later.
 var array = [];
@@ -146,33 +146,5 @@ _.each(modelMethods, function(method) {
       return _[method].apply(_, args);
     };
 });
-
-/*
-m = new Message({
-    test2: 'Test value 2!'
-});
-
-n = new Message('{"test3": "testJSON"}');
-
-m.set('test', 'test value 1');
-m.set('test2', 'test value 2');
-m.set('test3', 'test value 3');
-
-console.log('test is ', m.get('test'));
-console.log('test2 is ', m.get('test2'));
-console.log('test3 is ', m.get('test3'));
-
-//m.pick()
-
-console.log('test3 is ', n.get('test3'));
-*/
-
-/*
-repl.start({
-    prompt: "node via stdin> ",
-    input: process.stdin,
-    output: process.stdout
-});
-*/
 
 module.exports = Message;

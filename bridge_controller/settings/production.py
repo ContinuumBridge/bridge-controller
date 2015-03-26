@@ -1,11 +1,11 @@
 from bridge_controller.settings.base import *
 
 ENVIRONMENT = "production"
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-#SERVER_ADDRESS = 'portal.continuumbridge.com'
-SERVER_ADDRESS = '54.76.145.70'
+SERVER_ADDRESS = 'portal.continuumbridge.com'
+#SERVER_ADDRESS = '54.76.145.70'
 
 DATABASES = {
     'default': {

@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.conf.urls import url, include
 
 from tastypie import fields
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.utils import trailing_slash
 from tastypie.resources import ModelResource, convert_post_to_put, convert_post_to_VERB
@@ -15,23 +16,19 @@ from bridge_controller.api import cb_fields
 from bridges.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api.resources import CBResource, CBIDResourceMixin, ThroughModelResource, AuthResource, LoggedInResource
 from accounts.api.authorization import CurrentUserAuthorization
-from .bridge_resources import UserBridgeControlResource
+#from .bridge_resources import UserBridgeControlResource
 
 class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
-    bridge_controls = cb_fields.ToManyThroughField(UserBridgeControlResource,
-                    attribute=lambda bundle: bundle.obj.get_bridge_controls() or bundle.obj.bridge_controls, full=True,
-                    null=True, readonly=True, nonmodel=True)
+    bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserBridgeControlResource',
+                                         'bridge_controls', full=True)
 
-    '''
-    app_licences = cb_fields.ToManyThroughField(AppLicenceResource,
-                     attribute=lambda bundle: bundle.obj.get_app_licences() or bundle.obj.applicence_set, full=True,
-                     null=True, readonly=True, nonmodel=True)
+    #client_controls = fields.ToManyField('accounts.api.client_resources.UserClientControlResource',
+    #                                     'client_controls', full=True)
 
-    app_ownerships = cb_fields.ToManyThroughField(AppOwnershipResource,
-                                                attribute=lambda bundle: bundle.obj.get_app_ownerships() or bundle.obj.appownership_set, full=True,
-                                                null=True, readonly=True, nonmodel=True)
-    '''
+    app_licences = fields.ToManyField('apps.api.resources.AppLicenceResource', 'app_licences', full=True)
+
+    #app_ownerships = fields.ToManyField('apps.api.resources.AppOwnershipResource', 'app_ownerships', full=True)
 
     class Meta(LoggedInResource.Meta):
         resource_name = 'current_user'
@@ -48,19 +45,26 @@ class CurrentUserResource(LoggedInResource, CBIDResourceMixin):
 
 class UserResource(CBResource, CBIDResourceMixin):
 
+    app_licences = fields.ToManyField('accounts.api.app_resources.UserAppLicenceResource', 'app_licences', full=True)
+
     class Meta(CBResource.Meta):
-        resource_name = 'user'
         queryset = CBUser.objects.all()
         fields = ['id', 'cbid', 'email', 'first_name', 'last_name', 'date_joined', 'last_login']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = ReadOnlyAuthorization()
+        filtering = {
+            "first_name": ALL,
+            "last_name": ALL,
+            "email": ALL
+        }
+        resource_name = 'user'
 
 
 class UserAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows users to login and logout """
 
-    bridges = fields.ToManyField('accounts.api.bridge_resources.UserAuthBridgeControlResource', 'bridge_controls', full=True)
+    bridge_controls = fields.ToManyField('accounts.api.bridge_resources.UserAuthBridgeControlResource', 'bridge_controls', full=True)
 
     class Meta(AuthResource.Meta):
         queryset = CBUser.objects.all()

@@ -1,14 +1,15 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./portal/static/js/main.js":[function(require,module,exports){
 
-var $ = require('jquery-browserify');
-
 var CBApp = require('index');
+require('./cb/views/mixins/mixins');
+require('./cb/views/components/components');
 require('./cb/modules/config/config');
+//require('./cb/views/dashboard');
 require('./cb/modules/developer/developer');
 require('./cb/modules/home/home');
-require('./cb/modules/store/store');
+require('./cb/modules/market/market');
 require('./cb/modules/nav/nav');
-require('./cb/modules/notifications/notifications');
+//require('./cb/modules/notifications/notifications');
 require('./cb/socket');
 require('./cb/models');
 //require('./cb/views');
@@ -16,13 +17,13 @@ require('./cb/models');
 (function($){
 	$(document).ready(function() {
 
-        CBApp.start();
+        Portal.start();
 	});
 })(jQuery);
 
 
 
-},{"./cb/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/nav/nav":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/modules/notifications/notifications":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js","./cb/modules/store/store":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/store.js","./cb/socket":"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","jquery-browserify":"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js"}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{"./cb/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js","./cb/modules/config/config":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js","./cb/modules/developer/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js","./cb/modules/home/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js","./cb/modules/market/market":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js","./cb/modules/nav/nav":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js","./cb/socket":"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js","./cb/views/components/components":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/components.js","./cb/views/mixins/mixins":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/mixins.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -565,9341 +566,7 @@ module.exports = require('./dist/cjs/handlebars.runtime');
 },{"./dist/cjs/handlebars.runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/dist/cjs/handlebars.runtime.js"}],"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js":[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/runtime.js"}],"/home/ubuntu/bridge-controller/node_modules/jquery-browserify/lib/jquery.js":[function(require,module,exports){
-// Uses Node, AMD or browser globals to create a module.
-
-// If you want something that will work in other stricter CommonJS environments,
-// or if you need to create a circular dependency, see commonJsStrict.js
-
-// Defines a module "returnExports" that depends another module called "b".
-// Note that the name of the module is implied by the file name. It is best
-// if the file name and the exported global have matching names.
-
-// If the 'b' module also uses this type of boilerplate, then
-// in the browser, it will create a global .b that is used below.
-
-// If you do not want to support the browser global path, then you
-// can remove the `root` use and the passing `this` as the first arg to
-// the top function.
-
-(function (root, factory) {
-    if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory();
-    } else if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else {
-        // Browser globals
-        root.returnExports = factory();
-    }
-}(this, function () {/*!
- * jQuery JavaScript Library v1.8.1
- * http://jquery.com/
- *
- * Includes Sizzle.js
- * http://sizzlejs.com/
- *
- * Copyright 2012 jQuery Foundation and other contributors
- * Released under the MIT license
- * http://jquery.org/license
- *
- * Date: Thu Aug 30 2012 17:17:22 GMT-0400 (Eastern Daylight Time)
- */
-return (function( window, undefined ) {
-var
-	// A central reference to the root jQuery(document)
-	rootjQuery,
-
-	// The deferred used on DOM ready
-	readyList,
-
-	// Use the correct document accordingly with window argument (sandbox)
-	document = window.document,
-	location = window.location,
-	navigator = window.navigator,
-
-	// Map over jQuery in case of overwrite
-	_jQuery = window.jQuery,
-
-	// Map over the $ in case of overwrite
-	_$ = window.$,
-
-	// Save a reference to some core methods
-	core_push = Array.prototype.push,
-	core_slice = Array.prototype.slice,
-	core_indexOf = Array.prototype.indexOf,
-	core_toString = Object.prototype.toString,
-	core_hasOwn = Object.prototype.hasOwnProperty,
-	core_trim = String.prototype.trim,
-
-	// Define a local copy of jQuery
-	jQuery = function( selector, context ) {
-		// The jQuery object is actually just the init constructor 'enhanced'
-		return new jQuery.fn.init( selector, context, rootjQuery );
-	},
-
-	// Used for matching numbers
-	core_pnum = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source,
-
-	// Used for detecting and trimming whitespace
-	core_rnotwhite = /\S/,
-	core_rspace = /\s+/,
-
-	// Make sure we trim BOM and NBSP (here's looking at you, Safari 5.0 and IE)
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-
-	// A simple way to check for HTML strings
-	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
-	rquickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
-
-	// Match a standalone tag
-	rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
-
-	// JSON RegExp
-	rvalidchars = /^[\],:{}\s]*$/,
-	rvalidbraces = /(?:^|:|,)(?:\s*\[)+/g,
-	rvalidescape = /\\(?:["\\\/bfnrt]|u[\da-fA-F]{4})/g,
-	rvalidtokens = /"[^"\\\r\n]*"|true|false|null|-?(?:\d\d*\.|)\d+(?:[eE][\-+]?\d+|)/g,
-
-	// Matches dashed string for camelizing
-	rmsPrefix = /^-ms-/,
-	rdashAlpha = /-([\da-z])/gi,
-
-	// Used by jQuery.camelCase as callback to replace()
-	fcamelCase = function( all, letter ) {
-		return ( letter + "" ).toUpperCase();
-	},
-
-	// The ready event handler and self cleanup method
-	DOMContentLoaded = function() {
-		if ( document.addEventListener ) {
-			document.removeEventListener( "DOMContentLoaded", DOMContentLoaded, false );
-			jQuery.ready();
-		} else if ( document.readyState === "complete" ) {
-			// we're here because readyState === "complete" in oldIE
-			// which is good enough for us to call the dom ready!
-			document.detachEvent( "onreadystatechange", DOMContentLoaded );
-			jQuery.ready();
-		}
-	},
-
-	// [[Class]] -> type pairs
-	class2type = {};
-
-jQuery.fn = jQuery.prototype = {
-	constructor: jQuery,
-	init: function( selector, context, rootjQuery ) {
-		var match, elem, ret, doc;
-
-		// Handle $(""), $(null), $(undefined), $(false)
-		if ( !selector ) {
-			return this;
-		}
-
-		// Handle $(DOMElement)
-		if ( selector.nodeType ) {
-			this.context = this[0] = selector;
-			this.length = 1;
-			return this;
-		}
-
-		// Handle HTML strings
-		if ( typeof selector === "string" ) {
-			if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-				// Assume that strings that start and end with <> are HTML and skip the regex check
-				match = [ null, selector, null ];
-
-			} else {
-				match = rquickExpr.exec( selector );
-			}
-
-			// Match html or make sure no context is specified for #id
-			if ( match && (match[1] || !context) ) {
-
-				// HANDLE: $(html) -> $(array)
-				if ( match[1] ) {
-					context = context instanceof jQuery ? context[0] : context;
-					doc = ( context && context.nodeType ? context.ownerDocument || context : document );
-
-					// scripts is true for back-compat
-					selector = jQuery.parseHTML( match[1], doc, true );
-					if ( rsingleTag.test( match[1] ) && jQuery.isPlainObject( context ) ) {
-						this.attr.call( selector, context, true );
-					}
-
-					return jQuery.merge( this, selector );
-
-				// HANDLE: $(#id)
-				} else {
-					elem = document.getElementById( match[2] );
-
-					// Check parentNode to catch when Blackberry 4.6 returns
-					// nodes that are no longer in the document #6963
-					if ( elem && elem.parentNode ) {
-						// Handle the case where IE and Opera return items
-						// by name instead of ID
-						if ( elem.id !== match[2] ) {
-							return rootjQuery.find( selector );
-						}
-
-						// Otherwise, we inject the element directly into the jQuery object
-						this.length = 1;
-						this[0] = elem;
-					}
-
-					this.context = document;
-					this.selector = selector;
-					return this;
-				}
-
-			// HANDLE: $(expr, $(...))
-			} else if ( !context || context.jquery ) {
-				return ( context || rootjQuery ).find( selector );
-
-			// HANDLE: $(expr, context)
-			// (which is just equivalent to: $(context).find(expr)
-			} else {
-				return this.constructor( context ).find( selector );
-			}
-
-		// HANDLE: $(function)
-		// Shortcut for document ready
-		} else if ( jQuery.isFunction( selector ) ) {
-			return rootjQuery.ready( selector );
-		}
-
-		if ( selector.selector !== undefined ) {
-			this.selector = selector.selector;
-			this.context = selector.context;
-		}
-
-		return jQuery.makeArray( selector, this );
-	},
-
-	// Start with an empty selector
-	selector: "",
-
-	// The current version of jQuery being used
-	jquery: "1.8.1",
-
-	// The default length of a jQuery object is 0
-	length: 0,
-
-	// The number of elements contained in the matched element set
-	size: function() {
-		return this.length;
-	},
-
-	toArray: function() {
-		return core_slice.call( this );
-	},
-
-	// Get the Nth element in the matched element set OR
-	// Get the whole matched element set as a clean array
-	get: function( num ) {
-		return num == null ?
-
-			// Return a 'clean' array
-			this.toArray() :
-
-			// Return just the object
-			( num < 0 ? this[ this.length + num ] : this[ num ] );
-	},
-
-	// Take an array of elements and push it onto the stack
-	// (returning the new matched element set)
-	pushStack: function( elems, name, selector ) {
-
-		// Build a new jQuery matched element set
-		var ret = jQuery.merge( this.constructor(), elems );
-
-		// Add the old object onto the stack (as a reference)
-		ret.prevObject = this;
-
-		ret.context = this.context;
-
-		if ( name === "find" ) {
-			ret.selector = this.selector + ( this.selector ? " " : "" ) + selector;
-		} else if ( name ) {
-			ret.selector = this.selector + "." + name + "(" + selector + ")";
-		}
-
-		// Return the newly-formed element set
-		return ret;
-	},
-
-	// Execute a callback for every element in the matched set.
-	// (You can seed the arguments with an array of args, but this is
-	// only used internally.)
-	each: function( callback, args ) {
-		return jQuery.each( this, callback, args );
-	},
-
-	ready: function( fn ) {
-		// Add the callback
-		jQuery.ready.promise().done( fn );
-
-		return this;
-	},
-
-	eq: function( i ) {
-		i = +i;
-		return i === -1 ?
-			this.slice( i ) :
-			this.slice( i, i + 1 );
-	},
-
-	first: function() {
-		return this.eq( 0 );
-	},
-
-	last: function() {
-		return this.eq( -1 );
-	},
-
-	slice: function() {
-		return this.pushStack( core_slice.apply( this, arguments ),
-			"slice", core_slice.call(arguments).join(",") );
-	},
-
-	map: function( callback ) {
-		return this.pushStack( jQuery.map(this, function( elem, i ) {
-			return callback.call( elem, i, elem );
-		}));
-	},
-
-	end: function() {
-		return this.prevObject || this.constructor(null);
-	},
-
-	// For internal use only.
-	// Behaves like an Array's method, not like a jQuery method.
-	push: core_push,
-	sort: [].sort,
-	splice: [].splice
-};
-
-// Give the init function the jQuery prototype for later instantiation
-jQuery.fn.init.prototype = jQuery.fn;
-
-jQuery.extend = jQuery.fn.extend = function() {
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0] || {},
-		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	}
-
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !jQuery.isFunction(target) ) {
-		target = {};
-	}
-
-	// extend jQuery itself if only one argument is passed
-	if ( length === i ) {
-		target = this;
-		--i;
-	}
-
-	for ( ; i < length; i++ ) {
-		// Only deal with non-null/undefined values
-		if ( (options = arguments[ i ]) != null ) {
-			// Extend the base object
-			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
-
-				// Prevent never-ending loop
-				if ( target === copy ) {
-					continue;
-				}
-
-				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
-					if ( copyIsArray ) {
-						copyIsArray = false;
-						clone = src && jQuery.isArray(src) ? src : [];
-
-					} else {
-						clone = src && jQuery.isPlainObject(src) ? src : {};
-					}
-
-					// Never move original objects, clone them
-					target[ name ] = jQuery.extend( deep, clone, copy );
-
-				// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
-					target[ name ] = copy;
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
-};
-
-jQuery.extend({
-	noConflict: function( deep ) {
-		if ( window.$ === jQuery ) {
-			window.$ = _$;
-		}
-
-		if ( deep && window.jQuery === jQuery ) {
-			window.jQuery = _jQuery;
-		}
-
-		return jQuery;
-	},
-
-	// Is the DOM ready to be used? Set to true once it occurs.
-	isReady: false,
-
-	// A counter to track how many items to wait for before
-	// the ready event fires. See #6781
-	readyWait: 1,
-
-	// Hold (or release) the ready event
-	holdReady: function( hold ) {
-		if ( hold ) {
-			jQuery.readyWait++;
-		} else {
-			jQuery.ready( true );
-		}
-	},
-
-	// Handle when the DOM is ready
-	ready: function( wait ) {
-
-		// Abort if there are pending holds or we're already ready
-		if ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {
-			return;
-		}
-
-		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-		if ( !document.body ) {
-			return setTimeout( jQuery.ready, 1 );
-		}
-
-		// Remember that the DOM is ready
-		jQuery.isReady = true;
-
-		// If a normal DOM Ready event fired, decrement, and wait if need be
-		if ( wait !== true && --jQuery.readyWait > 0 ) {
-			return;
-		}
-
-		// If there are functions bound, to execute
-		readyList.resolveWith( document, [ jQuery ] );
-
-		// Trigger any bound ready events
-		if ( jQuery.fn.trigger ) {
-			jQuery( document ).trigger("ready").off("ready");
-		}
-	},
-
-	// See test/unit/core.js for details concerning isFunction.
-	// Since version 1.3, DOM methods and functions like alert
-	// aren't supported. They return false on IE (#2968).
-	isFunction: function( obj ) {
-		return jQuery.type(obj) === "function";
-	},
-
-	isArray: Array.isArray || function( obj ) {
-		return jQuery.type(obj) === "array";
-	},
-
-	isWindow: function( obj ) {
-		return obj != null && obj == obj.window;
-	},
-
-	isNumeric: function( obj ) {
-		return !isNaN( parseFloat(obj) ) && isFinite( obj );
-	},
-
-	type: function( obj ) {
-		return obj == null ?
-			String( obj ) :
-			class2type[ core_toString.call(obj) ] || "object";
-	},
-
-	isPlainObject: function( obj ) {
-		// Must be an Object.
-		// Because of IE, we also have to check the presence of the constructor property.
-		// Make sure that DOM nodes and window objects don't pass through, as well
-		if ( !obj || jQuery.type(obj) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
-			return false;
-		}
-
-		try {
-			// Not own constructor property must be Object
-			if ( obj.constructor &&
-				!core_hasOwn.call(obj, "constructor") &&
-				!core_hasOwn.call(obj.constructor.prototype, "isPrototypeOf") ) {
-				return false;
-			}
-		} catch ( e ) {
-			// IE8,9 Will throw exceptions on certain host objects #9897
-			return false;
-		}
-
-		// Own properties are enumerated firstly, so to speed up,
-		// if last one is own, then all properties are own.
-
-		var key;
-		for ( key in obj ) {}
-
-		return key === undefined || core_hasOwn.call( obj, key );
-	},
-
-	isEmptyObject: function( obj ) {
-		var name;
-		for ( name in obj ) {
-			return false;
-		}
-		return true;
-	},
-
-	error: function( msg ) {
-		throw new Error( msg );
-	},
-
-	// data: string of html
-	// context (optional): If specified, the fragment will be created in this context, defaults to document
-	// scripts (optional): If true, will include scripts passed in the html string
-	parseHTML: function( data, context, scripts ) {
-		var parsed;
-		if ( !data || typeof data !== "string" ) {
-			return null;
-		}
-		if ( typeof context === "boolean" ) {
-			scripts = context;
-			context = 0;
-		}
-		context = context || document;
-
-		// Single tag
-		if ( (parsed = rsingleTag.exec( data )) ) {
-			return [ context.createElement( parsed[1] ) ];
-		}
-
-		parsed = jQuery.buildFragment( [ data ], context, scripts ? null : [] );
-		return jQuery.merge( [],
-			(parsed.cacheable ? jQuery.clone( parsed.fragment ) : parsed.fragment).childNodes );
-	},
-
-	parseJSON: function( data ) {
-		if ( !data || typeof data !== "string") {
-			return null;
-		}
-
-		// Make sure leading/trailing whitespace is removed (IE can't handle it)
-		data = jQuery.trim( data );
-
-		// Attempt to parse using the native JSON parser first
-		if ( window.JSON && window.JSON.parse ) {
-			return window.JSON.parse( data );
-		}
-
-		// Make sure the incoming data is actual JSON
-		// Logic borrowed from http://json.org/json2.js
-		if ( rvalidchars.test( data.replace( rvalidescape, "@" )
-			.replace( rvalidtokens, "]" )
-			.replace( rvalidbraces, "")) ) {
-
-			return ( new Function( "return " + data ) )();
-
-		}
-		jQuery.error( "Invalid JSON: " + data );
-	},
-
-	// Cross-browser xml parsing
-	parseXML: function( data ) {
-		var xml, tmp;
-		if ( !data || typeof data !== "string" ) {
-			return null;
-		}
-		try {
-			if ( window.DOMParser ) { // Standard
-				tmp = new DOMParser();
-				xml = tmp.parseFromString( data , "text/xml" );
-			} else { // IE
-				xml = new ActiveXObject( "Microsoft.XMLDOM" );
-				xml.async = "false";
-				xml.loadXML( data );
-			}
-		} catch( e ) {
-			xml = undefined;
-		}
-		if ( !xml || !xml.documentElement || xml.getElementsByTagName( "parsererror" ).length ) {
-			jQuery.error( "Invalid XML: " + data );
-		}
-		return xml;
-	},
-
-	noop: function() {},
-
-	// Evaluates a script in a global context
-	// Workarounds based on findings by Jim Driscoll
-	// http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context
-	globalEval: function( data ) {
-		if ( data && core_rnotwhite.test( data ) ) {
-			// We use execScript on Internet Explorer
-			// We use an anonymous function so that context is window
-			// rather than jQuery in Firefox
-			( window.execScript || function( data ) {
-				window[ "eval" ].call( window, data );
-			} )( data );
-		}
-	},
-
-	// Convert dashed to camelCase; used by the css and data modules
-	// Microsoft forgot to hump their vendor prefix (#9572)
-	camelCase: function( string ) {
-		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
-	},
-
-	nodeName: function( elem, name ) {
-		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
-	},
-
-	// args is for internal usage only
-	each: function( obj, callback, args ) {
-		var name,
-			i = 0,
-			length = obj.length,
-			isObj = length === undefined || jQuery.isFunction( obj );
-
-		if ( args ) {
-			if ( isObj ) {
-				for ( name in obj ) {
-					if ( callback.apply( obj[ name ], args ) === false ) {
-						break;
-					}
-				}
-			} else {
-				for ( ; i < length; ) {
-					if ( callback.apply( obj[ i++ ], args ) === false ) {
-						break;
-					}
-				}
-			}
-
-		// A special, fast, case for the most common use of each
-		} else {
-			if ( isObj ) {
-				for ( name in obj ) {
-					if ( callback.call( obj[ name ], name, obj[ name ] ) === false ) {
-						break;
-					}
-				}
-			} else {
-				for ( ; i < length; ) {
-					if ( callback.call( obj[ i ], i, obj[ i++ ] ) === false ) {
-						break;
-					}
-				}
-			}
-		}
-
-		return obj;
-	},
-
-	// Use native String.trim function wherever possible
-	trim: core_trim && !core_trim.call("\uFEFF\xA0") ?
-		function( text ) {
-			return text == null ?
-				"" :
-				core_trim.call( text );
-		} :
-
-		// Otherwise use our own trimming functionality
-		function( text ) {
-			return text == null ?
-				"" :
-				text.toString().replace( rtrim, "" );
-		},
-
-	// results is for internal usage only
-	makeArray: function( arr, results ) {
-		var type,
-			ret = results || [];
-
-		if ( arr != null ) {
-			// The window, strings (and functions) also have 'length'
-			// Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930
-			type = jQuery.type( arr );
-
-			if ( arr.length == null || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow( arr ) ) {
-				core_push.call( ret, arr );
-			} else {
-				jQuery.merge( ret, arr );
-			}
-		}
-
-		return ret;
-	},
-
-	inArray: function( elem, arr, i ) {
-		var len;
-
-		if ( arr ) {
-			if ( core_indexOf ) {
-				return core_indexOf.call( arr, elem, i );
-			}
-
-			len = arr.length;
-			i = i ? i < 0 ? Math.max( 0, len + i ) : i : 0;
-
-			for ( ; i < len; i++ ) {
-				// Skip accessing in sparse arrays
-				if ( i in arr && arr[ i ] === elem ) {
-					return i;
-				}
-			}
-		}
-
-		return -1;
-	},
-
-	merge: function( first, second ) {
-		var l = second.length,
-			i = first.length,
-			j = 0;
-
-		if ( typeof l === "number" ) {
-			for ( ; j < l; j++ ) {
-				first[ i++ ] = second[ j ];
-			}
-
-		} else {
-			while ( second[j] !== undefined ) {
-				first[ i++ ] = second[ j++ ];
-			}
-		}
-
-		first.length = i;
-
-		return first;
-	},
-
-	grep: function( elems, callback, inv ) {
-		var retVal,
-			ret = [],
-			i = 0,
-			length = elems.length;
-		inv = !!inv;
-
-		// Go through the array, only saving the items
-		// that pass the validator function
-		for ( ; i < length; i++ ) {
-			retVal = !!callback( elems[ i ], i );
-			if ( inv !== retVal ) {
-				ret.push( elems[ i ] );
-			}
-		}
-
-		return ret;
-	},
-
-	// arg is for internal usage only
-	map: function( elems, callback, arg ) {
-		var value, key,
-			ret = [],
-			i = 0,
-			length = elems.length,
-			// jquery objects are treated as arrays
-			isArray = elems instanceof jQuery || length !== undefined && typeof length === "number" && ( ( length > 0 && elems[ 0 ] && elems[ length -1 ] ) || length === 0 || jQuery.isArray( elems ) ) ;
-
-		// Go through the array, translating each of the items to their
-		if ( isArray ) {
-			for ( ; i < length; i++ ) {
-				value = callback( elems[ i ], i, arg );
-
-				if ( value != null ) {
-					ret[ ret.length ] = value;
-				}
-			}
-
-		// Go through every key on the object,
-		} else {
-			for ( key in elems ) {
-				value = callback( elems[ key ], key, arg );
-
-				if ( value != null ) {
-					ret[ ret.length ] = value;
-				}
-			}
-		}
-
-		// Flatten any nested arrays
-		return ret.concat.apply( [], ret );
-	},
-
-	// A global GUID counter for objects
-	guid: 1,
-
-	// Bind a function to a context, optionally partially applying any
-	// arguments.
-	proxy: function( fn, context ) {
-		var tmp, args, proxy;
-
-		if ( typeof context === "string" ) {
-			tmp = fn[ context ];
-			context = fn;
-			fn = tmp;
-		}
-
-		// Quick check to determine if target is callable, in the spec
-		// this throws a TypeError, but we will just return undefined.
-		if ( !jQuery.isFunction( fn ) ) {
-			return undefined;
-		}
-
-		// Simulated bind
-		args = core_slice.call( arguments, 2 );
-		proxy = function() {
-			return fn.apply( context, args.concat( core_slice.call( arguments ) ) );
-		};
-
-		// Set the guid of unique handler to the same of original handler, so it can be removed
-		proxy.guid = fn.guid = fn.guid || proxy.guid || jQuery.guid++;
-
-		return proxy;
-	},
-
-	// Multifunctional method to get and set values of a collection
-	// The value/s can optionally be executed if it's a function
-	access: function( elems, fn, key, value, chainable, emptyGet, pass ) {
-		var exec,
-			bulk = key == null,
-			i = 0,
-			length = elems.length;
-
-		// Sets many values
-		if ( key && typeof key === "object" ) {
-			for ( i in key ) {
-				jQuery.access( elems, fn, i, key[i], 1, emptyGet, value );
-			}
-			chainable = 1;
-
-		// Sets one value
-		} else if ( value !== undefined ) {
-			// Optionally, function values get executed if exec is true
-			exec = pass === undefined && jQuery.isFunction( value );
-
-			if ( bulk ) {
-				// Bulk operations only iterate when executing function values
-				if ( exec ) {
-					exec = fn;
-					fn = function( elem, key, value ) {
-						return exec.call( jQuery( elem ), value );
-					};
-
-				// Otherwise they run against the entire set
-				} else {
-					fn.call( elems, value );
-					fn = null;
-				}
-			}
-
-			if ( fn ) {
-				for (; i < length; i++ ) {
-					fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );
-				}
-			}
-
-			chainable = 1;
-		}
-
-		return chainable ?
-			elems :
-
-			// Gets
-			bulk ?
-				fn.call( elems ) :
-				length ? fn( elems[0], key ) : emptyGet;
-	},
-
-	now: function() {
-		return ( new Date() ).getTime();
-	}
-});
-
-jQuery.ready.promise = function( obj ) {
-	if ( !readyList ) {
-
-		readyList = jQuery.Deferred();
-
-		// Catch cases where $(document).ready() is called after the browser event has already occurred.
-		// we once tried to use readyState "interactive" here, but it caused issues like the one
-		// discovered by ChrisS here: http://bugs.jquery.com/ticket/12282#comment:15
-		if ( document.readyState === "complete" ) {
-			// Handle it asynchronously to allow scripts the opportunity to delay ready
-			setTimeout( jQuery.ready, 1 );
-
-		// Standards-based browsers support DOMContentLoaded
-		} else if ( document.addEventListener ) {
-			// Use the handy event callback
-			document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
-
-			// A fallback to window.onload, that will always work
-			window.addEventListener( "load", jQuery.ready, false );
-
-		// If IE event model is used
-		} else {
-			// Ensure firing before onload, maybe late but safe also for iframes
-			document.attachEvent( "onreadystatechange", DOMContentLoaded );
-
-			// A fallback to window.onload, that will always work
-			window.attachEvent( "onload", jQuery.ready );
-
-			// If IE and not a frame
-			// continually check to see if the document is ready
-			var top = false;
-
-			try {
-				top = window.frameElement == null && document.documentElement;
-			} catch(e) {}
-
-			if ( top && top.doScroll ) {
-				(function doScrollCheck() {
-					if ( !jQuery.isReady ) {
-
-						try {
-							// Use the trick by Diego Perini
-							// http://javascript.nwbox.com/IEContentLoaded/
-							top.doScroll("left");
-						} catch(e) {
-							return setTimeout( doScrollCheck, 50 );
-						}
-
-						// and execute any waiting functions
-						jQuery.ready();
-					}
-				})();
-			}
-		}
-	}
-	return readyList.promise( obj );
-};
-
-// Populate the class2type map
-jQuery.each("Boolean Number String Function Array Date RegExp Object".split(" "), function(i, name) {
-	class2type[ "[object " + name + "]" ] = name.toLowerCase();
-});
-
-// All jQuery objects should point back to these
-rootjQuery = jQuery(document);
-// String to Object options format cache
-var optionsCache = {};
-
-// Convert String-formatted options into Object-formatted ones and store in cache
-function createOptions( options ) {
-	var object = optionsCache[ options ] = {};
-	jQuery.each( options.split( core_rspace ), function( _, flag ) {
-		object[ flag ] = true;
-	});
-	return object;
-}
-
-/*
- * Create a callback list using the following parameters:
- *
- *	options: an optional list of space-separated options that will change how
- *			the callback list behaves or a more traditional option object
- *
- * By default a callback list will act like an event callback list and can be
- * "fired" multiple times.
- *
- * Possible options:
- *
- *	once:			will ensure the callback list can only be fired once (like a Deferred)
- *
- *	memory:			will keep track of previous values and will call any callback added
- *					after the list has been fired right away with the latest "memorized"
- *					values (like a Deferred)
- *
- *	unique:			will ensure a callback can only be added once (no duplicate in the list)
- *
- *	stopOnFalse:	interrupt callings when a callback returns false
- *
- */
-jQuery.Callbacks = function( options ) {
-
-	// Convert options from String-formatted to Object-formatted if needed
-	// (we check in cache first)
-	options = typeof options === "string" ?
-		( optionsCache[ options ] || createOptions( options ) ) :
-		jQuery.extend( {}, options );
-
-	var // Last fire value (for non-forgettable lists)
-		memory,
-		// Flag to know if list was already fired
-		fired,
-		// Flag to know if list is currently firing
-		firing,
-		// First callback to fire (used internally by add and fireWith)
-		firingStart,
-		// End of the loop when firing
-		firingLength,
-		// Index of currently firing callback (modified by remove if needed)
-		firingIndex,
-		// Actual callback list
-		list = [],
-		// Stack of fire calls for repeatable lists
-		stack = !options.once && [],
-		// Fire callbacks
-		fire = function( data ) {
-			memory = options.memory && data;
-			fired = true;
-			firingIndex = firingStart || 0;
-			firingStart = 0;
-			firingLength = list.length;
-			firing = true;
-			for ( ; list && firingIndex < firingLength; firingIndex++ ) {
-				if ( list[ firingIndex ].apply( data[ 0 ], data[ 1 ] ) === false && options.stopOnFalse ) {
-					memory = false; // To prevent further calls using add
-					break;
-				}
-			}
-			firing = false;
-			if ( list ) {
-				if ( stack ) {
-					if ( stack.length ) {
-						fire( stack.shift() );
-					}
-				} else if ( memory ) {
-					list = [];
-				} else {
-					self.disable();
-				}
-			}
-		},
-		// Actual Callbacks object
-		self = {
-			// Add a callback or a collection of callbacks to the list
-			add: function() {
-				if ( list ) {
-					// First, we save the current length
-					var start = list.length;
-					(function add( args ) {
-						jQuery.each( args, function( _, arg ) {
-							var type = jQuery.type( arg );
-							if ( type === "function" && ( !options.unique || !self.has( arg ) ) ) {
-								list.push( arg );
-							} else if ( arg && arg.length && type !== "string" ) {
-								// Inspect recursively
-								add( arg );
-							}
-						});
-					})( arguments );
-					// Do we need to add the callbacks to the
-					// current firing batch?
-					if ( firing ) {
-						firingLength = list.length;
-					// With memory, if we're not firing then
-					// we should call right away
-					} else if ( memory ) {
-						firingStart = start;
-						fire( memory );
-					}
-				}
-				return this;
-			},
-			// Remove a callback from the list
-			remove: function() {
-				if ( list ) {
-					jQuery.each( arguments, function( _, arg ) {
-						var index;
-						while( ( index = jQuery.inArray( arg, list, index ) ) > -1 ) {
-							list.splice( index, 1 );
-							// Handle firing indexes
-							if ( firing ) {
-								if ( index <= firingLength ) {
-									firingLength--;
-								}
-								if ( index <= firingIndex ) {
-									firingIndex--;
-								}
-							}
-						}
-					});
-				}
-				return this;
-			},
-			// Control if a given callback is in the list
-			has: function( fn ) {
-				return jQuery.inArray( fn, list ) > -1;
-			},
-			// Remove all callbacks from the list
-			empty: function() {
-				list = [];
-				return this;
-			},
-			// Have the list do nothing anymore
-			disable: function() {
-				list = stack = memory = undefined;
-				return this;
-			},
-			// Is it disabled?
-			disabled: function() {
-				return !list;
-			},
-			// Lock the list in its current state
-			lock: function() {
-				stack = undefined;
-				if ( !memory ) {
-					self.disable();
-				}
-				return this;
-			},
-			// Is it locked?
-			locked: function() {
-				return !stack;
-			},
-			// Call all callbacks with the given context and arguments
-			fireWith: function( context, args ) {
-				args = args || [];
-				args = [ context, args.slice ? args.slice() : args ];
-				if ( list && ( !fired || stack ) ) {
-					if ( firing ) {
-						stack.push( args );
-					} else {
-						fire( args );
-					}
-				}
-				return this;
-			},
-			// Call all the callbacks with the given arguments
-			fire: function() {
-				self.fireWith( this, arguments );
-				return this;
-			},
-			// To know if the callbacks have already been called at least once
-			fired: function() {
-				return !!fired;
-			}
-		};
-
-	return self;
-};
-jQuery.extend({
-
-	Deferred: function( func ) {
-		var tuples = [
-				// action, add listener, listener list, final state
-				[ "resolve", "done", jQuery.Callbacks("once memory"), "resolved" ],
-				[ "reject", "fail", jQuery.Callbacks("once memory"), "rejected" ],
-				[ "notify", "progress", jQuery.Callbacks("memory") ]
-			],
-			state = "pending",
-			promise = {
-				state: function() {
-					return state;
-				},
-				always: function() {
-					deferred.done( arguments ).fail( arguments );
-					return this;
-				},
-				then: function( /* fnDone, fnFail, fnProgress */ ) {
-					var fns = arguments;
-					return jQuery.Deferred(function( newDefer ) {
-						jQuery.each( tuples, function( i, tuple ) {
-							var action = tuple[ 0 ],
-								fn = fns[ i ];
-							// deferred[ done | fail | progress ] for forwarding actions to newDefer
-							deferred[ tuple[1] ]( jQuery.isFunction( fn ) ?
-								function() {
-									var returned = fn.apply( this, arguments );
-									if ( returned && jQuery.isFunction( returned.promise ) ) {
-										returned.promise()
-											.done( newDefer.resolve )
-											.fail( newDefer.reject )
-											.progress( newDefer.notify );
-									} else {
-										newDefer[ action + "With" ]( this === deferred ? newDefer : this, [ returned ] );
-									}
-								} :
-								newDefer[ action ]
-							);
-						});
-						fns = null;
-					}).promise();
-				},
-				// Get a promise for this deferred
-				// If obj is provided, the promise aspect is added to the object
-				promise: function( obj ) {
-					return typeof obj === "object" ? jQuery.extend( obj, promise ) : promise;
-				}
-			},
-			deferred = {};
-
-		// Keep pipe for back-compat
-		promise.pipe = promise.then;
-
-		// Add list-specific methods
-		jQuery.each( tuples, function( i, tuple ) {
-			var list = tuple[ 2 ],
-				stateString = tuple[ 3 ];
-
-			// promise[ done | fail | progress ] = list.add
-			promise[ tuple[1] ] = list.add;
-
-			// Handle state
-			if ( stateString ) {
-				list.add(function() {
-					// state = [ resolved | rejected ]
-					state = stateString;
-
-				// [ reject_list | resolve_list ].disable; progress_list.lock
-				}, tuples[ i ^ 1 ][ 2 ].disable, tuples[ 2 ][ 2 ].lock );
-			}
-
-			// deferred[ resolve | reject | notify ] = list.fire
-			deferred[ tuple[0] ] = list.fire;
-			deferred[ tuple[0] + "With" ] = list.fireWith;
-		});
-
-		// Make the deferred a promise
-		promise.promise( deferred );
-
-		// Call given func if any
-		if ( func ) {
-			func.call( deferred, deferred );
-		}
-
-		// All done!
-		return deferred;
-	},
-
-	// Deferred helper
-	when: function( subordinate /* , ..., subordinateN */ ) {
-		var i = 0,
-			resolveValues = core_slice.call( arguments ),
-			length = resolveValues.length,
-
-			// the count of uncompleted subordinates
-			remaining = length !== 1 || ( subordinate && jQuery.isFunction( subordinate.promise ) ) ? length : 0,
-
-			// the master Deferred. If resolveValues consist of only a single Deferred, just use that.
-			deferred = remaining === 1 ? subordinate : jQuery.Deferred(),
-
-			// Update function for both resolve and progress values
-			updateFunc = function( i, contexts, values ) {
-				return function( value ) {
-					contexts[ i ] = this;
-					values[ i ] = arguments.length > 1 ? core_slice.call( arguments ) : value;
-					if( values === progressValues ) {
-						deferred.notifyWith( contexts, values );
-					} else if ( !( --remaining ) ) {
-						deferred.resolveWith( contexts, values );
-					}
-				};
-			},
-
-			progressValues, progressContexts, resolveContexts;
-
-		// add listeners to Deferred subordinates; treat others as resolved
-		if ( length > 1 ) {
-			progressValues = new Array( length );
-			progressContexts = new Array( length );
-			resolveContexts = new Array( length );
-			for ( ; i < length; i++ ) {
-				if ( resolveValues[ i ] && jQuery.isFunction( resolveValues[ i ].promise ) ) {
-					resolveValues[ i ].promise()
-						.done( updateFunc( i, resolveContexts, resolveValues ) )
-						.fail( deferred.reject )
-						.progress( updateFunc( i, progressContexts, progressValues ) );
-				} else {
-					--remaining;
-				}
-			}
-		}
-
-		// if we're not waiting on anything, resolve the master
-		if ( !remaining ) {
-			deferred.resolveWith( resolveContexts, resolveValues );
-		}
-
-		return deferred.promise();
-	}
-});
-jQuery.support = (function() {
-
-	var support,
-		all,
-		a,
-		select,
-		opt,
-		input,
-		fragment,
-		eventName,
-		i,
-		isSupported,
-		clickFn,
-		div = document.createElement("div");
-
-	// Preliminary tests
-	div.setAttribute( "className", "t" );
-	div.innerHTML = "  <link/><table></table><a href='/a'>a</a><input type='checkbox'/>";
-
-	all = div.getElementsByTagName("*");
-	a = div.getElementsByTagName("a")[ 0 ];
-	a.style.cssText = "top:1px;float:left;opacity:.5";
-
-	// Can't get basic test support
-	if ( !all || !all.length || !a ) {
-		return {};
-	}
-
-	// First batch of supports tests
-	select = document.createElement("select");
-	opt = select.appendChild( document.createElement("option") );
-	input = div.getElementsByTagName("input")[ 0 ];
-
-	support = {
-		// IE strips leading whitespace when .innerHTML is used
-		leadingWhitespace: ( div.firstChild.nodeType === 3 ),
-
-		// Make sure that tbody elements aren't automatically inserted
-		// IE will insert them into empty tables
-		tbody: !div.getElementsByTagName("tbody").length,
-
-		// Make sure that link elements get serialized correctly by innerHTML
-		// This requires a wrapper element in IE
-		htmlSerialize: !!div.getElementsByTagName("link").length,
-
-		// Get the style information from getAttribute
-		// (IE uses .cssText instead)
-		style: /top/.test( a.getAttribute("style") ),
-
-		// Make sure that URLs aren't manipulated
-		// (IE normalizes it by default)
-		hrefNormalized: ( a.getAttribute("href") === "/a" ),
-
-		// Make sure that element opacity exists
-		// (IE uses filter instead)
-		// Use a regex to work around a WebKit issue. See #5145
-		opacity: /^0.5/.test( a.style.opacity ),
-
-		// Verify style float existence
-		// (IE uses styleFloat instead of cssFloat)
-		cssFloat: !!a.style.cssFloat,
-
-		// Make sure that if no value is specified for a checkbox
-		// that it defaults to "on".
-		// (WebKit defaults to "" instead)
-		checkOn: ( input.value === "on" ),
-
-		// Make sure that a selected-by-default option has a working selected property.
-		// (WebKit defaults to false instead of true, IE too, if it's in an optgroup)
-		optSelected: opt.selected,
-
-		// Test setAttribute on camelCase class. If it works, we need attrFixes when doing get/setAttribute (ie6/7)
-		getSetAttribute: div.className !== "t",
-
-		// Tests for enctype support on a form(#6743)
-		enctype: !!document.createElement("form").enctype,
-
-		// Makes sure cloning an html5 element does not cause problems
-		// Where outerHTML is undefined, this still works
-		html5Clone: document.createElement("nav").cloneNode( true ).outerHTML !== "<:nav></:nav>",
-
-		// jQuery.support.boxModel DEPRECATED in 1.8 since we don't support Quirks Mode
-		boxModel: ( document.compatMode === "CSS1Compat" ),
-
-		// Will be defined later
-		submitBubbles: true,
-		changeBubbles: true,
-		focusinBubbles: false,
-		deleteExpando: true,
-		noCloneEvent: true,
-		inlineBlockNeedsLayout: false,
-		shrinkWrapBlocks: false,
-		reliableMarginRight: true,
-		boxSizingReliable: true,
-		pixelPosition: false
-	};
-
-	// Make sure checked status is properly cloned
-	input.checked = true;
-	support.noCloneChecked = input.cloneNode( true ).checked;
-
-	// Make sure that the options inside disabled selects aren't marked as disabled
-	// (WebKit marks them as disabled)
-	select.disabled = true;
-	support.optDisabled = !opt.disabled;
-
-	// Test to see if it's possible to delete an expando from an element
-	// Fails in Internet Explorer
-	try {
-		delete div.test;
-	} catch( e ) {
-		support.deleteExpando = false;
-	}
-
-	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
-		div.attachEvent( "onclick", clickFn = function() {
-			// Cloning a node shouldn't copy over any
-			// bound event handlers (IE does this)
-			support.noCloneEvent = false;
-		});
-		div.cloneNode( true ).fireEvent("onclick");
-		div.detachEvent( "onclick", clickFn );
-	}
-
-	// Check if a radio maintains its value
-	// after being appended to the DOM
-	input = document.createElement("input");
-	input.value = "t";
-	input.setAttribute( "type", "radio" );
-	support.radioValue = input.value === "t";
-
-	input.setAttribute( "checked", "checked" );
-
-	// #11217 - WebKit loses check when the name is after the checked attribute
-	input.setAttribute( "name", "t" );
-
-	div.appendChild( input );
-	fragment = document.createDocumentFragment();
-	fragment.appendChild( div.lastChild );
-
-	// WebKit doesn't clone checked state correctly in fragments
-	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
-
-	// Check if a disconnected checkbox will retain its checked
-	// value of true after appended to the DOM (IE6/7)
-	support.appendChecked = input.checked;
-
-	fragment.removeChild( input );
-	fragment.appendChild( div );
-
-	// Technique from Juriy Zaytsev
-	// http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
-	// We only care about the case where non-standard event systems
-	// are used, namely in IE. Short-circuiting here helps us to
-	// avoid an eval call (in setAttribute) which can cause CSP
-	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
-	if ( div.attachEvent ) {
-		for ( i in {
-			submit: true,
-			change: true,
-			focusin: true
-		}) {
-			eventName = "on" + i;
-			isSupported = ( eventName in div );
-			if ( !isSupported ) {
-				div.setAttribute( eventName, "return;" );
-				isSupported = ( typeof div[ eventName ] === "function" );
-			}
-			support[ i + "Bubbles" ] = isSupported;
-		}
-	}
-
-	// Run tests that need a body at doc ready
-	jQuery(function() {
-		var container, div, tds, marginDiv,
-			divReset = "padding:0;margin:0;border:0;display:block;overflow:hidden;",
-			body = document.getElementsByTagName("body")[0];
-
-		if ( !body ) {
-			// Return for frameset docs that don't have a body
-			return;
-		}
-
-		container = document.createElement("div");
-		container.style.cssText = "visibility:hidden;border:0;width:0;height:0;position:static;top:0;margin-top:1px";
-		body.insertBefore( container, body.firstChild );
-
-		// Construct the test element
-		div = document.createElement("div");
-		container.appendChild( div );
-
-		// Check if table cells still have offsetWidth/Height when they are set
-		// to display:none and there are still other visible table cells in a
-		// table row; if so, offsetWidth/Height are not reliable for use when
-		// determining if an element has been hidden directly using
-		// display:none (it is still safe to use offsets if a parent element is
-		// hidden; don safety goggles and see bug #4512 for more information).
-		// (only IE 8 fails this test)
-		div.innerHTML = "<table><tr><td></td><td>t</td></tr></table>";
-		tds = div.getElementsByTagName("td");
-		tds[ 0 ].style.cssText = "padding:0;margin:0;border:0;display:none";
-		isSupported = ( tds[ 0 ].offsetHeight === 0 );
-
-		tds[ 0 ].style.display = "";
-		tds[ 1 ].style.display = "none";
-
-		// Check if empty table cells still have offsetWidth/Height
-		// (IE <= 8 fail this test)
-		support.reliableHiddenOffsets = isSupported && ( tds[ 0 ].offsetHeight === 0 );
-
-		// Check box-sizing and margin behavior
-		div.innerHTML = "";
-		div.style.cssText = "box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%;";
-		support.boxSizing = ( div.offsetWidth === 4 );
-		support.doesNotIncludeMarginInBodyOffset = ( body.offsetTop !== 1 );
-
-		// NOTE: To any future maintainer, we've window.getComputedStyle
-		// because jsdom on node.js will break without it.
-		if ( window.getComputedStyle ) {
-			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
-			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
-
-			// Check if div with explicit width and no margin-right incorrectly
-			// gets computed margin-right based on width of container. For more
-			// info see bug #3333
-			// Fails in WebKit before Feb 2011 nightlies
-			// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-			marginDiv = document.createElement("div");
-			marginDiv.style.cssText = div.style.cssText = divReset;
-			marginDiv.style.marginRight = marginDiv.style.width = "0";
-			div.style.width = "1px";
-			div.appendChild( marginDiv );
-			support.reliableMarginRight =
-				!parseFloat( ( window.getComputedStyle( marginDiv, null ) || {} ).marginRight );
-		}
-
-		if ( typeof div.style.zoom !== "undefined" ) {
-			// Check if natively block-level elements act like inline-block
-			// elements when setting their display to 'inline' and giving
-			// them layout
-			// (IE < 8 does this)
-			div.innerHTML = "";
-			div.style.cssText = divReset + "width:1px;padding:1px;display:inline;zoom:1";
-			support.inlineBlockNeedsLayout = ( div.offsetWidth === 3 );
-
-			// Check if elements with layout shrink-wrap their children
-			// (IE 6 does this)
-			div.style.display = "block";
-			div.style.overflow = "visible";
-			div.innerHTML = "<div></div>";
-			div.firstChild.style.width = "5px";
-			support.shrinkWrapBlocks = ( div.offsetWidth !== 3 );
-
-			container.style.zoom = 1;
-		}
-
-		// Null elements to avoid leaks in IE
-		body.removeChild( container );
-		container = div = tds = marginDiv = null;
-	});
-
-	// Null elements to avoid leaks in IE
-	fragment.removeChild( div );
-	all = a = select = opt = input = fragment = div = null;
-
-	return support;
-})();
-var rbrace = /(?:\{[\s\S]*\}|\[[\s\S]*\])$/,
-	rmultiDash = /([A-Z])/g;
-
-jQuery.extend({
-	cache: {},
-
-	deletedIds: [],
-
-	// Please use with caution
-	uuid: 0,
-
-	// Unique for each copy of jQuery on the page
-	// Non-digits removed to match rinlinejQuery
-	expando: "jQuery" + ( jQuery.fn.jquery + Math.random() ).replace( /\D/g, "" ),
-
-	// The following elements throw uncatchable exceptions if you
-	// attempt to add expando properties to them.
-	noData: {
-		"embed": true,
-		// Ban all objects except for Flash (which handle expandos)
-		"object": "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000",
-		"applet": true
-	},
-
-	hasData: function( elem ) {
-		elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];
-		return !!elem && !isEmptyDataObject( elem );
-	},
-
-	data: function( elem, name, data, pvt /* Internal Use Only */ ) {
-		if ( !jQuery.acceptData( elem ) ) {
-			return;
-		}
-
-		var thisCache, ret,
-			internalKey = jQuery.expando,
-			getByName = typeof name === "string",
-
-			// We have to handle DOM nodes and JS objects differently because IE6-7
-			// can't GC object references properly across the DOM-JS boundary
-			isNode = elem.nodeType,
-
-			// Only DOM nodes need the global jQuery cache; JS object data is
-			// attached directly to the object so GC can occur automatically
-			cache = isNode ? jQuery.cache : elem,
-
-			// Only defining an ID for JS objects if its cache already exists allows
-			// the code to shortcut on the same path as a DOM node with no cache
-			id = isNode ? elem[ internalKey ] : elem[ internalKey ] && internalKey;
-
-		// Avoid doing any more work than we need to when trying to get data on an
-		// object that has no data at all
-		if ( (!id || !cache[id] || (!pvt && !cache[id].data)) && getByName && data === undefined ) {
-			return;
-		}
-
-		if ( !id ) {
-			// Only DOM nodes need a new unique ID for each element since their data
-			// ends up in the global cache
-			if ( isNode ) {
-				elem[ internalKey ] = id = jQuery.deletedIds.pop() || ++jQuery.uuid;
-			} else {
-				id = internalKey;
-			}
-		}
-
-		if ( !cache[ id ] ) {
-			cache[ id ] = {};
-
-			// Avoids exposing jQuery metadata on plain JS objects when the object
-			// is serialized using JSON.stringify
-			if ( !isNode ) {
-				cache[ id ].toJSON = jQuery.noop;
-			}
-		}
-
-		// An object can be passed to jQuery.data instead of a key/value pair; this gets
-		// shallow copied over onto the existing cache
-		if ( typeof name === "object" || typeof name === "function" ) {
-			if ( pvt ) {
-				cache[ id ] = jQuery.extend( cache[ id ], name );
-			} else {
-				cache[ id ].data = jQuery.extend( cache[ id ].data, name );
-			}
-		}
-
-		thisCache = cache[ id ];
-
-		// jQuery data() is stored in a separate object inside the object's internal data
-		// cache in order to avoid key collisions between internal data and user-defined
-		// data.
-		if ( !pvt ) {
-			if ( !thisCache.data ) {
-				thisCache.data = {};
-			}
-
-			thisCache = thisCache.data;
-		}
-
-		if ( data !== undefined ) {
-			thisCache[ jQuery.camelCase( name ) ] = data;
-		}
-
-		// Check for both converted-to-camel and non-converted data property names
-		// If a data property was specified
-		if ( getByName ) {
-
-			// First Try to find as-is property data
-			ret = thisCache[ name ];
-
-			// Test for null|undefined property data
-			if ( ret == null ) {
-
-				// Try to find the camelCased property
-				ret = thisCache[ jQuery.camelCase( name ) ];
-			}
-		} else {
-			ret = thisCache;
-		}
-
-		return ret;
-	},
-
-	removeData: function( elem, name, pvt /* Internal Use Only */ ) {
-		if ( !jQuery.acceptData( elem ) ) {
-			return;
-		}
-
-		var thisCache, i, l,
-
-			isNode = elem.nodeType,
-
-			// See jQuery.data for more information
-			cache = isNode ? jQuery.cache : elem,
-			id = isNode ? elem[ jQuery.expando ] : jQuery.expando;
-
-		// If there is already no cache entry for this object, there is no
-		// purpose in continuing
-		if ( !cache[ id ] ) {
-			return;
-		}
-
-		if ( name ) {
-
-			thisCache = pvt ? cache[ id ] : cache[ id ].data;
-
-			if ( thisCache ) {
-
-				// Support array or space separated string names for data keys
-				if ( !jQuery.isArray( name ) ) {
-
-					// try the string as a key before any manipulation
-					if ( name in thisCache ) {
-						name = [ name ];
-					} else {
-
-						// split the camel cased version by spaces unless a key with the spaces exists
-						name = jQuery.camelCase( name );
-						if ( name in thisCache ) {
-							name = [ name ];
-						} else {
-							name = name.split(" ");
-						}
-					}
-				}
-
-				for ( i = 0, l = name.length; i < l; i++ ) {
-					delete thisCache[ name[i] ];
-				}
-
-				// If there is no data left in the cache, we want to continue
-				// and let the cache object itself get destroyed
-				if ( !( pvt ? isEmptyDataObject : jQuery.isEmptyObject )( thisCache ) ) {
-					return;
-				}
-			}
-		}
-
-		// See jQuery.data for more information
-		if ( !pvt ) {
-			delete cache[ id ].data;
-
-			// Don't destroy the parent cache unless the internal data object
-			// had been the only thing left in it
-			if ( !isEmptyDataObject( cache[ id ] ) ) {
-				return;
-			}
-		}
-
-		// Destroy the cache
-		if ( isNode ) {
-			jQuery.cleanData( [ elem ], true );
-
-		// Use delete when supported for expandos or `cache` is not a window per isWindow (#10080)
-		} else if ( jQuery.support.deleteExpando || cache != cache.window ) {
-			delete cache[ id ];
-
-		// When all else fails, null
-		} else {
-			cache[ id ] = null;
-		}
-	},
-
-	// For internal use only.
-	_data: function( elem, name, data ) {
-		return jQuery.data( elem, name, data, true );
-	},
-
-	// A method for determining if a DOM node can handle the data expando
-	acceptData: function( elem ) {
-		var noData = elem.nodeName && jQuery.noData[ elem.nodeName.toLowerCase() ];
-
-		// nodes accept data unless otherwise specified; rejection can be conditional
-		return !noData || noData !== true && elem.getAttribute("classid") === noData;
-	}
-});
-
-jQuery.fn.extend({
-	data: function( key, value ) {
-		var parts, part, attr, name, l,
-			elem = this[0],
-			i = 0,
-			data = null;
-
-		// Gets all values
-		if ( key === undefined ) {
-			if ( this.length ) {
-				data = jQuery.data( elem );
-
-				if ( elem.nodeType === 1 && !jQuery._data( elem, "parsedAttrs" ) ) {
-					attr = elem.attributes;
-					for ( l = attr.length; i < l; i++ ) {
-						name = attr[i].name;
-
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.substring(5) );
-
-							dataAttr( elem, name, data[ name ] );
-						}
-					}
-					jQuery._data( elem, "parsedAttrs", true );
-				}
-			}
-
-			return data;
-		}
-
-		// Sets multiple values
-		if ( typeof key === "object" ) {
-			return this.each(function() {
-				jQuery.data( this, key );
-			});
-		}
-
-		parts = key.split( ".", 2 );
-		parts[1] = parts[1] ? "." + parts[1] : "";
-		part = parts[1] + "!";
-
-		return jQuery.access( this, function( value ) {
-
-			if ( value === undefined ) {
-				data = this.triggerHandler( "getData" + part, [ parts[0] ] );
-
-				// Try to fetch any internally stored data first
-				if ( data === undefined && elem ) {
-					data = jQuery.data( elem, key );
-					data = dataAttr( elem, key, data );
-				}
-
-				return data === undefined && parts[1] ?
-					this.data( parts[0] ) :
-					data;
-			}
-
-			parts[1] = value;
-			this.each(function() {
-				var self = jQuery( this );
-
-				self.triggerHandler( "setData" + part, parts );
-				jQuery.data( this, key, value );
-				self.triggerHandler( "changeData" + part, parts );
-			});
-		}, null, value, arguments.length > 1, null, false );
-	},
-
-	removeData: function( key ) {
-		return this.each(function() {
-			jQuery.removeData( this, key );
-		});
-	}
-});
-
-function dataAttr( elem, key, data ) {
-	// If nothing was found internally, try to fetch any
-	// data from the HTML5 data-* attribute
-	if ( data === undefined && elem.nodeType === 1 ) {
-
-		var name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
-
-		data = elem.getAttribute( name );
-
-		if ( typeof data === "string" ) {
-			try {
-				data = data === "true" ? true :
-				data === "false" ? false :
-				data === "null" ? null :
-				// Only convert to a number if it doesn't change the string
-				+data + "" === data ? +data :
-				rbrace.test( data ) ? jQuery.parseJSON( data ) :
-					data;
-			} catch( e ) {}
-
-			// Make sure we set the data so it isn't changed later
-			jQuery.data( elem, key, data );
-
-		} else {
-			data = undefined;
-		}
-	}
-
-	return data;
-}
-
-// checks a cache object for emptiness
-function isEmptyDataObject( obj ) {
-	var name;
-	for ( name in obj ) {
-
-		// if the public data object is empty, the private is still empty
-		if ( name === "data" && jQuery.isEmptyObject( obj[name] ) ) {
-			continue;
-		}
-		if ( name !== "toJSON" ) {
-			return false;
-		}
-	}
-
-	return true;
-}
-jQuery.extend({
-	queue: function( elem, type, data ) {
-		var queue;
-
-		if ( elem ) {
-			type = ( type || "fx" ) + "queue";
-			queue = jQuery._data( elem, type );
-
-			// Speed up dequeue by getting out quickly if this is just a lookup
-			if ( data ) {
-				if ( !queue || jQuery.isArray(data) ) {
-					queue = jQuery._data( elem, type, jQuery.makeArray(data) );
-				} else {
-					queue.push( data );
-				}
-			}
-			return queue || [];
-		}
-	},
-
-	dequeue: function( elem, type ) {
-		type = type || "fx";
-
-		var queue = jQuery.queue( elem, type ),
-			startLength = queue.length,
-			fn = queue.shift(),
-			hooks = jQuery._queueHooks( elem, type ),
-			next = function() {
-				jQuery.dequeue( elem, type );
-			};
-
-		// If the fx queue is dequeued, always remove the progress sentinel
-		if ( fn === "inprogress" ) {
-			fn = queue.shift();
-			startLength--;
-		}
-
-		if ( fn ) {
-
-			// Add a progress sentinel to prevent the fx queue from being
-			// automatically dequeued
-			if ( type === "fx" ) {
-				queue.unshift( "inprogress" );
-			}
-
-			// clear up the last queue stop function
-			delete hooks.stop;
-			fn.call( elem, next, hooks );
-		}
-
-		if ( !startLength && hooks ) {
-			hooks.empty.fire();
-		}
-	},
-
-	// not intended for public consumption - generates a queueHooks object, or returns the current one
-	_queueHooks: function( elem, type ) {
-		var key = type + "queueHooks";
-		return jQuery._data( elem, key ) || jQuery._data( elem, key, {
-			empty: jQuery.Callbacks("once memory").add(function() {
-				jQuery.removeData( elem, type + "queue", true );
-				jQuery.removeData( elem, key, true );
-			})
-		});
-	}
-});
-
-jQuery.fn.extend({
-	queue: function( type, data ) {
-		var setter = 2;
-
-		if ( typeof type !== "string" ) {
-			data = type;
-			type = "fx";
-			setter--;
-		}
-
-		if ( arguments.length < setter ) {
-			return jQuery.queue( this[0], type );
-		}
-
-		return data === undefined ?
-			this :
-			this.each(function() {
-				var queue = jQuery.queue( this, type, data );
-
-				// ensure a hooks for this queue
-				jQuery._queueHooks( this, type );
-
-				if ( type === "fx" && queue[0] !== "inprogress" ) {
-					jQuery.dequeue( this, type );
-				}
-			});
-	},
-	dequeue: function( type ) {
-		return this.each(function() {
-			jQuery.dequeue( this, type );
-		});
-	},
-	// Based off of the plugin by Clint Helfers, with permission.
-	// http://blindsignals.com/index.php/2009/07/jquery-delay/
-	delay: function( time, type ) {
-		time = jQuery.fx ? jQuery.fx.speeds[ time ] || time : time;
-		type = type || "fx";
-
-		return this.queue( type, function( next, hooks ) {
-			var timeout = setTimeout( next, time );
-			hooks.stop = function() {
-				clearTimeout( timeout );
-			};
-		});
-	},
-	clearQueue: function( type ) {
-		return this.queue( type || "fx", [] );
-	},
-	// Get a promise resolved when queues of a certain type
-	// are emptied (fx is the type by default)
-	promise: function( type, obj ) {
-		var tmp,
-			count = 1,
-			defer = jQuery.Deferred(),
-			elements = this,
-			i = this.length,
-			resolve = function() {
-				if ( !( --count ) ) {
-					defer.resolveWith( elements, [ elements ] );
-				}
-			};
-
-		if ( typeof type !== "string" ) {
-			obj = type;
-			type = undefined;
-		}
-		type = type || "fx";
-
-		while( i-- ) {
-			tmp = jQuery._data( elements[ i ], type + "queueHooks" );
-			if ( tmp && tmp.empty ) {
-				count++;
-				tmp.empty.add( resolve );
-			}
-		}
-		resolve();
-		return defer.promise( obj );
-	}
-});
-var nodeHook, boolHook, fixSpecified,
-	rclass = /[\t\r\n]/g,
-	rreturn = /\r/g,
-	rtype = /^(?:button|input)$/i,
-	rfocusable = /^(?:button|input|object|select|textarea)$/i,
-	rclickable = /^a(?:rea|)$/i,
-	rboolean = /^(?:autofocus|autoplay|async|checked|controls|defer|disabled|hidden|loop|multiple|open|readonly|required|scoped|selected)$/i,
-	getSetAttribute = jQuery.support.getSetAttribute;
-
-jQuery.fn.extend({
-	attr: function( name, value ) {
-		return jQuery.access( this, jQuery.attr, name, value, arguments.length > 1 );
-	},
-
-	removeAttr: function( name ) {
-		return this.each(function() {
-			jQuery.removeAttr( this, name );
-		});
-	},
-
-	prop: function( name, value ) {
-		return jQuery.access( this, jQuery.prop, name, value, arguments.length > 1 );
-	},
-
-	removeProp: function( name ) {
-		name = jQuery.propFix[ name ] || name;
-		return this.each(function() {
-			// try/catch handles cases where IE balks (such as removing a property on window)
-			try {
-				this[ name ] = undefined;
-				delete this[ name ];
-			} catch( e ) {}
-		});
-	},
-
-	addClass: function( value ) {
-		var classNames, i, l, elem,
-			setClass, c, cl;
-
-		if ( jQuery.isFunction( value ) ) {
-			return this.each(function( j ) {
-				jQuery( this ).addClass( value.call(this, j, this.className) );
-			});
-		}
-
-		if ( value && typeof value === "string" ) {
-			classNames = value.split( core_rspace );
-
-			for ( i = 0, l = this.length; i < l; i++ ) {
-				elem = this[ i ];
-
-				if ( elem.nodeType === 1 ) {
-					if ( !elem.className && classNames.length === 1 ) {
-						elem.className = value;
-
-					} else {
-						setClass = " " + elem.className + " ";
-
-						for ( c = 0, cl = classNames.length; c < cl; c++ ) {
-							if ( !~setClass.indexOf( " " + classNames[ c ] + " " ) ) {
-								setClass += classNames[ c ] + " ";
-							}
-						}
-						elem.className = jQuery.trim( setClass );
-					}
-				}
-			}
-		}
-
-		return this;
-	},
-
-	removeClass: function( value ) {
-		var removes, className, elem, c, cl, i, l;
-
-		if ( jQuery.isFunction( value ) ) {
-			return this.each(function( j ) {
-				jQuery( this ).removeClass( value.call(this, j, this.className) );
-			});
-		}
-		if ( (value && typeof value === "string") || value === undefined ) {
-			removes = ( value || "" ).split( core_rspace );
-
-			for ( i = 0, l = this.length; i < l; i++ ) {
-				elem = this[ i ];
-				if ( elem.nodeType === 1 && elem.className ) {
-
-					className = (" " + elem.className + " ").replace( rclass, " " );
-
-					// loop over each item in the removal list
-					for ( c = 0, cl = removes.length; c < cl; c++ ) {
-						// Remove until there is nothing to remove,
-						while ( className.indexOf(" " + removes[ c ] + " ") > -1 ) {
-							className = className.replace( " " + removes[ c ] + " " , " " );
-						}
-					}
-					elem.className = value ? jQuery.trim( className ) : "";
-				}
-			}
-		}
-
-		return this;
-	},
-
-	toggleClass: function( value, stateVal ) {
-		var type = typeof value,
-			isBool = typeof stateVal === "boolean";
-
-		if ( jQuery.isFunction( value ) ) {
-			return this.each(function( i ) {
-				jQuery( this ).toggleClass( value.call(this, i, this.className, stateVal), stateVal );
-			});
-		}
-
-		return this.each(function() {
-			if ( type === "string" ) {
-				// toggle individual class names
-				var className,
-					i = 0,
-					self = jQuery( this ),
-					state = stateVal,
-					classNames = value.split( core_rspace );
-
-				while ( (className = classNames[ i++ ]) ) {
-					// check each className given, space separated list
-					state = isBool ? state : !self.hasClass( className );
-					self[ state ? "addClass" : "removeClass" ]( className );
-				}
-
-			} else if ( type === "undefined" || type === "boolean" ) {
-				if ( this.className ) {
-					// store className if set
-					jQuery._data( this, "__className__", this.className );
-				}
-
-				// toggle whole className
-				this.className = this.className || value === false ? "" : jQuery._data( this, "__className__" ) || "";
-			}
-		});
-	},
-
-	hasClass: function( selector ) {
-		var className = " " + selector + " ",
-			i = 0,
-			l = this.length;
-		for ( ; i < l; i++ ) {
-			if ( this[i].nodeType === 1 && (" " + this[i].className + " ").replace(rclass, " ").indexOf( className ) > -1 ) {
-				return true;
-			}
-		}
-
-		return false;
-	},
-
-	val: function( value ) {
-		var hooks, ret, isFunction,
-			elem = this[0];
-
-		if ( !arguments.length ) {
-			if ( elem ) {
-				hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
-
-				if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
-					return ret;
-				}
-
-				ret = elem.value;
-
-				return typeof ret === "string" ?
-					// handle most common string cases
-					ret.replace(rreturn, "") :
-					// handle cases where value is null/undef or number
-					ret == null ? "" : ret;
-			}
-
-			return;
-		}
-
-		isFunction = jQuery.isFunction( value );
-
-		return this.each(function( i ) {
-			var val,
-				self = jQuery(this);
-
-			if ( this.nodeType !== 1 ) {
-				return;
-			}
-
-			if ( isFunction ) {
-				val = value.call( this, i, self.val() );
-			} else {
-				val = value;
-			}
-
-			// Treat null/undefined as ""; convert numbers to string
-			if ( val == null ) {
-				val = "";
-			} else if ( typeof val === "number" ) {
-				val += "";
-			} else if ( jQuery.isArray( val ) ) {
-				val = jQuery.map(val, function ( value ) {
-					return value == null ? "" : value + "";
-				});
-			}
-
-			hooks = jQuery.valHooks[ this.type ] || jQuery.valHooks[ this.nodeName.toLowerCase() ];
-
-			// If set returns undefined, fall back to normal setting
-			if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
-				this.value = val;
-			}
-		});
-	}
-});
-
-jQuery.extend({
-	valHooks: {
-		option: {
-			get: function( elem ) {
-				// attributes.value is undefined in Blackberry 4.7 but
-				// uses .value. See #6932
-				var val = elem.attributes.value;
-				return !val || val.specified ? elem.value : elem.text;
-			}
-		},
-		select: {
-			get: function( elem ) {
-				var value, i, max, option,
-					index = elem.selectedIndex,
-					values = [],
-					options = elem.options,
-					one = elem.type === "select-one";
-
-				// Nothing was selected
-				if ( index < 0 ) {
-					return null;
-				}
-
-				// Loop through all the selected options
-				i = one ? index : 0;
-				max = one ? index + 1 : options.length;
-				for ( ; i < max; i++ ) {
-					option = options[ i ];
-
-					// Don't return options that are disabled or in a disabled optgroup
-					if ( option.selected && (jQuery.support.optDisabled ? !option.disabled : option.getAttribute("disabled") === null) &&
-							(!option.parentNode.disabled || !jQuery.nodeName( option.parentNode, "optgroup" )) ) {
-
-						// Get the specific value for the option
-						value = jQuery( option ).val();
-
-						// We don't need an array for one selects
-						if ( one ) {
-							return value;
-						}
-
-						// Multi-Selects return an array
-						values.push( value );
-					}
-				}
-
-				// Fixes Bug #2551 -- select.val() broken in IE after form.reset()
-				if ( one && !values.length && options.length ) {
-					return jQuery( options[ index ] ).val();
-				}
-
-				return values;
-			},
-
-			set: function( elem, value ) {
-				var values = jQuery.makeArray( value );
-
-				jQuery(elem).find("option").each(function() {
-					this.selected = jQuery.inArray( jQuery(this).val(), values ) >= 0;
-				});
-
-				if ( !values.length ) {
-					elem.selectedIndex = -1;
-				}
-				return values;
-			}
-		}
-	},
-
-	// Unused in 1.8, left in so attrFn-stabbers won't die; remove in 1.9
-	attrFn: {},
-
-	attr: function( elem, name, value, pass ) {
-		var ret, hooks, notxml,
-			nType = elem.nodeType;
-
-		// don't get/set attributes on text, comment and attribute nodes
-		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
-			return;
-		}
-
-		if ( pass && jQuery.isFunction( jQuery.fn[ name ] ) ) {
-			return jQuery( elem )[ name ]( value );
-		}
-
-		// Fallback to prop when attributes are not supported
-		if ( typeof elem.getAttribute === "undefined" ) {
-			return jQuery.prop( elem, name, value );
-		}
-
-		notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
-
-		// All attributes are lowercase
-		// Grab necessary hook if one is defined
-		if ( notxml ) {
-			name = name.toLowerCase();
-			hooks = jQuery.attrHooks[ name ] || ( rboolean.test( name ) ? boolHook : nodeHook );
-		}
-
-		if ( value !== undefined ) {
-
-			if ( value === null ) {
-				jQuery.removeAttr( elem, name );
-				return;
-
-			} else if ( hooks && "set" in hooks && notxml && (ret = hooks.set( elem, value, name )) !== undefined ) {
-				return ret;
-
-			} else {
-				elem.setAttribute( name, "" + value );
-				return value;
-			}
-
-		} else if ( hooks && "get" in hooks && notxml && (ret = hooks.get( elem, name )) !== null ) {
-			return ret;
-
-		} else {
-
-			ret = elem.getAttribute( name );
-
-			// Non-existent attributes return null, we normalize to undefined
-			return ret === null ?
-				undefined :
-				ret;
-		}
-	},
-
-	removeAttr: function( elem, value ) {
-		var propName, attrNames, name, isBool,
-			i = 0;
-
-		if ( value && elem.nodeType === 1 ) {
-
-			attrNames = value.split( core_rspace );
-
-			for ( ; i < attrNames.length; i++ ) {
-				name = attrNames[ i ];
-
-				if ( name ) {
-					propName = jQuery.propFix[ name ] || name;
-					isBool = rboolean.test( name );
-
-					// See #9699 for explanation of this approach (setting first, then removal)
-					// Do not do this for boolean attributes (see #10870)
-					if ( !isBool ) {
-						jQuery.attr( elem, name, "" );
-					}
-					elem.removeAttribute( getSetAttribute ? name : propName );
-
-					// Set corresponding property to false for boolean attributes
-					if ( isBool && propName in elem ) {
-						elem[ propName ] = false;
-					}
-				}
-			}
-		}
-	},
-
-	attrHooks: {
-		type: {
-			set: function( elem, value ) {
-				// We can't allow the type property to be changed (since it causes problems in IE)
-				if ( rtype.test( elem.nodeName ) && elem.parentNode ) {
-					jQuery.error( "type property can't be changed" );
-				} else if ( !jQuery.support.radioValue && value === "radio" && jQuery.nodeName(elem, "input") ) {
-					// Setting the type on a radio button after the value resets the value in IE6-9
-					// Reset value to it's default in case type is set after value
-					// This is for element creation
-					var val = elem.value;
-					elem.setAttribute( "type", value );
-					if ( val ) {
-						elem.value = val;
-					}
-					return value;
-				}
-			}
-		},
-		// Use the value property for back compat
-		// Use the nodeHook for button elements in IE6/7 (#1954)
-		value: {
-			get: function( elem, name ) {
-				if ( nodeHook && jQuery.nodeName( elem, "button" ) ) {
-					return nodeHook.get( elem, name );
-				}
-				return name in elem ?
-					elem.value :
-					null;
-			},
-			set: function( elem, value, name ) {
-				if ( nodeHook && jQuery.nodeName( elem, "button" ) ) {
-					return nodeHook.set( elem, value, name );
-				}
-				// Does not return so that setAttribute is also used
-				elem.value = value;
-			}
-		}
-	},
-
-	propFix: {
-		tabindex: "tabIndex",
-		readonly: "readOnly",
-		"for": "htmlFor",
-		"class": "className",
-		maxlength: "maxLength",
-		cellspacing: "cellSpacing",
-		cellpadding: "cellPadding",
-		rowspan: "rowSpan",
-		colspan: "colSpan",
-		usemap: "useMap",
-		frameborder: "frameBorder",
-		contenteditable: "contentEditable"
-	},
-
-	prop: function( elem, name, value ) {
-		var ret, hooks, notxml,
-			nType = elem.nodeType;
-
-		// don't get/set properties on text, comment and attribute nodes
-		if ( !elem || nType === 3 || nType === 8 || nType === 2 ) {
-			return;
-		}
-
-		notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
-
-		if ( notxml ) {
-			// Fix name and attach hooks
-			name = jQuery.propFix[ name ] || name;
-			hooks = jQuery.propHooks[ name ];
-		}
-
-		if ( value !== undefined ) {
-			if ( hooks && "set" in hooks && (ret = hooks.set( elem, value, name )) !== undefined ) {
-				return ret;
-
-			} else {
-				return ( elem[ name ] = value );
-			}
-
-		} else {
-			if ( hooks && "get" in hooks && (ret = hooks.get( elem, name )) !== null ) {
-				return ret;
-
-			} else {
-				return elem[ name ];
-			}
-		}
-	},
-
-	propHooks: {
-		tabIndex: {
-			get: function( elem ) {
-				// elem.tabIndex doesn't always return the correct value when it hasn't been explicitly set
-				// http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
-				var attributeNode = elem.getAttributeNode("tabindex");
-
-				return attributeNode && attributeNode.specified ?
-					parseInt( attributeNode.value, 10 ) :
-					rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) && elem.href ?
-						0 :
-						undefined;
-			}
-		}
-	}
-});
-
-// Hook for boolean attributes
-boolHook = {
-	get: function( elem, name ) {
-		// Align boolean attributes with corresponding properties
-		// Fall back to attribute presence where some booleans are not supported
-		var attrNode,
-			property = jQuery.prop( elem, name );
-		return property === true || typeof property !== "boolean" && ( attrNode = elem.getAttributeNode(name) ) && attrNode.nodeValue !== false ?
-			name.toLowerCase() :
-			undefined;
-	},
-	set: function( elem, value, name ) {
-		var propName;
-		if ( value === false ) {
-			// Remove boolean attributes when set to false
-			jQuery.removeAttr( elem, name );
-		} else {
-			// value is true since we know at this point it's type boolean and not false
-			// Set boolean attributes to the same name and set the DOM property
-			propName = jQuery.propFix[ name ] || name;
-			if ( propName in elem ) {
-				// Only set the IDL specifically if it already exists on the element
-				elem[ propName ] = true;
-			}
-
-			elem.setAttribute( name, name.toLowerCase() );
-		}
-		return name;
-	}
-};
-
-// IE6/7 do not support getting/setting some attributes with get/setAttribute
-if ( !getSetAttribute ) {
-
-	fixSpecified = {
-		name: true,
-		id: true,
-		coords: true
-	};
-
-	// Use this for any attribute in IE6/7
-	// This fixes almost every IE6/7 issue
-	nodeHook = jQuery.valHooks.button = {
-		get: function( elem, name ) {
-			var ret;
-			ret = elem.getAttributeNode( name );
-			return ret && ( fixSpecified[ name ] ? ret.value !== "" : ret.specified ) ?
-				ret.value :
-				undefined;
-		},
-		set: function( elem, value, name ) {
-			// Set the existing or create a new attribute node
-			var ret = elem.getAttributeNode( name );
-			if ( !ret ) {
-				ret = document.createAttribute( name );
-				elem.setAttributeNode( ret );
-			}
-			return ( ret.value = value + "" );
-		}
-	};
-
-	// Set width and height to auto instead of 0 on empty string( Bug #8150 )
-	// This is for removals
-	jQuery.each([ "width", "height" ], function( i, name ) {
-		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
-			set: function( elem, value ) {
-				if ( value === "" ) {
-					elem.setAttribute( name, "auto" );
-					return value;
-				}
-			}
-		});
-	});
-
-	// Set contenteditable to false on removals(#10429)
-	// Setting to empty string throws an error as an invalid value
-	jQuery.attrHooks.contenteditable = {
-		get: nodeHook.get,
-		set: function( elem, value, name ) {
-			if ( value === "" ) {
-				value = "false";
-			}
-			nodeHook.set( elem, value, name );
-		}
-	};
-}
-
-
-// Some attributes require a special call on IE
-if ( !jQuery.support.hrefNormalized ) {
-	jQuery.each([ "href", "src", "width", "height" ], function( i, name ) {
-		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
-			get: function( elem ) {
-				var ret = elem.getAttribute( name, 2 );
-				return ret === null ? undefined : ret;
-			}
-		});
-	});
-}
-
-if ( !jQuery.support.style ) {
-	jQuery.attrHooks.style = {
-		get: function( elem ) {
-			// Return undefined in the case of empty string
-			// Normalize to lowercase since IE uppercases css property names
-			return elem.style.cssText.toLowerCase() || undefined;
-		},
-		set: function( elem, value ) {
-			return ( elem.style.cssText = "" + value );
-		}
-	};
-}
-
-// Safari mis-reports the default selected property of an option
-// Accessing the parent's selectedIndex property fixes it
-if ( !jQuery.support.optSelected ) {
-	jQuery.propHooks.selected = jQuery.extend( jQuery.propHooks.selected, {
-		get: function( elem ) {
-			var parent = elem.parentNode;
-
-			if ( parent ) {
-				parent.selectedIndex;
-
-				// Make sure that it also works with optgroups, see #5701
-				if ( parent.parentNode ) {
-					parent.parentNode.selectedIndex;
-				}
-			}
-			return null;
-		}
-	});
-}
-
-// IE6/7 call enctype encoding
-if ( !jQuery.support.enctype ) {
-	jQuery.propFix.enctype = "encoding";
-}
-
-// Radios and checkboxes getter/setter
-if ( !jQuery.support.checkOn ) {
-	jQuery.each([ "radio", "checkbox" ], function() {
-		jQuery.valHooks[ this ] = {
-			get: function( elem ) {
-				// Handle the case where in Webkit "" is returned instead of "on" if a value isn't specified
-				return elem.getAttribute("value") === null ? "on" : elem.value;
-			}
-		};
-	});
-}
-jQuery.each([ "radio", "checkbox" ], function() {
-	jQuery.valHooks[ this ] = jQuery.extend( jQuery.valHooks[ this ], {
-		set: function( elem, value ) {
-			if ( jQuery.isArray( value ) ) {
-				return ( elem.checked = jQuery.inArray( jQuery(elem).val(), value ) >= 0 );
-			}
-		}
-	});
-});
-var rformElems = /^(?:textarea|input|select)$/i,
-	rtypenamespace = /^([^\.]*|)(?:\.(.+)|)$/,
-	rhoverHack = /(?:^|\s)hover(\.\S+|)\b/,
-	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|contextmenu)|click/,
-	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
-	hoverHack = function( events ) {
-		return jQuery.event.special.hover ? events : events.replace( rhoverHack, "mouseenter$1 mouseleave$1" );
-	};
-
-/*
- * Helper functions for managing events -- not part of the public interface.
- * Props to Dean Edwards' addEvent library for many of the ideas.
- */
-jQuery.event = {
-
-	add: function( elem, types, handler, data, selector ) {
-
-		var elemData, eventHandle, events,
-			t, tns, type, namespaces, handleObj,
-			handleObjIn, handlers, special;
-
-		// Don't attach events to noData or text/comment nodes (allow plain objects tho)
-		if ( elem.nodeType === 3 || elem.nodeType === 8 || !types || !handler || !(elemData = jQuery._data( elem )) ) {
-			return;
-		}
-
-		// Caller can pass in an object of custom data in lieu of the handler
-		if ( handler.handler ) {
-			handleObjIn = handler;
-			handler = handleObjIn.handler;
-			selector = handleObjIn.selector;
-		}
-
-		// Make sure that the handler has a unique ID, used to find/remove it later
-		if ( !handler.guid ) {
-			handler.guid = jQuery.guid++;
-		}
-
-		// Init the element's event structure and main handler, if this is the first
-		events = elemData.events;
-		if ( !events ) {
-			elemData.events = events = {};
-		}
-		eventHandle = elemData.handle;
-		if ( !eventHandle ) {
-			elemData.handle = eventHandle = function( e ) {
-				// Discard the second event of a jQuery.event.trigger() and
-				// when an event is called after a page has unloaded
-				return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
-					jQuery.event.dispatch.apply( eventHandle.elem, arguments ) :
-					undefined;
-			};
-			// Add elem as a property of the handle fn to prevent a memory leak with IE non-native events
-			eventHandle.elem = elem;
-		}
-
-		// Handle multiple events separated by a space
-		// jQuery(...).bind("mouseover mouseout", fn);
-		types = jQuery.trim( hoverHack(types) ).split( " " );
-		for ( t = 0; t < types.length; t++ ) {
-
-			tns = rtypenamespace.exec( types[t] ) || [];
-			type = tns[1];
-			namespaces = ( tns[2] || "" ).split( "." ).sort();
-
-			// If event changes its type, use the special event handlers for the changed type
-			special = jQuery.event.special[ type ] || {};
-
-			// If selector defined, determine special event api type, otherwise given type
-			type = ( selector ? special.delegateType : special.bindType ) || type;
-
-			// Update special based on newly reset type
-			special = jQuery.event.special[ type ] || {};
-
-			// handleObj is passed to all event handlers
-			handleObj = jQuery.extend({
-				type: type,
-				origType: tns[1],
-				data: data,
-				handler: handler,
-				guid: handler.guid,
-				selector: selector,
-				namespace: namespaces.join(".")
-			}, handleObjIn );
-
-			// Init the event handler queue if we're the first
-			handlers = events[ type ];
-			if ( !handlers ) {
-				handlers = events[ type ] = [];
-				handlers.delegateCount = 0;
-
-				// Only use addEventListener/attachEvent if the special events handler returns false
-				if ( !special.setup || special.setup.call( elem, data, namespaces, eventHandle ) === false ) {
-					// Bind the global event handler to the element
-					if ( elem.addEventListener ) {
-						elem.addEventListener( type, eventHandle, false );
-
-					} else if ( elem.attachEvent ) {
-						elem.attachEvent( "on" + type, eventHandle );
-					}
-				}
-			}
-
-			if ( special.add ) {
-				special.add.call( elem, handleObj );
-
-				if ( !handleObj.handler.guid ) {
-					handleObj.handler.guid = handler.guid;
-				}
-			}
-
-			// Add to the element's handler list, delegates in front
-			if ( selector ) {
-				handlers.splice( handlers.delegateCount++, 0, handleObj );
-			} else {
-				handlers.push( handleObj );
-			}
-
-			// Keep track of which events have ever been used, for event optimization
-			jQuery.event.global[ type ] = true;
-		}
-
-		// Nullify elem to prevent memory leaks in IE
-		elem = null;
-	},
-
-	global: {},
-
-	// Detach an event or set of events from an element
-	remove: function( elem, types, handler, selector, mappedTypes ) {
-
-		var t, tns, type, origType, namespaces, origCount,
-			j, events, special, eventType, handleObj,
-			elemData = jQuery.hasData( elem ) && jQuery._data( elem );
-
-		if ( !elemData || !(events = elemData.events) ) {
-			return;
-		}
-
-		// Once for each type.namespace in types; type may be omitted
-		types = jQuery.trim( hoverHack( types || "" ) ).split(" ");
-		for ( t = 0; t < types.length; t++ ) {
-			tns = rtypenamespace.exec( types[t] ) || [];
-			type = origType = tns[1];
-			namespaces = tns[2];
-
-			// Unbind all events (on this namespace, if provided) for the element
-			if ( !type ) {
-				for ( type in events ) {
-					jQuery.event.remove( elem, type + types[ t ], handler, selector, true );
-				}
-				continue;
-			}
-
-			special = jQuery.event.special[ type ] || {};
-			type = ( selector? special.delegateType : special.bindType ) || type;
-			eventType = events[ type ] || [];
-			origCount = eventType.length;
-			namespaces = namespaces ? new RegExp("(^|\\.)" + namespaces.split(".").sort().join("\\.(?:.*\\.|)") + "(\\.|$)") : null;
-
-			// Remove matching events
-			for ( j = 0; j < eventType.length; j++ ) {
-				handleObj = eventType[ j ];
-
-				if ( ( mappedTypes || origType === handleObj.origType ) &&
-					 ( !handler || handler.guid === handleObj.guid ) &&
-					 ( !namespaces || namespaces.test( handleObj.namespace ) ) &&
-					 ( !selector || selector === handleObj.selector || selector === "**" && handleObj.selector ) ) {
-					eventType.splice( j--, 1 );
-
-					if ( handleObj.selector ) {
-						eventType.delegateCount--;
-					}
-					if ( special.remove ) {
-						special.remove.call( elem, handleObj );
-					}
-				}
-			}
-
-			// Remove generic event handler if we removed something and no more handlers exist
-			// (avoids potential for endless recursion during removal of special event handlers)
-			if ( eventType.length === 0 && origCount !== eventType.length ) {
-				if ( !special.teardown || special.teardown.call( elem, namespaces, elemData.handle ) === false ) {
-					jQuery.removeEvent( elem, type, elemData.handle );
-				}
-
-				delete events[ type ];
-			}
-		}
-
-		// Remove the expando if it's no longer used
-		if ( jQuery.isEmptyObject( events ) ) {
-			delete elemData.handle;
-
-			// removeData also checks for emptiness and clears the expando if empty
-			// so use it instead of delete
-			jQuery.removeData( elem, "events", true );
-		}
-	},
-
-	// Events that are safe to short-circuit if no handlers are attached.
-	// Native DOM events should not be added, they may have inline handlers.
-	customEvent: {
-		"getData": true,
-		"setData": true,
-		"changeData": true
-	},
-
-	trigger: function( event, data, elem, onlyHandlers ) {
-		// Don't do events on text and comment nodes
-		if ( elem && (elem.nodeType === 3 || elem.nodeType === 8) ) {
-			return;
-		}
-
-		// Event object or event type
-		var cache, exclusive, i, cur, old, ontype, special, handle, eventPath, bubbleType,
-			type = event.type || event,
-			namespaces = [];
-
-		// focus/blur morphs to focusin/out; ensure we're not firing them right now
-		if ( rfocusMorph.test( type + jQuery.event.triggered ) ) {
-			return;
-		}
-
-		if ( type.indexOf( "!" ) >= 0 ) {
-			// Exclusive events trigger only for the exact event (no namespaces)
-			type = type.slice(0, -1);
-			exclusive = true;
-		}
-
-		if ( type.indexOf( "." ) >= 0 ) {
-			// Namespaced trigger; create a regexp to match event type in handle()
-			namespaces = type.split(".");
-			type = namespaces.shift();
-			namespaces.sort();
-		}
-
-		if ( (!elem || jQuery.event.customEvent[ type ]) && !jQuery.event.global[ type ] ) {
-			// No jQuery handlers for this event type, and it can't have inline handlers
-			return;
-		}
-
-		// Caller can pass in an Event, Object, or just an event type string
-		event = typeof event === "object" ?
-			// jQuery.Event object
-			event[ jQuery.expando ] ? event :
-			// Object literal
-			new jQuery.Event( type, event ) :
-			// Just the event type (string)
-			new jQuery.Event( type );
-
-		event.type = type;
-		event.isTrigger = true;
-		event.exclusive = exclusive;
-		event.namespace = namespaces.join( "." );
-		event.namespace_re = event.namespace? new RegExp("(^|\\.)" + namespaces.join("\\.(?:.*\\.|)") + "(\\.|$)") : null;
-		ontype = type.indexOf( ":" ) < 0 ? "on" + type : "";
-
-		// Handle a global trigger
-		if ( !elem ) {
-
-			// TODO: Stop taunting the data cache; remove global events and always attach to document
-			cache = jQuery.cache;
-			for ( i in cache ) {
-				if ( cache[ i ].events && cache[ i ].events[ type ] ) {
-					jQuery.event.trigger( event, data, cache[ i ].handle.elem, true );
-				}
-			}
-			return;
-		}
-
-		// Clean up the event in case it is being reused
-		event.result = undefined;
-		if ( !event.target ) {
-			event.target = elem;
-		}
-
-		// Clone any incoming data and prepend the event, creating the handler arg list
-		data = data != null ? jQuery.makeArray( data ) : [];
-		data.unshift( event );
-
-		// Allow special events to draw outside the lines
-		special = jQuery.event.special[ type ] || {};
-		if ( special.trigger && special.trigger.apply( elem, data ) === false ) {
-			return;
-		}
-
-		// Determine event propagation path in advance, per W3C events spec (#9951)
-		// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
-		eventPath = [[ elem, special.bindType || type ]];
-		if ( !onlyHandlers && !special.noBubble && !jQuery.isWindow( elem ) ) {
-
-			bubbleType = special.delegateType || type;
-			cur = rfocusMorph.test( bubbleType + type ) ? elem : elem.parentNode;
-			for ( old = elem; cur; cur = cur.parentNode ) {
-				eventPath.push([ cur, bubbleType ]);
-				old = cur;
-			}
-
-			// Only add window if we got to document (e.g., not plain obj or detached DOM)
-			if ( old === (elem.ownerDocument || document) ) {
-				eventPath.push([ old.defaultView || old.parentWindow || window, bubbleType ]);
-			}
-		}
-
-		// Fire handlers on the event path
-		for ( i = 0; i < eventPath.length && !event.isPropagationStopped(); i++ ) {
-
-			cur = eventPath[i][0];
-			event.type = eventPath[i][1];
-
-			handle = ( jQuery._data( cur, "events" ) || {} )[ event.type ] && jQuery._data( cur, "handle" );
-			if ( handle ) {
-				handle.apply( cur, data );
-			}
-			// Note that this is a bare JS function and not a jQuery handler
-			handle = ontype && cur[ ontype ];
-			if ( handle && jQuery.acceptData( cur ) && handle.apply( cur, data ) === false ) {
-				event.preventDefault();
-			}
-		}
-		event.type = type;
-
-		// If nobody prevented the default action, do it now
-		if ( !onlyHandlers && !event.isDefaultPrevented() ) {
-
-			if ( (!special._default || special._default.apply( elem.ownerDocument, data ) === false) &&
-				!(type === "click" && jQuery.nodeName( elem, "a" )) && jQuery.acceptData( elem ) ) {
-
-				// Call a native DOM method on the target with the same name name as the event.
-				// Can't use an .isFunction() check here because IE6/7 fails that test.
-				// Don't do default actions on window, that's where global variables be (#6170)
-				// IE<9 dies on focus/blur to hidden element (#1486)
-				if ( ontype && elem[ type ] && ((type !== "focus" && type !== "blur") || event.target.offsetWidth !== 0) && !jQuery.isWindow( elem ) ) {
-
-					// Don't re-trigger an onFOO event when we call its FOO() method
-					old = elem[ ontype ];
-
-					if ( old ) {
-						elem[ ontype ] = null;
-					}
-
-					// Prevent re-triggering of the same event, since we already bubbled it above
-					jQuery.event.triggered = type;
-					elem[ type ]();
-					jQuery.event.triggered = undefined;
-
-					if ( old ) {
-						elem[ ontype ] = old;
-					}
-				}
-			}
-		}
-
-		return event.result;
-	},
-
-	dispatch: function( event ) {
-
-		// Make a writable jQuery.Event from the native event object
-		event = jQuery.event.fix( event || window.event );
-
-		var i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related,
-			handlers = ( (jQuery._data( this, "events" ) || {} )[ event.type ] || []),
-			delegateCount = handlers.delegateCount,
-			args = [].slice.call( arguments ),
-			run_all = !event.exclusive && !event.namespace,
-			special = jQuery.event.special[ event.type ] || {},
-			handlerQueue = [];
-
-		// Use the fix-ed jQuery.Event rather than the (read-only) native event
-		args[0] = event;
-		event.delegateTarget = this;
-
-		// Call the preDispatch hook for the mapped type, and let it bail if desired
-		if ( special.preDispatch && special.preDispatch.call( this, event ) === false ) {
-			return;
-		}
-
-		// Determine handlers that should run if there are delegated events
-		// Avoid non-left-click bubbling in Firefox (#3861)
-		if ( delegateCount && !(event.button && event.type === "click") ) {
-
-			for ( cur = event.target; cur != this; cur = cur.parentNode || this ) {
-
-				// Don't process clicks (ONLY) on disabled elements (#6911, #8165, #11382, #11764)
-				if ( cur.disabled !== true || event.type !== "click" ) {
-					selMatch = {};
-					matches = [];
-					for ( i = 0; i < delegateCount; i++ ) {
-						handleObj = handlers[ i ];
-						sel = handleObj.selector;
-
-						if ( selMatch[ sel ] === undefined ) {
-							selMatch[ sel ] = jQuery( sel, this ).index( cur ) >= 0;
-						}
-						if ( selMatch[ sel ] ) {
-							matches.push( handleObj );
-						}
-					}
-					if ( matches.length ) {
-						handlerQueue.push({ elem: cur, matches: matches });
-					}
-				}
-			}
-		}
-
-		// Add the remaining (directly-bound) handlers
-		if ( handlers.length > delegateCount ) {
-			handlerQueue.push({ elem: this, matches: handlers.slice( delegateCount ) });
-		}
-
-		// Run delegates first; they may want to stop propagation beneath us
-		for ( i = 0; i < handlerQueue.length && !event.isPropagationStopped(); i++ ) {
-			matched = handlerQueue[ i ];
-			event.currentTarget = matched.elem;
-
-			for ( j = 0; j < matched.matches.length && !event.isImmediatePropagationStopped(); j++ ) {
-				handleObj = matched.matches[ j ];
-
-				// Triggered event must either 1) be non-exclusive and have no namespace, or
-				// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
-				if ( run_all || (!event.namespace && !handleObj.namespace) || event.namespace_re && event.namespace_re.test( handleObj.namespace ) ) {
-
-					event.data = handleObj.data;
-					event.handleObj = handleObj;
-
-					ret = ( (jQuery.event.special[ handleObj.origType ] || {}).handle || handleObj.handler )
-							.apply( matched.elem, args );
-
-					if ( ret !== undefined ) {
-						event.result = ret;
-						if ( ret === false ) {
-							event.preventDefault();
-							event.stopPropagation();
-						}
-					}
-				}
-			}
-		}
-
-		// Call the postDispatch hook for the mapped type
-		if ( special.postDispatch ) {
-			special.postDispatch.call( this, event );
-		}
-
-		return event.result;
-	},
-
-	// Includes some event props shared by KeyEvent and MouseEvent
-	// *** attrChange attrName relatedNode srcElement  are not normalized, non-W3C, deprecated, will be removed in 1.8 ***
-	props: "attrChange attrName relatedNode srcElement altKey bubbles cancelable ctrlKey currentTarget eventPhase metaKey relatedTarget shiftKey target timeStamp view which".split(" "),
-
-	fixHooks: {},
-
-	keyHooks: {
-		props: "char charCode key keyCode".split(" "),
-		filter: function( event, original ) {
-
-			// Add which for key events
-			if ( event.which == null ) {
-				event.which = original.charCode != null ? original.charCode : original.keyCode;
-			}
-
-			return event;
-		}
-	},
-
-	mouseHooks: {
-		props: "button buttons clientX clientY fromElement offsetX offsetY pageX pageY screenX screenY toElement".split(" "),
-		filter: function( event, original ) {
-			var eventDoc, doc, body,
-				button = original.button,
-				fromElement = original.fromElement;
-
-			// Calculate pageX/Y if missing and clientX/Y available
-			if ( event.pageX == null && original.clientX != null ) {
-				eventDoc = event.target.ownerDocument || document;
-				doc = eventDoc.documentElement;
-				body = eventDoc.body;
-
-				event.pageX = original.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 );
-				event.pageY = original.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 );
-			}
-
-			// Add relatedTarget, if necessary
-			if ( !event.relatedTarget && fromElement ) {
-				event.relatedTarget = fromElement === event.target ? original.toElement : fromElement;
-			}
-
-			// Add which for click: 1 === left; 2 === middle; 3 === right
-			// Note: button is not normalized, so don't use it
-			if ( !event.which && button !== undefined ) {
-				event.which = ( button & 1 ? 1 : ( button & 2 ? 3 : ( button & 4 ? 2 : 0 ) ) );
-			}
-
-			return event;
-		}
-	},
-
-	fix: function( event ) {
-		if ( event[ jQuery.expando ] ) {
-			return event;
-		}
-
-		// Create a writable copy of the event object and normalize some properties
-		var i, prop,
-			originalEvent = event,
-			fixHook = jQuery.event.fixHooks[ event.type ] || {},
-			copy = fixHook.props ? this.props.concat( fixHook.props ) : this.props;
-
-		event = jQuery.Event( originalEvent );
-
-		for ( i = copy.length; i; ) {
-			prop = copy[ --i ];
-			event[ prop ] = originalEvent[ prop ];
-		}
-
-		// Fix target property, if necessary (#1925, IE 6/7/8 & Safari2)
-		if ( !event.target ) {
-			event.target = originalEvent.srcElement || document;
-		}
-
-		// Target should not be a text node (#504, Safari)
-		if ( event.target.nodeType === 3 ) {
-			event.target = event.target.parentNode;
-		}
-
-		// For mouse/key events, metaKey==false if it's undefined (#3368, #11328; IE6/7/8)
-		event.metaKey = !!event.metaKey;
-
-		return fixHook.filter? fixHook.filter( event, originalEvent ) : event;
-	},
-
-	special: {
-		load: {
-			// Prevent triggered image.load events from bubbling to window.load
-			noBubble: true
-		},
-
-		focus: {
-			delegateType: "focusin"
-		},
-		blur: {
-			delegateType: "focusout"
-		},
-
-		beforeunload: {
-			setup: function( data, namespaces, eventHandle ) {
-				// We only want to do this special case on windows
-				if ( jQuery.isWindow( this ) ) {
-					this.onbeforeunload = eventHandle;
-				}
-			},
-
-			teardown: function( namespaces, eventHandle ) {
-				if ( this.onbeforeunload === eventHandle ) {
-					this.onbeforeunload = null;
-				}
-			}
-		}
-	},
-
-	simulate: function( type, elem, event, bubble ) {
-		// Piggyback on a donor event to simulate a different one.
-		// Fake originalEvent to avoid donor's stopPropagation, but if the
-		// simulated event prevents default then we do the same on the donor.
-		var e = jQuery.extend(
-			new jQuery.Event(),
-			event,
-			{ type: type,
-				isSimulated: true,
-				originalEvent: {}
-			}
-		);
-		if ( bubble ) {
-			jQuery.event.trigger( e, null, elem );
-		} else {
-			jQuery.event.dispatch.call( elem, e );
-		}
-		if ( e.isDefaultPrevented() ) {
-			event.preventDefault();
-		}
-	}
-};
-
-// Some plugins are using, but it's undocumented/deprecated and will be removed.
-// The 1.7 special event interface should provide all the hooks needed now.
-jQuery.event.handle = jQuery.event.dispatch;
-
-jQuery.removeEvent = document.removeEventListener ?
-	function( elem, type, handle ) {
-		if ( elem.removeEventListener ) {
-			elem.removeEventListener( type, handle, false );
-		}
-	} :
-	function( elem, type, handle ) {
-		var name = "on" + type;
-
-		if ( elem.detachEvent ) {
-
-			// #8545, #7054, preventing memory leaks for custom events in IE6-8 –
-			// detachEvent needed property on element, by name of that event, to properly expose it to GC
-			if ( typeof elem[ name ] === "undefined" ) {
-				elem[ name ] = null;
-			}
-
-			elem.detachEvent( name, handle );
-		}
-	};
-
-jQuery.Event = function( src, props ) {
-	// Allow instantiation without the 'new' keyword
-	if ( !(this instanceof jQuery.Event) ) {
-		return new jQuery.Event( src, props );
-	}
-
-	// Event object
-	if ( src && src.type ) {
-		this.originalEvent = src;
-		this.type = src.type;
-
-		// Events bubbling up the document may have been marked as prevented
-		// by a handler lower down the tree; reflect the correct value.
-		this.isDefaultPrevented = ( src.defaultPrevented || src.returnValue === false ||
-			src.getPreventDefault && src.getPreventDefault() ) ? returnTrue : returnFalse;
-
-	// Event type
-	} else {
-		this.type = src;
-	}
-
-	// Put explicitly provided properties onto the event object
-	if ( props ) {
-		jQuery.extend( this, props );
-	}
-
-	// Create a timestamp if incoming event doesn't have one
-	this.timeStamp = src && src.timeStamp || jQuery.now();
-
-	// Mark it as fixed
-	this[ jQuery.expando ] = true;
-};
-
-function returnFalse() {
-	return false;
-}
-function returnTrue() {
-	return true;
-}
-
-// jQuery.Event is based on DOM3 Events as specified by the ECMAScript Language Binding
-// http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/ecma-script-binding.html
-jQuery.Event.prototype = {
-	preventDefault: function() {
-		this.isDefaultPrevented = returnTrue;
-
-		var e = this.originalEvent;
-		if ( !e ) {
-			return;
-		}
-
-		// if preventDefault exists run it on the original event
-		if ( e.preventDefault ) {
-			e.preventDefault();
-
-		// otherwise set the returnValue property of the original event to false (IE)
-		} else {
-			e.returnValue = false;
-		}
-	},
-	stopPropagation: function() {
-		this.isPropagationStopped = returnTrue;
-
-		var e = this.originalEvent;
-		if ( !e ) {
-			return;
-		}
-		// if stopPropagation exists run it on the original event
-		if ( e.stopPropagation ) {
-			e.stopPropagation();
-		}
-		// otherwise set the cancelBubble property of the original event to true (IE)
-		e.cancelBubble = true;
-	},
-	stopImmediatePropagation: function() {
-		this.isImmediatePropagationStopped = returnTrue;
-		this.stopPropagation();
-	},
-	isDefaultPrevented: returnFalse,
-	isPropagationStopped: returnFalse,
-	isImmediatePropagationStopped: returnFalse
-};
-
-// Create mouseenter/leave events using mouseover/out and event-time checks
-jQuery.each({
-	mouseenter: "mouseover",
-	mouseleave: "mouseout"
-}, function( orig, fix ) {
-	jQuery.event.special[ orig ] = {
-		delegateType: fix,
-		bindType: fix,
-
-		handle: function( event ) {
-			var ret,
-				target = this,
-				related = event.relatedTarget,
-				handleObj = event.handleObj,
-				selector = handleObj.selector;
-
-			// For mousenter/leave call the handler if related is outside the target.
-			// NB: No relatedTarget if the mouse left/entered the browser window
-			if ( !related || (related !== target && !jQuery.contains( target, related )) ) {
-				event.type = handleObj.origType;
-				ret = handleObj.handler.apply( this, arguments );
-				event.type = fix;
-			}
-			return ret;
-		}
-	};
-});
-
-// IE submit delegation
-if ( !jQuery.support.submitBubbles ) {
-
-	jQuery.event.special.submit = {
-		setup: function() {
-			// Only need this for delegated form submit events
-			if ( jQuery.nodeName( this, "form" ) ) {
-				return false;
-			}
-
-			// Lazy-add a submit handler when a descendant form may potentially be submitted
-			jQuery.event.add( this, "click._submit keypress._submit", function( e ) {
-				// Node name check avoids a VML-related crash in IE (#9807)
-				var elem = e.target,
-					form = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.form : undefined;
-				if ( form && !jQuery._data( form, "_submit_attached" ) ) {
-					jQuery.event.add( form, "submit._submit", function( event ) {
-						event._submit_bubble = true;
-					});
-					jQuery._data( form, "_submit_attached", true );
-				}
-			});
-			// return undefined since we don't need an event listener
-		},
-
-		postDispatch: function( event ) {
-			// If form was submitted by the user, bubble the event up the tree
-			if ( event._submit_bubble ) {
-				delete event._submit_bubble;
-				if ( this.parentNode && !event.isTrigger ) {
-					jQuery.event.simulate( "submit", this.parentNode, event, true );
-				}
-			}
-		},
-
-		teardown: function() {
-			// Only need this for delegated form submit events
-			if ( jQuery.nodeName( this, "form" ) ) {
-				return false;
-			}
-
-			// Remove delegated handlers; cleanData eventually reaps submit handlers attached above
-			jQuery.event.remove( this, "._submit" );
-		}
-	};
-}
-
-// IE change delegation and checkbox/radio fix
-if ( !jQuery.support.changeBubbles ) {
-
-	jQuery.event.special.change = {
-
-		setup: function() {
-
-			if ( rformElems.test( this.nodeName ) ) {
-				// IE doesn't fire change on a check/radio until blur; trigger it on click
-				// after a propertychange. Eat the blur-change in special.change.handle.
-				// This still fires onchange a second time for check/radio after blur.
-				if ( this.type === "checkbox" || this.type === "radio" ) {
-					jQuery.event.add( this, "propertychange._change", function( event ) {
-						if ( event.originalEvent.propertyName === "checked" ) {
-							this._just_changed = true;
-						}
-					});
-					jQuery.event.add( this, "click._change", function( event ) {
-						if ( this._just_changed && !event.isTrigger ) {
-							this._just_changed = false;
-						}
-						// Allow triggered, simulated change events (#11500)
-						jQuery.event.simulate( "change", this, event, true );
-					});
-				}
-				return false;
-			}
-			// Delegated event; lazy-add a change handler on descendant inputs
-			jQuery.event.add( this, "beforeactivate._change", function( e ) {
-				var elem = e.target;
-
-				if ( rformElems.test( elem.nodeName ) && !jQuery._data( elem, "_change_attached" ) ) {
-					jQuery.event.add( elem, "change._change", function( event ) {
-						if ( this.parentNode && !event.isSimulated && !event.isTrigger ) {
-							jQuery.event.simulate( "change", this.parentNode, event, true );
-						}
-					});
-					jQuery._data( elem, "_change_attached", true );
-				}
-			});
-		},
-
-		handle: function( event ) {
-			var elem = event.target;
-
-			// Swallow native change events from checkbox/radio, we already triggered them above
-			if ( this !== elem || event.isSimulated || event.isTrigger || (elem.type !== "radio" && elem.type !== "checkbox") ) {
-				return event.handleObj.handler.apply( this, arguments );
-			}
-		},
-
-		teardown: function() {
-			jQuery.event.remove( this, "._change" );
-
-			return !rformElems.test( this.nodeName );
-		}
-	};
-}
-
-// Create "bubbling" focus and blur events
-if ( !jQuery.support.focusinBubbles ) {
-	jQuery.each({ focus: "focusin", blur: "focusout" }, function( orig, fix ) {
-
-		// Attach a single capturing handler while someone wants focusin/focusout
-		var attaches = 0,
-			handler = function( event ) {
-				jQuery.event.simulate( fix, event.target, jQuery.event.fix( event ), true );
-			};
-
-		jQuery.event.special[ fix ] = {
-			setup: function() {
-				if ( attaches++ === 0 ) {
-					document.addEventListener( orig, handler, true );
-				}
-			},
-			teardown: function() {
-				if ( --attaches === 0 ) {
-					document.removeEventListener( orig, handler, true );
-				}
-			}
-		};
-	});
-}
-
-jQuery.fn.extend({
-
-	on: function( types, selector, data, fn, /*INTERNAL*/ one ) {
-		var origFn, type;
-
-		// Types can be a map of types/handlers
-		if ( typeof types === "object" ) {
-			// ( types-Object, selector, data )
-			if ( typeof selector !== "string" ) { // && selector != null
-				// ( types-Object, data )
-				data = data || selector;
-				selector = undefined;
-			}
-			for ( type in types ) {
-				this.on( type, selector, data, types[ type ], one );
-			}
-			return this;
-		}
-
-		if ( data == null && fn == null ) {
-			// ( types, fn )
-			fn = selector;
-			data = selector = undefined;
-		} else if ( fn == null ) {
-			if ( typeof selector === "string" ) {
-				// ( types, selector, fn )
-				fn = data;
-				data = undefined;
-			} else {
-				// ( types, data, fn )
-				fn = data;
-				data = selector;
-				selector = undefined;
-			}
-		}
-		if ( fn === false ) {
-			fn = returnFalse;
-		} else if ( !fn ) {
-			return this;
-		}
-
-		if ( one === 1 ) {
-			origFn = fn;
-			fn = function( event ) {
-				// Can use an empty set, since event contains the info
-				jQuery().off( event );
-				return origFn.apply( this, arguments );
-			};
-			// Use same guid so caller can remove using origFn
-			fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );
-		}
-		return this.each( function() {
-			jQuery.event.add( this, types, fn, data, selector );
-		});
-	},
-	one: function( types, selector, data, fn ) {
-		return this.on( types, selector, data, fn, 1 );
-	},
-	off: function( types, selector, fn ) {
-		var handleObj, type;
-		if ( types && types.preventDefault && types.handleObj ) {
-			// ( event )  dispatched jQuery.Event
-			handleObj = types.handleObj;
-			jQuery( types.delegateTarget ).off(
-				handleObj.namespace ? handleObj.origType + "." + handleObj.namespace : handleObj.origType,
-				handleObj.selector,
-				handleObj.handler
-			);
-			return this;
-		}
-		if ( typeof types === "object" ) {
-			// ( types-object [, selector] )
-			for ( type in types ) {
-				this.off( type, selector, types[ type ] );
-			}
-			return this;
-		}
-		if ( selector === false || typeof selector === "function" ) {
-			// ( types [, fn] )
-			fn = selector;
-			selector = undefined;
-		}
-		if ( fn === false ) {
-			fn = returnFalse;
-		}
-		return this.each(function() {
-			jQuery.event.remove( this, types, fn, selector );
-		});
-	},
-
-	bind: function( types, data, fn ) {
-		return this.on( types, null, data, fn );
-	},
-	unbind: function( types, fn ) {
-		return this.off( types, null, fn );
-	},
-
-	live: function( types, data, fn ) {
-		jQuery( this.context ).on( types, this.selector, data, fn );
-		return this;
-	},
-	die: function( types, fn ) {
-		jQuery( this.context ).off( types, this.selector || "**", fn );
-		return this;
-	},
-
-	delegate: function( selector, types, data, fn ) {
-		return this.on( types, selector, data, fn );
-	},
-	undelegate: function( selector, types, fn ) {
-		// ( namespace ) or ( selector, types [, fn] )
-		return arguments.length == 1? this.off( selector, "**" ) : this.off( types, selector || "**", fn );
-	},
-
-	trigger: function( type, data ) {
-		return this.each(function() {
-			jQuery.event.trigger( type, data, this );
-		});
-	},
-	triggerHandler: function( type, data ) {
-		if ( this[0] ) {
-			return jQuery.event.trigger( type, data, this[0], true );
-		}
-	},
-
-	toggle: function( fn ) {
-		// Save reference to arguments for access in closure
-		var args = arguments,
-			guid = fn.guid || jQuery.guid++,
-			i = 0,
-			toggler = function( event ) {
-				// Figure out which function to execute
-				var lastToggle = ( jQuery._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
-				jQuery._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
-
-				// Make sure that clicks stop
-				event.preventDefault();
-
-				// and execute the function
-				return args[ lastToggle ].apply( this, arguments ) || false;
-			};
-
-		// link all the functions, so any of them can unbind this click handler
-		toggler.guid = guid;
-		while ( i < args.length ) {
-			args[ i++ ].guid = guid;
-		}
-
-		return this.click( toggler );
-	},
-
-	hover: function( fnOver, fnOut ) {
-		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
-	}
-});
-
-jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblclick " +
-	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-	"change select submit keydown keypress keyup error contextmenu").split(" "), function( i, name ) {
-
-	// Handle event binding
-	jQuery.fn[ name ] = function( data, fn ) {
-		if ( fn == null ) {
-			fn = data;
-			data = null;
-		}
-
-		return arguments.length > 0 ?
-			this.on( name, null, data, fn ) :
-			this.trigger( name );
-	};
-
-	if ( rkeyEvent.test( name ) ) {
-		jQuery.event.fixHooks[ name ] = jQuery.event.keyHooks;
-	}
-
-	if ( rmouseEvent.test( name ) ) {
-		jQuery.event.fixHooks[ name ] = jQuery.event.mouseHooks;
-	}
-});
-/*!
- * Sizzle CSS Selector Engine
- *  Copyright 2012 jQuery Foundation and other contributors
- *  Released under the MIT license
- *  http://sizzlejs.com/
- */
-(function( window, undefined ) {
-
-var dirruns,
-	cachedruns,
-	assertGetIdNotName,
-	Expr,
-	getText,
-	isXML,
-	contains,
-	compile,
-	sortOrder,
-	hasDuplicate,
-
-	baseHasDuplicate = true,
-	strundefined = "undefined",
-
-	expando = ( "sizcache" + Math.random() ).replace( ".", "" ),
-
-	document = window.document,
-	docElem = document.documentElement,
-	done = 0,
-	slice = [].slice,
-	push = [].push,
-
-	// Augment a function for special use by Sizzle
-	markFunction = function( fn, value ) {
-		fn[ expando ] = value || true;
-		return fn;
-	},
-
-	createCache = function() {
-		var cache = {},
-			keys = [];
-
-		return markFunction(function( key, value ) {
-			// Only keep the most recent entries
-			if ( keys.push( key ) > Expr.cacheLength ) {
-				delete cache[ keys.shift() ];
-			}
-
-			return (cache[ key ] = value);
-		}, cache );
-	},
-
-	classCache = createCache(),
-	tokenCache = createCache(),
-	compilerCache = createCache(),
-
-	// Regex
-
-	// Whitespace characters http://www.w3.org/TR/css3-selectors/#whitespace
-	whitespace = "[\\x20\\t\\r\\n\\f]",
-	// http://www.w3.org/TR/css3-syntax/#characters
-	characterEncoding = "(?:\\\\.|[-\\w]|[^\\x00-\\xa0])+",
-
-	// Loosely modeled on CSS identifier characters
-	// An unquoted value should be a CSS identifier (http://www.w3.org/TR/css3-selectors/#attribute-selectors)
-	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
-	identifier = characterEncoding.replace( "w", "w#" ),
-
-	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
-	operators = "([*^$|!~]?=)",
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
-		"*(?:" + operators + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
-
-	// Prefer arguments not in parens/brackets,
-	//   then attribute selectors and non-pseudos (denoted by :),
-	//   then anything else
-	// These preferences are here to reduce the number of selectors
-	//   needing tokenize in the PSEUDO preFilter
-	pseudos = ":(" + characterEncoding + ")(?:\\((?:(['\"])((?:\\\\.|[^\\\\])*?)\\2|([^()[\\]]*|(?:(?:" + attributes + ")|[^:]|\\\\.)*|.*))\\)|)",
-
-	// For matchExpr.POS and matchExpr.needsContext
-	pos = ":(nth|eq|gt|lt|first|last|even|odd)(?:\\(((?:-\\d)?\\d*)\\)|)(?=[^-]|$)",
-
-	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
-	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
-
-	rcomma = new RegExp( "^" + whitespace + "*," + whitespace + "*" ),
-	rcombinators = new RegExp( "^" + whitespace + "*([\\x20\\t\\r\\n\\f>+~])" + whitespace + "*" ),
-	rpseudo = new RegExp( pseudos ),
-
-	// Easily-parseable/retrievable ID or TAG or CLASS selectors
-	rquickExpr = /^(?:#([\w\-]+)|(\w+)|\.([\w\-]+))$/,
-
-	rnot = /^:not/,
-	rsibling = /[\x20\t\r\n\f]*[+~]/,
-	rendsWithNot = /:not\($/,
-
-	rheader = /h\d/i,
-	rinputs = /input|select|textarea|button/i,
-
-	rbackslash = /\\(?!\\)/g,
-
-	matchExpr = {
-		"ID": new RegExp( "^#(" + characterEncoding + ")" ),
-		"CLASS": new RegExp( "^\\.(" + characterEncoding + ")" ),
-		"NAME": new RegExp( "^\\[name=['\"]?(" + characterEncoding + ")['\"]?\\]" ),
-		"TAG": new RegExp( "^(" + characterEncoding.replace( "w", "w*" ) + ")" ),
-		"ATTR": new RegExp( "^" + attributes ),
-		"PSEUDO": new RegExp( "^" + pseudos ),
-		"CHILD": new RegExp( "^:(only|nth|last|first)-child(?:\\(" + whitespace +
-			"*(even|odd|(([+-]|)(\\d*)n|)" + whitespace + "*(?:([+-]|)" + whitespace +
-			"*(\\d+)|))" + whitespace + "*\\)|)", "i" ),
-		"POS": new RegExp( pos, "ig" ),
-		// For use in libraries implementing .is()
-		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|" + pos, "i" )
-	},
-
-	// Support
-
-	// Used for testing something on an element
-	assert = function( fn ) {
-		var div = document.createElement("div");
-
-		try {
-			return fn( div );
-		} catch (e) {
-			return false;
-		} finally {
-			// release memory in IE
-			div = null;
-		}
-	},
-
-	// Check if getElementsByTagName("*") returns only elements
-	assertTagNameNoComments = assert(function( div ) {
-		div.appendChild( document.createComment("") );
-		return !div.getElementsByTagName("*").length;
-	}),
-
-	// Check if getAttribute returns normalized href attributes
-	assertHrefNotNormalized = assert(function( div ) {
-		div.innerHTML = "<a href='#'></a>";
-		return div.firstChild && typeof div.firstChild.getAttribute !== strundefined &&
-			div.firstChild.getAttribute("href") === "#";
-	}),
-
-	// Check if attributes should be retrieved by attribute nodes
-	assertAttributes = assert(function( div ) {
-		div.innerHTML = "<select></select>";
-		var type = typeof div.lastChild.getAttribute("multiple");
-		// IE8 returns a string for some attributes even when not present
-		return type !== "boolean" && type !== "string";
-	}),
-
-	// Check if getElementsByClassName can be trusted
-	assertUsableClassName = assert(function( div ) {
-		// Opera can't find a second classname (in 9.6)
-		div.innerHTML = "<div class='hidden e'></div><div class='hidden'></div>";
-		if ( !div.getElementsByClassName || !div.getElementsByClassName("e").length ) {
-			return false;
-		}
-
-		// Safari 3.2 caches class attributes and doesn't catch changes
-		div.lastChild.className = "e";
-		return div.getElementsByClassName("e").length === 2;
-	}),
-
-	// Check if getElementById returns elements by name
-	// Check if getElementsByName privileges form controls or returns elements by ID
-	assertUsableName = assert(function( div ) {
-		// Inject content
-		div.id = expando + 0;
-		div.innerHTML = "<a name='" + expando + "'></a><div name='" + expando + "'></div>";
-		docElem.insertBefore( div, docElem.firstChild );
-
-		// Test
-		var pass = document.getElementsByName &&
-			// buggy browsers will return fewer than the correct 2
-			document.getElementsByName( expando ).length === 2 +
-			// buggy browsers will return more than the correct 0
-			document.getElementsByName( expando + 0 ).length;
-		assertGetIdNotName = !document.getElementById( expando );
-
-		// Cleanup
-		docElem.removeChild( div );
-
-		return pass;
-	});
-
-// If slice is not available, provide a backup
-try {
-	slice.call( docElem.childNodes, 0 )[0].nodeType;
-} catch ( e ) {
-	slice = function( i ) {
-		var elem, results = [];
-		for ( ; (elem = this[i]); i++ ) {
-			results.push( elem );
-		}
-		return results;
-	};
-}
-
-function Sizzle( selector, context, results, seed ) {
-	results = results || [];
-	context = context || document;
-	var match, elem, xml, m,
-		nodeType = context.nodeType;
-
-	if ( nodeType !== 1 && nodeType !== 9 ) {
-		return [];
-	}
-
-	if ( !selector || typeof selector !== "string" ) {
-		return results;
-	}
-
-	xml = isXML( context );
-
-	if ( !xml && !seed ) {
-		if ( (match = rquickExpr.exec( selector )) ) {
-			// Speed-up: Sizzle("#ID")
-			if ( (m = match[1]) ) {
-				if ( nodeType === 9 ) {
-					elem = context.getElementById( m );
-					// Check parentNode to catch when Blackberry 4.6 returns
-					// nodes that are no longer in the document #6963
-					if ( elem && elem.parentNode ) {
-						// Handle the case where IE, Opera, and Webkit return items
-						// by name instead of ID
-						if ( elem.id === m ) {
-							results.push( elem );
-							return results;
-						}
-					} else {
-						return results;
-					}
-				} else {
-					// Context is not a document
-					if ( context.ownerDocument && (elem = context.ownerDocument.getElementById( m )) &&
-						contains( context, elem ) && elem.id === m ) {
-						results.push( elem );
-						return results;
-					}
-				}
-
-			// Speed-up: Sizzle("TAG")
-			} else if ( match[2] ) {
-				push.apply( results, slice.call(context.getElementsByTagName( selector ), 0) );
-				return results;
-
-			// Speed-up: Sizzle(".CLASS")
-			} else if ( (m = match[3]) && assertUsableClassName && context.getElementsByClassName ) {
-				push.apply( results, slice.call(context.getElementsByClassName( m ), 0) );
-				return results;
-			}
-		}
-	}
-
-	// All others
-	return select( selector, context, results, seed, xml );
-}
-
-Sizzle.matches = function( expr, elements ) {
-	return Sizzle( expr, null, null, elements );
-};
-
-Sizzle.matchesSelector = function( elem, expr ) {
-	return Sizzle( expr, null, null, [ elem ] ).length > 0;
-};
-
-// Returns a function to use in pseudos for input types
-function createInputPseudo( type ) {
-	return function( elem ) {
-		var name = elem.nodeName.toLowerCase();
-		return name === "input" && elem.type === type;
-	};
-}
-
-// Returns a function to use in pseudos for buttons
-function createButtonPseudo( type ) {
-	return function( elem ) {
-		var name = elem.nodeName.toLowerCase();
-		return (name === "input" || name === "button") && elem.type === type;
-	};
-}
-
-/**
- * Utility function for retrieving the text value of an array of DOM nodes
- * @param {Array|Element} elem
- */
-getText = Sizzle.getText = function( elem ) {
-	var node,
-		ret = "",
-		i = 0,
-		nodeType = elem.nodeType;
-
-	if ( nodeType ) {
-		if ( nodeType === 1 || nodeType === 9 || nodeType === 11 ) {
-			// Use textContent for elements
-			// innerText usage removed for consistency of new lines (see #11153)
-			if ( typeof elem.textContent === "string" ) {
-				return elem.textContent;
-			} else {
-				// Traverse its children
-				for ( elem = elem.firstChild; elem; elem = elem.nextSibling ) {
-					ret += getText( elem );
-				}
-			}
-		} else if ( nodeType === 3 || nodeType === 4 ) {
-			return elem.nodeValue;
-		}
-		// Do not include comment or processing instruction nodes
-	} else {
-
-		// If no nodeType, this is expected to be an array
-		for ( ; (node = elem[i]); i++ ) {
-			// Do not traverse comment nodes
-			ret += getText( node );
-		}
-	}
-	return ret;
-};
-
-isXML = Sizzle.isXML = function isXML( elem ) {
-	// documentElement is verified for cases where it doesn't yet exist
-	// (such as loading iframes in IE - #4833)
-	var documentElement = elem && (elem.ownerDocument || elem).documentElement;
-	return documentElement ? documentElement.nodeName !== "HTML" : false;
-};
-
-// Element contains another
-contains = Sizzle.contains = docElem.contains ?
-	function( a, b ) {
-		var adown = a.nodeType === 9 ? a.documentElement : a,
-			bup = b && b.parentNode;
-		return a === bup || !!( bup && bup.nodeType === 1 && adown.contains && adown.contains(bup) );
-	} :
-	docElem.compareDocumentPosition ?
-	function( a, b ) {
-		return b && !!( a.compareDocumentPosition( b ) & 16 );
-	} :
-	function( a, b ) {
-		while ( (b = b.parentNode) ) {
-			if ( b === a ) {
-				return true;
-			}
-		}
-		return false;
-	};
-
-Sizzle.attr = function( elem, name ) {
-	var attr,
-		xml = isXML( elem );
-
-	if ( !xml ) {
-		name = name.toLowerCase();
-	}
-	if ( Expr.attrHandle[ name ] ) {
-		return Expr.attrHandle[ name ]( elem );
-	}
-	if ( assertAttributes || xml ) {
-		return elem.getAttribute( name );
-	}
-	attr = elem.getAttributeNode( name );
-	return attr ?
-		typeof elem[ name ] === "boolean" ?
-			elem[ name ] ? name : null :
-			attr.specified ? attr.value : null :
-		null;
-};
-
-Expr = Sizzle.selectors = {
-
-	// Can be adjusted by the user
-	cacheLength: 50,
-
-	createPseudo: markFunction,
-
-	match: matchExpr,
-
-	order: new RegExp( "ID|TAG" +
-		(assertUsableName ? "|NAME" : "") +
-		(assertUsableClassName ? "|CLASS" : "")
-	),
-
-	// IE6/7 return a modified href
-	attrHandle: assertHrefNotNormalized ?
-		{} :
-		{
-			"href": function( elem ) {
-				return elem.getAttribute( "href", 2 );
-			},
-			"type": function( elem ) {
-				return elem.getAttribute("type");
-			}
-		},
-
-	find: {
-		"ID": assertGetIdNotName ?
-			function( id, context, xml ) {
-				if ( typeof context.getElementById !== strundefined && !xml ) {
-					var m = context.getElementById( id );
-					// Check parentNode to catch when Blackberry 4.6 returns
-					// nodes that are no longer in the document #6963
-					return m && m.parentNode ? [m] : [];
-				}
-			} :
-			function( id, context, xml ) {
-				if ( typeof context.getElementById !== strundefined && !xml ) {
-					var m = context.getElementById( id );
-
-					return m ?
-						m.id === id || typeof m.getAttributeNode !== strundefined && m.getAttributeNode("id").value === id ?
-							[m] :
-							undefined :
-						[];
-				}
-			},
-
-		"TAG": assertTagNameNoComments ?
-			function( tag, context ) {
-				if ( typeof context.getElementsByTagName !== strundefined ) {
-					return context.getElementsByTagName( tag );
-				}
-			} :
-			function( tag, context ) {
-				var results = context.getElementsByTagName( tag );
-
-				// Filter out possible comments
-				if ( tag === "*" ) {
-					var elem,
-						tmp = [],
-						i = 0;
-
-					for ( ; (elem = results[i]); i++ ) {
-						if ( elem.nodeType === 1 ) {
-							tmp.push( elem );
-						}
-					}
-
-					return tmp;
-				}
-				return results;
-			},
-
-		"NAME": function( tag, context ) {
-			if ( typeof context.getElementsByName !== strundefined ) {
-				return context.getElementsByName( name );
-			}
-		},
-
-		"CLASS": function( className, context, xml ) {
-			if ( typeof context.getElementsByClassName !== strundefined && !xml ) {
-				return context.getElementsByClassName( className );
-			}
-		}
-	},
-
-	relative: {
-		">": { dir: "parentNode", first: true },
-		" ": { dir: "parentNode" },
-		"+": { dir: "previousSibling", first: true },
-		"~": { dir: "previousSibling" }
-	},
-
-	preFilter: {
-		"ATTR": function( match ) {
-			match[1] = match[1].replace( rbackslash, "" );
-
-			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[4] || match[5] || "" ).replace( rbackslash, "" );
-
-			if ( match[2] === "~=" ) {
-				match[3] = " " + match[3] + " ";
-			}
-
-			return match.slice( 0, 4 );
-		},
-
-		"CHILD": function( match ) {
-			/* matches from matchExpr.CHILD
-				1 type (only|nth|...)
-				2 argument (even|odd|\d*|\d*n([+-]\d+)?|...)
-				3 xn-component of xn+y argument ([+-]?\d*n|)
-				4 sign of xn-component
-				5 x of xn-component
-				6 sign of y-component
-				7 y of y-component
-			*/
-			match[1] = match[1].toLowerCase();
-
-			if ( match[1] === "nth" ) {
-				// nth-child requires argument
-				if ( !match[2] ) {
-					Sizzle.error( match[0] );
-				}
-
-				// numeric x and y parameters for Expr.filter.CHILD
-				// remember that false/true cast respectively to 0/1
-				match[3] = +( match[3] ? match[4] + (match[5] || 1) : 2 * ( match[2] === "even" || match[2] === "odd" ) );
-				match[4] = +( ( match[6] + match[7] ) || match[2] === "odd" );
-
-			// other types prohibit arguments
-			} else if ( match[2] ) {
-				Sizzle.error( match[0] );
-			}
-
-			return match;
-		},
-
-		"PSEUDO": function( match, context, xml ) {
-			var unquoted, excess;
-			if ( matchExpr["CHILD"].test( match[0] ) ) {
-				return null;
-			}
-
-			if ( match[3] ) {
-				match[2] = match[3];
-			} else if ( (unquoted = match[4]) ) {
-				// Only check arguments that contain a pseudo
-				if ( rpseudo.test(unquoted) &&
-					// Get excess from tokenize (recursively)
-					(excess = tokenize( unquoted, context, xml, true )) &&
-					// advance to the next closing parenthesis
-					(excess = unquoted.indexOf( ")", unquoted.length - excess ) - unquoted.length) ) {
-
-					// excess is a negative index
-					unquoted = unquoted.slice( 0, excess );
-					match[0] = match[0].slice( 0, excess );
-				}
-				match[2] = unquoted;
-			}
-
-			// Return only captures needed by the pseudo filter method (type and argument)
-			return match.slice( 0, 3 );
-		}
-	},
-
-	filter: {
-		"ID": assertGetIdNotName ?
-			function( id ) {
-				id = id.replace( rbackslash, "" );
-				return function( elem ) {
-					return elem.getAttribute("id") === id;
-				};
-			} :
-			function( id ) {
-				id = id.replace( rbackslash, "" );
-				return function( elem ) {
-					var node = typeof elem.getAttributeNode !== strundefined && elem.getAttributeNode("id");
-					return node && node.value === id;
-				};
-			},
-
-		"TAG": function( nodeName ) {
-			if ( nodeName === "*" ) {
-				return function() { return true; };
-			}
-			nodeName = nodeName.replace( rbackslash, "" ).toLowerCase();
-
-			return function( elem ) {
-				return elem.nodeName && elem.nodeName.toLowerCase() === nodeName;
-			};
-		},
-
-		"CLASS": function( className ) {
-			var pattern = classCache[ expando ][ className ];
-			if ( !pattern ) {
-				pattern = classCache( className, new RegExp("(^|" + whitespace + ")" + className + "(" + whitespace + "|$)") );
-			}
-			return function( elem ) {
-				return pattern.test( elem.className || (typeof elem.getAttribute !== strundefined && elem.getAttribute("class")) || "" );
-			};
-		},
-
-		"ATTR": function( name, operator, check ) {
-			if ( !operator ) {
-				return function( elem ) {
-					return Sizzle.attr( elem, name ) != null;
-				};
-			}
-
-			return function( elem ) {
-				var result = Sizzle.attr( elem, name ),
-					value = result + "";
-
-				if ( result == null ) {
-					return operator === "!=";
-				}
-
-				switch ( operator ) {
-					case "=":
-						return value === check;
-					case "!=":
-						return value !== check;
-					case "^=":
-						return check && value.indexOf( check ) === 0;
-					case "*=":
-						return check && value.indexOf( check ) > -1;
-					case "$=":
-						return check && value.substr( value.length - check.length ) === check;
-					case "~=":
-						return ( " " + value + " " ).indexOf( check ) > -1;
-					case "|=":
-						return value === check || value.substr( 0, check.length + 1 ) === check + "-";
-				}
-			};
-		},
-
-		"CHILD": function( type, argument, first, last ) {
-
-			if ( type === "nth" ) {
-				var doneName = done++;
-
-				return function( elem ) {
-					var parent, diff,
-						count = 0,
-						node = elem;
-
-					if ( first === 1 && last === 0 ) {
-						return true;
-					}
-
-					parent = elem.parentNode;
-
-					if ( parent && (parent[ expando ] !== doneName || !elem.sizset) ) {
-						for ( node = parent.firstChild; node; node = node.nextSibling ) {
-							if ( node.nodeType === 1 ) {
-								node.sizset = ++count;
-								if ( node === elem ) {
-									break;
-								}
-							}
-						}
-
-						parent[ expando ] = doneName;
-					}
-
-					diff = elem.sizset - last;
-
-					if ( first === 0 ) {
-						return diff === 0;
-
-					} else {
-						return ( diff % first === 0 && diff / first >= 0 );
-					}
-				};
-			}
-
-			return function( elem ) {
-				var node = elem;
-
-				switch ( type ) {
-					case "only":
-					case "first":
-						while ( (node = node.previousSibling) ) {
-							if ( node.nodeType === 1 ) {
-								return false;
-							}
-						}
-
-						if ( type === "first" ) {
-							return true;
-						}
-
-						node = elem;
-
-						/* falls through */
-					case "last":
-						while ( (node = node.nextSibling) ) {
-							if ( node.nodeType === 1 ) {
-								return false;
-							}
-						}
-
-						return true;
-				}
-			};
-		},
-
-		"PSEUDO": function( pseudo, argument, context, xml ) {
-			// pseudo-class names are case-insensitive
-			// http://www.w3.org/TR/selectors/#pseudo-classes
-			// Prioritize by case sensitivity in case custom pseudos are added with uppercase letters
-			var args,
-				fn = Expr.pseudos[ pseudo ] || Expr.pseudos[ pseudo.toLowerCase() ];
-
-			if ( !fn ) {
-				Sizzle.error( "unsupported pseudo: " + pseudo );
-			}
-
-			// The user may use createPseudo to indicate that
-			// arguments are needed to create the filter function
-			// just as Sizzle does
-			if ( !fn[ expando ] ) {
-				if ( fn.length > 1 ) {
-					args = [ pseudo, pseudo, "", argument ];
-					return function( elem ) {
-						return fn( elem, 0, args );
-					};
-				}
-				return fn;
-			}
-
-			return fn( argument, context, xml );
-		}
-	},
-
-	pseudos: {
-		"not": markFunction(function( selector, context, xml ) {
-			// Trim the selector passed to compile
-			// to avoid treating leading and trailing
-			// spaces as combinators
-			var matcher = compile( selector.replace( rtrim, "$1" ), context, xml );
-			return function( elem ) {
-				return !matcher( elem );
-			};
-		}),
-
-		"enabled": function( elem ) {
-			return elem.disabled === false;
-		},
-
-		"disabled": function( elem ) {
-			return elem.disabled === true;
-		},
-
-		"checked": function( elem ) {
-			// In CSS3, :checked should return both checked and selected elements
-			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
-			var nodeName = elem.nodeName.toLowerCase();
-			return (nodeName === "input" && !!elem.checked) || (nodeName === "option" && !!elem.selected);
-		},
-
-		"selected": function( elem ) {
-			// Accessing this property makes selected-by-default
-			// options in Safari work properly
-			if ( elem.parentNode ) {
-				elem.parentNode.selectedIndex;
-			}
-
-			return elem.selected === true;
-		},
-
-		"parent": function( elem ) {
-			return !Expr.pseudos["empty"]( elem );
-		},
-
-		"empty": function( elem ) {
-			// http://www.w3.org/TR/selectors/#empty-pseudo
-			// :empty is only affected by element nodes and content nodes(including text(3), cdata(4)),
-			//   not comment, processing instructions, or others
-			// Thanks to Diego Perini for the nodeName shortcut
-			//   Greater than "@" means alpha characters (specifically not starting with "#" or "?")
-			var nodeType;
-			elem = elem.firstChild;
-			while ( elem ) {
-				if ( elem.nodeName > "@" || (nodeType = elem.nodeType) === 3 || nodeType === 4 ) {
-					return false;
-				}
-				elem = elem.nextSibling;
-			}
-			return true;
-		},
-
-		"contains": markFunction(function( text ) {
-			return function( elem ) {
-				return ( elem.textContent || elem.innerText || getText( elem ) ).indexOf( text ) > -1;
-			};
-		}),
-
-		"has": markFunction(function( selector ) {
-			return function( elem ) {
-				return Sizzle( selector, elem ).length > 0;
-			};
-		}),
-
-		"header": function( elem ) {
-			return rheader.test( elem.nodeName );
-		},
-
-		"text": function( elem ) {
-			var type, attr;
-			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc)
-			// use getAttribute instead to test this case
-			return elem.nodeName.toLowerCase() === "input" &&
-				(type = elem.type) === "text" &&
-				( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === type );
-		},
-
-		// Input types
-		"radio": createInputPseudo("radio"),
-		"checkbox": createInputPseudo("checkbox"),
-		"file": createInputPseudo("file"),
-		"password": createInputPseudo("password"),
-		"image": createInputPseudo("image"),
-
-		"submit": createButtonPseudo("submit"),
-		"reset": createButtonPseudo("reset"),
-
-		"button": function( elem ) {
-			var name = elem.nodeName.toLowerCase();
-			return name === "input" && elem.type === "button" || name === "button";
-		},
-
-		"input": function( elem ) {
-			return rinputs.test( elem.nodeName );
-		},
-
-		"focus": function( elem ) {
-			var doc = elem.ownerDocument;
-			return elem === doc.activeElement && (!doc.hasFocus || doc.hasFocus()) && !!(elem.type || elem.href);
-		},
-
-		"active": function( elem ) {
-			return elem === elem.ownerDocument.activeElement;
-		}
-	},
-
-	setFilters: {
-		"first": function( elements, argument, not ) {
-			return not ? elements.slice( 1 ) : [ elements[0] ];
-		},
-
-		"last": function( elements, argument, not ) {
-			var elem = elements.pop();
-			return not ? elements : [ elem ];
-		},
-
-		"even": function( elements, argument, not ) {
-			var results = [],
-				i = not ? 1 : 0,
-				len = elements.length;
-			for ( ; i < len; i = i + 2 ) {
-				results.push( elements[i] );
-			}
-			return results;
-		},
-
-		"odd": function( elements, argument, not ) {
-			var results = [],
-				i = not ? 0 : 1,
-				len = elements.length;
-			for ( ; i < len; i = i + 2 ) {
-				results.push( elements[i] );
-			}
-			return results;
-		},
-
-		"lt": function( elements, argument, not ) {
-			return not ? elements.slice( +argument ) : elements.slice( 0, +argument );
-		},
-
-		"gt": function( elements, argument, not ) {
-			return not ? elements.slice( 0, +argument + 1 ) : elements.slice( +argument + 1 );
-		},
-
-		"eq": function( elements, argument, not ) {
-			var elem = elements.splice( +argument, 1 );
-			return not ? elements : elem;
-		}
-	}
-};
-
-function siblingCheck( a, b, ret ) {
-	if ( a === b ) {
-		return ret;
-	}
-
-	var cur = a.nextSibling;
-
-	while ( cur ) {
-		if ( cur === b ) {
-			return -1;
-		}
-
-		cur = cur.nextSibling;
-	}
-
-	return 1;
-}
-
-sortOrder = docElem.compareDocumentPosition ?
-	function( a, b ) {
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-		}
-
-		return ( !a.compareDocumentPosition || !b.compareDocumentPosition ?
-			a.compareDocumentPosition :
-			a.compareDocumentPosition(b) & 4
-		) ? -1 : 1;
-	} :
-	function( a, b ) {
-		// The nodes are identical, we can exit early
-		if ( a === b ) {
-			hasDuplicate = true;
-			return 0;
-
-		// Fallback to using sourceIndex (in IE) if it's available on both nodes
-		} else if ( a.sourceIndex && b.sourceIndex ) {
-			return a.sourceIndex - b.sourceIndex;
-		}
-
-		var al, bl,
-			ap = [],
-			bp = [],
-			aup = a.parentNode,
-			bup = b.parentNode,
-			cur = aup;
-
-		// If the nodes are siblings (or identical) we can do a quick check
-		if ( aup === bup ) {
-			return siblingCheck( a, b );
-
-		// If no parents were found then the nodes are disconnected
-		} else if ( !aup ) {
-			return -1;
-
-		} else if ( !bup ) {
-			return 1;
-		}
-
-		// Otherwise they're somewhere else in the tree so we need
-		// to build up a full list of the parentNodes for comparison
-		while ( cur ) {
-			ap.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		cur = bup;
-
-		while ( cur ) {
-			bp.unshift( cur );
-			cur = cur.parentNode;
-		}
-
-		al = ap.length;
-		bl = bp.length;
-
-		// Start walking down the tree looking for a discrepancy
-		for ( var i = 0; i < al && i < bl; i++ ) {
-			if ( ap[i] !== bp[i] ) {
-				return siblingCheck( ap[i], bp[i] );
-			}
-		}
-
-		// We ended someplace up the tree so do a sibling check
-		return i === al ?
-			siblingCheck( a, bp[i], -1 ) :
-			siblingCheck( ap[i], b, 1 );
-	};
-
-// Always assume the presence of duplicates if sort doesn't
-// pass them to our comparison function (as in Google Chrome).
-[0, 0].sort( sortOrder );
-baseHasDuplicate = !hasDuplicate;
-
-// Document sorting and removing duplicates
-Sizzle.uniqueSort = function( results ) {
-	var elem,
-		i = 1;
-
-	hasDuplicate = baseHasDuplicate;
-	results.sort( sortOrder );
-
-	if ( hasDuplicate ) {
-		for ( ; (elem = results[i]); i++ ) {
-			if ( elem === results[ i - 1 ] ) {
-				results.splice( i--, 1 );
-			}
-		}
-	}
-
-	return results;
-};
-
-Sizzle.error = function( msg ) {
-	throw new Error( "Syntax error, unrecognized expression: " + msg );
-};
-
-function tokenize( selector, context, xml, parseOnly ) {
-	var matched, match, tokens, type,
-		soFar, groups, group, i,
-		preFilters, filters,
-		checkContext = !xml && context !== document,
-		// Token cache should maintain spaces
-		key = ( checkContext ? "<s>" : "" ) + selector.replace( rtrim, "$1<s>" ),
-		cached = tokenCache[ expando ][ key ];
-
-	if ( cached ) {
-		return parseOnly ? 0 : slice.call( cached, 0 );
-	}
-
-	soFar = selector;
-	groups = [];
-	i = 0;
-	preFilters = Expr.preFilter;
-	filters = Expr.filter;
-
-	while ( soFar ) {
-
-		// Comma and first run
-		if ( !matched || (match = rcomma.exec( soFar )) ) {
-			if ( match ) {
-				soFar = soFar.slice( match[0].length );
-				tokens.selector = group;
-			}
-			groups.push( tokens = [] );
-			group = "";
-
-			// Need to make sure we're within a narrower context if necessary
-			// Adding a descendant combinator will generate what is needed
-			if ( checkContext ) {
-				soFar = " " + soFar;
-			}
-		}
-
-		matched = false;
-
-		// Combinators
-		if ( (match = rcombinators.exec( soFar )) ) {
-			group += match[0];
-			soFar = soFar.slice( match[0].length );
-
-			// Cast descendant combinators to space
-			matched = tokens.push({
-				part: match.pop().replace( rtrim, " " ),
-				string: match[0],
-				captures: match
-			});
-		}
-
-		// Filters
-		for ( type in filters ) {
-			if ( (match = matchExpr[ type ].exec( soFar )) && (!preFilters[ type ] ||
-				( match = preFilters[ type ](match, context, xml) )) ) {
-
-				group += match[0];
-				soFar = soFar.slice( match[0].length );
-				matched = tokens.push({
-					part: type,
-					string: match.shift(),
-					captures: match
-				});
-			}
-		}
-
-		if ( !matched ) {
-			break;
-		}
-	}
-
-	// Attach the full group as a selector
-	if ( group ) {
-		tokens.selector = group;
-	}
-
-	// Return the length of the invalid excess
-	// if we're just parsing
-	// Otherwise, throw an error or return tokens
-	return parseOnly ?
-		soFar.length :
-		soFar ?
-			Sizzle.error( selector ) :
-			// Cache the tokens
-			slice.call( tokenCache(key, groups), 0 );
-}
-
-function addCombinator( matcher, combinator, context, xml ) {
-	var dir = combinator.dir,
-		doneName = done++;
-
-	if ( !matcher ) {
-		// If there is no matcher to check, check against the context
-		matcher = function( elem ) {
-			return elem === context;
-		};
-	}
-	return combinator.first ?
-		function( elem ) {
-			while ( (elem = elem[ dir ]) ) {
-				if ( elem.nodeType === 1 ) {
-					return matcher( elem ) && elem;
-				}
-			}
-		} :
-		xml ?
-			function( elem ) {
-				while ( (elem = elem[ dir ]) ) {
-					if ( elem.nodeType === 1 ) {
-						if ( matcher( elem ) ) {
-							return elem;
-						}
-					}
-				}
-			} :
-			function( elem ) {
-				var cache,
-					dirkey = doneName + "." + dirruns,
-					cachedkey = dirkey + "." + cachedruns;
-				while ( (elem = elem[ dir ]) ) {
-					if ( elem.nodeType === 1 ) {
-						if ( (cache = elem[ expando ]) === cachedkey ) {
-							return elem.sizset;
-						} else if ( typeof cache === "string" && cache.indexOf(dirkey) === 0 ) {
-							if ( elem.sizset ) {
-								return elem;
-							}
-						} else {
-							elem[ expando ] = cachedkey;
-							if ( matcher( elem ) ) {
-								elem.sizset = true;
-								return elem;
-							}
-							elem.sizset = false;
-						}
-					}
-				}
-			};
-}
-
-function addMatcher( higher, deeper ) {
-	return higher ?
-		function( elem ) {
-			var result = deeper( elem );
-			return result && higher( result === true ? elem : result );
-		} :
-		deeper;
-}
-
-// ["TAG", ">", "ID", " ", "CLASS"]
-function matcherFromTokens( tokens, context, xml ) {
-	var token, matcher,
-		i = 0;
-
-	for ( ; (token = tokens[i]); i++ ) {
-		if ( Expr.relative[ token.part ] ) {
-			matcher = addCombinator( matcher, Expr.relative[ token.part ], context, xml );
-		} else {
-			matcher = addMatcher( matcher, Expr.filter[ token.part ].apply(null, token.captures.concat( context, xml )) );
-		}
-	}
-
-	return matcher;
-}
-
-function matcherFromGroupMatchers( matchers ) {
-	return function( elem ) {
-		var matcher,
-			j = 0;
-		for ( ; (matcher = matchers[j]); j++ ) {
-			if ( matcher(elem) ) {
-				return true;
-			}
-		}
-		return false;
-	};
-}
-
-compile = Sizzle.compile = function( selector, context, xml ) {
-	var group, i, len,
-		cached = compilerCache[ expando ][ selector ];
-
-	// Return a cached group function if already generated (context dependent)
-	if ( cached && cached.context === context ) {
-		return cached;
-	}
-
-	// Generate a function of recursive functions that can be used to check each element
-	group = tokenize( selector, context, xml );
-	for ( i = 0, len = group.length; i < len; i++ ) {
-		group[i] = matcherFromTokens(group[i], context, xml);
-	}
-
-	// Cache the compiled function
-	cached = compilerCache( selector, matcherFromGroupMatchers(group) );
-	cached.context = context;
-	cached.runs = cached.dirruns = 0;
-	return cached;
-};
-
-function multipleContexts( selector, contexts, results, seed ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results, seed );
-	}
-}
-
-function handlePOSGroup( selector, posfilter, argument, contexts, seed, not ) {
-	var results,
-		fn = Expr.setFilters[ posfilter.toLowerCase() ];
-
-	if ( !fn ) {
-		Sizzle.error( posfilter );
-	}
-
-	if ( selector || !(results = seed) ) {
-		multipleContexts( selector || "*", contexts, (results = []), seed );
-	}
-
-	return results.length > 0 ? fn( results, argument, not ) : [];
-}
-
-function handlePOS( groups, context, results, seed ) {
-	var group, part, j, groupLen, token, selector,
-		anchor, elements, match, matched,
-		lastIndex, currentContexts, not,
-		i = 0,
-		len = groups.length,
-		rpos = matchExpr["POS"],
-		// This is generated here in case matchExpr["POS"] is extended
-		rposgroups = new RegExp( "^" + rpos.source + "(?!" + whitespace + ")", "i" ),
-		// This is for making sure non-participating
-		// matching groups are represented cross-browser (IE6-8)
-		setUndefined = function() {
-			var i = 1,
-				len = arguments.length - 2;
-			for ( ; i < len; i++ ) {
-				if ( arguments[i] === undefined ) {
-					match[i] = undefined;
-				}
-			}
-		};
-
-	for ( ; i < len; i++ ) {
-		group = groups[i];
-		part = "";
-		elements = seed;
-		for ( j = 0, groupLen = group.length; j < groupLen; j++ ) {
-			token = group[j];
-			selector = token.string;
-			if ( token.part === "PSEUDO" ) {
-				// Reset regex index to 0
-				rpos.exec("");
-				anchor = 0;
-				while ( (match = rpos.exec( selector )) ) {
-					matched = true;
-					lastIndex = rpos.lastIndex = match.index + match[0].length;
-					if ( lastIndex > anchor ) {
-						part += selector.slice( anchor, match.index );
-						anchor = lastIndex;
-						currentContexts = [ context ];
-
-						if ( rcombinators.test(part) ) {
-							if ( elements ) {
-								currentContexts = elements;
-							}
-							elements = seed;
-						}
-
-						if ( (not = rendsWithNot.test( part )) ) {
-							part = part.slice( 0, -5 ).replace( rcombinators, "$&*" );
-							anchor++;
-						}
-
-						if ( match.length > 1 ) {
-							match[0].replace( rposgroups, setUndefined );
-						}
-						elements = handlePOSGroup( part, match[1], match[2], currentContexts, elements, not );
-					}
-					part = "";
-				}
-
-			}
-
-			if ( !matched ) {
-				part += selector;
-			}
-			matched = false;
-		}
-
-		if ( part ) {
-			if ( rcombinators.test(part) ) {
-				multipleContexts( part, elements || [ context ], results, seed );
-			} else {
-				Sizzle( part, context, results, seed ? seed.concat(elements) : elements );
-			}
-		} else {
-			push.apply( results, elements );
-		}
-	}
-
-	// Do not sort if this is a single filter
-	return len === 1 ? results : Sizzle.uniqueSort( results );
-}
-
-function select( selector, context, results, seed, xml ) {
-	// Remove excessive whitespace
-	selector = selector.replace( rtrim, "$1" );
-	var elements, matcher, cached, elem,
-		i, tokens, token, lastToken, findContext, type,
-		match = tokenize( selector, context, xml ),
-		contextNodeType = context.nodeType;
-
-	// POS handling
-	if ( matchExpr["POS"].test(selector) ) {
-		return handlePOS( match, context, results, seed );
-	}
-
-	if ( seed ) {
-		elements = slice.call( seed, 0 );
-
-	// To maintain document order, only narrow the
-	// set if there is one group
-	} else if ( match.length === 1 ) {
-
-		// Take a shortcut and set the context if the root selector is an ID
-		if ( (tokens = slice.call( match[0], 0 )).length > 2 &&
-				(token = tokens[0]).part === "ID" &&
-				contextNodeType === 9 && !xml &&
-				Expr.relative[ tokens[1].part ] ) {
-
-			context = Expr.find["ID"]( token.captures[0].replace( rbackslash, "" ), context, xml )[0];
-			if ( !context ) {
-				return results;
-			}
-
-			selector = selector.slice( tokens.shift().string.length );
-		}
-
-		findContext = ( (match = rsibling.exec( tokens[0].string )) && !match.index && context.parentNode ) || context;
-
-		// Reduce the set if possible
-		lastToken = "";
-		for ( i = tokens.length - 1; i >= 0; i-- ) {
-			token = tokens[i];
-			type = token.part;
-			lastToken = token.string + lastToken;
-			if ( Expr.relative[ type ] ) {
-				break;
-			}
-			if ( Expr.order.test(type) ) {
-				elements = Expr.find[ type ]( token.captures[0].replace( rbackslash, "" ), findContext, xml );
-				if ( elements == null ) {
-					continue;
-				} else {
-					selector = selector.slice( 0, selector.length - lastToken.length ) +
-						lastToken.replace( matchExpr[ type ], "" );
-
-					if ( !selector ) {
-						push.apply( results, slice.call(elements, 0) );
-					}
-
-					break;
-				}
-			}
-		}
-	}
-
-	// Only loop over the given elements once
-	if ( selector ) {
-		matcher = compile( selector, context, xml );
-		dirruns = matcher.dirruns++;
-		if ( elements == null ) {
-			elements = Expr.find["TAG"]( "*", (rsibling.test( selector ) && context.parentNode) || context );
-		}
-
-		for ( i = 0; (elem = elements[i]); i++ ) {
-			cachedruns = matcher.runs++;
-			if ( matcher(elem) ) {
-				results.push( elem );
-			}
-		}
-	}
-
-	return results;
-}
-
-if ( document.querySelectorAll ) {
-	(function() {
-		var disconnectedMatch,
-			oldSelect = select,
-			rescape = /'|\\/g,
-			rattributeQuotes = /\=[\x20\t\r\n\f]*([^'"\]]*)[\x20\t\r\n\f]*\]/g,
-			rbuggyQSA = [],
-			// matchesSelector(:active) reports false when true (IE9/Opera 11.5)
-			// A support test would require too much code (would include document ready)
-			// just skip matchesSelector for :active
-			rbuggyMatches = [":active"],
-			matches = docElem.matchesSelector ||
-				docElem.mozMatchesSelector ||
-				docElem.webkitMatchesSelector ||
-				docElem.oMatchesSelector ||
-				docElem.msMatchesSelector;
-
-		// Build QSA regex
-		// Regex strategy adopted from Diego Perini
-		assert(function( div ) {
-			// Select is set to empty string on purpose
-			// This is to test IE's treatment of not explictly
-			// setting a boolean content attribute,
-			// since its presence should be enough
-			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select><option selected=''></option></select>";
-
-			// IE8 - Some boolean attributes are not treated correctly
-			if ( !div.querySelectorAll("[selected]").length ) {
-				rbuggyQSA.push( "\\[" + whitespace + "*(?:checked|disabled|ismap|multiple|readonly|selected|value)" );
-			}
-
-			// Webkit/Opera - :checked should return selected option elements
-			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
-			// IE8 throws error here (do not put tests after this one)
-			if ( !div.querySelectorAll(":checked").length ) {
-				rbuggyQSA.push(":checked");
-			}
-		});
-
-		assert(function( div ) {
-
-			// Opera 10-12/IE9 - ^= $= *= and empty values
-			// Should not select anything
-			div.innerHTML = "<p test=''></p>";
-			if ( div.querySelectorAll("[test^='']").length ) {
-				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:\"\"|'')" );
-			}
-
-			// FF 3.5 - :enabled/:disabled and hidden elements (hidden elements are still enabled)
-			// IE8 throws error here (do not put tests after this one)
-			div.innerHTML = "<input type='hidden'/>";
-			if ( !div.querySelectorAll(":enabled").length ) {
-				rbuggyQSA.push(":enabled", ":disabled");
-			}
-		});
-
-		rbuggyQSA = rbuggyQSA.length && new RegExp( rbuggyQSA.join("|") );
-
-		select = function( selector, context, results, seed, xml ) {
-			// Only use querySelectorAll when not filtering,
-			// when this is not xml,
-			// and when no QSA bugs apply
-			if ( !seed && !xml && (!rbuggyQSA || !rbuggyQSA.test( selector )) ) {
-				if ( context.nodeType === 9 ) {
-					try {
-						push.apply( results, slice.call(context.querySelectorAll( selector ), 0) );
-						return results;
-					} catch(qsaError) {}
-				// qSA works strangely on Element-rooted queries
-				// We can work around this by specifying an extra ID on the root
-				// and working up from there (Thanks to Andrew Dupont for the technique)
-				// IE 8 doesn't work on object elements
-				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
-					var groups, i, len,
-						old = context.getAttribute("id"),
-						nid = old || expando,
-						newContext = rsibling.test( selector ) && context.parentNode || context;
-
-					if ( old ) {
-						nid = nid.replace( rescape, "\\$&" );
-					} else {
-						context.setAttribute( "id", nid );
-					}
-
-					groups = tokenize(selector, context, xml);
-					// Trailing space is unnecessary
-					// There is always a context check
-					nid = "[id='" + nid + "']";
-					for ( i = 0, len = groups.length; i < len; i++ ) {
-						groups[i] = nid + groups[i].selector;
-					}
-					try {
-						push.apply( results, slice.call( newContext.querySelectorAll(
-							groups.join(",")
-						), 0 ) );
-						return results;
-					} catch(qsaError) {
-					} finally {
-						if ( !old ) {
-							context.removeAttribute("id");
-						}
-					}
-				}
-			}
-
-			return oldSelect( selector, context, results, seed, xml );
-		};
-
-		if ( matches ) {
-			assert(function( div ) {
-				// Check to see if it's possible to do matchesSelector
-				// on a disconnected node (IE 9)
-				disconnectedMatch = matches.call( div, "div" );
-
-				// This should fail with an exception
-				// Gecko does not error, returns false instead
-				try {
-					matches.call( div, "[test!='']:sizzle" );
-					rbuggyMatches.push( matchExpr["PSEUDO"].source, matchExpr["POS"].source, "!=" );
-				} catch ( e ) {}
-			});
-
-			// rbuggyMatches always contains :active, so no need for a length check
-			rbuggyMatches = /* rbuggyMatches.length && */ new RegExp( rbuggyMatches.join("|") );
-
-			Sizzle.matchesSelector = function( elem, expr ) {
-				// Make sure that attribute selectors are quoted
-				expr = expr.replace( rattributeQuotes, "='$1']" );
-
-				// rbuggyMatches always contains :active, so no need for an existence check
-				if ( !isXML( elem ) && !rbuggyMatches.test( expr ) && (!rbuggyQSA || !rbuggyQSA.test( expr )) ) {
-					try {
-						var ret = matches.call( elem, expr );
-
-						// IE 9's matchesSelector returns false on disconnected nodes
-						if ( ret || disconnectedMatch ||
-								// As well, disconnected nodes are said to be in a document
-								// fragment in IE 9
-								elem.document && elem.document.nodeType !== 11 ) {
-							return ret;
-						}
-					} catch(e) {}
-				}
-
-				return Sizzle( expr, null, null, [ elem ] ).length > 0;
-			};
-		}
-	})();
-}
-
-// Deprecated
-Expr.setFilters["nth"] = Expr.setFilters["eq"];
-
-// Back-compat
-Expr.filters = Expr.pseudos;
-
-// Override sizzle attribute retrieval
-Sizzle.attr = jQuery.attr;
-jQuery.find = Sizzle;
-jQuery.expr = Sizzle.selectors;
-jQuery.expr[":"] = jQuery.expr.pseudos;
-jQuery.unique = Sizzle.uniqueSort;
-jQuery.text = Sizzle.getText;
-jQuery.isXMLDoc = Sizzle.isXML;
-jQuery.contains = Sizzle.contains;
-
-
-})( window );
-var runtil = /Until$/,
-	rparentsprev = /^(?:parents|prev(?:Until|All))/,
-	isSimple = /^.[^:#\[\.,]*$/,
-	rneedsContext = jQuery.expr.match.needsContext,
-	// methods guaranteed to produce a unique set when starting from a unique set
-	guaranteedUnique = {
-		children: true,
-		contents: true,
-		next: true,
-		prev: true
-	};
-
-jQuery.fn.extend({
-	find: function( selector ) {
-		var i, l, length, n, r, ret,
-			self = this;
-
-		if ( typeof selector !== "string" ) {
-			return jQuery( selector ).filter(function() {
-				for ( i = 0, l = self.length; i < l; i++ ) {
-					if ( jQuery.contains( self[ i ], this ) ) {
-						return true;
-					}
-				}
-			});
-		}
-
-		ret = this.pushStack( "", "find", selector );
-
-		for ( i = 0, l = this.length; i < l; i++ ) {
-			length = ret.length;
-			jQuery.find( selector, this[i], ret );
-
-			if ( i > 0 ) {
-				// Make sure that the results are unique
-				for ( n = length; n < ret.length; n++ ) {
-					for ( r = 0; r < length; r++ ) {
-						if ( ret[r] === ret[n] ) {
-							ret.splice(n--, 1);
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		return ret;
-	},
-
-	has: function( target ) {
-		var i,
-			targets = jQuery( target, this ),
-			len = targets.length;
-
-		return this.filter(function() {
-			for ( i = 0; i < len; i++ ) {
-				if ( jQuery.contains( this, targets[i] ) ) {
-					return true;
-				}
-			}
-		});
-	},
-
-	not: function( selector ) {
-		return this.pushStack( winnow(this, selector, false), "not", selector);
-	},
-
-	filter: function( selector ) {
-		return this.pushStack( winnow(this, selector, true), "filter", selector );
-	},
-
-	is: function( selector ) {
-		return !!selector && (
-			typeof selector === "string" ?
-				// If this is a positional/relative selector, check membership in the returned set
-				// so $("p:first").is("p:last") won't return true for a doc with two "p".
-				rneedsContext.test( selector ) ?
-					jQuery( selector, this.context ).index( this[0] ) >= 0 :
-					jQuery.filter( selector, this ).length > 0 :
-				this.filter( selector ).length > 0 );
-	},
-
-	closest: function( selectors, context ) {
-		var cur,
-			i = 0,
-			l = this.length,
-			ret = [],
-			pos = rneedsContext.test( selectors ) || typeof selectors !== "string" ?
-				jQuery( selectors, context || this.context ) :
-				0;
-
-		for ( ; i < l; i++ ) {
-			cur = this[i];
-
-			while ( cur && cur.ownerDocument && cur !== context && cur.nodeType !== 11 ) {
-				if ( pos ? pos.index(cur) > -1 : jQuery.find.matchesSelector(cur, selectors) ) {
-					ret.push( cur );
-					break;
-				}
-				cur = cur.parentNode;
-			}
-		}
-
-		ret = ret.length > 1 ? jQuery.unique( ret ) : ret;
-
-		return this.pushStack( ret, "closest", selectors );
-	},
-
-	// Determine the position of an element within
-	// the matched set of elements
-	index: function( elem ) {
-
-		// No argument, return index in parent
-		if ( !elem ) {
-			return ( this[0] && this[0].parentNode ) ? this.prevAll().length : -1;
-		}
-
-		// index in selector
-		if ( typeof elem === "string" ) {
-			return jQuery.inArray( this[0], jQuery( elem ) );
-		}
-
-		// Locate the position of the desired element
-		return jQuery.inArray(
-			// If it receives a jQuery object, the first element is used
-			elem.jquery ? elem[0] : elem, this );
-	},
-
-	add: function( selector, context ) {
-		var set = typeof selector === "string" ?
-				jQuery( selector, context ) :
-				jQuery.makeArray( selector && selector.nodeType ? [ selector ] : selector ),
-			all = jQuery.merge( this.get(), set );
-
-		return this.pushStack( isDisconnected( set[0] ) || isDisconnected( all[0] ) ?
-			all :
-			jQuery.unique( all ) );
-	},
-
-	addBack: function( selector ) {
-		return this.add( selector == null ?
-			this.prevObject : this.prevObject.filter(selector)
-		);
-	}
-});
-
-jQuery.fn.andSelf = jQuery.fn.addBack;
-
-// A painfully simple check to see if an element is disconnected
-// from a document (should be improved, where feasible).
-function isDisconnected( node ) {
-	return !node || !node.parentNode || node.parentNode.nodeType === 11;
-}
-
-function sibling( cur, dir ) {
-	do {
-		cur = cur[ dir ];
-	} while ( cur && cur.nodeType !== 1 );
-
-	return cur;
-}
-
-jQuery.each({
-	parent: function( elem ) {
-		var parent = elem.parentNode;
-		return parent && parent.nodeType !== 11 ? parent : null;
-	},
-	parents: function( elem ) {
-		return jQuery.dir( elem, "parentNode" );
-	},
-	parentsUntil: function( elem, i, until ) {
-		return jQuery.dir( elem, "parentNode", until );
-	},
-	next: function( elem ) {
-		return sibling( elem, "nextSibling" );
-	},
-	prev: function( elem ) {
-		return sibling( elem, "previousSibling" );
-	},
-	nextAll: function( elem ) {
-		return jQuery.dir( elem, "nextSibling" );
-	},
-	prevAll: function( elem ) {
-		return jQuery.dir( elem, "previousSibling" );
-	},
-	nextUntil: function( elem, i, until ) {
-		return jQuery.dir( elem, "nextSibling", until );
-	},
-	prevUntil: function( elem, i, until ) {
-		return jQuery.dir( elem, "previousSibling", until );
-	},
-	siblings: function( elem ) {
-		return jQuery.sibling( ( elem.parentNode || {} ).firstChild, elem );
-	},
-	children: function( elem ) {
-		return jQuery.sibling( elem.firstChild );
-	},
-	contents: function( elem ) {
-		return jQuery.nodeName( elem, "iframe" ) ?
-			elem.contentDocument || elem.contentWindow.document :
-			jQuery.merge( [], elem.childNodes );
-	}
-}, function( name, fn ) {
-	jQuery.fn[ name ] = function( until, selector ) {
-		var ret = jQuery.map( this, fn, until );
-
-		if ( !runtil.test( name ) ) {
-			selector = until;
-		}
-
-		if ( selector && typeof selector === "string" ) {
-			ret = jQuery.filter( selector, ret );
-		}
-
-		ret = this.length > 1 && !guaranteedUnique[ name ] ? jQuery.unique( ret ) : ret;
-
-		if ( this.length > 1 && rparentsprev.test( name ) ) {
-			ret = ret.reverse();
-		}
-
-		return this.pushStack( ret, name, core_slice.call( arguments ).join(",") );
-	};
-});
-
-jQuery.extend({
-	filter: function( expr, elems, not ) {
-		if ( not ) {
-			expr = ":not(" + expr + ")";
-		}
-
-		return elems.length === 1 ?
-			jQuery.find.matchesSelector(elems[0], expr) ? [ elems[0] ] : [] :
-			jQuery.find.matches(expr, elems);
-	},
-
-	dir: function( elem, dir, until ) {
-		var matched = [],
-			cur = elem[ dir ];
-
-		while ( cur && cur.nodeType !== 9 && (until === undefined || cur.nodeType !== 1 || !jQuery( cur ).is( until )) ) {
-			if ( cur.nodeType === 1 ) {
-				matched.push( cur );
-			}
-			cur = cur[dir];
-		}
-		return matched;
-	},
-
-	sibling: function( n, elem ) {
-		var r = [];
-
-		for ( ; n; n = n.nextSibling ) {
-			if ( n.nodeType === 1 && n !== elem ) {
-				r.push( n );
-			}
-		}
-
-		return r;
-	}
-});
-
-// Implement the identical functionality for filter and not
-function winnow( elements, qualifier, keep ) {
-
-	// Can't pass null or undefined to indexOf in Firefox 4
-	// Set to 0 to skip string check
-	qualifier = qualifier || 0;
-
-	if ( jQuery.isFunction( qualifier ) ) {
-		return jQuery.grep(elements, function( elem, i ) {
-			var retVal = !!qualifier.call( elem, i, elem );
-			return retVal === keep;
-		});
-
-	} else if ( qualifier.nodeType ) {
-		return jQuery.grep(elements, function( elem, i ) {
-			return ( elem === qualifier ) === keep;
-		});
-
-	} else if ( typeof qualifier === "string" ) {
-		var filtered = jQuery.grep(elements, function( elem ) {
-			return elem.nodeType === 1;
-		});
-
-		if ( isSimple.test( qualifier ) ) {
-			return jQuery.filter(qualifier, filtered, !keep);
-		} else {
-			qualifier = jQuery.filter( qualifier, filtered );
-		}
-	}
-
-	return jQuery.grep(elements, function( elem, i ) {
-		return ( jQuery.inArray( elem, qualifier ) >= 0 ) === keep;
-	});
-}
-function createSafeFragment( document ) {
-	var list = nodeNames.split( "|" ),
-	safeFrag = document.createDocumentFragment();
-
-	if ( safeFrag.createElement ) {
-		while ( list.length ) {
-			safeFrag.createElement(
-				list.pop()
-			);
-		}
-	}
-	return safeFrag;
-}
-
-var nodeNames = "abbr|article|aside|audio|bdi|canvas|data|datalist|details|figcaption|figure|footer|" +
-		"header|hgroup|mark|meter|nav|output|progress|section|summary|time|video",
-	rinlinejQuery = / jQuery\d+="(?:null|\d+)"/g,
-	rleadingWhitespace = /^\s+/,
-	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,
-	rtagName = /<([\w:]+)/,
-	rtbody = /<tbody/i,
-	rhtml = /<|&#?\w+;/,
-	rnoInnerhtml = /<(?:script|style|link)/i,
-	rnocache = /<(?:script|object|embed|option|style)/i,
-	rnoshimcache = new RegExp("<(?:" + nodeNames + ")[\\s/>]", "i"),
-	rcheckableType = /^(?:checkbox|radio)$/,
-	// checked="checked" or checked
-	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
-	rscriptType = /\/(java|ecma)script/i,
-	rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)|[\]\-]{2}>\s*$/g,
-	wrapMap = {
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
-		legend: [ 1, "<fieldset>", "</fieldset>" ],
-		thead: [ 1, "<table>", "</table>" ],
-		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
-		td: [ 3, "<table><tbody><tr>", "</tr></tbody></table>" ],
-		col: [ 2, "<table><tbody></tbody><colgroup>", "</colgroup></table>" ],
-		area: [ 1, "<map>", "</map>" ],
-		_default: [ 0, "", "" ]
-	},
-	safeFragment = createSafeFragment( document ),
-	fragmentDiv = safeFragment.appendChild( document.createElement("div") );
-
-wrapMap.optgroup = wrapMap.option;
-wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
-wrapMap.th = wrapMap.td;
-
-// IE6-8 can't serialize link, script, style, or any html5 (NoScope) tags,
-// unless wrapped in a div with non-breaking characters in front of it.
-if ( !jQuery.support.htmlSerialize ) {
-	wrapMap._default = [ 1, "X<div>", "</div>" ];
-}
-
-jQuery.fn.extend({
-	text: function( value ) {
-		return jQuery.access( this, function( value ) {
-			return value === undefined ?
-				jQuery.text( this ) :
-				this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) );
-		}, null, value, arguments.length );
-	},
-
-	wrapAll: function( html ) {
-		if ( jQuery.isFunction( html ) ) {
-			return this.each(function(i) {
-				jQuery(this).wrapAll( html.call(this, i) );
-			});
-		}
-
-		if ( this[0] ) {
-			// The elements to wrap the target around
-			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true);
-
-			if ( this[0].parentNode ) {
-				wrap.insertBefore( this[0] );
-			}
-
-			wrap.map(function() {
-				var elem = this;
-
-				while ( elem.firstChild && elem.firstChild.nodeType === 1 ) {
-					elem = elem.firstChild;
-				}
-
-				return elem;
-			}).append( this );
-		}
-
-		return this;
-	},
-
-	wrapInner: function( html ) {
-		if ( jQuery.isFunction( html ) ) {
-			return this.each(function(i) {
-				jQuery(this).wrapInner( html.call(this, i) );
-			});
-		}
-
-		return this.each(function() {
-			var self = jQuery( this ),
-				contents = self.contents();
-
-			if ( contents.length ) {
-				contents.wrapAll( html );
-
-			} else {
-				self.append( html );
-			}
-		});
-	},
-
-	wrap: function( html ) {
-		var isFunction = jQuery.isFunction( html );
-
-		return this.each(function(i) {
-			jQuery( this ).wrapAll( isFunction ? html.call(this, i) : html );
-		});
-	},
-
-	unwrap: function() {
-		return this.parent().each(function() {
-			if ( !jQuery.nodeName( this, "body" ) ) {
-				jQuery( this ).replaceWith( this.childNodes );
-			}
-		}).end();
-	},
-
-	append: function() {
-		return this.domManip(arguments, true, function( elem ) {
-			if ( this.nodeType === 1 || this.nodeType === 11 ) {
-				this.appendChild( elem );
-			}
-		});
-	},
-
-	prepend: function() {
-		return this.domManip(arguments, true, function( elem ) {
-			if ( this.nodeType === 1 || this.nodeType === 11 ) {
-				this.insertBefore( elem, this.firstChild );
-			}
-		});
-	},
-
-	before: function() {
-		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, function( elem ) {
-				this.parentNode.insertBefore( elem, this );
-			});
-		}
-
-		if ( arguments.length ) {
-			var set = jQuery.clean( arguments );
-			return this.pushStack( jQuery.merge( set, this ), "before", this.selector );
-		}
-	},
-
-	after: function() {
-		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, function( elem ) {
-				this.parentNode.insertBefore( elem, this.nextSibling );
-			});
-		}
-
-		if ( arguments.length ) {
-			var set = jQuery.clean( arguments );
-			return this.pushStack( jQuery.merge( this, set ), "after", this.selector );
-		}
-	},
-
-	// keepData is for internal use only--do not document
-	remove: function( selector, keepData ) {
-		var elem,
-			i = 0;
-
-		for ( ; (elem = this[i]) != null; i++ ) {
-			if ( !selector || jQuery.filter( selector, [ elem ] ).length ) {
-				if ( !keepData && elem.nodeType === 1 ) {
-					jQuery.cleanData( elem.getElementsByTagName("*") );
-					jQuery.cleanData( [ elem ] );
-				}
-
-				if ( elem.parentNode ) {
-					elem.parentNode.removeChild( elem );
-				}
-			}
-		}
-
-		return this;
-	},
-
-	empty: function() {
-		var elem,
-			i = 0;
-
-		for ( ; (elem = this[i]) != null; i++ ) {
-			// Remove element nodes and prevent memory leaks
-			if ( elem.nodeType === 1 ) {
-				jQuery.cleanData( elem.getElementsByTagName("*") );
-			}
-
-			// Remove any remaining nodes
-			while ( elem.firstChild ) {
-				elem.removeChild( elem.firstChild );
-			}
-		}
-
-		return this;
-	},
-
-	clone: function( dataAndEvents, deepDataAndEvents ) {
-		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
-		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
-
-		return this.map( function () {
-			return jQuery.clone( this, dataAndEvents, deepDataAndEvents );
-		});
-	},
-
-	html: function( value ) {
-		return jQuery.access( this, function( value ) {
-			var elem = this[0] || {},
-				i = 0,
-				l = this.length;
-
-			if ( value === undefined ) {
-				return elem.nodeType === 1 ?
-					elem.innerHTML.replace( rinlinejQuery, "" ) :
-					undefined;
-			}
-
-			// See if we can take a shortcut and just use innerHTML
-			if ( typeof value === "string" && !rnoInnerhtml.test( value ) &&
-				( jQuery.support.htmlSerialize || !rnoshimcache.test( value )  ) &&
-				( jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value ) ) &&
-				!wrapMap[ ( rtagName.exec( value ) || ["", ""] )[1].toLowerCase() ] ) {
-
-				value = value.replace( rxhtmlTag, "<$1></$2>" );
-
-				try {
-					for (; i < l; i++ ) {
-						// Remove element nodes and prevent memory leaks
-						elem = this[i] || {};
-						if ( elem.nodeType === 1 ) {
-							jQuery.cleanData( elem.getElementsByTagName( "*" ) );
-							elem.innerHTML = value;
-						}
-					}
-
-					elem = 0;
-
-				// If using innerHTML throws an exception, use the fallback method
-				} catch(e) {}
-			}
-
-			if ( elem ) {
-				this.empty().append( value );
-			}
-		}, null, value, arguments.length );
-	},
-
-	replaceWith: function( value ) {
-		if ( !isDisconnected( this[0] ) ) {
-			// Make sure that the elements are removed from the DOM before they are inserted
-			// this can help fix replacing a parent with child elements
-			if ( jQuery.isFunction( value ) ) {
-				return this.each(function(i) {
-					var self = jQuery(this), old = self.html();
-					self.replaceWith( value.call( this, i, old ) );
-				});
-			}
-
-			if ( typeof value !== "string" ) {
-				value = jQuery( value ).detach();
-			}
-
-			return this.each(function() {
-				var next = this.nextSibling,
-					parent = this.parentNode;
-
-				jQuery( this ).remove();
-
-				if ( next ) {
-					jQuery(next).before( value );
-				} else {
-					jQuery(parent).append( value );
-				}
-			});
-		}
-
-		return this.length ?
-			this.pushStack( jQuery(jQuery.isFunction(value) ? value() : value), "replaceWith", value ) :
-			this;
-	},
-
-	detach: function( selector ) {
-		return this.remove( selector, true );
-	},
-
-	domManip: function( args, table, callback ) {
-
-		// Flatten any nested arrays
-		args = [].concat.apply( [], args );
-
-		var results, first, fragment, iNoClone,
-			i = 0,
-			value = args[0],
-			scripts = [],
-			l = this.length;
-
-		// We can't cloneNode fragments that contain checked, in WebKit
-		if ( !jQuery.support.checkClone && l > 1 && typeof value === "string" && rchecked.test( value ) ) {
-			return this.each(function() {
-				jQuery(this).domManip( args, table, callback );
-			});
-		}
-
-		if ( jQuery.isFunction(value) ) {
-			return this.each(function(i) {
-				var self = jQuery(this);
-				args[0] = value.call( this, i, table ? self.html() : undefined );
-				self.domManip( args, table, callback );
-			});
-		}
-
-		if ( this[0] ) {
-			results = jQuery.buildFragment( args, this, scripts );
-			fragment = results.fragment;
-			first = fragment.firstChild;
-
-			if ( fragment.childNodes.length === 1 ) {
-				fragment = first;
-			}
-
-			if ( first ) {
-				table = table && jQuery.nodeName( first, "tr" );
-
-				// Use the original fragment for the last item instead of the first because it can end up
-				// being emptied incorrectly in certain situations (#8070).
-				// Fragments from the fragment cache must always be cloned and never used in place.
-				for ( iNoClone = results.cacheable || l - 1; i < l; i++ ) {
-					callback.call(
-						table && jQuery.nodeName( this[i], "table" ) ?
-							findOrAppend( this[i], "tbody" ) :
-							this[i],
-						i === iNoClone ?
-							fragment :
-							jQuery.clone( fragment, true, true )
-					);
-				}
-			}
-
-			// Fix #11809: Avoid leaking memory
-			fragment = first = null;
-
-			if ( scripts.length ) {
-				jQuery.each( scripts, function( i, elem ) {
-					if ( elem.src ) {
-						if ( jQuery.ajax ) {
-							jQuery.ajax({
-								url: elem.src,
-								type: "GET",
-								dataType: "script",
-								async: false,
-								global: false,
-								"throws": true
-							});
-						} else {
-							jQuery.error("no ajax");
-						}
-					} else {
-						jQuery.globalEval( ( elem.text || elem.textContent || elem.innerHTML || "" ).replace( rcleanScript, "" ) );
-					}
-
-					if ( elem.parentNode ) {
-						elem.parentNode.removeChild( elem );
-					}
-				});
-			}
-		}
-
-		return this;
-	}
-});
-
-function findOrAppend( elem, tag ) {
-	return elem.getElementsByTagName( tag )[0] || elem.appendChild( elem.ownerDocument.createElement( tag ) );
-}
-
-function cloneCopyEvent( src, dest ) {
-
-	if ( dest.nodeType !== 1 || !jQuery.hasData( src ) ) {
-		return;
-	}
-
-	var type, i, l,
-		oldData = jQuery._data( src ),
-		curData = jQuery._data( dest, oldData ),
-		events = oldData.events;
-
-	if ( events ) {
-		delete curData.handle;
-		curData.events = {};
-
-		for ( type in events ) {
-			for ( i = 0, l = events[ type ].length; i < l; i++ ) {
-				jQuery.event.add( dest, type, events[ type ][ i ] );
-			}
-		}
-	}
-
-	// make the cloned public data object a copy from the original
-	if ( curData.data ) {
-		curData.data = jQuery.extend( {}, curData.data );
-	}
-}
-
-function cloneFixAttributes( src, dest ) {
-	var nodeName;
-
-	// We do not need to do anything for non-Elements
-	if ( dest.nodeType !== 1 ) {
-		return;
-	}
-
-	// clearAttributes removes the attributes, which we don't want,
-	// but also removes the attachEvent events, which we *do* want
-	if ( dest.clearAttributes ) {
-		dest.clearAttributes();
-	}
-
-	// mergeAttributes, in contrast, only merges back on the
-	// original attributes, not the events
-	if ( dest.mergeAttributes ) {
-		dest.mergeAttributes( src );
-	}
-
-	nodeName = dest.nodeName.toLowerCase();
-
-	if ( nodeName === "object" ) {
-		// IE6-10 improperly clones children of object elements using classid.
-		// IE10 throws NoModificationAllowedError if parent is null, #12132.
-		if ( dest.parentNode ) {
-			dest.outerHTML = src.outerHTML;
-		}
-
-		// This path appears unavoidable for IE9. When cloning an object
-		// element in IE9, the outerHTML strategy above is not sufficient.
-		// If the src has innerHTML and the destination does not,
-		// copy the src.innerHTML into the dest.innerHTML. #10324
-		if ( jQuery.support.html5Clone && (src.innerHTML && !jQuery.trim(dest.innerHTML)) ) {
-			dest.innerHTML = src.innerHTML;
-		}
-
-	} else if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
-		// IE6-8 fails to persist the checked state of a cloned checkbox
-		// or radio button. Worse, IE6-7 fail to give the cloned element
-		// a checked appearance if the defaultChecked value isn't also set
-
-		dest.defaultChecked = dest.checked = src.checked;
-
-		// IE6-7 get confused and end up setting the value of a cloned
-		// checkbox/radio button to an empty string instead of "on"
-		if ( dest.value !== src.value ) {
-			dest.value = src.value;
-		}
-
-	// IE6-8 fails to return the selected option to the default selected
-	// state when cloning options
-	} else if ( nodeName === "option" ) {
-		dest.selected = src.defaultSelected;
-
-	// IE6-8 fails to set the defaultValue to the correct value when
-	// cloning other types of input fields
-	} else if ( nodeName === "input" || nodeName === "textarea" ) {
-		dest.defaultValue = src.defaultValue;
-
-	// IE blanks contents when cloning scripts
-	} else if ( nodeName === "script" && dest.text !== src.text ) {
-		dest.text = src.text;
-	}
-
-	// Event data gets referenced instead of copied if the expando
-	// gets copied too
-	dest.removeAttribute( jQuery.expando );
-}
-
-jQuery.buildFragment = function( args, context, scripts ) {
-	var fragment, cacheable, cachehit,
-		first = args[ 0 ];
-
-	// Set context from what may come in as undefined or a jQuery collection or a node
-	// Updated to fix #12266 where accessing context[0] could throw an exception in IE9/10 &
-	// also doubles as fix for #8950 where plain objects caused createDocumentFragment exception
-	context = context || document;
-	context = !context.nodeType && context[0] || context;
-	context = context.ownerDocument || context;
-
-	// Only cache "small" (1/2 KB) HTML strings that are associated with the main document
-	// Cloning options loses the selected state, so don't cache them
-	// IE 6 doesn't like it when you put <object> or <embed> elements in a fragment
-	// Also, WebKit does not clone 'checked' attributes on cloneNode, so don't cache
-	// Lastly, IE6,7,8 will not correctly reuse cached fragments that were created from unknown elems #10501
-	if ( args.length === 1 && typeof first === "string" && first.length < 512 && context === document &&
-		first.charAt(0) === "<" && !rnocache.test( first ) &&
-		(jQuery.support.checkClone || !rchecked.test( first )) &&
-		(jQuery.support.html5Clone || !rnoshimcache.test( first )) ) {
-
-		// Mark cacheable and look for a hit
-		cacheable = true;
-		fragment = jQuery.fragments[ first ];
-		cachehit = fragment !== undefined;
-	}
-
-	if ( !fragment ) {
-		fragment = context.createDocumentFragment();
-		jQuery.clean( args, context, fragment, scripts );
-
-		// Update the cache, but only store false
-		// unless this is a second parsing of the same content
-		if ( cacheable ) {
-			jQuery.fragments[ first ] = cachehit && fragment;
-		}
-	}
-
-	return { fragment: fragment, cacheable: cacheable };
-};
-
-jQuery.fragments = {};
-
-jQuery.each({
-	appendTo: "append",
-	prependTo: "prepend",
-	insertBefore: "before",
-	insertAfter: "after",
-	replaceAll: "replaceWith"
-}, function( name, original ) {
-	jQuery.fn[ name ] = function( selector ) {
-		var elems,
-			i = 0,
-			ret = [],
-			insert = jQuery( selector ),
-			l = insert.length,
-			parent = this.length === 1 && this[0].parentNode;
-
-		if ( (parent == null || parent && parent.nodeType === 11 && parent.childNodes.length === 1) && l === 1 ) {
-			insert[ original ]( this[0] );
-			return this;
-		} else {
-			for ( ; i < l; i++ ) {
-				elems = ( i > 0 ? this.clone(true) : this ).get();
-				jQuery( insert[i] )[ original ]( elems );
-				ret = ret.concat( elems );
-			}
-
-			return this.pushStack( ret, name, insert.selector );
-		}
-	};
-});
-
-function getAll( elem ) {
-	if ( typeof elem.getElementsByTagName !== "undefined" ) {
-		return elem.getElementsByTagName( "*" );
-
-	} else if ( typeof elem.querySelectorAll !== "undefined" ) {
-		return elem.querySelectorAll( "*" );
-
-	} else {
-		return [];
-	}
-}
-
-// Used in clean, fixes the defaultChecked property
-function fixDefaultChecked( elem ) {
-	if ( rcheckableType.test( elem.type ) ) {
-		elem.defaultChecked = elem.checked;
-	}
-}
-
-jQuery.extend({
-	clone: function( elem, dataAndEvents, deepDataAndEvents ) {
-		var srcElements,
-			destElements,
-			i,
-			clone;
-
-		if ( jQuery.support.html5Clone || jQuery.isXMLDoc(elem) || !rnoshimcache.test( "<" + elem.nodeName + ">" ) ) {
-			clone = elem.cloneNode( true );
-
-		// IE<=8 does not properly clone detached, unknown element nodes
-		} else {
-			fragmentDiv.innerHTML = elem.outerHTML;
-			fragmentDiv.removeChild( clone = fragmentDiv.firstChild );
-		}
-
-		if ( (!jQuery.support.noCloneEvent || !jQuery.support.noCloneChecked) &&
-				(elem.nodeType === 1 || elem.nodeType === 11) && !jQuery.isXMLDoc(elem) ) {
-			// IE copies events bound via attachEvent when using cloneNode.
-			// Calling detachEvent on the clone will also remove the events
-			// from the original. In order to get around this, we use some
-			// proprietary methods to clear the events. Thanks to MooTools
-			// guys for this hotness.
-
-			cloneFixAttributes( elem, clone );
-
-			// Using Sizzle here is crazy slow, so we use getElementsByTagName instead
-			srcElements = getAll( elem );
-			destElements = getAll( clone );
-
-			// Weird iteration because IE will replace the length property
-			// with an element if you are cloning the body and one of the
-			// elements on the page has a name or id of "length"
-			for ( i = 0; srcElements[i]; ++i ) {
-				// Ensure that the destination node is not null; Fixes #9587
-				if ( destElements[i] ) {
-					cloneFixAttributes( srcElements[i], destElements[i] );
-				}
-			}
-		}
-
-		// Copy the events from the original to the clone
-		if ( dataAndEvents ) {
-			cloneCopyEvent( elem, clone );
-
-			if ( deepDataAndEvents ) {
-				srcElements = getAll( elem );
-				destElements = getAll( clone );
-
-				for ( i = 0; srcElements[i]; ++i ) {
-					cloneCopyEvent( srcElements[i], destElements[i] );
-				}
-			}
-		}
-
-		srcElements = destElements = null;
-
-		// Return the cloned set
-		return clone;
-	},
-
-	clean: function( elems, context, fragment, scripts ) {
-		var i, j, elem, tag, wrap, depth, div, hasBody, tbody, len, handleScript, jsTags,
-			safe = context === document && safeFragment,
-			ret = [];
-
-		// Ensure that context is a document
-		if ( !context || typeof context.createDocumentFragment === "undefined" ) {
-			context = document;
-		}
-
-		// Use the already-created safe fragment if context permits
-		for ( i = 0; (elem = elems[i]) != null; i++ ) {
-			if ( typeof elem === "number" ) {
-				elem += "";
-			}
-
-			if ( !elem ) {
-				continue;
-			}
-
-			// Convert html string into DOM nodes
-			if ( typeof elem === "string" ) {
-				if ( !rhtml.test( elem ) ) {
-					elem = context.createTextNode( elem );
-				} else {
-					// Ensure a safe container in which to render the html
-					safe = safe || createSafeFragment( context );
-					div = context.createElement("div");
-					safe.appendChild( div );
-
-					// Fix "XHTML"-style tags in all browsers
-					elem = elem.replace(rxhtmlTag, "<$1></$2>");
-
-					// Go to html and back, then peel off extra wrappers
-					tag = ( rtagName.exec( elem ) || ["", ""] )[1].toLowerCase();
-					wrap = wrapMap[ tag ] || wrapMap._default;
-					depth = wrap[0];
-					div.innerHTML = wrap[1] + elem + wrap[2];
-
-					// Move to the right depth
-					while ( depth-- ) {
-						div = div.lastChild;
-					}
-
-					// Remove IE's autoinserted <tbody> from table fragments
-					if ( !jQuery.support.tbody ) {
-
-						// String was a <table>, *may* have spurious <tbody>
-						hasBody = rtbody.test(elem);
-							tbody = tag === "table" && !hasBody ?
-								div.firstChild && div.firstChild.childNodes :
-
-								// String was a bare <thead> or <tfoot>
-								wrap[1] === "<table>" && !hasBody ?
-									div.childNodes :
-									[];
-
-						for ( j = tbody.length - 1; j >= 0 ; --j ) {
-							if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length ) {
-								tbody[ j ].parentNode.removeChild( tbody[ j ] );
-							}
-						}
-					}
-
-					// IE completely kills leading whitespace when innerHTML is used
-					if ( !jQuery.support.leadingWhitespace && rleadingWhitespace.test( elem ) ) {
-						div.insertBefore( context.createTextNode( rleadingWhitespace.exec(elem)[0] ), div.firstChild );
-					}
-
-					elem = div.childNodes;
-
-					// Take out of fragment container (we need a fresh div each time)
-					div.parentNode.removeChild( div );
-				}
-			}
-
-			if ( elem.nodeType ) {
-				ret.push( elem );
-			} else {
-				jQuery.merge( ret, elem );
-			}
-		}
-
-		// Fix #11356: Clear elements from safeFragment
-		if ( div ) {
-			elem = div = safe = null;
-		}
-
-		// Reset defaultChecked for any radios and checkboxes
-		// about to be appended to the DOM in IE 6/7 (#8060)
-		if ( !jQuery.support.appendChecked ) {
-			for ( i = 0; (elem = ret[i]) != null; i++ ) {
-				if ( jQuery.nodeName( elem, "input" ) ) {
-					fixDefaultChecked( elem );
-				} else if ( typeof elem.getElementsByTagName !== "undefined" ) {
-					jQuery.grep( elem.getElementsByTagName("input"), fixDefaultChecked );
-				}
-			}
-		}
-
-		// Append elements to a provided document fragment
-		if ( fragment ) {
-			// Special handling of each script element
-			handleScript = function( elem ) {
-				// Check if we consider it executable
-				if ( !elem.type || rscriptType.test( elem.type ) ) {
-					// Detach the script and store it in the scripts array (if provided) or the fragment
-					// Return truthy to indicate that it has been handled
-					return scripts ?
-						scripts.push( elem.parentNode ? elem.parentNode.removeChild( elem ) : elem ) :
-						fragment.appendChild( elem );
-				}
-			};
-
-			for ( i = 0; (elem = ret[i]) != null; i++ ) {
-				// Check if we're done after handling an executable script
-				if ( !( jQuery.nodeName( elem, "script" ) && handleScript( elem ) ) ) {
-					// Append to fragment and handle embedded scripts
-					fragment.appendChild( elem );
-					if ( typeof elem.getElementsByTagName !== "undefined" ) {
-						// handleScript alters the DOM, so use jQuery.merge to ensure snapshot iteration
-						jsTags = jQuery.grep( jQuery.merge( [], elem.getElementsByTagName("script") ), handleScript );
-
-						// Splice the scripts into ret after their former ancestor and advance our index beyond them
-						ret.splice.apply( ret, [i + 1, 0].concat( jsTags ) );
-						i += jsTags.length;
-					}
-				}
-			}
-		}
-
-		return ret;
-	},
-
-	cleanData: function( elems, /* internal */ acceptData ) {
-		var data, id, elem, type,
-			i = 0,
-			internalKey = jQuery.expando,
-			cache = jQuery.cache,
-			deleteExpando = jQuery.support.deleteExpando,
-			special = jQuery.event.special;
-
-		for ( ; (elem = elems[i]) != null; i++ ) {
-
-			if ( acceptData || jQuery.acceptData( elem ) ) {
-
-				id = elem[ internalKey ];
-				data = id && cache[ id ];
-
-				if ( data ) {
-					if ( data.events ) {
-						for ( type in data.events ) {
-							if ( special[ type ] ) {
-								jQuery.event.remove( elem, type );
-
-							// This is a shortcut to avoid jQuery.event.remove's overhead
-							} else {
-								jQuery.removeEvent( elem, type, data.handle );
-							}
-						}
-					}
-
-					// Remove cache only if it was not already removed by jQuery.event.remove
-					if ( cache[ id ] ) {
-
-						delete cache[ id ];
-
-						// IE does not allow us to delete expando properties from nodes,
-						// nor does it have a removeAttribute function on Document nodes;
-						// we must handle all of these cases
-						if ( deleteExpando ) {
-							delete elem[ internalKey ];
-
-						} else if ( elem.removeAttribute ) {
-							elem.removeAttribute( internalKey );
-
-						} else {
-							elem[ internalKey ] = null;
-						}
-
-						jQuery.deletedIds.push( id );
-					}
-				}
-			}
-		}
-	}
-});
-// Limit scope pollution from any deprecated API
-(function() {
-
-var matched, browser;
-
-// Use of jQuery.browser is frowned upon.
-// More details: http://api.jquery.com/jQuery.browser
-// jQuery.uaMatch maintained for back-compat
-jQuery.uaMatch = function( ua ) {
-	ua = ua.toLowerCase();
-
-	var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
-		/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
-		/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
-		/(msie) ([\w.]+)/.exec( ua ) ||
-		ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
-		[];
-
-	return {
-		browser: match[ 1 ] || "",
-		version: match[ 2 ] || "0"
-	};
-};
-
-matched = jQuery.uaMatch( navigator.userAgent );
-browser = {};
-
-if ( matched.browser ) {
-	browser[ matched.browser ] = true;
-	browser.version = matched.version;
-}
-
-// Chrome is Webkit, but Webkit is also Safari.
-if ( browser.chrome ) {
-	browser.webkit = true;
-} else if ( browser.webkit ) {
-	browser.safari = true;
-}
-
-jQuery.browser = browser;
-
-jQuery.sub = function() {
-	function jQuerySub( selector, context ) {
-		return new jQuerySub.fn.init( selector, context );
-	}
-	jQuery.extend( true, jQuerySub, this );
-	jQuerySub.superclass = this;
-	jQuerySub.fn = jQuerySub.prototype = this();
-	jQuerySub.fn.constructor = jQuerySub;
-	jQuerySub.sub = this.sub;
-	jQuerySub.fn.init = function init( selector, context ) {
-		if ( context && context instanceof jQuery && !(context instanceof jQuerySub) ) {
-			context = jQuerySub( context );
-		}
-
-		return jQuery.fn.init.call( this, selector, context, rootjQuerySub );
-	};
-	jQuerySub.fn.init.prototype = jQuerySub.fn;
-	var rootjQuerySub = jQuerySub(document);
-	return jQuerySub;
-};
-
-})();
-var curCSS, iframe, iframeDoc,
-	ralpha = /alpha\([^)]*\)/i,
-	ropacity = /opacity=([^)]*)/,
-	rposition = /^(top|right|bottom|left)$/,
-	// swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
-	// see here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
-	rdisplayswap = /^(none|table(?!-c[ea]).+)/,
-	rmargin = /^margin/,
-	rnumsplit = new RegExp( "^(" + core_pnum + ")(.*)$", "i" ),
-	rnumnonpx = new RegExp( "^(" + core_pnum + ")(?!px)[a-z%]+$", "i" ),
-	rrelNum = new RegExp( "^([-+])=(" + core_pnum + ")", "i" ),
-	elemdisplay = {},
-
-	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
-	cssNormalTransform = {
-		letterSpacing: 0,
-		fontWeight: 400
-	},
-
-	cssExpand = [ "Top", "Right", "Bottom", "Left" ],
-	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ],
-
-	eventsToggle = jQuery.fn.toggle;
-
-// return a css property mapped to a potentially vendor prefixed property
-function vendorPropName( style, name ) {
-
-	// shortcut for names that are not vendor prefixed
-	if ( name in style ) {
-		return name;
-	}
-
-	// check for vendor prefixed names
-	var capName = name.charAt(0).toUpperCase() + name.slice(1),
-		origName = name,
-		i = cssPrefixes.length;
-
-	while ( i-- ) {
-		name = cssPrefixes[ i ] + capName;
-		if ( name in style ) {
-			return name;
-		}
-	}
-
-	return origName;
-}
-
-function isHidden( elem, el ) {
-	elem = el || elem;
-	return jQuery.css( elem, "display" ) === "none" || !jQuery.contains( elem.ownerDocument, elem );
-}
-
-function showHide( elements, show ) {
-	var elem, display,
-		values = [],
-		index = 0,
-		length = elements.length;
-
-	for ( ; index < length; index++ ) {
-		elem = elements[ index ];
-		if ( !elem.style ) {
-			continue;
-		}
-		values[ index ] = jQuery._data( elem, "olddisplay" );
-		if ( show ) {
-			// Reset the inline display of this element to learn if it is
-			// being hidden by cascaded rules or not
-			if ( !values[ index ] && elem.style.display === "none" ) {
-				elem.style.display = "";
-			}
-
-			// Set elements which have been overridden with display: none
-			// in a stylesheet to whatever the default browser style is
-			// for such an element
-			if ( elem.style.display === "" && isHidden( elem ) ) {
-				values[ index ] = jQuery._data( elem, "olddisplay", css_defaultDisplay(elem.nodeName) );
-			}
-		} else {
-			display = curCSS( elem, "display" );
-
-			if ( !values[ index ] && display !== "none" ) {
-				jQuery._data( elem, "olddisplay", display );
-			}
-		}
-	}
-
-	// Set the display of most of the elements in a second loop
-	// to avoid the constant reflow
-	for ( index = 0; index < length; index++ ) {
-		elem = elements[ index ];
-		if ( !elem.style ) {
-			continue;
-		}
-		if ( !show || elem.style.display === "none" || elem.style.display === "" ) {
-			elem.style.display = show ? values[ index ] || "" : "none";
-		}
-	}
-
-	return elements;
-}
-
-jQuery.fn.extend({
-	css: function( name, value ) {
-		return jQuery.access( this, function( elem, name, value ) {
-			return value !== undefined ?
-				jQuery.style( elem, name, value ) :
-				jQuery.css( elem, name );
-		}, name, value, arguments.length > 1 );
-	},
-	show: function() {
-		return showHide( this, true );
-	},
-	hide: function() {
-		return showHide( this );
-	},
-	toggle: function( state, fn2 ) {
-		var bool = typeof state === "boolean";
-
-		if ( jQuery.isFunction( state ) && jQuery.isFunction( fn2 ) ) {
-			return eventsToggle.apply( this, arguments );
-		}
-
-		return this.each(function() {
-			if ( bool ? state : isHidden( this ) ) {
-				jQuery( this ).show();
-			} else {
-				jQuery( this ).hide();
-			}
-		});
-	}
-});
-
-jQuery.extend({
-	// Add in style property hooks for overriding the default
-	// behavior of getting and setting a style property
-	cssHooks: {
-		opacity: {
-			get: function( elem, computed ) {
-				if ( computed ) {
-					// We should always get a number back from opacity
-					var ret = curCSS( elem, "opacity" );
-					return ret === "" ? "1" : ret;
-
-				}
-			}
-		}
-	},
-
-	// Exclude the following css properties to add px
-	cssNumber: {
-		"fillOpacity": true,
-		"fontWeight": true,
-		"lineHeight": true,
-		"opacity": true,
-		"orphans": true,
-		"widows": true,
-		"zIndex": true,
-		"zoom": true
-	},
-
-	// Add in properties whose names you wish to fix before
-	// setting or getting the value
-	cssProps: {
-		// normalize float css property
-		"float": jQuery.support.cssFloat ? "cssFloat" : "styleFloat"
-	},
-
-	// Get and set the style property on a DOM Node
-	style: function( elem, name, value, extra ) {
-		// Don't set styles on text and comment nodes
-		if ( !elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style ) {
-			return;
-		}
-
-		// Make sure that we're working with the right name
-		var ret, type, hooks,
-			origName = jQuery.camelCase( name ),
-			style = elem.style;
-
-		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( style, origName ) );
-
-		// gets hook for the prefixed version
-		// followed by the unprefixed version
-		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
-
-		// Check if we're setting a value
-		if ( value !== undefined ) {
-			type = typeof value;
-
-			// convert relative number strings (+= or -=) to relative numbers. #7345
-			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
-				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
-				// Fixes bug #9237
-				type = "number";
-			}
-
-			// Make sure that NaN and null values aren't set. See: #7116
-			if ( value == null || type === "number" && isNaN( value ) ) {
-				return;
-			}
-
-			// If a number was passed in, add 'px' to the (except for certain CSS properties)
-			if ( type === "number" && !jQuery.cssNumber[ origName ] ) {
-				value += "px";
-			}
-
-			// If a hook was provided, use that value, otherwise just set the specified value
-			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
-				// Wrapped to prevent IE from throwing errors when 'invalid' values are provided
-				// Fixes bug #5509
-				try {
-					style[ name ] = value;
-				} catch(e) {}
-			}
-
-		} else {
-			// If a hook was provided get the non-computed value from there
-			if ( hooks && "get" in hooks && (ret = hooks.get( elem, false, extra )) !== undefined ) {
-				return ret;
-			}
-
-			// Otherwise just get the value from the style object
-			return style[ name ];
-		}
-	},
-
-	css: function( elem, name, numeric, extra ) {
-		var val, num, hooks,
-			origName = jQuery.camelCase( name );
-
-		// Make sure that we're working with the right name
-		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( elem.style, origName ) );
-
-		// gets hook for the prefixed version
-		// followed by the unprefixed version
-		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
-
-		// If a hook was provided get the computed value from there
-		if ( hooks && "get" in hooks ) {
-			val = hooks.get( elem, true, extra );
-		}
-
-		// Otherwise, if a way to get the computed value exists, use that
-		if ( val === undefined ) {
-			val = curCSS( elem, name );
-		}
-
-		//convert "normal" to computed value
-		if ( val === "normal" && name in cssNormalTransform ) {
-			val = cssNormalTransform[ name ];
-		}
-
-		// Return, converting to number if forced or a qualifier was provided and val looks numeric
-		if ( numeric || extra !== undefined ) {
-			num = parseFloat( val );
-			return numeric || jQuery.isNumeric( num ) ? num || 0 : val;
-		}
-		return val;
-	},
-
-	// A method for quickly swapping in/out CSS properties to get correct calculations
-	swap: function( elem, options, callback ) {
-		var ret, name,
-			old = {};
-
-		// Remember the old values, and insert the new ones
-		for ( name in options ) {
-			old[ name ] = elem.style[ name ];
-			elem.style[ name ] = options[ name ];
-		}
-
-		ret = callback.call( elem );
-
-		// Revert the old values
-		for ( name in options ) {
-			elem.style[ name ] = old[ name ];
-		}
-
-		return ret;
-	}
-});
-
-// NOTE: To any future maintainer, we've window.getComputedStyle
-// because jsdom on node.js will break without it.
-if ( window.getComputedStyle ) {
-	curCSS = function( elem, name ) {
-		var ret, width, minWidth, maxWidth,
-			computed = window.getComputedStyle( elem, null ),
-			style = elem.style;
-
-		if ( computed ) {
-
-			ret = computed[ name ];
-			if ( ret === "" && !jQuery.contains( elem.ownerDocument, elem ) ) {
-				ret = jQuery.style( elem, name );
-			}
-
-			// A tribute to the "awesome hack by Dean Edwards"
-			// Chrome < 17 and Safari 5.0 uses "computed value" instead of "used value" for margin-right
-			// Safari 5.1.7 (at least) returns percentage for a larger set of values, but width seems to be reliably pixels
-			// this is against the CSSOM draft spec: http://dev.w3.org/csswg/cssom/#resolved-values
-			if ( rnumnonpx.test( ret ) && rmargin.test( name ) ) {
-				width = style.width;
-				minWidth = style.minWidth;
-				maxWidth = style.maxWidth;
-
-				style.minWidth = style.maxWidth = style.width = ret;
-				ret = computed.width;
-
-				style.width = width;
-				style.minWidth = minWidth;
-				style.maxWidth = maxWidth;
-			}
-		}
-
-		return ret;
-	};
-} else if ( document.documentElement.currentStyle ) {
-	curCSS = function( elem, name ) {
-		var left, rsLeft,
-			ret = elem.currentStyle && elem.currentStyle[ name ],
-			style = elem.style;
-
-		// Avoid setting ret to empty string here
-		// so we don't default to auto
-		if ( ret == null && style && style[ name ] ) {
-			ret = style[ name ];
-		}
-
-		// From the awesome hack by Dean Edwards
-		// http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
-
-		// If we're not dealing with a regular pixel number
-		// but a number that has a weird ending, we need to convert it to pixels
-		// but not position css attributes, as those are proportional to the parent element instead
-		// and we can't measure the parent instead because it might trigger a "stacking dolls" problem
-		if ( rnumnonpx.test( ret ) && !rposition.test( name ) ) {
-
-			// Remember the original values
-			left = style.left;
-			rsLeft = elem.runtimeStyle && elem.runtimeStyle.left;
-
-			// Put in the new values to get a computed value out
-			if ( rsLeft ) {
-				elem.runtimeStyle.left = elem.currentStyle.left;
-			}
-			style.left = name === "fontSize" ? "1em" : ret;
-			ret = style.pixelLeft + "px";
-
-			// Revert the changed values
-			style.left = left;
-			if ( rsLeft ) {
-				elem.runtimeStyle.left = rsLeft;
-			}
-		}
-
-		return ret === "" ? "auto" : ret;
-	};
-}
-
-function setPositiveNumber( elem, value, subtract ) {
-	var matches = rnumsplit.exec( value );
-	return matches ?
-			Math.max( 0, matches[ 1 ] - ( subtract || 0 ) ) + ( matches[ 2 ] || "px" ) :
-			value;
-}
-
-function augmentWidthOrHeight( elem, name, extra, isBorderBox ) {
-	var i = extra === ( isBorderBox ? "border" : "content" ) ?
-		// If we already have the right measurement, avoid augmentation
-		4 :
-		// Otherwise initialize for horizontal or vertical properties
-		name === "width" ? 1 : 0,
-
-		val = 0;
-
-	for ( ; i < 4; i += 2 ) {
-		// both box models exclude margin, so add it if we want it
-		if ( extra === "margin" ) {
-			// we use jQuery.css instead of curCSS here
-			// because of the reliableMarginRight CSS hook!
-			val += jQuery.css( elem, extra + cssExpand[ i ], true );
-		}
-
-		// From this point on we use curCSS for maximum performance (relevant in animations)
-		if ( isBorderBox ) {
-			// border-box includes padding, so remove it if we want content
-			if ( extra === "content" ) {
-				val -= parseFloat( curCSS( elem, "padding" + cssExpand[ i ] ) ) || 0;
-			}
-
-			// at this point, extra isn't border nor margin, so remove border
-			if ( extra !== "margin" ) {
-				val -= parseFloat( curCSS( elem, "border" + cssExpand[ i ] + "Width" ) ) || 0;
-			}
-		} else {
-			// at this point, extra isn't content, so add padding
-			val += parseFloat( curCSS( elem, "padding" + cssExpand[ i ] ) ) || 0;
-
-			// at this point, extra isn't content nor padding, so add border
-			if ( extra !== "padding" ) {
-				val += parseFloat( curCSS( elem, "border" + cssExpand[ i ] + "Width" ) ) || 0;
-			}
-		}
-	}
-
-	return val;
-}
-
-function getWidthOrHeight( elem, name, extra ) {
-
-	// Start with offset property, which is equivalent to the border-box value
-	var val = name === "width" ? elem.offsetWidth : elem.offsetHeight,
-		valueIsBorderBox = true,
-		isBorderBox = jQuery.support.boxSizing && jQuery.css( elem, "boxSizing" ) === "border-box";
-
-	// some non-html elements return undefined for offsetWidth, so check for null/undefined
-	// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
-	// MathML - https://bugzilla.mozilla.org/show_bug.cgi?id=491668
-	if ( val <= 0 || val == null ) {
-		// Fall back to computed then uncomputed css if necessary
-		val = curCSS( elem, name );
-		if ( val < 0 || val == null ) {
-			val = elem.style[ name ];
-		}
-
-		// Computed unit is not pixels. Stop here and return.
-		if ( rnumnonpx.test(val) ) {
-			return val;
-		}
-
-		// we need the check for style in case a browser which returns unreliable values
-		// for getComputedStyle silently falls back to the reliable elem.style
-		valueIsBorderBox = isBorderBox && ( jQuery.support.boxSizingReliable || val === elem.style[ name ] );
-
-		// Normalize "", auto, and prepare for extra
-		val = parseFloat( val ) || 0;
-	}
-
-	// use the active box-sizing model to add/subtract irrelevant styles
-	return ( val +
-		augmentWidthOrHeight(
-			elem,
-			name,
-			extra || ( isBorderBox ? "border" : "content" ),
-			valueIsBorderBox
-		)
-	) + "px";
-}
-
-
-// Try to determine the default display value of an element
-function css_defaultDisplay( nodeName ) {
-	if ( elemdisplay[ nodeName ] ) {
-		return elemdisplay[ nodeName ];
-	}
-
-	var elem = jQuery( "<" + nodeName + ">" ).appendTo( document.body ),
-		display = elem.css("display");
-	elem.remove();
-
-	// If the simple way fails,
-	// get element's real default display by attaching it to a temp iframe
-	if ( display === "none" || display === "" ) {
-		// Use the already-created iframe if possible
-		iframe = document.body.appendChild(
-			iframe || jQuery.extend( document.createElement("iframe"), {
-				frameBorder: 0,
-				width: 0,
-				height: 0
-			})
-		);
-
-		// Create a cacheable copy of the iframe document on first call.
-		// IE and Opera will allow us to reuse the iframeDoc without re-writing the fake HTML
-		// document to it; WebKit & Firefox won't allow reusing the iframe document.
-		if ( !iframeDoc || !iframe.createElement ) {
-			iframeDoc = ( iframe.contentWindow || iframe.contentDocument ).document;
-			iframeDoc.write("<!doctype html><html><body>");
-			iframeDoc.close();
-		}
-
-		elem = iframeDoc.body.appendChild( iframeDoc.createElement(nodeName) );
-
-		display = curCSS( elem, "display" );
-		document.body.removeChild( iframe );
-	}
-
-	// Store the correct default display
-	elemdisplay[ nodeName ] = display;
-
-	return display;
-}
-
-jQuery.each([ "height", "width" ], function( i, name ) {
-	jQuery.cssHooks[ name ] = {
-		get: function( elem, computed, extra ) {
-			if ( computed ) {
-				// certain elements can have dimension info if we invisibly show them
-				// however, it must have a current display style that would benefit from this
-				if ( elem.offsetWidth === 0 && rdisplayswap.test( curCSS( elem, "display" ) ) ) {
-					return jQuery.swap( elem, cssShow, function() {
-						return getWidthOrHeight( elem, name, extra );
-					});
-				} else {
-					return getWidthOrHeight( elem, name, extra );
-				}
-			}
-		},
-
-		set: function( elem, value, extra ) {
-			return setPositiveNumber( elem, value, extra ?
-				augmentWidthOrHeight(
-					elem,
-					name,
-					extra,
-					jQuery.support.boxSizing && jQuery.css( elem, "boxSizing" ) === "border-box"
-				) : 0
-			);
-		}
-	};
-});
-
-if ( !jQuery.support.opacity ) {
-	jQuery.cssHooks.opacity = {
-		get: function( elem, computed ) {
-			// IE uses filters for opacity
-			return ropacity.test( (computed && elem.currentStyle ? elem.currentStyle.filter : elem.style.filter) || "" ) ?
-				( 0.01 * parseFloat( RegExp.$1 ) ) + "" :
-				computed ? "1" : "";
-		},
-
-		set: function( elem, value ) {
-			var style = elem.style,
-				currentStyle = elem.currentStyle,
-				opacity = jQuery.isNumeric( value ) ? "alpha(opacity=" + value * 100 + ")" : "",
-				filter = currentStyle && currentStyle.filter || style.filter || "";
-
-			// IE has trouble with opacity if it does not have layout
-			// Force it by setting the zoom level
-			style.zoom = 1;
-
-			// if setting opacity to 1, and no other filters exist - attempt to remove filter attribute #6652
-			if ( value >= 1 && jQuery.trim( filter.replace( ralpha, "" ) ) === "" &&
-				style.removeAttribute ) {
-
-				// Setting style.filter to null, "" & " " still leave "filter:" in the cssText
-				// if "filter:" is present at all, clearType is disabled, we want to avoid this
-				// style.removeAttribute is IE Only, but so apparently is this code path...
-				style.removeAttribute( "filter" );
-
-				// if there there is no filter style applied in a css rule, we are done
-				if ( currentStyle && !currentStyle.filter ) {
-					return;
-				}
-			}
-
-			// otherwise, set new filter values
-			style.filter = ralpha.test( filter ) ?
-				filter.replace( ralpha, opacity ) :
-				filter + " " + opacity;
-		}
-	};
-}
-
-// These hooks cannot be added until DOM ready because the support test
-// for it is not run until after DOM ready
-jQuery(function() {
-	if ( !jQuery.support.reliableMarginRight ) {
-		jQuery.cssHooks.marginRight = {
-			get: function( elem, computed ) {
-				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
-				// Work around by temporarily setting element display to inline-block
-				return jQuery.swap( elem, { "display": "inline-block" }, function() {
-					if ( computed ) {
-						return curCSS( elem, "marginRight" );
-					}
-				});
-			}
-		};
-	}
-
-	// Webkit bug: https://bugs.webkit.org/show_bug.cgi?id=29084
-	// getComputedStyle returns percent when specified for top/left/bottom/right
-	// rather than make the css module depend on the offset module, we just check for it here
-	if ( !jQuery.support.pixelPosition && jQuery.fn.position ) {
-		jQuery.each( [ "top", "left" ], function( i, prop ) {
-			jQuery.cssHooks[ prop ] = {
-				get: function( elem, computed ) {
-					if ( computed ) {
-						var ret = curCSS( elem, prop );
-						// if curCSS returns percentage, fallback to offset
-						return rnumnonpx.test( ret ) ? jQuery( elem ).position()[ prop ] + "px" : ret;
-					}
-				}
-			};
-		});
-	}
-
-});
-
-if ( jQuery.expr && jQuery.expr.filters ) {
-	jQuery.expr.filters.hidden = function( elem ) {
-		return ( elem.offsetWidth === 0 && elem.offsetHeight === 0 ) || (!jQuery.support.reliableHiddenOffsets && ((elem.style && elem.style.display) || curCSS( elem, "display" )) === "none");
-	};
-
-	jQuery.expr.filters.visible = function( elem ) {
-		return !jQuery.expr.filters.hidden( elem );
-	};
-}
-
-// These hooks are used by animate to expand properties
-jQuery.each({
-	margin: "",
-	padding: "",
-	border: "Width"
-}, function( prefix, suffix ) {
-	jQuery.cssHooks[ prefix + suffix ] = {
-		expand: function( value ) {
-			var i,
-
-				// assumes a single number if not a string
-				parts = typeof value === "string" ? value.split(" ") : [ value ],
-				expanded = {};
-
-			for ( i = 0; i < 4; i++ ) {
-				expanded[ prefix + cssExpand[ i ] + suffix ] =
-					parts[ i ] || parts[ i - 2 ] || parts[ 0 ];
-			}
-
-			return expanded;
-		}
-	};
-
-	if ( !rmargin.test( prefix ) ) {
-		jQuery.cssHooks[ prefix + suffix ].set = setPositiveNumber;
-	}
-});
-var r20 = /%20/g,
-	rbracket = /\[\]$/,
-	rCRLF = /\r?\n/g,
-	rinput = /^(?:color|date|datetime|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
-	rselectTextarea = /^(?:select|textarea)/i;
-
-jQuery.fn.extend({
-	serialize: function() {
-		return jQuery.param( this.serializeArray() );
-	},
-	serializeArray: function() {
-		return this.map(function(){
-			return this.elements ? jQuery.makeArray( this.elements ) : this;
-		})
-		.filter(function(){
-			return this.name && !this.disabled &&
-				( this.checked || rselectTextarea.test( this.nodeName ) ||
-					rinput.test( this.type ) );
-		})
-		.map(function( i, elem ){
-			var val = jQuery( this ).val();
-
-			return val == null ?
-				null :
-				jQuery.isArray( val ) ?
-					jQuery.map( val, function( val, i ){
-						return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
-					}) :
-					{ name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
-		}).get();
-	}
-});
-
-//Serialize an array of form elements or a set of
-//key/values into a query string
-jQuery.param = function( a, traditional ) {
-	var prefix,
-		s = [],
-		add = function( key, value ) {
-			// If value is a function, invoke it and return its value
-			value = jQuery.isFunction( value ) ? value() : ( value == null ? "" : value );
-			s[ s.length ] = encodeURIComponent( key ) + "=" + encodeURIComponent( value );
-		};
-
-	// Set traditional to true for jQuery <= 1.3.2 behavior.
-	if ( traditional === undefined ) {
-		traditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
-	}
-
-	// If an array was passed in, assume that it is an array of form elements.
-	if ( jQuery.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
-		// Serialize the form elements
-		jQuery.each( a, function() {
-			add( this.name, this.value );
-		});
-
-	} else {
-		// If traditional, encode the "old" way (the way 1.3.2 or older
-		// did it), otherwise encode params recursively.
-		for ( prefix in a ) {
-			buildParams( prefix, a[ prefix ], traditional, add );
-		}
-	}
-
-	// Return the resulting serialization
-	return s.join( "&" ).replace( r20, "+" );
-};
-
-function buildParams( prefix, obj, traditional, add ) {
-	var name;
-
-	if ( jQuery.isArray( obj ) ) {
-		// Serialize array item.
-		jQuery.each( obj, function( i, v ) {
-			if ( traditional || rbracket.test( prefix ) ) {
-				// Treat each array item as a scalar.
-				add( prefix, v );
-
-			} else {
-				// If array item is non-scalar (array or object), encode its
-				// numeric index to resolve deserialization ambiguity issues.
-				// Note that rack (as of 1.0.0) can't currently deserialize
-				// nested arrays properly, and attempting to do so may cause
-				// a server error. Possible fixes are to modify rack's
-				// deserialization algorithm or to provide an option or flag
-				// to force array serialization to be shallow.
-				buildParams( prefix + "[" + ( typeof v === "object" ? i : "" ) + "]", v, traditional, add );
-			}
-		});
-
-	} else if ( !traditional && jQuery.type( obj ) === "object" ) {
-		// Serialize object item.
-		for ( name in obj ) {
-			buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
-		}
-
-	} else {
-		// Serialize scalar item.
-		add( prefix, obj );
-	}
-}
-var // Document location
-	ajaxLocation,
-	// Document location segments
-	ajaxLocParts,
-
-	rhash = /#.*$/,
-	rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg, // IE leaves an \r character at EOL
-	// #7653, #8125, #8152: local protocol detection
-	rlocalProtocol = /^(?:about|app|app\-storage|.+\-extension|file|res|widget):$/,
-	rnoContent = /^(?:GET|HEAD)$/,
-	rprotocol = /^\/\//,
-	rquery = /\?/,
-	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-	rts = /([?&])_=[^&]*/,
-	rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/,
-
-	// Keep a copy of the old load method
-	_load = jQuery.fn.load,
-
-	/* Prefilters
-	 * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)
-	 * 2) These are called:
-	 *    - BEFORE asking for a transport
-	 *    - AFTER param serialization (s.data is a string if s.processData is true)
-	 * 3) key is the dataType
-	 * 4) the catchall symbol "*" can be used
-	 * 5) execution will start with transport dataType and THEN continue down to "*" if needed
-	 */
-	prefilters = {},
-
-	/* Transports bindings
-	 * 1) key is the dataType
-	 * 2) the catchall symbol "*" can be used
-	 * 3) selection will start with transport dataType and THEN go to "*" if needed
-	 */
-	transports = {},
-
-	// Avoid comment-prolog char sequence (#10098); must appease lint and evade compression
-	allTypes = ["*/"] + ["*"];
-
-// #8138, IE may throw an exception when accessing
-// a field from window.location if document.domain has been set
-try {
-	ajaxLocation = location.href;
-} catch( e ) {
-	// Use the href attribute of an A element
-	// since IE will modify it given document.location
-	ajaxLocation = document.createElement( "a" );
-	ajaxLocation.href = "";
-	ajaxLocation = ajaxLocation.href;
-}
-
-// Segment location into parts
-ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
-
-// Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
-function addToPrefiltersOrTransports( structure ) {
-
-	// dataTypeExpression is optional and defaults to "*"
-	return function( dataTypeExpression, func ) {
-
-		if ( typeof dataTypeExpression !== "string" ) {
-			func = dataTypeExpression;
-			dataTypeExpression = "*";
-		}
-
-		var dataType, list, placeBefore,
-			dataTypes = dataTypeExpression.toLowerCase().split( core_rspace ),
-			i = 0,
-			length = dataTypes.length;
-
-		if ( jQuery.isFunction( func ) ) {
-			// For each dataType in the dataTypeExpression
-			for ( ; i < length; i++ ) {
-				dataType = dataTypes[ i ];
-				// We control if we're asked to add before
-				// any existing element
-				placeBefore = /^\+/.test( dataType );
-				if ( placeBefore ) {
-					dataType = dataType.substr( 1 ) || "*";
-				}
-				list = structure[ dataType ] = structure[ dataType ] || [];
-				// then we add to the structure accordingly
-				list[ placeBefore ? "unshift" : "push" ]( func );
-			}
-		}
-	};
-}
-
-// Base inspection function for prefilters and transports
-function inspectPrefiltersOrTransports( structure, options, originalOptions, jqXHR,
-		dataType /* internal */, inspected /* internal */ ) {
-
-	dataType = dataType || options.dataTypes[ 0 ];
-	inspected = inspected || {};
-
-	inspected[ dataType ] = true;
-
-	var selection,
-		list = structure[ dataType ],
-		i = 0,
-		length = list ? list.length : 0,
-		executeOnly = ( structure === prefilters );
-
-	for ( ; i < length && ( executeOnly || !selection ); i++ ) {
-		selection = list[ i ]( options, originalOptions, jqXHR );
-		// If we got redirected to another dataType
-		// we try there if executing only and not done already
-		if ( typeof selection === "string" ) {
-			if ( !executeOnly || inspected[ selection ] ) {
-				selection = undefined;
-			} else {
-				options.dataTypes.unshift( selection );
-				selection = inspectPrefiltersOrTransports(
-						structure, options, originalOptions, jqXHR, selection, inspected );
-			}
-		}
-	}
-	// If we're only executing or nothing was selected
-	// we try the catchall dataType if not done already
-	if ( ( executeOnly || !selection ) && !inspected[ "*" ] ) {
-		selection = inspectPrefiltersOrTransports(
-				structure, options, originalOptions, jqXHR, "*", inspected );
-	}
-	// unnecessary when only executing (prefilters)
-	// but it'll be ignored by the caller in that case
-	return selection;
-}
-
-// A special extend for ajax options
-// that takes "flat" options (not to be deep extended)
-// Fixes #9887
-function ajaxExtend( target, src ) {
-	var key, deep,
-		flatOptions = jQuery.ajaxSettings.flatOptions || {};
-	for ( key in src ) {
-		if ( src[ key ] !== undefined ) {
-			( flatOptions[ key ] ? target : ( deep || ( deep = {} ) ) )[ key ] = src[ key ];
-		}
-	}
-	if ( deep ) {
-		jQuery.extend( true, target, deep );
-	}
-}
-
-jQuery.fn.load = function( url, params, callback ) {
-	if ( typeof url !== "string" && _load ) {
-		return _load.apply( this, arguments );
-	}
-
-	// Don't do a request if no elements are being requested
-	if ( !this.length ) {
-		return this;
-	}
-
-	var selector, type, response,
-		self = this,
-		off = url.indexOf(" ");
-
-	if ( off >= 0 ) {
-		selector = url.slice( off, url.length );
-		url = url.slice( 0, off );
-	}
-
-	// If it's a function
-	if ( jQuery.isFunction( params ) ) {
-
-		// We assume that it's the callback
-		callback = params;
-		params = undefined;
-
-	// Otherwise, build a param string
-	} else if ( params && typeof params === "object" ) {
-		type = "POST";
-	}
-
-	// Request the remote document
-	jQuery.ajax({
-		url: url,
-
-		// if "type" variable is undefined, then "GET" method will be used
-		type: type,
-		dataType: "html",
-		data: params,
-		complete: function( jqXHR, status ) {
-			if ( callback ) {
-				self.each( callback, response || [ jqXHR.responseText, status, jqXHR ] );
-			}
-		}
-	}).done(function( responseText ) {
-
-		// Save response for use in complete callback
-		response = arguments;
-
-		// See if a selector was specified
-		self.html( selector ?
-
-			// Create a dummy div to hold the results
-			jQuery("<div>")
-
-				// inject the contents of the document in, removing the scripts
-				// to avoid any 'Permission Denied' errors in IE
-				.append( responseText.replace( rscript, "" ) )
-
-				// Locate the specified elements
-				.find( selector ) :
-
-			// If not, just inject the full result
-			responseText );
-
-	});
-
-	return this;
-};
-
-// Attach a bunch of functions for handling common AJAX events
-jQuery.each( "ajaxStart ajaxStop ajaxComplete ajaxError ajaxSuccess ajaxSend".split( " " ), function( i, o ){
-	jQuery.fn[ o ] = function( f ){
-		return this.on( o, f );
-	};
-});
-
-jQuery.each( [ "get", "post" ], function( i, method ) {
-	jQuery[ method ] = function( url, data, callback, type ) {
-		// shift arguments if data argument was omitted
-		if ( jQuery.isFunction( data ) ) {
-			type = type || callback;
-			callback = data;
-			data = undefined;
-		}
-
-		return jQuery.ajax({
-			type: method,
-			url: url,
-			data: data,
-			success: callback,
-			dataType: type
-		});
-	};
-});
-
-jQuery.extend({
-
-	getScript: function( url, callback ) {
-		return jQuery.get( url, undefined, callback, "script" );
-	},
-
-	getJSON: function( url, data, callback ) {
-		return jQuery.get( url, data, callback, "json" );
-	},
-
-	// Creates a full fledged settings object into target
-	// with both ajaxSettings and settings fields.
-	// If target is omitted, writes into ajaxSettings.
-	ajaxSetup: function( target, settings ) {
-		if ( settings ) {
-			// Building a settings object
-			ajaxExtend( target, jQuery.ajaxSettings );
-		} else {
-			// Extending ajaxSettings
-			settings = target;
-			target = jQuery.ajaxSettings;
-		}
-		ajaxExtend( target, settings );
-		return target;
-	},
-
-	ajaxSettings: {
-		url: ajaxLocation,
-		isLocal: rlocalProtocol.test( ajaxLocParts[ 1 ] ),
-		global: true,
-		type: "GET",
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		processData: true,
-		async: true,
-		/*
-		timeout: 0,
-		data: null,
-		dataType: null,
-		username: null,
-		password: null,
-		cache: null,
-		throws: false,
-		traditional: false,
-		headers: {},
-		*/
-
-		accepts: {
-			xml: "application/xml, text/xml",
-			html: "text/html",
-			text: "text/plain",
-			json: "application/json, text/javascript",
-			"*": allTypes
-		},
-
-		contents: {
-			xml: /xml/,
-			html: /html/,
-			json: /json/
-		},
-
-		responseFields: {
-			xml: "responseXML",
-			text: "responseText"
-		},
-
-		// List of data converters
-		// 1) key format is "source_type destination_type" (a single space in-between)
-		// 2) the catchall symbol "*" can be used for source_type
-		converters: {
-
-			// Convert anything to text
-			"* text": window.String,
-
-			// Text to html (true = no transformation)
-			"text html": true,
-
-			// Evaluate text as a json expression
-			"text json": jQuery.parseJSON,
-
-			// Parse text as xml
-			"text xml": jQuery.parseXML
-		},
-
-		// For options that shouldn't be deep extended:
-		// you can add your own custom options here if
-		// and when you create one that shouldn't be
-		// deep extended (see ajaxExtend)
-		flatOptions: {
-			context: true,
-			url: true
-		}
-	},
-
-	ajaxPrefilter: addToPrefiltersOrTransports( prefilters ),
-	ajaxTransport: addToPrefiltersOrTransports( transports ),
-
-	// Main method
-	ajax: function( url, options ) {
-
-		// If url is an object, simulate pre-1.5 signature
-		if ( typeof url === "object" ) {
-			options = url;
-			url = undefined;
-		}
-
-		// Force options to be an object
-		options = options || {};
-
-		var // ifModified key
-			ifModifiedKey,
-			// Response headers
-			responseHeadersString,
-			responseHeaders,
-			// transport
-			transport,
-			// timeout handle
-			timeoutTimer,
-			// Cross-domain detection vars
-			parts,
-			// To know if global events are to be dispatched
-			fireGlobals,
-			// Loop variable
-			i,
-			// Create the final options object
-			s = jQuery.ajaxSetup( {}, options ),
-			// Callbacks context
-			callbackContext = s.context || s,
-			// Context for global events
-			// It's the callbackContext if one was provided in the options
-			// and if it's a DOM node or a jQuery collection
-			globalEventContext = callbackContext !== s &&
-				( callbackContext.nodeType || callbackContext instanceof jQuery ) ?
-						jQuery( callbackContext ) : jQuery.event,
-			// Deferreds
-			deferred = jQuery.Deferred(),
-			completeDeferred = jQuery.Callbacks( "once memory" ),
-			// Status-dependent callbacks
-			statusCode = s.statusCode || {},
-			// Headers (they are sent all at once)
-			requestHeaders = {},
-			requestHeadersNames = {},
-			// The jqXHR state
-			state = 0,
-			// Default abort message
-			strAbort = "canceled",
-			// Fake xhr
-			jqXHR = {
-
-				readyState: 0,
-
-				// Caches the header
-				setRequestHeader: function( name, value ) {
-					if ( !state ) {
-						var lname = name.toLowerCase();
-						name = requestHeadersNames[ lname ] = requestHeadersNames[ lname ] || name;
-						requestHeaders[ name ] = value;
-					}
-					return this;
-				},
-
-				// Raw string
-				getAllResponseHeaders: function() {
-					return state === 2 ? responseHeadersString : null;
-				},
-
-				// Builds headers hashtable if needed
-				getResponseHeader: function( key ) {
-					var match;
-					if ( state === 2 ) {
-						if ( !responseHeaders ) {
-							responseHeaders = {};
-							while( ( match = rheaders.exec( responseHeadersString ) ) ) {
-								responseHeaders[ match[1].toLowerCase() ] = match[ 2 ];
-							}
-						}
-						match = responseHeaders[ key.toLowerCase() ];
-					}
-					return match === undefined ? null : match;
-				},
-
-				// Overrides response content-type header
-				overrideMimeType: function( type ) {
-					if ( !state ) {
-						s.mimeType = type;
-					}
-					return this;
-				},
-
-				// Cancel the request
-				abort: function( statusText ) {
-					statusText = statusText || strAbort;
-					if ( transport ) {
-						transport.abort( statusText );
-					}
-					done( 0, statusText );
-					return this;
-				}
-			};
-
-		// Callback for when everything is done
-		// It is defined here because jslint complains if it is declared
-		// at the end of the function (which would be more logical and readable)
-		function done( status, nativeStatusText, responses, headers ) {
-			var isSuccess, success, error, response, modified,
-				statusText = nativeStatusText;
-
-			// Called once
-			if ( state === 2 ) {
-				return;
-			}
-
-			// State is "done" now
-			state = 2;
-
-			// Clear timeout if it exists
-			if ( timeoutTimer ) {
-				clearTimeout( timeoutTimer );
-			}
-
-			// Dereference transport for early garbage collection
-			// (no matter how long the jqXHR object will be used)
-			transport = undefined;
-
-			// Cache response headers
-			responseHeadersString = headers || "";
-
-			// Set readyState
-			jqXHR.readyState = status > 0 ? 4 : 0;
-
-			// Get response data
-			if ( responses ) {
-				response = ajaxHandleResponses( s, jqXHR, responses );
-			}
-
-			// If successful, handle type chaining
-			if ( status >= 200 && status < 300 || status === 304 ) {
-
-				// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
-				if ( s.ifModified ) {
-
-					modified = jqXHR.getResponseHeader("Last-Modified");
-					if ( modified ) {
-						jQuery.lastModified[ ifModifiedKey ] = modified;
-					}
-					modified = jqXHR.getResponseHeader("Etag");
-					if ( modified ) {
-						jQuery.etag[ ifModifiedKey ] = modified;
-					}
-				}
-
-				// If not modified
-				if ( status === 304 ) {
-
-					statusText = "notmodified";
-					isSuccess = true;
-
-				// If we have data
-				} else {
-
-					isSuccess = ajaxConvert( s, response );
-					statusText = isSuccess.state;
-					success = isSuccess.data;
-					error = isSuccess.error;
-					isSuccess = !error;
-				}
-			} else {
-				// We extract error from statusText
-				// then normalize statusText and status for non-aborts
-				error = statusText;
-				if ( !statusText || status ) {
-					statusText = "error";
-					if ( status < 0 ) {
-						status = 0;
-					}
-				}
-			}
-
-			// Set data for the fake xhr object
-			jqXHR.status = status;
-			jqXHR.statusText = "" + ( nativeStatusText || statusText );
-
-			// Success/Error
-			if ( isSuccess ) {
-				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
-			} else {
-				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
-			}
-
-			// Status-dependent callbacks
-			jqXHR.statusCode( statusCode );
-			statusCode = undefined;
-
-			if ( fireGlobals ) {
-				globalEventContext.trigger( "ajax" + ( isSuccess ? "Success" : "Error" ),
-						[ jqXHR, s, isSuccess ? success : error ] );
-			}
-
-			// Complete
-			completeDeferred.fireWith( callbackContext, [ jqXHR, statusText ] );
-
-			if ( fireGlobals ) {
-				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s ] );
-				// Handle the global AJAX counter
-				if ( !( --jQuery.active ) ) {
-					jQuery.event.trigger( "ajaxStop" );
-				}
-			}
-		}
-
-		// Attach deferreds
-		deferred.promise( jqXHR );
-		jqXHR.success = jqXHR.done;
-		jqXHR.error = jqXHR.fail;
-		jqXHR.complete = completeDeferred.add;
-
-		// Status-dependent callbacks
-		jqXHR.statusCode = function( map ) {
-			if ( map ) {
-				var tmp;
-				if ( state < 2 ) {
-					for ( tmp in map ) {
-						statusCode[ tmp ] = [ statusCode[tmp], map[tmp] ];
-					}
-				} else {
-					tmp = map[ jqXHR.status ];
-					jqXHR.always( tmp );
-				}
-			}
-			return this;
-		};
-
-		// Remove hash character (#7531: and string promotion)
-		// Add protocol if not provided (#5866: IE7 issue with protocol-less urls)
-		// We also use the url parameter if available
-		s.url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
-
-		// Extract dataTypes list
-		s.dataTypes = jQuery.trim( s.dataType || "*" ).toLowerCase().split( core_rspace );
-
-		// Determine if a cross-domain request is in order
-		if ( s.crossDomain == null ) {
-			parts = rurl.exec( s.url.toLowerCase() );
-			s.crossDomain = !!( parts &&
-				( parts[ 1 ] != ajaxLocParts[ 1 ] || parts[ 2 ] != ajaxLocParts[ 2 ] ||
-					( parts[ 3 ] || ( parts[ 1 ] === "http:" ? 80 : 443 ) ) !=
-						( ajaxLocParts[ 3 ] || ( ajaxLocParts[ 1 ] === "http:" ? 80 : 443 ) ) )
-			);
-		}
-
-		// Convert data if not already a string
-		if ( s.data && s.processData && typeof s.data !== "string" ) {
-			s.data = jQuery.param( s.data, s.traditional );
-		}
-
-		// Apply prefilters
-		inspectPrefiltersOrTransports( prefilters, s, options, jqXHR );
-
-		// If request was aborted inside a prefilter, stop there
-		if ( state === 2 ) {
-			return jqXHR;
-		}
-
-		// We can fire global events as of now if asked to
-		fireGlobals = s.global;
-
-		// Uppercase the type
-		s.type = s.type.toUpperCase();
-
-		// Determine if request has content
-		s.hasContent = !rnoContent.test( s.type );
-
-		// Watch for a new set of requests
-		if ( fireGlobals && jQuery.active++ === 0 ) {
-			jQuery.event.trigger( "ajaxStart" );
-		}
-
-		// More options handling for requests with no content
-		if ( !s.hasContent ) {
-
-			// If data is available, append data to url
-			if ( s.data ) {
-				s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.data;
-				// #9682: remove data so that it's not used in an eventual retry
-				delete s.data;
-			}
-
-			// Get ifModifiedKey before adding the anti-cache parameter
-			ifModifiedKey = s.url;
-
-			// Add anti-cache in url if needed
-			if ( s.cache === false ) {
-
-				var ts = jQuery.now(),
-					// try replacing _= if it is there
-					ret = s.url.replace( rts, "$1_=" + ts );
-
-				// if nothing was replaced, add timestamp to the end
-				s.url = ret + ( ( ret === s.url ) ? ( rquery.test( s.url ) ? "&" : "?" ) + "_=" + ts : "" );
-			}
-		}
-
-		// Set the correct header, if data is being sent
-		if ( s.data && s.hasContent && s.contentType !== false || options.contentType ) {
-			jqXHR.setRequestHeader( "Content-Type", s.contentType );
-		}
-
-		// Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
-		if ( s.ifModified ) {
-			ifModifiedKey = ifModifiedKey || s.url;
-			if ( jQuery.lastModified[ ifModifiedKey ] ) {
-				jqXHR.setRequestHeader( "If-Modified-Since", jQuery.lastModified[ ifModifiedKey ] );
-			}
-			if ( jQuery.etag[ ifModifiedKey ] ) {
-				jqXHR.setRequestHeader( "If-None-Match", jQuery.etag[ ifModifiedKey ] );
-			}
-		}
-
-		// Set the Accepts header for the server, depending on the dataType
-		jqXHR.setRequestHeader(
-			"Accept",
-			s.dataTypes[ 0 ] && s.accepts[ s.dataTypes[0] ] ?
-				s.accepts[ s.dataTypes[0] ] + ( s.dataTypes[ 0 ] !== "*" ? ", " + allTypes + "; q=0.01" : "" ) :
-				s.accepts[ "*" ]
-		);
-
-		// Check for headers option
-		for ( i in s.headers ) {
-			jqXHR.setRequestHeader( i, s.headers[ i ] );
-		}
-
-		// Allow custom headers/mimetypes and early abort
-		if ( s.beforeSend && ( s.beforeSend.call( callbackContext, jqXHR, s ) === false || state === 2 ) ) {
-				// Abort if not done already and return
-				return jqXHR.abort();
-
-		}
-
-		// aborting is no longer a cancellation
-		strAbort = "abort";
-
-		// Install callbacks on deferreds
-		for ( i in { success: 1, error: 1, complete: 1 } ) {
-			jqXHR[ i ]( s[ i ] );
-		}
-
-		// Get transport
-		transport = inspectPrefiltersOrTransports( transports, s, options, jqXHR );
-
-		// If no transport, we auto-abort
-		if ( !transport ) {
-			done( -1, "No Transport" );
-		} else {
-			jqXHR.readyState = 1;
-			// Send global event
-			if ( fireGlobals ) {
-				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
-			}
-			// Timeout
-			if ( s.async && s.timeout > 0 ) {
-				timeoutTimer = setTimeout( function(){
-					jqXHR.abort( "timeout" );
-				}, s.timeout );
-			}
-
-			try {
-				state = 1;
-				transport.send( requestHeaders, done );
-			} catch (e) {
-				// Propagate exception as error if not done
-				if ( state < 2 ) {
-					done( -1, e );
-				// Simply rethrow otherwise
-				} else {
-					throw e;
-				}
-			}
-		}
-
-		return jqXHR;
-	},
-
-	// Counter for holding the number of active queries
-	active: 0,
-
-	// Last-Modified header cache for next request
-	lastModified: {},
-	etag: {}
-
-});
-
-/* Handles responses to an ajax request:
- * - sets all responseXXX fields accordingly
- * - finds the right dataType (mediates between content-type and expected dataType)
- * - returns the corresponding response
- */
-function ajaxHandleResponses( s, jqXHR, responses ) {
-
-	var ct, type, finalDataType, firstDataType,
-		contents = s.contents,
-		dataTypes = s.dataTypes,
-		responseFields = s.responseFields;
-
-	// Fill responseXXX fields
-	for ( type in responseFields ) {
-		if ( type in responses ) {
-			jqXHR[ responseFields[type] ] = responses[ type ];
-		}
-	}
-
-	// Remove auto dataType and get content-type in the process
-	while( dataTypes[ 0 ] === "*" ) {
-		dataTypes.shift();
-		if ( ct === undefined ) {
-			ct = s.mimeType || jqXHR.getResponseHeader( "content-type" );
-		}
-	}
-
-	// Check if we're dealing with a known content-type
-	if ( ct ) {
-		for ( type in contents ) {
-			if ( contents[ type ] && contents[ type ].test( ct ) ) {
-				dataTypes.unshift( type );
-				break;
-			}
-		}
-	}
-
-	// Check to see if we have a response for the expected dataType
-	if ( dataTypes[ 0 ] in responses ) {
-		finalDataType = dataTypes[ 0 ];
-	} else {
-		// Try convertible dataTypes
-		for ( type in responses ) {
-			if ( !dataTypes[ 0 ] || s.converters[ type + " " + dataTypes[0] ] ) {
-				finalDataType = type;
-				break;
-			}
-			if ( !firstDataType ) {
-				firstDataType = type;
-			}
-		}
-		// Or just use first one
-		finalDataType = finalDataType || firstDataType;
-	}
-
-	// If we found a dataType
-	// We add the dataType to the list if needed
-	// and return the corresponding response
-	if ( finalDataType ) {
-		if ( finalDataType !== dataTypes[ 0 ] ) {
-			dataTypes.unshift( finalDataType );
-		}
-		return responses[ finalDataType ];
-	}
-}
-
-// Chain conversions given the request and the original response
-function ajaxConvert( s, response ) {
-
-	var conv, conv2, current, tmp,
-		// Work with a copy of dataTypes in case we need to modify it for conversion
-		dataTypes = s.dataTypes.slice(),
-		prev = dataTypes[ 0 ],
-		converters = {},
-		i = 0;
-
-	// Apply the dataFilter if provided
-	if ( s.dataFilter ) {
-		response = s.dataFilter( response, s.dataType );
-	}
-
-	// Create converters map with lowercased keys
-	if ( dataTypes[ 1 ] ) {
-		for ( conv in s.converters ) {
-			converters[ conv.toLowerCase() ] = s.converters[ conv ];
-		}
-	}
-
-	// Convert to each sequential dataType, tolerating list modification
-	for ( ; (current = dataTypes[++i]); ) {
-
-		// There's only work to do if current dataType is non-auto
-		if ( current !== "*" ) {
-
-			// Convert response if prev dataType is non-auto and differs from current
-			if ( prev !== "*" && prev !== current ) {
-
-				// Seek a direct converter
-				conv = converters[ prev + " " + current ] || converters[ "* " + current ];
-
-				// If none found, seek a pair
-				if ( !conv ) {
-					for ( conv2 in converters ) {
-
-						// If conv2 outputs current
-						tmp = conv2.split(" ");
-						if ( tmp[ 1 ] === current ) {
-
-							// If prev can be converted to accepted input
-							conv = converters[ prev + " " + tmp[ 0 ] ] ||
-								converters[ "* " + tmp[ 0 ] ];
-							if ( conv ) {
-								// Condense equivalence converters
-								if ( conv === true ) {
-									conv = converters[ conv2 ];
-
-								// Otherwise, insert the intermediate dataType
-								} else if ( converters[ conv2 ] !== true ) {
-									current = tmp[ 0 ];
-									dataTypes.splice( i--, 0, current );
-								}
-
-								break;
-							}
-						}
-					}
-				}
-
-				// Apply converter (if not an equivalence)
-				if ( conv !== true ) {
-
-					// Unless errors are allowed to bubble, catch and return them
-					if ( conv && s["throws"] ) {
-						response = conv( response );
-					} else {
-						try {
-							response = conv( response );
-						} catch ( e ) {
-							return { state: "parsererror", error: conv ? e : "No conversion from " + prev + " to " + current };
-						}
-					}
-				}
-			}
-
-			// Update prev for next iteration
-			prev = current;
-		}
-	}
-
-	return { state: "success", data: response };
-}
-var oldCallbacks = [],
-	rquestion = /\?/,
-	rjsonp = /(=)\?(?=&|$)|\?\?/,
-	nonce = jQuery.now();
-
-// Default jsonp settings
-jQuery.ajaxSetup({
-	jsonp: "callback",
-	jsonpCallback: function() {
-		var callback = oldCallbacks.pop() || ( jQuery.expando + "_" + ( nonce++ ) );
-		this[ callback ] = true;
-		return callback;
-	}
-});
-
-// Detect, normalize options and install callbacks for jsonp requests
-jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
-
-	var callbackName, overwritten, responseContainer,
-		data = s.data,
-		url = s.url,
-		hasCallback = s.jsonp !== false,
-		replaceInUrl = hasCallback && rjsonp.test( url ),
-		replaceInData = hasCallback && !replaceInUrl && typeof data === "string" &&
-			!( s.contentType || "" ).indexOf("application/x-www-form-urlencoded") &&
-			rjsonp.test( data );
-
-	// Handle iff the expected data type is "jsonp" or we have a parameter to set
-	if ( s.dataTypes[ 0 ] === "jsonp" || replaceInUrl || replaceInData ) {
-
-		// Get callback name, remembering preexisting value associated with it
-		callbackName = s.jsonpCallback = jQuery.isFunction( s.jsonpCallback ) ?
-			s.jsonpCallback() :
-			s.jsonpCallback;
-		overwritten = window[ callbackName ];
-
-		// Insert callback into url or form data
-		if ( replaceInUrl ) {
-			s.url = url.replace( rjsonp, "$1" + callbackName );
-		} else if ( replaceInData ) {
-			s.data = data.replace( rjsonp, "$1" + callbackName );
-		} else if ( hasCallback ) {
-			s.url += ( rquestion.test( url ) ? "&" : "?" ) + s.jsonp + "=" + callbackName;
-		}
-
-		// Use data converter to retrieve json after script execution
-		s.converters["script json"] = function() {
-			if ( !responseContainer ) {
-				jQuery.error( callbackName + " was not called" );
-			}
-			return responseContainer[ 0 ];
-		};
-
-		// force json dataType
-		s.dataTypes[ 0 ] = "json";
-
-		// Install callback
-		window[ callbackName ] = function() {
-			responseContainer = arguments;
-		};
-
-		// Clean-up function (fires after converters)
-		jqXHR.always(function() {
-			// Restore preexisting value
-			window[ callbackName ] = overwritten;
-
-			// Save back as free
-			if ( s[ callbackName ] ) {
-				// make sure that re-using the options doesn't screw things around
-				s.jsonpCallback = originalSettings.jsonpCallback;
-
-				// save the callback name for future use
-				oldCallbacks.push( callbackName );
-			}
-
-			// Call if it was a function and we have a response
-			if ( responseContainer && jQuery.isFunction( overwritten ) ) {
-				overwritten( responseContainer[ 0 ] );
-			}
-
-			responseContainer = overwritten = undefined;
-		});
-
-		// Delegate to script
-		return "script";
-	}
-});
-// Install script dataType
-jQuery.ajaxSetup({
-	accepts: {
-		script: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript"
-	},
-	contents: {
-		script: /javascript|ecmascript/
-	},
-	converters: {
-		"text script": function( text ) {
-			jQuery.globalEval( text );
-			return text;
-		}
-	}
-});
-
-// Handle cache's special case and global
-jQuery.ajaxPrefilter( "script", function( s ) {
-	if ( s.cache === undefined ) {
-		s.cache = false;
-	}
-	if ( s.crossDomain ) {
-		s.type = "GET";
-		s.global = false;
-	}
-});
-
-// Bind script tag hack transport
-jQuery.ajaxTransport( "script", function(s) {
-
-	// This transport only deals with cross domain requests
-	if ( s.crossDomain ) {
-
-		var script,
-			head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
-
-		return {
-
-			send: function( _, callback ) {
-
-				script = document.createElement( "script" );
-
-				script.async = "async";
-
-				if ( s.scriptCharset ) {
-					script.charset = s.scriptCharset;
-				}
-
-				script.src = s.url;
-
-				// Attach handlers for all browsers
-				script.onload = script.onreadystatechange = function( _, isAbort ) {
-
-					if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
-
-						// Handle memory leak in IE
-						script.onload = script.onreadystatechange = null;
-
-						// Remove the script
-						if ( head && script.parentNode ) {
-							head.removeChild( script );
-						}
-
-						// Dereference the script
-						script = undefined;
-
-						// Callback if not abort
-						if ( !isAbort ) {
-							callback( 200, "success" );
-						}
-					}
-				};
-				// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
-				// This arises when a base node is used (#2709 and #4378).
-				head.insertBefore( script, head.firstChild );
-			},
-
-			abort: function() {
-				if ( script ) {
-					script.onload( 0, 1 );
-				}
-			}
-		};
-	}
-});
-var xhrCallbacks,
-	// #5280: Internet Explorer will keep connections alive if we don't abort on unload
-	xhrOnUnloadAbort = window.ActiveXObject ? function() {
-		// Abort all pending requests
-		for ( var key in xhrCallbacks ) {
-			xhrCallbacks[ key ]( 0, 1 );
-		}
-	} : false,
-	xhrId = 0;
-
-// Functions to create xhrs
-function createStandardXHR() {
-	try {
-		return new window.XMLHttpRequest();
-	} catch( e ) {}
-}
-
-function createActiveXHR() {
-	try {
-		return new window.ActiveXObject( "Microsoft.XMLHTTP" );
-	} catch( e ) {}
-}
-
-// Create the request object
-// (This is still attached to ajaxSettings for backward compatibility)
-jQuery.ajaxSettings.xhr = window.ActiveXObject ?
-	/* Microsoft failed to properly
-	 * implement the XMLHttpRequest in IE7 (can't request local files),
-	 * so we use the ActiveXObject when it is available
-	 * Additionally XMLHttpRequest can be disabled in IE7/IE8 so
-	 * we need a fallback.
-	 */
-	function() {
-		return !this.isLocal && createStandardXHR() || createActiveXHR();
-	} :
-	// For all other browsers, use the standard XMLHttpRequest object
-	createStandardXHR;
-
-// Determine support properties
-(function( xhr ) {
-	jQuery.extend( jQuery.support, {
-		ajax: !!xhr,
-		cors: !!xhr && ( "withCredentials" in xhr )
-	});
-})( jQuery.ajaxSettings.xhr() );
-
-// Create transport if the browser can provide an xhr
-if ( jQuery.support.ajax ) {
-
-	jQuery.ajaxTransport(function( s ) {
-		// Cross domain only allowed if supported through XMLHttpRequest
-		if ( !s.crossDomain || jQuery.support.cors ) {
-
-			var callback;
-
-			return {
-				send: function( headers, complete ) {
-
-					// Get a new xhr
-					var handle, i,
-						xhr = s.xhr();
-
-					// Open the socket
-					// Passing null username, generates a login popup on Opera (#2865)
-					if ( s.username ) {
-						xhr.open( s.type, s.url, s.async, s.username, s.password );
-					} else {
-						xhr.open( s.type, s.url, s.async );
-					}
-
-					// Apply custom fields if provided
-					if ( s.xhrFields ) {
-						for ( i in s.xhrFields ) {
-							xhr[ i ] = s.xhrFields[ i ];
-						}
-					}
-
-					// Override mime type if needed
-					if ( s.mimeType && xhr.overrideMimeType ) {
-						xhr.overrideMimeType( s.mimeType );
-					}
-
-					// X-Requested-With header
-					// For cross-domain requests, seeing as conditions for a preflight are
-					// akin to a jigsaw puzzle, we simply never set it to be sure.
-					// (it can always be set on a per-request basis or even using ajaxSetup)
-					// For same-domain requests, won't change header if already provided.
-					if ( !s.crossDomain && !headers["X-Requested-With"] ) {
-						headers[ "X-Requested-With" ] = "XMLHttpRequest";
-					}
-
-					// Need an extra try/catch for cross domain requests in Firefox 3
-					try {
-						for ( i in headers ) {
-							xhr.setRequestHeader( i, headers[ i ] );
-						}
-					} catch( _ ) {}
-
-					// Do send the request
-					// This may raise an exception which is actually
-					// handled in jQuery.ajax (so no try/catch here)
-					xhr.send( ( s.hasContent && s.data ) || null );
-
-					// Listener
-					callback = function( _, isAbort ) {
-
-						var status,
-							statusText,
-							responseHeaders,
-							responses,
-							xml;
-
-						// Firefox throws exceptions when accessing properties
-						// of an xhr when a network error occurred
-						// http://helpful.knobs-dials.com/index.php/Component_returned_failure_code:_0x80040111_(NS_ERROR_NOT_AVAILABLE)
-						try {
-
-							// Was never called and is aborted or complete
-							if ( callback && ( isAbort || xhr.readyState === 4 ) ) {
-
-								// Only called once
-								callback = undefined;
-
-								// Do not keep as active anymore
-								if ( handle ) {
-									xhr.onreadystatechange = jQuery.noop;
-									if ( xhrOnUnloadAbort ) {
-										delete xhrCallbacks[ handle ];
-									}
-								}
-
-								// If it's an abort
-								if ( isAbort ) {
-									// Abort it manually if needed
-									if ( xhr.readyState !== 4 ) {
-										xhr.abort();
-									}
-								} else {
-									status = xhr.status;
-									responseHeaders = xhr.getAllResponseHeaders();
-									responses = {};
-									xml = xhr.responseXML;
-
-									// Construct response list
-									if ( xml && xml.documentElement /* #4958 */ ) {
-										responses.xml = xml;
-									}
-
-									// When requesting binary data, IE6-9 will throw an exception
-									// on any attempt to access responseText (#11426)
-									try {
-										responses.text = xhr.responseText;
-									} catch( _ ) {
-									}
-
-									// Firefox throws an exception when accessing
-									// statusText for faulty cross-domain requests
-									try {
-										statusText = xhr.statusText;
-									} catch( e ) {
-										// We normalize with Webkit giving an empty statusText
-										statusText = "";
-									}
-
-									// Filter status for non standard behaviors
-
-									// If the request is local and we have data: assume a success
-									// (success with no data won't get notified, that's the best we
-									// can do given current implementations)
-									if ( !status && s.isLocal && !s.crossDomain ) {
-										status = responses.text ? 200 : 404;
-									// IE - #1450: sometimes returns 1223 when it should be 204
-									} else if ( status === 1223 ) {
-										status = 204;
-									}
-								}
-							}
-						} catch( firefoxAccessException ) {
-							if ( !isAbort ) {
-								complete( -1, firefoxAccessException );
-							}
-						}
-
-						// Call complete if needed
-						if ( responses ) {
-							complete( status, statusText, responses, responseHeaders );
-						}
-					};
-
-					if ( !s.async ) {
-						// if we're in sync mode we fire the callback
-						callback();
-					} else if ( xhr.readyState === 4 ) {
-						// (IE6 & IE7) if it's in cache and has been
-						// retrieved directly we need to fire the callback
-						setTimeout( callback, 0 );
-					} else {
-						handle = ++xhrId;
-						if ( xhrOnUnloadAbort ) {
-							// Create the active xhrs callbacks list if needed
-							// and attach the unload handler
-							if ( !xhrCallbacks ) {
-								xhrCallbacks = {};
-								jQuery( window ).unload( xhrOnUnloadAbort );
-							}
-							// Add to list of active xhrs callbacks
-							xhrCallbacks[ handle ] = callback;
-						}
-						xhr.onreadystatechange = callback;
-					}
-				},
-
-				abort: function() {
-					if ( callback ) {
-						callback(0,1);
-					}
-				}
-			};
-		}
-	});
-}
-var fxNow, timerId,
-	rfxtypes = /^(?:toggle|show|hide)$/,
-	rfxnum = new RegExp( "^(?:([-+])=|)(" + core_pnum + ")([a-z%]*)$", "i" ),
-	rrun = /queueHooks$/,
-	animationPrefilters = [ defaultPrefilter ],
-	tweeners = {
-		"*": [function( prop, value ) {
-			var end, unit, prevScale,
-				tween = this.createTween( prop, value ),
-				parts = rfxnum.exec( value ),
-				target = tween.cur(),
-				start = +target || 0,
-				scale = 1;
-
-			if ( parts ) {
-				end = +parts[2];
-				unit = parts[3] || ( jQuery.cssNumber[ prop ] ? "" : "px" );
-
-				// We need to compute starting value
-				if ( unit !== "px" && start ) {
-					// Iteratively approximate from a nonzero starting point
-					// Prefer the current property, because this process will be trivial if it uses the same units
-					// Fallback to end or a simple constant
-					start = jQuery.css( tween.elem, prop, true ) || end || 1;
-
-					do {
-						// If previous iteration zeroed out, double until we get *something*
-						// Use a string for doubling factor so we don't accidentally see scale as unchanged below
-						prevScale = scale = scale || ".5";
-
-						// Adjust and apply
-						start = start / scale;
-						jQuery.style( tween.elem, prop, start + unit );
-
-						// Update scale, tolerating zeroes from tween.cur()
-						scale = tween.cur() / target;
-
-					// Stop looping if we've hit the mark or scale is unchanged
-					} while ( scale !== 1 && scale !== prevScale );
-				}
-
-				tween.unit = unit;
-				tween.start = start;
-				// If a +=/-= token was provided, we're doing a relative animation
-				tween.end = parts[1] ? start + ( parts[1] + 1 ) * end : end;
-			}
-			return tween;
-		}]
-	};
-
-// Animations created synchronously will run synchronously
-function createFxNow() {
-	setTimeout(function() {
-		fxNow = undefined;
-	}, 0 );
-	return ( fxNow = jQuery.now() );
-}
-
-function createTweens( animation, props ) {
-	jQuery.each( props, function( prop, value ) {
-		var collection = ( tweeners[ prop ] || [] ).concat( tweeners[ "*" ] ),
-			index = 0,
-			length = collection.length;
-		for ( ; index < length; index++ ) {
-			if ( collection[ index ].call( animation, prop, value ) ) {
-
-				// we're done with this property
-				return;
-			}
-		}
-	});
-}
-
-function Animation( elem, properties, options ) {
-	var result,
-		index = 0,
-		tweenerIndex = 0,
-		length = animationPrefilters.length,
-		deferred = jQuery.Deferred().always( function() {
-			// don't match elem in the :animated selector
-			delete tick.elem;
-		}),
-		tick = function() {
-			var currentTime = fxNow || createFxNow(),
-				remaining = Math.max( 0, animation.startTime + animation.duration - currentTime ),
-				percent = 1 - ( remaining / animation.duration || 0 ),
-				index = 0,
-				length = animation.tweens.length;
-
-			for ( ; index < length ; index++ ) {
-				animation.tweens[ index ].run( percent );
-			}
-
-			deferred.notifyWith( elem, [ animation, percent, remaining ]);
-
-			if ( percent < 1 && length ) {
-				return remaining;
-			} else {
-				deferred.resolveWith( elem, [ animation ] );
-				return false;
-			}
-		},
-		animation = deferred.promise({
-			elem: elem,
-			props: jQuery.extend( {}, properties ),
-			opts: jQuery.extend( true, { specialEasing: {} }, options ),
-			originalProperties: properties,
-			originalOptions: options,
-			startTime: fxNow || createFxNow(),
-			duration: options.duration,
-			tweens: [],
-			createTween: function( prop, end, easing ) {
-				var tween = jQuery.Tween( elem, animation.opts, prop, end,
-						animation.opts.specialEasing[ prop ] || animation.opts.easing );
-				animation.tweens.push( tween );
-				return tween;
-			},
-			stop: function( gotoEnd ) {
-				var index = 0,
-					// if we are going to the end, we want to run all the tweens
-					// otherwise we skip this part
-					length = gotoEnd ? animation.tweens.length : 0;
-
-				for ( ; index < length ; index++ ) {
-					animation.tweens[ index ].run( 1 );
-				}
-
-				// resolve when we played the last frame
-				// otherwise, reject
-				if ( gotoEnd ) {
-					deferred.resolveWith( elem, [ animation, gotoEnd ] );
-				} else {
-					deferred.rejectWith( elem, [ animation, gotoEnd ] );
-				}
-				return this;
-			}
-		}),
-		props = animation.props;
-
-	propFilter( props, animation.opts.specialEasing );
-
-	for ( ; index < length ; index++ ) {
-		result = animationPrefilters[ index ].call( animation, elem, props, animation.opts );
-		if ( result ) {
-			return result;
-		}
-	}
-
-	createTweens( animation, props );
-
-	if ( jQuery.isFunction( animation.opts.start ) ) {
-		animation.opts.start.call( elem, animation );
-	}
-
-	jQuery.fx.timer(
-		jQuery.extend( tick, {
-			anim: animation,
-			queue: animation.opts.queue,
-			elem: elem
-		})
-	);
-
-	// attach callbacks from options
-	return animation.progress( animation.opts.progress )
-		.done( animation.opts.done, animation.opts.complete )
-		.fail( animation.opts.fail )
-		.always( animation.opts.always );
-}
-
-function propFilter( props, specialEasing ) {
-	var index, name, easing, value, hooks;
-
-	// camelCase, specialEasing and expand cssHook pass
-	for ( index in props ) {
-		name = jQuery.camelCase( index );
-		easing = specialEasing[ name ];
-		value = props[ index ];
-		if ( jQuery.isArray( value ) ) {
-			easing = value[ 1 ];
-			value = props[ index ] = value[ 0 ];
-		}
-
-		if ( index !== name ) {
-			props[ name ] = value;
-			delete props[ index ];
-		}
-
-		hooks = jQuery.cssHooks[ name ];
-		if ( hooks && "expand" in hooks ) {
-			value = hooks.expand( value );
-			delete props[ name ];
-
-			// not quite $.extend, this wont overwrite keys already present.
-			// also - reusing 'index' from above because we have the correct "name"
-			for ( index in value ) {
-				if ( !( index in props ) ) {
-					props[ index ] = value[ index ];
-					specialEasing[ index ] = easing;
-				}
-			}
-		} else {
-			specialEasing[ name ] = easing;
-		}
-	}
-}
-
-jQuery.Animation = jQuery.extend( Animation, {
-
-	tweener: function( props, callback ) {
-		if ( jQuery.isFunction( props ) ) {
-			callback = props;
-			props = [ "*" ];
-		} else {
-			props = props.split(" ");
-		}
-
-		var prop,
-			index = 0,
-			length = props.length;
-
-		for ( ; index < length ; index++ ) {
-			prop = props[ index ];
-			tweeners[ prop ] = tweeners[ prop ] || [];
-			tweeners[ prop ].unshift( callback );
-		}
-	},
-
-	prefilter: function( callback, prepend ) {
-		if ( prepend ) {
-			animationPrefilters.unshift( callback );
-		} else {
-			animationPrefilters.push( callback );
-		}
-	}
-});
-
-function defaultPrefilter( elem, props, opts ) {
-	var index, prop, value, length, dataShow, tween, hooks, oldfire,
-		anim = this,
-		style = elem.style,
-		orig = {},
-		handled = [],
-		hidden = elem.nodeType && isHidden( elem );
-
-	// handle queue: false promises
-	if ( !opts.queue ) {
-		hooks = jQuery._queueHooks( elem, "fx" );
-		if ( hooks.unqueued == null ) {
-			hooks.unqueued = 0;
-			oldfire = hooks.empty.fire;
-			hooks.empty.fire = function() {
-				if ( !hooks.unqueued ) {
-					oldfire();
-				}
-			};
-		}
-		hooks.unqueued++;
-
-		anim.always(function() {
-			// doing this makes sure that the complete handler will be called
-			// before this completes
-			anim.always(function() {
-				hooks.unqueued--;
-				if ( !jQuery.queue( elem, "fx" ).length ) {
-					hooks.empty.fire();
-				}
-			});
-		});
-	}
-
-	// height/width overflow pass
-	if ( elem.nodeType === 1 && ( "height" in props || "width" in props ) ) {
-		// Make sure that nothing sneaks out
-		// Record all 3 overflow attributes because IE does not
-		// change the overflow attribute when overflowX and
-		// overflowY are set to the same value
-		opts.overflow = [ style.overflow, style.overflowX, style.overflowY ];
-
-		// Set display property to inline-block for height/width
-		// animations on inline elements that are having width/height animated
-		if ( jQuery.css( elem, "display" ) === "inline" &&
-				jQuery.css( elem, "float" ) === "none" ) {
-
-			// inline-level elements accept inline-block;
-			// block-level elements need to be inline with layout
-			if ( !jQuery.support.inlineBlockNeedsLayout || css_defaultDisplay( elem.nodeName ) === "inline" ) {
-				style.display = "inline-block";
-
-			} else {
-				style.zoom = 1;
-			}
-		}
-	}
-
-	if ( opts.overflow ) {
-		style.overflow = "hidden";
-		if ( !jQuery.support.shrinkWrapBlocks ) {
-			anim.done(function() {
-				style.overflow = opts.overflow[ 0 ];
-				style.overflowX = opts.overflow[ 1 ];
-				style.overflowY = opts.overflow[ 2 ];
-			});
-		}
-	}
-
-
-	// show/hide pass
-	for ( index in props ) {
-		value = props[ index ];
-		if ( rfxtypes.exec( value ) ) {
-			delete props[ index ];
-			if ( value === ( hidden ? "hide" : "show" ) ) {
-				continue;
-			}
-			handled.push( index );
-		}
-	}
-
-	length = handled.length;
-	if ( length ) {
-		dataShow = jQuery._data( elem, "fxshow" ) || jQuery._data( elem, "fxshow", {} );
-		if ( hidden ) {
-			jQuery( elem ).show();
-		} else {
-			anim.done(function() {
-				jQuery( elem ).hide();
-			});
-		}
-		anim.done(function() {
-			var prop;
-			jQuery.removeData( elem, "fxshow", true );
-			for ( prop in orig ) {
-				jQuery.style( elem, prop, orig[ prop ] );
-			}
-		});
-		for ( index = 0 ; index < length ; index++ ) {
-			prop = handled[ index ];
-			tween = anim.createTween( prop, hidden ? dataShow[ prop ] : 0 );
-			orig[ prop ] = dataShow[ prop ] || jQuery.style( elem, prop );
-
-			if ( !( prop in dataShow ) ) {
-				dataShow[ prop ] = tween.start;
-				if ( hidden ) {
-					tween.end = tween.start;
-					tween.start = prop === "width" || prop === "height" ? 1 : 0;
-				}
-			}
-		}
-	}
-}
-
-function Tween( elem, options, prop, end, easing ) {
-	return new Tween.prototype.init( elem, options, prop, end, easing );
-}
-jQuery.Tween = Tween;
-
-Tween.prototype = {
-	constructor: Tween,
-	init: function( elem, options, prop, end, easing, unit ) {
-		this.elem = elem;
-		this.prop = prop;
-		this.easing = easing || "swing";
-		this.options = options;
-		this.start = this.now = this.cur();
-		this.end = end;
-		this.unit = unit || ( jQuery.cssNumber[ prop ] ? "" : "px" );
-	},
-	cur: function() {
-		var hooks = Tween.propHooks[ this.prop ];
-
-		return hooks && hooks.get ?
-			hooks.get( this ) :
-			Tween.propHooks._default.get( this );
-	},
-	run: function( percent ) {
-		var eased,
-			hooks = Tween.propHooks[ this.prop ];
-
-		if ( this.options.duration ) {
-			this.pos = eased = jQuery.easing[ this.easing ](
-				percent, this.options.duration * percent, 0, 1, this.options.duration
-			);
-		} else {
-			this.pos = eased = percent;
-		}
-		this.now = ( this.end - this.start ) * eased + this.start;
-
-		if ( this.options.step ) {
-			this.options.step.call( this.elem, this.now, this );
-		}
-
-		if ( hooks && hooks.set ) {
-			hooks.set( this );
-		} else {
-			Tween.propHooks._default.set( this );
-		}
-		return this;
-	}
-};
-
-Tween.prototype.init.prototype = Tween.prototype;
-
-Tween.propHooks = {
-	_default: {
-		get: function( tween ) {
-			var result;
-
-			if ( tween.elem[ tween.prop ] != null &&
-				(!tween.elem.style || tween.elem.style[ tween.prop ] == null) ) {
-				return tween.elem[ tween.prop ];
-			}
-
-			// passing any value as a 4th parameter to .css will automatically
-			// attempt a parseFloat and fallback to a string if the parse fails
-			// so, simple values such as "10px" are parsed to Float.
-			// complex values such as "rotate(1rad)" are returned as is.
-			result = jQuery.css( tween.elem, tween.prop, false, "" );
-			// Empty strings, null, undefined and "auto" are converted to 0.
-			return !result || result === "auto" ? 0 : result;
-		},
-		set: function( tween ) {
-			// use step hook for back compat - use cssHook if its there - use .style if its
-			// available and use plain properties where available
-			if ( jQuery.fx.step[ tween.prop ] ) {
-				jQuery.fx.step[ tween.prop ]( tween );
-			} else if ( tween.elem.style && ( tween.elem.style[ jQuery.cssProps[ tween.prop ] ] != null || jQuery.cssHooks[ tween.prop ] ) ) {
-				jQuery.style( tween.elem, tween.prop, tween.now + tween.unit );
-			} else {
-				tween.elem[ tween.prop ] = tween.now;
-			}
-		}
-	}
-};
-
-// Remove in 2.0 - this supports IE8's panic based approach
-// to setting things on disconnected nodes
-
-Tween.propHooks.scrollTop = Tween.propHooks.scrollLeft = {
-	set: function( tween ) {
-		if ( tween.elem.nodeType && tween.elem.parentNode ) {
-			tween.elem[ tween.prop ] = tween.now;
-		}
-	}
-};
-
-jQuery.each([ "toggle", "show", "hide" ], function( i, name ) {
-	var cssFn = jQuery.fn[ name ];
-	jQuery.fn[ name ] = function( speed, easing, callback ) {
-		return speed == null || typeof speed === "boolean" ||
-			// special check for .toggle( handler, handler, ... )
-			( !i && jQuery.isFunction( speed ) && jQuery.isFunction( easing ) ) ?
-			cssFn.apply( this, arguments ) :
-			this.animate( genFx( name, true ), speed, easing, callback );
-	};
-});
-
-jQuery.fn.extend({
-	fadeTo: function( speed, to, easing, callback ) {
-
-		// show any hidden elements after setting opacity to 0
-		return this.filter( isHidden ).css( "opacity", 0 ).show()
-
-			// animate to the value specified
-			.end().animate({ opacity: to }, speed, easing, callback );
-	},
-	animate: function( prop, speed, easing, callback ) {
-		var empty = jQuery.isEmptyObject( prop ),
-			optall = jQuery.speed( speed, easing, callback ),
-			doAnimation = function() {
-				// Operate on a copy of prop so per-property easing won't be lost
-				var anim = Animation( this, jQuery.extend( {}, prop ), optall );
-
-				// Empty animations resolve immediately
-				if ( empty ) {
-					anim.stop( true );
-				}
-			};
-
-		return empty || optall.queue === false ?
-			this.each( doAnimation ) :
-			this.queue( optall.queue, doAnimation );
-	},
-	stop: function( type, clearQueue, gotoEnd ) {
-		var stopQueue = function( hooks ) {
-			var stop = hooks.stop;
-			delete hooks.stop;
-			stop( gotoEnd );
-		};
-
-		if ( typeof type !== "string" ) {
-			gotoEnd = clearQueue;
-			clearQueue = type;
-			type = undefined;
-		}
-		if ( clearQueue && type !== false ) {
-			this.queue( type || "fx", [] );
-		}
-
-		return this.each(function() {
-			var dequeue = true,
-				index = type != null && type + "queueHooks",
-				timers = jQuery.timers,
-				data = jQuery._data( this );
-
-			if ( index ) {
-				if ( data[ index ] && data[ index ].stop ) {
-					stopQueue( data[ index ] );
-				}
-			} else {
-				for ( index in data ) {
-					if ( data[ index ] && data[ index ].stop && rrun.test( index ) ) {
-						stopQueue( data[ index ] );
-					}
-				}
-			}
-
-			for ( index = timers.length; index--; ) {
-				if ( timers[ index ].elem === this && (type == null || timers[ index ].queue === type) ) {
-					timers[ index ].anim.stop( gotoEnd );
-					dequeue = false;
-					timers.splice( index, 1 );
-				}
-			}
-
-			// start the next in the queue if the last step wasn't forced
-			// timers currently will call their complete callbacks, which will dequeue
-			// but only if they were gotoEnd
-			if ( dequeue || !gotoEnd ) {
-				jQuery.dequeue( this, type );
-			}
-		});
-	}
-});
-
-// Generate parameters to create a standard animation
-function genFx( type, includeWidth ) {
-	var which,
-		attrs = { height: type },
-		i = 0;
-
-	// if we include width, step value is 1 to do all cssExpand values,
-	// if we don't include width, step value is 2 to skip over Left and Right
-	includeWidth = includeWidth? 1 : 0;
-	for( ; i < 4 ; i += 2 - includeWidth ) {
-		which = cssExpand[ i ];
-		attrs[ "margin" + which ] = attrs[ "padding" + which ] = type;
-	}
-
-	if ( includeWidth ) {
-		attrs.opacity = attrs.width = type;
-	}
-
-	return attrs;
-}
-
-// Generate shortcuts for custom animations
-jQuery.each({
-	slideDown: genFx("show"),
-	slideUp: genFx("hide"),
-	slideToggle: genFx("toggle"),
-	fadeIn: { opacity: "show" },
-	fadeOut: { opacity: "hide" },
-	fadeToggle: { opacity: "toggle" }
-}, function( name, props ) {
-	jQuery.fn[ name ] = function( speed, easing, callback ) {
-		return this.animate( props, speed, easing, callback );
-	};
-});
-
-jQuery.speed = function( speed, easing, fn ) {
-	var opt = speed && typeof speed === "object" ? jQuery.extend( {}, speed ) : {
-		complete: fn || !fn && easing ||
-			jQuery.isFunction( speed ) && speed,
-		duration: speed,
-		easing: fn && easing || easing && !jQuery.isFunction( easing ) && easing
-	};
-
-	opt.duration = jQuery.fx.off ? 0 : typeof opt.duration === "number" ? opt.duration :
-		opt.duration in jQuery.fx.speeds ? jQuery.fx.speeds[ opt.duration ] : jQuery.fx.speeds._default;
-
-	// normalize opt.queue - true/undefined/null -> "fx"
-	if ( opt.queue == null || opt.queue === true ) {
-		opt.queue = "fx";
-	}
-
-	// Queueing
-	opt.old = opt.complete;
-
-	opt.complete = function() {
-		if ( jQuery.isFunction( opt.old ) ) {
-			opt.old.call( this );
-		}
-
-		if ( opt.queue ) {
-			jQuery.dequeue( this, opt.queue );
-		}
-	};
-
-	return opt;
-};
-
-jQuery.easing = {
-	linear: function( p ) {
-		return p;
-	},
-	swing: function( p ) {
-		return 0.5 - Math.cos( p*Math.PI ) / 2;
-	}
-};
-
-jQuery.timers = [];
-jQuery.fx = Tween.prototype.init;
-jQuery.fx.tick = function() {
-	var timer,
-		timers = jQuery.timers,
-		i = 0;
-
-	for ( ; i < timers.length; i++ ) {
-		timer = timers[ i ];
-		// Checks the timer has not already been removed
-		if ( !timer() && timers[ i ] === timer ) {
-			timers.splice( i--, 1 );
-		}
-	}
-
-	if ( !timers.length ) {
-		jQuery.fx.stop();
-	}
-};
-
-jQuery.fx.timer = function( timer ) {
-	if ( timer() && jQuery.timers.push( timer ) && !timerId ) {
-		timerId = setInterval( jQuery.fx.tick, jQuery.fx.interval );
-	}
-};
-
-jQuery.fx.interval = 13;
-
-jQuery.fx.stop = function() {
-	clearInterval( timerId );
-	timerId = null;
-};
-
-jQuery.fx.speeds = {
-	slow: 600,
-	fast: 200,
-	// Default speed
-	_default: 400
-};
-
-// Back Compat <1.8 extension point
-jQuery.fx.step = {};
-
-if ( jQuery.expr && jQuery.expr.filters ) {
-	jQuery.expr.filters.animated = function( elem ) {
-		return jQuery.grep(jQuery.timers, function( fn ) {
-			return elem === fn.elem;
-		}).length;
-	};
-}
-var rroot = /^(?:body|html)$/i;
-
-jQuery.fn.offset = function( options ) {
-	if ( arguments.length ) {
-		return options === undefined ?
-			this :
-			this.each(function( i ) {
-				jQuery.offset.setOffset( this, options, i );
-			});
-	}
-
-	var box, docElem, body, win, clientTop, clientLeft, scrollTop, scrollLeft, top, left,
-		elem = this[ 0 ],
-		doc = elem && elem.ownerDocument;
-
-	if ( !doc ) {
-		return;
-	}
-
-	if ( (body = doc.body) === elem ) {
-		return jQuery.offset.bodyOffset( elem );
-	}
-
-	docElem = doc.documentElement;
-
-	// Make sure we're not dealing with a disconnected DOM node
-	if ( !jQuery.contains( docElem, elem ) ) {
-		return { top: 0, left: 0 };
-	}
-
-	box = elem.getBoundingClientRect();
-	win = getWindow( doc );
-	clientTop  = docElem.clientTop  || body.clientTop  || 0;
-	clientLeft = docElem.clientLeft || body.clientLeft || 0;
-	scrollTop  = win.pageYOffset || docElem.scrollTop;
-	scrollLeft = win.pageXOffset || docElem.scrollLeft;
-	top  = box.top  + scrollTop  - clientTop;
-	left = box.left + scrollLeft - clientLeft;
-
-	return { top: top, left: left };
-};
-
-jQuery.offset = {
-
-	bodyOffset: function( body ) {
-		var top = body.offsetTop,
-			left = body.offsetLeft;
-
-		if ( jQuery.support.doesNotIncludeMarginInBodyOffset ) {
-			top  += parseFloat( jQuery.css(body, "marginTop") ) || 0;
-			left += parseFloat( jQuery.css(body, "marginLeft") ) || 0;
-		}
-
-		return { top: top, left: left };
-	},
-
-	setOffset: function( elem, options, i ) {
-		var position = jQuery.css( elem, "position" );
-
-		// set position first, in-case top/left are set even on static elem
-		if ( position === "static" ) {
-			elem.style.position = "relative";
-		}
-
-		var curElem = jQuery( elem ),
-			curOffset = curElem.offset(),
-			curCSSTop = jQuery.css( elem, "top" ),
-			curCSSLeft = jQuery.css( elem, "left" ),
-			calculatePosition = ( position === "absolute" || position === "fixed" ) && jQuery.inArray("auto", [curCSSTop, curCSSLeft]) > -1,
-			props = {}, curPosition = {}, curTop, curLeft;
-
-		// need to be able to calculate position if either top or left is auto and position is either absolute or fixed
-		if ( calculatePosition ) {
-			curPosition = curElem.position();
-			curTop = curPosition.top;
-			curLeft = curPosition.left;
-		} else {
-			curTop = parseFloat( curCSSTop ) || 0;
-			curLeft = parseFloat( curCSSLeft ) || 0;
-		}
-
-		if ( jQuery.isFunction( options ) ) {
-			options = options.call( elem, i, curOffset );
-		}
-
-		if ( options.top != null ) {
-			props.top = ( options.top - curOffset.top ) + curTop;
-		}
-		if ( options.left != null ) {
-			props.left = ( options.left - curOffset.left ) + curLeft;
-		}
-
-		if ( "using" in options ) {
-			options.using.call( elem, props );
-		} else {
-			curElem.css( props );
-		}
-	}
-};
-
-
-jQuery.fn.extend({
-
-	position: function() {
-		if ( !this[0] ) {
-			return;
-		}
-
-		var elem = this[0],
-
-		// Get *real* offsetParent
-		offsetParent = this.offsetParent(),
-
-		// Get correct offsets
-		offset       = this.offset(),
-		parentOffset = rroot.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset();
-
-		// Subtract element margins
-		// note: when an element has margin: auto the offsetLeft and marginLeft
-		// are the same in Safari causing offset.left to incorrectly be 0
-		offset.top  -= parseFloat( jQuery.css(elem, "marginTop") ) || 0;
-		offset.left -= parseFloat( jQuery.css(elem, "marginLeft") ) || 0;
-
-		// Add offsetParent borders
-		parentOffset.top  += parseFloat( jQuery.css(offsetParent[0], "borderTopWidth") ) || 0;
-		parentOffset.left += parseFloat( jQuery.css(offsetParent[0], "borderLeftWidth") ) || 0;
-
-		// Subtract the two offsets
-		return {
-			top:  offset.top  - parentOffset.top,
-			left: offset.left - parentOffset.left
-		};
-	},
-
-	offsetParent: function() {
-		return this.map(function() {
-			var offsetParent = this.offsetParent || document.body;
-			while ( offsetParent && (!rroot.test(offsetParent.nodeName) && jQuery.css(offsetParent, "position") === "static") ) {
-				offsetParent = offsetParent.offsetParent;
-			}
-			return offsetParent || document.body;
-		});
-	}
-});
-
-
-// Create scrollLeft and scrollTop methods
-jQuery.each( {scrollLeft: "pageXOffset", scrollTop: "pageYOffset"}, function( method, prop ) {
-	var top = /Y/.test( prop );
-
-	jQuery.fn[ method ] = function( val ) {
-		return jQuery.access( this, function( elem, method, val ) {
-			var win = getWindow( elem );
-
-			if ( val === undefined ) {
-				return win ? (prop in win) ? win[ prop ] :
-					win.document.documentElement[ method ] :
-					elem[ method ];
-			}
-
-			if ( win ) {
-				win.scrollTo(
-					!top ? val : jQuery( win ).scrollLeft(),
-					 top ? val : jQuery( win ).scrollTop()
-				);
-
-			} else {
-				elem[ method ] = val;
-			}
-		}, method, val, arguments.length, null );
-	};
-});
-
-function getWindow( elem ) {
-	return jQuery.isWindow( elem ) ?
-		elem :
-		elem.nodeType === 9 ?
-			elem.defaultView || elem.parentWindow :
-			false;
-}
-// Create innerHeight, innerWidth, height, width, outerHeight and outerWidth methods
-jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
-	jQuery.each( { padding: "inner" + name, content: type, "": "outer" + name }, function( defaultExtra, funcName ) {
-		// margin is only for outerHeight, outerWidth
-		jQuery.fn[ funcName ] = function( margin, value ) {
-			var chainable = arguments.length && ( defaultExtra || typeof margin !== "boolean" ),
-				extra = defaultExtra || ( margin === true || value === true ? "margin" : "border" );
-
-			return jQuery.access( this, function( elem, type, value ) {
-				var doc;
-
-				if ( jQuery.isWindow( elem ) ) {
-					// As of 5/8/2012 this will yield incorrect results for Mobile Safari, but there
-					// isn't a whole lot we can do. See pull request at this URL for discussion:
-					// https://github.com/jquery/jquery/pull/764
-					return elem.document.documentElement[ "client" + name ];
-				}
-
-				// Get document width or height
-				if ( elem.nodeType === 9 ) {
-					doc = elem.documentElement;
-
-					// Either scroll[Width/Height] or offset[Width/Height] or client[Width/Height], whichever is greatest
-					// unfortunately, this causes bug #3838 in IE6/8 only, but there is currently no good, small way to fix it.
-					return Math.max(
-						elem.body[ "scroll" + name ], doc[ "scroll" + name ],
-						elem.body[ "offset" + name ], doc[ "offset" + name ],
-						doc[ "client" + name ]
-					);
-				}
-
-				return value === undefined ?
-					// Get width or height on the element, requesting but not forcing parseFloat
-					jQuery.css( elem, type, value, extra ) :
-
-					// Set width or height on the element
-					jQuery.style( elem, type, value, extra );
-			}, type, chainable ? margin : undefined, chainable, null );
-		};
-	});
-});
-// Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
-
-// Expose jQuery as an AMD module, but only for AMD loaders that
-// understand the issues with loading multiple versions of jQuery
-// in a page that all might call define(). The loader will indicate
-// they have special allowances for multiple jQuery versions by
-// specifying define.amd.jQuery = true. Register as a named module,
-// since jQuery can be concatenated with other files that may use define,
-// but not use a proper concatenation script that understands anonymous
-// AMD modules. A named AMD is safest and most robust way to register.
-// Lowercase jquery is used because AMD module names are derived from
-// file names, and jQuery is normally delivered in a lowercase file name.
-// Do this after creating the global so that if an AMD module wants to call
-// noConflict to hide this version of jQuery, it will work.
-if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
-	define( "jquery", [], function () { return jQuery; } );
-}
-
-return jQuery;
-
-})( window ); }));
-
-},{}],"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
+},{"handlebars/runtime":"/home/ubuntu/bridge-controller/node_modules/handlebars/runtime.js"}],"/home/ubuntu/bridge-controller/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -21032,1354 +11699,9 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js":[function(require,module,exports){
-//     Underscore.js 1.6.0
-//     http://underscorejs.org
-//     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-//     Underscore may be freely distributed under the MIT license.
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
 
-(function() {
-
-  // Baseline setup
-  // --------------
-
-  // Establish the root object, `window` in the browser, or `exports` on the server.
-  var root = this;
-
-  // Save the previous value of the `_` variable.
-  var previousUnderscore = root._;
-
-  // Establish the object that gets returned to break out of a loop iteration.
-  var breaker = {};
-
-  // Save bytes in the minified (but not gzipped) version:
-  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
-
-  // Create quick reference variables for speed access to core prototypes.
-  var
-    push             = ArrayProto.push,
-    slice            = ArrayProto.slice,
-    concat           = ArrayProto.concat,
-    toString         = ObjProto.toString,
-    hasOwnProperty   = ObjProto.hasOwnProperty;
-
-  // All **ECMAScript 5** native function implementations that we hope to use
-  // are declared here.
-  var
-    nativeForEach      = ArrayProto.forEach,
-    nativeMap          = ArrayProto.map,
-    nativeReduce       = ArrayProto.reduce,
-    nativeReduceRight  = ArrayProto.reduceRight,
-    nativeFilter       = ArrayProto.filter,
-    nativeEvery        = ArrayProto.every,
-    nativeSome         = ArrayProto.some,
-    nativeIndexOf      = ArrayProto.indexOf,
-    nativeLastIndexOf  = ArrayProto.lastIndexOf,
-    nativeIsArray      = Array.isArray,
-    nativeKeys         = Object.keys,
-    nativeBind         = FuncProto.bind;
-
-  // Create a safe reference to the Underscore object for use below.
-  var _ = function(obj) {
-    if (obj instanceof _) return obj;
-    if (!(this instanceof _)) return new _(obj);
-    this._wrapped = obj;
-  };
-
-  // Export the Underscore object for **Node.js**, with
-  // backwards-compatibility for the old `require()` API. If we're in
-  // the browser, add `_` as a global object via a string identifier,
-  // for Closure Compiler "advanced" mode.
-  if (typeof exports !== 'undefined') {
-    if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = _;
-    }
-    exports._ = _;
-  } else {
-    root._ = _;
-  }
-
-  // Current version.
-  _.VERSION = '1.6.0';
-
-  // Collection Functions
-  // --------------------
-
-  // The cornerstone, an `each` implementation, aka `forEach`.
-  // Handles objects with the built-in `forEach`, arrays, and raw objects.
-  // Delegates to **ECMAScript 5**'s native `forEach` if available.
-  var each = _.each = _.forEach = function(obj, iterator, context) {
-    if (obj == null) return obj;
-    if (nativeForEach && obj.forEach === nativeForEach) {
-      obj.forEach(iterator, context);
-    } else if (obj.length === +obj.length) {
-      for (var i = 0, length = obj.length; i < length; i++) {
-        if (iterator.call(context, obj[i], i, obj) === breaker) return;
-      }
-    } else {
-      var keys = _.keys(obj);
-      for (var i = 0, length = keys.length; i < length; i++) {
-        if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
-      }
-    }
-    return obj;
-  };
-
-  // Return the results of applying the iterator to each element.
-  // Delegates to **ECMAScript 5**'s native `map` if available.
-  _.map = _.collect = function(obj, iterator, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-    each(obj, function(value, index, list) {
-      results.push(iterator.call(context, value, index, list));
-    });
-    return results;
-  };
-
-  var reduceError = 'Reduce of empty array with no initial value';
-
-  // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
-  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
-    if (obj == null) obj = [];
-    if (nativeReduce && obj.reduce === nativeReduce) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
-    }
-    each(obj, function(value, index, list) {
-      if (!initial) {
-        memo = value;
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, value, index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
-    return memo;
-  };
-
-  // The right-associative version of reduce, also known as `foldr`.
-  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
-  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
-    if (obj == null) obj = [];
-    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
-    }
-    var length = obj.length;
-    if (length !== +length) {
-      var keys = _.keys(obj);
-      length = keys.length;
-    }
-    each(obj, function(value, index, list) {
-      index = keys ? keys[--length] : --length;
-      if (!initial) {
-        memo = obj[index];
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, obj[index], index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
-    return memo;
-  };
-
-  // Return the first value which passes a truth test. Aliased as `detect`.
-  _.find = _.detect = function(obj, predicate, context) {
-    var result;
-    any(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) {
-        result = value;
-        return true;
-      }
-    });
-    return result;
-  };
-
-  // Return all the elements that pass a truth test.
-  // Delegates to **ECMAScript 5**'s native `filter` if available.
-  // Aliased as `select`.
-  _.filter = _.select = function(obj, predicate, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(predicate, context);
-    each(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) results.push(value);
-    });
-    return results;
-  };
-
-  // Return all the elements for which a truth test fails.
-  _.reject = function(obj, predicate, context) {
-    return _.filter(obj, function(value, index, list) {
-      return !predicate.call(context, value, index, list);
-    }, context);
-  };
-
-  // Determine whether all of the elements match a truth test.
-  // Delegates to **ECMAScript 5**'s native `every` if available.
-  // Aliased as `all`.
-  _.every = _.all = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = true;
-    if (obj == null) return result;
-    if (nativeEvery && obj.every === nativeEvery) return obj.every(predicate, context);
-    each(obj, function(value, index, list) {
-      if (!(result = result && predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
-  };
-
-  // Determine if at least one element in the object matches a truth test.
-  // Delegates to **ECMAScript 5**'s native `some` if available.
-  // Aliased as `any`.
-  var any = _.some = _.any = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = false;
-    if (obj == null) return result;
-    if (nativeSome && obj.some === nativeSome) return obj.some(predicate, context);
-    each(obj, function(value, index, list) {
-      if (result || (result = predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
-  };
-
-  // Determine if the array or object contains a given value (using `===`).
-  // Aliased as `include`.
-  _.contains = _.include = function(obj, target) {
-    if (obj == null) return false;
-    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
-    return any(obj, function(value) {
-      return value === target;
-    });
-  };
-
-  // Invoke a method (with arguments) on every item in a collection.
-  _.invoke = function(obj, method) {
-    var args = slice.call(arguments, 2);
-    var isFunc = _.isFunction(method);
-    return _.map(obj, function(value) {
-      return (isFunc ? method : value[method]).apply(value, args);
-    });
-  };
-
-  // Convenience version of a common use case of `map`: fetching a property.
-  _.pluck = function(obj, key) {
-    return _.map(obj, _.property(key));
-  };
-
-  // Convenience version of a common use case of `filter`: selecting only objects
-  // containing specific `key:value` pairs.
-  _.where = function(obj, attrs) {
-    return _.filter(obj, _.matches(attrs));
-  };
-
-  // Convenience version of a common use case of `find`: getting the first object
-  // containing specific `key:value` pairs.
-  _.findWhere = function(obj, attrs) {
-    return _.find(obj, _.matches(attrs));
-  };
-
-  // Return the maximum element or (element-based computation).
-  // Can't optimize arrays of integers longer than 65,535 elements.
-  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
-  _.max = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.max.apply(Math, obj);
-    }
-    var result = -Infinity, lastComputed = -Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed > lastComputed) {
-        result = value;
-        lastComputed = computed;
-      }
-    });
-    return result;
-  };
-
-  // Return the minimum element (or element-based computation).
-  _.min = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.min.apply(Math, obj);
-    }
-    var result = Infinity, lastComputed = Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed < lastComputed) {
-        result = value;
-        lastComputed = computed;
-      }
-    });
-    return result;
-  };
-
-  // Shuffle an array, using the modern version of the
-  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
-  _.shuffle = function(obj) {
-    var rand;
-    var index = 0;
-    var shuffled = [];
-    each(obj, function(value) {
-      rand = _.random(index++);
-      shuffled[index - 1] = shuffled[rand];
-      shuffled[rand] = value;
-    });
-    return shuffled;
-  };
-
-  // Sample **n** random values from a collection.
-  // If **n** is not specified, returns a single random element.
-  // The internal `guard` argument allows it to work with `map`.
-  _.sample = function(obj, n, guard) {
-    if (n == null || guard) {
-      if (obj.length !== +obj.length) obj = _.values(obj);
-      return obj[_.random(obj.length - 1)];
-    }
-    return _.shuffle(obj).slice(0, Math.max(0, n));
-  };
-
-  // An internal function to generate lookup iterators.
-  var lookupIterator = function(value) {
-    if (value == null) return _.identity;
-    if (_.isFunction(value)) return value;
-    return _.property(value);
-  };
-
-  // Sort the object's values by a criterion produced by an iterator.
-  _.sortBy = function(obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    return _.pluck(_.map(obj, function(value, index, list) {
-      return {
-        value: value,
-        index: index,
-        criteria: iterator.call(context, value, index, list)
-      };
-    }).sort(function(left, right) {
-      var a = left.criteria;
-      var b = right.criteria;
-      if (a !== b) {
-        if (a > b || a === void 0) return 1;
-        if (a < b || b === void 0) return -1;
-      }
-      return left.index - right.index;
-    }), 'value');
-  };
-
-  // An internal function used for aggregate "group by" operations.
-  var group = function(behavior) {
-    return function(obj, iterator, context) {
-      var result = {};
-      iterator = lookupIterator(iterator);
-      each(obj, function(value, index) {
-        var key = iterator.call(context, value, index, obj);
-        behavior(result, key, value);
-      });
-      return result;
-    };
-  };
-
-  // Groups the object's values by a criterion. Pass either a string attribute
-  // to group by, or a function that returns the criterion.
-  _.groupBy = group(function(result, key, value) {
-    _.has(result, key) ? result[key].push(value) : result[key] = [value];
-  });
-
-  // Indexes the object's values by a criterion, similar to `groupBy`, but for
-  // when you know that your index values will be unique.
-  _.indexBy = group(function(result, key, value) {
-    result[key] = value;
-  });
-
-  // Counts instances of an object that group by a certain criterion. Pass
-  // either a string attribute to count by, or a function that returns the
-  // criterion.
-  _.countBy = group(function(result, key) {
-    _.has(result, key) ? result[key]++ : result[key] = 1;
-  });
-
-  // Use a comparator function to figure out the smallest index at which
-  // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    var value = iterator.call(context, obj);
-    var low = 0, high = array.length;
-    while (low < high) {
-      var mid = (low + high) >>> 1;
-      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
-    }
-    return low;
-  };
-
-  // Safely create a real, live array from anything iterable.
-  _.toArray = function(obj) {
-    if (!obj) return [];
-    if (_.isArray(obj)) return slice.call(obj);
-    if (obj.length === +obj.length) return _.map(obj, _.identity);
-    return _.values(obj);
-  };
-
-  // Return the number of elements in an object.
-  _.size = function(obj) {
-    if (obj == null) return 0;
-    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
-  };
-
-  // Array Functions
-  // ---------------
-
-  // Get the first element of an array. Passing **n** will return the first N
-  // values in the array. Aliased as `head` and `take`. The **guard** check
-  // allows it to work with `_.map`.
-  _.first = _.head = _.take = function(array, n, guard) {
-    if (array == null) return void 0;
-    if ((n == null) || guard) return array[0];
-    if (n < 0) return [];
-    return slice.call(array, 0, n);
-  };
-
-  // Returns everything but the last entry of the array. Especially useful on
-  // the arguments object. Passing **n** will return all the values in
-  // the array, excluding the last N. The **guard** check allows it to work with
-  // `_.map`.
-  _.initial = function(array, n, guard) {
-    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
-  };
-
-  // Get the last element of an array. Passing **n** will return the last N
-  // values in the array. The **guard** check allows it to work with `_.map`.
-  _.last = function(array, n, guard) {
-    if (array == null) return void 0;
-    if ((n == null) || guard) return array[array.length - 1];
-    return slice.call(array, Math.max(array.length - n, 0));
-  };
-
-  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
-  // Especially useful on the arguments object. Passing an **n** will return
-  // the rest N values in the array. The **guard**
-  // check allows it to work with `_.map`.
-  _.rest = _.tail = _.drop = function(array, n, guard) {
-    return slice.call(array, (n == null) || guard ? 1 : n);
-  };
-
-  // Trim out all falsy values from an array.
-  _.compact = function(array) {
-    return _.filter(array, _.identity);
-  };
-
-  // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, output) {
-    if (shallow && _.every(input, _.isArray)) {
-      return concat.apply(output, input);
-    }
-    each(input, function(value) {
-      if (_.isArray(value) || _.isArguments(value)) {
-        shallow ? push.apply(output, value) : flatten(value, shallow, output);
-      } else {
-        output.push(value);
-      }
-    });
-    return output;
-  };
-
-  // Flatten out an array, either recursively (by default), or just one level.
-  _.flatten = function(array, shallow) {
-    return flatten(array, shallow, []);
-  };
-
-  // Return a version of the array that does not contain the specified value(s).
-  _.without = function(array) {
-    return _.difference(array, slice.call(arguments, 1));
-  };
-
-  // Split an array into two arrays: one whose elements all satisfy the given
-  // predicate, and one whose elements all do not satisfy the predicate.
-  _.partition = function(array, predicate) {
-    var pass = [], fail = [];
-    each(array, function(elem) {
-      (predicate(elem) ? pass : fail).push(elem);
-    });
-    return [pass, fail];
-  };
-
-  // Produce a duplicate-free version of the array. If the array has already
-  // been sorted, you have the option of using a faster algorithm.
-  // Aliased as `unique`.
-  _.uniq = _.unique = function(array, isSorted, iterator, context) {
-    if (_.isFunction(isSorted)) {
-      context = iterator;
-      iterator = isSorted;
-      isSorted = false;
-    }
-    var initial = iterator ? _.map(array, iterator, context) : array;
-    var results = [];
-    var seen = [];
-    each(initial, function(value, index) {
-      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
-        seen.push(value);
-        results.push(array[index]);
-      }
-    });
-    return results;
-  };
-
-  // Produce an array that contains the union: each distinct element from all of
-  // the passed-in arrays.
-  _.union = function() {
-    return _.uniq(_.flatten(arguments, true));
-  };
-
-  // Produce an array that contains every item shared between all the
-  // passed-in arrays.
-  _.intersection = function(array) {
-    var rest = slice.call(arguments, 1);
-    return _.filter(_.uniq(array), function(item) {
-      return _.every(rest, function(other) {
-        return _.contains(other, item);
-      });
-    });
-  };
-
-  // Take the difference between one array and a number of other arrays.
-  // Only the elements present in just the first array will remain.
-  _.difference = function(array) {
-    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
-    return _.filter(array, function(value){ return !_.contains(rest, value); });
-  };
-
-  // Zip together multiple lists into a single array -- elements that share
-  // an index go together.
-  _.zip = function() {
-    var length = _.max(_.pluck(arguments, 'length').concat(0));
-    var results = new Array(length);
-    for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, '' + i);
-    }
-    return results;
-  };
-
-  // Converts lists into objects. Pass either a single array of `[key, value]`
-  // pairs, or two parallel arrays of the same length -- one of keys, and one of
-  // the corresponding values.
-  _.object = function(list, values) {
-    if (list == null) return {};
-    var result = {};
-    for (var i = 0, length = list.length; i < length; i++) {
-      if (values) {
-        result[list[i]] = values[i];
-      } else {
-        result[list[i][0]] = list[i][1];
-      }
-    }
-    return result;
-  };
-
-  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
-  // we need this function. Return the position of the first occurrence of an
-  // item in an array, or -1 if the item is not included in the array.
-  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
-  // If the array is large and already in sort order, pass `true`
-  // for **isSorted** to use binary search.
-  _.indexOf = function(array, item, isSorted) {
-    if (array == null) return -1;
-    var i = 0, length = array.length;
-    if (isSorted) {
-      if (typeof isSorted == 'number') {
-        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
-      } else {
-        i = _.sortedIndex(array, item);
-        return array[i] === item ? i : -1;
-      }
-    }
-    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
-    for (; i < length; i++) if (array[i] === item) return i;
-    return -1;
-  };
-
-  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
-  _.lastIndexOf = function(array, item, from) {
-    if (array == null) return -1;
-    var hasIndex = from != null;
-    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
-      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
-    }
-    var i = (hasIndex ? from : array.length);
-    while (i--) if (array[i] === item) return i;
-    return -1;
-  };
-
-  // Generate an integer Array containing an arithmetic progression. A port of
-  // the native Python `range()` function. See
-  // [the Python documentation](http://docs.python.org/library/functions.html#range).
-  _.range = function(start, stop, step) {
-    if (arguments.length <= 1) {
-      stop = start || 0;
-      start = 0;
-    }
-    step = arguments[2] || 1;
-
-    var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var idx = 0;
-    var range = new Array(length);
-
-    while(idx < length) {
-      range[idx++] = start;
-      start += step;
-    }
-
-    return range;
-  };
-
-  // Function (ahem) Functions
-  // ------------------
-
-  // Reusable constructor function for prototype setting.
-  var ctor = function(){};
-
-  // Create a function bound to a given object (assigning `this`, and arguments,
-  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
-  // available.
-  _.bind = function(func, context) {
-    var args, bound;
-    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    if (!_.isFunction(func)) throw new TypeError;
-    args = slice.call(arguments, 2);
-    return bound = function() {
-      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      ctor.prototype = func.prototype;
-      var self = new ctor;
-      ctor.prototype = null;
-      var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (Object(result) === result) return result;
-      return self;
-    };
-  };
-
-  // Partially apply a function by creating a version that has had some of its
-  // arguments pre-filled, without changing its dynamic `this` context. _ acts
-  // as a placeholder, allowing any combination of arguments to be pre-filled.
-  _.partial = function(func) {
-    var boundArgs = slice.call(arguments, 1);
-    return function() {
-      var position = 0;
-      var args = boundArgs.slice();
-      for (var i = 0, length = args.length; i < length; i++) {
-        if (args[i] === _) args[i] = arguments[position++];
-      }
-      while (position < arguments.length) args.push(arguments[position++]);
-      return func.apply(this, args);
-    };
-  };
-
-  // Bind a number of an object's methods to that object. Remaining arguments
-  // are the method names to be bound. Useful for ensuring that all callbacks
-  // defined on an object belong to it.
-  _.bindAll = function(obj) {
-    var funcs = slice.call(arguments, 1);
-    if (funcs.length === 0) throw new Error('bindAll must be passed function names');
-    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
-    return obj;
-  };
-
-  // Memoize an expensive function by storing its results.
-  _.memoize = function(func, hasher) {
-    var memo = {};
-    hasher || (hasher = _.identity);
-    return function() {
-      var key = hasher.apply(this, arguments);
-      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
-    };
-  };
-
-  // Delays a function for the given number of milliseconds, and then calls
-  // it with the arguments supplied.
-  _.delay = function(func, wait) {
-    var args = slice.call(arguments, 2);
-    return setTimeout(function(){ return func.apply(null, args); }, wait);
-  };
-
-  // Defers a function, scheduling it to run after the current call stack has
-  // cleared.
-  _.defer = function(func) {
-    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
-  };
-
-  // Returns a function, that, when invoked, will only be triggered at most once
-  // during a given window of time. Normally, the throttled function will run
-  // as much as it can, without ever going more than once per `wait` duration;
-  // but if you'd like to disable the execution on the leading edge, pass
-  // `{leading: false}`. To disable execution on the trailing edge, ditto.
-  _.throttle = function(func, wait, options) {
-    var context, args, result;
-    var timeout = null;
-    var previous = 0;
-    options || (options = {});
-    var later = function() {
-      previous = options.leading === false ? 0 : _.now();
-      timeout = null;
-      result = func.apply(context, args);
-      context = args = null;
-    };
-    return function() {
-      var now = _.now();
-      if (!previous && options.leading === false) previous = now;
-      var remaining = wait - (now - previous);
-      context = this;
-      args = arguments;
-      if (remaining <= 0) {
-        clearTimeout(timeout);
-        timeout = null;
-        previous = now;
-        result = func.apply(context, args);
-        context = args = null;
-      } else if (!timeout && options.trailing !== false) {
-        timeout = setTimeout(later, remaining);
-      }
-      return result;
-    };
-  };
-
-  // Returns a function, that, as long as it continues to be invoked, will not
-  // be triggered. The function will be called after it stops being called for
-  // N milliseconds. If `immediate` is passed, trigger the function on the
-  // leading edge, instead of the trailing.
-  _.debounce = function(func, wait, immediate) {
-    var timeout, args, context, timestamp, result;
-
-    var later = function() {
-      var last = _.now() - timestamp;
-      if (last < wait) {
-        timeout = setTimeout(later, wait - last);
-      } else {
-        timeout = null;
-        if (!immediate) {
-          result = func.apply(context, args);
-          context = args = null;
-        }
-      }
-    };
-
-    return function() {
-      context = this;
-      args = arguments;
-      timestamp = _.now();
-      var callNow = immediate && !timeout;
-      if (!timeout) {
-        timeout = setTimeout(later, wait);
-      }
-      if (callNow) {
-        result = func.apply(context, args);
-        context = args = null;
-      }
-
-      return result;
-    };
-  };
-
-  // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
-  _.once = function(func) {
-    var ran = false, memo;
-    return function() {
-      if (ran) return memo;
-      ran = true;
-      memo = func.apply(this, arguments);
-      func = null;
-      return memo;
-    };
-  };
-
-  // Returns the first function passed as an argument to the second,
-  // allowing you to adjust arguments, run code before and after, and
-  // conditionally execute the original function.
-  _.wrap = function(func, wrapper) {
-    return _.partial(wrapper, func);
-  };
-
-  // Returns a function that is the composition of a list of functions, each
-  // consuming the return value of the function that follows.
-  _.compose = function() {
-    var funcs = arguments;
-    return function() {
-      var args = arguments;
-      for (var i = funcs.length - 1; i >= 0; i--) {
-        args = [funcs[i].apply(this, args)];
-      }
-      return args[0];
-    };
-  };
-
-  // Returns a function that will only be executed after being called N times.
-  _.after = function(times, func) {
-    return function() {
-      if (--times < 1) {
-        return func.apply(this, arguments);
-      }
-    };
-  };
-
-  // Object Functions
-  // ----------------
-
-  // Retrieve the names of an object's properties.
-  // Delegates to **ECMAScript 5**'s native `Object.keys`
-  _.keys = function(obj) {
-    if (!_.isObject(obj)) return [];
-    if (nativeKeys) return nativeKeys(obj);
-    var keys = [];
-    for (var key in obj) if (_.has(obj, key)) keys.push(key);
-    return keys;
-  };
-
-  // Retrieve the values of an object's properties.
-  _.values = function(obj) {
-    var keys = _.keys(obj);
-    var length = keys.length;
-    var values = new Array(length);
-    for (var i = 0; i < length; i++) {
-      values[i] = obj[keys[i]];
-    }
-    return values;
-  };
-
-  // Convert an object into a list of `[key, value]` pairs.
-  _.pairs = function(obj) {
-    var keys = _.keys(obj);
-    var length = keys.length;
-    var pairs = new Array(length);
-    for (var i = 0; i < length; i++) {
-      pairs[i] = [keys[i], obj[keys[i]]];
-    }
-    return pairs;
-  };
-
-  // Invert the keys and values of an object. The values must be serializable.
-  _.invert = function(obj) {
-    var result = {};
-    var keys = _.keys(obj);
-    for (var i = 0, length = keys.length; i < length; i++) {
-      result[obj[keys[i]]] = keys[i];
-    }
-    return result;
-  };
-
-  // Return a sorted list of the function names available on the object.
-  // Aliased as `methods`
-  _.functions = _.methods = function(obj) {
-    var names = [];
-    for (var key in obj) {
-      if (_.isFunction(obj[key])) names.push(key);
-    }
-    return names.sort();
-  };
-
-  // Extend a given object with all the properties in passed-in object(s).
-  _.extend = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          obj[prop] = source[prop];
-        }
-      }
-    });
-    return obj;
-  };
-
-  // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    each(keys, function(key) {
-      if (key in obj) copy[key] = obj[key];
-    });
-    return copy;
-  };
-
-   // Return a copy of the object without the blacklisted properties.
-  _.omit = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    for (var key in obj) {
-      if (!_.contains(keys, key)) copy[key] = obj[key];
-    }
-    return copy;
-  };
-
-  // Fill in a given object with default properties.
-  _.defaults = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          if (obj[prop] === void 0) obj[prop] = source[prop];
-        }
-      }
-    });
-    return obj;
-  };
-
-  // Create a (shallow-cloned) duplicate of an object.
-  _.clone = function(obj) {
-    if (!_.isObject(obj)) return obj;
-    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
-  };
-
-  // Invokes interceptor with the obj, and then returns obj.
-  // The primary purpose of this method is to "tap into" a method chain, in
-  // order to perform operations on intermediate results within the chain.
-  _.tap = function(obj, interceptor) {
-    interceptor(obj);
-    return obj;
-  };
-
-  // Internal recursive comparison function for `isEqual`.
-  var eq = function(a, b, aStack, bStack) {
-    // Identical objects are equal. `0 === -0`, but they aren't identical.
-    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-    if (a === b) return a !== 0 || 1 / a == 1 / b;
-    // A strict comparison is necessary because `null == undefined`.
-    if (a == null || b == null) return a === b;
-    // Unwrap any wrapped objects.
-    if (a instanceof _) a = a._wrapped;
-    if (b instanceof _) b = b._wrapped;
-    // Compare `[[Class]]` names.
-    var className = toString.call(a);
-    if (className != toString.call(b)) return false;
-    switch (className) {
-      // Strings, numbers, dates, and booleans are compared by value.
-      case '[object String]':
-        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-        // equivalent to `new String("5")`.
-        return a == String(b);
-      case '[object Number]':
-        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-        // other numeric values.
-        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
-      case '[object Date]':
-      case '[object Boolean]':
-        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-        // millisecond representations. Note that invalid dates with millisecond representations
-        // of `NaN` are not equivalent.
-        return +a == +b;
-      // RegExps are compared by their source patterns and flags.
-      case '[object RegExp]':
-        return a.source == b.source &&
-               a.global == b.global &&
-               a.multiline == b.multiline &&
-               a.ignoreCase == b.ignoreCase;
-    }
-    if (typeof a != 'object' || typeof b != 'object') return false;
-    // Assume equality for cyclic structures. The algorithm for detecting cyclic
-    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-    var length = aStack.length;
-    while (length--) {
-      // Linear search. Performance is inversely proportional to the number of
-      // unique nested structures.
-      if (aStack[length] == a) return bStack[length] == b;
-    }
-    // Objects with different constructors are not equivalent, but `Object`s
-    // from different frames are.
-    var aCtor = a.constructor, bCtor = b.constructor;
-    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
-      return false;
-    }
-    // Add the first object to the stack of traversed objects.
-    aStack.push(a);
-    bStack.push(b);
-    var size = 0, result = true;
-    // Recursively compare objects and arrays.
-    if (className == '[object Array]') {
-      // Compare array lengths to determine if a deep comparison is necessary.
-      size = a.length;
-      result = size == b.length;
-      if (result) {
-        // Deep compare the contents, ignoring non-numeric properties.
-        while (size--) {
-          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
-        }
-      }
-    } else {
-      // Deep compare objects.
-      for (var key in a) {
-        if (_.has(a, key)) {
-          // Count the expected number of properties.
-          size++;
-          // Deep compare each member.
-          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
-        }
-      }
-      // Ensure that both objects contain the same number of properties.
-      if (result) {
-        for (key in b) {
-          if (_.has(b, key) && !(size--)) break;
-        }
-        result = !size;
-      }
-    }
-    // Remove the first object from the stack of traversed objects.
-    aStack.pop();
-    bStack.pop();
-    return result;
-  };
-
-  // Perform a deep comparison to check if two objects are equal.
-  _.isEqual = function(a, b) {
-    return eq(a, b, [], []);
-  };
-
-  // Is a given array, string, or object empty?
-  // An "empty" object has no enumerable own-properties.
-  _.isEmpty = function(obj) {
-    if (obj == null) return true;
-    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
-    for (var key in obj) if (_.has(obj, key)) return false;
-    return true;
-  };
-
-  // Is a given value a DOM element?
-  _.isElement = function(obj) {
-    return !!(obj && obj.nodeType === 1);
-  };
-
-  // Is a given value an array?
-  // Delegates to ECMA5's native Array.isArray
-  _.isArray = nativeIsArray || function(obj) {
-    return toString.call(obj) == '[object Array]';
-  };
-
-  // Is a given variable an object?
-  _.isObject = function(obj) {
-    return obj === Object(obj);
-  };
-
-  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
-    _['is' + name] = function(obj) {
-      return toString.call(obj) == '[object ' + name + ']';
-    };
-  });
-
-  // Define a fallback version of the method in browsers (ahem, IE), where
-  // there isn't any inspectable "Arguments" type.
-  if (!_.isArguments(arguments)) {
-    _.isArguments = function(obj) {
-      return !!(obj && _.has(obj, 'callee'));
-    };
-  }
-
-  // Optimize `isFunction` if appropriate.
-  if (typeof (/./) !== 'function') {
-    _.isFunction = function(obj) {
-      return typeof obj === 'function';
-    };
-  }
-
-  // Is a given object a finite number?
-  _.isFinite = function(obj) {
-    return isFinite(obj) && !isNaN(parseFloat(obj));
-  };
-
-  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
-  _.isNaN = function(obj) {
-    return _.isNumber(obj) && obj != +obj;
-  };
-
-  // Is a given value a boolean?
-  _.isBoolean = function(obj) {
-    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
-  };
-
-  // Is a given value equal to null?
-  _.isNull = function(obj) {
-    return obj === null;
-  };
-
-  // Is a given variable undefined?
-  _.isUndefined = function(obj) {
-    return obj === void 0;
-  };
-
-  // Shortcut function for checking if an object has a given property directly
-  // on itself (in other words, not on a prototype).
-  _.has = function(obj, key) {
-    return hasOwnProperty.call(obj, key);
-  };
-
-  // Utility Functions
-  // -----------------
-
-  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
-  // previous owner. Returns a reference to the Underscore object.
-  _.noConflict = function() {
-    root._ = previousUnderscore;
-    return this;
-  };
-
-  // Keep the identity function around for default iterators.
-  _.identity = function(value) {
-    return value;
-  };
-
-  _.constant = function(value) {
-    return function () {
-      return value;
-    };
-  };
-
-  _.property = function(key) {
-    return function(obj) {
-      return obj[key];
-    };
-  };
-
-  // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
-  _.matches = function(attrs) {
-    return function(obj) {
-      if (obj === attrs) return true; //avoid comparing an object to itself.
-      for (var key in attrs) {
-        if (attrs[key] !== obj[key])
-          return false;
-      }
-      return true;
-    }
-  };
-
-  // Run a function **n** times.
-  _.times = function(n, iterator, context) {
-    var accum = Array(Math.max(0, n));
-    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
-    return accum;
-  };
-
-  // Return a random integer between min and max (inclusive).
-  _.random = function(min, max) {
-    if (max == null) {
-      max = min;
-      min = 0;
-    }
-    return min + Math.floor(Math.random() * (max - min + 1));
-  };
-
-  // A (possibly faster) way to get the current timestamp as an integer.
-  _.now = Date.now || function() { return new Date().getTime(); };
-
-  // List of HTML entities for escaping.
-  var entityMap = {
-    escape: {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;'
-    }
-  };
-  entityMap.unescape = _.invert(entityMap.escape);
-
-  // Regexes containing the keys and values listed immediately above.
-  var entityRegexes = {
-    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
-    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
-  };
-
-  // Functions for escaping and unescaping strings to/from HTML interpolation.
-  _.each(['escape', 'unescape'], function(method) {
-    _[method] = function(string) {
-      if (string == null) return '';
-      return ('' + string).replace(entityRegexes[method], function(match) {
-        return entityMap[method][match];
-      });
-    };
-  });
-
-  // If the value of the named `property` is a function then invoke it with the
-  // `object` as context; otherwise, return it.
-  _.result = function(object, property) {
-    if (object == null) return void 0;
-    var value = object[property];
-    return _.isFunction(value) ? value.call(object) : value;
-  };
-
-  // Add your own custom functions to the Underscore object.
-  _.mixin = function(obj) {
-    each(_.functions(obj), function(name) {
-      var func = _[name] = obj[name];
-      _.prototype[name] = function() {
-        var args = [this._wrapped];
-        push.apply(args, arguments);
-        return result.call(this, func.apply(_, args));
-      };
-    });
-  };
-
-  // Generate a unique integer id (unique within the entire client session).
-  // Useful for temporary DOM ids.
-  var idCounter = 0;
-  _.uniqueId = function(prefix) {
-    var id = ++idCounter + '';
-    return prefix ? prefix + id : id;
-  };
-
-  // By default, Underscore uses ERB-style template delimiters, change the
-  // following template settings to use alternative delimiters.
-  _.templateSettings = {
-    evaluate    : /<%([\s\S]+?)%>/g,
-    interpolate : /<%=([\s\S]+?)%>/g,
-    escape      : /<%-([\s\S]+?)%>/g
-  };
-
-  // When customizing `templateSettings`, if you don't want to define an
-  // interpolation, evaluation or escaping regex, we need one that is
-  // guaranteed not to match.
-  var noMatch = /(.)^/;
-
-  // Certain characters need to be escaped so that they can be put into a
-  // string literal.
-  var escapes = {
-    "'":      "'",
-    '\\':     '\\',
-    '\r':     'r',
-    '\n':     'n',
-    '\t':     't',
-    '\u2028': 'u2028',
-    '\u2029': 'u2029'
-  };
-
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
-
-  // JavaScript micro-templating, similar to John Resig's implementation.
-  // Underscore templating handles arbitrary delimiters, preserves whitespace,
-  // and correctly escapes quotes within interpolated code.
-  _.template = function(text, data, settings) {
-    var render;
-    settings = _.defaults({}, settings, _.templateSettings);
-
-    // Combine delimiters into one regular expression via alternation.
-    var matcher = new RegExp([
-      (settings.escape || noMatch).source,
-      (settings.interpolate || noMatch).source,
-      (settings.evaluate || noMatch).source
-    ].join('|') + '|$', 'g');
-
-    // Compile the template source, escaping string literals appropriately.
-    var index = 0;
-    var source = "__p+='";
-    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset)
-        .replace(escaper, function(match) { return '\\' + escapes[match]; });
-
-      if (escape) {
-        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-      }
-      if (interpolate) {
-        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-      }
-      if (evaluate) {
-        source += "';\n" + evaluate + "\n__p+='";
-      }
-      index = offset + match.length;
-      return match;
-    });
-    source += "';\n";
-
-    // If a variable is not specified, place data values in local scope.
-    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-
-    source = "var __t,__p='',__j=Array.prototype.join," +
-      "print=function(){__p+=__j.call(arguments,'');};\n" +
-      source + "return __p;\n";
-
-    try {
-      render = new Function(settings.variable || 'obj', '_', source);
-    } catch (e) {
-      e.source = source;
-      throw e;
-    }
-
-    if (data) return render(data, _);
-    var template = function(data) {
-      return render.call(this, data, _);
-    };
-
-    // Provide the compiled function source as a convenience for precompilation.
-    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
-
-    return template;
-  };
-
-  // Add a "chain" function, which will delegate to the wrapper.
-  _.chain = function(obj) {
-    return _(obj).chain();
-  };
-
-  // OOP
-  // ---------------
-  // If Underscore is called as a function, it returns a wrapped object that
-  // can be used OO-style. This wrapper holds altered versions of all the
-  // underscore functions. Wrapped objects may be chained.
-
-  // Helper function to continue chaining intermediate results.
-  var result = function(obj) {
-    return this._chain ? _(obj).chain() : obj;
-  };
-
-  // Add all of the Underscore functions to the wrapper object.
-  _.mixin(_);
-
-  // Add all mutator Array functions to the wrapper.
-  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
-    var method = ArrayProto[name];
-    _.prototype[name] = function() {
-      var obj = this._wrapped;
-      method.apply(obj, arguments);
-      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
-      return result.call(this, obj);
-    };
-  });
-
-  // Add all accessor Array functions to the wrapper.
-  each(['concat', 'join', 'slice'], function(name) {
-    var method = ArrayProto[name];
-    _.prototype[name] = function() {
-      return result.call(this, method.apply(this._wrapped, arguments));
-    };
-  });
-
-  _.extend(_.prototype, {
-
-    // Start chaining a wrapped Underscore object.
-    chain: function() {
-      this._chain = true;
-      return this;
-    },
-
-    // Extracts the result from a wrapped and chained object.
-    value: function() {
-      return this._wrapped;
-    }
-
-  });
-
-  // AMD registration happens at the end for compatibility with AMD loaders
-  // that may not enforce next-turn semantics on modules. Even though general
-  // practice for AMD registration is to be anonymous, underscore registers
-  // as a named module because, like jQuery, it is a base library that is
-  // popular enough to be bundled in a third party lib, but not be part of
-  // an AMD load request. Those cases could generate an error when an
-  // anonymous define() is called outside of a loader request.
-  if (typeof define === 'function' && define.amd) {
-    define('underscore', [], function() {
-      return _;
-    });
-  }
-}).call(this);
-
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js":[function(require,module,exports){
-
-CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
+Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -22388,9 +11710,9 @@ CBApp.AdaptorCompatibility = Backbone.RelationalModel.extend({
     }
 });
 
-CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
+Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
-    model: CBApp.AdaptorCompatibility,
+    model: Portal.AdaptorCompatibility,
     //backend: 'app',
 
     initialize: function() {
@@ -22403,8 +11725,8 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             initializeCollection: 'adaptorCollection',
             includeInJSON: true
@@ -22419,7 +11741,7 @@ CBApp.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js":[function(require,module,exports){
 
-CBApp.Adaptor = Backbone.RelationalModel.extend({
+Portal.Adaptor = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -22429,18 +11751,11 @@ CBApp.Adaptor = Backbone.RelationalModel.extend({
 }, { modelType: "adaptor" });
 
 
-CBApp.AdaptorCollection = Backbone.Collection.extend({
+Portal.AdaptorCollection = Backbone.Collection.extend({
 
-    model: CBApp.Adaptor,
-    backend: 'app',
+    model: Portal.Adaptor,
+    backend: 'app'
 
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
 });
 
 
@@ -22448,7 +11763,7 @@ CBApp.AdaptorCollection = Backbone.Collection.extend({
 
 require('../../common/models');
 
-CBApp.AppConnection = CBApp.ConnectionModel.extend({
+Portal.AppConnection = Portal.ConnectionModel.extend({
 
     backend: 'appConnection',
 
@@ -22458,8 +11773,8 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             initializeCollection: 'appCollection',
             includeInJSON: true
@@ -22469,8 +11784,8 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             initializeCollection: 'clientCollection',
             includeInJSON: true
@@ -22478,143 +11793,50 @@ CBApp.AppConnection = CBApp.ConnectionModel.extend({
     ]
 }, { modelType: "appConnection" });
 
-CBApp.AppConnectionCollection = QueryEngine.QueryCollection.extend({
+Portal.AppConnectionCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppConnection,
+    model: Portal.AppConnection,
     backend: 'appConnection',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.AppConnectionCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppConnectionCollection.__super__.initialize.apply(this, arguments);
     }
 });
 
 
-},{"../../common/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{"../../common/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js":[function(require,module,exports){
 
 
-  return "<div class=\"connection-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
-  });
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js":[function(require,module,exports){
 
-require('../../components/switches');
-
-/*
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
-
-    template: require('../../components/templates/switch.html'),
-
-    getActivation: function() {
-
-        return this.model.isNew() ? '' : 'active';
-    },
-
-    onClick: function() {
-
-        this.model.toggleConnection();
-    },
-
-    onRender: function() {
-        this.stickit();
-    }
-});
-*/
-
-CBApp.AppConnectionView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'inner-item',
-    template: require('./templates/appConnection.html'),
-
-    initialize: function() {
-
-        var self = this;
-
-        this.connectionSwitch = new CBApp.Components.ConnectionSwitch({
-            model: this.model
-        });
-
-        console.log('view model is', this.model);
-        //this.adpModel = this.model.getAppPermission(this.appInstall);
-
-        // Proxy change events for stickit
-        this.model.on('unsavedChanges sync', function(e) {
-            self.model.trigger('change:change');
-        }, this);
-    },
-
-    onRender: function() {
-
-        console.log('render AppDevicePermissionView', this);
-        this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
-        this.connectionSwitch.setElement(this.$('.connection-switch')).render();
-    }
-});
-
-CBApp.AppConnectionListView = Marionette.CollectionView.extend({
-
-    //template: require('./templates/appConnectionSection.html'),
-    tagName: 'ul',
-    className: '',
-    itemView: CBApp.AppConnectionView,
-    //itemViewContainer: '.connection-list',
-
-    initialize: function(options) {
-
-        this.appOwnership = options.appOwnership;
-        this.app = this.appOwnership.get('app');
-    },
-
-    buildItemView: function(clientControl, ItemViewType, itemViewOptions){
-
-        var client = clientControl.get('client');
-        //if (deviceInstall.isNew()) return void 0;
-        console.log('buildItemView', client);
-        // Create or fetch an app device permission
-        var appConnection = CBApp.appConnectionCollection.findOrAdd({
-            app: this.app,
-            client: client
-        });
-        // Set the permission field depending on whether the model is new or not
-        var connected = appConnection.isNew() ? false : true;
-        appConnection.set('connected', connected);
-        appConnection.restartTracking();
-
-        console.log('appConnection is', appConnection);
-        // build the final list of options for the item view type
-        var options = _.extend({
-            model: appConnection
-        }, itemViewOptions);
-        // create the item view instance
-        var view = new ItemViewType(options);
-        // Add the device install model
-        view.app = this.app;
-        // Add the app install model
-        view.client = client;
-        return view;
-    }
-});
-
-},{"../../components/switches":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/switches.js","./templates/appConnection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/templates/appConnection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js":[function(require,module,exports){
-
-CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
+Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 
     /* Permission model between a deviceInstall and an appInstall */
 
     idAttribute: 'id',
 
+    backend: 'appDevicePermission',
+
+    matchFields: ['appInstall', 'deviceInstall'],
+
     initialize: function() {
 
-        this.startTracking();
+        var self = this;
+        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        this.listenTo(this.get('appInstall'), 'destroy', function() {
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
+        });
+
+        this.listenTo(this.get('deviceInstall'), 'destroy', function() {
+            //console.log('ADP heard destroy on deviceInstall')
+            self.delete();
+        });
     },
+    /*
 
     setConnection: function(connection) {
 
@@ -22653,6 +11875,7 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
         var currentConnection = !this.isNew();
         this.setConnection(!currentConnection);
     },
+    */
 
     relations: [
         {
@@ -22660,228 +11883,156 @@ CBApp.AppDevicePermission = Backbone.Deferred.Model.extend({
             key: 'deviceInstall',
             keySource: 'device_install',
             keyDestination: 'device_install',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'appPermissions',
+                keySource: 'app_permissions',
+                keyDestination: 'app_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                includeInJSON: false,
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         },
         {
             type: Backbone.HasOne,
             key: 'appInstall',
             keySource: 'app_install',
             keyDestination: 'app_install',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             //createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasMany,
+                key: 'devicePermissions',
+                keySource: 'device_permissions',
+                keyDestination: 'device_permissions',
+                collectionType: 'Portal.AppDevicePermissionCollection',
+                //includeInJSON: 'resource_uri',
+                initializeCollection: 'appDevicePermissionCollection'
+            }
         }
     ]
 }, { modelType: "appDevicePermission" });
 
-CBApp.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
-    model: CBApp.AppDevicePermission,
+    model: Portal.AppDevicePermission,
     backend: 'appDevicePermission',
 
+    /*
     initialize: function() {
 
         this.bindBackend();
     }
+    */
 
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/templates/devicePermission.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js":[function(require,module,exports){
 
+Portal.AppDevicePermissionView = React.createClass({displayName: 'AppDevicePermissionView',
+    mixins: [Portal.InnerItemView],
 
-  return "<div class=\"permission-switch\">\n</div>\n<div id=\"device-name\" class=\"list-label\"><h4 class=\"list-group-item-heading\"></h4></div>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js":[function(require,module,exports){
-
-require('../../components/switches');
-
-/*
-CBApp.Components.PermissionSwitch = CBApp.Components.Switch.extend({
-
-    template: require('../../components/templates/switch.html'),
-
-    getActivation: function() {
-
-        return this.model.isNew() ? '' : 'active';
-    },
-
-    onClick: function() {
-
-        this.model.toggleConnection();
-    },
-
-    onRender: function() {
-        this.stickit();
-    }
 });
-*/
 
-CBApp.AppDevicePermissionView = Marionette.ItemView.extend({
+Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDevicePermissionListView',
 
-    tagName: 'li',
-    className: 'inner-item',
-    template: require('./templates/devicePermission.html'),
+    mixins: [Backbone.React.Component.mixin, Portal.InnerListView],
 
-    initialize: function() {
-
-        var self = this;
-
-        this.permissionSwitch = new CBApp.Components.ConnectionSwitch({
-            model: this.model
-        });
-
-        console.log('view model is', this.model);
-        //this.adpModel = this.model.getAppPermission(this.appInstall);
-
-        // Proxy change events for stickit
-        this.model.on('unsavedChanges sync', function(e) {
-            self.model.trigger('change:change');
-        }, this);
+    getDefaultProps: function () {
+        return {
+            title: 'Connect devices'
+        };
     },
 
-    onRender: function() {
+    createItem: function(item) {
 
-        console.log('render AppDevicePermissionView', this);
-        this.stickit(this.deviceInstall, {'#device-name': 'friendly_name'});
-        this.permissionSwitch.setElement(this.$('.permission-switch')).render();
+        var cid = item.cid;
+
+        var adp = this.getCollection().get({cid: cid});;
+        var label = adp.get('deviceInstall').get('friendly_name');
+
+        return React.createElement(Portal.Components.Switch, {key: cid, label: label, model: adp})
     }
 });
 
-CBApp.AppDevicePermissionListView = Marionette.CollectionView.extend({
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
 
-    tagName: 'ul',
-    className: '',
-    itemView: CBApp.AppDevicePermissionView,
-    //template: require('./templates/devicePermissionSection.html'),
-
-    initialize: function(options) {
-
-        this.appInstall = options.appInstall;
-    },
-
-    buildItemView: function(deviceInstall, ItemViewType, itemViewOptions){
-
-        //if (deviceInstall.isNew()) return void 0;
-        console.log('buildItemView', deviceInstall);
-        // Create or fetch an app device permission
-        //var adp = deviceInstall.getAppPermission(this.appInstall);
-        var adp = CBApp.appDevicePermissionCollection.findOrAdd({
-            appInstall: this.appInstall,
-            deviceInstall: deviceInstall
-        });
-        // Set the permission field depending on whether the model is new or not
-        var permission = adp.isNew() ? false : true;
-        adp.set('permission', permission);
-        adp.restartTracking();
-
-        console.log('adp is', adp);
-        // build the final list of options for the item view type
-        var options = _.extend({
-            model: adp
-        }, itemViewOptions);
-        // create the item view instance
-        var view = new ItemViewType(options);
-        // Add the device install model
-        view.deviceInstall = deviceInstall;
-        // Add the app install model
-        view.appInstall = this.appInstall;
-        return view;
-    }
-});
-
-
-},{"../../components/switches":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/switches.js","./templates/devicePermission.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/templates/devicePermission.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js":[function(require,module,exports){
-
-CBApp.AppInstall = Backbone.Deferred.Model.extend({
+Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'appInstall',
 
+    matchFields: ['bridge', 'app'],
+
     initialize: function() {
-        this.startTracking();
-    },
 
-    install: function() {
+        var self = this;
 
-        console.log('installing AppInstall');
-        this.save().then(function() {
-            console.log('AppInstall successfully saved');
-        }, function(error) {
-            console.log('Error installing', error);
-            CBApp.Notifications.trigger('error:show', error);
-        }).done();
-    },
+        //change relational:change relational:add relational:remove
+        this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
 
-    uninstall: function() {
-
-        console.log('uninstalling AppInstall', this);
-        this.destroyOnServer().then(function(model, response, options) {
-            console.log('AppInstall successfully destroyed', model, response, options);
+            self.trigger('relational:change');
         });
     },
 
-    toggleInstalled: function() {
+    getPortal: function() {
 
-        if(this.isNew()) {
-            this.install();
-        } else {
-            this.uninstall();
-        }
+        return Portal.portalCollection.findOrAdd({
+            appInstall: this
+        });
     },
 
     relations: [
+        /*
         {   
             type: Backbone.HasOne,
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
         },
-        {   
+        */
+        {
             type: Backbone.HasOne,
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'appInstalls',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'appInstallCollection',
             }   
         },
+        /*
         {
             type: Backbone.HasMany,
             key: 'devicePermissions',
             keySource: 'device_permissions',
             keyDestination: 'device_permissions',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
             /*
             reverseRelation: {
@@ -22889,200 +12040,156 @@ CBApp.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstall',
                 keySource: 'app_install',
                 keyDestination: 'app_install',
-                collectionType: 'CBApp.AppInstallCollection',
+                collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appInstallCollection'
             }
-            */
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'licence',
             keySource: 'licence',
             keyDestination: 'licence',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appLicenceCollection',
         },
+        {
+            type: Backbone.HasOne,
+            key: 'portal',
+            //keySource: 'app',
+            //keyDestination: 'app',
+            relatedModel: 'Portal.Portal',
+            collectionType: 'Portal.PortalCollection',
+            //createModels: true,
+            includeInJSON: false,
+            initializeCollection: 'portalCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'appInstall',
+                collectionType: 'Portal.AppInstallCollection',
+                includeInJSON: false,
+                initializeCollection: 'appInstallCollection'
+            }
+        }
     ]
 }, { modelType: "appInstall" });
 
-CBApp.AppInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppInstall,
-    backend: 'appInstall',
+    model: Portal.AppInstall,
+    backend: 'appInstall'
 
-    initialize: function() {
-        this.bindBackend();
-        CBApp.AppInstallCollection.__super__.initialize.apply(this, arguments);
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
 });
 
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\" data-target=\"#";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div id=\"";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"panel-collapse collapse app-config\">\n    <li class=\"user-panel inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstallSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"install-apps\"  class=\"topcoat-button--cta center full\">Install Apps</div></br>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/staffAppInstall.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table \">\n    <tr>\n        <td class=\"col-md-4 panel-item\">\n            AppInstall ID: <span class=\"app-install-id\"></span>\n        </td>\n        <td class=\"col-md-8 panel-item\">\n            Licence Owner: <span class=\"licence-owner\"></span> (ID: <span class=\"licence-owner-id\"></span>)\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js":[function(require,module,exports){
 
 require('../device_permissions/views');
 
-CBApp.AppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/appInstall.html'),
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-    events: {
-        //'click': 'eventWrapperClick',
-        'click .uninstall-button': 'uninstall'
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.uninstall
+            }]
+        };
     },
 
-    initialize: function() {
-
-        this.staffView = new CBApp.StaffAppInstallView({
-            model: this.model
-        });
-        this.staffView.licenceOwner = this.model.get('licence').get('user');
-        this.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
-                appInstall: this.model
-            });
-    },
-
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "AID" + app.get('id');
-      return data;
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
     uninstall: function() {
 
-        console.log('uninstall in install view', this.model);
-        this.model.uninstall();
+        this.toggleExistenceOnServer(this.props.model);
     },
 
-    onRender : function(){
+    renderBody: function() {
 
-        console.log('AppInstallView render', this);
         var self = this;
 
-        this.staffView.setElement(this.$('.staff-panel')).render();
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        var devicePermissions = appInstall.get('devicePermissions');
 
-            console.log('AppInstall', currentBridge);
-            var deviceInstalls = currentBridge.get('deviceInstalls');
-            self.appDevicePermissionListView.setCollection(deviceInstalls);
-            var $appConfig = self.$('.user-panel');
-            console.log('$appConfig is', $appConfig);
-            self.appDevicePermissionListView.setElement($appConfig).render();
-        }).done();
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+        });
+
+        return (
+            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
+        );
     }
 });
 
-CBApp.StaffAppInstallView = Marionette.ItemView.extend({
+Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView',
 
-    tagName: 'table',
-    template: require('./templates/staffAppInstall.html'),
+    itemView: Portal.AppInstallView,
 
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licenceOwner) {
-            this.stickit(this.licenceOwner, this.licenceOwnerBindings);
-        }
-    }
-});
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-CBApp.AppInstallListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appInstallSection.html'),
-    itemView: CBApp.AppInstallView,
-    itemViewContainer: '.app-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #install-apps': 'showLicences'
+    getInitialState: function () {
+        return {
+            title: 'Apps',
+            buttons: [{
+                name: 'Install Apps',
+                onClick: this.installApps,
+                type: 'bold'
+            }]
+        };
     },
 
-    showLicences: function() {
-        console.log('click showLicences');
-        CBApp.Config.controller.showAppLicences();
+    installApps: function() {
+        Portal.router.setParams({action: 'install-app'});
     },
 
-    onRender : function(){
+    renderItem: function (item) {
 
+        var cid = item.cid;
+
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
+            deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
 
-},{"../device_permissions/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js","./templates/appInstall.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html","./templates/appInstallSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstallSection.html","./templates/staffAppInstall.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/staffAppInstall.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
+},{"../device_permissions/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js":[function(require,module,exports){
 
-CBApp.AppLicence = Backbone.Deferred.Model.extend({
+Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    /*
     defaults: {
         installs_permitted: 0,
     },
-    */
 
     relations: [
         {
@@ -23090,15 +12197,19 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence',
-                includeInJSON: 'resource_uri'
+                type: Backbone.HasMany,
+                key: 'appLicences',
+                keySource: 'app_licence',
+                keyDestination: 'app_licence',
+                relatedModel: 'Portal.AppLicence',
+                collectionType: 'Portal.AppLicenceCollection',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'appLicenceCollection'
             }
         },
         {
@@ -23106,8 +12217,8 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             key: 'installs',
             keySource: 'installs',
             keyDestination: 'installs',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -23117,14 +12228,14 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
             /*
             modelBuilder: {
-                'user': CBApp.User,
-                'currentUser': CBApp.CurrentUser
+                'user': Portal.User,
+                'currentUser': Portal.CurrentUser
             }
             //initializeCollection: 'userCollection',
             reverseRelation: {
@@ -23137,8 +12248,14 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
+        var self = this;
         console.log('initialize AppLicence');
-        this.startTracking();
+
+        this.on('all', function() {
+            var app = self.get('app');
+            if(app instanceof Backbone.Model) app.trigger('relational:change');
+        });
+        //this.startTracking();
     },
 
     toggleInstall: function(bridge) {
@@ -23152,12 +12269,21 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
     },
 
     getInstall: function(bridge) {
-        /* Gets the install for this licence and the given bridge */
+        /* Get or create the install for this licence and the given bridge */
 
+        var install;
+        var installData = {
+            bridge: bridge,
+            app: this.get('app'),
+            licence: this
+        }
         var licenceInstalls = this.get('installs');
-        return licenceInstalls.findWhere({
-            bridge: bridge
-        });
+        install = licenceInstalls.findWhere(installData);
+        if (!install) {
+            install = new Portal.AppInstall(installData);
+            this.set('installs', install, {remove: false});
+        }
+        return install;
     },
 
     testIfInstalled: function(bridge) {
@@ -23213,10 +12339,10 @@ CBApp.AppLicence = Backbone.Deferred.Model.extend({
 }, { modelType: "appLicence" });
 
 //var QueryEngine = require('query-engine');
-//CBApp.AppLicenceCollection = Backbone.Collection.extend({
-CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
+//Portal.AppLicenceCollection = Backbone.Collection.extend({
+Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppLicence,
+    model: Portal.AppLicence,
     backend: 'appLicence',
 
     initialize: function() {
@@ -23228,7 +12354,7 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
             self.add(model);
         });
         */
-        CBApp.AppLicenceCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){
@@ -23236,225 +12362,272 @@ CBApp.AppLicenceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/button.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
 
 
-  return "Test Install Button";
-  });
+Portal.AppLicenceView = React.createClass({displayName: 'AppLicenceView',
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/licence.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    // Used in the App Market
 
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-  return "<td class=\"app-name\">\n    App Name\n</td>\n<td class=\"installs-permitted\">\n    Installs permitted\n</td>\n<td class=\"installs-remaining\">\n    Installs remaining\n</td>\n<td>\n    <div class=\"install-component\"></div>\n</td>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/licenceSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h4>My Licences</h4>\n\n<table class=\"table\">\n    <thead>\n        <td class=\"col-md-6\">\n            <div class=\"list-group-item-heading app-name\">App Name</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-permitted\">Installs permitted</div>\n        </td>\n        <td class=\"col-md-2\">\n            <div class=\"installs-remaining\">Installs remaining</div>\n        </td>\n        <td class=\"col-md-2\">\n        </td>\n    </thead>\n    <tbody>\n\n    </tbody>\n</table>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js":[function(require,module,exports){
-
-require('../../components/buttons');
-
-CBApp.Components.AppInstallButton = CBApp.Components.Button.extend({
-
-    //className: 'btn btn-default install-button',
-
-    extraClass: "app-install-button",
-
-    template: require('./templates/button.html'),
-
-
-    initialize: function() {
-
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.delete
+            }]
+        };
     },
 
-    /*
-    getEnabled: function(val) {
-
-        console.log('getEnabled called', val);
-        //var isNew = this.model.isNew();
-        var enabled = this.model.unsavedAttributes() ? '' : 'disabled';
-        //var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : '';
-
-        return enabled;
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
-    */
 
-    getContent: function() {
+    delete: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    renderBody: function() {
 
         var self = this;
-        console.log('in getContent');
 
-        if (this.model) {
-            console.log('in getContent appInstall');
+        return (
+            React.createElement("div", null)
+        );
+    }
+});
 
-            var isInstalled = this.model.get('isGhost')
-                ? 'Install' : 'Uninstall';
+Portal.AppLicenceListView = React.createClass({displayName: 'AppLicenceListView',
 
-            var isInstalling = this.model.unsavedAttributes()
-                ? '' : '';
-        }
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-        return isInstalled + isInstalling || '...';
+    getInitialState: function () {
+        return {
+            title: 'My App Licences'
+            /*
+            buttons: [{
+                name: 'Install Apps',
+                onClick: this.installApps,
+                type: 'bold'
+            }]
+            */
+        };
     },
 
-    onClick: function() {
+    renderItem: function (item) {
+        console.log('appLicenceView createItem item', item);
+        var cid = item.cid;
+
+        var appLicenceCollection = this.getCollection()
+        var appLicence = appLicenceCollection.get({cid: cid});
+
+        var app = appLicence.get('app');
+        var title = app.get('name');
+
+        var installs = appLicence.get('installs');
+
+        return React.createElement(Portal.AppLicenceView, {key: cid, title: title, 
+                 model: appLicence, installs: installs})
+    }
+});
+
+Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
+
+    // Used for installing apps modal in config
+
+    render: function() {
 
         var self = this;
-        console.log('onClick');
-        this.model.toggleInstalled();
+
+        var licence = this.props.model;
+        var installsRemaining = licence.getInstallsRemaining();
+        var installsPermitted = licence.get('installs_permitted');
+
+        var name = this.props.name;
+        var appInstall = this.props.appInstall;
+        console.log('AppLicenceView props', this.props);
+
+        var canInstall = installsPermitted > 0;
+        var installButton = canInstall ? React.createElement(Portal.Components.InstallButton, {model: appInstall})
+                            : '';
+
+        return (
+            React.createElement("tr", null, 
+                React.createElement("td", {className: "app-name"}, name), 
+                React.createElement("td", {className: "installs-permitted"}, installsPermitted), 
+                React.createElement("td", {className: "installs-remaining"}, installsRemaining), 
+                React.createElement("td", null, installButton)
+            )
+        );
+    }
+});
+
+Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableView',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps'
+        };
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appLicenceCollection = this.getCollection()
+        var licence = appLicenceCollection.get({cid: cid});
+
+        var app = licence.get('app');
+        var name = app.get('name');
+
+        var appInstall = licence.getInstall(this.props.bridge);
+
+        return React.createElement(Portal.AppLicenceRowView, {key: cid, name: name, 
+                    appInstall: appInstall, model: licence})
+    },
+
+    render: function() {
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("h4", null, "My Licences"), 
+
+                React.createElement(React.Table, null, 
+                    React.createElement("thead", null, 
+                        React.createElement("td", {className: "col-md-6"}, 
+                            React.createElement("div", {className: "list-group-item-heading app-name"}, "App Name")
+                        ), 
+                        React.createElement("td", {className: "col-md-2"}, 
+                            React.createElement("div", {className: "installs-permitted"}, "Installs permitted")
+                        ), 
+                        React.createElement("td", {className: "col-md-2"}, 
+                            React.createElement("div", {className: "installs-remaining"}, "Installs remaining")
+                        ), 
+                        React.createElement("td", {className: "col-md-2"}
+                        )
+                    ), 
+                    React.createElement("tbody", null, 
+                        this.props.collection.map(this.createItem)
+                    )
+                )
+            )
+        )
+    }
+});
+
+/*
+Portal.AppLicenceNestedRowView = React.createClass({
+
+    // Used in developer section
+
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
+
+    renderBody: function() {
+
+        var self = this;
+
         /*
-        CBApp.getCurrentBridge().then(function(currentBridge){
-            console.log('onClick promise');
-            self.model.toggleInstall(currentBridge);
-            console.log('onClick promise 2');
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
+
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        deviceInstalls.each(function(deviceInstall) {
+
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
         });
         */
-    },
 
-    onRender: function() {
+        /*
+         var devicePermissions = appInstall.get('devicePermissions');
 
+         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+         console.log('event on deviceInstalls', event);
+         self.getCollection().trigger('change');
+         });
 
-        console.log('render InstallButton' , this.model);
-        //this.stickit();
-
-        //this.$('.install-component').html(this.render().$el);
+        return (
+            < Portal.AppDevicePermissionListView collection={devicePermissions} />
+        );
     }
 });
 
-CBApp.AppLicenceView = Marionette.ItemView.extend({
+Portal.AppLicenceNestedTableView = React.createClass({
 
-    tagName: 'tr',
-    //className: 'row',
-    template: require('./templates/licence.html'),
+    mixins: [Backbone.React.Component.mixin, Portal.TableView ],
 
-    events: {
-        //'click': 'eventWrapperClick',
-        //'click .install-button': 'toggleCurrentInstall'
+    getInitialState: function () {
+        return {
+            title: 'Licences'
+        };
     },
 
-    bindings: {
-        '.installs-permitted': 'installs_permitted'
+    renderHeader: function() {
+
+        var userCollection = this.getCollection();
+
+        return (
+            <div className="form-group form-group-sm">
+                <Portal.Components.SearchInput collection={userCollection} />
+            </div>
+        )
+        //<input className="form-control" type="text" value={searchString} />
     },
 
-    appBindings: {
-        '.app-name': 'name'
-    },
+    renderRow: function (item) {
+        console.log('UserLicenceTableView createItem item', item);
+        var cid = item.cid;
 
-    appInstallBindings: {
-        '.installs-remaining': {
-            observe: ['change', 'change:relational', 'isGhost'],
-            onGet: 'getInstallsRemaining'
-        }
-    },
+        //var app = this.props.app;
 
-    initialize: function() {
+        var licenceCollection = this.getCollection();
+        var licence = licenceCollection.get({cid: cid});
 
-        var self = this;
+        var user = licence.get('user');
+        var userName = user.get('first_name') + " " + user.get('last_name');
+        //var appLicence = app.getLicence(user);
+        //var title = app.get('name');
 
-        this.app = this.model.get('app');
+        var installsPermitted = appLicence.get('installs_permitted');
 
-        this.installButton = new CBApp.Components.AppInstallButton();
-
-        CBApp.getCurrentBridge().then(function(currentBridge){
-
-            self.installButton.bridge = currentBridge;
-            self.appInstall = CBApp.appInstallCollection.findOrAdd({
-                app: self.app,
-                bridge: currentBridge,
-                licence: self.model
-            });
-            // Trigger change events on the model, to cause the view to update
-            self.listenTo(self.appInstall, 'all', function(e) {
-                console.log('event on appInstall', e);
-            });
-
-            self.stickit(self.appInstall, self.appInstallBindings);
-
-            self.installButton.setModel(self.appInstall);
-            self.installButton.stickit();
-            //self.render();
-        }).done();
-    },
-
-    getInstallsRemaining: function() {
-
-        //return "Test ir";
-        console.log('getInstallsRemaining');
-        console.log('getInstallsRemaining model', this.appInstall);
-        return this.model.getInstallsRemaining();
-    },
-
-    onRender : function() {
-
-        var self = this;
-
-        console.log('AppLicenceView render', this);
-        this.stickit();
-        this.stickit(this.app, this.appBindings);
-
-        if (this.appInstall) {
-        }
-
-        var $installComponent = this.$('.install-component');
-        console.log('installComponent', $installComponent);
-        //$installComponent.html(this.installButton.render().$el);
-        this.installButton.setElement($installComponent).render();
-        //this.installButton.setElement(this.$('.install-component')).render();
+        return (
+            <tr key={cid}>
+                <td className="shrink">{userName}</td>
+                <td className="expand">{installsPermitted}</td>
+            </tr>
+        );
     }
 });
+*/
 
-CBApp.AppLicenceListView = Marionette.CompositeView.extend({
 
-    template: require('./templates/licenceSection.html'),
-    itemView: CBApp.AppLicenceView,
-    //itemViewContainer: 'tbody',
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
 
-    emptyView: CBApp.ListItemLoadingView,
-
-    appendHtml: function(collectionView, itemView){
-        collectionView.$("tbody").append(itemView.el);
-    },
-
-    onRender : function(){
-
-        console.log('AppLicenceListView', this.collection);
-    }
-});
-
-},{"../../components/buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/button.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/button.html","./templates/licence.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/licence.html","./templates/licenceSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/templates/licenceSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js":[function(require,module,exports){
-
-CBApp.App = Backbone.RelationalModel.extend({
+Portal.App = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     /*
     relations: [
+
         {
             type: Backbone.HasMany,
             key: 'appInstalls',
-            collectionType: 'CBApp.AppInstallCollection',
+            collectionType: 'Portal.AppInstallCollection',
             includeInJSON: false,
             initializeCollection: 'appInstallCollection'
         }
@@ -23478,14 +12651,20 @@ CBApp.App = Backbone.RelationalModel.extend({
         }
     },
 
+    getLicence: function(user) {
+
+        return Portal.appLicenceCollection.findOrAdd({
+            app: this,
+            user: user
+        });
+    },
+
     getInstall: function(bridge) {
 
-        var appInstall = CBApp.appInstallCollection.findOrCreate({
+        var appInstall = Portal.appInstallCollection.findOrAdd({
             app: this,
             bridge: bridge
         });
-
-        console.log('appInstall in getInstall is', appInstall);
 
         return appInstall;
     },
@@ -23499,9 +12678,9 @@ CBApp.App = Backbone.RelationalModel.extend({
     }
 }, { modelType: "app" });
 
-CBApp.AppCollection = Backbone.Collection.extend({
+Portal.AppCollection = Backbone.Collection.extend({
 
-    model: CBApp.App,
+    model: Portal.App,
     backend: 'app',
 
     initialize: function() {
@@ -23521,7 +12700,7 @@ CBApp.AppCollection = Backbone.Collection.extend({
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js":[function(require,module,exports){
 
-CBApp.AppOwnership = Backbone.Deferred.Model.extend({
+Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
@@ -23531,33 +12710,42 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'CBApp.App',
-            collectionType: 'CBApp.AppCollection',
+            relatedModel: 'Portal.App',
+            collectionType: 'Portal.AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appOwnership',
-                includeInJSON: 'resource_uri'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                includeInJSON: 'resource_uri',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
+                initializeCollection: 'appOwnershipCollection'
             }
         },
+        /*
         {
             type: Backbone.HasOne,
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
-            includeInJSON: 'resource_uri'
-            /*
+            includeInJSON: 'resource_uri',
             reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence'
+                type: Backbone.HasMany,
+                key: 'appOwnerships',
+                keySource: 'app_ownerships',
+                keyDestination: 'app_ownerships',
+                relatedModel: 'Portal.AppOwnership',
+                collectionType: 'Portal.AppOwnershipCollection',
             }
-            */
         }
+        */
     ],
 
     initialize: function() {
@@ -23572,150 +12760,221 @@ CBApp.AppOwnership = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appOwnership" });
 
-CBApp.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.AppOwnership,
-    backend: 'appOwnership',
+    model: Portal.AppOwnership,
+    backend: 'appOwnership'
 
+    /*
     initialize: function() {
         this.bindBackend();
 
-        CBApp.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
+        Portal.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
     },
 
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
 
+require('../../users/views');
 
-  return "<h4 class=\"app-name list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\" data-toggle=\"collapse\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n<div class=\"panel-collapse collapse app-config\">\n    <li class=\"client-connections inner-item\">\n    </li>\n    <li class=\"staff-panel inner-item\">\n    </li>\n</div>";
-  });
+Portal.AppOwnershipView = React.createClass({displayName: 'AppOwnershipView',
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-
-  return "<h2>Apps</h2>\n<div class=\"table animated-list app-list\"></div>\n<div id=\"create-app\"  class=\"topcoat-button--cta center full\">Create App</div></br>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js":[function(require,module,exports){
-
-require('../../components/buttons');
-
-require('../connections/views');
-
-CBApp.AppOwnershipView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/ownership.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-        //'click .install-button': 'toggleCurrentInstall'
-    },
-
-    bindings: {
-        '.installs-permitted': 'installs_permitted'
-    },
-
-    appBindings: {
-        '.app-name': 'name',
-        '.edit-button': {
-            attributes: [{
-                name: 'data-target',
-                observe: 'cbid',
-                onGet: function(value, options) {
-                    return "#" + value;
-                }
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.disown
             }]
-        },
-        '.app-config': {
-            attributes: [{
-                name: 'id',
-                observe: 'cbid'
-            }]
-        }
+        };
     },
 
-    appConnectionBindings: {
-        '.installs-remaining': {
-            observe: ['change', 'change:relational', 'isGhost'],
-            onGet: 'getInstallsRemaining'
-        }
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    initialize: function() {
+    disown: function() {
+
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    renderBody: function() {
 
         var self = this;
 
-        this.app = this.model.get('app');
+        console.log('AppOwnershipView renderBody');
 
-        this.appConnectionListView =
-            new CBApp.AppConnectionListView({
-                appOwnership: this.model
+        var app = this.props.app;
+
+        var licences = app.get('appLicences');
+
+        var users = Portal.userCollection;
+            /*
+            .getFiltered('search', function(model, searchString) {
+                //return !model.isNew();
+                var searchRegex = QueryEngine.createSafeRegex(searchString)
+                var pass = searchRegex.test(model.get('title'));// || searchRegex.test(model.get('content'))
+                return pass
             });
+            */
+
+        return (
+            React.createElement(Portal.UserLicenceTableView, {collection: users, app: app, size: "small"})
+        );
+    }
+});
+
+Portal.AppOwnershipListView = React.createClass({displayName: 'AppOwnershipListView',
+
+    itemView: Portal.AppOwnershipView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Apps',
+            buttons: [{
+                name: 'Create App',
+                onClick: this.createApp,
+                type: 'bold'
+            }]
+        };
     },
 
-    onRender : function() {
+    createApp: function() {
+        Portal.router.setParams({action: 'create-app'});
+    },
+
+    renderItem: function (item) {
+        var cid = item.cid;
+
+        var appOwnershipCollection = this.getCollection()
+        var appOwnership = appOwnershipCollection.get({cid: cid});
+
+        var app = appOwnership.get('app');
+        var title = app.get('name');
+
+        return React.createElement(Portal.AppOwnershipView, {key: cid, title: title, 
+                    model: appOwnership, app: app})
+    }
+});
+
+
+},{"../../users/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/views.js":[function(require,module,exports){
+
+Portal.AppView = React.createClass({displayName: 'AppView',
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'counter',
+                element: Portal.Components.Counter
+            }]
+        };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderButtons: function() {
+
+        console.log('AppView renderButtons');
+        var app = this.props.model;
+        var licence = app.getLicence(Portal.currentUser);
+        return React.createElement(Portal.Components.Counter, {model: licence, 
+                        size: "large", field: "installs_permitted"})
+    },
+
+    renderBody: function() {
 
         var self = this;
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            var clientControls = currentUser.get('clientControls');
-            self.appConnectionListView.setCollection(clientControls);
-            var $clientConnections = self.$('.client-connections');
-            self.appConnectionListView.setElement($clientConnections).render();
-        }).done();
-
-        console.log('AppOwnershipView render', this);
-        this.stickit();
-        this.stickit(this.app, this.appBindings);
+        return (
+            React.createElement("div", null)
+        );
     }
 });
 
+Portal.AppListView = React.createClass({displayName: 'AppListView',
 
-CBApp.AppOwnershipListView = Marionette.CompositeView.extend({
+    itemView: Portal.AppView,
 
-    template: require('./templates/ownershipSection.html'),
-    itemView: CBApp.AppOwnershipView,
-    itemViewContainer: '.app-list',
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    emptyView: CBApp.ListItemLoadingView,
+    getInitialState: function () {
+        return {
+            title: 'Apps'
+        };
+    },
 
-    onRender : function(){
+    renderItem: function (item) {
+        console.log('appView createItem item', item);
+        var cid = item.cid;
 
-        console.log('AppLicenceListView', this.collection);
+        var app = Portal.appCollection.get({cid: cid});
+
+        var title = app.get('name');
+
+        return React.createElement(Portal.AppView, {key: cid, title: title, 
+                    model: app})
     }
 });
 
-},{"../../components/buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/buttons.js","../connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","./templates/ownership.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownership.html","./templates/ownershipSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/templates/ownershipSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js":[function(require,module,exports){
 
 //var logger = require('logger');
 var Q = require('q');
 
-CBApp.Bridge = Backbone.Deferred.Model.extend({
+Portal.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     initialize: function() {
 
-        var deviceInstalls = this.getRelation('deviceInstalls');
+        var self = this;
+        /*
+        this.on('all', function(event, payload) {
+            console.log('Bridge event ', event, payload);
+        });
+
+        this.listenTo(this, 'all', function(name) {
+            console.log('EVENT bridge', name);
+        });
+         */
+
+        this.listenTo(this.get('appInstalls'), 'all', function(name) {
+            //console.log('EVENT currentBridge appInstalls', name);
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
+            //console.log('EVENT currentBridge deviceInstalls', name);
+            self.trigger('relational:change');
+        });
+
+        this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
+
+        var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        this.set('messages', messages);
+
+        this.listenTo(this.get('messages'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
         //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
         //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
     },
@@ -23733,12 +12992,12 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
     },
 
     relations: [
-        {   
+        {
             type: Backbone.HasMany,
             key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            keySource: 'controllers',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection'
@@ -23754,80 +13013,113 @@ CBApp.Bridge = Backbone.Deferred.Model.extend({
             key: 'appInstalls',
             keySource: 'apps',
             keyDestination: 'apps',
-            relatedModel: 'CBApp.AppInstall',
-            collectionType: 'CBApp.AppInstallCollection',
+            relatedModel: 'Portal.AppInstall',
+            collectionType: 'Portal.AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'appInstallCollection'
+            initializeCollection: 'appInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'bridgeCollection'
+            }
         },
         {
             type: Backbone.HasMany,
             key: 'deviceInstalls',
             keySource: 'devices',
             keyDestination: 'devices',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
-            initializeCollection: 'deviceInstallCollection'
+            initializeCollection: 'deviceInstallCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Portal.Bridge',
+                collectionType: 'Portal.BridgeCollection',
+                includeInJSON: 'resource_uri'
+            }
         },
         {
             type: Backbone.HasMany,
-            key: 'discoveredDeviceInstalls',
+            key: 'discoveredDevices',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: 'CBApp.DiscoveredDeviceInstall',
-            collectionType: 'CBApp.DiscoveredDeviceInstallCollection',
+            relatedModel: 'Portal.DiscoveredDevice',
+            collectionType: 'Portal.DiscoveredDeviceCollection',
             createModels: true,
             //includeInJSON: true,
-            initializeCollection: 'discoveredDeviceInstallCollection'
+            initializeCollection: 'discoveredDeviceCollection'
         }
     ]
 }, { modelType: "bridge" });
 
-CBApp.BridgeCollection = Backbone.Collection.extend({
+Portal.BridgeCollection = Backbone.Collection.extend({
 
-    model: CBApp.Bridge,
-    backend: 'bridge',
+    model: Portal.Bridge,
+    backend: 'bridge'
 
+    /*
     initialize: function() {
         this.bindBackend();
     },
-    
+
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
+/*
+Portal.getCurrentBridge = function() {
 
-CBApp.getCurrentBridge = function() {
+}
+*/
 
-    var currentBridgeDeferred = Q.defer();
+//router = require('../router');
 
-    CBApp.getCurrentUser().then(function(result) {
 
-        var bridge = CBApp.bridgeCollection.findWhere({current: true}) || CBApp.bridgeCollection.at(0);
+Portal.getCurrentBridge = function() {
 
-        if (!bridge) {
-            //logger.log('warn', 'There is no current bridge');
-            bridge = false;
-        } else {
-            bridge.set({current: true});
-        }
+    //console.log('getCurrentBridge router', router);
+    var bridge, query;
 
-        currentBridgeDeferred.resolve(bridge);
+    var query = Portal.route.query;
 
-    }, function(error) {
+    if (query && query.bridge) {
+        bridge = Portal.bridgeCollection.getID(query.bridge);
+        Portal.currentBridge = bridge;
+    }
 
-        console.log('Error fetching currentUser', error);
-        currentBridgeDeferred.reject(error);
-    });
+    if (!bridge && Portal.currentBridge) {
+        bridge = Portal.currentBridge;
+        Portal.setCurrentBridge(bridge);
+    }
 
-    return currentBridgeDeferred.promise;
+    if (!bridge) {
+        bridge = Portal.bridgeCollection.at(0);
+        if (bridge) Portal.setCurrentBridge(bridge);
+    }
+
+    return bridge;
+    //return Portal.bridgeCollection.at(0);
 }
 
+Portal.setCurrentBridge = function(bridge) {
 
-CBApp.BridgeControl = Backbone.RelationalModel.extend({
+    if (bridge) {
+        Portal.currentBridge = bridge;
+        Portal.router.setQuery({bridge: bridge.get('id')});
+    }
+}
+
+Portal.BridgeControl = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
@@ -23841,8 +13133,8 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             initializeCollection: 'bridgeCollection',
             includeInJSON: true
@@ -23852,8 +13144,8 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
+            relatedModel: 'Portal.User',
+            collectionType: 'Portal.UserCollection',
             createModels: true,
             includeInJSON: true,
             initializeCollection: 'userCollection',
@@ -23861,9 +13153,9 @@ CBApp.BridgeControl = Backbone.RelationalModel.extend({
     ]
 }); 
 
-CBApp.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = Backbone.Collection.extend({
 
-    model: CBApp.BridgeControl,
+    model: Portal.BridgeControl,
     backend: 'bridgeControl',
 
     initialize: function() {
@@ -23920,7 +13212,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
 
-CBApp.StaffBridgeView = Marionette.ItemView.extend({
+Portal.StaffBridgeView = Marionette.ItemView.extend({
 
     //tagName: 'table',
     template: require('./templates/staffBridge.html'),
@@ -23937,7 +13229,7 @@ CBApp.StaffBridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeView = Marionette.ItemView.extend({
+Portal.BridgeView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -23960,7 +13252,7 @@ CBApp.BridgeView = Marionette.ItemView.extend({
 
     initialize: function() {
 
-        this.staffView = new CBApp.StaffBridgeView({
+        this.staffView = new Portal.StaffBridgeView({
             model: this.model
         });
     },
@@ -23983,15 +13275,15 @@ CBApp.BridgeView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.BridgeListView = Marionette.CompositeView.extend({
+Portal.BridgeListView = Marionette.CompositeView.extend({
 
     template: require('./templates/bridgeSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.BridgeView,
+    itemView: Portal.BridgeView,
     itemViewContainer: '.bridge-list',
 
-    emptyView: CBApp.ListItemLoadingView,
+    emptyView: Portal.ListItemLoadingView,
 
 
     events: {
@@ -23999,7 +13291,7 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+        Portal.Config.controller.discoverDevices();
     },
 
     onRender : function() {
@@ -24007,40 +13299,145 @@ CBApp.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
-CBApp.ClientControl = Backbone.Deferred.Model.extend({
+var utils = require('./utils');
+//var Portals = require('./portals/models');
+
+/*
+var optionalParam = /\((.*?)\)/g;
+var namedParam    = /(\(\?)?:\w+/g;
+var splatParam    = /\*\w+/g;
+var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+*/
+
+var CBApp = Marionette.Application.extend({
+
+    initialize: function() {
+
+        console.log('CBApp initialized');
+
+        var self = this;
+
+        this.dispatcher = new Dispatcher();
+
+        //this.portals = new Portals();
+    },
+    /*
+
+    setupCBIDTypes: function(cbidTypes) {
+
+        var self = this;
+
+        // Setup regex expressions to match CBIDs to their types
+        this.cbidTypesRegex = {};
+        _.each(cbidTypes, function(type, pattern) {
+            self.cbidTypesRegex[self.patternToRegex(pattern)] = type;
+        });
+    },
+
+    patternToRegex: function(pattern) {
+        pattern = pattern.replace(escapeRegExp, '\\$&')
+            .replace(optionalParam, '(?:$1)?')
+            .replace(namedParam, function (match, optional) {
+                return optional ? match : '([^/?]+)';
+            })
+            .replace(splatParam, '([^?]*?)');
+        return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
+    },
+    */
+
+    dispatch: function(message) {
+
+        console.log('dispatch message', message);
+
+        var source = _.property('source')(message);
+        var body = _.property('body')(message);
+
+        if (source == 'portal') {
+
+            this.dispatcher.dispatch(message);
+
+        } else if (source == 'cb') {
+
+            var actionTypes = {
+                create: 'add',
+                delete: 'delete',
+                update: 'update'
+            }
+            var verb = _.property('verb')(body);
+            var actionType = actionTypes[verb.toLowerCase()];
+            var uri = _.property('resource_uri')(body);
+            var resourceMatches = uri.match(Portal.filters.apiRegex);
+            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            var items = _.property('body')(body);
+
+            var msg = {
+                payload: items,
+                itemType: itemType,
+                actionType: actionType
+            };
+
+            this.dispatcher.dispatch(msg);
+
+        } else if (source.match(Portal.filters.cbidRegex)) {
+            // Message is from a bridge or an app on a bridge
+            message.direction = "inbound";
+
+            var destination = _.property('destination')(message);
+            var destMatch = destination.match(Portal.filters.cbidRegex)
+            if (destMatch) {
+                if (destMatch[3]) {
+                    // The address has a third cbid - maybe an app!
+                    message.destination = destMatch[2] + "/" + destMatch[3];
+                    Portal.portalCollection.dispatch(message);
+                } else {
+                    Portal.messageCollection.add(message);
+                }
+            }
+
+        } else {
+            console.warn('message source unrecognised', message);
+        }
+    },
+
+    register: function(callback) {
+
+        this.dispatcher.register(callback);
+    },
+
+    error: function(error) {
+        // Log an error
+
+    }
+});
+
+module.exports = CBApp;
+
+},{"./utils":"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js":[function(require,module,exports){
+
+Portal.ClientControl = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'clientControl',
 
     relations: [
-        {   
-            type: Backbone.HasOne,
-            key: 'user',
-            keySource: 'user',
-            keyDestination: 'user',
-            relatedModel: 'CBApp.User',
-            collectionType: 'CBApp.UserCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'userCollection',
-        },
-        {   
+
+        {
             type: Backbone.HasOne,
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'CBApp.Client',
-            collectionType: 'CBApp.ClientCollection',
+            relatedModel: 'Portal.Client',
+            collectionType: 'Portal.ClientCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'clientControls',
-                collectionType: 'CBApp.ClientCollection',
+                collectionType: 'Portal.ClientCollection',
                 includeInJSON: false,
                 initializeCollection: 'clientCollection',
             }   
@@ -24048,14 +13445,14 @@ CBApp.ClientControl = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "clientControl" });
 
-CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
+Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.ClientControl,
+    model: Portal.ClientControl,
     backend: 'clientControl',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.ClientControlCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientControlCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -24064,87 +13461,66 @@ CBApp.ClientControlCollection = QueryEngine.QueryCollection.extend({
 });
 
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html")
-},{"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/templates/appInstall.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
 
 
-  return "<h2>Clients</h2>\n<div class=\"table animated-list client-list\"></div>\n<div id=\"create-client\"  class=\"topcoat-button--cta center full\">Create Client</div></br>\n";
-  });
+Portal.ClientControlView = React.createClass({displayName: 'ClientControlView',
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js":[function(require,module,exports){
+    mixins: [Portal.ItemView],
 
-CBApp.ClientControlView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/clientControl.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-        'click .uninstall-button': 'uninstall'
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    initialize: function() {
-
-    },
-
-    /*
-    serializeData: function() {
-
-      var data = {};
-      var app = this.model.get('app');
-      data.name = app.get('name');
-      data.appID = "AID" + app.get('id');
-      return data;
-    },
-    */
-
-    delete: function() {
-
-        console.log('uninstall in install view', this.model);
-        this.model.uninstall();
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        //var $appConfig = self.$('.user-panel');
-        //self.appDevicePermissionListView.setElement($appConfig).render();
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
+        };
     }
 });
 
-CBApp.ClientControlListView = Marionette.CompositeView.extend({
+Portal.ClientControlListView = React.createClass({displayName: 'ClientControlListView',
 
-    template: require('./templates/clientControlSection.html'),
-    itemView: CBApp.ClientControlView,
-    itemViewContainer: '.client-list',
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #create-client': 'createClient'
+    getInitialState: function () {
+        return {
+            title: 'Clients',
+            buttons: [{
+                name: 'Create Client',
+                onClick: this.createClient,
+                type: 'bold'
+            }]
+        };
     },
 
     createClient: function() {
-        CBApp.Config.controller.createClient();
+
+        Portal.router.setParams({action: 'create-client'});
     },
 
-    onRender : function(){
+    renderItem: function (item) {
+        var cid = item.cid;
 
+        var clientControl = this.getCollection().get({cid: cid});
+        var client = clientControl.get('client');
+        var title = "Client";
+        //var header = <Portal.Components.TextInput model={client} field="name" />;
+
+        return React.createElement(Portal.ClientControlView, {key: cid, 
+                    title: title, model: clientControl})
     }
 });
 
-},{"./templates/clientControl.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControl.html","./templates/clientControlSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/templates/clientControlSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
 
-CBApp.Client = Backbone.Deferred.Model.extend({
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js":[function(require,module,exports){
+
+Portal.Client = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
@@ -24157,8 +13533,8 @@ CBApp.Client = Backbone.Deferred.Model.extend({
             type: Backbone.HasMany,
             key: 'clientControls',
             keySource: 'client_controls',
-            relatedModel: 'CBApp.ClientControl',
-            collectionType: 'CBApp.ClientControlCollection',
+            relatedModel: 'Portal.ClientControl',
+            collectionType: 'Portal.ClientControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'clientControlCollection'
@@ -24166,138 +13542,133 @@ CBApp.Client = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "client" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.ClientCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.ClientCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Client,
+    model: Portal.Client,
     backend: 'client',
 
     initialize: function() {
         var self = this;
 
-        CBApp.ClientCollection.__super__.initialize.apply(this, arguments);
+        Portal.ClientCollection.__super__.initialize.apply(this, arguments);
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/client.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
 
 
-  return "<h4 class=\"list-group-item-heading name\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
-  });
+Portal.ClientView = React.createClass({displayName: 'ClientView',
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
 
-
-  return "<h2>Devices</h2>\n\n<div class=\"animated-list device-list\"></div>\n<div class=\"topcoat-button--cta center full discover-devices-button\">Connect to a Device</div></br>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js":[function(require,module,exports){
-
-CBApp.ClientView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/client.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'delete',
+                onClick: this.uninstall
+            }]
+        };
     },
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    getClass: function(val) {
+    uninstall: function() {
 
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
+        this.toggleExistenceOnServer(this.props.model);
     },
 
-    delete: function() {
-        this.model.delete();
-    },
+    renderBody: function() {
 
-    onRender: function() {
-        this.stickit();
-    }
-});
+        var self = this;
 
+        //var devicePermissions = this.props.devicePermissions;
+        var deviceInstalls = this.props.deviceInstalls;
+        var appInstall = this.props.model;
 
-CBApp.ClientListView = Marionette.CompositeView.extend({
+        var devicePermissions = appInstall.get('devicePermissions');
 
-    template: require('./templates/clientSection.html'),
-    itemView: CBApp.ClientView,
-    itemViewContainer: '.client-list',
+        deviceInstalls.each(function(deviceInstall) {
 
-    emptyView: CBApp.ListItemLoadingView,
-
-
-    events: {
-        'click .add-client': 'addClient'
-    },
-
-    addClient : function() {
-        CBApp.Config.controller.addClient();
-    },
-
-    onRender : function() {
-
-    }
-});
-
-/*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
-
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        CBApp.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new CBApp.DeviceListView({ 
-            collection: this.collection
+            var adp;
+            var adpData = {
+                deviceInstall: deviceInstall,
+                appInstall: appInstall
+            }
+            adp = devicePermissions.findWhere(adpData)
+            if (!adp) {
+                adp = new Portal.AppDevicePermission(adpData);
+                appInstall.set('devicePermissions', adp, {remove: false});
+            }
+            /*
+            if(!devicePermissions.findWhere(adpData)) {
+                //var permission = new Portal.AppDevicePermission(adpData);
+                //console.log('permission is', permission );
+                //devicePermissions.add(permission);
+            }
+            */
         });
-        
-        this.deviceList.show(deviceListView);
+
+        /*
+        var devicePermissions = appInstall.get('devicePermissions');
+
+        devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
+            console.log('event on deviceInstalls', event);
+            self.getCollection().trigger('change');
+        });
+        */
+
+        return (
+            React.createElement(Portal.AppDevicePermissionListView, {collection: devicePermissions})
+        );
     }
-})
- */
+});
+
+Portal.ClientListView = React.createClass({displayName: 'ClientListView',
+
+    itemView: Portal.ClientView,
+
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+
+    getInitialState: function () {
+        return {
+            title: 'Clients',
+            buttons: [{
+                name: 'Create Client',
+                onClick: this.createClient,
+                type: 'bold'
+            }]
+        };
+    },
+
+    createClient: function() {
+        Portal.router.setParams({action: 'create-client'});
+    },
+
+    createItem: function (item) {
+        var cid = item.cid;
+
+        var appInstallCollection = this.getCollection()
+        var appInstall = appInstallCollection.get({cid: cid});
+
+        var app = appInstall.get('app');
+        var title = app.get('name');
+
+        var deviceInstalls = this.props.deviceInstalls;
+
+        return React.createElement(Portal.ClientView, {key: cid, title: title, 
+                    deviceInstalls: deviceInstalls, model: appInstall})
+    }
+});
 
 
-},{"./templates/client.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/client.html","./templates/clientSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/common/models.js":[function(require,module,exports){
 
-CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
+Portal.ConnectionModel = Backbone.Deferred.Model.extend({
 
     /* Model for connecting things ie. Apps and Devices, Clients and Apps */
 
@@ -24348,247 +13719,56 @@ CBApp.ConnectionModel = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "connectionModel" });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/buttons.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
 
-require('./components');
-
-CBApp.Components.Button = Marionette.ItemView.extend({
-
-    tagName: 'button',
-
-    events: {
-        'click': 'onClick'
-    },
-
-    bindings: {
-        ':el': {
-            attributes: [{
-                name: 'class',
-                observe: ['isGhost'],
-                modelEvents: ['change', 'change:relational', 'unsavedChanges'],
-                onGet: 'getClass'
-            }],
-            observe: ['isGhost'],
-            modelEvents: ['change', 'change:relational', 'unsavedChanges'],
-            onGet: 'getContent'
-        }
-    },
-    /*
-    getTemplate: function() {
-
-        // Return a blank template so that one does not have to be specified
-        return _.template(' ');
-    },
-    */
-
-    getClass: function() {
-
-        var enabled = this.getEnabled() || "";
-        var extraClass = this.extraClass || "";
-        console.log('Button getClass', enabled);
-
-        return "btn btn-default " + enabled + " " + extraClass;
-    },
-
-    getEnabled: function(val) {
-
-        var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
-        console.log('Button getEnabled', this.model.unsavedAttributes());
-        return enabled;
-    }
-});
-
-},{"./components":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/components.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/components.js":[function(require,module,exports){
-
-CBApp.Components = {};
-
-
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/numbers.js":[function(require,module,exports){
-
-require('./components');
-
-CBApp.Components.NumberField = Marionette.ItemView.extend({
-
-    tagName: 'button',
-
-    template: require('./templates/numberField.html'),
-
-    events: {
-        'click .inc': 'increment',
-        'click .dec': 'decrement'
-    },
-
-    bindings: {
-        '.bfh-number': {
-            attributes: [{
-                name: 'disabled',
-                //observe: ['change', 'change:relational', 'installs_permitted'],
-                modelEvents: ['change'],
-                onGet: 'getDisabled'
-            }],
-            observe: ['installs_permitted'],
-            events: ['change'],
-            onGet: 'getContent'
-        }
-    },
-
-    /*
-    getClass: function() {
-
-        var enabled = this.getEnabled() || "";
-
-        return "form-control bfh-number app-form-input installs-permitted" + enabled;
-    },
-    */
-
-    getDisabled: function(val) {
-
-        console.log('numbers getDisabled');
-        //testModel = this.model;
-        //return this.model.unsavedAttributes() ? true : false;
-        return false;
-    }
-});
-},{"./components":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/components.js","./templates/numberField.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/numberField.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/switches.js":[function(require,module,exports){
-
-require('./components');
-
-CBApp.Components.Switch = Marionette.ItemView.extend({
-
-    //tagName: 'button',
-
-    template: require('./templates/switch.html'),
-
-    events: {
-        'click': 'onClick'
-    },
-
-    bindings: {
-        ':el': {
-            attributes: [{
-                name: 'class',
-                observe: ['change', 'change:relational'],
-                onGet: 'getClass'
-            }]
-            //observe: ['change', 'change:relational', 'content', 'permission'],
-            //onGet: 'getContent'
-        }
-    },
-
-    getClass: function() {
-
-        //var enabled = this.getEnabled() || "";
-        var enabled = this.model.unsavedAttributes() ? 'disabled' : '';
-        var activation = this.getActivation();
-
-        return "left theme-green animate toggle-switch " + activation + " " + enabled;
-    }
-});
-
-CBApp.Components.ConnectionSwitch = CBApp.Components.Switch.extend({
-
-    template: require('./templates/switch.html'),
-
-    getActivation: function() {
-
-        return this.model.isNew() ? '' : 'active';
-    },
-
-    onClick: function() {
-
-        this.model.toggleConnection();
-    },
-
-    onRender: function() {
-        this.stickit();
-    }
-});
-
-},{"./components":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/components.js","./templates/switch.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/numberField.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<input type=\"text\" class=\"form-control bfh-number app-form-input installs-permitted\">\n<span class=\"input-group-addon bfh-number-btn inc\"><span class=\"glyphicon glyphicon-chevron-up\"></span></span>\n<span class=\"input-group-addon bfh-number-btn dec\"><span class=\"glyphicon glyphicon-chevron-down\"></span></span>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "";
-
-
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js":[function(require,module,exports){
-
-/*
-CBApp.DiscoveredDevice = Backbone.RelationalModel.extend({
+Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
-    initialize: function() {
-
-    }
-});
-
-CBApp.DiscoveredDeviceCollection = Backbone.Collection.extend({
-
-    model: CBApp.DiscoveredDevice,
-    backend: 'discoveredDevice',
-
-    initialize: function() {
-
-        var self = this;
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-});
- */
-
-CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
+    matchFields: ['device', 'bridge', 'address'],
 
     initialize: function() {
 
     },
 
-    installDevice: function(friendlyName) {
+    install: function(friendlyName) {
 
         var self = this;
 
+        /*
         console.log('this in installDevice is', this);
-
-
         console.log('adaptor in installDevice is', adaptor);
         console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
         console.log('device in installDevice is', this.get('device').get('resource_uri'));
         console.log('mac_addr in installDevice is', this.get('mac_addr'));
+        */
         //this.set('friendly_name', friendlyName);
         //this.set('adaptor', adaptor);
 
+        var device = this.get('device');
+        if(!device) return console.error('Cannot install device, no device found', this);
+        var adaptor = device.get('adaptorCompatibilities').at(0).get('adaptor');
         // Find if a device install already exists, otherwise create a one blank (to avoid instantiating relations now)
         var address = this.get('mac_addr') || this.get('address');
         var deviceInstallData = {
             bridge: this.get('bridge').get('resource_uri'),
-            device: this.get('device').get('resource_uri'),
-            address: address
+            device: device.get('resource_uri'),
+            address: address,
+            adaptor: adaptor,
+            friendly_name: friendlyName
         };
 
-        var adaptor = this.get('device').get('adaptorCompatibility').at(0).get('adaptor');
-        var deviceInstall = CBApp.deviceInstallCollection.findWhere(deviceInstallData)
-            || new CBApp.DeviceInstall({
+        var createOptions = {matchFields: this.matchFields};
+
+        Portal.deviceInstallCollection.create(deviceInstallData, createOptions);
+        /*
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData);
+        if (!deviceInstall) {
+            //deviceInstall = new
+        }
+        /*
+        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
+            || new Portal.DeviceInstall({
                 bridge: this.get('bridge'),
                 device: this.get('device'),
                 address: address,
@@ -24597,10 +13777,9 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             });
 
         /*
-        var deviceInstall = CBApp.deviceInstallCollection.findOrAdd({
+        var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
 
         });
-        */
 
 
         // Add the optional data in for saving
@@ -24610,33 +13789,13 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
         });
         console.log('deviceInstall is', deviceInstall.toJSON());
         // Add to the deviceInstall collection, to save with backbone io
-        CBApp.deviceInstallCollection.add(deviceInstall);
+        Portal.deviceInstallCollection.add(deviceInstall);
         deviceInstall.save().then(function(result) {
 
             console.log('deviceInstall saved successfully');
         }, function(error) {
 
             console.error('Error saving deviceInstall', error);
-        });
-        //console.log('deviceInstall is', deviceInstall);
-
-        console.log('In installDevice');
-        // Create the device_install model on the server
-        /*
-        CBApp.deviceInstallCollection.create(deviceInstall, {
-
-            wait: true,
-
-            success : function(resp){
-
-                console.log('device installed successfully', resp);
-                self.destroy();
-            },
-
-            error : function(err) {
-
-                console.error(err);
-            }
         });
         */
     },
@@ -24647,23 +13806,25 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'discoveredDeviceInstalls'
             }
+            */
         },
         {
             type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection'
@@ -24672,7 +13833,7 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'appPermissions',
             keySource: 'app_permissions',
             keyDestination: 'app_permissions',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: true,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -24684,196 +13845,138 @@ CBApp.DiscoveredDeviceInstall = Backbone.RelationalModel.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection'
         }
         */
     ]
-}, { modelType: "discoveredDeviceInstall" });
+}, { modelType: "discoveredDevice" });
 
-CBApp.DiscoveredDeviceInstallCollection = Backbone.Collection.extend({
+Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DiscoveredDeviceInstall,
-    backend: 'discoveredDeviceInstall',
+    model: Portal.DiscoveredDevice,
+    backend: 'discoveredDevice',
 
-
+    /*
     initialize: function() {
 
         var self = this;
+    },
+    */
+});
 
-        /*
-        // Listen for reset event from the backend
-        this.bind('backend:reset', function(models) {
-            console.log('DiscoveredDeviceCollection reset with ', models);
-            self.reset(models);
-        });
-        */
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
+
+Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceView',
+
+    mixins: [Portal.ItemView],
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    parse : function(response){
-        return response.objects;
+    getInitialState: function () {
+        var buttons = [];
+
+        var discoveredDevice = this.getModel();
+        var device = discoveredDevice.get('device');
+        if (device && device.get('adaptorCompatibilities').at(0)) {
+            buttons.push({
+                onClick: this.installDevice,
+                type: 'text',
+                label: 'Install'
+            });
+        } else {
+            buttons.push({
+                type: 'text',
+                label: 'Unknown Device',
+                disabled: true
+            });
+        }
+
+        //var installLabel = this.props.model.device ? 'Install' : 'Device not found'
+        return {
+            buttons: buttons
+        };
+    },
+
+    installDevice: function() {
+
+        console.log('click installDevice');
+        var discoveredDevice = this.getModel();
+        console.log('installDevice discoveredDevice', discoveredDevice);
+        Portal.router.setParams({action: 'install-device',
+                                 item: discoveredDevice.get('id')});
     }
 });
 
+Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDeviceListView',
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDevice.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-
-  return "<div class=\"card-heading h4 device-name\"></div>\n<div class=\"card-subheading h4 small device-address\"></div>\n<div class=\"install-button\"></div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDeviceSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Device Discovery</h2>\n\n<div id=\"discovered-device-list\" class=\"animated-list\"></div>\n<div id=\"devices\" class=\"topcoat-button--cta\">Show Devices</div>\n<div id=\"rescan\" class=\"topcoat-button--cta\">Rescan</div></br>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html")
-},{"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/templates/switch.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js":[function(require,module,exports){
-
-require('../../components/buttons');
-
-
-/*
-CBApp.DiscoveredDeviceView = React.createClass({
-    mixins: [React.ItemView]
-});
-
-CBApp.DiscoveredDeviceListView = React.createClass({
-    mixins: [React.CollectionView]
-});
-*/
-
-CBApp.Components.DeviceInstallButton = CBApp.Components.Button.extend({
-
-    template: require('./templates/installButton.html'),
-
-    extraClass: "install-button",
-
-    initialize: function() {
-
+    getInitialState: function () {
+        return {
+            title: 'Discovered Devices',
+            buttons: [{
+                name: 'Rescan',
+                type: 'bold',
+                onClick: this.rescan
+            }, {
+                name: 'Back to my devices',
+                onClick: this.stopDiscoveringDevices
+            }]
+        };
     },
 
-    onClick: function(e) {
-
-        e.preventDefault();
-        CBApp.Config.controller.installDevice(this.model);
-    },
-
-    getContent: function() {
-
-        return this.model.get('device') ? 'Install' : 'Request an adaptor';
-    },
-
-    onRender: function() {
-
-        this.stickit();
-    }
-});
-
-CBApp.DiscoveredDeviceItemView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/discoveredDevice.html'),
-    //template: '#discoveredDeviceItemViewTemplate',
-
-    bindings: {
-        '.device-address': {
-            observe: ['mac_addr', 'address'],
-            onGet: 'formatAddress'
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo device discovery', transition, params);
         }
     },
 
-    initialize: function() {
+    stopDiscoveringDevices: function() {
 
-        this.installButton = new CBApp.Components.DeviceInstallButton({
-            model: this.model
-        });
+        Portal.router.setParams({});
+        //Portal.Config.controller.stopDiscoveringDevices();
     },
 
-    formatAddress: function(address) {
+    rescan: function() {
 
-        // Retain backwards compatibility with using mac_addr
-        var addr = address[0] || address[1];
-        return addr.slice(addr.length-5);
+        this.props.rescan();
+        //Portal.Config.controller.discoverDevices();
     },
 
-    onRender: function() {
+    renderItem: function (item) {
 
-        this.stickit();
-        var device = this.model.get('device');
-        this.stickit(device, {'.device-name': 'name'});
+        var model = this.getCollection().findWhere({id: item.id});
+        //var title = model.get('device') ? name : name + " (Unknown device)";
+        var title = item.name;
+        var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
 
-        this.installButton.setElement(this.$('.install-button')).render();
-    },
-});
-
-
-CBApp.DiscoveredDeviceListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/discoveredDeviceSection.html'),
-    itemView: CBApp.DiscoveredDeviceItemView,
-    itemViewContainer: '#discovered-device-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    events: {
-        'click #devices': 'clickDevices',
-        'click #rescan': 'clickDiscover'
-    },
-
-    clickDevices: function() {
-
-        CBApp.Config.controller.stopDiscoveringDevices();
-    },
-
-    clickDiscover: function() {
-
-        CBApp.Config.controller.discoverDevices();
-    },
-
-    onRender : function(){
-
+        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, 
+                    title: title, subtitle: subtitle, model: item})
     }
 });
 
-},{"../../components/buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/buttons.js","./templates/discoveredDevice.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDevice.html","./templates/discoveredDeviceSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/discoveredDeviceSection.html","./templates/installButton.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js":[function(require,module,exports){
 
-CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
+Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    /*
-    computeds: {
-
-        unconfirmed: function() {
-            var isNew = this.isNew();
-            return isNew || this.hasChangedSinceLastSync;
-        }
-    },
-    */
+    matchFields: ['bridge', 'device'],
+    backend: 'deviceInstall',
 
     initialize: function() {
 
-        Backbone.Deferred.Model.prototype.initialize.apply(this);
-        this.bind("change", this.changeHandler)
+        //Backbone.Deferred.Model.prototype.initialize.apply(this);
+        //this.bind("change", this.changeHandler)
 
     },
 
@@ -24897,7 +14000,7 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         }
 
         //var adp = appInstall.get('devicePermissions').findOrCreate({deviceInstall: this});
-        var adp = CBApp.appInstallCollection.findOrCreate({
+        var adp = Portal.appInstallCollection.findOrCreate({
             appInstall: appInstall,
             deviceInstall: this
         });
@@ -24906,48 +14009,51 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
         if (adp) {
             adp.set({permission: true}, {silent: true});
         } else {
-            var adp = CBApp.AppDevicePermission.findOrCreate({
+            var adp = Portal.AppDevicePermission.findOrCreate({
                 deviceInstall: this,
                 appInstall: appInstall,
                 permission: false
             });
         }
-        CBApp.appDevicePermissionCollection.add(adp);
+        Portal.appDevicePermissionCollection.add(adp);
         */
 
         return adp;
     },
 
     relations: [
+        /*
         {
             type: Backbone.HasOne,
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
-            createModels: false,
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
+            createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
+            /*
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls'
             }
         },
+        */
         {
             type: Backbone.HasOne,
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'CBApp.Device',
-            collectionType: 'CBApp.DeviceCollection',
+            relatedModel: 'Portal.Device',
+            collectionType: 'Portal.DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -24957,15 +14063,15 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'CBApp.Adaptor',
-            collectionType: 'CBApp.AdaptorCollection',
+            relatedModel: 'Portal.Adaptor',
+            collectionType: 'Portal.AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: 'CBApp.DeviceInstallCollection',
+                collectionType: 'Portal.DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -24976,8 +14082,8 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'appPermissions',
             //keySource: '',
             //keyDestination: 'bridge',
-            relatedModel: 'CBApp.AppDevicePermission',
-            collectionType: 'CBApp.AppDevicePermissionCollection',
+            relatedModel: 'Portal.AppDevicePermission',
+            collectionType: 'Portal.AppDevicePermissionCollection',
             createModels: false,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -24986,137 +14092,93 @@ CBApp.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//CBApp.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.DeviceInstall,
+    model: Portal.DeviceInstall,
     backend: 'deviceInstall',
 
-    initialize: function() {
+    /*
+    initialize: function(options) {
         var self = this;
 
+        //Portal.addInitializer(function(options) {
+
+        //});
+        /*
         this.bind('backend:create', function(model) {
             self.add(model);
         });
-        CBApp.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
     },
+    */
 
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstall.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
+Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
 
-  return "<h4 class=\"list-group-item-heading\"></h4>\n<i id=\"edit-button\" class=\"icon ion-edit edit-button\"></i>\n<i class=\"icon ion-trash-a uninstall-button\"></i>\n";
-  });
+    mixins: [Portal.ItemView],
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstallSection.html":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html")
-},{"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/templates/clientSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
-
-CBApp.DeviceInstallView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/deviceInstall.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    },
-
-    getClass: function(val) {
-
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
-    },
-
-    uninstall: function() {
-        this.model.uninstall();
-    },
-
-    onRender: function() {
-        this.stickit();
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
+        };
     }
 });
 
+Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallListView',
 
-CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
+    itemView: Portal.DeviceInstallView,
 
-    template: require('./templates/deviceInstallSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
-    itemViewContainer: '.device-list',
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    emptyView: CBApp.ListItemLoadingView,
-
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
+    getInitialState: function () {
+        return {
+            title: 'Devices',
+            buttons: [{
+                name: 'Discover Devices',
+                onClick: this.discoverDevices,
+                type: 'bold'
+            }]
+        };
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+
+        Portal.router.setParams({action: 'discover-devices'});
+        //this.props.discoverDevices();
     },
 
-    onRender : function() {
+    renderItem: function (item) {
+        var cid = item.cid;
 
+        var deviceInstall = this.getCollection().get({cid: cid});
+        var title = React.createElement(Portal.Components.TextInput, {model: deviceInstall, field: "friendly_name"});
+
+        return React.createElement(Portal.DeviceInstallView, {key: cid, 
+                    title: title, model: item})
     }
 });
 
-/*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        CBApp.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new CBApp.DeviceListView({ 
-            collection: this.collection
-        });
-        
-        this.deviceList.show(deviceListView);
-    }
-})
- */
-
-
-},{"./templates/deviceInstall.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstall.html","./templates/deviceInstallSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/templates/deviceInstallSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
-
-CBApp.Device = Backbone.Deferred.Model.extend({
+Portal.Device = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
     
@@ -25128,11 +14190,11 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     relations: [
         {
             type: Backbone.HasMany,
-            key: 'adaptorCompatibility',
-            keySource: 'adaptor_compatibility',
-            keyDestination: 'adaptor_compatibility',
-            relatedModel: 'CBApp.AdaptorCompatibility',
-            collectionType: 'CBApp.AdaptorCompatibilityCollection',
+            key: 'adaptorCompatibilities',
+            keySource: 'adaptor_compatibilities',
+            keyDestination: 'adaptor_compatibilities',
+            relatedModel: 'Portal.AdaptorCompatibility',
+            collectionType: 'Portal.AdaptorCompatibilityCollection',
             createModels: true,
             initializeCollection: 'adaptorCompatibilityCollection',
             includeInJSON: true
@@ -25143,8 +14205,8 @@ CBApp.Device = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             //keySource: 'device_installs',
             //keyDestination: 'device_installs',
-            relatedModel: 'CBApp.DeviceInstall',
-            collectionType: 'CBApp.DeviceInstallCollection',
+            relatedModel: 'Portal.DeviceInstall',
+            collectionType: 'Portal.DeviceInstallCollection',
             createModels: false,
             initializeCollection: 'deviceInstallCollection',
             includeInJSON: true,
@@ -25157,15 +14219,15 @@ CBApp.Device = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "device" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Device,
+    model: Portal.Device,
     backend: 'device',
 
     initialize: function() {
         this.bindBackend();
-        CBApp.DeviceCollection.__super__.initialize.apply(this, arguments);
+        Portal.DeviceCollection.__super__.initialize.apply(this, arguments);
     },
     
     parse : function(response){
@@ -25173,152 +14235,306 @@ CBApp.DeviceCollection = QueryEngine.QueryCollection.extend({
     }
 });
 
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js":[function(require,module,exports){
+
+Portal.Error = Backbone.RelationalModel.extend({
+
+    idAttribute: 'id',
+
+    initialize: function(attributes, options) {
+
+        console.log('error initialized', attributes);
+
+        if (attributes['type'] != "TransportError") {
+            var notification = new Portal.Notification({error: this,
+                type: 'error'});
+        }
+
+        Portal.notificationCollection.add(notification);
+    },
+
+    getName: function() {
+        return this.get('response').error.name;
+    },
+
+    getMessage: function() {
+        return this.get('response').error.message;
+    },
+
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'notification',
+            relatedModel: 'Portal.Notification',
+            collectionType: 'Portal.NotificationCollection',
+            createModels: true,
+            includeInJSON: 'resource_uri',
+            initializeCollection: 'notificcationCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'error',
+                includeInJSON: false,
+                initializeCollection: 'errorCollection'
+            }
+        }
+    ]
+}, { modelType: "error" });
+
+Portal.ErrorCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Error,
+    backend: 'error'
+
+    /*
+    initialize: function() {
+        this.bindBackend();
+
+        this.bind('backend:create', function(model) {
+            //logger.log('debug', 'AppCollection create', model);
+            self.add(model);
+        });
+    },
+    */
+
+});
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js":[function(require,module,exports){
 
-CBApp = new Marionette.Application();
+CBApp = require('./cbApp')
 
-require('./views/generic-views');
+Portal = new CBApp();
 
-//CBApp.dispatcher = new Dispatcher();
+require('./views/mixins/backbone');
+require('./views/mixins/connector');
+require('./views/mixins/items');
 
-CBApp.addRegions({
-    navRegion: "#nav-region",
-    mainRegion: "#main-region",
-    notificationRegion: "#notification-region",
-    modalsRegion: {
-      selector: "#modals-region",
-      regionType: Backbone.Marionette.Modals
-    }
+Portal._isInitialized = false;
+
+Portal.Controller = Marionette.Controller.extend({
 });
 
-CBApp._isInitialized = false;
-
-CBApp.Controller = Marionette.Controller.extend({
-
-  index: function () {
-    console.log('index');
-  },
-  showConfig: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', 'config');
-      CBApp.Config.trigger('config:show', slug);
-  },
-  showDeveloper: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', '');
-      CBApp.Developer.trigger('developer:show', slug);
-  },
-  showHome: function() {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('home:activate', '');
-      CBApp.Home.trigger('developer:show', slug);
-  },
-  showStore: function(slug) {
-      CBApp.modalsRegion.reset();
-      CBApp.Nav.trigger('topbar:activate', 'store');
-      CBApp.Store.trigger('store:show', slug);
-  },
-  setCurrentBridge: function(bridge) {
-
-      var currentBridges = CBApp.bridgeCollection.where({current: true})
-      for (i=0; i < currentBridges.length; i++) {
-          currentBridges[i].set('current', false);
-      }
-
-      bridge.set('current', true);
-  }
-});
-
-/*
-var DevicesView = React.createClass({
-
-    render: function() {
-        return <div>Hello!</div>
-    }
-});
-*/
-
-CBApp.addInitializer(function () {
+Portal.addInitializer(function () {
 
   //router
-  CBApp.controller = new CBApp.Controller();
-  CBApp.router = new CBApp.Router('portal', {
-      controller : CBApp.controller,
+  Portal.controller = new Portal.Controller();
+  /*
+  Portal.router = new Portal.Router('portal', {
+      controller : Portal.controller,
       createTrailingSlashRoutes: true
   });
-  var $testSection = document.getElementById('test-region');
-  console.log('$testSection ', $testSection );
-  //React.renderComponent(DevicesView(), $testSection);
+  */
+
 });
 
-CBApp.navigate = function(route,  options){
-  options || (options = {});
-  Backbone.history.navigate(route, options);
-};
+var BaseView = require('./views/base');
 
-CBApp.getCurrentRoute = function(){
-  return Backbone.history.fragment
-};
+Portal.addInitializer(function () {
+//Portal.on("initialize:after", function () {
 
+  Portal.router = require('./router');
 
-CBApp.on("initialize:after", function () {
+  Portal.router.run(function (Handler, state) {
+      Portal.route = state;
 
-  CBApp.Nav.trigger('topbar:show');
-  CBApp.Notifications.trigger('show');
+      var params = state.params;
 
-  //for routing purposes
-  if(Backbone.history) {
-
-      Backbone.history.start({pushState: true});
-                              //root: '/portal'});
-
-      console.log('Backbone.history.fragment', Backbone.history.fragment);
-      if (this.getCurrentRoute() === "") {
-          CBApp.request('config:show');
-          //Backbone.history.navigate('index');
-
+      var models = {
+          currentUser: Portal.currentUser
       }
-  } else {
-      console.warn('Backbone.history was not started');
-  }
+
+      var currentBridge = Portal.getCurrentBridge();
+      if(currentBridge) {
+          currentBridge.fetch();
+          models['currentBridge'] = currentBridge;
+      }
+
+      var collections = {
+          apps: Portal.appCollection,
+          users: Portal.userCollection,
+          messages: Portal.messageCollection,
+          notifications: Portal.notificationCollection
+      }
+
+      var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
+
+      React.render(
+          React.createElement(BaseView, {params: params, handler: Handler, 
+              path: state.path, 
+              //key={state.path}
+              collection: collections, model: models}),
+          document.getElementById('app')
+      );
+  });
 });
 
-CBApp.Router = Marionette.SubRouter.extend({
+module.exports = Portal;
+},{"./cbApp":"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js","./router":"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js","./views/base":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js","./views/mixins/backbone":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js","./views/mixins/connector":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js","./views/mixins/items":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js":[function(require,module,exports){
 
-  appRoutes: {
-    '': 'showHome',
-    'config(/:slug)': 'showConfig',
-    'developer(/:slug)': 'showDeveloper',
-    'store(/:slug)': 'showStore'
-  }
+//var _ = require('underscore')
+//    ;
+
+// Create local references to array methods we'll want to use later.
+var array = [];
+var slice = array.slice;
+
+Message = function(attributes, options) {
+
+    var unknownAttrs = attributes || {};
+    var attrs = (typeof(unknownAttrs) == 'string') ? JSON.parse(unknownAttrs) : unknownAttrs;
+    options || (options = {});
+    this.attributes = {};
+    //if (options.parse) attrs = this.parse(attrs, options) || {};
+    //attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
+    this.set(attrs, options);
+    this.changed = {};
+    this.initialize.apply(this, arguments);
+};
+
+_.extend(Message.prototype, {
+
+    // Initialize is an empty function by default. Override it with your own
+    // initialization logic.
+    initialize: function(){},
+
+    toJSON: function(options) {
+      return _.clone(this.attributes);
+    },
+
+    // Return a copy of the model's `attributes` object.
+    toJSONString: function(options) {
+
+      var jsonAttributes = JSON.stringify(_.clone(this.attributes));
+      return jsonAttributes;
+    },
+
+    setJSON: function(jsonAttributes, options) {
+
+        if (typeof jsonAttributes == 'string') {
+            try {
+                var attributes = JSON.parse(jsonAttributes);
+            } catch (error) {
+                console.error(error);
+            }
+        } else if (typeof jsonAttributes == 'object') {
+            var attributes = jsonAttributes;
+        }
+
+        if (!options) options = {};
+
+        this.set(attributes, options);
+    },
+
+    returnToSource: function(source) {
+
+        // Switches the original source to the destination
+        var src = source || "";
+        var prevSource = this.get('source') || "";
+        this.set('destination', prevSource);
+        this.set('source', src);
+    },
+
+    returnError: function(error) {
+
+    },
+
+    // Get the value of an attribute.
+    get: function(attr) {
+      return this.attributes[attr];
+    },
+
+    set: function(key, val, options) {
+      var attr, attrs, unset, changes, silent, changing, prev, current;
+      if (key == null) return this;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (typeof key === 'object') {
+        attrs = key;
+        options = val;
+      } else {
+        (attrs = {})[key] = val;
+      }
+
+      options || (options = {});
+
+      // Run validation.
+      if (!this._validate(attrs, options)) return false;
+
+      // Extract attributes and options.
+      unset           = options.unset;
+      silent          = options.silent;
+      changes         = [];
+      changing        = this._changing;
+      this._changing  = true;
+
+      if (!changing) {
+        this._previousAttributes = _.clone(this.attributes);
+        this.changed = {};
+      }
+      current = this.attributes, prev = this._previousAttributes;
+
+      // For each `set` attribute, update or delete the current value.
+      for (attr in attrs) {
+        val = attrs[attr];
+        if (!_.isEqual(current[attr], val)) changes.push(attr);
+        if (!_.isEqual(prev[attr], val)) {
+          this.changed[attr] = val;
+        } else {
+          delete this.changed[attr];
+        }
+        unset ? delete current[attr] : current[attr] = val;
+      }
+
+      this._pending = false;
+      this._changing = false;
+      return this;
+    },
+
+    unset: function(attr, options) {
+      return this.set(attr, void 0, _.extend({}, options, {unset: true}));
+    },
+
+    _validate: function(attrs, options) {
+      if (!options.validate || !this.validate) return true;
+      attrs = _.extend({}, this.attributes, attrs);
+      var error = this.validationError = this.validate(attrs, options) || null;
+      if (!error) return true;
+      this.trigger('invalid', this, error, _.extend(options, {validationError: error}));
+      return false;
+    }
+
+})
+
+// Underscore methods that we want to implement on the Model.
+// Added defaults
+var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'defults'];
+
+// Mix in each Underscore method as a proxy to `Model#attributes`.
+_.each(modelMethods, function(method) {
+  if (!_[method]) return;
+    Message.prototype[method] = function() {
+      var args = slice.call(arguments);
+      args.unshift(this.attributes);
+      return _[method].apply(_, args);
+    };
 });
 
-CBApp.reqres.setHandler("config:show", function(){
-    CBApp.controller.showConfig();
-});
+module.exports = Message;
 
-CBApp.reqres.setHandler("developer:show", function(){
-    CBApp.controller.showDeveloper();
-});
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
 
-CBApp.reqres.setHandler("home:show", function(){
-    CBApp.controller.showHome();
-});
-
-
-CBApp.reqres.setHandler("store:show", function(){
-    CBApp.controller.showStore();
-});
-
-module.exports = CBApp;
-},{"./views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js":[function(require,module,exports){
-
-CBApp.Message = Backbone.RelationalModel.extend({
+Portal.Message = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     initialize: function() {
-        
+
+        var body = this.get('body');
+        var status = body.status;
+        if (status) {
+            status = status.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+            this.set('body', {status: status})
+        }
     },
 
     getSourceID: function() {
@@ -25345,8 +14561,8 @@ CBApp.Message = Backbone.RelationalModel.extend({
             key: 'source',
             keySource: 'source',
             keyDestination: 'source',
-            relatedModel: 'CBApp.Bridge',
-            collectionType: 'CBApp.BridgeCollection',
+            relatedModel: 'Portal.Bridge',
+            collectionType: 'Portal.BridgeCollection',
             createModels: false,
             includeInJSON: 'BID',
             initializeCollection: 'bridgeCollection',
@@ -25355,188 +14571,200 @@ CBApp.Message = Backbone.RelationalModel.extend({
     */
 });
 
-CBApp.MessageCollection = Backbone.Collection.extend({
+Portal.MessageCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Message,
+    model: Portal.Message,
     //backend: 'message',
 
+    /*
     initialize: function() {
-        /*
         this.bindBackend();
 
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-        */
     },
-    
-    parse : function(response){
-        return response.objects;
-    },
+    */
 
-    sendMessage: function(message) {
+    send: function(message) {
 
-        console.log('sendMessage', message);
         var self = this;
 
-        var time = new Date();
-        var currentUserID = CBApp.currentUser.get('cbid');
-        message.set('source', currentUserID);
-        message.set('time_sent', time);
+        message.set('source', Portal.currentUser.get('cbid'));
+        message.set('time_sent', new Date());
 
-        console.log('publishMessage', message.toJSON());
+        Portal.socket.publish(message);
 
-        CBApp.socket.publish(message);
+        message.set('direction', 'outbound');
         this.add(message);
-    }
-});
-
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/templates/message.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<td class=\"shrink\">";
-  if (helper = helpers.remote) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.remote); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " ";
-  if (helper = helpers.direction) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.direction); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</td>\n<td class=\"expand\">";
-  if (helper = helpers.body) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.body); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</td>\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Bridge Messages</h2>\n\n<div id=\"messages-wrapper\">\n    <table id=\"messages-table\" class=\"table-condensed table-hover table-striped\">\n    </table>\n</div>\n\n<div class=\"input-group\">\n  <input type=\"text\" id=\"command-input\" class=\"form-control\">\n  <span class=\"input-group-btn\">\n    <button id=\"send-button\" class=\"btn btn-default\" type=\"button\">Send</button>\n  </span>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='start' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Start</button>\n  </div>\n  <div id='stop' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Stop</button>\n  </div>\n  <div id='update_config' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Update</button>\n  </div>\n  <div id='send_log' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Send Log</button>\n  </div>\n  <div id='z-exclude' class=\"topcoat-button-bar__item\">\n      <button class=\"topcoat-button-bar__button\">Z Exclude</button>\n  </div>\n</div>\n<div class=\"topcoat-button-bar\">\n  <div id='restart' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Restart</button>\n  </div>\n  <div id='reboot' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Reboot</button>\n  </div>\n  <div id='upgrade' class=\"topcoat-button-bar__item\">\n    <button class=\"topcoat-button-bar__button\">Upgrade</button>\n  </div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
-
-//var Message = require('./message');
-
-CBApp.MessageView = Marionette.ItemView.extend({
-
-    tagName: 'tr',
-    className: '',
-    template: require('./templates/message.html'),
-
-    serializeData: function() {
-
-      console.log('serializeData');
-      //var bridgeID = "BID" + this.model.get('bridge').get('id');
-      var data = {};
-      var incoming = Boolean(this.model.get('time_received'));
-      data.direction = incoming ? "=>" : "<=";
-      data.remote = incoming ? this.model.get('source') : this.model.get('destination');
-      var body = this.model.get('body');
-      // Check if this is a command
-      data.body = body instanceof Object ? body.command || body.status : body;
-      return data;
-    }
-})
-
-CBApp.MessageListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/messageSection.html'),
-    id: 'messages',
-    //tagName: 'table',
-    //className: 'table-condensed table-hover table-striped',
-    itemView: CBApp.MessageView,
-    itemViewContainer: '#messages-table',
-
-    events: {
-        'click #send-button': 'clickSend',
-        'keyup #command-input' : 'keyPressEventHandler',
-        'click #start': 'clickCommand',
-        'click #stop': 'clickCommand',
-        'click #update_config': 'clickCommand',
-        'click #send_log': 'clickCommand',
-        'click #z-exclude': 'clickCommand',
-        'click #restart': 'clickCommand',
-        'click #reboot': 'clickCommand',
-        'click #upgrade': 'clickCommand'
-    },
-
-    collectionEvents: {
-        "relational:reset": "scrollMessages"
-    },
-
-    initialize: function() {
-
-        //this.listenTo(this.collection, 'after:item:added', this.scrollMessages)
-    },
-
-    onRender: function() {
-
-        this.$commandInput = this.$('#command-input');
-        this.$messagesWrapper = this.$('#messages-wrapper');
-    },
-
-    scrollMessages: function(){
-
-        if (this.$messagesWrapper && this.$messagesWrapper[0]) {
-            this.$messagesWrapper[0].scrollTop = this.$messagesWrapper[0].scrollHeight;
-        }
     },
 
     sendCommand: function(command) {
 
         console.log('sendCommand', command);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-            var destination = currentBridge.get('cbid');
-            var message = new CBApp.Message({
-                destination: destination,
-                body: {
-                    command: command
-                }
-            });
-            CBApp.messageCollection.sendMessage(message);
+        var message = new Portal.Message({
+            destination: 'BID' + Portal.getCurrentBridge().get('id'),
+            body: {command: command}
         });
-    },
-
-    clickCommand: function(e) {
-        //console.log('clickCommand', e);
-        var command = $(e.currentTarget).attr('id');
-        console.log('clickCommand', command);
-        this.sendCommand(command);
-    },
-
-    clickSend: function() {
-        var command = this.$commandInput.val();
-        this.$commandInput.value = "";
-        this.sendCommand(command);
-    },
-
-    keyPressEventHandler: function(event){
-        // When enter is pressed in the input, send the message
-        if(event.keyCode == 13){
-            this.clickSend();
-        }
+        this.send(message);
+        //message.set('destination', Portal.getCurrentBridge().get('cbid'));
     }
 });
 
-},{"./templates/message.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/templates/message.html","./templates/messageSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/templates/messageSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js":[function(require,module,exports){
 
-CBApp.FilteredCollection = function(original){
+//var Message = require('./message');
+
+Portal.MessageView = React.createClass({displayName: 'MessageView',
+    //mixins: [Portal.ItemView],
+    render: function() {
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("td", {className: "shrink"}, "\"remote\" \"direction\""), 
+                React.createElement("td", {className: "expand"}, " \"body\" ")
+            )
+        )
+    }
+});
+
+Portal.MessageListView = React.createClass({displayName: 'MessageListView',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    getInitialState: function() {
+        return {command: ''};
+    },
+
+    getDefaultProps: function () {
+        return {
+            title: 'Messages',
+            buttons: [
+                'start',
+                'stop',
+                'update',
+                'send_log',
+                'z_exclude',
+                'restart',
+                'reboot',
+                'upgrade'
+            ]
+        };
+    },
+
+    sendCommand: function(command) {
+
+        Portal.messageCollection.sendCommand(command);
+    },
+
+    commandSubmit: function() {
+        var command = this.refs.command.getDOMNode().value;
+        this.sendCommand(command);
+        this.setState({command: ''});
+    },
+
+    handleCommandChange: function(e) {
+        this.setState({command: e.target.value});
+    },
+
+    handleCommandKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            return this.commandSubmit();
+        }
+    },
+
+    renderMessage: function(message) {
+
+        var direction = message.direction == 'outbound' ? '<=' : '=>';
+        var remote = message.direction == 'outbound' ? message.destination : message.source;
+
+        var body = message.body;
+        var content = body.status || body.command;
+
+        return (
+            React.createElement("tr", {key: message.cid}, 
+                React.createElement("td", {className: "shrink"}, remote, " ", direction), 
+                React.createElement("td", {className: "expand", dangerouslySetInnerHTML: {__html: content}})
+            )
+        )
+    },
+
+    renderButton: function(name) {
+
+        var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        return (
+            React.createElement("div", {className: "topcoat-button-bar__item"}, 
+                React.createElement("button", {'data-tag': name, className: "topcoat-button-bar__button", onClick: this.onButtonClick}, label)
+            )
+        )
+    },
+
+    onButtonClick: function(e) {
+
+        var command = e.target.getAttribute('data-tag');
+        this.sendCommand(command);
+        this.setState({command: ''});
+    },
+
+    componentWillUpdate: function() {
+        // Check if the message window is already at the bottom
+        //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        // Temporarily remove checking to fix windows chrome bug
+        this.shouldScrollBottom = true;
+    },
+
+    componentDidUpdate: function() {
+        if (this.shouldScrollBottom) {
+            // Scroll the message window to its bottom
+            var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight
+        }
+    },
+
+    render: function() {
+
+        var command = this.state.command;
+
+        var topButtons = this.props.buttons.slice(0, 5);
+        var bottomButtons = this.props.buttons.slice(5);
+
+        return (
+            React.createElement("div", {id: "messages"}, 
+                React.createElement("h2", null, "Bridge Messages"), 
+
+                React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
+                    React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
+                        React.createElement("tbody", null, 
+                        this.props.collection.map(this.renderMessage)
+                        )
+                    )
+                ), 
+
+                React.createElement("div", {className: "input-group"}, 
+                    React.createElement("input", {type: "text", className: "form-control", ref: "command", 
+                        value: command, onKeyDown: this.handleCommandKeyDown, onChange: this.handleCommandChange}), 
+                    React.createElement("span", {className: "input-group-btn"}, 
+                        React.createElement("button", {id: "send-button", className: "btn btn-default", 
+                            type: "button", onClick: this.commandSubmit}, "Send")
+                    )
+                ), 
+                React.createElement("div", {className: "topcoat-button-bar"}, 
+                    topButtons.map(this.renderButton)
+                ), 
+                React.createElement("div", {className: "topcoat-button-bar"}, 
+                    bottomButtons.map(this.renderButton)
+                )
+            )
+        )
+    }
+});
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js":[function(require,module,exports){
+
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
     
     // allow this object to have it's own events
@@ -25594,7 +14822,7 @@ CBApp.FilteredCollection = function(original){
     return filtered;
 }
 
-CBApp.FilteredCollection = function(original){
+Portal.FilteredCollection = function(original){
     var filtered = new original.constructor();
 
     // allow this object to have it's own events
@@ -25655,26 +14883,26 @@ CBApp.FilteredCollection = function(original){
 
 require('q');
 
-CBApp.filters = {};
+Portal.filters = {};
 
-CBApp.filters.currentBridge = function() {
+Portal.filters.currentBridge = function() {
     
     return function(item) {
 
         var relation = item.get('bridge');
 
         // Add the item to the collection if it belongs to the bridge
-        if (relation === CBApp.getCurrentBridge()) {
+        if (relation === Portal.getCurrentBridge()) {
             return item;
         }
     }
 }
 
-CBApp.filters.currentBridgeMessageDeferred = function() {
+Portal.filters.currentBridgeMessageDeferred = function() {
 
     var iteratorDeferred = Q.defer();
 
-    CBApp.getCurrentBridge().then(function(currentBridge) {
+    Portal.getCurrentBridge().then(function(currentBridge) {
 
         var iterator = function(item) {
 
@@ -25694,17 +14922,19 @@ CBApp.filters.currentBridgeMessageDeferred = function() {
     return iteratorDeferred.promise;
 }
 
-//CBApp.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
-CBApp.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+//Portal.filters.apiRegex = /\/\w*\/\w*\/\w*\/\w*\/([0-9]*)/;
+//Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
+Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 
+//Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?\/?([A-Z]ID[0-9]+)?/;
 
 },{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
 var Q = require('q');
 
-var CBApp = require('index');
-
-require('./components/buttons');
+//var CBApp = require('index');
+require('index');
 
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
@@ -25720,89 +14950,112 @@ require('./clients/controls/models');
 require('./devices/models');
 require('./devices/discovery/models');
 require('./devices/installs/models');
+require('./errors/models');
 require('./notifications/models');
+require('./portals/models');
 require('./users/models');
 require('./users/current/models');
 
 require('./misc/decorators');
 require('./misc/filters');
 
-CBApp.addInitializer(function () {
+Portal.on('before:start', function () {
 
-  CBApp.adaptorCollection = new CBApp.AdaptorCollection();
-  CBApp.adaptorCompatibilityCollection = new CBApp.AdaptorCompatibilityCollection();
+  Portal.adaptorCollection = new Portal.AdaptorCollection();
+  Portal.adaptorCompatibilityCollection = new Portal.AdaptorCompatibilityCollection();
 
   //data
-  CBApp.appCollection = new CBApp.AppCollection();
+  Portal.appCollection = new Portal.AppCollection();
+  Portal.appCollection.subscribe();
 
-  CBApp.appConnectionCollection = new CBApp.AppConnectionCollection();
+  Portal.appConnectionCollection = new Portal.AppConnectionCollection();
 
-  CBApp.appInstallCollection = new CBApp.AppInstallCollection();
-  //CBApp.filteredAppInstallCollection = new CBApp.FilteredCollection(CBApp.appInstallCollection);
-  CBApp.appDevicePermissionCollection = new CBApp.AppDevicePermissionCollection();
+  Portal.appInstallCollection = new Portal.AppInstallCollection();
+  Portal.appInstallCollection.subscribe();
+  //Portal.filteredAppInstallCollection = new Portal.FilteredCollection(Portal.appInstallCollection);
 
-  CBApp.appLicenceCollection = new CBApp.AppLicenceCollection();
+  Portal.appDevicePermissionCollection = new Portal.AppDevicePermissionCollection();
+  Portal.appDevicePermissionCollection.subscribe();
 
-  CBApp.appOwnershipCollection = new CBApp.AppOwnershipCollection();
+  Portal.appLicenceCollection = new Portal.AppLicenceCollection();
+  Portal.appLicenceCollection.subscribe();
 
-  CBApp.bridgeControlCollection = new CBApp.BridgeControlCollection();
-  CBApp.bridgeCollection = new CBApp.BridgeCollection();
+  Portal.appOwnershipCollection = new Portal.AppOwnershipCollection();
 
-  CBApp.clientCollection = new CBApp.ClientCollection();
+  Portal.bridgeControlCollection = new Portal.BridgeControlCollection();
 
-  CBApp.clientControlCollection = new CBApp.ClientControlCollection();
+  Portal.bridgeCollection = new Portal.BridgeCollection();
+  Portal.bridgeCollection.subscribe();
 
-  CBApp.deviceCollection = new CBApp.DeviceCollection();
+  Portal.clientCollection = new Portal.ClientCollection();
 
-  CBApp.deviceInstallCollection = new CBApp.DeviceInstallCollection();
-  //CBApp.filteredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.deviceInstallCollection);
+  Portal.clientControlCollection = new Portal.ClientControlCollection();
 
-  CBApp.discoveredDeviceInstallCollection = new CBApp.DiscoveredDeviceInstallCollection();
-  //CBApp.filteredDiscoveredDeviceInstallCollection = CBApp.FilteredCollection(CBApp.discoveredDeviceInstallCollection);
+  Portal.deviceCollection = new Portal.DeviceCollection();
 
+  Portal.deviceInstallCollection = new Portal.DeviceInstallCollection();
+  Portal.deviceInstallCollection.subscribe();
+  //CBDispatcher.registerCallback(Portal.deviceInstallCollection.dispatchCallback);
+  //Portal.filteredDeviceInstallCollection = Portal.FilteredCollection(Portal.deviceInstallCollection);
 
-  CBApp.messageCollection = new CBApp.MessageCollection([
-      { body: "Test message 1", source: "BID8", destination: "UID2" },
-      { body: "Test message 2", source: "UID2", destination: "BID8" }
+  Portal.discoveredDeviceCollection = new Portal.DiscoveredDeviceCollection();
+  Portal.discoveredDeviceCollection.subscribe();
+  //Portal.filteredDiscoveredDeviceInstallCollection = Portal.FilteredCollection(Portal.discoveredDeviceInstallCollection);
+
+  Portal.errorCollection = new Portal.ErrorCollection();
+  Portal.errorCollection.subscribe();
+
+  Portal.messageCollection = new Portal.MessageCollection([
+    //{ source: "UID1", destination: "BID2", direction: "outbound", body: "Test Body 1"},
+    //{ source: "BID2", destination: "UID1", direction: "inbound", body: "Test Body 2"}
   ]);
-  CBApp.filteredMessageCollection = CBApp.FilteredCollection(CBApp.messageCollection);
+  //Portal.filteredMessageCollection = Portal.FilteredCollection(Portal.messageCollection);
 
-  CBApp.notificationCollection = new CBApp.NotificationCollection([
+  Portal.notificationCollection = new Portal.NotificationCollection([
       //{ title: "Test Notification 1", body: "Test Body 1", type: "information" },
       //{ title: "Test Notification 2", body: "Test Body 2", type: "error" }
   ]);
+  Portal.notificationCollection.subscribe();
 
-  CBApp.userCollection = new CBApp.UserCollection();
+  Portal.portalCollection = new Portal.PortalCollection();
 
-  CBApp.currentUserCollection = new CBApp.CurrentUserCollection();
-  CBApp.currentUserCollection.fetch().then(function() {
+  Portal.userCollection = new Portal.UserCollection();
+  Portal.userCollection.subscribe();
 
-      CBApp.currentUser = CBApp.currentUserCollection.at(0);
+  Portal.currentUserCollection = new Portal.CurrentUserCollection();
+  Portal.currentUser = new Portal.CurrentUser(JSON.parse(INITIAL_USER_DATA));
+  Portal.currentUserCollection.add(Portal.currentUser);
+
+  /*
+  Portal.currentUserCollection.fetch().then(function() {
+
+      Portal.currentUser = Portal.currentUserCollection.at(0);
       setTimeout(function() {
-          CBApp._isInitialized = true;
-          CBApp.currentUserDeferred.resolve(CBApp.currentUser);
+          Portal._isInitialized = true;
+          Portal.currentUserDeferred.resolve(Portal.currentUser);
       }, 500);
 
   }, function(error) {
 
-      CBApp.currentUserDeferred.reject(error);
+      Portal.currentUserDeferred.reject(error);
       console.error('currentUser could not be fetched', error);
   });
+  */
 });
 
-},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./components/buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/buttons.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./errors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
 
-CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Config ran!');
 
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
           //"": "showConfig",
-          ":id": "showBridge",
+          ":id": "showConfig",
           //"config/bridge/:bridge": "config",
           "install_device": "installDevice"
         }
@@ -25822,126 +15075,81 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        CBApp.mainRegion.show(Config.mainLayoutView);
+        Portal.mainRegion.show(Config.mainLayoutView);
       },
-      showBridge: function(bridgeID) {
+      showConfig: function() {
 
-          console.log('showBridge bridgeID is', bridgeID);
-          Config.mainLayoutView = new ConfigViews.Main();
-          var bridge = CBApp.bridgeCollection.get(bridgeID);
-          if (bridge) CBApp.setCurrentBridge(bridge);
-          CBApp.mainRegion.show(Config.mainLayoutView);
+          /*
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+
+          /*
+          var currentBridge = Portal.getCurrentBridge();
+          currentBridge.fetch();
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+          var $mainRegion = $('#main-region')[0];
+          React.unmountComponentAtNode($mainRegion[0]);
+          //$mainRegion.remove();
+          Config.mainView = React.render(
+              React.createElement(ConfigViews.Main, {collection: Portal.bridgeCollection}),
+              $mainRegion
+          );
       },
-      showAppLicences: function() {
+      installApps: function() {
 
-        var installAppModal = new ConfigViews.InstallAppModal();
-            /*
-            //model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-            */
-
-        CBApp.modalsRegion.show(installAppModal);
+          console.log('controller installApps');
+        Config.mainView.setState({installingApps: true});
+        //var installAppModal = new ConfigViews.InstallAppModal();
+        //Portal.modalsRegion.show(installAppModal);
+      },
+      cancelInstallApps: function() {
+          Config.mainView.setState({installingApps: false});
       },
       discoverDevices: function() {
 
-          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
-              Backbone.Relational.store.unregister(discoveredDeviceInstall);
+          Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+              discoveredDevice.delete();
           });
-          /*
-          CBApp.getCurrentBridge().then(function(currentBridge) {
-
-              // Remove all existing discovered devices
-              var collection = currentBridge.get('discoveredDeviceInstalls');
-              collection.forEach(function(discoveredDeviceInstall) {
-                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
-              });
-          });
-          */
-          CBApp.getCurrentBridge().then(function(currentBridge) {
-              var destination = currentBridge.get('cbid');
-              var message = new CBApp.Message({
-                  body: {
-                      command: 'discover'
-                  },
-                  destination: destination
-              });
-              CBApp.messageCollection.sendMessage(message);
-          });
-
-          Config.mainLayoutView.devicesView.showDeviceDiscovery();
+          Portal.messageCollection.sendCommand('discover');
+          Config.mainView.setState({discoveringDevices: true});
       },
       stopDiscoveringDevices: function() {
-
-          Config.mainLayoutView.devicesView.showDeviceInstalls();
+          Config.mainView.setState({discoveringDevices: false});
       },
-      installDevice: function(discoveredDeviceInstall) {
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-        });
-        CBApp.modalsRegion.show(installDeviceModal);
+      promptInstallDevice: function(discoveredDevice) {
+          console.log('promptInstallDevice discoveredDevice', discoveredDevice);
+          Config.mainView.setState({installDevice: discoveredDevice});
+      },
+      installDevice: function(discoveredDevice, friendlyName) {
+          console.log('installDevice discoveredDevice', discoveredDevice);
+          discoveredDevice.install(friendlyName);
+          Config.mainView.setState({installDevice: false,
+                                    discoveringDevices: false});
+      },
+      cancelInstallDevice: function() {
+          console.log('cancelInstallDevice');
+          Config.mainView.setState({installDevice: false});
       }
     });
 
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        Config.controller.showBridge(bridgeID);
+        Portal.currentBridge = Portal.bridgeCollection.get(bridgeID);
+        Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/devicesView.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"current-view\"></div>";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbm-modal__topbar\">\n  <h3 class=\"bbm-modal__title\">Install Device</h3>\n</div>\n<div class=\"bbm-modal__section\">\n  <ul>\n  <li><label>Device [friendly] name</label></li>\n  <li><input id=\"friendly-name\" type=\"text\" placeholder=\"Eg. Front door\"></li>\n  </ul>\n</div>\n<div class=\"bbm-modal__bottombar\">\n  <a href=\"#\" id=\"submit-button\" class=\"bbm-button\">Install Device</a>\n  <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"bbm-modal__topbar\">\n    <h3 class=\"bbm-modal__title\">Install App</h3>\n</div>\n<div class=\"bbm-modal__section\">\n    <div class=\"licence-section\"></div>\n</div>\n<div class=\"bbm-modal__bottombar\">\n    <a href=\"#\" class=\"bbm-button store-button\">App Store</a>\n    <a href=\"#\" id=\"cancel-button\" class=\"bbm-button\">Close</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"device-section col-md-6\"></div>\n</div>\n<div class=\"row\">\n    <div class=\"message-section col-md-6\"></div>\n    <div class=\"bridge-section col-md-6\"></div>\n</div>";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js":[function(require,module,exports){
 
 var Q = require('q');
 
@@ -25951,219 +15159,234 @@ require('../../views/regions');
 require('../../apps/installs/views');
 require('../../apps/licences/views');
 require('../../bridges/views');
-//require('../../devices/views');
 require('../../devices/discovery/views');
 require('../../devices/installs/views');
 require('../../messages/views');
 
-module.exports.Main = Marionette.Layout.extend({
 
-    template: require('./templates/main.html'),
+module.exports.Main = React.createClass({displayName: 'Main',
 
-    regions: {
-        appSection: {
-            selector: '.app-section',
-            regionType: CBApp.Regions.Fade
-        },
-        deviceSection: '.device-section',
-        messageSection: '.message-section',
-        bridgeSection: '.bridge-section'
-    },
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    bindings: {
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasWings',
-            onGet: 'formatWings'
-          }, {
-            name: 'readonly',
-            observe: 'isLocked'
-          }]
+    statics: {
+        willTransitionTo: function (transition, params) {
+            console.log('willTransitionTo config view', transition, params);
+            switch (params.action) {
+                case "discover-devices":
+                    var model;
+                    while (model = Portal.getCurrentBridge().get('discoveredDevices').first()) {
+                        model.delete();
+                    }
+                    //Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+                        //discoveredDevice.delete();
+                    //});
+                    Portal.messageCollection.sendCommand('discover');
+                    break;
+                default:
+                    break;
+            }
         }
-      },
-
-    initialize: function() {
-
-        this.appInstallListView = new CBApp.AppInstallListView();
-        this.bridgeView = new CBApp.BridgeListView();
-        // View which manages device installs and device discovery
-        this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
-
-        /*
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.bridgeControlCollection.fetch({ data: { 'user': 'current' }});
-            //CBApp.clientCollection.fetch()
-        }).done();
-        */
     },
 
-    populateViews: function() {
+    discoverDevices: function() {
 
-        var self = this;
     },
 
-    onRender: function() {
+    discoverDevicesRescan: function() {
 
-        var self = this;
-
-        this.appSection.show(this.appInstallListView);
-        this.deviceSection.show(this.devicesView);
-        this.devicesView.render();
-        this.messageSection.show(this.messageListView);
-        this.bridgeSection.show(this.bridgeView);
-
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
-            var appInstallCollection = currentBridge.get('appInstalls');
-            var liveAppInstallCollection = appInstallCollection.findAllLive({isGhost: false})
-            //var liveAppInstallCollection = appInstallCollection.createLiveChildCollection();
-            //liveAppInstallCollection.setQuery({isGhost: false});
-
-            console.log('liveAppInstallCollection', liveAppInstallCollection );
-            self.appInstallListView.setCollection(liveAppInstallCollection);
-            self.appInstallListView.render();
-
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
-            self.messageListView.render();
-
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
-            console.log('bridgeCollection is', bridgeCollection);
-            self.bridgeView.setCollection(bridgeCollection);
-            self.bridgeView.render();
-        }).done();
-    }
-
-});
-
-var DevicesView = Marionette.ItemView.extend({
-
-    template: require('./templates/devicesView.html'),
-
-    initialize: function() {
-
-        this.deviceInstallListView = new CBApp.DeviceInstallListView();
-        this.discoveredDeviceInstallListView = new CBApp.DiscoveredDeviceListView();
-        this.currentView = this.deviceInstallListView;
-
-        //this.listenTo(this.deviceInstallListView, 'discover', this.showDeviceDiscovery)
+        Portal.messageCollection.sendCommand('discover');
     },
 
-    showDeviceDiscovery: function() {
+    installDevice: function(discoveredDevice, friendlyName) {
 
-        this.currentView = this.discoveredDeviceInstallListView;
-        this.render();
+        discoveredDevice.install(friendlyName);
+        Portal.router.setParams({action: ''});
     },
 
-    showDeviceInstalls: function() {
+    cancelInstallDevice: function() {
 
-        this.currentView = this.deviceInstallListView;
-        this.render();
+        Portal.router.setParams({action: ''});
     },
 
-    populateViews: function() {
 
-        var self = this;
+    renderModals: function () {
 
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        switch (action) {
+            case "install-app":
+                return React.createElement(InstallAppModal, {container: this});
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
+                break;
+            default:
+                break;
+        }
     },
 
     render: function() {
 
-        this.$el.html(this.template());
-        this.currentView.setElement(this.$('.current-view')).render();
-        //this.$el.append(this.currentView.render().$el);
+        var currentBridge = Portal.getCurrentBridge();
 
-        var self = this;
+        if (!currentBridge) {
+            return (
+                React.createElement("div", {className: "welcome"}, 
+                    React.createElement("div", {className: "welcome-text panel-body"}, 
+                        "You don't have any bridges to configure yet"
+                    )
+                )
+            );
+        }
 
-        CBApp.getCurrentBridge().then(function(currentBridge) {
+        var appInstalls = currentBridge.get('appInstalls')
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
+            });
 
-            var deviceInstallCollection = currentBridge.get('deviceInstalls');
-            self.deviceInstallListView.setCollection(deviceInstallCollection);
-            //self.deviceInstallListView.render();
+        var deviceInstalls = currentBridge.get('deviceInstalls')
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
+            });
 
-            var discoveredDeviceInstallCollection = currentBridge.get('discoveredDeviceInstalls');
-            self.discoveredDeviceInstallListView.setCollection(discoveredDeviceInstallCollection);
-            //self.discoveredDeviceInstallListView.render();
+        var deviceView;
+        if (this.getParams().action == 'discover-devices') {
+            var discoveredDevices = currentBridge.get('discoveredDevices');
+            deviceView = React.createElement(Portal.DiscoveredDeviceListView, {key: currentBridge.cid, 
+                rescan: this.discoverDevicesRescan, stopDiscoveringDevices: this.stopDiscoveringDevices, 
+                collection: discoveredDevices});
+        } else {
+            deviceView = React.createElement(Portal.DeviceInstallListView, {key: currentBridge.cid, 
+                collection: deviceInstalls, discoverDevices: this.discoverDevices});
+        }
 
-            self.currentView.setElement(this.$('.current-view')).render();
-        });
+        var currentBID = Portal.currentBridge.getCBID();
+        var messages = Portal.messageCollection
+            .getFiltered('currentBridge', function(model, searchString) {
+                var passed = model.get('source') == currentBID
+                    || model.get('destination') == currentBID;
+                return passed;
+            });
 
-        //self.currentView.render();
-
-        return this;
-    }
-})
-
-module.exports.InstallAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/installAppModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    events: {
-        'click .store-button': 'clickStore'
-    },
-
-
-    initialize: function() {
-
-        var self = this;
-        CBApp.appLicenceCollection.fetch({data: { 'user': 'current' }})
-        this.licenceListView = new CBApp.AppLicenceListView();
-    },
-
-    clickStore: function() {
-
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
-    },
-
-    onRender: function() {
-
-        var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            console.log('promise in app modal initialize');
-            var licenceCollection = currentUser.get('appLicences');
-            self.licenceListView.setCollection(licenceCollection);
-            self.licenceListView.render();
-        }).done();
-        //this.licenceListView.setElement(this.$('licence-section')).render();
-        this.$('.licence-section').html(this.licenceListView.render().$el);
-    },
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+        return (
+            React.createElement("div", null, 
+                this.renderModals(), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
+                        React.createElement(Portal.AppInstallListView, {key: currentBridge.cid, 
+                            collection: appInstalls, deviceInstalls: deviceInstalls})
+                    ), 
+                    React.createElement("div", {ref: "deviceSection", className: "device-section col-md-6"}, 
+                        deviceView
+                    )
+                ), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "messageSection", className: "message-section col-md-6"}, 
+                        React.createElement(Portal.MessageListView, {key: currentBridge.cid, 
+                            collection: messages})
+                    ), 
+                    React.createElement("div", {ref: "bridgeSection", className: "bridge-section col-md-6"})
+                )
+            )
+        )
     }
 });
 
-module.exports.InstallDeviceModal = Backbone.Modal.extend({
+var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
 
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
+    mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
+    getInitialState: function() {
+        return {
+            friendlyName: ""
+        }
+    },
+
+    handleFriendlyName: function(event) {
+        this.setState({friendlyName: event.target.value});
+    },
+
+    installDevice: function() {
+        console.log('Submitted installDevice modal');
+        var discoveredDevice = this.getModel();
+        discoveredDevice.install(this.state.friendlyName);
+        Portal.router.setParams({});
+    },
+
+    cancelInstall: function() {
+
+        Portal.router.setParams({});
+    },
+
+    render: function() {
+
+        var friendlyName = this.state.friendlyName;
+        var device = this.getModel().get('device');
+        var title = device ? "Install " + device.get('name') : "Unknown device";
+
+        return (
+            React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
+                onRequestHide: this.cancelInstall, animation: false}, 
+                React.createElement("div", {className: "modal-body"}, 
+                    React.createElement("div", null, "Type a name to help you remember this device ie. Kitchen Thermometer"), 
+                    React.createElement("br", null), 
+                    React.createElement("input", {type: "text", value: friendlyName, onChange: this.handleFriendlyName})
+                ), 
+                React.createElement("div", {className: "modal-footer"}, 
+                    React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
+                    React.createElement(React.Button, {onClick: this.installDevice}, "Install")
+                )
+            )
+        )
     }
 });
 
+var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
 
-},{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/devicesView.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/devicesView.html","./templates/discoveryModal.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/discoveryModal.html","./templates/installAppModal.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/installAppModal.html","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
+    mixins: [ Router.State, Router.Navigation, Backbone.React.Component.mixin],
+
+    handleFriendlyName: function(event) {
+        this.setState({friendlyName: event.target.value});
+    },
+
+    showAppMarket: function() {
+
+        this.transitionTo('market', {}, this.getQuery());
+    },
+
+    cancelInstall: function() {
+
+        Portal.router.setParams({});
+    },
+
+    render: function() {
+
+        var self = this;
+
+        var licenceCollection = Portal.currentUser.get('appLicences');
+        var bridge = Portal.getCurrentBridge();
+
+        return (
+            React.createElement(React.Modal, {className: "portal-modal", title: "Install Apps", container: this.props.container, 
+                onRequestHide: this.cancelInstall, animation: false}, 
+                React.createElement("div", {className: "modal-body"}, 
+                    React.createElement(Portal.AppLicenceTableView, {collection: licenceCollection, bridge: bridge})
+                ), 
+                React.createElement("div", {className: "modal-footer"}, 
+                    React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
+                    React.createElement(React.Button, {onClick: this.showAppMarket}, "App Market")
+                )
+            )
+        )
+    }
+});
+
+},{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
 
 var DeveloperViews = require('./views');
 
-CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Developer ran!');
     Developer.addInitializer(function() {
@@ -26181,7 +15404,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
       showDeveloper: function() {
 
           Developer.mainLayoutView = new DeveloperViews.Main();
-          CBApp.mainRegion.show(Developer.mainLayoutView);
+          Portal.mainRegion.show(Developer.mainLayoutView);
       },
       addAppConnection: function(app, user) {
         var that = this;
@@ -26192,7 +15415,7 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
@@ -26211,30 +15434,13 @@ CBApp.module('Developer', function(Developer, CBApp, Backbone, Marionette, $, _)
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
 
-
-  return "<div class=\"row\">\n    <div class=\"app-section col-md-6\"></div>\n    <div class=\"client-section col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/views.js":[function(require,module,exports){
-
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
 require('../../views/regions');
-
-require('../../apps/ownerships/views');
-require('../../apps/connections/views');
-
-require('../../clients/views');
-require('../../clients/controls/views');
 
 //var AppViews = require('./apps/views');
 
@@ -26249,22 +15455,21 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+        this.appOwnershipListView = new Portal.AppOwnershipListView();
 
-        this.clientControlListView = new CBApp.ClientControlListView();
+        this.clientControlListView = new Portal.ClientControlListView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }})
+            //Portal.clientCollection.fetch()
         }).done();
 
         /*
-        this.bridgeView = new CBApp.BridgeListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
-        */
+        this.messageListView = new Portal.MessageListView();
     },
 
     onRender: function() {
@@ -26278,9 +15483,8 @@ module.exports.Main = Marionette.Layout.extend({
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
-         */
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             //self.listenToOnce(currentBridge, 'change:current', self.render);
             var appOwnershipCollection = currentUser.get('appOwnerships');
@@ -26303,89 +15507,26 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            self.messageListView.setCollection(Portal.filteredMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-             */
         }).done();
     }
 
 });
-
-/*
-module.exports.InstallAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/installAppModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    events: {
-        'click .store-button': 'clickStore'
-    },
-
-
-    initialize: function() {
-
-        var self = this;
-        this.licenceListView = new CBApp.AppLicenceListView();
-
-    },
-
-    clickStore: function() {
-
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
-    },
-
-    onRender: function() {
-
-        var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            console.log('promise in app modal initialize');
-            var licenceCollection = currentUser.get('appLicences');
-            self.licenceListView.setCollection(licenceCollection);
-            self.licenceListView.render();
-        }).done();
-        //this.licenceListView.setElement(this.$('licence-section')).render();
-        this.$('.licence-section').html(this.licenceListView.render().$el);
-    },
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-module.exports.InstallDeviceModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
 */
 
-},{"../../apps/connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","../../apps/ownerships/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../../clients/controls/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js","../../clients/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/home.js":[function(require,module,exports){
 
 
 var HomeViews = require('./views');
 
-CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Home ran!');
     Home.addInitializer(function() {
@@ -26404,15 +15545,15 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
       index: function () {
         Home.mainLayoutView = new HomeViews.Main();
         console.log('mainLayoutView', Home.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Home.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Home.mainLayoutView);
         console.log('config index');
       },
       */
       showHome: function() {
 
           Home.mainLayoutView = new HomeViews.Main();
-          CBApp.mainRegion.show(Home.mainLayoutView);
+          Portal.mainRegion.show(Home.mainLayoutView);
       },
       licenseApp: function(discoveredDeviceInstall) {
         var that = this;
@@ -26423,7 +15564,7 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
                 console.log('Install callback!');
             }
         });
-        CBApp.modalsRegion.show(installDeviceModal);
+        Portal.modalsRegion.show(installDeviceModal);
       }
     });
 
@@ -26442,20 +15583,9 @@ CBApp.module('Home', function(Home, CBApp, Backbone, Marionette, $, _) {
     });
 });
 
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
 
-
-  return "<div class=\"welcome\">\n    Welcome to the ContinuumBridge portal.\n    <br><br>\n    If this is the first time you have logged-in and you don't have any bridges, please click <a href=\"http://continuumbridge.readme.io/v1.0/docs/start-here\">here</a>\n    <br><br>\n    If you have a bridge, click <a href=\"http://portal.continuumbridge.com/portal/config/\">here</a> to see what devices and apps you have and add more.\n    <br><br>\n    For further information on how to use this portal, click <a href=\"http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal\">here</a>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/views.js":[function(require,module,exports){
-
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
@@ -26467,14 +15597,12 @@ module.exports.Main = Marionette.Layout.extend({
 
     template: require('./templates/main.html'),
 
-    /*
     regions: {
         appSection: {
             selector: '#app-section',
-            regionType: CBApp.Regions.Fade
+            regionType: Portal.Regions.Fade
         }
     },
-    */
 
     initialize: function() {
 
@@ -26486,10 +15614,116 @@ module.exports.Main = Marionette.Layout.extend({
     }
 
 });
+*/
 
-},{"../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/home/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/market.js":[function(require,module,exports){
 
-CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
+
+var StoreViews = require('./views');
+
+Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
+
+    console.log('Store ran!');
+    Store.addInitializer(function() {
+
+        //router
+        this.controller = new this.Controller();
+        this.router = new this.Router('portal/store/', {
+            controller : this.controller,
+            createTrailingSlashRoutes: true
+        });
+    });
+
+    Store.Controller = Marionette.Controller.extend({
+
+      /*
+      index: function () {
+        Store.mainLayoutView = new StoreViews.Main();
+        console.log('mainLayoutView', Store.mainLayoutView);
+        console.log('portalLayout', Portal.portalLayout);
+        Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
+        console.log('config index');
+      },
+      */
+      showStore: function() {
+
+          Store.mainLayoutView = new StoreViews.Main();
+          Portal.mainRegion.show(Store.mainLayoutView);
+      },
+      licenseApp: function(discoveredDeviceInstall) {
+        var that = this;
+        console.log('We got to the controller!');
+        var installDeviceModal = new ConfigViews.InstallDeviceModal({
+            model: discoveredDeviceInstall,
+            installDevice: function(friendlyName) {
+                console.log('Install callback!');
+            }
+        });
+        Portal.modalsRegion.show(installDeviceModal);
+      }
+    });
+
+    Store.Router = Marionette.SubRouter.extend({
+
+        appRoutes: {
+          "": "showStore",
+          //"config/bridge/:bridge": "config",
+        }
+    });
+
+    Store.on('store:show', function(){
+        console.log('show store');
+        Store.controller.showStore();
+        Store.router.navigate('');
+    });
+});
+
+},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js":[function(require,module,exports){
+
+var Q = require('q');
+
+//require('../../views/generic-views');
+//require('../../views/regions');
+
+require('../../apps/views');
+
+
+module.exports.Main = React.createClass({displayName: 'Main',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    componentWillReceiveParams: function(params) {
+
+        if (!this.params || this.params != params) {
+            Portal.appCollection.fetch();
+            //Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+
+        this.params = params;
+    },
+
+    renderModals: function () {
+
+    },
+
+    render: function() {
+
+        var apps = Portal.appCollection;
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
+                        React.createElement(Portal.AppListView, {collection: apps})
+                    )
+                )
+            )
+        )
+    }
+});
+
+},{"../../apps/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/views.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/nav/nav.js":[function(require,module,exports){
+
+Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
     require('bootstrap');
 
@@ -26504,7 +15738,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         showTopbar: function() {
 
             Nav.topbarView = new Nav.TopbarView();
-            CBApp.navRegion.show(Nav.topbarView);
+            Portal.navRegion.show(Nav.topbarView);
         },
         deactivateTopbar: function() {
             console.log('deactivateTopbar');
@@ -26533,7 +15767,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
         },
 
         bridgeClick: function() {
-            CBApp.controller.setCurrentBridge(this.model);
+            Portal.controller.setCurrentBridge(this.model);
         },
 
         onRender: function() {
@@ -26547,7 +15781,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         tagName: 'li',
         className: 'dropdown',
-        itemView: CBApp.Nav.BridgeItemView,
+        itemView: Portal.Nav.BridgeItemView,
         itemViewContainer: '#bridge-list',
         template: require('./templates/bridgeDropdown.html'),
 
@@ -26567,21 +15801,18 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
         addBridge: function() {
 
-            //CBApp.getCurrentBridge()
+            //Portal.getCurrentBridge()
             this.render();
         },
 
         onRender : function(){
 
-            var self = this;
-
-            CBApp.getCurrentBridge().then(function(currentBridge){
-
-                self.model = currentBridge;
-                self.listenToOnce(self.model, 'change', self.render);
-                //self.model.bind('change', self.render);
-                self.stickit();
-            });
+            this.model = Portal.getCurrentBridge();
+            //console.log('Portal.getCurrentBridge();', Portal.getCurrentBridge());
+            //this.listenToOnce(this.model, 'change', this.render);
+            this.listenToOnce(Portal.bridgeCollection, 'change:current', this.render);
+            //self.model.bind('change', self.render);
+            this.stickit();
         }
     });
 
@@ -26611,7 +15842,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
             var navEvent = e.target.className + ':show';
             console.log('navigate', navEvent);
             //console.log('navigate', e.target.className);
-            CBApp.request(navEvent);
+            Portal.request(navEvent);
         },
 
         activateSection: function(section) {
@@ -26633,7 +15864,7 @@ CBApp.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
             var $navbarLeft = this.$('#navbar-left');
             this.bridgeDropdownView = new Nav.BridgeDropdownView({
-                collection: CBApp.bridgeCollection
+                collection: Portal.bridgeCollection
             });
             $navbarLeft.append(this.bridgeDropdownView.render().$el);
 
@@ -26692,514 +15923,175 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>CB</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
+  return "<div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle pull-right\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"home navbar-brand\"><strong>Continuum Bridge</strong></a>\n</div>\n\n<div class=\"collapse navbar-collapse navbar-ex1-collapse\" role=\"navigation\">\n    <ul id=\"navbar-left\" class=\"nav navbar-nav navbar-left\">\n        <li id=\"bridge-dropdown\" class=\"dropdown\"></li>\n    </ul>\n    <div id=\"navbar-right\" class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"dashboard\">Dashboard</a></li>\n        <li><a class=\"store\">App Store</a></li>\n        <li><a class=\"config\">Config</a></li>\n        <li id=\"account-dropdown\" class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n            <div class=\"header-text\">My Account</div>\n                <b class=\"caret\"></b>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li><a class=\"developer\">Developer</a></li>\n                <li name=\"logout\"><a href=\"/accounts/logout\">Logout</a></li>\n            </ul>\n        </li>\n    </div>\n</div>";
   });
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/notifications/notifications.js":[function(require,module,exports){
+},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
 
-require('../../notifications/views');
-//var Models = require('./models');
-//var Views = require('./views');
-
-CBApp.module('Notifications', function(Notifications, CBApp, Backbone, Marionette, $, _) {
-
-    Notifications.addInitializer(function() {
-
-        console.log('Notifications Initializer');
-        //router
-        this.controller = new this.Controller();
-
-        //this.collection = new CBApp.NotificationCollection();
-    });
-
-    Notifications.Controller = Marionette.Controller.extend({
-        showNotifications: function() {
-
-            console.log('notificationCollection', CBApp.notificationCollection);
-            Notifications.notificationsListView = new CBApp.NotificationListView({
-                collection: CBApp.notificationCollection
-            });
-
-            console.log('notificationsListView ', Notifications.notificationsListView);
-            CBApp.notificationRegion.show(Notifications.notificationsListView);
-        },
-        showInformation: function(message, title) {
-            console.log('We got to the notification controller!');
-            this.collection.add({
-                title: title,
-                message: message
-            });
-            var notificationView = new Backbone.Notify.Notification();
-        },
-        showError: function(error) {
-            var err = error && error.response && error.response.error || error || {};
-            console.log('We got to the error notification controller!', err);
-            var notification = new CBApp.Notification({
-                name: err.name || "Error",
-                message: err.message || "Error message",
-                response: err.response || "Error response"
-            });
-            console.log('ErrorNotification controller model is', notification);
-            var notificationView = new Backbone.Notify.Error();
-            notificationView.model = notification;
-            console.log('notificationView is', notificationView);
-            CBApp.notificationsRegion.show(notificationView);
-        },
-    });
-
-    Notifications.on('show', function(){
-        Notifications.controller.showNotifications();
-    });
-
-    Notifications.on('show:information', function(information){
-
-        this.collection.add({
-            title: information.title,
-            message: information.message,
-            type: 'information'
-        });
-        //Notifications.controller.showInformation(message, title);
-    });
-
-    Notifications.on('add:error', function(error){
-        Notifications.controller.showError(error);
-    });
-});
-
-},{"../../notifications/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<div id=\"";
-  if (helper = helpers.appID) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.appID); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"panel-collapse\">\n    <li class=\"staff-panel panel inner-item\">\n    </li>\n    <li class=\"user-panel panel inner-item\">\n        <table class=\"table\">\n            <tr>\n                <td class=\"col-md-6 list-label\">\n                    My Licences\n                </td>\n                <td class=\"col-md-6\">\n                    <li class=\"installs-permitted input-group\">\n\n                    </li>\n                </td>\n            </tr>\n        </table>\n    </li>\n</div>\n\n";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<h2>Apps</h2>\n\n<div class=\"app-list table animated-list\"></div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item app-id\">\n        </td>\n        <td class=\"col-md-6 panel-item licence-id\">\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/views.js":[function(require,module,exports){
-
-require('../../../components/numbers');
-//require('./device_permissions/views');
-
-var InstallsPermittedField = CBApp.Components.NumberField.extend({
-
-    initialize: function() {
-
-    },
-
-    getContent: function() {
-
-        console.log('InstallsPermittedField getContent');
-        return this.model.get('installs_permitted');
-    },
-
-    increment: function() {
-
-        this.model.changeInstallsPermitted(1);
-    },
-
-    decrement: function() {
-
-        this.model.changeInstallsPermitted(-1);
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-    }
-});
-
-var StaffAppView = Marionette.ItemView.extend({
-
-    tagName: 'table',
-    template: require('./templates/staffApp.html'),
-
-    bindings: {
-        '.app-id': {
-            observe: [],
-            onGet: function() {
-                return "App ID: " + this.model.get('id');
-            }
-        }
-    },
-
-    licenceBindings: {
-        '.licence-id': {
-            observe: [],
-            onGet: function() {
-                //return this.model.get('licence').get('id');
-                return "Licence ID: " + this.licence.get('id');
-            }
-        }
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-        if (this.licence) {
-            this.stickit(this.licence, this.licenceBindings);
-        }
-    }
-});
-
-var AppView = module.exports.AppView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    className: 'new-item',
-    template: require('./templates/app.html'),
-
-    events: {
-        //'click': 'eventWrapperClick',
-    },
-
-    initialize: function() {
-        // Proxy change events for stickit
-        var self = this;
-
-        this.installsPermittedField = new InstallsPermittedField();
-        this.staffView = new StaffAppView();
-
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            // Create or find a licence, then bind to it
-            var licence = CBApp.appLicenceCollection.findWhere({
-                app: self.model,
-                user: currentUser
-            });
-
-            self.licence = licence || new CBApp.AppLicence({
-                                                    app: self.model,
-                                                    user: currentUser,
-                                                    installs_permitted: 0
-                                                });
-
-            CBApp.appLicenceCollection.add(self.licence);
-
-            self.staffView.licence = self.licence;
-            self.staffView.setModel(self.model);
-            self.installsPermittedField.setModel(self.licence);
-
-            self.render();
-            /*
-            var licenceBindings = {
-                '.installs-permitted': {
-                  observe: ['installs_permitted'],
-                  onGet: function(installsPermitted) {
-                      return installsPermitted;
-                  },
-                  attributes: [{
-                    name: 'disabled',
-                    observe: ['installs_permitted', 'change'],
-                    onGet: 'getDisabled'
-                  }]
-                }
-            };
-
-            self.stickit(self.licence, licenceBindings);
-            */
-        });
-
-        this.model.on('unsavedChanges sync', function(e) {
-            self.model.trigger('change:change');
-        }, this);
-    },
-
-    onRender : function(){
-
-        var self = this;
-
-        this.staffView.setElement(this.$('.staff-panel')).render();
-        this.installsPermittedField.setElement(this.$('.installs-permitted')).render();
-        /*
-        self.appDevicePermissionListView =
-            new CBApp.AppDevicePermissionListView({
-                collection: currentBridge.get('deviceInstalls'),
-                appInstall: self.model
-            });
-
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-
-            var appID = '#APPID' + self.model.get('app').get('id');
-            $appDevicePermissionList = self.$(appID);
-            $appDevicePermissionList.html(self.appDevicePermissionListView.render().$el);
-        });
-         */
-    }
-});
-
-/*
-module.exports.InstallAppView = CBApp.AppView.extend({
-
-    template: require('./templates/installApp.html'),
-});
-*/
-
-module.exports.AppListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/appSection.html'),
-    itemView: AppView,
-    itemViewContainer: '.app-list',
-
-    emptyView: CBApp.ListItemLoadingView,
-
-    /*
-    buildItemView: function(item, ItemViewType, itemViewOptions){
-
-        var options = _.extend({model: item}, itemViewOptions);
-        var view = new ItemViewType(options);
-        //view.licence = "test";
-        return view;
-    },
-    */
-
-    onRender : function(){
-
-    }
-});
-
-},{"../../../components/numbers":"/home/ubuntu/bridge-controller/portal/static/js/cb/components/numbers.js","./templates/app.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/app.html","./templates/appSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/appSection.html","./templates/staffApp.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/templates/staffApp.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/store.js":[function(require,module,exports){
-
-
-var StoreViews = require('./views');
-
-CBApp.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
-
-    console.log('Store ran!');
-    Store.addInitializer(function() {
-
-        //router
-        this.controller = new this.Controller();
-        this.router = new this.Router('portal/store/', {
-            controller : this.controller,
-            createTrailingSlashRoutes: true
-        });
-    });
-
-    Store.Controller = Marionette.Controller.extend({
-
-      /*
-      index: function () {
-        Store.mainLayoutView = new StoreViews.Main();
-        console.log('mainLayoutView', Store.mainLayoutView);
-        console.log('portalLayout', CBApp.portalLayout);
-        CBApp.portalLayout.mainRegion.show(Store.mainLayoutView);
-        console.log('config index');
-      },
-      */
-      showStore: function() {
-
-          Store.mainLayoutView = new StoreViews.Main();
-          CBApp.mainRegion.show(Store.mainLayoutView);
-      },
-      licenseApp: function(discoveredDeviceInstall) {
-        var that = this;
-        console.log('We got to the controller!');
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-        });
-        CBApp.modalsRegion.show(installDeviceModal);
-      }
-    });
-
-    Store.Router = Marionette.SubRouter.extend({
-
-        appRoutes: {
-          "": "showStore",
-          //"config/bridge/:bridge": "config",
-        }
-    });
-
-    Store.on('store:show', function(){
-        console.log('show store');
-        Store.controller.showStore();
-        Store.router.navigate('');
-    });
-});
-
-},{"./views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/templates/main.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<div class=\"row\">\n    <div id=\"app-section\" class=\"col-md-6\"></div>\n</div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/views.js":[function(require,module,exports){
-
-var Q = require('q');
-
-require('../../views/generic-views');
-require('../../views/regions');
-
-//require('../../apps/storeViews');
-var AppViews = require('./apps/views');
-
-module.exports.Main = Marionette.Layout.extend({
-
-    template: require('./templates/main.html'),
-
-    regions: {
-        appSection: {
-            selector: '#app-section',
-            regionType: CBApp.Regions.Fade
-        }
-    },
-
-    initialize: function() {
-
-
-        this.appListView = new AppViews.AppListView({
-                                    collection: CBApp.appCollection
-                                });
-
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            CBApp.appCollection.fetch();
-        }).done();
-    },
-
-    onRender: function() {
-
-        var self = this;
-
-        this.appSection.show(this.appListView);
-
-        /*
-        CBApp.appCollection.fetch().then(function(appCollection) {
-
-            console.log('appCollection fetched', appCollection);
-        });
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-
-            self.listenToOnce(currentBridge, 'change:current', self.render);
-
-            var appCollection = currentBridge.get('appInstalls');
-            self.appInstallListView.collection = appInstallCollection;
-            self.appInstallListView._initialEvents();
-            self.appInstallListView.delegateEvents();
-            self.appInstallListView.render();
-            //self.appInstallListView.delegateEvents();
-            //self.appSection.show(self.appInstallListView);
-        });
-        */
-    }
-
-});
-
-/*
-module.exports.LicenseAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-*/
-
-},{"../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","./apps/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/apps/views.js","./templates/main.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/store/templates/main.html","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js":[function(require,module,exports){
-
-CBApp.Notification = Backbone.Deferred.Model.extend({
-
+Portal.Notification = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'notification',
 
-    initialize: function() {
-        //this.startTracking();
+    subModelTypes: {
+		'connectionStatus': 'Portal.ConnectionStatus'
+	},
+
+    isVisible: function() {
+        return true;
+    },
+
+    getTitle: function() {
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getName();
+        } else {
+            return this.get('title');
+        }
+    },
+
+    getSubtitle: function() {
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getMessage();
+        } else {
+            return this.get('subTitle') || "";
+        }
     }
 
 }, { modelType: "notification" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Notification,
-    backend: 'notification',
+Portal.ConnectionStatus = Portal.Notification.extend({
 
-    initialize: function() {
-        //this.bindBackend();
-        CBApp.NotificationCollection.__super__.initialize.apply(this, arguments);
+    defaults: {
+        type: 'connectionStatus',
+        connected: true,
+        reconnecting: false,
+        error: false,
+        timeout: false
+    },
+
+    isVisible: function() {
+        return !this.get('connected');
+    },
+
+    getTitle: function() {
+        var error = this.get('error');
+        return error ? "Connection error" : "Connection lost"
+    },
+
+    getSubtitle: function() {
+        var reconnecting = this.get('reconnecting');
+        return reconnecting ? "reconnecting.." : "waiting to reconnect";
+    }
+
+}, { modelType: "connectionStatus" });
+
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Notification,
+    backend: 'notification'
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
+
+
+Portal.NotificationView = React.createClass({displayName: 'NotificationView',
+
+    mixins: [Portal.ItemView],
+
+    getInitialState: function () {
+        return {
+            buttons: [{
+                type: 'text',
+                label: 'Close',
+                onClick: this.handleDelete
+            }]
+        };
+    },
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
+    renderBody: function() {
+
+        var notification = this.props.model;
+        var error = notification.get('error');
+        if (error) {
+
+            return error.getMessage();
+        } else {
+            return "";
+        }
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/templates/notification.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+Portal.ConnectionStatusView = React.createClass({displayName: 'ConnectionStatusView',
 
+    mixins: [Portal.ItemView],
 
-  return "<h4 class=\"list-group-item-heading\"></h4>\n<i class=\"icon ion-information-circled\"></i>\n<i class=\"icon ion-alert-circled\"></i>\n";
-  });
+    getInitialState: function () {
+        return {};
+    },
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+    reconnect: function() {
+        this.get('socket').io.reconnect();
+    }
+});
 
+Portal.NotificationListView = React.createClass({displayName: 'NotificationListView',
 
-  return "<div class=\"animated-list notification-list\"></div>\n";
-  });
+    mixins: [Backbone.React.Component.mixin],
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js":[function(require,module,exports){
+    renderNotification: function(model) {
 
-CBApp.NotificationView = Marionette.ItemView.extend({
+        var title = model.getTitle();
+
+        switch (model.get('type')) {
+            case 'connectionStatus':
+                var subtitle = model.getSubtitle();
+                return React.createElement(Portal.ConnectionStatusView, {title: title, subtitle: subtitle, 
+                    model: model, className: "notification"})
+                break;
+            case 'error':
+                var subtitle = model.getSubtitle();
+                return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
+                    hideSubtitleOnExpanded: true, 
+                    model: model, className: "notification"})
+                break;
+            default:
+                return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
+                    hideSubtitleOnExpanded: true, 
+                    model: model, className: "notification"})
+                break;
+        }
+    },
+
+    render: function() {
+
+        var collection = Portal.notificationCollection
+                            .getFiltered('isVisible', function(model, searchString) {
+                                return model.isVisible();
+                            });
+
+        return (
+            React.createElement("div", {className: "notification-region"}, 
+                React.createElement("div", {className: "animated-list notification-list"}, 
+                    collection.map(this.renderNotification)
+                )
+            )
+        )
+    }
+});
+
+/*
+Portal.NotificationView = Marionette.ItemView.extend({
 
     tagName: 'li',
     //className: 'new-item',
@@ -27221,265 +16113,473 @@ CBApp.NotificationView = Marionette.ItemView.extend({
     }
 });
 
-CBApp.NotificationListView = Marionette.CompositeView.extend({
+Portal.NotificationListView = Marionette.CompositeView.extend({
 
     template: require('./templates/notificationSection.html'),
     //tagName: 'ul',
     //className: 'animated-list',
-    itemView: CBApp.NotificationView,
+    itemView: Portal.NotificationView,
     itemViewContainer: '.notification-list',
 
 });
+*/
 
-},{"./templates/notification.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/templates/notification.html","./templates/notificationSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/templates/notificationSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/routers.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js":[function(require,module,exports){
 
-var _ = require('underscore');
+var Socket = function()  {
 
-var Router = function(options) {
-    options || (options = {});
-    if (options.routes) this.routes = options.routes;
-    this.handlers = [];
-    this._bindRoutes();
-    this.initialize.apply(this, arguments);
 }
 
-var optionalParam = /\((.*?)\)/g;
-var namedParam    = /(\(\?)?:\w+/g;
-var splatParam    = /\*\w+/g;
-var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+Socket.prototype.publish = function(message) {
 
-_.extend(Router.prototype, Backbone.Events, {
+        //var destination = "BID" + currentBridge.get('id');
+        //message.set('destination', destination);
+        console.log('Caja socket publish message is', message);
+        var jsonMessage = message.toJSON();
 
-    initialize: function() {},
-
-    _bindRoutes: function() {
-        if (!this.routes) return;
-        this.routes = _.result(this, 'routes');
-        var route, routes = _.keys(this.routes);
-        while ((route = routes.pop()) != null) {
-            this.route(route, this.routes[route]);
-        }
-    },
-
-    _routeToRegExp: function(route) {
-        route = route.replace(escapeRegExp, '\\$&')
-            .replace(optionalParam, '(?:$1)?')
-            .replace(namedParam, function(match, optional) {
-                return optional ? match : '([^/?]+)';
-            })
-            .replace(splatParam, '([^?]*?)');
-        return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-    },
-
-    route: function(route, callback) {
-        if (!_.isRegExp(route)) route = this._routeToRegExp(route);
-        if (!_.isFunction(callback)) callback = this[callback];
-        var router = this;
-        this.handlers.unshift({route: route, callback: callback});
-    },
-
-    dispatch: function(message) {
-
-        console.log('message in dispatch', message);
-
-        var self = this;
-        //var message = new CBApp.Message(jsonMessage);
-        var route = this.getRoute(message);
-        var formattedMessage = this.formatMessage(message);
-        _.any(this.handlers, function(handler) {
-            console.log('handler is', handler);
-            if (handler.route.test(route)) {
-                console.log('Matched', route)
-                console.log('Callback is', handler.callback);
-                console.log('this in dispatch is', this);
-                console.log('message for callback', message);
-                handler.callback.call(self, formattedMessage);
-                return true;
-            }
+        Portal.socket.emit('message', jsonMessage, function(data){
+            //logger.log('verbose', 'Sent to socket ' + data);
         });
-    },
-
-    getRoute: function(message) {
-        // Overide this
-    },
-
-    formatMessage: function(message) {
-        return message;
-    }
-});
-
-Router.extend = Backbone.Model.extend;
-
-var updateCollection = function(collectionName) {
-
-    console.log('collection', collectionName);
-    return function(message) {
-        console.log('updateCollection message', message );
-        var messageBody = _.property('body')(message);
-        var verb = _.property('verb')(messageBody);
-        var jsonModels = _.property('body')(messageBody);
-        console.log('updateCollection jsonModels', jsonModels );
-        var collection = CBApp[collectionName];
-        console.log('collection', collection);
-        if (verb != 'delete') {
-            collection.update(jsonModels);
-        } else if (verb == 'delete') {
-            collection.delete(jsonModels);
-        }
-    }
 };
 
-var PortalRouter = Router.extend({
+/*
+    subscribe: function(event, callback, channel) {
 
-    routes: {
-        'BID:b/UID:u': updateCollection('bridgeControlCollection'),
-        'message': 'updateMessageCollection'
-    },
-
-    updateMessageCollection: function(message) {
-        console.log('updateMessageCollection', message);
-        CBApp.messageCollection.add(message);
-    },
-
-    /*
-        'AID[0-9]+': 'app',
-        'ACID[0-9]+': 'appConnection',
-        'BID[0-9]+/AID[0-9]+': 'appInstall',
-        'ADPID[0-9]+': 'appDevicePermission',
-        'ALID[0-9]+': 'appLicence',
-        'AOID[0-9]+': 'appOwnership',
-        'BID[0-9]+': 'bridge',
-        'CID[0-9]+': 'client',
-        'CCID[0-9]+': 'clientControl',
-        'DID[0-9]+': 'device',
-        'BID[0-9]+/DID[0-9]+': 'deviceInstall',
-        'DDID[0-9]+': 'discoveredDevice',
-        'UID[0-9]+': 'currentUser'
-    */
-
-    getRoute: function(message) {
-
-        var portalMessage = _.property('body')(message);
-        console.log('portalMessage ', portalMessage );
-        var verb = _.property('body')(message);
-        var jsonModels = _.property('body')(portalMessage);
-        console.log('jsonModels ', jsonModels );
-
-        if (!jsonModels) {
-            console.warn('Message received has no inner body', transportMessage);
-            return;
-        }
-        var model = jsonModels[0] || jsonModels;
-
-        console.log('model ', model );
-        var cbid = _.property('cbid')(model);
-        console.log('cbid ', cbid );
-        if (!cbid) {
-            return "message";
-        } else {
-            return cbid;
-        }
+        var sub = channel ? channel + ':' + event : 'message:' + event;
+        this.listenTo(this, sub, callback);
     }
+*/
+
+_.extend(Socket, Backbone.Events);
+
+var Model = Backbone.Deferred.Model.extend({
+
 });
 
-var MessageRouter = module.exports.MessageRouter = Router.extend({
+var Collection = Backbone.Deferred.Collection.extend({
 
-    routes: {
-        'broadcast': 'toPortal'
-    },
+});
+
+var tameCtor = function(ctor, methods) {
+    caja.markCtor(ctor);
+    _.each(methods, function(method) {
+        caja.grantMethod(ctor, method);
+    });
+    return caja.tame(ctor);
+}
+
+var tameFunction = function(func) {
+    caja.markFunction(func);
+    return caja.tame(func);
+}
+
+var tameAll = function() {
+
+    var alertGreeting = function() { alert('Hello from inside caja'); };
+    var log = function() { console.log('caja says', arguments) };
+
+    var cajaConsole = {};
+
+    //var log = tameFunction(log);
+    //cajaConsole.log = tameFunction(console.log);
+
+    caja.markCtor(Socket);
+    caja.grantMethod(Socket.prototype, "publish");
+
+    return {
+        Model: tameCtor(Model, []),
+        Collection: tameCtor(Collection, []),
+        //Socket: tameCtor(Socket, ['publish']),
+        sayHello: tameFunction(alertGreeting),
+        log: tameFunction(log)
+        //sayWindow: tameFunction(windowGreeting),
+        //console: cajaConsole
+    };
+}
+
+//var = _.extend({}, Backbone.Events);
+//var SingleDuplexSocket = _.extend(function() {}, Backbone.Events);
+
+var Socket = function(hostMessageCallback) {
+
+    var self = this;
+
+    // Direction is from inside the web app
+    this.inboundSocket = _.extend({}, Backbone.Events);
+    this.outboundSocket = _.extend({}, Backbone.Events);
+
+    this.dispatcher = new Dispatcher();
+
+    this.outboundSocket.on('message', hostMessageCallback);
+    //this.inboundSocket.on('all', function(message) {
+    //});
+}
+
+Socket.prototype.sayHi = function() {
+    return "Hi!";
+};
+
+Socket.prototype.publish = function(channel, message) {
+
+    this.outboundSocket.trigger(channel, message);
+};
+
+Socket.prototype.onMessage = function(callback) {
+
+    this.inboundSocket.on('message', callback);
+};
+
+Socket.prototype.send = function(message) {
+
+    this.outboundSocket.trigger('message', message);
+};
+
+Socket.prototype.subscribe = function(channel, callback) {
+
+    this.inboundSocket.on(channel, callback);
+};
+
+Socket.prototype.register = function(dispatchCallback) {
+
+    this.dispatcher.register(dispatchCallback);
+    //this.inboundSocket.on('all', dispatchCallback);
+};
+
+module.exports.Socket = Socket;
+
+/*
+var API;
+caja.whenReady(function() {  // (1)
+    API = tameAll();
+});
+*/
+
+var api;
+var getAPI = function() {
+
+    api = api ? api : tameAll();
+    return api;
+}
+module.exports.getAPI = getAPI;
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js":[function(require,module,exports){
+
+var PortalsAPI = require('./api');
+
+Portal.Portal = Backbone.Deferred.Model.extend({
+
+    idAttribute: 'id',
+
+    //backend: 'appInstall',
 
     initialize: function() {
 
         var self = this;
 
-        this.portalRouter = new PortalRouter();
+        var BID = Portal.getCurrentBridge().get('cbid');
+        var AID = this.get('appInstall').get('app').get('cbid');
 
-        console.log('portalRouter is', this.portalRouter );
+        //var cbidRegex = /\/?(BID[0-9]+)\/?(AID[0-9]+)?/;
+        var cbidRegex = new RegExp("\/?(" + BID + ")\/(" + AID + ")");
+        console.log('portal cbidRegex is ', cbidRegex);
+        this.set('cbidRegex', cbidRegex);
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            var uid = currentUser.get('cbid');
-            self.route(uid, "portal", self.toPortal);
-            self.route(uid + '/:webapp', "webapp", self.toWebApps);
-        });
+        Portal.portalCollection.register(function(msg) { self.inboundCallback(self, msg) });
     },
 
-    getRoute: function(message) {
-
-        console.log('getRoute message', message);
-        return _.property('destination')(message);
+    getAPI: function() {
+        var API = PortalsAPI.getAPI();
+        var CB = API.CB = new PortalsAPI.Socket(this.outboundCallback);
+        this.inboundSocket = CB.inboundSocket;
+        this.outboundSocket = CB.outboundSocket;
+        this.dispatcher = CB.dispatcher;
+        return API;
     },
 
-    toPortal: function(message, fragment) {
+    outboundCallback: function(message) {
+        // TODO sanitise the message
 
-        console.log('Message for portal', message);
-        console.log('fragment', fragment);
-        console.log('this in portal', this);
-        this.portalRouter.dispatch(message);
+        // Messages sent from inside the web app
+        console.log('message outbound from web app', message);
+
+        Portal.socket.publish(message);
     },
 
-    toWebApps: function(message, webapp) {
+    inboundCallback: function(self, message) {
 
-        console.log('Message for webapp', webapp, message);
+        //console.log('portal dispatch callback got message', message);
+        var destination = _.property('destination')(message);
+
+        var cbidRegex = self.get('cbidRegex');
+        //console.log('portal cbidRegex', cbidRegex);
+        var destMatch = destination.match(cbidRegex);
+        //console.log('portal destMatch', destMatch);
+        if (destMatch && destMatch[2]) {
+            var body = _.property('body')(message);
+            var resource = _.property('resource')(body);
+
+            if (resource) {
+                console.log('sending to portal dispatcher', cbidRegex, body);
+                this.dispatcher.dispatch(body);
+            } else {
+                //console.log('sending to inbound socket', message);
+                this.inboundSocket.trigger('message', message);
+            }
+        }
+    }
+
+}, { modelType: "portal" });
+
+Portal.PortalCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Portal,
+    //backend: ''
+
+    initialize: function() {
+
+        this.dispatcher = new Dispatcher();
+
+        Portal.PortalCollection.__super__.initialize.apply(this, arguments);
+    },
+
+    dispatch: function(message) {
+        this.dispatcher.dispatch(message);
+    },
+
+    register: function(callback) {
+        this.dispatcher.register(callback);
     }
 });
 
-},{"underscore":"/home/ubuntu/bridge-controller/node_modules/underscore/underscore.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
+},{"./api":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js":[function(require,module,exports){
+
+
+Portal.PortalView = React.createClass({displayName: 'PortalView',
+
+    componentDidMount: function() {
+
+        var portal = this.props.model;
+
+        //var $portal = this.$('.portal');
+        var cajaSection = this.refs.caja.getDOMNode();
+        caja.load(cajaSection, undefined, function(frame) {
+            var API = portal.getAPI();
+            console.log('portal api is', API);
+            frame.code('/static/caja-test.html',
+                'text/html')
+                .api(API)
+                //.api({ sayHello: tamedAlertGreeting })
+                .run();
+        });
+    },
+
+    render: function() {
+
+        //console.log('portal in portalview is', this.props.model);
+
+        return (
+                React.createElement("div", {ref: "caja"}
+                )
+        )
+    }
+});
+
+Portal.PortalTabbedView = React.createClass({displayName: 'PortalTabbedView',
+
+    renderTab: function(appInstall) {
+
+        var id = appInstall.get('id');
+        var app = appInstall.get('app');
+        var name = app.get('name');
+
+        var portal = appInstall.getPortal();
+
+        return (
+            React.createElement(React.TabPane, {eventKey: id, tab: name}, 
+                React.createElement(Portal.PortalView, {model: portal})
+            )
+        )
+    },
+
+    render: function() {
+
+        var handleSelect = function() {};
+
+        var collection = this.props.collection;
+        var appInstall = collection.at(0);
+        var startID = appInstall ? appInstall.get('id') : 0;
+
+        return (
+            React.createElement(React.TabbedArea, {activeKey: startID, animation: false, onSelect: handleSelect}, 
+                collection.map(this.renderTab)
+            )
+        )
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/router.js":[function(require,module,exports){
+
+var Route = Router.Route
+    ,DefaultRoute = Router.DefaultRoute
+    ,RouteHandler = Router.RouteHandler
+    ,NotFoundRoute = Router.NotFoundRoute
+    ,Link = Router.Link;
+
+require('./views/home');
+require('./views/main');
+
+var AccountView = require('./views/account');
+var ConfigView = require('./modules/config/views').Main;
+var MainView = require('./views/main');
+var HomeView = require('./views/home');
+var DashboardView = require('./views/dashboard');
+var DeveloperView = require('./views/developer');
+var MarketView = require('./modules/market/views').Main;
+var NotFoundView = require('./views/notFound');
+
+var routes = (
+    React.createElement(Route, {handler: MainView, path: "/"}, 
+        React.createElement(DefaultRoute, {handler: HomeView}), 
+        React.createElement(Route, {name: "account", handler: AccountView}), 
+        React.createElement(Route, {name: "config", path: "config/:action?/?:item?", handler: ConfigView}), 
+        React.createElement(Route, {name: "dashboard", handler: DashboardView}), 
+        React.createElement(Route, {name: "developer", handler: DeveloperView}), 
+        React.createElement(Route, {name: "market", handler: MarketView}), 
+        React.createElement(NotFoundRoute, {handler: NotFoundView})
+    )
+);
+//<Route name="config" path="config/?:action?/?:item?" handler={ConfigView} />
+
+var router = Router.create({
+    routes: routes,
+    location: Router.HistoryLocation
+});
+
+router.setQuery = function(query, triggerTransition) {
+
+    var route = Portal.route;
+    Portal.router.replaceWith(route.pathname, route.params,
+        _.defaults(query, route.query));
+}
+
+router.setParams = function(params) {
+
+    var route = Portal.route;
+    // Remove any extra slashes in the pathname
+    //var pathnameMatch = route.pathname.replace(/\//g, '');
+    var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
+    console.log('pathnameMatch ', pathnameMatch );
+    console.log('setParams', pathnameMatch[1], params, route.query);
+    //var path = Portal.router.makePath(pathnameMatch[1], params, route.query);
+    //console.log('setParams path', path);
+    Portal.router.transitionTo(pathnameMatch[1], params, route.query);
+    //Portal.router.transitionTo(path);
+}
+
+module.exports = router;
+
+
+},{"./modules/config/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/views.js","./modules/market/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/market/views.js","./views/account":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js","./views/dashboard":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js","./views/developer":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js","./views/home":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/home.js","./views/main":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/main.js","./views/notFound":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/notFound.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/socket.js":[function(require,module,exports){
 
 var CBApp = require('index')
+    ,Message = require('./message')
     ;
 
 require('./messages/models');
-var routers = require('./routers');
+//var routers = require('./routers');
 //var Message = require('./message');
 
 
-CBApp.addInitializer(function() {
+Portal.addInitializer(function() {
 
-    CBApp.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
+    Portal.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
 
-    //CBApp.socket = Backbone.io('http://gfdsgfds:9453/');
+    //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
-    CBApp.socket.on('connect', function(){
-        console.log('Socket connected');
-    });
+    var connectionStatus = new Portal.ConnectionStatus({socket: Portal.socket});
+    Portal.notificationCollection.add(connectionStatus);
 
-    CBApp.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
-        /*
-        var message = new Message(foundDevices);
-        var foundDevices = message.get('body');
-         */
-        console.log('foundDevices are', foundDevices);
-        console.log('foundDevices are', JSON.toString(foundDevices));
-
-        CBApp.discoveredDeviceInstallCollection.reset(foundDevices);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-            // Trigger reset for the GUI
-            var collection = currentBridge.get('discoveredDeviceInstalls');
-            collection.trigger('reset');
+    _.each(['connect', 'reconnect'], function(event) {
+        Portal.socket.on(event, function() {
+            connectionStatus.set({
+                connected: true,
+                reconnecting: false,
+                error: false,
+                timeout: false
+            });
         });
     });
 
-    CBApp.socket.publish = function(message) {
+    _.each(['error', 'reconnect_error'], function(event) {
+        Portal.socket.on(event, function (error) {
+            connectionStatus.set({
+                connected: false,
+                error: error,
+                reconnecting: false
+            });
+        });
+    });
 
-      var self = this;
+    Portal.socket.on('reconnecting', function(){
+        connectionStatus.set('reconnecting', true);
+    });
 
-      CBApp.getCurrentBridge().then(function(currentBridge) {
+    Portal.socket.on('disconnect', function(){
+        connectionStatus.set('connected', false);
+    });
+
+    Portal.socket.on('reconnect_failed', function(){
+        connectionStatus.set('timeout', true);
+    });
+
+    /*
+    Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
+        /*
+        var message = new Message(foundDevices);
+        var foundDevices = message.get('body');
+        console.log('foundDevices are', foundDevices);
+        console.log('foundDevices are', JSON.toString(foundDevices));
+
+        Portal.discoveredDeviceInstallCollection.reset(foundDevices);
+        var currentBridge = Portal.getCurrentBridge()
+            // Trigger reset for the GUI
+        var collection = currentBridge.get('discoveredDeviceInstalls');
+        collection.trigger('reset');
+
+    });
+    */
+
+    Portal.socket.publish = function(message) {
+
+        var self = this;
+
+        var jsonMessage;
+        if (message instanceof Message) {
+            jsonMessage = message.toJSON();
+        } else if (typeof message == 'string') {
+            jsonMessage = message;
+        } else {
+            jsonMessage = JSON.stringify(message);
+        }
+
+        console.log('Socket sending >', jsonMessage);
+
+        Portal.socket.emit('message', jsonMessage, function(data){
+            console.log('data from socket emit', data);
+        });
+      /*
+      Portal.getCurrentBridge().then(function(currentBridge) {
 
           var destination = "BID" + currentBridge.get('id');
           message.set('destination', destination);
           console.log('Message is', message);
-          var jsonMessage = message.toJSON();
-
-          CBApp.socket.emit('message', jsonMessage, function(data){
-              //logger.log('verbose', 'Sent to socket ' + data);
-          });
       });
+      */
     };
 
-    CBApp.messageRouter = new routers.MessageRouter();
+    //Portal.messageRouter = new routers.MessageRouter();
 
-    CBApp.socket.on('message', function(jsonString) {
+    Portal.socket.on('message', function(jsonString) {
 
         try {
             var jsonMessage = JSON.parse(jsonString);
@@ -27487,118 +16587,111 @@ CBApp.addInitializer(function() {
             console.error(e);
             return;
         }
-        //var message = new CBApp.Message(jsonMessage);
-        console.log('Server >', jsonMessage);
-        CBApp.messageRouter.dispatch(jsonMessage);
 
-        //that.appendLine(message);
+        console.log('Server >', jsonMessage);
+        Portal.dispatch(jsonMessage);
+        /*
+        var message = new Portal.Message(jsonMessage);
+
+        var date = new Date();
+        message.set('time_received', date);
+        console.log('Server >', message);
+        Portal.messageCollection.add(message);
+        */
     });
 });
 
-},{"./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","./routers":"/home/ubuntu/bridge-controller/portal/static/js/cb/routers.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
+},{"./message":"/home/ubuntu/bridge-controller/portal/static/js/cb/message.js","./messages/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js":[function(require,module,exports){
 
 require('../models');
 
-//CBApp.CurrentUser = Backbone.Deferred.Model.extend({
-/*
-CBApp.CurrentUser = CBApp.User.extend({
+Portal.CurrentUser = Portal.User.extend({
 
     idAttribute: 'id',
 
     backend: 'currentUser',
 
-    //partOfModel: CBApp.User,
-
-    initialize: function() {
-
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
-
-    },
-
-    relations: [
-        {
-            type: Backbone.HasMany,
-            key: 'appLicences',
-            keySource: 'app_licences',
-            keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
-        },
-        {
-            type: Backbone.HasMany,
-            key: 'bridgeControls',
-            keySource: 'bridge_controls',
-            keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'bridgeControlCollection'
-        }
-    ]
-
-});
-*/
-
-CBApp.currentUserDeferred = Q.defer();
-
-CBApp.getCurrentUser = function() {
-
-    /*
-    var user = CBApp.currentUserCollection.findWhere({current: true}) || CBApp.currentUserCollection.at(0);
-
-    if (!user) {
-        console.warn('There is no current user');
-        user = false;
-    } else {
-        user.set({current: true});
-    }
-
-    return user;
-    */
-    return CBApp.currentUserDeferred.promise;
-};
-
-//CBApp.U = Backbone.RelationalModel.extend({
-//CBApp.U = Backbone.Deferred.Model.extend({
-
-//CBApp.CurrentUser = CBApp.User.extend({
-//CBApp.LoggedInUser = Backbone.Deferred.Model.extend({
-CBApp.CurrentUser = CBApp.User.extend({
-
-    idAttribute: 'id',
-
-    backend: 'currentUser',
-
+    //partOfModel: Portal.User,
     defaults: {
-        type: 'loggedInUser'
+        type: 'currentUser'
     },
 
-    //partOfModel: CBApp.User,
+    relations: Portal.User.prototype.relations.concat([{}]),
 
     initialize: function() {
 
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
-
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
+        var self = this;
         /*
         this.listenTo(this, 'all', function(name) {
             console.log('EVENT currentUser', name);
-        })
+        });
         */
 
+        this.listenTo(this.get('appOwnerships'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
+    }
+}, { modelType: "currentUser" });
+
+Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
+
+    model: Portal.CurrentUser,
+    backend: 'currentUser',
+
+    initialize: function() {
+        this.bindBackend();
+    }
+});
+
+
+},{"../models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/views.js":[function(require,module,exports){
+
+
+Portal.CurrentUserView = React.createClass({displayName: 'CurrentUserView',
+
+    //mixins: [ Portal.ItemView],
+
+    render: function() {
+
+        var TextInput = Portal.Components.TextInput;
+        var currentUser = Portal.currentUser;
+        var title = "My Profile";
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("h2", null, title), 
+                React.createElement("ul", {className: "animated-list"}, 
+                    React.createElement("li", {className: "panel"}, 
+                        React.createElement("ul", {className: "nested-list"}, 
+                            React.createElement("li", null, 
+                                React.createElement(TextInput, {model: currentUser, 
+                                    autosize: true, field: "first_name"}), 
+                                React.createElement(TextInput, {model: currentUser, 
+                                    autosize: true, field: "last_name"})
+                            ), 
+                            React.createElement("li", null, 
+                                React.createElement(TextInput, {model: currentUser, field: "email"})
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
+
+Portal.User = Backbone.Deferred.Model.extend({
+
+    idAttribute: 'id',
+
+    subModelTypes: {
+		'currentUser': 'Portal.CurrentUser'
+	},
+
+    defaults: {
+        type: 'user'
     },
 
     relations: [
@@ -27607,10 +16700,10 @@ CBApp.CurrentUser = CBApp.User.extend({
             key: 'bridgeControls',
             keySource: 'bridge_controls',
             keyDestination: 'bridge_controls',
-            relatedModel: 'CBApp.BridgeControl',
-            collectionType: 'CBApp.BridgeControlCollection',
+            relatedModel: 'Portal.BridgeControl',
+            collectionType: 'Portal.BridgeControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             initializeCollection: 'bridgeControlCollection'
         },
         {
@@ -27618,70 +16711,67 @@ CBApp.CurrentUser = CBApp.User.extend({
             key: 'appLicences',
             keySource: 'app_licences',
             keyDestination: 'app_licences',
-            relatedModel: 'CBApp.AppLicence',
-            collectionType: 'CBApp.AppLicenceCollection',
+            relatedModel: 'Portal.AppLicence',
+            collectionType: 'Portal.AppLicenceCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
-            initializeCollection: 'appLicenceCollection'
+            initializeCollection: 'appLicenceCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.User',
+                //createModels: true,
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection'
+            }
         },
         {
             type: Backbone.HasMany,
             key: 'appOwnerships',
             keySource: 'app_ownerships',
             keyDestination: 'app_ownerships',
-            relatedModel: 'CBApp.AppOwnership',
-            collectionType: 'CBApp.AppOwnershipCollection',
+            relatedModel: 'Portal.AppOwnership',
+            collectionType: 'Portal.AppOwnershipCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
+            includeInJSON: false,
             //includeInJSON: false,
-            initializeCollection: 'appOwnershipCollection'
+            initializeCollection: 'appOwnershipCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.User',
+                createModels: true,
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection'
+            }
         },
         {
             type: Backbone.HasMany,
             key: 'clientControls',
             keySource: 'client_controls',
             keyDestination: 'client_controls',
-            relatedModel: 'CBApp.ClientControl',
-            collectionType: 'CBApp.ClientControlCollection',
+            relatedModel: 'Portal.ClientControl',
+            collectionType: 'Portal.ClientControlCollection',
             createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'clientControlCollection'
+            includeInJSON: false,
+            initializeCollection: 'clientControlCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'user',
+                keySource: 'user',
+                keyDestination: 'user',
+                relatedModel: 'Portal.User',
+                createModels: true,
+                includeInJSON: 'resource_uri',
+                initializeCollection: 'userCollection',
+            }
         }
-    ]
-}, { modelType: "currentUser" });
-
-CBApp.CurrentUserCollection = Backbone.QueryCollection.extend({
-
-    model: CBApp.CurrentUser,
-    backend: 'currentUser',
-
-    initialize: function() {
-        this.bindBackend();
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-});
-
-
-},{"../models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js":[function(require,module,exports){
-
-//CBApp.User = Backbone.Deferred.Model.extend({
-CBApp.User = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    subModelTypes: {
-		'currentUser': 'CBApp.CurrentUser',
-	},
-
-    /*
-    defaults: {
-        type: 'user'
-    },
-    */
+    ],
 
     initialize: function() {
 
@@ -27700,23 +16790,917 @@ CBApp.User = Backbone.RelationalModel.extend({
     }
 }, { modelType: "user" });
 
-CBApp.UserCollection = Backbone.Collection.extend({
+Portal.UserCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.User,
-    backend: 'user',
+    model: Portal.User,
+    backend: 'user'
 
-    initialize: function() {
-        //this.bindBackend();
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/users/views.js":[function(require,module,exports){
+
+Portal.UserLicenceTableView = React.createClass({displayName: 'UserLicenceTableView',
+
+    mixins: [ Portal.Mixins.TableView ],
+
+    getInitialState: function () {
+        return {
+            title: 'Licences',
+            rows: 3,
+            filters: {
+                search: {
+                    prefixes: ['user:', ''],
+                    callback: function(model, searchString) {
+                        console.log('UserLicenceTableView searchString', searchString);
+                        console.log('UserLicenceTableView model', model);
+                        var filterRegex = searchString.toLowerCase() + ".*";
+                        var searchRegex = QueryEngine.createSafeRegex(filterRegex);
+                        var pass = false;
+                        _.each(['first_name', 'last_name', 'email'], function(field) {
+                            if (searchRegex.test(model.get(field).toLowerCase())) {
+                                pass = true;
+                            }
+                        });
+                        return pass;
+                    }
+                }
+            }
+        };
     },
 
-    parse : function(response){
-        return response.objects;
+    renderHeader: function() {
+
+        var filteredCollection = this.getFilteredCollection();
+        var collection = this.props.collection;
+
+        //console.log('renderHeader filteredCollection ', filteredCollection );
+        //console.log('renderHeader collection ', collection );
+
+        return (
+            React.createElement("div", {className: "form-group form-group-sm search-group"}, 
+                React.createElement(Portal.Components.SearchInput, {collection: collection, 
+                    filteredCollection: filteredCollection})
+            )
+        )
+        //<input className="form-control" type="text" value={searchString} />
+    },
+
+    renderRow: function (user) {
+        var cid = user.cid;
+
+        var app = this.props.app;
+
+        /*
+        var userCollection = this.getCollection();
+        var user = userCollection.get({cid: cid});
+        */
+
+        var userName = user.get('first_name') + " " + user.get('last_name');
+
+        var appLicence = app.getLicence(user);
+
+        var installsPermitted = appLicence.get('installs_permitted');
+
+        return (
+            React.createElement("tr", {key: cid}, 
+                React.createElement("td", {className: "expand"}, userName), 
+                React.createElement("td", null, 
+                    React.createElement(Portal.Components.Counter, {model: appLicence, 
+                        field: "installs_permitted", size: "small"})
+                )
+            )
+        );
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/utils.js":[function(require,module,exports){
 
-CBApp.ItemView = {
+module.exports.underscoredToCamelCase = function(underscored) {
+    var camelCased = underscored.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+    return camelCased;
+}
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js":[function(require,module,exports){
+
+require('../users/current/views');
+require('../apps/licences/views');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    renderModals: function () {
+
+        /*
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        console.log('renderModals params', action);
+        switch (action) {
+            case "install-app":
+                return <InstallAppModal container={this} />;
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return <InstallDeviceModal container={this} model={discoveredDevice} />;
+                break;
+            default:
+                break;
+        }
+        */
+    },
+
+    render: function() {
+
+        /*
+        var currentUser = Portal.currentUser;
+
+        var appOwnerships = currentUser.get('appOwnerships')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
+
+        var clientControls = currentUser.get('clientControls')
+            .getFiltered('isNew', function(model, searchString) {
+                return !model.isNew();
+            });
+        */
+        var currentUser = Portal.currentUser;
+
+        var appLicences = currentUser.get('appLicences')
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
+            });
+
+        return (
+            React.createElement("div", null, 
+                this.renderModals(), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "profileSection", className: "col-md-6"}, 
+                        React.createElement(Portal.CurrentUserView, {model: currentUser})
+                    ), 
+                    React.createElement("div", {ref: "appSection", className: "col-md-6"}, 
+                        React.createElement(Portal.AppLicenceListView, {collection: appLicences})
+                    )
+                )
+            )
+        )
+    }
+});
+
+
+},{"../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../users/current/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/base.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [Backbone.React.Component.mixin],
+
+    render: function () {
+
+        var Handler = this.props.handler;
+        var params = this.props.params;
+
+        var path = this.props.path;
+
+        return (
+            React.createElement(Handler, {params: params, path: path})
+        );
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/buttons.js":[function(require,module,exports){
+
+module.exports.InstallButton = React.createClass({displayName: 'InstallButton',
+
+    mixins: [Portal.ConnectorMixin],
+
+    handleClick: function() {
+        this.toggleExistenceOnServer(this.props.model);
+    },
+
+    render: function() {
+
+        //var contents = "Install";
+        //var contents = <Spinner />
+        console.log('Install button model', this.props);
+        //<div class="install-component btn btn-default app-install-button">Uninstall</div>
+        var model = this.props.model;
+
+        var syncing = model.isSyncing();
+        var label;
+        if (model.get('isGhost')) {
+            label = syncing ? "Uninstall" : "Install";
+        } else {
+            label = syncing ? "Install" : "Uninstall";
+        }
+        //var label = model.get('isGhost') ? "Install" :
+        var disabled = model.isSyncing() ? 'disabled' : '';;
+        var buttonClass = "btn btn-default " + disabled;
+
+        return (
+            React.createElement("div", {className: buttonClass, onClick: this.handleClick}, 
+                label
+            )
+        )
+    }
+});
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/components.js":[function(require,module,exports){
+
+var Components = {};
+
+Components.Counter = require('./counter');
+Components.Switch = require('./switch');
+Components.TextInput = require('./text').TextInput;
+Components.SearchInput = require('./search').SearchInput;
+
+Components.InstallButton = require('./buttons').InstallButton;
+
+Portal.Components = Components;
+
+
+},{"./buttons":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/buttons.js","./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/counter.js","./search":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/search.js","./switch":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/switch.js","./text":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/text.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/counter.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Portal.Mixins.Counter ],
+
+    render: function() {
+
+        var model = this.props.model;
+
+        var value = model.get(this.props.field);
+        var disabled = model.isSyncing();
+
+        var counterClass = "input-group counter-" + this.props.size;
+        return (
+            React.createElement("div", {className: counterClass}, 
+                React.createElement("span", {className: "input-group-btn data-dwn"}, 
+                    React.createElement("button", {className: "btn btn-default", 
+                            onClick: this.handleDecrement, 'data-increment': "-1"}, 
+                        React.createElement("span", {className: "glyphicon glyphicon-minus btn-icon"})
+                    )
+                ), 
+                React.createElement("input", {type: "text", className: "form-control number text-center", 
+                    readonly: "true", disabled: disabled, value: value}), 
+                React.createElement("span", {className: "input-group-btn data-up"}, 
+                    React.createElement("button", {className: "btn btn-default", 
+                            onClick: this.handleIncrement, 'data-increment': "1"}, 
+                        React.createElement("span", {className: "glyphicon glyphicon-plus btn-icon"})
+                    )
+                )
+            )
+        )
+    }
+});
+
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/search.js":[function(require,module,exports){
+
+module.exports.SearchInput = React.createClass({displayName: 'SearchInput',
+
+    getInitialState: function() {
+        return {searchString: ''};
+    },
+
+    handleChange: function(e) {
+        var searchString = e.target.value;
+        this.setState({searchString: searchString});
+        //this.filter();
+    },
+
+    handleBlur: function(e) {
+        this.setState({searchString: e.target.value});
+        //this.search();
+    },
+
+    handleKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            this.search();
+        }
+        this.filter();
+    },
+
+    filter: function(searchString ) {
+
+        var searchString = this.state.searchString;
+        console.log('filter searchString', searchString);
+        var filteredCollection = this.props.filteredCollection;
+        filteredCollection.setSearchString('user:' + searchString);
+        filteredCollection.query();
+    },
+
+    search: function() {
+        var collection = this.props.collection;
+        var searchString = this.state.searchString;
+        collection.fetch({data: { 'first_name__istartswith': searchString }});
+
+    },
+
+    render: function() {
+
+        var searchString = this.state.searchString;
+        return (
+            React.createElement("div", {className: "input-group"}, 
+                React.createElement("input", {type: "text", className: "form-control", value: searchString, 
+                    onChange: this.handleChange, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
+                React.createElement("span", {className: "input-group-btn"}, 
+                    React.createElement("button", {className: "btn btn-default", 
+                        type: "button", onClick: this.search}, "Search")
+                )
+            )
+        )
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/switch.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [Portal.ReactBackboneMixin],
+
+    handleClick: function() {
+
+        var model = this.getModel();
+
+        if (!model.isSyncing()) {
+            if (model.isNew()) {
+                console.log('handleClick save');
+                //model.save();
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: model.__proto__.constructor.modelType,
+                    payload: model
+                });
+            } else {
+                console.log('handleClick destroyOnServer');
+                model.destroyOnServer();
+            }
+        }
+    },
+
+    render: function() {
+
+        var model = this.props.model;
+
+        var label = this.props.label;
+
+        var disabled = model.isSyncing() ? 'disabled' : '';;
+        var active = !model.get('isGhost') ? 'active' : '';
+        var switchClass = "left theme-green animate toggle-switch " + active + " " + disabled;
+
+        return (
+            React.createElement("li", {className: "inner-item"}, 
+                React.createElement("div", {className: switchClass, onClick: this.handleClick}), 
+                React.createElement("div", {className: "list-label"}, label)
+            )
+        )
+    }
+});
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/components/text.js":[function(require,module,exports){
+
+module.exports.TextInput = React.createClass({displayName: 'TextInput',
+
+    getInitialState: function() {
+        return {
+            focused: false
+        };
+    },
+
+    handleChange: function(e) {
+        this.setValue(e.target.value);
+    },
+
+    handleFocus: function(e) {
+        this.setState({focused: true});
+    },
+
+    handleBlur: function(e) {
+        this.setState({focused: false});
+        this.setValue(e.target.value);
+        this.submit();
+    },
+
+    handleKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            this.submit();
+        }
+    },
+
+    setValue: function(value) {
+
+        this.props.model.set(this.props.field, value);
+    },
+
+    submit: function() {
+
+        var model = this.props.model;
+        if (model.unsavedAttributes()) model.save();
+        //this.props.model.save();
+    },
+
+    render: function() {
+
+        var model = this.props.model;
+        var value = model.get(this.props.field);
+        var disabled = model.isSyncing();
+
+        var style = {};
+        var inputStyle = {};
+        //var inputStyle = { padding: 3, borderRadius: 3 }
+            //fontSize: 14 };
+        if (this.state.focused) {
+            style.background = "#eee";
+            //style.borderRadius= 5;
+            inputStyle.border = "1px solid #999";
+        } else {
+            style.background = "transparent";
+            inputStyle.border = "1px solid transparent";
+        }
+
+        if (this.props.autosize) {
+
+            return React.createElement(AutosizeInput, {value: value, disabled: disabled, 
+                        className: "input-text-wrapper", inputClassName: "input-text", 
+                        style: style, inputStyle: inputStyle, 
+                        onFocus: this.handleFocus, onBlur: this.handleBlur, 
+                        onChange: this.handleChange, onKeyDown: this.handleKeyDown})
+        } else {
+
+            return (
+                React.createElement("div", {className: "input-text-wrapper", style: style}, 
+                       React.createElement("input", {type: "text", className: "input-text", value: value, disabled: disabled, 
+                            style: inputStyle, 
+                            onFocus: this.handleFocus, onBlur: this.handleBlur, 
+                            onChange: this.handleChange, onKeyDown: this.handleKeyDown})
+                )
+            )
+        }
+    }
+});
+
+// From https://github.com/JedWatson/react-input-autosize/
+
+var sizerStyle = { position: 'absolute', visibility: 'hidden', height: 0, width: 0, overflow: 'scroll', whiteSpace: 'nowrap' };
+
+var AutosizeInput = React.createClass({
+
+    displayName: 'AutosizeInput',
+
+    propTypes: {
+        value: React.PropTypes.any,                 // field value
+        defaultValue: React.PropTypes.any,          // default field value
+        onChange: React.PropTypes.func,             // onChange handler: function(newValue) {}
+        style: React.PropTypes.object,              // css styles for the outer element
+        className: React.PropTypes.string,          // className for the outer element
+        inputStyle: React.PropTypes.object,         // css styles for the input element
+        inputClassName: React.PropTypes.string      // className for the input element
+    },
+
+    getDefaultProps: function() {
+        return {
+            minWidth: 1
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            inputWidth: this.props.minWidth
+        };
+    },
+
+    componentDidMount: function() {
+        this.copyInputStyles();
+        this.updateInputWidth();
+    },
+
+    componentDidUpdate: function() {
+        this.updateInputWidth();
+    },
+
+    copyInputStyles: function() {
+        if (!this.isMounted() || !window.getComputedStyle) {
+            return;
+        }
+        var inputStyle = window.getComputedStyle(this.refs.input.getDOMNode());
+        var widthNode = this.refs.sizer.getDOMNode();
+        widthNode.style.fontSize = inputStyle.fontSize;
+        widthNode.style.fontFamily = inputStyle.fontFamily;
+    },
+
+    updateInputWidth: function() {
+        if (!this.isMounted()) {
+            return;
+        }
+        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 12;
+        if (newInputWidth < this.props.minWidth) {
+            newInputWidth = this.props.minWidth;
+        }
+        if (newInputWidth !== this.state.inputWidth) {
+            this.setState({
+                inputWidth: newInputWidth
+            });
+        }
+    },
+
+    getInput: function() {
+        return this.refs.input;
+    },
+
+    focus: function() {
+        this.refs.input.getDOMNode().focus();
+    },
+
+    select: function() {
+        this.refs.input.getDOMNode().select();
+    },
+
+    render: function() {
+
+        var nbspValue = (this.props.value || '').replace(/ /g, '&nbsp;');
+
+        var wrapperStyle = this.props.style || {};
+        wrapperStyle.display = 'inline-block';
+
+        var inputStyle = this.props.inputStyle || {};
+        inputStyle.width = this.state.inputWidth;
+
+        return (
+            React.createElement("div", {className: this.props.className, style: wrapperStyle}, 
+                React.createElement("input", React.__spread({},  this.props, {ref: "input", className: this.props.inputClassName, style: inputStyle})), 
+                React.createElement("div", {ref: "sizer", style: sizerStyle, dangerouslySetInnerHTML: { __html: nbspValue}})
+            )
+        );
+
+    }
+
+});
+
+module.exports.AutosizeInput = AutosizeInput;
+
+module.exports.Subtitle = React.createClass({displayName: 'Subtitle',
+
+    render: function() {
+
+
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/dashboard.js":[function(require,module,exports){
+
+require('../portals/views');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+
+        var collection = Portal.getCurrentBridge().get('appInstalls');
+
+        return (
+            React.createElement(Portal.PortalTabbedView, {collection: collection})
+        );
+    }
+});
+
+/*
+ </br></br>
+ If this is the first time you have logged-in and you don\'t have any bridges, please click <a href="http://continuumbridge.readme.io/v1.0/docs/start-here">here</a>
+ </br></br>
+ If you have a bridge, click <a href="http://portal.continuumbridge.com/portal/config/">here</a> to see what devices and apps you have and add more.
+ </br></br>
+ For further information on how to use this portal, click <a href="http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal">here</a>
+*/
+
+},{"../portals/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/developer.js":[function(require,module,exports){
+
+require('../apps/ownerships/views');
+require('../apps/connections/views');
+
+require('../clients/views');
+require('../clients/controls/views');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    /*
+    componentWillReceiveParams: function(params) {
+
+        console.log('developer will receive params', params);
+        console.log('developer will receive this.params', this.params);
+        if (!this.params || this.params != params) {
+            console.log('developer fetch collections');
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+
+        this.params = params;
+        /*
+        if (this.action != params.action) {
+            if (params.action == 'discover-devices') {
+                this.discoverDevices();
+            }
+            this.action = params.action;
+        }
+    },
+    */
+
+    statics: {
+        willTransitionTo: function (transition, params) {
+
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        }
+    },
+
+    renderModals: function () {
+
+        var action = this.getParams().action;
+        var itemID = this.getParams().item;
+        console.log('renderModals params', action);
+        switch (action) {
+            case "install-app":
+                return React.createElement(InstallAppModal, {container: this});
+                break;
+            case "install-device":
+                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
+                return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
+                break;
+            default:
+                break;
+        }
+    },
+
+    render: function() {
+
+        var currentUser = Portal.currentUser;
+
+        var appOwnerships = currentUser.get('appOwnerships')
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
+            });
+
+        var clientControls = currentUser.get('clientControls')
+            .getFiltered('isGhost', function(model, searchString) {
+                return model ? !model.get('isGhost') : false;
+            });
+
+        return (
+            React.createElement("div", null, 
+                this.renderModals(), 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {ref: "appSection", className: "app-section col-md-6"}, 
+                        React.createElement(Portal.AppOwnershipListView, {key: currentUser.cid, 
+                            collection: appOwnerships})
+                    ), 
+                    React.createElement("div", {ref: "clientSection", className: "client-section col-md-6"}, 
+                        React.createElement(Portal.ClientControlListView, {key: currentUser.cid, 
+                            collection: clientControls})
+                    )
+                )
+            )
+        )
+    }
+});
+
+
+},{"../apps/connections/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/views.js","../apps/ownerships/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/views.js","../clients/controls/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/views.js","../clients/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/views.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js":[function(require,module,exports){
+
+
+/*
+Portal.FluxBoneMixin = function(propName) {
+    return {
+        componentDidMount: function() {
+            return this.props[propName].on("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        },
+        componentWillUnmount: function() {
+            return this.props[propName].off("all", (function(_this) {
+                return function() {
+                    return _this.forceUpdate();
+                };
+            })(this), this);
+        }
+    };
+};
+
+Portal.ListItemLoadingView = Marionette.ItemView.extend({
+
+    tagName: 'li',
+    className: 'spinner',
+    template: require('./templates/listItemLoading.html')
+});
+*/
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/home.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", {className: "welcome"}, 
+                React.createElement("div", {className: "welcome-text panel-body"}, 
+                    "Welcome to the ContinuumBridge portal.", 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "If this is the first time you have logged-in and you don\\'t have any bridges, please click ", React.createElement("a", {href: "http://continuumbridge.readme.io/v1.0/docs/start-here"}, "here"), 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "If you have a bridge, click ", React.createElement("a", {href: "http://portal.continuumbridge.com/portal/config/"}, "here"), " to see what devices and apps you have and add more.", 
+                    React.createElement("br", null), React.createElement("br", null), 
+                    "For further information on how to use this portal, click ", React.createElement("a", {href: "http://continuumbridge.readme.io/v1.0/docs/the-continuumbridge-portal"}, "here")
+                )
+            )
+        );
+    }
+});
+
+/*
+*/
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/main.js":[function(require,module,exports){
+
+var Nav = require('./nav');
+require('../notifications/views');
+
+module.exports = React.createClass({displayName: 'exports',
+
+    mixins: [ Router.State, Router.Navigation ],
+
+    render: function () {
+        //Portal.mainView = this;
+        //mainView = this;
+        var activeSection = this.getParams().section;
+        //console.log('mainView getParams()', this.getParams());
+        //console.log('mainView params', this.props.params);
+        //console.log('mainView model', this.getModel());
+
+        var path = this.props.path;
+        //var currentBridge = Portal.getCurrentBridge();
+        return (
+            React.createElement("div", null, 
+                React.createElement(Nav.Topbar, {activeSection: activeSection}), 
+                React.createElement("div", {className: "container"}, 
+                    React.createElement(Router.RouteHandler, {key: path, params: this.props.params})
+                ), 
+                React.createElement(Portal.NotificationListView, null)
+            )
+        );
+    }
+});
+
+/*
+var ConfigViews = require('../modules/config/views');
+
+Portal.MainView = React.createClass({
+    mixins: [Backbone.React.Component.mixin],
+
+    render: function() {
+        var currentBridge = Portal.getCurrentBridge();
+        currentBridge.fetch();
+        return (
+            <ConfigViews.Main model={currentBridge} />
+        )
+    }
+});
+*/
+
+},{"../notifications/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/views.js","./nav":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/nav.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/backbone.js":[function(require,module,exports){
+
+Portal.ReactBackboneMixin = {
+
+    getModel: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        return collection.get({cid: this.props.model.cid})
+    },
+}
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/connector.js":[function(require,module,exports){
+
+Portal.ConnectorMixin = {
+
+    toggleExistenceOnServer: function(model) {
+
+        if (!model.isSyncing()) {
+            if (model.isNew()) {
+                console.log('toggleExistenceOnServer save');
+                //model.save();
+                Portal.dispatch({
+                    source: 'portal',
+                    actionType: 'create',
+                    itemType: model.__proto__.constructor.modelType,
+                    payload: model
+                });
+            } else {
+                console.log('toggleExistenceOnServer destroyOnServer');
+                model.destroyOnServer();
+            }
+        }
+    }
+}
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js":[function(require,module,exports){
+
+module.exports = {
+
+    handleIncrement: function() {
+        this.incrementField(this.props.model, this.props.field, 1);
+    },
+
+    handleDecrement: function() {
+        this.incrementField(this.props.model, this.props.field, -1);
+    },
+
+    incrementField: function(model, fieldName, increment) {
+
+        if (!model.isSyncing()) {
+
+            var currentValue = model.get(fieldName);
+
+            console.log('incrementField currentValue', currentValue);
+            console.log('incrementField increment', increment);
+            if (!currentValue) currentValue = 0;
+
+            var nextValue = parseInt(currentValue) + parseInt(increment);
+            if (nextValue < 0) nextValue = 0;
+            model.set(fieldName, nextValue);
+
+            console.log('incrementField nextValue', nextValue);
+            console.log('incrementField model.isNew()', model.isNew());
+
+            if (nextValue > 0) {
+                console.log('incrementField create');
+                if (model.isNew()) {
+                    Portal.dispatch({
+                        source: 'portal',
+                        actionType: 'create',
+                        itemType: model.__proto__.constructor.modelType,
+                        payload: model
+                    });
+                } else {
+                    console.log('incrementField save');
+                    model.save();
+                }
+            } else {
+                if (!model.isNew()) {
+                    console.log('incrementField destroyOnServer');
+                    model.destroyOnServer();
+                }
+            }
+        }
+    }
+}
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js":[function(require,module,exports){
+
+
+module.exports = {
+
+    getFilteredCollection: function(name, filter) {
+
+        this.filteredCollection = this.filteredCollection || this.getCollection()
+                        .createLiveChildCollection(this.getCollection().models);
+
+        this.filteredCollection.setFilter(name, filter);
+
+        return this.filteredCollection;
+    }
+}
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/items.js":[function(require,module,exports){
+
+Portal.InnerItemView = {
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "inner-item"}, 
+                "Inner Item"
+            )
+        );
+    }
+}
+
+
+Portal.InnerListView = {
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "inner-item"}, 
+                React.createElement("h5", null, this.props.title), 
+                React.createElement("ul", {className: "animated-list device-list"}, 
+                    this.props.collection.map(this.createItem)
+                )
+            )
+        );
+    }
+}
+
+Portal.ItemView = {
     //mixins: [Backbone.React.Component.mixin],
     /*
     getTitle: function() {
@@ -27732,65 +17716,396 @@ CBApp.ItemView = {
         return "Staff contents";
     },
     */
-    render: function() {
+
+    getModel: function() {
+
+        var item = this.props.model;
+
+        if (item instanceof Backbone.Model) return item;
+
+        var owner = this._owner;
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        var query = item.id ? {id: item.id} : {cid: item.cid};
+        return collection.findWhere(query);
+    },
+
+    getCollection: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        return owner.getCollection();
+    },
+
+    handleDelete: function() {
+        this.getModel().delete();
+    },
+
+    handleDestroy: function() {
+        this.getModel().destroy();
+    },
+
+    handleDestroyOnServer: function() {
+        this.getModel().destroyOnServer();
+    },
+
+    /*
+    renderButtons: function() {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        var onClick = button.onClick || function(){};
+
         return (
-            React.createElement("div", null, 
-                React.createElement("h4", {classname: "list-group-item-heading"}, this.getTitle()), 
-                React.createElement("i", {id: "edit-button", classname: "icon ion-edit edit-button"}), 
-                React.createElement("i", {classname: "icon ion-trash-a uninstall-button"})
+            <div className={className} onClick={button.onClick}>{button.name}</div>
+        );
+    },
+    */
+
+    render: function() {
+        //console.log('ItemView props', this.props);
+        var model = this.props.model;
+        var body = this.renderBody ? this.renderBody() : "";
+        var buttons = this.state.buttons || [];
+        var className = this.props.className;
+        return (
+            React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
+                buttons: buttons, renderButtons: this.renderButtons, 
+                className: className, bsStyle: "", 
+                hideSubtitleOnExpanded: this.props.hideSubtitleOnExpanded, 
+                collapsable: this.props.openable, eventKey: "1"}, 
+                body
             )
         );
     }
 };
 
-CBApp.ListView = {
-    //mixins: [Backbone.React.Component.mixin],
-    createItem: function (item) {
-        console.log('createItem itemView', this.itemView);
-        console.log('item', item);
-        return React.createElement("div", null, item);
+Portal.ListView = {
+
+    /*
+    propTypes: {
+        handleButtonClick: React.PropTypes.func
     },
+
     setCollection: function(collection) {
 
     },
-    /*
-    componentWillReceiveProps: function(newProps, oldProps){
-        this.setState(this.getInitialState(newProps));
+    */
+
+    renderButton: function(button) {
+
+        var type = button.type == 'bold' ? '--cta' : '';
+        var className = "topcoat-button" + type + " center full";
+        //console.log('renderButton onClick', button.onClick);
+        //var onClick = button.onClick || function(){};
+
+        return (
+            React.createElement("div", {className: className, onClick: button.onClick}, button.name)
+        );
     },
-    render: function () {
-        return <div>{this.props.collection.map(this.createItem)}</div>;
+
+    renderButtons: function() {
+
+        var buttons = this.state.buttons || [];
+
+        return (
+            React.createElement("div", {class: "topcoat-button-bar"}, 
+                buttons.map(this.renderButton)
+            )
+        )
     },
-     */
+
     render: function() {
+        //console.log('render collection', this.props);
+        //console.log('render mapped collection', this.props.collection.map(this.createItem));
+        //console.log('react getCollection ', this.getCollection());
+
+        var title = this.state.title || "";
+
+        //var collection = this.getCollection();
+        //console.log('ListView collection', collection);
         return (
             React.createElement("div", null, 
-                React.createElement("h4", {classname: "list-group-item-heading"}, "Test"), 
-                React.createElement("i", {id: "edit-button", classname: "icon ion-edit edit-button"}), 
-                React.createElement("i", {classname: "icon ion-trash-a uninstall-button"})
+                React.createElement("h2", null, title), 
+                React.createElement("ul", {className: "animated-list device-list"}, 
+                    this.props.collection.map(this.renderItem)
+                ), 
+                this.renderButtons()
             )
         );
     }
 };
 
-CBApp.ListItemLoadingView = Marionette.ItemView.extend({
 
-    tagName: 'li',
-    className: 'spinner',
-    template: require('./templates/listItemLoading.html')
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/mixins.js":[function(require,module,exports){
+
+var Mixins = {};
+
+Mixins.Counter = require('./counter');
+Mixins.Filter = require('./filter');
+Mixins.RowView = require('./table').RowView;
+Mixins.TableView = require('./table').TableView;
+
+Portal.Mixins = Mixins;
+
+
+},{"./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
+
+module.exports.RowView = {
+
+    getModel: function() {
+
+        var owner = this._owner;
+        //console.log('getModel owner', owner);
+        if (!owner) return false;
+        var collection = owner.getCollection();
+        //console.log('getModel collection', collection);
+        //console.log('getModel item', this.props.model);
+        var item = this.props.model;
+        var query = item.id ? {id: item.id} : {cid: item.cid};
+        return collection.findWhere(query);
+    },
+
+    getCollection: function() {
+
+        var owner = this._owner;
+        if (!owner) return false;
+        return owner.getCollection();
+    },
+
+    handleDestroy: function() {
+        this.getModel().destroy();
+    },
+
+    handleDestroyOnServer: function() {
+        this.getModel().destroyOnServer();
+    },
+
+    render: function() {
+        //console.log('ItemView props', this.props);
+        var model = this.props.model;
+        return (
+            React.createElement("tr", {key: model.cid}, 
+                React.createElement("td", {className: "shrink"}, remote, " ", direction), 
+                React.createElement("td", {className: "expand"}, message.body)
+            )
+        );
+    }
+};
+
+module.exports.TableView = {
+
+    getFilteredCollection: function() {
+
+        var self = this;
+
+        if (this.filteredCollection) {
+            return this.filteredCollection;
+        } else {
+
+            var collection = this.props.collection;
+
+            this.filteredCollection = collection.createLiveChildCollection(collection.models);
+
+            /*
+            this.filteredCollection.on('all', function(event) {
+                console.log('filteredCollection event', event)
+                //collection.trigger('change');
+            });
+            */
+
+            this.filteredCollection.setPills(this.state.filters);
+            /*
+            _.each(this.state.filters, function(filter) {
+                self.filteredCollection.setFilter(filter.name, filter.filter);
+            });
+            */
+
+            return this.filteredCollection;
+        }
+    },
+
+    render: function() {
+
+        var title = this.state.title || "";
+
+        var header = this.renderHeader ? this.renderHeader() : '';
+
+        console.log('TableView render filteredCollection ', this.getFilteredCollection());
+
+        return (
+            React.createElement("div", null, 
+                React.createElement("h4", null, title), 
+                header, 
+                React.createElement("div", {className: "table-nested"}, 
+                    React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
+                        React.createElement("tbody", null, 
+                        this.getFilteredCollection().map(this.renderRow)
+                        )
+                    )
+                )
+            )
+        );
+    }
+};
+
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/nav.js":[function(require,module,exports){
+
+module.exports.Topbar = React.createClass({displayName: 'Topbar',
+
+    mixins: [ Router.State ],
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "navbar navbar-inverse navbar-fixed-top"}, 
+                React.createElement("div", {className: "container"}, 
+                    React.createElement("div", {className: "navbar-header"}, 
+                        React.createElement("button", {type: "button", className: "navbar-toggle pull-right", 'data-toggle': "collapse", 'data-target': ".navbar-ex1-collapse"}, 
+                            React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
+                            React.createElement("span", {className: "icon-bar"}), 
+                            React.createElement("span", {className: "icon-bar"}), 
+                            React.createElement("span", {className: "icon-bar"})
+                        ), 
+                        React.createElement("a", {className: "home navbar-brand"}, React.createElement("strong", null, "ContinuumBridge"))
+                    ), 
+
+                    React.createElement("div", {className: "collapse navbar-collapse navbar-ex1-collapse", role: "navigation"}, 
+                        React.createElement("ul", {id: "navbar-left", className: "nav navbar-nav navbar-left"}, 
+                            React.createElement(BridgeList, {collection: Portal.bridgeCollection})
+                        ), 
+                        React.createElement("div", {id: "navbar-right", className: "nav navbar-nav navbar-right"}, 
+                            React.createElement(Tab, {to: "dashboard"}, "Dashboard"), 
+                            React.createElement(Tab, {to: "market"}, "App Market"), 
+                            React.createElement(Tab, {to: "config"}, "Config"), 
+                            React.createElement(AccountList, null)
+                        )
+                    )
+                )
+            )
+        )
+    }
 });
 
-CBApp.ListView = Marionette.CompositeView.extend({
+var BridgeList = React.createClass({displayName: 'BridgeList',
 
-    showLoading: function() {
+    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
 
+    bridgeClick: function(e) {
+        console.log('bridgeClick event target', e.target);
+        var bridgeID = parseInt(e.target.getAttribute('data-tag'));
+        console.log('bridgeClick bridgeID', bridgeID);
+        var bridge = Portal.bridgeCollection.getID(bridgeID);
+        console.log('bridgeClick bridge', bridge);
+        Portal.setCurrentBridge(bridge);
+    },
 
+    createItem: function(bridge) {
+
+        return (
+            React.createElement("li", {key: bridge.id}, 
+                React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, bridge.name)
+            )
+        );
+    },
+
+    render: function () {
+
+        var currentBridge = Portal.getCurrentBridge();
+        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
+        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
+
+        //var bridgeCollection = this.props.collection.without(currentBridge);
+        return (
+            React.createElement("li", {className: "dropdown"}, 
+                React.createElement("a", {href: "#", id: "bridge-header", className: "dropdown-toggle", 'data-toggle': "dropdown"}, 
+                    React.createElement("div", {className: "header-text"}, bridgeName), React.createElement("b", {className: "caret"})
+                ), 
+                React.createElement("ul", {className: "dropdown-menu"}, 
+                    this.props.collection.map(this.createItem)
+                )
+            )
+        )
+    }
+});
+
+var AccountList = React.createClass({displayName: 'AccountList',
+
+    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+
+    render: function () {
+
+        var firstName = Portal.currentUser.get('first_name');
+        var lastName = Portal.currentUser.get('last_name');
+
+        return (
+            React.createElement("li", {id: "account-dropdown", className: "dropdown"}, 
+                React.createElement("a", {href: "#", className: "dropdown-toggle", 'data-toggle': "dropdown"}, 
+                    React.createElement("div", {className: "header-text"}, firstName, " ", lastName), 
+                    React.createElement("b", {className: "caret"})
+                ), 
+                React.createElement("ul", {className: "dropdown-menu"}, 
+                    React.createElement(Tab, {to: "account"}, "My Account"), 
+                    React.createElement(Tab, {to: "developer"}, "Developer"), 
+                    React.createElement("li", {name: "logout"}, 
+                        React.createElement("a", {href: "/accounts/logout/"}, "Logout")
+                    )
+                )
+            )
+        )
     }
 })
-},{"./templates/listItemLoading.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
 
-CBApp.Regions = {};
+var Tab = React.createClass({displayName: 'Tab',
 
-CBApp.Regions.Fade = Marionette.Region.extend({
+    mixins: [ Router.State, Router.Navigation ],
+
+    onClick: function() {
+
+        console.log('onClick nav query', this.getQuery());
+        console.log('nave this.props.to', this.props.to);
+        var path = Portal.router.makePath(this.props.to, {}, Portal.route.query);
+        console.log('nav path', path);
+        this.transitionTo(this.props.to, {}, this.getQuery());
+        // Stop the default transition from firing
+        return false;
+    },
+
+    render: function () {
+        var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
+        var className = isActive ? 'active' : '';
+        //console.log('link props', this.props);
+        //var link = Router.Link(this.props);
+        //var link = (
+        //    <Router.Link {...this.props} />
+        //);
+
+        return (
+            React.createElement("li", {className: className}, 
+                React.createElement(Router.Link, React.__spread({},  this.props, {onClick: this.onClick}))
+            )
+        );
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/notFound.js":[function(require,module,exports){
+
+module.exports = React.createClass({displayName: 'exports',
+
+    render: function () {
+        return (
+            React.createElement("div", null, 
+                "Page Not Found"
+            )
+        );
+    }
+});
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js":[function(require,module,exports){
+
+Portal.Regions = {};
+
+Portal.Regions.Fade = Marionette.Region.extend({
 
     open: function(view){
         this.$el.hide();
@@ -27799,9 +18114,7 @@ CBApp.Regions.Fade = Marionette.Region.extend({
     }
 });
 
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/templates/listItemLoading.html":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html")
-},{"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/templates/installButton.html"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/bootstrap/bootstrap.js":[function(require,module,exports){
 (function (global){
 
 ; $ = global.$ = require("jquery");

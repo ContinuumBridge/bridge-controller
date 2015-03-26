@@ -23,9 +23,10 @@ class AppResource(CBResource, CBIDResourceMixin):
         queryset = App.objects.all()
         authorization = AppAuthorization()
         always_return_data = True
-        #bridge_related_through = 'app_installs'
+        bridge_related_through = 'app_installs'
         related_bridge_permissions = ['read']
-        #user_related_through = 'app_ownerships'
+        user_related_through = 'app_ownerships'
+        create_user_through_model = True
         related_user_permissions = ['read', 'create', 'update', 'delete']
         #client_related_through = 'app_connections'
         resource_name = 'app'
@@ -66,15 +67,7 @@ class AppOwnershipResource(CBResource):
         resource_name = 'app_ownership'
 
 
-class AppLicenceResource(PostMatchMixin, CBResource):
-
-    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
-    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
-    #installs_permitted = fields.IntegerField()
-
-    installs = cb_fields.ToManyThroughField('apps.api.resources.AppInstallResource',
-                                                      attribute=lambda bundle: bundle.obj.get_installs() or bundle.obj.app_installs, full=False,
-                                                      null=True, readonly=True, nonmodel=True)
+class ProtoAppLicenceResource(PostMatchMixin, CBResource):
 
     class Meta(CBResource.Meta):
        queryset = AppLicence.objects.all()
@@ -84,6 +77,18 @@ class AppLicenceResource(PostMatchMixin, CBResource):
        related_user_permissions = ['read', 'delete']
        resource_name = 'app_licence'
        post_match = ['app', 'user']
+
+
+class AppLicenceResource(ProtoAppLicenceResource):
+
+    user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
+    app = cb_fields.ToOneThroughField('apps.api.resources.AppResource', 'app', full=True)
+
+    installs = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                  'installs', full=False)
+
+    class Meta(ProtoAppLicenceResource.Meta):
+        pass
 
 
 class AppInstallResource(CBResource, CBIDResourceMixin):

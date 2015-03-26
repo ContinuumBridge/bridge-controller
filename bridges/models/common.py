@@ -20,7 +20,7 @@ class CBIDModelMixin(object):
         return prefix + str(self.id)
 
 
-models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('default_resource',
+models.options.DEFAULT_NAMES = models.options.DEFAULT_NAMES + ('broadcast_resource',
                                                                'user_related_through',
                                                                'bridge_related_through',
                                                                'client_related_through')
@@ -34,8 +34,8 @@ class BroadcastMixin(CBIDModelMixin):
         for client_name in client_names:
             # Get clients directly related to this object
             try:
-                print "self is", self
-                print "client_name is", client_name
+                #print "self is", self
+                #print "client_name is", client_name
                 client = getattr(self, client_name)
                 related_cbids.append(client.cbid)
             except ObjectDoesNotExist:
@@ -51,36 +51,39 @@ class BroadcastMixin(CBIDModelMixin):
                 related_cbids.extend([c.cbid for c in clients])
             except AttributeError:
                 pass
-        print "related_cbids is", related_cbids
         return related_cbids
 
     def to_json(self, fields=None):
-        # Get the default resource for this model and use it for dehydration
-        resource_path = getattr(self._meta, 'default_resource').split('.')
+        # Get the broadcast resource for this model and use it for dehydration
+        resource_path = getattr(self._meta, 'broadcast_resource').split('.')
         module = __import__('.'.join(resource_path[:-1]), fromlist=[resource_path[-1]])
         resource = getattr(module, resource_path[-1])()
         bundle = resource.build_bundle(obj=self)
         if fields:
+            data = {}
             for field in fields:
                 if field == 'resource_uri':
-                    data = { 'resource_uri': resource.get_resource_uri() + str(self.pk) }
+                    data['resource_uri'] = resource.get_resource_uri() + str(self.pk)
+                if field == 'id':
+                    data['id'] = str(self.pk)
+
                 # TODO Allow choosing of fields other than resource_uri
         else:
             data = getattr(resource.full_dehydrate(bundle), 'data')
-        return RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
+        return resource.get_resource_uri(), RawJSON(resource._meta.serializer.serialize(data, 'application/json'))
 
     def create_message(self, verb):
 
         if verb != "delete":
-            data = self.to_json()
+            resource_uri, data = self.to_json()
         elif verb == "delete":
             # Only serialize specific fields if the model is being deleted
-            data = self.to_json(fields=['resource_uri', 'deleted_by'])
+            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id'])
 
         body = {
-            'cbid': self.cbid,
             'verb': verb,
-            'body': data
+            'body': data,
+            'resource_uri': resource_uri
         }
 
         return {
@@ -93,7 +96,10 @@ class BroadcastMixin(CBIDModelMixin):
         r = redis.Redis()
         json_message = json.dumps(message, cls=RawJSONEncoder)
         destinations = self.get_related_cbids()
+
+        #modified_by = self.modified_by
         for d in destinations:
+
             r.publish(d, json_message)
 
     def save(self, *args, **kwargs):
@@ -101,23 +107,23 @@ class BroadcastMixin(CBIDModelMixin):
         broadcast = kwargs.pop('broadcast', True)
         super(BroadcastMixin, self).save(*args, **kwargs)
         if broadcast:
-            if settings.ENVIRONMENT == "development":
+            #if settings.ENVIRONMENT == "development":
                 message = self.create_message(verb)
                 self.broadcast(message)
-            else:
+            #else:
                 # User the task queue if we're not in development
-                message = self.create_message(verb)
-                tasks.broadcast.delay(self, message)
+                #message = self.create_message(verb)
+                #tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
         message = self.create_message('delete')
         super(BroadcastMixin, self).delete(using=using)
         if broadcast:
-            if settings.ENVIRONMENT == "development":
-                self.broadcast(message)
-            else:
+            #if settings.ENVIRONMENT == "development":
+            self.broadcast(message)
+            #else:
                 # User the task queue if we're not in development
-                tasks.broadcast.delay(self, message)
+                #tasks.broadcast.delay(self, message)
 
 
 class LoggedModel(models.Model):

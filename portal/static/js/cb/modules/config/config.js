@@ -2,14 +2,14 @@
 
 var ConfigViews = require('./views');
 
-CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
+Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
     console.log('Config ran!');
 
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
           //"": "showConfig",
-          ":id": "showBridge",
+          ":id": "showConfig",
           //"config/bridge/:bridge": "config",
           "install_device": "installDevice"
         }
@@ -29,72 +29,75 @@ CBApp.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
       index: function() {
         Config.mainLayoutView = new ConfigViews.Main();
-        CBApp.mainRegion.show(Config.mainLayoutView);
+        Portal.mainRegion.show(Config.mainLayoutView);
       },
-      showBridge: function(bridgeID) {
+      showConfig: function() {
 
-          console.log('showBridge bridgeID is', bridgeID);
-          Config.mainLayoutView = new ConfigViews.Main();
-          var bridge = CBApp.bridgeCollection.get(bridgeID);
-          if (bridge) CBApp.setCurrentBridge(bridge);
-          CBApp.mainRegion.show(Config.mainLayoutView);
+          /*
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+
+          /*
+          var currentBridge = Portal.getCurrentBridge();
+          currentBridge.fetch();
+          Config.mainView = React.render(
+              < ConfigViews.Main model={currentBridge} />,
+              $('#main-region')[0]
+          );
+          */
+          var $mainRegion = $('#main-region')[0];
+          React.unmountComponentAtNode($mainRegion[0]);
+          //$mainRegion.remove();
+          Config.mainView = React.render(
+              < ConfigViews.Main collection={Portal.bridgeCollection} />,
+              $mainRegion
+          );
       },
-      showAppLicences: function() {
+      installApps: function() {
 
-        var installAppModal = new ConfigViews.InstallAppModal();
-            /*
-            //model: discoveredDeviceInstall,
-            installDevice: function(friendlyName) {
-                console.log('Install callback!');
-            }
-            */
-
-        CBApp.modalsRegion.show(installAppModal);
+          console.log('controller installApps');
+        Config.mainView.setState({installingApps: true});
+        //var installAppModal = new ConfigViews.InstallAppModal();
+        //Portal.modalsRegion.show(installAppModal);
+      },
+      cancelInstallApps: function() {
+          Config.mainView.setState({installingApps: false});
       },
       discoverDevices: function() {
 
-          CBApp.discoveredDeviceInstallCollection.forEach(function(discoveredDeviceInstall) {
-              Backbone.Relational.store.unregister(discoveredDeviceInstall);
+          Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
+              discoveredDevice.delete();
           });
-          /*
-          CBApp.getCurrentBridge().then(function(currentBridge) {
-
-              // Remove all existing discovered devices
-              var collection = currentBridge.get('discoveredDeviceInstalls');
-              collection.forEach(function(discoveredDeviceInstall) {
-                  Backbone.Relational.store.unregister(discoveredDeviceInstall);
-              });
-          });
-          */
-          CBApp.getCurrentBridge().then(function(currentBridge) {
-              var destination = currentBridge.get('cbid');
-              var message = new CBApp.Message({
-                  body: {
-                      command: 'discover'
-                  },
-                  destination: destination
-              });
-              CBApp.messageCollection.sendMessage(message);
-          });
-
-          Config.mainLayoutView.devicesView.showDeviceDiscovery();
+          Portal.messageCollection.sendCommand('discover');
+          Config.mainView.setState({discoveringDevices: true});
       },
       stopDiscoveringDevices: function() {
-
-          Config.mainLayoutView.devicesView.showDeviceInstalls();
+          Config.mainView.setState({discoveringDevices: false});
       },
-      installDevice: function(discoveredDeviceInstall) {
-        var installDeviceModal = new ConfigViews.InstallDeviceModal({
-            model: discoveredDeviceInstall,
-        });
-        CBApp.modalsRegion.show(installDeviceModal);
+      promptInstallDevice: function(discoveredDevice) {
+          console.log('promptInstallDevice discoveredDevice', discoveredDevice);
+          Config.mainView.setState({installDevice: discoveredDevice});
+      },
+      installDevice: function(discoveredDevice, friendlyName) {
+          console.log('installDevice discoveredDevice', discoveredDevice);
+          discoveredDevice.install(friendlyName);
+          Config.mainView.setState({installDevice: false,
+                                    discoveringDevices: false});
+      },
+      cancelInstallDevice: function() {
+          console.log('cancelInstallDevice');
+          Config.mainView.setState({installDevice: false});
       }
     });
 
     Config.on('config:show', function(bridgeID){
         console.log('show config');
         var slug = bridgeID || "";
-        Config.controller.showBridge(bridgeID);
+        Portal.currentBridge = Portal.bridgeCollection.get(bridgeID);
+        Config.controller.showConfig();
         console.log('slug in config config:show is', slug);
         Config.router.navigate(slug);
     });

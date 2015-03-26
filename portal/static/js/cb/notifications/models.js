@@ -1,25 +1,68 @@
 
-CBApp.Notification = Backbone.Deferred.Model.extend({
-
+Portal.Notification = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
 
     backend: 'notification',
 
-    initialize: function() {
-        //this.startTracking();
+    subModelTypes: {
+		'connectionStatus': 'Portal.ConnectionStatus'
+	},
+
+    isVisible: function() {
+        return true;
+    },
+
+    getTitle: function() {
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getName();
+        } else {
+            return this.get('title');
+        }
+    },
+
+    getSubtitle: function() {
+
+        if (this.get('type') == 'error') {
+            return this.get('error').getMessage();
+        } else {
+            return this.get('subTitle') || "";
+        }
     }
 
 }, { modelType: "notification" });
 
-//CBApp.DeviceCollection = Backbone.Deferred.Collection.extend({
-CBApp.NotificationCollection = QueryEngine.QueryCollection.extend({
 
-    model: CBApp.Notification,
-    backend: 'notification',
+Portal.ConnectionStatus = Portal.Notification.extend({
 
-    initialize: function() {
-        //this.bindBackend();
-        CBApp.NotificationCollection.__super__.initialize.apply(this, arguments);
+    defaults: {
+        type: 'connectionStatus',
+        connected: true,
+        reconnecting: false,
+        error: false,
+        timeout: false
+    },
+
+    isVisible: function() {
+        return !this.get('connected');
+    },
+
+    getTitle: function() {
+        var error = this.get('error');
+        return error ? "Connection error" : "Connection lost"
+    },
+
+    getSubtitle: function() {
+        var reconnecting = this.get('reconnecting');
+        return reconnecting ? "reconnecting.." : "waiting to reconnect";
     }
+
+}, { modelType: "connectionStatus" });
+
+//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
+Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
+
+    model: Portal.Notification,
+    backend: 'notification'
 });

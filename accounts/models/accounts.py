@@ -126,5 +126,3 @@ class CBUser(AuthPasswordMixin, CBAuth):
     def cbid(self):
         return "UID" + str(self.id)
 
-print "After CBUser"
-

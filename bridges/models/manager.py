@@ -3,7 +3,7 @@ from clients.models.manager import ClientModelManager
 
 class BridgeModelManager(ClientModelManager):
 
-    def create_bridge(self, save=False, **extra_fields):
+    def create_bridge(self, save=False, user=False, **extra_fields):
 
         """
         Creates a bridge, saves it if save is True.

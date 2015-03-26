@@ -17,25 +17,27 @@ class CurrentUserAuthorization(Authorization):
         print "Obj id", bundle.obj.id, "Request id", bundle.request.user.id
         return bundle.obj.id == bundle.request.user.id
 
+    '''
     def create_list(self, object_list, bundle):
         # Assuming their auto-assigned to ``user``.
         return object_list
 
     def create_detail(self, object_list, bundle):
         return bundle.obj.user == bundle.request.user
+    '''
 
     def update_list(self, object_list, bundle):
         allowed = []
 
         # Since they may not all be saved, iterate over them.
         for obj in object_list:
-            if obj.user == bundle.request.user:
+            if obj == bundle.request.user:
                 allowed.append(obj)
 
         return allowed
 
     def update_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
+        return bundle.obj == bundle.request.user
 
     def delete_list(self, object_list, bundle):
         # Sorry user, no deletes for you!

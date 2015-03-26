@@ -1,14 +1,9 @@
 
+/*
 var Q = require('q');
 
 require('../../views/generic-views');
 require('../../views/regions');
-
-require('../../apps/ownerships/views');
-require('../../apps/connections/views');
-
-require('../../clients/views');
-require('../../clients/controls/views');
 
 //var AppViews = require('./apps/views');
 
@@ -23,22 +18,21 @@ module.exports.Main = Marionette.Layout.extend({
 
     initialize: function() {
 
-        this.appOwnershipListView = new CBApp.AppOwnershipListView();
+        this.appOwnershipListView = new Portal.AppOwnershipListView();
 
-        this.clientControlListView = new CBApp.ClientControlListView();
+        this.clientControlListView = new Portal.ClientControlListView();
 
-        CBApp.getCurrentUser().then(function(currentUser) {
-            CBApp.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            CBApp.clientControlCollection.fetch({data: { 'user': 'current' }})
-            //CBApp.clientCollection.fetch()
+        Portal.getCurrentUser().then(function(currentUser) {
+            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+            Portal.clientControlCollection.fetch({data: { 'user': 'current' }})
+            //Portal.clientCollection.fetch()
         }).done();
 
         /*
-        this.bridgeView = new CBApp.BridgeListView();
+        this.bridgeView = new Portal.BridgeListView();
         // View which manages device installs and device discovery
         this.devicesView = new DevicesView();
-        this.messageListView = new CBApp.MessageListView();
-        */
+        this.messageListView = new Portal.MessageListView();
     },
 
     onRender: function() {
@@ -52,9 +46,8 @@ module.exports.Main = Marionette.Layout.extend({
         this.devicesView.render();
         this.messageSection.show(this.messageListView);
         this.bridgeSection.show(this.bridgeView);
-         */
 
-        CBApp.getCurrentUser().then(function(currentUser) {
+        Portal.getCurrentUser().then(function(currentUser) {
 
             //self.listenToOnce(currentBridge, 'change:current', self.render);
             var appOwnershipCollection = currentUser.get('appOwnerships');
@@ -77,79 +70,16 @@ module.exports.Main = Marionette.Layout.extend({
             self.appInstallListView.setCollection(liveAppInstallCollection);
             self.appInstallListView.render();
 
-            CBApp.filteredMessageCollection.deferredFilter(CBApp.filters.currentBridgeMessageDeferred());
-            self.messageListView.setCollection(CBApp.filteredMessageCollection, true);
+            Portal.filteredMessageCollection.deferredFilter(Portal.filters.currentBridgeMessageDeferred());
+            self.messageListView.setCollection(Portal.filteredMessageCollection, true);
             self.messageListView.render();
 
-            var bridgeCollection = new CBApp.BridgeCollection(currentBridge);
+            var bridgeCollection = new Portal.BridgeCollection(currentBridge);
             console.log('bridgeCollection is', bridgeCollection);
             self.bridgeView.setCollection(bridgeCollection);
             self.bridgeView.render();
-             */
         }).done();
     }
 
 });
-
-/*
-module.exports.InstallAppModal = Backbone.Modal.extend({
-
-    template: require('./templates/installAppModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    events: {
-        'click .store-button': 'clickStore'
-    },
-
-
-    initialize: function() {
-
-        var self = this;
-        this.licenceListView = new CBApp.AppLicenceListView();
-
-    },
-
-    clickStore: function() {
-
-        CBApp.request('store:show');
-        //CBApp.Controller.store();
-    },
-
-    onRender: function() {
-
-        var self = this;
-        CBApp.getCurrentUser().then(function(currentUser) {
-
-            console.log('promise in app modal initialize');
-            var licenceCollection = currentUser.get('appLicences');
-            self.licenceListView.setCollection(licenceCollection);
-            self.licenceListView.render();
-        }).done();
-        //this.licenceListView.setElement(this.$('licence-section')).render();
-        this.$('.licence-section').html(this.licenceListView.render().$el);
-    },
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
-module.exports.InstallDeviceModal = Backbone.Modal.extend({
-
-    template: require('./templates/discoveryModal.html'),
-    cancelEl: '#cancel-button',
-    submitEl: '#submit-button',
-
-    submit: function() {
-        console.log('Submitted modal', this);
-        var friendlyName = this.$('#friendly-name').val();
-        this.model.installDevice(friendlyName);
-        CBApp.Config.controller.stopDiscoveringDevices();
-    }
-});
-
 */

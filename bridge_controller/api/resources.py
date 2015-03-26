@@ -39,7 +39,7 @@ from .authentication import HTTPHeaderSessionAuthentication
 class CBResource(ModelResource):
 
     class Meta:
-        list_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get', 'post', 'patch']
         detail_allowed_methods = ['get', 'post', 'patch', 'put', 'delete']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CBAuthorization()
@@ -54,9 +54,11 @@ class CBResource(ModelResource):
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
     def update_modified_by(self, bundle):
+        print "Update modified by obj meta fields", bundle.obj._meta.fields
         if 'created_by' in bundle.obj._meta.fields and not bundle.obj.pk:
             bundle.obj.created_by = bundle.request.user
         if 'updated_by' in bundle.obj._meta.fields:
+            print "Update updated_by"
             bundle.obj.modified_by = bundle.request.user
 
     def save(self, bundle, skip_errors=False):
@@ -65,11 +67,19 @@ class CBResource(ModelResource):
         if bundle.errors and not skip_errors:
             raise ImmediateHttpResponse(response=self.error_response(bundle.request, bundle.errors))
 
+        # ADDED
+        create_user_through_model = False
+
         # Check if they're authorized.
         if bundle.obj.pk:
             self.authorized_update_detail(self.get_object_list(bundle.request), bundle)
         else:
             self.authorized_create_detail(self.get_object_list(bundle.request), bundle)
+            # ADDED
+            try:
+                create_user_through_model = getattr(self._meta, 'create_user_through_model')
+            except AttributeError:
+                pass
 
         # Save FKs just in case.
         self.save_related(bundle)
@@ -84,6 +94,12 @@ class CBResource(ModelResource):
         # Now pick up the M2M bits.
         m2m_bundle = self.hydrate_m2m(bundle)
         self.save_m2m(m2m_bundle)
+
+        # ADDED
+        print "create_user_through_model is", create_user_through_model
+        if create_user_through_model:
+            self.create_user_through_model(bundle)
+
         return bundle
 
     def obj_get_list(self, bundle, **kwargs):
@@ -103,8 +119,10 @@ class CBResource(ModelResource):
         if filters.get('user') == 'current':
             filters['user'] = str(bundle.request.user.id)
 
-        # Update with the provided kwargs.
+        # Update filters with the provided kwargs.
+        #print "filter kwargs are", kwargs
         filters.update(kwargs)
+        #print "filter filters are", filters
         applicable_filters = self.build_filters(filters=filters)
 
         try:
@@ -207,25 +225,11 @@ class CBIDResourceMixin(ModelResource):
         resource_name = 'cbid_resource_mixin'
 
 
-'''
-class ClientObjectsResource(CBResource):
-
-    """ Allows API access to objects which have the logged in client in their client field """
-
-    class Meta(CBResource.Meta):
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'post', 'put', 'patch', 'delete']
-        authentication = HTTPHeaderSessionAuthentication()
-        authorization = ClientObjectsOnlyAuthorization()
-
-        #authorization = UserObjectsOnlyAuthorization()
-'''
-
 class LoggedInResource(CBResource):
 
     class Meta(CBResource.Meta):
         list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
+        detail_allowed_methods = ['get', 'patch']
         excludes = ['password', 'is_staff', 'is_superuser']
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CurrentUserAuthorization()
@@ -249,7 +253,7 @@ class LoggedInResource(CBResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
-        print "user id is", request.user.id
+        #print "user id is", request.user.id
         # ADDED Set the request pk to the id of the logged in user
         if request_type == 'detail':
             kwargs['pk'] = request.user.id
@@ -305,12 +309,6 @@ class ThroughModelResource(CBResource):
 
             if method:
                 bundle.data[field_name] = method(bundle)
-            '''
-            # Dehydrate ids of related resources if they have them and append them to the ToMany level
-            if 'dehydrate_id' in dir(field_object) and callable(field_object.dehydrate_id):
-                print "Field object is callable"
-                bundle.data['%s_id' % field_name] = field_object.dehydrate_id(bundle)
-            '''
 
         if hasattr(self, 'instance'):
             # Add the through model id to the bundle
@@ -465,10 +463,9 @@ class AuthResource(LoggedInResource):
             if client.is_active:
                 login(request, client)
                 # Return the client's data
-                #bundle = self._meta.data_resource.build_bundle(obj=client)
-                #bundle = self._meta.data_resource.full_dehydrate(bundle)
-                #bundle = self.alter_detail_data_to_serialize(request, bundle)
-                bundle = self.build_bundle(obj=client)
+                bundle = self.build_bundle(obj=client, request=request)
+                #print "bundle.request is", bundle.request
+
                 bundle = self.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)
                 return self.create_response(request, bundle)

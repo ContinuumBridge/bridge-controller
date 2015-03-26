@@ -27,8 +27,8 @@ class App(BroadcastMixin, LoggedModel, CBIDModelMixin):
     class Meta:
         verbose_name = _('app')
         user_related_through = 'app_ownerships'
-        bridge_related_through = 'app_installs'
-        default_resource = 'apps.api.resources.AppResource'
+        bridge_related_through = 'installs'
+        broadcast_resource = 'apps.api.resources.AppResource'
         app_label = 'apps'
 
     def save(self, *args, **kwargs):
@@ -42,7 +42,7 @@ class App(BroadcastMixin, LoggedModel, CBIDModelMixin):
 
 class AppOwnership(LoggedModel):
 
-    user = models.ForeignKey(CBUser)
+    user = models.ForeignKey(CBUser, related_name='app_ownerships')
     app = models.ForeignKey(App, related_name='app_ownerships')
 
     class Meta:
@@ -54,7 +54,7 @@ class AppLicence(LoggedModel):
 
     """ Through model for a User and an App """
 
-    user = models.ForeignKey(CBUser)
+    user = models.ForeignKey(CBUser, related_name='app_licences')
     app = models.ForeignKey(App, related_name='app_licences')
     # How many times is the user allowed to install the app on their bridges
     installs_permitted = models.IntegerField(_("installs_permitted"))
@@ -64,20 +64,14 @@ class AppLicence(LoggedModel):
         verbose_name_plural = _('app_licences')
         app_label = 'apps'
 
-    def get_installs(self):
-        installs = []
-        for install in self.app_installs.filter():
-            installs.append(install)
-        return installs
-
 
 class AppInstall(LoggedModel):
     
     """ Through model for a Bridge and an App """
 
     bridge = models.ForeignKey(Bridge, related_name='app_installs')
-    app = models.ForeignKey(App, related_name='app_installs')
-    licence = models.ForeignKey(AppLicence, related_name='app_installs')
+    app = models.ForeignKey(App, related_name='installs')
+    licence = models.ForeignKey(AppLicence, related_name='installs')
 
     class Meta:
         verbose_name = _('app_install')
@@ -123,7 +117,7 @@ class AppInstallConnection(LoggedModel):
 class AppConnection(LoggedModel):
 
     client = models.ForeignKey(CBAuth, related_name='app_connections')
-    app = models.ForeignKey(App, related_name='app_connections')
+    app = models.ForeignKey(App, related_name='client_connections')
 
     class Meta:
         verbose_name = _('app_connection')

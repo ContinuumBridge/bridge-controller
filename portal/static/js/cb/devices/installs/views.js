@@ -1,92 +1,54 @@
 
-CBApp.DeviceInstallView = Marionette.ItemView.extend({
-    
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/deviceInstall.html'),
+Portal.DeviceInstallView = React.createClass({
 
-    events: {
-        'click .uninstall-button': 'uninstall'
+    mixins: [Portal.ItemView],
+
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
     },
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    },
-
-    getClass: function(val) {
-
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
-    },
-
-    uninstall: function() {
-        this.model.uninstall();
-    },
-
-    onRender: function() {
-        this.stickit();
+    getInitialState: function () {
+        return {
+            buttons: [{
+                onClick: this.handleDestroy,
+                type: 'delete'
+            }]
+        };
     }
 });
 
+Portal.DeviceInstallListView = React.createClass({
 
-CBApp.DeviceInstallListView = Marionette.CompositeView.extend({
+    itemView: Portal.DeviceInstallView,
 
-    template: require('./templates/deviceInstallSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: CBApp.DeviceInstallView,
-    itemViewContainer: '.device-list',
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
-    emptyView: CBApp.ListItemLoadingView,
-
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
+    getInitialState: function () {
+        return {
+            title: 'Devices',
+            buttons: [{
+                name: 'Discover Devices',
+                onClick: this.discoverDevices,
+                type: 'bold'
+            }]
+        };
     },
 
     discoverDevices: function() {
-        CBApp.Config.controller.discoverDevices();
+
+        Portal.router.setParams({action: 'discover-devices'});
+        //this.props.discoverDevices();
     },
 
-    onRender : function() {
+    renderItem: function (item) {
+        var cid = item.cid;
 
+        var deviceInstall = this.getCollection().get({cid: cid});
+        var title = <Portal.Components.TextInput model={deviceInstall} field="friendly_name" />;
+
+        return < Portal.DeviceInstallView key={cid}
+                    title={title} model={item} />
     }
 });
-
-/*
-CBApp.DeviceLayoutView = Marionette.Layout.extend({
-
-
-    events: {
-        'click #connect-device': 'discover',
-    },
-
-    regions: {
-        deviceList: '#device-list',
-    },
-
-    discover: function() {
-
-        CBApp.messageCollection.sendMessage('command', 'discover');
-    },
-
-    onRender: function() {
-
-        var deviceListView = new CBApp.DeviceListView({ 
-            collection: this.collection
-        });
-        
-        this.deviceList.show(deviceListView);
-    }
-})
- */
-

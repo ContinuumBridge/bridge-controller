@@ -35,6 +35,20 @@ from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 # For test
 from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
 
+
+class UserBridgeResource(CBResource):
+
+    """
+    Used for fetching bootstrapped data on initial load
+    """
+
+    class Meta(CBResource.Meta):
+        queryset = Bridge.objects.all()
+        excludes = ['is_staff', 'is_superuser', 'key', 'plaintext_key', 'uid']
+        authorization = ReadOnlyAuthorization()
+        resource_name = 'bridge'
+
+
 class UserBridgeControlResource(CBResource):
 
     bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=True)
@@ -58,19 +72,3 @@ class UserAuthBridgeControlResource(CBResource):
         queryset = BridgeControl.objects.all()
         related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge_control'
-
-
-class UserBridgeResource(CBResource):
-
-    apps = cb_fields.ToManyThroughField(AppInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_apps() or bundle.obj.app_installs, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    devices = cb_fields.ToManyThroughField(DeviceInstallResource,
-                    attribute=lambda bundle: bundle.obj.get_device_installs() or bundle.obj.deviceinstall_set, full=True,
-                    null=True, readonly=True, nonmodel=True)
-
-    class Meta(CBResource.Meta):
-        queryset = Bridge.objects.all()
-        #authorization = ReadOnlyAuthorization()
-        resource_name = 'bridge'

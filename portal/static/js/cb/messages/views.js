@@ -1,103 +1,148 @@
 
 //var Message = require('./message');
 
-CBApp.MessageView = Marionette.ItemView.extend({
+Portal.MessageView = React.createClass({
+    //mixins: [Portal.ItemView],
+    render: function() {
 
-    tagName: 'tr',
-    className: '',
-    template: require('./templates/message.html'),
-
-    serializeData: function() {
-
-      console.log('serializeData');
-      //var bridgeID = "BID" + this.model.get('bridge').get('id');
-      var data = {};
-      var incoming = Boolean(this.model.get('time_received'));
-      data.direction = incoming ? "=>" : "<=";
-      data.remote = incoming ? this.model.get('source') : this.model.get('destination');
-      var body = this.model.get('body');
-      // Check if this is a command
-      data.body = body instanceof Object ? body.command || body.status : body;
-      return data;
+        return (
+            <div>
+                <td className="shrink">"remote" "direction"</td>
+                <td className="expand"> "body" </td>
+            </div>
+        )
     }
-})
+});
 
-CBApp.MessageListView = Marionette.CompositeView.extend({
+Portal.MessageListView = React.createClass({
 
-    template: require('./templates/messageSection.html'),
-    id: 'messages',
-    //tagName: 'table',
-    //className: 'table-condensed table-hover table-striped',
-    itemView: CBApp.MessageView,
-    itemViewContainer: '#messages-table',
+    mixins: [Backbone.React.Component.mixin],
 
-    events: {
-        'click #send-button': 'clickSend',
-        'keyup #command-input' : 'keyPressEventHandler',
-        'click #start': 'clickCommand',
-        'click #stop': 'clickCommand',
-        'click #update_config': 'clickCommand',
-        'click #send_log': 'clickCommand',
-        'click #z-exclude': 'clickCommand',
-        'click #restart': 'clickCommand',
-        'click #reboot': 'clickCommand',
-        'click #upgrade': 'clickCommand'
+    getInitialState: function() {
+        return {command: ''};
     },
 
-    collectionEvents: {
-        "relational:reset": "scrollMessages"
-    },
-
-    initialize: function() {
-
-        //this.listenTo(this.collection, 'after:item:added', this.scrollMessages)
-    },
-
-    onRender: function() {
-
-        this.$commandInput = this.$('#command-input');
-        this.$messagesWrapper = this.$('#messages-wrapper');
-    },
-
-    scrollMessages: function(){
-
-        if (this.$messagesWrapper && this.$messagesWrapper[0]) {
-            this.$messagesWrapper[0].scrollTop = this.$messagesWrapper[0].scrollHeight;
-        }
+    getDefaultProps: function () {
+        return {
+            title: 'Messages',
+            buttons: [
+                'start',
+                'stop',
+                'update',
+                'send_log',
+                'z_exclude',
+                'restart',
+                'reboot',
+                'upgrade'
+            ]
+        };
     },
 
     sendCommand: function(command) {
 
-        console.log('sendCommand', command);
-        CBApp.getCurrentBridge().then(function(currentBridge) {
-            var destination = currentBridge.get('cbid');
-            var message = new CBApp.Message({
-                destination: destination,
-                body: {
-                    command: command
-                }
-            });
-            CBApp.messageCollection.sendMessage(message);
-        });
+        Portal.messageCollection.sendCommand(command);
     },
 
-    clickCommand: function(e) {
-        //console.log('clickCommand', e);
-        var command = $(e.currentTarget).attr('id');
-        console.log('clickCommand', command);
+    commandSubmit: function() {
+        var command = this.refs.command.getDOMNode().value;
         this.sendCommand(command);
+        this.setState({command: ''});
     },
 
-    clickSend: function() {
-        var command = this.$commandInput.val();
-        this.$commandInput.value = "";
-        this.sendCommand(command);
+    handleCommandChange: function(e) {
+        this.setState({command: e.target.value});
     },
 
-    keyPressEventHandler: function(event){
-        // When enter is pressed in the input, send the message
-        if(event.keyCode == 13){
-            this.clickSend();
+    handleCommandKeyDown: function(e) {
+        if (e.keyCode == 13 ) {
+            return this.commandSubmit();
         }
+    },
+
+    renderMessage: function(message) {
+
+        var direction = message.direction == 'outbound' ? '<=' : '=>';
+        var remote = message.direction == 'outbound' ? message.destination : message.source;
+
+        var body = message.body;
+        var content = body.status || body.command;
+
+        return (
+            <tr key={message.cid}>
+                <td className="shrink">{remote} {direction}</td>
+                <td className="expand" dangerouslySetInnerHTML={{__html: content }}></td>
+            </tr>
+        )
+    },
+
+    renderButton: function(name) {
+
+        var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        return (
+            <div className="topcoat-button-bar__item">
+                <button data-tag={name} className="topcoat-button-bar__button" onClick={this.onButtonClick} >{label}</button>
+            </div>
+        )
+    },
+
+    onButtonClick: function(e) {
+
+        var command = e.target.getAttribute('data-tag');
+        this.sendCommand(command);
+        this.setState({command: ''});
+    },
+
+    componentWillUpdate: function() {
+        // Check if the message window is already at the bottom
+        //var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+        //this.shouldScrollBottom = messagesWrapper.scrollTop + messagesWrapper.offsetHeight >= messagesWrapper.scrollHeight;
+        // Temporarily remove checking to fix windows chrome bug
+        this.shouldScrollBottom = true;
+    },
+
+    componentDidUpdate: function() {
+        if (this.shouldScrollBottom) {
+            // Scroll the message window to its bottom
+            var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight
+        }
+    },
+
+    render: function() {
+
+        var command = this.state.command;
+
+        var topButtons = this.props.buttons.slice(0, 5);
+        var bottomButtons = this.props.buttons.slice(5);
+
+        return (
+            <div id="messages">
+                <h2>Bridge Messages</h2>
+
+                <div ref="messagesWrapper" id="messages-wrapper">
+                    <table className="table-condensed table-hover table-striped">
+                        <tbody>
+                        {this.props.collection.map(this.renderMessage)}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="input-group">
+                    <input type="text" className="form-control" ref="command"
+                        value={command} onKeyDown={this.handleCommandKeyDown} onChange={this.handleCommandChange} />
+                    <span className="input-group-btn">
+                        <button id="send-button" className="btn btn-default"
+                            type="button" onClick={this.commandSubmit} >Send</button>
+                    </span>
+                </div>
+                <div className="topcoat-button-bar">
+                    {topButtons.map(this.renderButton)}
+                </div>
+                <div className="topcoat-button-bar">
+                    {bottomButtons.map(this.renderButton)}
+                </div>
+            </div>
+        )
     }
 });
+
