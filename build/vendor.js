@@ -61065,7 +61065,287 @@ function toArray(list, index) {
     return array
 }
 
-},{}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/CollectionMethodsMixin.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Collection.js":[function(require,module,exports){
+"use strict";
+
+var Spec = require('./Spec');
+var IdArray = require('./IdArray');
+var Syncable = require('./Syncable');
+var ProxyListener = require('./ProxyListener');
+
+/** Abstract base class for "smaller" collections.
+    Backbone. 4000 full load */
+var Collection = Syncable.extend('Collection', {
+
+    defaults: {
+        ids: IdArray,
+        ins: IdArray,
+        rms: IdArray, // TODO shared codebook
+//        _proxy: ProxyListener, // underscoreds don't go to POJO (well...)
+        _oplog: Object  // TODO move to Storage
+    },
+
+    ops: {
+        in: function (spec, value, src) {
+            var m = Collection.reTokExtSpKey.exec(value);
+            var obj_id=m[1], key=m[4];
+            var pos = this._findPosFor(spec, value, obj_id, key);
+            this.ids.insert(obj_id, pos);
+            this.ins.insert(spec.version(), pos);
+            this.rms.insert("0", pos);
+            if (this._keys) {
+                this._keys.splice(pos,0,key);
+            }
+            this._rebuild(pos);
+        },
+
+        rm: function (spec, value, src) {
+            var op_id = value; // TODO valid
+            var pos = this.ins.find(op_id);
+            this.rms.splice(pos,1,spec.version());
+            this._rebuild(pos);
+        }
+    },
+
+    reactions: {
+        init: function (spec,val,src) {
+            var self = this;
+            self._rebuild();
+            self._forEach(function (id) {
+                self._object(id).on4(self._relay, self);
+            }, this);
+        },
+        in: function (spec,value,src) {
+            var m = Collection.reTokExtSpKey.exec(value);
+            var obj_id=m[1];
+            var obj = this._object(obj_id);
+            obj.on4(this._relay, this);
+            if (this._events) {
+                this._events.queued.push({
+                    name: "insert",
+                    target: this,
+                    value: obj.toPojo(),
+                    entry_id: obj_id,
+                    position: undefined // TODO
+                });
+            }
+        },
+        rm: function (spec,val,src) {
+            var pos = this.ins.find(val);
+            var i = this.ids.iterator(pos.pos);
+            var obj = this._object(i.base64id());
+            obj.off4(this._relay, this);
+            if (this._events) {
+                this._events.queued.push({
+                    name: "remove",
+                    target: this,
+                    entry_id: obj._id,
+                    position: undefined // TODO
+                });
+            }
+        }
+    },
+
+    diff: function (base) {
+        if (!base || base=='!0') { // == !
+            return this.toPojo(true);
+        } else {
+            return Syncable._pt.diff.apply(this, arguments);
+        }
+    },
+
+    _rebuild: function (pos) {
+    },
+
+    _findPosFor: function (spec, value) {
+        return this.ids.length();
+    },
+
+    validate: function (spec, value) {
+        if (spec.op()==="ins") {
+            if (!Collection.reTokExtSpKey.test(value)) {
+                return "invalid op value";
+            }
+        }
+        return '';
+    },
+
+    _fireInit: function () {
+        if (!this._events) {return;}
+        var full = true, self = this;
+        self._forEach(function (id){
+            var obj = self._object(id);
+            full &= obj && obj._version;
+        });
+        if (full) {
+            this._events.queued.push({
+                name: 'init',
+                target: this
+            });
+        }
+    },
+
+    _relay: function (ev) {
+        var clone = {};
+        for(var key in ev) {clone[key] = ev[key];}
+        clone.entry = ev.target;
+        clone.entry_id = ev.target._id;
+        clone.target = this;
+        clone.name = 'entry:' + ev.name;
+        if (this._events) {
+            this._events.queued.push(clone);
+            this.emit4();
+        }
+        if (ev.old_version==='' && this._events) {
+            this._fireInit();
+        }
+    },
+
+    _object: function (id) {
+        if (!id) { return null; }
+        var spec = '/'+this.entryType+'#'+id;
+        var obj = this._host.get(spec);
+        return obj;
+    },
+
+    _forEach: function (cb) { // TODO reimpl over view (has objs)
+        var idi = this.ids.iterator();
+        var rmi = this.rms.iterator();
+        var ini = this.ins.iterator();
+        while (idi.match) {
+            var rm = rmi.id();
+            if (rm==='0') {
+                var id = idi.id();
+                var op = ini.id();
+                cb(id, op, rm);
+            }
+            idi.next();
+            rmi.next();
+            ini.next();
+        }
+
+    },
+
+    gc: function () {
+
+    },
+
+    remove: function (op_id) {
+
+    },
+
+    _arg2id: function (obj, mayCreate) {
+        if (!obj) {throw new Error("no null entries allowed (yet?)");}
+        var spec;
+        if (obj._id) {
+            spec = obj.spec();
+        } else if (Spec.is(obj)) {
+            spec = new Spec(obj);
+        } else if (obj.constructor===String && Spec.reTokExt.test(obj)) {
+            return obj;
+        } else if (mayCreate && obj.constructor===Object) { // new obj
+            var o = new Syncable.types[this.entryType](obj);
+            spec = o.spec();
+        } else {
+            throw new Error("not an object or a spec: "+obj);
+        }
+        if (spec.type()!==this.entryType) {
+            throw new Error("only accept type "+this.entryType);
+        }
+        return spec.id();
+    },
+
+    insert: function (obj, location) {
+        var obj_id = this._arg2id(obj, true);
+        return this["in"](obj_id+' '+(location||''));
+    }
+
+});
+
+Collection.rsTokExtSpKey = '^((=)(?:\\+(=))?)(?: (.*))$'.replace(/=/g, Spec.rT);
+Collection.reTokExtSpKey = new RegExp(Collection.rsTokExtSpKey);
+module.exports = Collection;
+
+
+Collection.Vector = Collection.extend('Vector', {
+
+    _findPosFor: function (spec, value, id, key) {
+        var i, ins = this.ins;
+        if (key==='0' || !key) {
+            i = ins.iterator();
+        } else {
+            i = ins._find(ins.encoder.encode(key));
+            if (i.match) { // FIXME correctness/order
+                i.next();
+            }
+        }
+        var op_ver = spec.version();
+        while (i.match && ins.encoder.decode(i.enc4)>op_ver) {
+            i.next();
+        }
+        return i.pos;
+    },
+
+    _rebuild: function (pos) {
+        var self = this;
+        self.vector = [];
+        self._forEach(function (id){
+            self.vector.push(self._object(id));
+        });
+        // TODO optimize
+        this._fireInit();
+    },
+
+    push: function (obj) {
+        var last_in = '0';
+        this._forEach(function(id,op,rm){ // FIXME :(
+            last_in = op;
+        });
+        this["in"](this._arg2id(obj, true)+' '+last_in);
+    },
+
+    unshift: function (obj) {
+        this["in"](this._arg2id(obj, true)+' 0');
+    },
+
+    pop: function () {
+        var last_in = '0', last_id;
+        this._forEach(function(id,op,rm){ // FIXME :(
+            last_in = op;
+            last_id = id;
+        });
+        this.rm(last_in);
+        return this._object(last_id);
+    },
+
+    shift: function () {
+        var last_in, last_id;
+        this._forEach(function(id,op,rm){ // FIXME :(
+            if (!last_in) {
+                last_in = op;
+                last_id = id;
+            }
+        });
+        if (last_in) {
+            this.rm(last_in);
+        }
+        return this._object(last_id);
+    },
+
+    toPojoCollection: function () {
+        var self = this;
+        var ret = [];
+        self._forEach(function (id){
+            var pojo = self._object(id).toPojo();
+            pojo._id = id;
+            ret.push(pojo);
+        });
+        return ret;
+    }
+
+});
+
+},{"./IdArray":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/IdArray.js","./ProxyListener":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/ProxyListener.js","./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js","./Syncable":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Syncable.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/CollectionMethodsMixin.js":[function(require,module,exports){
 "use strict";
 
 
@@ -61116,6 +61396,14 @@ module.exports = {
         } else {
             this.once('init', checker);
         }
+    },
+
+    map: function (cb, thisArg) {
+        var res = [];
+        this.forEach(function (entry, idx) {
+            res.push(cb.call(this, entry, idx));
+        }, thisArg);
+        return res;
     }
 };
 },{}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Host.js":[function(require,module,exports){
@@ -61182,6 +61470,14 @@ Host.hashDistance = function hashDistance(peer, obj) {
     return dist;
 };
 
+/** 0.4 refac
+*
+*   (1) state to be sufficient for a merge (IdArray generaliz TODO)
+*   (2) log to stay in Storage for syncing
+*   (3) forward tail queries to Storage (.on semantics)
+*   (4) log horizon/compaction/wtw @Storage
+*   (5) correct diff @Storage
+*/
 module.exports = Syncable.extend(Host, {
 
     deliver: function (spec, val, repl) {
@@ -61256,6 +61552,7 @@ module.exports = Syncable.extend(Host, {
          * (value). The 1st (spec) reflects this /Host.on invocation only.
          */
         on: function hostOn(spec, filter, lstn) {
+            console.log('on spec', spec, 'filter', filter, 'lstn', lstn);
             if (!filter) {
                 // the subscriber needs "all the events"
                 return this.addSource(spec, lstn);
@@ -61280,6 +61577,7 @@ module.exports = Syncable.extend(Host, {
         },
 
         reon: function hostReOn(spec, ms, host) {
+            console.log('reon spec', spec, 'ms', ms, 'host', host);
             if (spec.type() !== 'Host') {
                 throw new Error('Host.reon(/NotHost.reon)');
             }
@@ -61288,11 +61586,13 @@ module.exports = Syncable.extend(Host, {
         },
 
         off: function (spec, nothing, peer) {
+            console.log('off spec', spec, 'nothing', nothing, 'peer', peer);
             peer.deliver(peer.spec().add(this.time(), '!').add('.reoff'), '', this);
             this.removeSource(spec, peer);
         },
 
         reoff: function hostReOff(spec, nothing, peer) {
+            console.log('reoff spec', spec, 'nothing', nothing, 'peer', peer);
             this.removeSource(spec, peer);
         }
 
@@ -61455,8 +61755,10 @@ var Swarm = module.exports = window.Swarm = {};
 Swarm.env = require('./env');
 Swarm.Spec = require('./Spec');
 Swarm.LongSpec = require('./LongSpec');
+Swarm.IdArray = require('./IdArray');
 Swarm.Syncable = require('./Syncable');
 Swarm.Model = require('./Model');
+Swarm.Collection = require('./Collection');
 Swarm.Set = require('./Set');
 Swarm.Vector = require('./Vector');
 Swarm.Host = require('./Host');
@@ -61500,7 +61802,433 @@ if (env.isWebKit || env.isGecko) {
     };
 }
 
-},{"./Host":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Host.js","./LevelStorage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LevelStorage.js","./LongSpec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LongSpec.js","./Model":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Model.js","./Pipe":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Pipe.js","./ReactMixin":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/ReactMixin.js","./Set":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Set.js","./SharedWebStorage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/SharedWebStorage.js","./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js","./Storage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Storage.js","./Syncable":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Syncable.js","./Vector":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Vector.js","./WebSocketStream":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/WebSocketStream.js","./env":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/env.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LevelStorage.js":[function(require,module,exports){
+},{"./Collection":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Collection.js","./Host":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Host.js","./IdArray":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/IdArray.js","./LevelStorage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LevelStorage.js","./LongSpec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LongSpec.js","./Model":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Model.js","./Pipe":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Pipe.js","./ReactMixin":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/ReactMixin.js","./Set":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Set.js","./SharedWebStorage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/SharedWebStorage.js","./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js","./Storage":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Storage.js","./Syncable":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Syncable.js","./Vector":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Vector.js","./WebSocketStream":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/WebSocketStream.js","./env":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/env.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/IdArray.js":[function(require,module,exports){
+"use strict";
+
+var Spec = require('./Spec');
+var SecondPreciseClock = require('./SecondPreciseClock');
+
+/** An array of op ids in a compressed form.
+ *  Using an array of base64 strings is a bit too wasteful sometimes.
+ *  This one employs heuristics to compress base64 ids into variable-length
+ *  Unicode "x-plets". Is supposed to compress Text state especially well
+ *  as long ranges of uninterrupted typing create intervals of
+ *  monotonically growing ids. */
+function IdArray (param) {
+    this.encoder = new IdArray.Encoder();
+    this.body = '';  // FIXME store body in chunks to iterate less
+    this._length = 0;
+    if (param) {
+        if (param.constructor===Array) {
+            this.insert(param);
+        } else if (('body' in param) && ('encoder' in param)) {
+            // reverse of toPojo()
+            this.body = param.body;
+            this.encoder = new IdArray.Encoder(param.encoder);
+            var i = this.iterator();
+            while (i.match) {
+                this._length++;
+                i.next();
+            }
+        } else {
+            throw new Error("init param not understood");
+        }
+    }
+    // nice quirk: use tses younger than 2015 to store custom ids
+}
+module.exports = IdArray;
+
+IdArray.re_xplet = /[\u1030-\u1fff]|[\u2030-\u2fff][0-\u802f]|[\u3030-\u3fff][0-\u802f]{2}|[\u4030-\u4fff][0-\u802f]{3}/g;
+
+IdArray.prototype.toPojo = function () {
+    return {
+        encoder: this.encoder.toPojo(),
+        body: this.body,
+        bookmarks: {} // enc4: offset // update on splice() TODO perf
+        // also bookmark the last one
+    };
+};
+
+// returns an iterator: match/pos, context(prev)
+IdArray.prototype.iterator = function (pos) {
+    var iter = new IdArray.Iterator(this);
+    if (pos) {
+        iter.next(pos);
+    }
+    return iter;
+};
+
+
+// uncompresses an unicode xplet into 4-symbol unicode
+// TODO make static
+IdArray.uncompress = function (xplet, enc4) {
+    enc4 = enc4 || '     ';
+    var code = xplet.charCodeAt(0), ret='';
+    var regime = code >> 12;
+    var seq = String.fromCharCode(code&0xfff);
+    switch (regime) {
+        case 1: ret = enc4[0]+enc4[1]+seq+enc4[3]; break;
+        case 2: ret = enc4[0]+xplet[1]+seq+enc4[3]; break;
+        case 3: ret = xplet[2]+xplet[1]+seq+enc4[3]; break;
+        case 4: ret = xplet[2]+xplet[1]+seq+xplet[3]; break;
+        default: throw new Error("format violation?!!");
+    }
+    return ret;
+};
+
+// returns base64 id at position pos
+IdArray.prototype.at = function (pos) {
+    var i = this.iterator(pos);
+    return i.match ?
+        this.encoder.decode(i.enc4) : undefined;
+};
+
+IdArray.compress = function (enc4, prev_enc4) {
+    var tail='', flag=0;
+    var same_mask = 0;
+    if (prev_enc4) {
+        for(var i=0; i<4; i++) {
+            if (enc4.charAt(i)===prev_enc4.charAt(i)) {
+                same_mask |= (8>>i);
+            }
+        }
+    }
+    switch (same_mask) {
+        case 15:
+        case 13:    flag = 1<<12;
+                    tail = '';
+                    break;
+        case 9:
+        case 11:    flag = 2<<12;
+                    tail = enc4[1];
+                    break;
+        case 1:     flag = 3<<12;
+                    tail = enc4[1]+enc4[0];
+                    break;
+        default:    flag = 4<<12;
+                    tail = enc4[1]+enc4[0]+enc4.charAt(3);
+                    break;
+    }
+    var flagged_seq = String.fromCharCode(enc4.charCodeAt(2) | flag);
+    return flagged_seq + tail;
+};
+
+IdArray.prototype._insert = function (enc_ids, iter) {
+    this._splice(iter,0,enc_ids);
+};
+
+/** Arguments: the id (or an array of ids) and its position-to-be
+  * (default: 0, i.e. prepend) */
+IdArray.prototype.insert = function (ids, pos) {
+    var encoded = [];
+    if (ids.constructor===String) {
+        ids = [ids];
+    }
+    for(var j=0; j<ids.length; j++) {
+        encoded.push(this.encoder.encode(ids[j]));
+    }
+    var i = this.iterator(pos);
+    this._insert(encoded,i);
+};
+
+IdArray.prototype.length = function () {
+    return this._length;
+};
+
+IdArray.prototype.push = function (something) {
+    // FIXME perf: no full pass
+    this.insert(something, this._length);
+};
+
+IdArray.prototype.pop = function () {
+    if (!this._length) { return undefined; }
+    var i = this.iterator(this._length-1);
+    var last = this.encoder.decode(i.enc4);
+    this._remove(i);
+    return last;
+};
+
+IdArray.prototype._splice = function (iter, count, enc_ids) {
+    if (!iter) {return undefined;}
+    count = count || 0;
+    enc_ids = enc_ids || [];
+    if (enc_ids.constructor!==Array) { enc_ids=[enc_ids]; }
+
+    var prev = iter.prev;
+    var insert_gz = '';
+    for(var j=0; j<enc_ids.length; j++){
+        insert_gz += IdArray.compress(enc_ids[j],prev);
+        prev = enc_ids[j];
+    }
+
+    var tail = '';
+    var head = iter.match ? this.body.substr(0, iter.index) : this.body;
+
+    if (count) {
+        if (count>this._length-iter.pos) {
+            throw new Error("no such elements to delete");
+        }
+        iter.next(count);
+    }
+
+    if (iter.match) {
+        tail = this.body.substr(iter.index+iter.match.length);
+        // iter must stay valid, point to the 'till' point
+        iter.index = head.length + insert_gz.length;
+        iter.match = IdArray.compress(iter.enc4,prev);
+        insert_gz += iter.match;
+    }
+    iter.prev = null;
+    iter.pos = iter.pos - count + enc_ids.length;
+
+    this.body = head + insert_gz + tail;
+    this._length = this._length - count + enc_ids.length;
+};
+
+IdArray.prototype._remove = function (iter, count) {
+    this._splice(iter,count||1,null);
+};
+
+IdArray.prototype.remove = function (pos, count) {
+    var i = this.iterator(pos);
+    return i.match ? this._remove(i, count) : 0;
+};
+
+IdArray.prototype.splice = function (pos, delete_count, add) {
+    if (delete_count) { // FIXME _splice
+        this.remove(pos,delete_count);
+    }
+    if (add) {
+        this.insert(add, pos);
+    }
+};
+
+IdArray.prototype._find = function (enc4, iter) {
+    // TODO seek full form matching ts0
+    // then iterate
+    var i = iter || this.iterator();
+    while (i.match && i.enc4!==enc4) {
+        i.next();
+    }
+    return i;
+};
+
+IdArray.prototype.find = function (id) {
+    var i = this._find(this.encoder.encode(id));
+    return i.match ? i.pos : -1;
+};
+
+IdArray.prototype.toString = function () {
+    var ret = [];
+    for(var i=this.iterator(); i.match; i.next()) {
+        ret.push(i.id());
+    }
+    return ret.join(',');
+};
+
+
+
+var Iterator = IdArray.Iterator = function (id_array) {
+    this.id_array = id_array;
+    this.prev = null;
+    this.match = '';
+    this.index = 0;
+    this.pos = -1;
+    this.enc4 = '     ';
+    this.next();
+};
+
+Iterator.prototype.clone = function () {
+    var c = new Iterator(this.id_array);
+    c.prev = this.prev;
+    c.match = this.match;
+    c.index = this.index;
+    c.pos = this.pos;
+    c.enc4 = this.enc4;
+    return c;
+};
+
+Iterator.prototype.id = function () {
+    return this.id_array.encoder.decode(this.enc4);
+};
+
+Iterator.prototype.base64id = Iterator.prototype.id;
+
+Iterator.prototype.end = function () {
+    return this.match===null;
+};
+
+Iterator.prototype.goTo = function (pos) {
+    if (pos<this.pos) { throw new Error("that pos is behind"); }
+    this.next(pos-this.pos);
+};
+
+Iterator.prototype.next = function (steps) {
+    var array = this.id_array;
+    if (steps===undefined) { steps=1; }
+    while (steps-->0) {
+        if (this.match===null) { return undefined; }
+        IdArray.re_xplet.lastIndex = this.index + this.match.length;
+        this.prev = this.enc4;
+        var m = IdArray.re_xplet.exec(array.body);
+        if (m) {
+            this.match = m[0];
+            this.index = m.index;
+            this.enc4 = IdArray.uncompress(this.match,this.prev);
+        } else {
+            this.match = null;
+            this.index = -1;
+            this.enc4 = null;
+        }
+        this.pos++;
+    }
+    return this;
+};
+
+
+
+var Encoder = IdArray.Encoder = function (sources) {
+    if (sources) {
+        this.sources = sources.split('+');
+    } else {
+        this.sources = [''];
+    }
+    /*this.src2id = {};
+    for(var i=0; i<this.sources.length; i++) {
+        this.src2i[this.sources[i]] = i;
+    }*/
+};
+
+// decodes 4-symbol unicode back into base64 id
+Encoder.prototype.decode = function (enc4) {
+    if (enc4==='0000') {return '0';}
+    var ints = [0,0,0,0];
+    for(var i=0; i<4; i++) {
+        ints[i] = enc4.charCodeAt(i)-0x30;
+    }
+    var parsed = {
+        time:   (ints[0]<<15) | ints[1],
+        seq:    ints[2],
+        source: this.sources[ints[3]]
+    };
+    return SecondPreciseClock.unparseTimestamp(parsed);
+};
+
+//IdArray.rsTsSeqSrc = "!?(B{5})(B{2})?\\+(B+)".replace(/B/g, '[0-9A-Za-z_~]');
+//IdArray.reTsSeqSrc = new RegExp(IdArray.rsTsSeqSrc);
+
+Encoder.prototype.encode = function (tok) {
+    if (tok.length<=2) {
+        if (/^[!#]?0$/.test(tok)) { return '0000'; }
+        throw new Error("malformed token: "+tok);
+    }
+    var parsed = SecondPreciseClock.parseTimestamp(tok);
+    var ai = this.sources.indexOf(parsed.source); // TODO perf
+    if (ai===-1) {
+        ai = this.sources.length;
+        this.sources.push(parsed.source);
+    }
+    return String.fromCharCode(
+        (parsed.time>>15) + 0x30,
+        (parsed.time&0x7fff) + 0x30,
+        (parsed.seq) + 0x30,
+        ai + 0x30
+        //this.src2i['+'+parsed.source] + 0x30
+    );
+};
+
+Encoder.prototype.toPojo = function () {
+    return this.sources.join('+');
+};
+Encoder.prototype.toString = Encoder.prototype.toPojo;
+
+
+
+var Uncompressed = IdArray.Uncompressed = function UncompressedArray(pojo, e) {
+    if (pojo!==undefined && pojo.constructor===String) {
+        this.encoder = e || null;
+        this.body = pojo;
+    } else if (pojo) {
+        this.encoder = new Encoder(pojo.encoder);
+        this.body = pojo.body;
+    } else {
+        this.body = '';
+        this.encoder = new Encoder();
+    }
+}
+
+Uncompressed.prototype.toPojo = function () {
+    return {
+        encoder: this.encoder.toPojo(),
+        body: this.body
+    };
+};
+
+Uncompressed.prototype.splice = function (iter, remove, insert) {
+    if (!insert) {insert = '';}
+    var head = this.body.substr(0,iter.pos<<2);
+    var tail = this.body.substr((iter.pos+remove)<<2);
+    this.body = head + insert + tail;
+    iter.pos += insert.length>>2;
+    iter.enc4 = tail.substr(0,4);
+};
+
+Uncompressed.prototype._slice = function (offset, count) {
+    var chunk = this.body.substr(offset<<2,count<<2);
+    return chunk.match(/[0-\u802f]{4}/g);
+};
+
+Uncompressed.prototype.slice = function (offset, count) {
+    var ids = this._slice(offset,count), encoder=this.encoder;
+    return ids.map(function(enc4){
+        return encoder.decode(enc4);
+    });
+};
+
+
+Uncompressed.prototype.push = function (enc4) {
+    this.body += enc4;
+};
+
+Uncompressed.prototype.find = function (enc4, pos) {
+    pos = (pos || 0) - 1;
+    do {
+        pos = this.body.indexOf(enc4,pos+1);
+    } while (pos!==-1 && (pos&3)!==0);
+    return new Uncompressed.Iterator
+        (this, pos===-1 ? this.body.length>>2 : pos>>2);
+};
+
+Uncompressed.prototype._at = function (offset) {
+    return this.body.substr(offset<<2,4);
+};
+
+Uncompressed.prototype.at = function (offset) {
+    return this.encoder.decode(this._at(offset));
+};
+
+Uncompressed.prototype.iterator = function (pos) {
+    return new Uncompressed.Iterator(this,pos)
+};
+
+
+Uncompressed.Iterator = function (unc, pos) {
+    this.array = unc;
+    pos = pos || 0;
+    this.pos = pos-1;
+    this.next();
+};
+
+Uncompressed.Iterator.prototype.next = function () {
+    this.pos++;
+    this.enc4 = this.match = this.array.body.substr(this.pos<<2,4);
+};
+
+Uncompressed.Iterator.prototype.clone = function () {
+    return new Uncompressed.Iterator(this.array, this.pos);
+};
+
+},{"./SecondPreciseClock":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/SecondPreciseClock.js","./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/LevelStorage.js":[function(require,module,exports){
 "use strict";
 var env = require('./env');
 var Spec = require('./Spec');
@@ -62256,8 +62984,10 @@ function Model(idOrState) {
     var ret = Model._super.apply(this, arguments);
     /// TODO: combine with state push, make clean
     if (ret === this && idOrState && idOrState.constructor !== String && !Spec.is(idOrState)) {
-        this.deliver(this.spec().add(this._id, '!').add('.set'), idOrState);
+        var op_spec = this.spec().add(this._id, '!').add('.set');
+        this.deliver(op_spec, Syncable.toPojo(idOrState));
     }
+    return ret;
 }
 
 module.exports = Syncable.extend(Model, {
@@ -62369,28 +63099,19 @@ module.exports = Syncable.extend(Model, {
                 this.distillLog(); // may amend the value
                 value = this._oplog[vermet];
             }
-            value && this.apply(value);
+            if (value) {
+                var old_vals = this.apply(value);
+                if (this._events) {
+                    this._events.queued.push({
+                        name: "set",
+                        value: value,
+                        target: this,
+                        old_value: old_vals,
+                        old_version: this._version
+                    });
+                }
+            }
         }
-    },
-
-    fill: function (key) { // TODO goes to Model to support references
-        if (!this.hasOwnProperty(key)) {
-            throw new Error('no such entry');
-        }
-
-        //if (!Spec.is(this[key]))
-        //    throw new Error('not a specifier');
-        var spec = new Spec(this[key]).filter('/#');
-        if (spec.pattern() !== '/#') {
-            throw new Error('incomplete spec');
-        }
-
-        this[key] = this._host.get(spec);
-        /* TODO new this.refType(id) || new Swarm.types[type](id);
-         on('init', function(){
-         self.emit('fill',key,this)
-         self.emit('full',key,this)
-         });*/
     },
 
     /**
@@ -62400,7 +63121,7 @@ module.exports = Syncable.extend(Model, {
     save: function () {
         var cumul = this.distillLog(),
             changes = {},
-            pojo = this.pojo(),
+            pojo = this.toPojo(),
             field;
         for (field in pojo) {
             if (this[field] !== cumul[field]) {// TODO nesteds
@@ -62425,6 +63146,25 @@ module.exports = Syncable.extend(Model, {
             }
         }
         return '';
+    },
+
+    on4: function (filter, callback, context) {
+        if (filter.constructor===Function) {
+            context = callback;
+            callback = filter;
+            filter = null;
+        }
+        var m = filter && filter.match(/^(\w+):(\w+)$/);
+        if (m) {
+            filter = m[1];
+            var field_name = m[2], orig_callback = callback;
+            callback = function (ev) {
+                if (field_name in ev.value) {
+                    orig_callback(ev);
+                }
+            };
+        }
+        Syncable._pt.on4.call(this, filter, callback, context);
     }
 
 });
@@ -62496,7 +63236,7 @@ function Pipe(host, stream, opts) {
             throw new Error('protocol not supported: ' + proto);
         }
         self.url = url;
-        stream = new fn(url);
+        stream = new fn(url, opts);
     }
     self.connect(stream);
 }
@@ -62515,6 +63255,7 @@ Pipe.prototype.connect = function pc(stream) {
         self.lastRecvTS = self.time();
         var json = self.serializer.parse(data);
         try {
+            console.log('stream on data json', json);
             self._id ? self.parseBundle(json) : self.parseHandshake(json);
         } catch (ex) {
             console.error('error processing message', ex, ex.stack);
@@ -62553,17 +63294,21 @@ Pipe.prototype.keepAliveFn = function () {
 };
 
 Pipe.prototype.parseHandshake = function ph(handshake) {
+    console.log('parse handshake', handshake);
     var spec, value, key;
     for (key in handshake) {
         spec = new Spec(key);
         value = handshake[key];
+        console.log('handshake key', key);
+        console.log('handshake spec', spec);
+        console.log('handshake value', value);
         break; // 8)-
     }
     if (!spec) {
         throw new Error('handshake has no spec');
     }
     if (spec.type() !== 'Host') {
-        env.warn("non-Host handshake");
+        console.warn("non-Host handshake");
     }
     if (spec.id() === this.host._id) {
         throw new Error('self hs');
@@ -62572,6 +63317,7 @@ Pipe.prototype.parseHandshake = function ph(handshake) {
     var op = spec.op();
     var evspec = spec.set(this.host._id, '#');
 
+    console.log('handshake spec op', value);
     if (op in {on: 1, reon: 1, off: 1, reoff: 1}) {// access denied TODO
         this.host.deliver(evspec, value, this);
     } else {
@@ -62898,23 +63644,36 @@ SecondPreciseClock.prototype.issueTimestamp = function time () {
     return this.lastTimestamp;
 };
 
-//SecondPreciseClock.reQTokExt = new RegExp(Spec.rsTokExt); // no 'g'
+SecondPreciseClock.rsQTokExt =
+    '([/#\\.!\\*])?(={5})(={2})?(?:\\+(={1,80}))?'
+    .replace(/=/g, '[0-9A-Za-z_~]');
+SecondPreciseClock.reQTokExt = new RegExp(SecondPreciseClock.rsQTokExt);
 
-SecondPreciseClock.prototype.parseTimestamp = function parse (ts) {
-    var m = ts.match(Spec.reTokExt);
+SecondPreciseClock.parseTimestamp = function parse (ts) {
+    var m = ts.match(SecondPreciseClock.rsQTokExt);
     if (!m) {throw new Error('malformed timestamp: '+ts);}
-    var timeseq=m[1]; //, process=m[2];
-    var time = timeseq.substr(0,5), seq = timeseq.substr(5);
-    if (seq&&seq.length!==2) {
-        throw new Error('malformed timestamp value: '+timeseq);
+    var time = Spec.base2int(m[2]);
+    var seq = m[3] ? Spec.base2int(m[3]) : 0;
+    var source = m[4];
+    if (seq>=Spec.MAX_SEQ) {
+        throw new Error("4000Hz is the limit");
     }
     return {
-        time: Spec.base2int(time),
-        seq: seq ? Spec.base2int(seq) : 0
+        time: time,
+        seq: seq,
+        source: source
     };
 };
+SecondPreciseClock.prototype.parseTimestamp = SecondPreciseClock.parseTimestamp;
 
-/** Freshly issued Lamport logical tiemstamps must be greater than
+SecondPreciseClock.unparseTimestamp = function unparse (parsed) {
+    var baseTimeSeq = Spec.int2base(parsed.time, 5);
+    if (parsed.seq>0) { baseTimeSeq+=Spec.int2base(parsed.seq, 2); }
+    return baseTimeSeq + '+' + parsed.source;
+};
+SecondPreciseClock.prototype.unparseTimestamp = SecondPreciseClock.unparseTimestamp;
+
+/** Freshly issued Lamport logical timestamps must be greater than
     any timestamps previously seen. */
 SecondPreciseClock.prototype.checkTimestamp = function see (ts) {
     if (ts<this.lastTimestamp) { return true; }
@@ -62959,9 +63718,8 @@ var CollectionMethodsMixin = require('./CollectionMethodsMixin');
 module.exports = Syncable.extend('Set', {
 
     defaults: {
-        _objects: Object,
-        _oplog: Object,
-        _proxy: ProxyListener
+        objects: Object,
+        _oplog: Object
     },
 
     mixins: [
@@ -62970,6 +63728,9 @@ module.exports = Syncable.extend('Set', {
 
     reactions: {
         init: function (spec,val,src) {
+            if (!this._proxy) {
+                this._proxy = new ProxyListener();
+            }
             this.forEach(function (obj) {
                 obj.on(this._proxy);
             }, this);
@@ -62987,14 +63748,14 @@ module.exports = Syncable.extend('Set', {
             var key_spec;
             for (key_spec in value) {
                 if (value[key_spec] === 1) {
-                    if (!this._objects[key_spec]) { // only if object not in the set
-                        this._objects[key_spec] = this._host.get(key_spec);
-                        this._objects[key_spec].on(this._proxy);
+                    if (!this.objects[key_spec]) { // only if object not in the set
+                        this.objects[key_spec] = this._host.get(key_spec);
+                        this.objects[key_spec].on(this._proxy);
                     }
                 } else if (value[key_spec] === 0) {
-                    if (this._objects[key_spec]) {
-                        this._objects[key_spec].off(this._proxy);
-                        delete this._objects[key_spec];
+                    if (this.objects[key_spec]) {
+                        this.objects[key_spec].off(this._proxy);
+                        delete this.objects[key_spec];
                     }
                 } else {
                     env.log(this.spec(), 'unexpected val', JSON.stringify(value));
@@ -63029,13 +63790,6 @@ module.exports = Syncable.extend('Set', {
 
     distillLog: Model.prototype.distillLog,
 
-    pojo: function () {
-        // invoke super.pojo()
-        var result = Syncable._pt.pojo.apply(this, arguments);
-        result.entries = Object.keys(this._objects);
-        return result;
-    },
-
     /**
      * Adds an object to the set.
      * @param {Syncable} obj the object  //TODO , its id or its specifier.
@@ -63066,7 +63820,7 @@ module.exports = Syncable.extend('Set', {
         if (key_spec.pattern() !== '/#') {
             throw new Error("invalid spec");
         }
-        return this._objects[key_spec];
+        return this.objects[key_spec];
     },
 
     /**
@@ -63075,24 +63829,28 @@ module.exports = Syncable.extend('Set', {
      */
     list: function (order) {
         var ret = [];
-        for (var key in this._objects) {
-            ret.push(this._objects[key]);
+        for (var key in this.objects) {
+            ret.push(this.objects[key]);
         }
         ret.sort(order);
         return ret;
     },
 
+    length: function () {
+        return Object.keys(this.objects).length;
+    },
+
     forEach: function (cb, thisArg) {
         var index = 0;
-        for (var spec in this._objects) {
-            cb.call(thisArg, this._objects[spec], index++);
+        for (var spec in this.objects) {
+            cb.call(thisArg, this.objects[spec], index++);
         }
     },
 
     every: function (cb, thisArg) {
         var index = 0;
-        for (var spec in this._objects) {
-            if (!cb.call(thisArg, this._objects[spec], index++)) {
+        for (var spec in this.objects) {
+            if (!cb.call(thisArg, this.objects[spec], index++)) {
                 return false;
             }
         }
@@ -63107,15 +63865,8 @@ module.exports = Syncable.extend('Set', {
             }
         });
         return res;
-    },
-
-    map: function (cb, thisArg) {
-        var res = [];
-        this.forEach(function (entry, idx) {
-            res.push(cb.call(thisArg, entry, idx));
-        });
-        return res;
     }
+
 });
 
 },{"./CollectionMethodsMixin":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/CollectionMethodsMixin.js","./Model":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Model.js","./ProxyListener":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/ProxyListener.js","./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js","./Syncable":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Syncable.js","./env":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/env.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/SharedWebStorage.js":[function(require,module,exports){
@@ -63298,7 +64049,7 @@ function Spec(str, quant) {
         }
     }
     this.value = str;
-    this.index = 0;
+    this.index = 0; // FIXME make this explicit
 }
 module.exports = Spec;
 
@@ -63371,7 +64122,16 @@ Spec.prototype.op = function () { return this.get('.'); };
 Spec.prototype.type = function () { return this.get('/'); };
 Spec.prototype.id = function () { return this.get('#'); };
 Spec.prototype.typeid = function () { return this.filter('/#'); };
-Spec.prototype.source = function () { return this.token('!').ext; };
+Spec.prototype.source = function () {
+    var v = this.get('!');
+    var p = v.indexOf('+');
+    return p===-1 ? '' : v.substr(p+1);
+};
+Spec.prototype.author = function () {
+    var src = this.source();
+    var ai = src.indexOf('~');
+    return ai===-1 ? src : src.substr(0,ai);
+};
 
 Spec.prototype.sort = function () {
     function Q(a, b) {
@@ -63417,7 +64177,7 @@ Spec.prototype.fits = function (specFilter) {
 Spec.base2int = function (base) {
     var ret = 0, l = base.match(Spec.re64l);
     for (var shift = 0; l.length; shift += 6) {
-        ret += Spec.base64.indexOf(l.pop()) << shift;
+        ret += Spec.base64.indexOf(l.pop()) << shift; // TODO performance
     }
     return ret;
 };
@@ -63439,6 +64199,11 @@ Spec.rsTokExt = '^(=)(?:\\+(=))?$'.replace(/=/g, Spec.rT);
 Spec.reTokExt = new RegExp(Spec.rsTokExt);
 Spec.rsQTokExt = '([/#\\.!\\*])((=)(?:\\+(=))?)'.replace(/=/g, Spec.rT);
 Spec.reQTokExt = new RegExp(Spec.rsQTokExt, 'g');
+Spec.rsExt = '\\+(=)'.replace(/=/g, Spec.rT);
+Spec.reExt = new RegExp(Spec.rsExt, 'g');
+/** 4000Hz is our limit for event frequency (4000 ops per object per second)
+ *  FIXME move to clocks; has no rel to Spec in general */
+Spec.MAX_SEQ = Spec.int2base(3999,2);
 Spec.is = function (str) {
     if (str === null || str === undefined) {
         return false;
@@ -63703,7 +64468,13 @@ Storage.prototype.readState = function (ti, callback) {
 };
 
 Storage.prototype.readOps = function (ti, callback) {
-    var tail = JSON.parse(this.tails[ti] || null);
+    var tailSerialized = this.tails[ti];
+    var tail = {};
+    for (var vm in tailSerialized) try {
+        tail[vm] = JSON.parse(tailSerialized[vm] || null);
+    } catch (ex) {
+        console.error("JSON parse error: "+tailSerialized[vm], ex);
+    }
     callback(null, tail);
 };
 
@@ -63768,7 +64539,7 @@ function Syncable() {
     }
     //var state = args.length ? args.pop() : (fresh?{}:undefined);
     // register with the host
-    var doubl = this._host.register(this);
+    var doubl = this._host.register(this); // <<< just this .4
     if (doubl !== this) { return doubl; }
     // locally created objects get state immediately
     // (while external-id objects need to query uplinks)
@@ -63779,8 +64550,8 @@ function Syncable() {
      }*/
     this.reset();
     // find uplinks, subscribe
-    this.checkUplink();
-    // TODO inplement state push
+    this.checkUplink(); // .4 routing in Host; just this._host.link() ^^^
+    // TODO .4 implement state push
     return this;
 }
 module.exports = Syncable;
@@ -63818,7 +64589,8 @@ Syncable.extend = function (fn, own) {
             return parent.apply(this, arguments);
         };
         fnid = id; // if only it worked
-    } else { // please call Syncable.constructor.apply(this,args) in your constructor
+    } else {
+        // please call Syncable.constructor.apply(this,args) in your constructor
         fnid = fnname(fn);
     }
 
@@ -63843,31 +64615,19 @@ Syncable.extend = function (fn, own) {
 
         // "Methods" are serialized, logged and delivered to replicas
         for (name in own.ops || {}) {
-            if (Syncable.reMethodName.test(name)) {
-                this._ops[name] = own.ops[name];
-                this[name] = wrapCall(name);
-            } else {
-                console.warn('invalid op name:',name);
-            }
+            this._ops[name] = own.ops[name];
+            this[name] = wrapCall(name);
         }
 
         // "Neutrals" don't change the state
         for (name in own.neutrals || {}) {
-            if (Syncable.reMethodName.test(name)) {
-                this._neutrals[name] = own.neutrals[name];
-                this[name] = wrapCall(name);
-            } else {
-                console.warn('invalid neutral op name:',name);
-            }
+            this._neutrals[name] = own.neutrals[name];
+            this[name] = wrapCall(name);
         }
 
         // "Remotes" are serialized and sent upstream (like RPC calls)
         for (name in own.remotes || {}) {
-            if (Syncable.reMethodName.test(name)) {
-                this[name] = wrapCall(name);
-            } else {
-                console.warn('invalid rpc name:',name);
-            }
+            this[name] = wrapCall(name);
         }
 
         // add mixins
@@ -63879,21 +64639,20 @@ Syncable.extend = function (fn, own) {
 
         // add other members
         for (name in own) {
-            if (Syncable.reMethodName.test(name)) {
-                var memberType = own[name].constructor;
-                if (memberType === Function) { // non-op method
-                    // these must change state ONLY by invoking ops
-                    this[name] = own[name];
-                } else if (memberType===String || memberType===Number) {
-                    this[name] = own[name]; // some static constant, OK
-                } else if (name in Syncable.memberClasses) {
-                    // see above
-                    continue;
-                } else {
-                    console.warn('invalid member:',name,memberType);
-                }
+            /*if (!Syncable.reMethodName.test(name)) {  _private
+                throw new Error('invalid member name:'+name);
+            }*/
+            var memberType = own[name].constructor;
+            if (memberType === Function) { // non-op method
+                // these must change state ONLY by invoking ops
+                this[name] = own[name];
+            } else if (memberType===String || memberType===Number) {
+                this[name] = own[name]; // some static constant, OK
+            } else if (name in Syncable.memberClasses) {
+                // see above
+                continue;
             } else {
-                console.warn('invalid member name:',name);
+                throw new Error('invalid member: '+name+", "+memberType);
             }
         }
 
@@ -63970,11 +64729,14 @@ Syncable.extend = function (fn, own) {
         if (val && val.constructor === Function) {
             return {type: val, value: undefined};
         }
-        return {type:null, value: val};
+        return {type:val.constructor, value: val};
     }
 
     // signature normalization for logged/remote/local method calls;
     function wrapCall(name) {
+        if (!Syncable.reMethodName.test(name)) {
+            throw new Error("invalid method name: "+name);
+        }
         return function wrapper() {
             // assign a Lamport timestamp
             var spec = this.newEventSpec(name);
@@ -63982,6 +64744,9 @@ Syncable.extend = function (fn, own) {
             // find the callback if any
             Syncable.isOpSink(args[args.length - 1]) && (lstn = args.pop());
             // prettify the rest of the arguments
+            for(var i=0; i<args.length; i++) {
+                args[i] = toPojo(args[i]);
+            }
             if (!args.length) {  // FIXME isn't it confusing?
                 args = ''; // used as 'empty'
             } else if (args.length === 1) {
@@ -64081,6 +64846,7 @@ Syncable.extend(Syncable, {  // :P
         spec = Spec.as(spec);
         var opver = '!' + spec.version();
         var error;
+        var op_ret = undefined;
 
         function fail(msg, ex) {
             console.error(msg, spec, value, (ex && ex.stack) || ex || new Error(msg));
@@ -64115,7 +64881,9 @@ Syncable.extend(Syncable, {  // :P
                     return;
                 }
                 // invoke the implementation
-                this._ops[call].call(this, spec, value, lstn); // NOTE: no return value
+                op_ret =
+                this._ops[call].call(this, spec, value, lstn);
+
                 // once applied, may remember in the log...
                 if (spec.op() !== 'init') {
                     this._oplog && (this._oplog[spec.filter('!.')] = value);
@@ -64130,8 +64898,13 @@ Syncable.extend(Syncable, {  // :P
                 }
                 // ...and relay further to downstream replicas and various listeners
                 this.emit(spec, value, lstn);
+
+                if (this._events) {
+                    this.emit4();
+                }
             } else if (this._neutrals[call]) {
                 // invoke the implementation
+                op_ret =
                 this._neutrals[call].call(this, spec, value, lstn);
                 // and relay to listeners
                 this.emit(spec, value, lstn);
@@ -64143,7 +64916,7 @@ Syncable.extend(Syncable, {  // :P
         }
 
         // to force async signatures we eat the returned value silently
-        return spec;
+        return op_ret || spec;
     },
 
     /**
@@ -64184,13 +64957,23 @@ Syncable.extend(Syncable, {  // :P
      * @param {*} values
      */
     apply: function (values) {
+        // TODO .4  (1) rename
+        var old_vals = {};
         for (var key in values) {
-            if (Syncable.reFieldName.test(key)) { // skip special fields
-                var def = this.constructor.defaults[key];
-                this[key] = def && def.type ?
-                    new def.type(values[key]) : values[key];
+            if (!Syncable.reFieldName.test(key)) {continue;}
+            var def = this.constructor.defaults[key];
+            if (!def) {throw new Error("unknown field: "+key);}
+            var val = values[key];
+            old_vals[key] = this[key];
+            if (val===undefined || val===null) {
+                this[key] = null;
+            } else if (val.constructor===def.type) {
+                this[key] = val;
+            } else {
+                this[key] = new def.type(val); //unflatten by-value types
             }
         }
+        return old_vals;
     },
 
     /**
@@ -64324,10 +65107,14 @@ Syncable.extend(Syncable, {  // :P
         var defs = this.constructor.defaults;
         for (var name in defs) {
             var def = defs[name];
-            if (def.type) {
-                this[name] = def.value ? new def.type(def.value) : new def.type();
-            } else {
-                this[name] = def.value;
+            switch (def.type) {
+                case String:
+                case Number:
+                    this[name] = def.value; // immutables
+                    break;
+                default:
+                    this[name] = def.value===undefined ?
+                        new def.type : new def.type(def.value);
             }
         }
     },
@@ -64569,29 +65356,37 @@ Syncable.extend(Syncable, {  // :P
         }
     },
 
+    fill: function () {
+        var defs = this.constructor.defaults;
+        for(var key in defs) {
+            if (defs[key].type===Syncable.Ref) {
+                this[key].fill(this._host);
+            }
+        }
+    },
+
     /**
      * returns a Plain Javascript Object with the state
      * @this {Syncable}
      */
-    pojo: function (addVersionInfo) {
+    toPojo: function (addMetadata) {
         var pojo = {},
             defs = this.constructor.defaults;
-        for (var key in this) {
-            if (this.hasOwnProperty(key)) {
-                if (Syncable.reFieldName.test(key) && this[key] !== undefined) {
-                    var def = defs[key],
-                        val = this[key];
-                    pojo[key] = def && def.type ?
-                    (val.toJSON && val.toJSON()) || val.toString() :
-                            (val && val._id ? val._id : val); // TODO prettify
-                }
+        for(var key in defs) {
+            if (Syncable.reFieldName.test(key)) {
+                pojo[key] = toPojo(this[key]);
             }
         }
-        if (addVersionInfo) {
+        if (addMetadata) {
             pojo._id = this._id; // not necassary
             pojo._version = this._version;
             this._vector && (pojo._vector = this._vector);
-            this._oplog && (pojo._oplog = this._oplog); //TODO copy
+            if (this._oplog) {
+                pojo._oplog = {};
+                for (var op in this._oplog) {
+                    pojo._oplog[op] = this._oplog[op];
+                }
+            }
         }
         return pojo;
     },
@@ -64639,6 +65434,10 @@ Syncable.extend(Syncable, {  // :P
      * @see Syncable#on
      */
     once: function (filter, cb) {
+        if (filter.constructor===Function) {
+            cb=filter;
+            filter='';
+        }
         this.on(filter, function onceWrap(spec, val, src) {
             // "this" is the object (Syncable)
             if (cb.constructor === Function) {
@@ -64648,7 +65447,60 @@ Syncable.extend(Syncable, {  // :P
             }
             this.off(filter, onceWrap);
         });
+    },
+
+
+    on4: function (filter, callback, context) {
+        if (filter && filter.constructor===Function) {
+            context = callback;
+            callback = filter;
+            filter = null;
+        }
+        if (!this._events) {
+            this._events = {listeners:[],queued:[]};
+        }
+        this._events.listeners.push({
+            callback: callback,
+            filter: filter||null,
+            context: context||null
+        });
+    },
+
+    off4: function(filter,callback,context) {
+        if (!this._events) {return;}
+        if (filter.constructor===Function) {
+            context = callback;
+            callback = filter;
+            filter = null;
+        }
+        filter = filter || null;
+        context = context || null;
+        this._events.listeners = this._events.listeners.filter (
+            function (l) {
+                return  l.callback!==callback;
+            }
+        );
+        if (this._events.listeners.length===0) {
+            this._events = null;
+        }
+    },
+
+    emit4: function () {
+        var ev;
+        while (ev = this._events.queued.shift()) {
+            ev.target = this;
+            this._events.listeners.forEach(function(l){
+                if (l.filter===null || l.filter===ev.name) {
+                    try {
+                        l.callback.call(l.context,ev);
+                    } catch (ex) {
+                        console.error("listener failed", ex.message, ex.stack);
+                    }
+                }
+            });
+        }
     }
+
 });
 
 
@@ -64677,6 +65529,119 @@ Syncable.stateVersionVector = function stateVersionVector(state) {
     return map.toString();
 };
 
+Syncable.getType = function (type_id) {
+    if (Spec.is(type_id)) {
+        return Syncable.types[new Spec(type_id).type()] || undefined;
+    } else {
+        return Syncable.types[type_id] || undefined;
+    }
+};
+
+function toPojo (obj) { // .4 move to .pojo and .apply/.reset
+    if (obj===undefined || obj===null) { return null; }
+    switch ((obj).constructor) {
+        case String:
+        case Number:
+        case Array: // TODO
+            return obj;
+        case Spec:
+            return obj.toString();
+        default:
+            if (obj._id && obj.spec) {
+                return obj.spec().toString();
+            }
+            if (obj.toPojo) {
+                return obj.toPojo();
+            }
+            var pojo = {};
+            for(var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    pojo[key] = toPojo(obj[key]);
+                }
+            }
+            return pojo;
+    }
+}
+Syncable.toPojo = toPojo;
+
+/** The most important by-value type; used as a field referencing another
+  * syncable object. */
+Syncable.Ref = function Ref (arg, type, host) {
+    this._target = null;
+    this.ref = '#0';
+    if (!arg || arg==='0' || arg==='#0') {
+        this.ref = '#0';
+    } else if (arg._id) {
+        this.ref = arg.spec().toString();
+    } else {
+        var spec = new Spec(arg.toString(),'#');
+        spec = spec.filter('/#');
+        if (spec.pattern()==='#' && type) {
+            if (type.constructor===Function) {
+                type = type._pt._type;
+            }
+            type = new Spec(type,'/');
+            spec = new Spec(''+type+spec);
+        }
+        this.ref = spec.toString();
+    }
+    if (host && host.has(this.ref)) {
+        this._target = host.get(this.ref);
+    }
+};
+
+Syncable.Ref.prototype.toString = function () {
+    return this.ref;
+};
+
+/***/
+Syncable.Ref.prototype.toPojo = function () {
+    return this.ref;
+};
+
+Syncable.Ref.prototype.fill = function (host) {
+    if (this._target) {return;}
+    if (!this.ref) { throw new Error("empty ref"); }
+    if (!host) { host = env.localhost; }
+    return this._target = host.get(this.ref); // TODO .4 #0 null-like obj
+};
+
+Syncable.Ref.prototype.target = function (host) {
+    return this._target || this.fill(host);
+};
+
+Syncable.Ref.prototype.on = function () {
+    if (!this._target) { this.fill(); }
+    this._target.on.apply(this._target,arguments);
+};
+
+Syncable.Ref.prototype.once = function () {
+    if (!this._target) { this.fill(); }
+    this._target.once.apply(this._target,arguments);
+};
+
+Syncable.Ref.prototype.isNull = function () {
+    return this.ref==='#0';
+};
+
+Syncable.Ref.prototype.call = function (method, args, cb) {
+    if (!this._target) { this.fill(); }
+    var _target = this._target;
+    var fn = _target[method];
+    if (!fn || fn.constructor!==Function) {
+        throw new Error("no such method");
+    }
+    if (_target._version) { // stateful
+        var ret = fn.apply(_target,args);
+        if (cb) { cb(ret); }
+    } else {
+        _target.once(function(){
+            var ret = fn.apply(_target,args);
+            if (cb) { cb(ret); }
+        });
+    }
+};
+
 },{"./Spec":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Spec.js","./env":"/home/ubuntu/bridge-controller/node_modules/swarm/lib/env.js"}],"/home/ubuntu/bridge-controller/node_modules/swarm/lib/Vector.js":[function(require,module,exports){
 "use strict";
 
@@ -64703,7 +65668,7 @@ module.exports = Syncable.extend('Vector', {
 
     defaults: {
         _oplog: Object,
-        _objects: Array,
+        objects: Array,
         _order: LongSpec,
         _proxy: ProxyListener
     },
@@ -64738,7 +65703,7 @@ module.exports = Syncable.extend('Vector', {
             var pos = this.findPositionFor(opid, at?at:'!0');
             var obj = this._host.get(type+what);
 
-            this._objects.splice(pos.index,0,obj);
+            this.objects.splice(pos.index,0,obj);
             this._order.insert(opid,pos);
 
             obj.on(this._proxy);
@@ -64758,8 +65723,8 @@ module.exports = Syncable.extend('Vector', {
                 // partial order can't break cause-and-effect ordering
                 return;
             }
-            var obj = this._objects[at.index];
-            this._objects.splice(at.index,1);
+            var obj = this.objects[at.index];
+            this.objects.splice(at.index,1);
             at.erase(1);
 
             obj.off(this._proxy);
@@ -64783,18 +65748,11 @@ module.exports = Syncable.extend('Vector', {
                 var op = i.token() + '.in';
                 var value = this._oplog[op];
                 var obj = this.getObject(value);
-                this._objects[i.index] = obj;
+                this.objects[i.index] = obj;
                 obj.on(this._proxy);
             }
         }
 
-    },
-
-    pojo: function () {
-        // invoke super.pojo()
-        var result = Syncable._pt.pojo.apply(this, arguments);
-        result.entries = Object.keys(this._objects);
-        return result;
     },
 
     getObject: function (spec) {
@@ -64811,7 +65769,7 @@ module.exports = Syncable.extend('Vector', {
     },
 
     length: function () {
-        return this._objects.length;
+        return this.objects.length;
     },
 
     //  C A U S A L  T R E E S  M A G I C
@@ -64892,11 +65850,11 @@ module.exports = Syncable.extend('Vector', {
         if (!obj._id) {
             obj = this.getObject(obj);
         }
-        return this._objects.indexOf(obj,startAt);
+        return this.objects.indexOf(obj,startAt);
     },
 
     /*splice: function (offset, removeCount, insert) {
-        var ref = offset===-1 ? '' : this._objects[offset];
+        var ref = offset===-1 ? '' : this.objects[offset];
         var del = [];
         var hint;
         for (var rm=1; rm<=removeCount; rm++) {
@@ -64923,8 +65881,8 @@ module.exports = Syncable.extend('Vector', {
         var spec = new Spec(pos,'#');
         var type = spec.type();
         var id = spec.id();
-        for(var i=0; i<this._objects.length; i++) {
-            var obj = this._objects[i];
+        for(var i=0; i<this.objects.length; i++) {
+            var obj = this.objects[i];
             if (obj && obj._id===id && (!type || obj._type===type)) {
                 break;
             }
@@ -64991,7 +65949,7 @@ module.exports = Syncable.extend('Vector', {
     },
 
     objectAt: function (i) {
-        return this._objects[i];
+        return this.objects[i];
     },
 
     insertSorted: function (obj, cmp) {
@@ -65001,19 +65959,15 @@ module.exports = Syncable.extend('Vector', {
     },
 
     forEach: function (cb, thisArg) {
-        this._objects.forEach(cb, thisArg);
+        this.objects.forEach(cb, thisArg);
     },
 
     every: function (cb, thisArg) {
-        return this._objects.every(cb, thisArg);
+        return this.objects.every(cb, thisArg);
     },
 
     filter: function (cb, thisArg) {
-        return this._objects.filter(cb, thisArg);
-    },
-
-    map: function (cb, thisArg) {
-        return this._objects.map(cb, thisArg);
+        return this.objects.filter(cb, thisArg);
     }
 
 });

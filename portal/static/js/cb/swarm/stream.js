@@ -8,7 +8,7 @@ function SwarmStream(inbound, outbound) {
     this.outbound = outbound;
 
     this.inbound.on('data', function(data) {
-        console.log('Stream socket received', data);
+        console.log('stream inbound', data);
         try {
             ln.data && ln.data(data);
         } catch (ex) {
@@ -49,7 +49,7 @@ SwarmStream.prototype.on = function (evname, fn) {
 
 SwarmStream.prototype.write = function (data) {
 
-    console.log('SwarmStream write', data);
+    console.log('stream outbound', data);
 
     this.outbound.trigger('data', {
         swarm: data

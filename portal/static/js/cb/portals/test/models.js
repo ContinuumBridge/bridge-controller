@@ -2,12 +2,15 @@
 
 var Model = Swarm.Model;
 
-// Our key class: a mouse pointer :)
 module.exports.Switch = Model.extend('Switch', {
     defaults: {
-        value: false,
-        symbol: '?',
-        ms: 0// last activity timestamp
+        name: '',
+        value: 'off'
+    },
+
+    toggle: function () {
+        var value = this.value == "on" ? "off" : "on";
+        this.set({ value: value });
     }
 });
 

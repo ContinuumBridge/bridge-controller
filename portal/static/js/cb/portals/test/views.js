@@ -9,11 +9,14 @@ var SwitchView = React.createClass({
         modelType: "Switch"
     },
 
+    handleClick: function() {
+        this.sync.toggle();
+    },
+
     render: function() {
 
-        var cbSwitch = this.sync;
+        var testSwitch = this.sync;
 
-        console.log('swarm react cbSwitch is', cbSwitch);
         /*
         var bookmark = <noscript/>;
         var tab = this.props.app.isTouch
@@ -29,10 +32,16 @@ var SwitchView = React.createClass({
         }
         */
 
-        var label = cbSwitch.value ? "True" : "False";
+        var label = testSwitch.value;
+
+        //var disabled = model.isSyncing() ? 'disabled' : '';;
+        var active = testSwitch.value == "on" ? 'active' : '';
+        var switchClass = "left theme-green animate toggle-switch " + active;// + " " + disabled;
+
         return (
-            <div className="switch" key={cbSwitch._id}>
-                Test switch is {label}
+            <div className="switch" key={testSwitch._id}>
+                <div className={switchClass} onClick={this.handleClick}></div>
+                <div className="list-label">{label}</div>
             </div>
         );
     },
@@ -78,10 +87,13 @@ var MainView = React.createClass({
 
     render: function() {
 
+        var switchView = this.props.swarmApp
+            ? <SwitchView spec='/Switch#1'/>
+            : "";
+
         return (
             <div>
-                <div>Test portal</div>
-                <SwitchView spec='/Switch#1'/>
+                {switchView}
             </div>
         )
     }

@@ -47,7 +47,7 @@ var CBApp = Marionette.Application.extend({
 
     dispatch: function(message) {
 
-        console.log('dispatch message', message);
+        //console.log('dispatch message', message);
 
         var source = _.property('source')(message);
         var body = _.property('body')(message);
@@ -80,7 +80,7 @@ var CBApp = Marionette.Application.extend({
 
         } else if (source.match(Portal.filters.cbidRegex)) {
 
-            console.log('message from bridge, client or app on bridge', message);
+            //console.log('message from bridge, client or app on bridge', message);
             // Message is from a bridge or an app on a bridge
             message.direction = "inbound";
 

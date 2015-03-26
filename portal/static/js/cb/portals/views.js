@@ -10,23 +10,41 @@ Portal.PortalView = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+
+        var self = this;
+
+        var portal = this.props.model;
+
+        var swarmApp = portal.getSwarm();
+
+        /*
+        var updateCallback = function(spec, change, object) {
+            console.log('switchCallback', spec, change, object);
+            self.forceUpdate();
+        };
+        swarmApp.host.on(updateCallback);
+        */
+        self.setState({swarm: swarmApp});
+    },
+
     componentDidMount: function() {
 
         var self = this;
 
         var portal = this.props.model;
 
+        /*
         caja.whenReady(function() {  // (1)
             var swarmApp = portal.getSwarm();
             console.log('caja swarmApp', swarmApp);
-            /*
-            var switchCallback = function(spec, change, object) {
+
+            var updateCallback = function(spec, change, object) {
                 console.log('switchCallback', spec, change, object);
                 self.forceUpdate();
-            }
+            };
             //swarmApp.host.on('/Switch#1', switchCallback);
-            swarmApp.host.on(switchCallback);
-            */
+            swarmApp.host.on(updateCallback);
             self.setState({swarm: swarmApp})
         });
 
@@ -39,6 +57,7 @@ Portal.PortalView = React.createClass({
                 .api({})
                 .run();
         });
+        */
     },
 
     render: function() {
@@ -52,14 +71,10 @@ Portal.PortalView = React.createClass({
         var swarmApp = this.state.swarm;
         console.log('Portal view swarmApp', swarmApp);
         console.log('Portal view key', key);
-        /*
-        var swarmView = swarmApp
-                    ? <SwitchView app={swarmApp} spec={key}/>
-                    : "";
-        */
+
         return (
             <div ref="caja">
-                <TestPortalView />
+                <TestPortalView swarmApp={swarmApp} spec={key}/>
             </div>
         )
     }

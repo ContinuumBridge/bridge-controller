@@ -15,9 +15,10 @@ Portal.Portal = Backbone.Deferred.Model.extend({
 
         var self = this;
 
+        var UID = Portal.currentUser.get('cbid');
         var BID = Portal.getCurrentBridge().get('cbid');
         var AID = this.get('appInstall').get('app').get('cbid');
-        this.set('cbid', BID + '/' + AID);
+        this.set('cbid', UID + '/' + BID + '/' + AID);
 
         var cbidRegex = new RegExp("\/?(" + BID + ")\/(" + AID + ")");
         this.set('cbidRegex', cbidRegex);
@@ -37,7 +38,8 @@ Portal.Portal = Backbone.Deferred.Model.extend({
     getSwarm: function() {
 
         //var cbid = this.get('cbid');
-        var CB = new PortalsAPI.Socket(this.outboundCallback);
+        var boundCallback = this.outboundCallback.bind(this);
+        var CB = new PortalsAPI.Socket(boundCallback);
         this.inboundSocket = CB.inboundSocket;
         this.outboundSocket = CB.outboundSocket;
         this.swarmStream = new SwarmStream(this.inboundSocket, this.outboundSocket);
@@ -70,12 +72,13 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         // TODO sanitise the message
 
         // Messages sent from inside the web app
-        console.log('message outbound from web app', message);
+        //console.log('message outbound from web app', message);
 
         var msg = {
             body: message,
             destination: 'CID46',
-            source: 'UID1/BID2/AID9'// + this.get('cbid')
+            //source: 'UID1/BID2/AID9'// + this.get('cbid')
+            source: this.get('cbid')
         }
 
         Portal.socket.publish(msg);
@@ -86,12 +89,13 @@ Portal.Portal = Backbone.Deferred.Model.extend({
         //console.log('portal dispatch callback got message', message);
         var destination = _.property('destination')(message);
 
+        //console.log('portal dispatch callback got message', message, destination);
         var cbidRegex = self.get('cbidRegex');
         //console.log('portal cbidRegex', cbidRegex);
         var destMatch = destination.match(cbidRegex);
         //console.log('portal destMatch', destMatch);
         if (destMatch && destMatch[2]) {
-            console.log('portal', cbidRegex, 'got message', message);
+            //console.log('portal', cbidRegex, 'got message', message);
             var body = _.property('body')(message);
             var swarm = _.property('swarm')(body);
 
