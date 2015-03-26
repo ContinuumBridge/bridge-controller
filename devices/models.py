@@ -47,8 +47,8 @@ class DeviceInstall(BroadcastMixin, LoggedModel):
     bridge = models.ForeignKey(Bridge, related_name='device_installs')
     device = models.ForeignKey(Device, related_name='bridge_installs')
 
-    #status = models.CharField(_("status"), max_length = 255, blank=True)
-    #status_message = models.CharField(_("status_message"), max_length = 5000, blank=True)
+    status = models.CharField(_("status"), max_length = 255, default='', blank=True)
+    status_message = models.CharField(_("status_message"), max_length = 5000, default='', blank=True)
 
     class Meta:
         verbose_name = _('device_install')

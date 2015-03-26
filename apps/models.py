@@ -73,6 +73,9 @@ class AppInstall(LoggedModel):
     app = models.ForeignKey(App, related_name='installs')
     licence = models.ForeignKey(AppLicence, related_name='installs')
 
+    status = models.CharField(_("status"), max_length = 255, default='', blank=True)
+    status_message = models.CharField(_("status_message"), max_length = 5000, default='', blank=True)
+
     class Meta:
         verbose_name = _('app_install')
         verbose_name_plural = _('app_installs')

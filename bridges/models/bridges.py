@@ -43,7 +43,8 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
     #connected = models.BooleanField(_('connected'), default = False)
     #ip = models.GenericIPAddressField(_('ip'))
 
-    #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
+    status = models.CharField(_("status"), max_length = 255, default='', blank=True)
+    status_message = models.CharField(_("status_message"), max_length = 5000, default='', blank=True)
 
     objects = BridgeModelManager()
 
