@@ -69,7 +69,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
         this.on('all', function() {
             var app = self.get('app');
-            if(app instanceof Backbone.Model) app.trigger('relational:change');
+            //if(app instanceof Backbone.Model) app.trigger('relational:change');
         });
         //this.startTracking();
     },

@@ -13,16 +13,6 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
         var self = this;
 
-        /*
-        console.log('this in installDevice is', this);
-        console.log('adaptor in installDevice is', adaptor);
-        console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
-        console.log('device in installDevice is', this.get('device').get('resource_uri'));
-        console.log('mac_addr in installDevice is', this.get('mac_addr'));
-        */
-        //this.set('friendly_name', friendlyName);
-        //this.set('adaptor', adaptor);
-
         var device = this.get('device');
         if(!device) return console.error('Cannot install device, no device found', this);
         var adaptor = device.get('adaptorCompatibilities').at(0).get('adaptor');
@@ -33,49 +23,13 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             device: device.get('resource_uri'),
             address: address,
             adaptor: adaptor,
+            status: 'should_install',
             friendly_name: friendlyName
         };
 
         var createOptions = {matchFields: this.matchFields};
 
         Portal.deviceInstallCollection.create(deviceInstallData, createOptions);
-        /*
-        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData);
-        if (!deviceInstall) {
-            //deviceInstall = new
-        }
-        /*
-        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
-            || new Portal.DeviceInstall({
-                bridge: this.get('bridge'),
-                device: this.get('device'),
-                address: address,
-                adaptor: adaptor,
-                friendly_name: friendlyName
-            });
-
-        /*
-        var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
-
-        });
-
-
-        // Add the optional data in for saving
-        deviceInstallData = _.defaults(deviceInstallData, {
-            adaptor: adaptor.resource_uri,
-            friendly_name: friendlyName
-        });
-        console.log('deviceInstall is', deviceInstall.toJSON());
-        // Add to the deviceInstall collection, to save with backbone io
-        Portal.deviceInstallCollection.add(deviceInstall);
-        deviceInstall.save().then(function(result) {
-
-            console.log('deviceInstall saved successfully');
-        }, function(error) {
-
-            console.error('Error saving deviceInstall', error);
-        });
-        */
     },
 
     relations: [

@@ -5,12 +5,12 @@ var includeFolder = require('include-folder');
 
 //var utils = includeFolder('./node_modules/react-bootstrap/utils');
 //var utils = require('./node_modules/react-bootstrap/utils');
-var joinClasses = require('../../../../../node_modules/react-bootstrap/utils/joinClasses');
-var classSet = require('../../../../../node_modules/react-bootstrap/utils/classSet');
-var cloneWithProps = require('../../../../../node_modules/react-bootstrap/utils/cloneWithProps');
+var joinClasses = require('../../../../../node_modules/react-bootstrap/lib/utils/joinClasses');
+var classSet = require('../../../../../node_modules/react-bootstrap/lib/utils/classSet');
+var cloneWithProps = require('../../../../../node_modules/react-bootstrap/lib/utils/cloneWithProps');
 
 var BootstrapMixin = require('./BootstrapMixin');
-var ValidComponentChildren = require('../../../../../node_modules/react-bootstrap/utils/ValidComponentChildren');
+var ValidComponentChildren = require('../../../../../node_modules/react-bootstrap/lib/utils/ValidComponentChildren');
 
 var ListItem = React.createClass({
     mixins: [BootstrapMixin],

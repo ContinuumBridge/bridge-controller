@@ -238,7 +238,7 @@ var CBCollection = OriginalCollection.extend({
         if (!this.filtered) {
             // If the collection is newly created, proxy events
             collection.on('reset', function(e) {
-                self.trigger('relational:change');
+                //self.trigger('relational:change');
             });
         }
 
