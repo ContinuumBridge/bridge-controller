@@ -25,7 +25,7 @@ Portal.DeviceInstallListView = React.createClass({
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView, InstallableMixin],
+    mixins: [Portal.ListView, InstallableMixin],
 
     getInitialState: function () {
         return {
@@ -44,17 +44,18 @@ Portal.DeviceInstallListView = React.createClass({
         //this.props.discoverDevices();
     },
 
-    renderItem: function (item) {
-        var cid = item.cid;
+    renderItem: function (deviceInstall) {
 
-        var deviceInstall = this.getCollection().get({cid: cid});
+        var cid = deviceInstall.cid;
+
+        //var deviceInstall = this.getCollection().get({cid: cid});
         var title = <Portal.Components.TextInput model={deviceInstall} field="friendly_name" />;
 
         var status = this.getStatus(deviceInstall);
         //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
 
         return <Portal.DeviceInstallView key={cid} subtitle={status}
-                    title={title} model={item} />
+                    title={title} model={deviceInstall} />
     }
 });
 

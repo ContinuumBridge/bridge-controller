@@ -21,16 +21,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge deviceInstalls', name);
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
@@ -215,9 +215,10 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
             initializeCollection: 'userCollection',
         }
     ]
-}); 
+});
 
-Portal.BridgeControlCollection = Backbone.Collection.extend({
+//Portal.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.BridgeControl,
     backend: 'bridgeControl',

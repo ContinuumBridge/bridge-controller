@@ -46,6 +46,8 @@ require('./backbone-cb-collection');
 
 QueryEngine = require('query-engine');
 
+require('./backbone-cb-querycollection');
+
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(QueryEngine.QueryCollection, CBCollectionMixin);
 

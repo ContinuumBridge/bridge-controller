@@ -11824,7 +11824,6 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
-        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
         this.listenTo(this.get('appInstall'), 'destroy', function() {
             //console.log('ADP heard destroy on deviceInstall')
@@ -11921,17 +11920,11 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appDevicePermission" });
 
-Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+//Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.AppDevicePermission,
-    backend: 'appDevicePermission',
-
-    /*
-    initialize: function() {
-
-        this.bindBackend();
-    }
-    */
+    backend: 'appDevicePermission'
 
 });
 
@@ -11944,7 +11937,7 @@ Portal.AppDevicePermissionView = React.createClass({displayName: 'AppDevicePermi
 
 Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDevicePermissionListView',
 
-    mixins: [Backbone.React.Component.mixin, Portal.InnerListView],
+    mixins: [Portal.InnerListView],
 
     getDefaultProps: function () {
         return {
@@ -11952,11 +11945,11 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
         };
     },
 
-    createItem: function(item) {
+    createItem: function(adp) {
 
-        var cid = item.cid;
-
-        var adp = this.getCollection().get({cid: cid});;
+        var cid = adp.cid;
+        console.log('adp cid', adp);
+        //var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 
         return React.createElement(Portal.Components.Switch, {key: cid, label: label, model: adp})
@@ -11979,7 +11972,6 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
-
             self.trigger('relational:change');
         });
     },
@@ -12133,8 +12125,9 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
             adp = devicePermissions.findWhere(adpData)
             if (!adp) {
                 adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
+                appInstall.set('devicePermissions', adp, {remove: false, silent: true});
             }
+
         });
 
         return (
@@ -12147,7 +12140,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    mixins: [Portal.ListView],
 
     getInitialState: function () {
         return {
@@ -12164,15 +12157,16 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
         Portal.router.setParams({action: 'install-app'});
     },
 
-    renderItem: function (item) {
+    renderItem: function (appInstall) {
 
-        var cid = item.cid;
+        var cid = appInstall.cid;
 
-        var appInstallCollection = this.getCollection()
-        var appInstall = appInstallCollection.get({cid: cid});
+        //var appInstallCollection = this.getCollection()
+        //var appInstall = appInstallCollection.get({cid: cid});
 
         var app = appInstall.get('app');
         var title = app.get('name');
+        //var title = app.name;
 
         var deviceInstalls = this.props.deviceInstalls;
 
@@ -12253,7 +12247,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
         this.on('all', function() {
             var app = self.get('app');
-            //if(app instanceof Backbone.Model) app.trigger('relational:change');
+            if(app instanceof Backbone.Model) app.trigger('relational:change');
         });
         //this.startTracking();
     },
@@ -12281,7 +12275,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
         install = licenceInstalls.findWhere(installData);
         if (!install) {
             install = new Portal.AppInstall(installData);
-            this.set('installs', install, {remove: false});
+            this.set('installs', install, {remove: false, silent: true});
         }
         return install;
     },
@@ -12957,16 +12951,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge appInstalls', name);
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('deviceInstalls'), 'all', function(name) {
             //console.log('EVENT currentBridge deviceInstalls', name);
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         this.listenTo(this.get('discoveredDevices'), 'all', function(name) {
-            //self.trigger('relational:change');
+            self.trigger('relational:change');
         });
 
         var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
@@ -13151,9 +13145,10 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
             initializeCollection: 'userCollection',
         }
     ]
-}); 
+});
 
-Portal.BridgeControlCollection = Backbone.Collection.extend({
+//Portal.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.BridgeControl,
     backend: 'bridgeControl',
@@ -13807,7 +13802,7 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
     getInitialState: function () {
         var buttons = [];
 
-        var discoveredDevice = this.getModel();
+        var discoveredDevice = this.props.model;
         var device = discoveredDevice.get('device');
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
@@ -13841,7 +13836,7 @@ Portal.DiscoveredDeviceView = React.createClass({displayName: 'DiscoveredDeviceV
 
 Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDeviceListView',
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    mixins: [Portal.ListView],
 
     getInitialState: function () {
         return {
@@ -13875,15 +13870,16 @@ Portal.DiscoveredDeviceListView = React.createClass({displayName: 'DiscoveredDev
         //Portal.Config.controller.discoverDevices();
     },
 
-    renderItem: function (item) {
+    renderItem: function (discoveredDevice) {
 
-        var model = this.getCollection().findWhere({id: item.id});
+        //var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device') ? name : name + " (Unknown device)";
-        var title = item.name;
-        var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
+        var title = discoveredDevice.get('name');
+        var address = discoveredDevice.get('address');
+        var subtitle =  "(" + address.slice(address.length-5) + ")";
 
-        return React.createElement(Portal.DiscoveredDeviceView, {key: item.cid, 
-                    title: title, subtitle: subtitle, model: item})
+        return React.createElement(Portal.DiscoveredDeviceView, {key: discoveredDevice.cid, 
+                    title: title, subtitle: subtitle, model: discoveredDevice})
     }
 });
 
@@ -13895,18 +13891,6 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
 
     matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
-
-    initialize: function() {
-
-        //Backbone.Deferred.Model.prototype.initialize.apply(this);
-        //this.bind("change", this.changeHandler)
-
-    },
-
-    changeHandler: function(e) {
-
-        console.log('Change in device install is', e);
-    },
 
     uninstall: function() {
 
@@ -14019,28 +14003,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
 Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
-    backend: 'deviceInstall',
+    backend: 'deviceInstall'
 
-    /*
-    initialize: function(options) {
-        var self = this;
-
-        //Portal.addInitializer(function(options) {
-
-        //});
-        /*
-        this.bind('backend:create', function(model) {
-            self.add(model);
-        });
-        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
-    },
-    */
-
-    /*
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
@@ -14071,7 +14035,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView, InstallableMixin],
+    mixins: [Portal.ListView, InstallableMixin],
 
     getInitialState: function () {
         return {
@@ -14090,17 +14054,18 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         //this.props.discoverDevices();
     },
 
-    renderItem: function (item) {
-        var cid = item.cid;
+    renderItem: function (deviceInstall) {
 
-        var deviceInstall = this.getCollection().get({cid: cid});
+        var cid = deviceInstall.cid;
+
+        //var deviceInstall = this.getCollection().get({cid: cid});
         var title = React.createElement(Portal.Components.TextInput, {model: deviceInstall, field: "friendly_name"});
 
         var status = this.getStatus(deviceInstall);
         //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
 
         return React.createElement(Portal.DeviceInstallView, {key: cid, subtitle: status, 
-                    title: title, model: item})
+                    title: title, model: deviceInstall})
     }
 });
 
@@ -14287,7 +14252,7 @@ Portal.addInitializer(function () {
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
-      React.render(
+      baseView = React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
               path: state.path, 
               //key={state.path}
@@ -16865,6 +16830,14 @@ module.exports = React.createClass({displayName: 'exports',
 
     mixins: [Backbone.React.Component.mixin],
 
+    /*
+    componentDidUpdate: function() {
+
+        console.log('base componentDidUpdate');
+        Backbone.Relational.eventQueue.unblock();
+    },
+    */
+
     render: function () {
 
         var Handler = this.props.handler;
@@ -17069,7 +17042,8 @@ module.exports = React.createClass({displayName: 'exports',
 
     handleClick: function() {
 
-        var model = this.getModel();
+        //var model = this.getModel();
+        var model = this.props.model;
 
         if (!model.isSyncing()) {
             if (model.isNew()) {

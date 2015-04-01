@@ -6,18 +6,6 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
 
-    initialize: function() {
-
-        //Backbone.Deferred.Model.prototype.initialize.apply(this);
-        //this.bind("change", this.changeHandler)
-
-    },
-
-    changeHandler: function(e) {
-
-        console.log('Change in device install is', e);
-    },
-
     uninstall: function() {
 
 
@@ -129,26 +117,6 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
 Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
-    backend: 'deviceInstall',
+    backend: 'deviceInstall'
 
-    /*
-    initialize: function(options) {
-        var self = this;
-
-        //Portal.addInitializer(function(options) {
-
-        //});
-        /*
-        this.bind('backend:create', function(model) {
-            self.add(model);
-        });
-        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
-    },
-    */
-
-    /*
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });

@@ -44,8 +44,9 @@ Portal.AppInstallView = React.createClass({
             adp = devicePermissions.findWhere(adpData)
             if (!adp) {
                 adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
+                appInstall.set('devicePermissions', adp, {remove: false, silent: true});
             }
+
         });
 
         return (
@@ -58,7 +59,7 @@ Portal.AppInstallListView = React.createClass({
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    mixins: [Portal.ListView],
 
     getInitialState: function () {
         return {
@@ -75,15 +76,16 @@ Portal.AppInstallListView = React.createClass({
         Portal.router.setParams({action: 'install-app'});
     },
 
-    renderItem: function (item) {
+    renderItem: function (appInstall) {
 
-        var cid = item.cid;
+        var cid = appInstall.cid;
 
-        var appInstallCollection = this.getCollection()
-        var appInstall = appInstallCollection.get({cid: cid});
+        //var appInstallCollection = this.getCollection()
+        //var appInstall = appInstallCollection.get({cid: cid});
 
         var app = appInstall.get('app');
         var title = app.get('name');
+        //var title = app.name;
 
         var deviceInstalls = this.props.deviceInstalls;
 

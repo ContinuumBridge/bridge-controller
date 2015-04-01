@@ -69,7 +69,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
         this.on('all', function() {
             var app = self.get('app');
-            //if(app instanceof Backbone.Model) app.trigger('relational:change');
+            if(app instanceof Backbone.Model) app.trigger('relational:change');
         });
         //this.startTracking();
     },
@@ -97,7 +97,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
         install = licenceInstalls.findWhere(installData);
         if (!install) {
             install = new Portal.AppInstall(installData);
-            this.set('installs', install, {remove: false});
+            this.set('installs', install, {remove: false, silent: true});
         }
         return install;
     },

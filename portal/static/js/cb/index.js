@@ -56,7 +56,7 @@ Portal.addInitializer(function () {
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
-      React.render(
+      baseView = React.render(
           <BaseView params={params} handler={Handler}
               path={state.path}
               //key={state.path}

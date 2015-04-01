@@ -223,31 +223,6 @@ var CBCollection = OriginalCollection.extend({
 
         // id can be a string or int
         return this.findWhere({id: ''+id}) || this.findWhere({id: parseInt(id)});
-    },
-
-    getFiltered: function(name, filter) {
-
-        var self = this;
-        //return this.createLiveChildCollection();
-
-        var collection = this.filtered || this.createLiveChildCollection(this.models);
-
-        //var collection = this.filtered || this.createLiveChildCollection();
-        collection.setFilter(name, filter);
-
-        if (!this.filtered) {
-            // If the collection is newly created, proxy events
-            collection.on('reset', function(e) {
-                //self.trigger('relational:change');
-            });
-        }
-
-        collection.parent = this;
-        this.filtered = collection;
-
-        collection.query();
-
-        return this.filtered;
     }
 });
 

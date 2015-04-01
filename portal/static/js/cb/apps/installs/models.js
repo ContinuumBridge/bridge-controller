@@ -13,7 +13,6 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
-
             self.trigger('relational:change');
         });
     },
