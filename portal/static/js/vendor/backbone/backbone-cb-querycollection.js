@@ -19,7 +19,7 @@ QueryEngine.QueryCollection.prototype.getFiltered = function(name, filter) {
     collection.parent = this;
     this.filtered = collection;
 
-    collection.query({}, {silent: true});
+    collection.query();
 
     return this.filtered;
 },

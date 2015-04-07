@@ -1,5 +1,5 @@
 
-var InstallableMixin = require('../../views/mixins/installable');
+//var InstallableMixin = require('../../views/mixins/installable');
 
 Portal.DeviceInstallView = React.createClass({
 
@@ -14,10 +14,22 @@ Portal.DeviceInstallView = React.createClass({
     getInitialState: function () {
         return {
             buttons: [{
-                onClick: this.handleDestroy,
+                onClick: this.handleUninstall,
                 type: 'delete'
             }]
         };
+    },
+
+    handleUninstall: function() {
+
+        var deviceInstall = this.props.model;
+
+        deviceInstall.set({'status': 'should_uninstall'})
+        deviceInstall.save();
+        if (deviceInstall.get('device').get('protocol') == 'zwave') {
+            Portal.router.setParams({action: 'uninstall-device',
+                item: deviceInstall.get('id')});
+        }
     }
 });
 
@@ -25,7 +37,7 @@ Portal.DeviceInstallListView = React.createClass({
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Portal.ListView, InstallableMixin],
+    mixins: [Portal.ListView, Portal.Mixins.Installable],
 
     getInitialState: function () {
         return {
@@ -54,7 +66,7 @@ Portal.DeviceInstallListView = React.createClass({
         var status = this.getStatus(deviceInstall);
         //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
 
-        return <Portal.DeviceInstallView key={cid} subtitle={status}
+        return <Portal.DeviceInstallView key={cid} status={status}
                     title={title} model={deviceInstall} />
     }
 });

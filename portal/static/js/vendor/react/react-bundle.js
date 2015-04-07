@@ -8,7 +8,7 @@ React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 //React.AutosizeInput = require('react-input-autosize');
-React.OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+React.OverlayTrigger = require('./OverlayTrigger');
 React.Tooltip = require('react-bootstrap').Tooltip;
 
 React.Button = require('react-bootstrap').Button;

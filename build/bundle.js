@@ -11948,7 +11948,6 @@ Portal.AppDevicePermissionListView = React.createClass({displayName: 'AppDeviceP
     createItem: function(adp) {
 
         var cid = adp.cid;
-        console.log('adp cid', adp);
         //var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 
@@ -11965,6 +11964,10 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     backend: 'appInstall',
 
     matchFields: ['bridge', 'app'],
+
+    defaults: {
+        "status":  "should_install"
+    },
 
     initialize: function() {
 
@@ -12140,7 +12143,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Portal.ListView],
+    mixins: [Portal.ListView, Portal.Mixins.Installable],
 
     getInitialState: function () {
         return {
@@ -12170,7 +12173,9 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return React.createElement(Portal.AppInstallView, {key: cid, title: title, 
+        var status = this.getStatus(appInstall);
+
+        return React.createElement(Portal.AppInstallView, {key: cid, title: title, status: status, 
             deviceInstalls: deviceInstalls, model: appInstall})
     }
 });
@@ -12938,7 +12943,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        var self = this;
+        var self =
         /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
@@ -12950,7 +12955,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
          */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
-            //console.log('EVENT currentBridge appInstalls', name);
+            console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
         });
 
@@ -13709,7 +13714,6 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             device: device.get('resource_uri'),
             address: address,
             adaptor: adaptor,
-            status: 'should_install',
             friendly_name: friendlyName
         };
 
@@ -13889,11 +13893,19 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
 
-    uninstall: function() {
+    matchFields: ['bridge', 'device'],
 
+    defaults: {
+        "status":  "should_install"
+    },
+
+    initialize: function() {
+
+    },
+
+    uninstall: function() {
 
         this.relationalDestroy({wait: true});
     },
@@ -13999,7 +14011,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Backbone.Cocktail.mixin(Portal.DeviceInstall, Portal.InstallableModelMixin);
+
 Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
@@ -14009,7 +14022,7 @@ Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js":[function(require,module,exports){
 
-var InstallableMixin = require('../../views/mixins/installable');
+//var InstallableMixin = require('../../views/mixins/installable');
 
 Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
 
@@ -14024,10 +14037,22 @@ Portal.DeviceInstallView = React.createClass({displayName: 'DeviceInstallView',
     getInitialState: function () {
         return {
             buttons: [{
-                onClick: this.handleDestroy,
+                onClick: this.handleUninstall,
                 type: 'delete'
             }]
         };
+    },
+
+    handleUninstall: function() {
+
+        var deviceInstall = this.props.model;
+
+        deviceInstall.set({'status': 'should_uninstall'})
+        deviceInstall.save();
+        if (deviceInstall.get('device').get('protocol') == 'zwave') {
+            Portal.router.setParams({action: 'uninstall-device',
+                item: deviceInstall.get('id')});
+        }
     }
 });
 
@@ -14035,7 +14060,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Portal.ListView, InstallableMixin],
+    mixins: [Portal.ListView, Portal.Mixins.Installable],
 
     getInitialState: function () {
         return {
@@ -14064,13 +14089,13 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
         var status = this.getStatus(deviceInstall);
         //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
 
-        return React.createElement(Portal.DeviceInstallView, {key: cid, subtitle: status, 
+        return React.createElement(Portal.DeviceInstallView, {key: cid, status: status, 
                     title: title, model: deviceInstall})
     }
 });
 
 
-},{"../../views/mixins/installable":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/installable.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js":[function(require,module,exports){
 
 Portal.Device = Backbone.Deferred.Model.extend({
     
@@ -14136,8 +14161,6 @@ Portal.Error = Backbone.RelationalModel.extend({
     idAttribute: 'id',
 
     initialize: function(attributes, options) {
-
-        console.log('error initialized', attributes);
 
         if (attributes['type'] != "TransportError") {
             var notification = new Portal.Notification({error: this,
@@ -14229,6 +14252,8 @@ Portal.addInitializer(function () {
   Portal.router = require('./router');
 
   Portal.router.run(function (Handler, state) {
+      console.log('router run');
+
       Portal.route = state;
 
       var params = state.params;
@@ -14252,10 +14277,10 @@ Portal.addInitializer(function () {
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 
-      baseView = React.render(
+      React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
               path: state.path, 
-              //key={state.path}
+              key: currentBridgeID, 
               collection: collections, model: models}),
           document.getElementById('app')
       );
@@ -14823,13 +14848,55 @@ Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 //Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
 Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?\/?([A-Z]ID[0-9]+)?/;
 
-},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
+},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/mixins/installable.js":[function(require,module,exports){
+
+Portal.InstallableModelMixin = {
+
+    relations: [
+        {
+            type: Backbone.HasOne,
+            key: 'notification',
+            relatedModel: 'Portal.ModelStatus',
+            createModels: true,
+            includeInJSON: false,
+            initializeCollection: 'notificationCollection',
+            reverseRelation: {
+                type: Backbone.HasOne,
+                key: 'model',
+                includeInJSON: false
+            }
+        }
+    ],
+
+    initialize: function(undefined, options) {
+
+        this.on('change:status', this.onStatusChange, this);
+    },
+
+    onStatusChange: function(model, value, options) {
+        if(_.contains(['error', 'install_error', 'uninstall_error'], value)) {
+            var notification = this.get('notification');
+            if (!notification) {
+                Portal.notificationCollection.add(
+                    new Portal.ModelStatus({model: this, type: 'installStatus'})
+                )
+            }
+            //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
+        }
+        console.log('status changed', model, value, options);
+    }
+}
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/mixins/mixins.js":[function(require,module,exports){
+
+require('./installable');
+},{"./installable":"/home/ubuntu/bridge-controller/portal/static/js/cb/mixins/installable.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/models.js":[function(require,module,exports){
 
 var Q = require('q');
 
 //var CBApp = require('index');
 require('index');
 
+require('./mixins/mixins');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');
@@ -14937,7 +15004,7 @@ Portal.on('before:start', function () {
   */
 });
 
-},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./errors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
+},{"./adaptors/compatibility/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/compatibility/models.js","./adaptors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/adaptors/models.js","./apps/connections/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/connections/models.js","./apps/device_permissions/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/device_permissions/models.js","./apps/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/models.js","./apps/licences/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/models.js","./apps/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/models.js","./apps/ownerships/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/ownerships/models.js","./bridges/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/models.js","./clients/controls/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/controls/models.js","./clients/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/clients/models.js","./devices/discovery/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/models.js","./devices/installs/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/models.js","./devices/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/models.js","./errors/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/errors/models.js","./misc/decorators":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/decorators.js","./misc/filters":"/home/ubuntu/bridge-controller/portal/static/js/cb/misc/filters.js","./mixins/mixins":"/home/ubuntu/bridge-controller/portal/static/js/cb/mixins/mixins.js","./notifications/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/notifications/models.js","./portals/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/models.js","./users/current/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/current/models.js","./users/models":"/home/ubuntu/bridge-controller/portal/static/js/cb/users/models.js","index":"/home/ubuntu/bridge-controller/portal/static/js/cb/index.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/config/config.js":[function(require,module,exports){
 
 
 var ConfigViews = require('./views');
@@ -15213,6 +15280,47 @@ var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
                 React.createElement("div", {className: "modal-footer"}, 
                     React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
                     React.createElement(React.Button, {onClick: this.installDevice}, "Install")
+                )
+            )
+        )
+    }
+});
+
+var UninstallDeviceModal = React.createClass({displayName: 'UninstallDeviceModal',
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    installDevice: function() {
+        console.log('Submitted installDevice modal');
+        var discoveredDevice = this.getModel();
+        discoveredDevice.install(this.state.friendlyName);
+        Portal.router.setParams({});
+    },
+
+    cancelUninstall: function() {
+
+        this.getModel().set({'status': ''}).save();
+        Portal.router.setParams({});
+    },
+
+    render: function() {
+
+        var deviceInstall = this.getModel();
+
+        var friendlyName = deviceInstall.get('friendly_name');
+
+        var title = "Uninstall device " + friendlyName;
+        //var device = this.getModel().get('device');
+        //var title = device ? "Install " + device.get('name') : "Unknown device";
+
+        return (
+            React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
+                onRequestHide: this.cancelInstall, animation: false}, 
+                React.createElement("div", {className: "modal-body"}, 
+                    React.createElement("div", null)
+                ), 
+                React.createElement("div", {className: "modal-footer"}, 
+                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "Close")
                 )
             )
         )
@@ -15865,6 +15973,24 @@ Portal.ConnectionStatus = Portal.Notification.extend({
     }
 
 }, { modelType: "connectionStatus" });
+
+Portal.ModelStatus = Portal.Notification.extend({
+
+    defaults: {
+        type: 'installStatus'
+    },
+
+    getTitle: function() {
+        var installable = this.get('model');
+        return installable.get('status');
+    },
+
+    getSubtitle: function() {
+        var installable = this.get('model');
+        return installable.get('status_message');
+    }
+
+}, { modelType: "installStatus" });
 
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
 Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
@@ -17615,23 +17741,22 @@ module.exports = {
 
     getStatus: function(install) {
 
-        return React.createElement(React.OverlayTrigger, {placement: "top", overlay: React.createElement(React.Tooltip, null, "Test tooltip")}, 
-                  React.createElement(Portal.Components.Spinner, null)
-               );
-
         var statusLabel;
         var status = install.get('status');
         if (!status || status == 'operational') return "";
         statusLabel = this.statusHash[status];
 
-        if (statusLabel) return React.createElement(React.OverlayTrigger, {placement: "top", 
-                                    overlay: React.createElement(React.Tooltip, {test: "spinnerInfo"}, "Test tooltip")}, 
+        if (statusLabel) return (React.createElement(React.OverlayTrigger, {placement: "top", 
+                                    overlay: React.createElement(React.Tooltip, {test: "spinnerInfo"}, statusLabel)}, 
                                     React.createElement(Portal.Components.Spinner, null)
-                                );
+                                 ));
 
         statusLabel = this.errorStatusHash[status];
         if (statusLabel) {
-            return statusLabel
+            return (React.createElement(React.OverlayTrigger, {placement: "top", 
+                        overlay: React.createElement(React.Tooltip, null, statusLabel)}, 
+                        React.createElement("i", {className: "icon ion-alert-circled icon-error item-icon-button"})
+                    ));
         } else {
             return "";
         }
@@ -17737,7 +17862,7 @@ Portal.ItemView = {
         return (
             React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
-                className: className, bsStyle: "", 
+                className: className, bsStyle: "", status: this.props.status, 
                 hideSubtitleOnExpanded: this.props.hideSubtitleOnExpanded, 
                 collapsable: this.props.openable, eventKey: "1"}, 
                 body
@@ -17811,11 +17936,12 @@ Mixins.Counter = require('./counter');
 Mixins.Filter = require('./filter');
 Mixins.RowView = require('./table').RowView;
 Mixins.TableView = require('./table').TableView;
+Mixins.Installable = require('./installable');
 
 Portal.Mixins = Mixins;
 
 
-},{"./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./table":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
+},{"./counter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/counter.js","./filter":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/filter.js","./installable":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/installable.js","./table":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/mixins/table.js":[function(require,module,exports){
 
 module.exports.RowView = {
 

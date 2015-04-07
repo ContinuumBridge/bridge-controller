@@ -23,7 +23,6 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             device: device.get('resource_uri'),
             address: address,
             adaptor: adaptor,
-            status: 'should_install',
             friendly_name: friendlyName
         };
 

@@ -7,6 +7,10 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     matchFields: ['bridge', 'app'],
 
+    defaults: {
+        "status":  "should_install"
+    },
+
     initialize: function() {
 
         var self = this;

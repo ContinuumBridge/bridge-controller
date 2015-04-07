@@ -20,7 +20,7 @@ var React = _interopRequire(_react);
 
 var cloneElement = _react.cloneElement;
 
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
+var BootstrapMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/BootstrapMixin"));
 
 var classSet = _interopRequire(require("../../../../../node_modules/react-bootstrap/node_modules/classnames"));
 
@@ -148,6 +148,9 @@ var ListItem = React.createClass({
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
+        var status = this.props.status || "";
+        console.log('status is', status);
+
         var buttons = this.props.buttons || [];
 
         return (
@@ -160,6 +163,7 @@ var ListItem = React.createClass({
                     </small>
                 </h4>
                 <div className="item-buttons">
+                    {status}
                     {buttons.map(this.renderButton)}
                     {renderedButtons}
                 </div>

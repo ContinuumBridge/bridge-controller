@@ -17,7 +17,6 @@ Portal.AppDevicePermissionListView = React.createClass({
     createItem: function(adp) {
 
         var cid = adp.cid;
-        console.log('adp cid', adp);
         //var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 

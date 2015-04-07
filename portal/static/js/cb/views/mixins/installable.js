@@ -18,23 +18,22 @@ module.exports = {
 
     getStatus: function(install) {
 
-        return <React.OverlayTrigger placement='top' overlay={<React.Tooltip>Test tooltip</React.Tooltip>}>
-                  <Portal.Components.Spinner />
-               </React.OverlayTrigger>;
-
         var statusLabel;
         var status = install.get('status');
         if (!status || status == 'operational') return "";
         statusLabel = this.statusHash[status];
 
-        if (statusLabel) return <React.OverlayTrigger placement='top'
-                                    overlay={<React.Tooltip test='spinnerInfo'>Test tooltip</React.Tooltip>}>
+        if (statusLabel) return (<React.OverlayTrigger placement='top'
+                                    overlay={<React.Tooltip test='spinnerInfo'>{statusLabel}</React.Tooltip>}>
                                     <Portal.Components.Spinner />
-                                </React.OverlayTrigger>;
+                                 </React.OverlayTrigger>);
 
         statusLabel = this.errorStatusHash[status];
         if (statusLabel) {
-            return statusLabel
+            return (<React.OverlayTrigger placement='top'
+                        overlay={<React.Tooltip>{statusLabel}</React.Tooltip>}>
+                        <i className="icon ion-alert-circled icon-error item-icon-button"/>
+                    </React.OverlayTrigger>);
         } else {
             return "";
         }

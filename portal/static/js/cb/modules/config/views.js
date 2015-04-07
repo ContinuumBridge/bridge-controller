@@ -190,6 +190,47 @@ var InstallDeviceModal = React.createClass({
     }
 });
 
+var UninstallDeviceModal = React.createClass({
+
+    mixins: [ Router.State, Backbone.React.Component.mixin],
+
+    installDevice: function() {
+        console.log('Submitted installDevice modal');
+        var discoveredDevice = this.getModel();
+        discoveredDevice.install(this.state.friendlyName);
+        Portal.router.setParams({});
+    },
+
+    cancelUninstall: function() {
+
+        this.getModel().set({'status': ''}).save();
+        Portal.router.setParams({});
+    },
+
+    render: function() {
+
+        var deviceInstall = this.getModel();
+
+        var friendlyName = deviceInstall.get('friendly_name');
+
+        var title = "Uninstall device " + friendlyName;
+        //var device = this.getModel().get('device');
+        //var title = device ? "Install " + device.get('name') : "Unknown device";
+
+        return (
+            <React.Modal className="portal-modal" title={title} container={this.props.container}
+                onRequestHide={this.cancelInstall} animation={false}>
+                <div className="modal-body">
+                    <div></div>
+                </div>
+                <div className="modal-footer">
+                    <React.Button onClick={this.cancelUninstall}>Close</React.Button>
+                </div>
+            </ React.Modal>
+        )
+    }
+});
+
 var InstallAppModal = React.createClass({
 
     mixins: [ Router.State, Router.Navigation, Backbone.React.Component.mixin],

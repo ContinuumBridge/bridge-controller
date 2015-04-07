@@ -64842,13 +64842,13 @@ Backbone.RelationalModel = Backbone.RelationalModel.extend({
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/backbone/backbone-bundle.js":[function(require,module,exports){
 
 var $ = require('jquery')
-    ,_ = require('underscore')
-    ,Cocktail = require('backbone-cocktail');
+    ,_ = require('underscore');
 
 Backbone = require('backbone');
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
+Backbone.Cocktail = require('backbone-cocktail');
 
 require('./backbone-cb-model-pre');
 
@@ -64873,8 +64873,8 @@ require('../../cb/misc/relational-models');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
 
 var CBViewsMixin = require('./backbone-cb-views');
-Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
-Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
+Backbone.Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
+Backbone.Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
 
@@ -65451,7 +65451,7 @@ QueryEngine.QueryCollection.prototype.getFiltered = function(name, filter) {
     collection.parent = this;
     this.filtered = collection;
 
-    collection.query({}, {silent: true});
+    collection.query();
 
     return this.filtered;
 },
@@ -73392,44 +73392,7 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js":[function(require,module,exports){
-
-var React = require('react');
-var constants = require('./constants');
-
-var BootstrapMixin = {
-    propTypes: {
-        bsClass: React.PropTypes.oneOf(Object.keys(constants.CLASSES)),
-        bsStyle: React.PropTypes.oneOf(Object.keys(constants.STYLES)),
-        bsSize: React.PropTypes.oneOf(Object.keys(constants.SIZES))
-    },
-
-    getBsClassSet: function () {
-        var classes = {};
-
-        var bsClass = this.props.bsClass && constants.CLASSES[this.props.bsClass];
-        if (bsClass) {
-            classes[bsClass] = true;
-
-            var prefix = bsClass + '-';
-
-            var bsSize = this.props.bsSize && constants.SIZES[this.props.bsSize];
-            if (bsSize) {
-                classes[prefix + bsSize] = true;
-            }
-
-            var bsStyle = this.props.bsStyle && constants.STYLES[this.props.bsStyle];
-            if (this.props.bsStyle) {
-                classes[prefix + bsStyle] = true;
-            }
-        }
-
-        return classes;
-    }
-};
-
-module.exports = BootstrapMixin;
-},{"./constants":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
 
 /*
 var React = require('react');
@@ -73452,7 +73415,7 @@ var React = _interopRequire(_react);
 
 var cloneElement = _react.cloneElement;
 
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
+var BootstrapMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/BootstrapMixin"));
 
 var classSet = _interopRequire(require("../../../../../node_modules/react-bootstrap/node_modules/classnames"));
 
@@ -73580,6 +73543,9 @@ var ListItem = React.createClass({displayName: 'ListItem',
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
+        var status = this.props.status || "";
+        console.log('status is', status);
+
         var buttons = this.props.buttons || [];
 
         return (
@@ -73592,6 +73558,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
                     )
                 ), 
                 React.createElement("div", {className: "item-buttons"}, 
+                    status, 
                     buttons.map(this.renderButton), 
                     renderedButtons
                 )
@@ -73664,252 +73631,248 @@ var ListItem = React.createClass({displayName: 'ListItem',
 });
 
 module.exports = ListItem;
-},{"../../../../../node_modules/react-bootstrap/node_modules/classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js":[function(require,module,exports){
-module.exports = {
-    CLASSES: {
-        'alert': 'alert',
-        'button': 'btn',
-        'button-group': 'btn-group',
-        'button-toolbar': 'btn-toolbar',
-        'column': 'col',
-        'input-group': 'input-group',
-        'form': 'form',
-        'glyphicon': 'glyphicon',
-        'label': 'label',
-        'list-group-item': 'list-group-item',
-        'panel': 'panel',
-        'panel-group': 'panel-group',
-        'progress-bar': 'progress-bar',
-        'nav': 'nav',
-        'navbar': 'navbar',
-        'modal': 'modal',
-        'row': 'row',
-        'well': 'well'
+},{"../../../../../node_modules/react-bootstrap/lib/BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","../../../../../node_modules/react-bootstrap/node_modules/classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/OverlayTrigger.js":[function(require,module,exports){
+"use strict";
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var _react = require("react");
+
+var React = _interopRequire(_react);
+
+var cloneElement = _react.cloneElement;
+
+var OverlayMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/OverlayMixin"));
+
+var domUtils = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/domUtils"));
+
+var createChainedFunction = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/createChainedFunction"));
+
+var assign = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/Object.assign"));
+
+/**
+ * Check if value one is inside or equal to the of value
+ *
+ * @param {string} one
+ * @param {string|array} of
+ * @returns {boolean}
+ */
+function isOneOf(one, of) {
+    if (Array.isArray(of)) {
+        return of.indexOf(one) >= 0;
+    }
+    return one === of;
+}
+
+var OverlayTrigger = React.createClass({
+    displayName: "OverlayTrigger",
+
+    mixins: [OverlayMixin],
+
+    propTypes: {
+        trigger: React.PropTypes.oneOfType([React.PropTypes.oneOf(["manual", "click", "hover", "focus"]), React.PropTypes.arrayOf(React.PropTypes.oneOf(["click", "hover", "focus"]))]),
+        placement: React.PropTypes.oneOf(["top", "right", "bottom", "left"]),
+        delay: React.PropTypes.number,
+        delayShow: React.PropTypes.number,
+        delayHide: React.PropTypes.number,
+        defaultOverlayShown: React.PropTypes.bool,
+        overlay: React.PropTypes.node.isRequired
     },
-    STYLES: {
-        'default': 'default',
-        'primary': 'primary',
-        'success': 'success',
-        'info': 'info',
-        'warning': 'warning',
-        'danger': 'danger',
-        'link': 'link',
-        'inline': 'inline',
-        'tabs': 'tabs',
-        'pills': 'pills',
-        // ADDED
-        '':''
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            placement: "right",
+            trigger: ["hover", "focus"]
+        };
     },
-    SIZES: {
-        'large': 'lg',
-        'medium': 'md',
-        'small': 'sm',
-        'xsmall': 'xs'
+
+    getInitialState: function getInitialState() {
+        return {
+            isOverlayShown: this.props.defaultOverlayShown == null ? false : this.props.defaultOverlayShown,
+            overlayLeft: null,
+            overlayTop: null
+        };
     },
-    GLYPHS: [
-        'asterisk',
-        'plus',
-        'euro',
-        'minus',
-        'cloud',
-        'envelope',
-        'pencil',
-        'glass',
-        'music',
-        'search',
-        'heart',
-        'star',
-        'star-empty',
-        'user',
-        'film',
-        'th-large',
-        'th',
-        'th-list',
-        'ok',
-        'remove',
-        'zoom-in',
-        'zoom-out',
-        'off',
-        'signal',
-        'cog',
-        'trash',
-        'home',
-        'file',
-        'time',
-        'road',
-        'download-alt',
-        'download',
-        'upload',
-        'inbox',
-        'play-circle',
-        'repeat',
-        'refresh',
-        'list-alt',
-        'lock',
-        'flag',
-        'headphones',
-        'volume-off',
-        'volume-down',
-        'volume-up',
-        'qrcode',
-        'barcode',
-        'tag',
-        'tags',
-        'book',
-        'bookmark',
-        'print',
-        'camera',
-        'font',
-        'bold',
-        'italic',
-        'text-height',
-        'text-width',
-        'align-left',
-        'align-center',
-        'align-right',
-        'align-justify',
-        'list',
-        'indent-left',
-        'indent-right',
-        'facetime-video',
-        'picture',
-        'map-marker',
-        'adjust',
-        'tint',
-        'edit',
-        'share',
-        'check',
-        'move',
-        'step-backward',
-        'fast-backward',
-        'backward',
-        'play',
-        'pause',
-        'stop',
-        'forward',
-        'fast-forward',
-        'step-forward',
-        'eject',
-        'chevron-left',
-        'chevron-right',
-        'plus-sign',
-        'minus-sign',
-        'remove-sign',
-        'ok-sign',
-        'question-sign',
-        'info-sign',
-        'screenshot',
-        'remove-circle',
-        'ok-circle',
-        'ban-circle',
-        'arrow-left',
-        'arrow-right',
-        'arrow-up',
-        'arrow-down',
-        'share-alt',
-        'resize-full',
-        'resize-small',
-        'exclamation-sign',
-        'gift',
-        'leaf',
-        'fire',
-        'eye-open',
-        'eye-close',
-        'warning-sign',
-        'plane',
-        'calendar',
-        'random',
-        'comment',
-        'magnet',
-        'chevron-up',
-        'chevron-down',
-        'retweet',
-        'shopping-cart',
-        'folder-close',
-        'folder-open',
-        'resize-vertical',
-        'resize-horizontal',
-        'hdd',
-        'bullhorn',
-        'bell',
-        'certificate',
-        'thumbs-up',
-        'thumbs-down',
-        'hand-right',
-        'hand-left',
-        'hand-up',
-        'hand-down',
-        'circle-arrow-right',
-        'circle-arrow-left',
-        'circle-arrow-up',
-        'circle-arrow-down',
-        'globe',
-        'wrench',
-        'tasks',
-        'filter',
-        'briefcase',
-        'fullscreen',
-        'dashboard',
-        'paperclip',
-        'heart-empty',
-        'link',
-        'phone',
-        'pushpin',
-        'usd',
-        'gbp',
-        'sort',
-        'sort-by-alphabet',
-        'sort-by-alphabet-alt',
-        'sort-by-order',
-        'sort-by-order-alt',
-        'sort-by-attributes',
-        'sort-by-attributes-alt',
-        'unchecked',
-        'expand',
-        'collapse-down',
-        'collapse-up',
-        'log-in',
-        'flash',
-        'log-out',
-        'new-window',
-        'record',
-        'save',
-        'open',
-        'saved',
-        'import',
-        'export',
-        'send',
-        'floppy-disk',
-        'floppy-saved',
-        'floppy-remove',
-        'floppy-save',
-        'floppy-open',
-        'credit-card',
-        'transfer',
-        'cutlery',
-        'header',
-        'compressed',
-        'earphone',
-        'phone-alt',
-        'tower',
-        'stats',
-        'sd-video',
-        'hd-video',
-        'subtitles',
-        'sound-stereo',
-        'sound-dolby',
-        'sound-5-1',
-        'sound-6-1',
-        'sound-7-1',
-        'copyright-mark',
-        'registration-mark',
-        'cloud-download',
-        'cloud-upload',
-        'tree-conifer',
-        'tree-deciduous'
-    ]
-};
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
+
+    show: function show() {
+        this.setState({
+            isOverlayShown: true
+        }, function () {
+            this.updateOverlayPosition();
+        });
+    },
+
+    hide: function hide() {
+        this.setState({
+            isOverlayShown: false
+        });
+    },
+
+    toggle: function toggle() {
+        if (this.state.isOverlayShown) {
+            this.hide();
+        } else {
+            this.show();
+        }
+    },
+
+    renderOverlay: function renderOverlay() {
+        if (!this.state.isOverlayShown) {
+            return React.createElement("span", null);
+        }
+
+        return cloneElement(this.props.overlay, {
+            onRequestHide: this.hide,
+            placement: this.props.placement,
+            positionLeft: this.state.overlayLeft,
+            positionTop: this.state.overlayTop
+        });
+    },
+
+    render: function render() {
+        if (this.props.trigger === "manual") {
+            return React.Children.only(this.props.children);
+        }
+
+        var props = {};
+
+        if (isOneOf("click", this.props.trigger)) {
+            props.onClick = createChainedFunction(this.toggle, this.props.onClick);
+        }
+
+        if (isOneOf("hover", this.props.trigger)) {
+            props.onMouseOver = createChainedFunction(this.handleDelayedShow, this.props.onMouseOver);
+            props.onMouseOut = createChainedFunction(this.handleDelayedHide, this.props.onMouseOut);
+        }
+
+        if (isOneOf("focus", this.props.trigger)) {
+            props.onFocus = createChainedFunction(this.handleDelayedShow, this.props.onFocus);
+            props.onBlur = createChainedFunction(this.handleDelayedHide, this.props.onBlur);
+        }
+
+        return cloneElement(React.Children.only(this.props.children), props);
+    },
+
+    componentWillUnmount: function componentWillUnmount() {
+        clearTimeout(this._hoverDelay);
+    },
+
+    componentDidMount: function componentDidMount() {
+        if (this.props.defaultOverlayShown) {
+            this.updateOverlayPosition();
+        }
+    },
+
+    handleDelayedShow: function handleDelayedShow() {
+        if (this._hoverDelay != null) {
+            clearTimeout(this._hoverDelay);
+            this._hoverDelay = null;
+            return;
+        }
+
+        var delay = this.props.delayShow != null ? this.props.delayShow : this.props.delay;
+
+        if (!delay) {
+            this.show();
+            return;
+        }
+
+        this._hoverDelay = setTimeout((function () {
+            this._hoverDelay = null;
+            this.show();
+        }).bind(this), delay);
+    },
+
+    handleDelayedHide: function handleDelayedHide() {
+        if (this._hoverDelay != null) {
+            clearTimeout(this._hoverDelay);
+            this._hoverDelay = null;
+            return;
+        }
+
+        var delay = this.props.delayHide != null ? this.props.delayHide : this.props.delay;
+
+        if (!delay) {
+            this.hide();
+            return;
+        }
+
+        this._hoverDelay = setTimeout((function () {
+            this._hoverDelay = null;
+            this.hide();
+        }).bind(this), delay);
+    },
+
+    updateOverlayPosition: function updateOverlayPosition() {
+        if (!this.isMounted()) {
+            return;
+        }
+
+        var pos = this.calcOverlayPosition();
+
+        this.setState({
+            overlayLeft: pos.left,
+            overlayTop: pos.top
+        });
+    },
+
+    calcOverlayPosition: function calcOverlayPosition() {
+        var childOffset = this.getPosition();
+
+        var overlayNode = this.getOverlayDOMNode();
+        console.log('overlayNode', overlayNode);
+        var overlayHeight = overlayNode.offsetHeight;
+        console.log('overlayNode.offsetHeight', overlayNode.offsetHeight);
+        var overlayWidth = overlayNode.offsetWidth;
+        console.log('overlayNode.offsetWidth', overlayNode.offsetWidth);
+
+        switch (this.props.placement) {
+            case "right":
+                return {
+                    top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
+                    left: childOffset.left + childOffset.width
+                };
+            case "left":
+                return {
+                    top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
+                    left: childOffset.left - overlayWidth
+                };
+            case "top":
+                return {
+                    top: childOffset.top - overlayHeight,
+                    left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
+                };
+            case "bottom":
+                return {
+                    top: childOffset.top + childOffset.height,
+                    left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
+                };
+            default:
+                throw new Error("calcOverlayPosition(): No such placement of \"" + this.props.placement + "\" found.");
+        }
+    },
+
+    getPosition: function getPosition() {
+        var node = React.findDOMNode(this);
+        console.log('getPosition node', node, node.offsetHeight, node.offsetWidth);
+        var container = this.getContainerDOMNode();
+        console.log('getPosition container', container);
+
+        //var offset = container.tagName === "BODY" ? domUtils.getOffset(node) : domUtils.getPosition(node, container);
+        var offset = domUtils.getOffset(node);
+        console.log('offset', offset);
+        var position = domUtils.getPosition(node, container);
+        console.log('position', position);
+
+        return assign({}, offset, {
+            height: node.offsetHeight,
+            width: node.offsetWidth
+        });
+    }
+});
+
+module.exports = OverlayTrigger;
+},{"../../../../../node_modules/react-bootstrap/lib/OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js","../../../../../node_modules/react-bootstrap/lib/utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/Object.assign.js","../../../../../node_modules/react-bootstrap/lib/utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","../../../../../node_modules/react-bootstrap/lib/utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
 
 var React = require('react')
     ;
@@ -73920,7 +73883,7 @@ React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 //React.AutosizeInput = require('react-input-autosize');
-React.OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+React.OverlayTrigger = require('./OverlayTrigger');
 React.Tooltip = require('react-bootstrap').Tooltip;
 
 React.Button = require('react-bootstrap').Button;
@@ -73977,4 +73940,4 @@ React.ListView = React.createClass({
 
 module.exports = React;
 
-},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
+},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","./OverlayTrigger":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/OverlayTrigger.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);

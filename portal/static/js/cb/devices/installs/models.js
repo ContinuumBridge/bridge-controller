@@ -3,11 +3,19 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
 
-    uninstall: function() {
+    matchFields: ['bridge', 'device'],
 
+    defaults: {
+        "status":  "should_install"
+    },
+
+    initialize: function() {
+
+    },
+
+    uninstall: function() {
 
         this.relationalDestroy({wait: true});
     },
@@ -113,7 +121,8 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
-//Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
+Backbone.Cocktail.mixin(Portal.DeviceInstall, Portal.InstallableModelMixin);
+
 Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,

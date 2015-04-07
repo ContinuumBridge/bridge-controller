@@ -59,7 +59,7 @@ Portal.AppInstallListView = React.createClass({
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Portal.ListView],
+    mixins: [Portal.ListView, Portal.Mixins.Installable],
 
     getInitialState: function () {
         return {
@@ -89,7 +89,9 @@ Portal.AppInstallListView = React.createClass({
 
         var deviceInstalls = this.props.deviceInstalls;
 
-        return < Portal.AppInstallView key={cid} title={title}
+        var status = this.getStatus(appInstall);
+
+        return < Portal.AppInstallView key={cid} title={title} status={status}
             deviceInstalls={deviceInstalls} model={appInstall} />
     }
 });
