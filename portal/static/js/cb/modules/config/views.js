@@ -225,7 +225,7 @@ var UninstallDeviceModal = React.createClass({
         var title = "Uninstall device " + friendlyName;
         //var device = this.getModel().get('device');
         //var title = device ? "Install " + device.get('name') : "Unknown device";
-        var instructions = Portal.getCurrentBridge().get('zwave') == 'zexclude'
+        var instructions = Portal.getCurrentBridge().get('zwave') == 'exclude'
             ? "find it and press the button on it"
             : "wait for the bridge to go into Z-Exclude mode";
 

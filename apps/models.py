@@ -65,7 +65,7 @@ class AppLicence(LoggedModel):
         app_label = 'apps'
 
 
-class AppInstall(LoggedModel):
+class AppInstall(BroadcastMixin, LoggedModel):
     
     """ Through model for a Bridge and an App """
 
@@ -77,6 +77,7 @@ class AppInstall(LoggedModel):
     status_message = models.CharField(_("status_message"), max_length = 5000, default='', blank=True)
 
     class Meta:
+        broadcast_resource = 'apps.api.resources.AppInstallResource'
         verbose_name = _('app_install')
         verbose_name_plural = _('app_installs')
         app_label = 'apps'
