@@ -23,12 +23,22 @@ Portal.InstallableModelMixin = {
     },
 
     onStatusChange: function(model, value, options) {
-        if(_.contains(['error', 'install_error', 'uninstall_error'], value)) {
-            var notification = this.get('notification');
+
+        var self = this;
+
+        if(_.contains(['not_uninstalled'], value)) {
+            var notification;
+            notification = this.get('notification');
             if (!notification) {
-                Portal.notificationCollection.add(
-                    new Portal.ModelStatus({model: this, type: 'installStatus'})
-                )
+                notification = new Portal.ModelStatus({model: this, type: 'installStatus'});
+                Portal.notificationCollection.add(notification);
+                this.listenToOnce(notification, 'destroy', function() {
+                    self.set({
+                        status: "",
+                        status_message: ""
+                    });
+                    self.save();
+                });
             }
             //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
         }

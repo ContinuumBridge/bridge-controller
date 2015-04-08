@@ -67,8 +67,9 @@ Portal.ModelStatus = Portal.Notification.extend({
     },
 
     getTitle: function() {
-        var installable = this.get('model');
-        return installable.get('status');
+        //var installable = this.get('model');
+        //return installable.get('status');
+        return this.get('model').get('friendly_name') + " " + "not uninstalled";
     },
 
     getSubtitle: function() {

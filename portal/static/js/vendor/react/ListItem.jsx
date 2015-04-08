@@ -78,10 +78,10 @@ var ListItem = React.createClass({
         var classes = this.getBsClassSet();
         classes['panel'] = true;
         //classes = joinClasses(classes, this.props.className);
-
+        //{...this.props}
         return (
             // ADDED replace div with li
-            <li {...this.props} className={classSet(this.props.className, classes)}
+            <li className={classSet(this.props.className, classes)}
                 onSelect={null}>
         {this.renderHeading()}
         {this.props.collapsable ? this.renderCollapsableBody() : ''}
@@ -149,7 +149,6 @@ var ListItem = React.createClass({
         var renderedButtons = renderButtons ? renderButtons() : "";
 
         var status = this.props.status || "";
-        console.log('status is', status);
 
         var buttons = this.props.buttons || [];
 

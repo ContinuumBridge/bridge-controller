@@ -13,6 +13,7 @@ module.exports = {
     errorStatusHash: {
         install_error: "Error installing: ",
         uninstall_error: "Error uninstalling: ",
+        not_uninstalled: "Not uninstalled",
         error: "Error: "
     },
 

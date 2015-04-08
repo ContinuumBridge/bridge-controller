@@ -9,7 +9,7 @@ Portal.AppInstallView = React.createClass({
         return {
             buttons: [{
                 type: 'delete',
-                onClick: this.uninstall
+                onClick: this.handleUninstall
             }]
         };
     },
@@ -20,9 +20,12 @@ Portal.AppInstallView = React.createClass({
         };
     },
 
-    uninstall: function() {
+    handleUninstall: function() {
 
-        this.toggleExistenceOnServer(this.props.model);
+        var appInstall = this.props.model;
+
+        appInstall.set({'status': 'should_uninstall'})
+        appInstall.save();
     },
 
     renderBody: function() {
@@ -59,7 +62,7 @@ Portal.AppInstallListView = React.createClass({
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Portal.ListView, Portal.Mixins.Installable],
+    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 
     getInitialState: function () {
         return {

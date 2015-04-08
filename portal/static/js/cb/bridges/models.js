@@ -20,7 +20,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
          */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge appInstalls', name);
+            //console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
         });
 

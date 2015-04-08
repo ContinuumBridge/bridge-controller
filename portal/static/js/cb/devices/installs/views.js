@@ -37,7 +37,7 @@ Portal.DeviceInstallListView = React.createClass({
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Portal.ListView, Portal.Mixins.Installable],
+    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 
     getInitialState: function () {
         return {

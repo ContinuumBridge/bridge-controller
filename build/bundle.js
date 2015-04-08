@@ -12093,7 +12093,7 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         return {
             buttons: [{
                 type: 'delete',
-                onClick: this.uninstall
+                onClick: this.handleUninstall
             }]
         };
     },
@@ -12104,9 +12104,12 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
         };
     },
 
-    uninstall: function() {
+    handleUninstall: function() {
 
-        this.toggleExistenceOnServer(this.props.model);
+        var appInstall = this.props.model;
+
+        appInstall.set({'status': 'should_uninstall'})
+        appInstall.save();
     },
 
     renderBody: function() {
@@ -12143,7 +12146,7 @@ Portal.AppInstallListView = React.createClass({displayName: 'AppInstallListView'
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Portal.ListView, Portal.Mixins.Installable],
+    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 
     getInitialState: function () {
         return {
@@ -12955,7 +12958,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
          */
 
         this.listenTo(this.get('appInstalls'), 'all', function(name) {
-            console.log('EVENT currentBridge appInstalls', name);
+            //console.log('EVENT currentBridge appInstalls', name);
             self.trigger('relational:change');
         });
 
@@ -13168,138 +13171,90 @@ Portal.BridgeControlCollection = QueryEngine.QueryCollection.extend({
 }, { modelType: "bridgeControl" });
 
 
-},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+},{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
+Portal.BridgeStatusView = React.createClass({displayName: 'BridgeStatusView',
 
-  buffer += "<h4 class=\"list-group-item-heading\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h4>\n<div class=\"panel-collapse\">\n    <li class=\"staff-panel panel inner-item\">\n    </li>\n</div>\n";
-  return buffer;
-  });
+    render: function() {
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+        var bridge = this.props.model;
+        var name = bridge.get('name');
 
-
-  return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge name:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-name\">\n        </td>\n    </tr>\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge ID:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-id\">\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
-
-
-Portal.StaffBridgeView = Marionette.ItemView.extend({
-
-    //tagName: 'table',
-    template: require('./templates/staffBridge.html'),
-
-    bindings: {
-        '.bridge-name': 'name',
-        '.bridge-id': 'id'
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
+        return (
+            React.createElement("div", null, 
+                React.createElement("h2", null, "Status"), 
+                React.createElement("ul", {className: "animated-list device-list"}, 
+                    React.createElement("li", {className: "panel"}, 
+                        React.createElement("div", {className: "panel-heading"}, 
+                            React.createElement("table", {className: "table"}, 
+                                React.createElement("thead", null), 
+                                React.createElement("tbody", null, 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "CBID:"), 
+                                        React.createElement("td", null, bridge.get('cbid'))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Description: "), 
+                                        React.createElement("td", null, bridge.get('description'))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Status: "), 
+                                        React.createElement("td", null, bridge.get('status') + bridge.get('status_message'))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Z Wave: "), 
+                                        React.createElement("td", null, bridge.get('zwave'))
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
     }
 });
 
-Portal.BridgeView = Marionette.ItemView.extend({
+/*
+Portal.BridgeView = React.createClass({
 
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/bridge.html'),
+    renderBody: function() {
 
-    events: {
-        'click .uninstall-button': 'uninstall'
-    },
+        var self = this;
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    },
-
-    initialize: function() {
-
-        this.staffView = new Portal.StaffBridgeView({
-            model: this.model
-        });
-    },
-
-    getClass: function(val) {
-
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
-    },
-
-    uninstall: function() {
-        this.model.uninstall();
-    },
-
-    onRender: function() {
-        this.stickit();
-        this.staffView.setElement(this.$('.staff-panel')).render();
+        return (
+            <li className="panel">
+                <div className="panel-heading item-heading">
+                    Bridge details
+                </div>
+            </li>
+        );
     }
 });
 
-Portal.BridgeListView = Marionette.CompositeView.extend({
+Portal.BridgeListView = React.createClass({
 
-    template: require('./templates/bridgeSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
     itemView: Portal.BridgeView,
-    itemViewContainer: '.bridge-list',
 
-    emptyView: Portal.ListItemLoadingView,
+    mixins: [Portal.ListView],
 
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
+    getInitialState: function () {
+        return {
+            title: 'Bridge'
+        };
     },
 
-    discoverDevices: function() {
-        Portal.Config.controller.discoverDevices();
-    },
+    renderItem: function (bridge) {
 
-    onRender : function() {
+        var cid = bridge.cid;
 
+        return < Portal.BridgeView key={cid} model={bridge} />
     }
 });
 
-},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
+ */
+
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
 var utils = require('./utils');
 
@@ -14060,7 +14015,7 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     itemView: Portal.DeviceInstallView,
 
-    mixins: [Portal.ListView, Portal.Mixins.Installable],
+    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 
     getInitialState: function () {
         return {
@@ -14651,7 +14606,7 @@ Portal.MessageListView = React.createClass({displayName: 'MessageListView',
 
         return (
             React.createElement("div", {id: "messages"}, 
-                React.createElement("h2", null, "Bridge Messages"), 
+                React.createElement("h2", null, "Messages"), 
 
                 React.createElement("div", {ref: "messagesWrapper", id: "messages-wrapper"}, 
                     React.createElement("table", {className: "table-condensed table-hover table-striped"}, 
@@ -14874,12 +14829,22 @@ Portal.InstallableModelMixin = {
     },
 
     onStatusChange: function(model, value, options) {
-        if(_.contains(['error', 'install_error', 'uninstall_error'], value)) {
-            var notification = this.get('notification');
+
+        var self = this;
+
+        if(_.contains(['not_uninstalled'], value)) {
+            var notification;
+            notification = this.get('notification');
             if (!notification) {
-                Portal.notificationCollection.add(
-                    new Portal.ModelStatus({model: this, type: 'installStatus'})
-                )
+                notification = new Portal.ModelStatus({model: this, type: 'installStatus'});
+                Portal.notificationCollection.add(notification);
+                this.listenToOnce(notification, 'destroy', function() {
+                    self.set({
+                        status: "",
+                        status_message: ""
+                    });
+                    self.save();
+                });
             }
             //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
         }
@@ -15165,6 +15130,12 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
                 return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
                 break;
+            case "uninstall-device":
+                var deviceInstall = Portal.deviceInstallCollection.getID(itemID);
+                if (deviceInstall) {
+                    return React.createElement(UninstallDeviceModal, {container: this, model: deviceInstall});
+                }
+                break;
             default:
                 break;
         }
@@ -15230,7 +15201,10 @@ module.exports.Main = React.createClass({displayName: 'Main',
                         React.createElement(Portal.MessageListView, {key: currentBridge.cid, 
                             collection: messages})
                     ), 
-                    React.createElement("div", {ref: "bridgeSection", className: "bridge-section col-md-6"})
+                    React.createElement("div", {ref: "bridgeSection", className: "bridge-section col-md-6"}, 
+                        React.createElement(Portal.BridgeStatusView, {key: currentBridge.cid, 
+                            model: currentBridge})
+                    )
                 )
             )
         )
@@ -15312,15 +15286,18 @@ var UninstallDeviceModal = React.createClass({displayName: 'UninstallDeviceModal
         var title = "Uninstall device " + friendlyName;
         //var device = this.getModel().get('device');
         //var title = device ? "Install " + device.get('name') : "Unknown device";
+        var instructions = Portal.getCurrentBridge().get('zwave') == 'zexclude'
+            ? "find it and press the button on it"
+            : "wait for the bridge to go into Z-Exclude mode";
 
         return (
             React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
                 onRequestHide: this.cancelInstall, animation: false}, 
                 React.createElement("div", {className: "modal-body"}, 
-                    React.createElement("div", null)
+                    React.createElement("div", null, "In order to uninstall device ", friendlyName, " ", instructions)
                 ), 
                 React.createElement("div", {className: "modal-footer"}, 
-                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "Close")
+                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "Cancel uninstall")
                 )
             )
         )
@@ -15981,8 +15958,9 @@ Portal.ModelStatus = Portal.Notification.extend({
     },
 
     getTitle: function() {
-        var installable = this.get('model');
-        return installable.get('status');
+        //var installable = this.get('model');
+        //return installable.get('status');
+        return this.get('model').get('friendly_name') + " " + "not uninstalled";
     },
 
     getSubtitle: function() {
@@ -16055,15 +16033,14 @@ Portal.NotificationListView = React.createClass({displayName: 'NotificationListV
     renderNotification: function(model) {
 
         var title = model.getTitle();
+        var subtitle = model.getSubtitle();
 
         switch (model.get('type')) {
             case 'connectionStatus':
-                var subtitle = model.getSubtitle();
                 return React.createElement(Portal.ConnectionStatusView, {title: title, subtitle: subtitle, 
                     model: model, className: "notification"})
                 break;
             case 'error':
-                var subtitle = model.getSubtitle();
                 return React.createElement(Portal.NotificationView, {title: title, subtitle: subtitle, 
                     hideSubtitleOnExpanded: true, 
                     model: model, className: "notification"})
@@ -16092,40 +16069,6 @@ Portal.NotificationListView = React.createClass({displayName: 'NotificationListV
         )
     }
 });
-
-/*
-Portal.NotificationView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/notification.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
-    },
-
-    bindings: {
-        '.': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    }
-});
-
-Portal.NotificationListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/notificationSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: Portal.NotificationView,
-    itemViewContainer: '.notification-list',
-
-});
-*/
 
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/portals/api.js":[function(require,module,exports){
 
@@ -17144,7 +17087,6 @@ module.exports = React.createClass({displayName: 'Spinner',
 
         //var { ...other } = this.props;
 
-        console.log('spinner props', this.props);
         return (
             React.createElement("div", React.__spread({},  this.props, {className: "spinner", ref: "spinner"}), 
                 React.createElement("div", {className: "bounce1"}), 
@@ -17736,6 +17678,7 @@ module.exports = {
     errorStatusHash: {
         install_error: "Error installing: ",
         uninstall_error: "Error uninstalling: ",
+        not_uninstalled: "Not uninstalled",
         error: "Error: "
     },
 
@@ -17936,7 +17879,7 @@ Mixins.Counter = require('./counter');
 Mixins.Filter = require('./filter');
 Mixins.RowView = require('./table').RowView;
 Mixins.TableView = require('./table').TableView;
-Mixins.Installable = require('./installable');
+Mixins.InstallableList = require('./installable');
 
 Portal.Mixins = Mixins;
 

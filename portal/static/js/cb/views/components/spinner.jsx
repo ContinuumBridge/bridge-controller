@@ -14,7 +14,6 @@ module.exports = React.createClass({displayName: 'Spinner',
 
         //var { ...other } = this.props;
 
-        console.log('spinner props', this.props);
         return (
             <div {...this.props} className="spinner" ref="spinner">
                 <div className="bounce1"></div>

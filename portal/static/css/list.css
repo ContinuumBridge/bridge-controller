@@ -244,6 +244,15 @@ li[contenteditable='true']{
   list-style-type: none;
 }
 
+.table {
+    margin-bottom: 0px;
+}
+
+.table th, .table td {
+    border-top: none !important;
+}
+
+
 /* Loading */
 /*
 .spinner {

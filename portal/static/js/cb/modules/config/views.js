@@ -69,6 +69,12 @@ module.exports.Main = React.createClass({
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
                 return <InstallDeviceModal container={this} model={discoveredDevice} />;
                 break;
+            case "uninstall-device":
+                var deviceInstall = Portal.deviceInstallCollection.getID(itemID);
+                if (deviceInstall) {
+                    return <UninstallDeviceModal container={this} model={deviceInstall} />;
+                }
+                break;
             default:
                 break;
         }
@@ -134,7 +140,10 @@ module.exports.Main = React.createClass({
                         <Portal.MessageListView key={currentBridge.cid}
                             collection={messages} />
                     </div>
-                    <div ref="bridgeSection" className="bridge-section col-md-6"></div>
+                    <div ref="bridgeSection" className="bridge-section col-md-6">
+                        <Portal.BridgeStatusView key={currentBridge.cid}
+                            model={currentBridge} />
+                    </div>
                 </div>
             </div>
         )
@@ -216,15 +225,18 @@ var UninstallDeviceModal = React.createClass({
         var title = "Uninstall device " + friendlyName;
         //var device = this.getModel().get('device');
         //var title = device ? "Install " + device.get('name') : "Unknown device";
+        var instructions = Portal.getCurrentBridge().get('zwave') == 'zexclude'
+            ? "find it and press the button on it"
+            : "wait for the bridge to go into Z-Exclude mode";
 
         return (
             <React.Modal className="portal-modal" title={title} container={this.props.container}
                 onRequestHide={this.cancelInstall} animation={false}>
                 <div className="modal-body">
-                    <div></div>
+                    <div>In order to uninstall device {friendlyName} {instructions}</div>
                 </div>
                 <div className="modal-footer">
-                    <React.Button onClick={this.cancelUninstall}>Close</React.Button>
+                    <React.Button onClick={this.cancelUninstall}>Cancel uninstall</React.Button>
                 </div>
             </ React.Modal>
         )

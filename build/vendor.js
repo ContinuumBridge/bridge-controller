@@ -65087,10 +65087,12 @@ var CBCollection = OriginalCollection.extend({
     delete: function(models, options) {
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
-        options || (options = {});
+        options = options ? _.clone(options) : {};
         for (var i = 0; i < models.length; i++) {
             var attrs = models[i];
-            var model = this.findWhere({id: _.property(attrs, 'id')});
+            console.log('attrs for delete is', attrs);
+            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
+            console.log('model for delete is', model);
             //model = this.get(models[i]);
             if(model) model.delete();
         }
@@ -73473,11 +73475,11 @@ var ListItem = React.createClass({displayName: 'ListItem',
         var classes = this.getBsClassSet();
         classes['panel'] = true;
         //classes = joinClasses(classes, this.props.className);
-
+        //{...this.props}
         return (
             // ADDED replace div with li
-            React.createElement("li", React.__spread({},  this.props, {className: classSet(this.props.className, classes), 
-                onSelect: null}), 
+            React.createElement("li", {className: classSet(this.props.className, classes), 
+                onSelect: null}, 
         this.renderHeading(), 
         this.props.collapsable ? this.renderCollapsableBody() : '', 
         this.renderFooter()
@@ -73544,7 +73546,6 @@ var ListItem = React.createClass({displayName: 'ListItem',
         var renderedButtons = renderButtons ? renderButtons() : "";
 
         var status = this.props.status || "";
-        console.log('status is', status);
 
         var buttons = this.props.buttons || [];
 
@@ -73631,248 +73632,7 @@ var ListItem = React.createClass({displayName: 'ListItem',
 });
 
 module.exports = ListItem;
-},{"../../../../../node_modules/react-bootstrap/lib/BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","../../../../../node_modules/react-bootstrap/node_modules/classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/OverlayTrigger.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var OverlayMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/OverlayMixin"));
-
-var domUtils = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/domUtils"));
-
-var createChainedFunction = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/createChainedFunction"));
-
-var assign = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/utils/Object.assign"));
-
-/**
- * Check if value one is inside or equal to the of value
- *
- * @param {string} one
- * @param {string|array} of
- * @returns {boolean}
- */
-function isOneOf(one, of) {
-    if (Array.isArray(of)) {
-        return of.indexOf(one) >= 0;
-    }
-    return one === of;
-}
-
-var OverlayTrigger = React.createClass({
-    displayName: "OverlayTrigger",
-
-    mixins: [OverlayMixin],
-
-    propTypes: {
-        trigger: React.PropTypes.oneOfType([React.PropTypes.oneOf(["manual", "click", "hover", "focus"]), React.PropTypes.arrayOf(React.PropTypes.oneOf(["click", "hover", "focus"]))]),
-        placement: React.PropTypes.oneOf(["top", "right", "bottom", "left"]),
-        delay: React.PropTypes.number,
-        delayShow: React.PropTypes.number,
-        delayHide: React.PropTypes.number,
-        defaultOverlayShown: React.PropTypes.bool,
-        overlay: React.PropTypes.node.isRequired
-    },
-
-    getDefaultProps: function getDefaultProps() {
-        return {
-            placement: "right",
-            trigger: ["hover", "focus"]
-        };
-    },
-
-    getInitialState: function getInitialState() {
-        return {
-            isOverlayShown: this.props.defaultOverlayShown == null ? false : this.props.defaultOverlayShown,
-            overlayLeft: null,
-            overlayTop: null
-        };
-    },
-
-    show: function show() {
-        this.setState({
-            isOverlayShown: true
-        }, function () {
-            this.updateOverlayPosition();
-        });
-    },
-
-    hide: function hide() {
-        this.setState({
-            isOverlayShown: false
-        });
-    },
-
-    toggle: function toggle() {
-        if (this.state.isOverlayShown) {
-            this.hide();
-        } else {
-            this.show();
-        }
-    },
-
-    renderOverlay: function renderOverlay() {
-        if (!this.state.isOverlayShown) {
-            return React.createElement("span", null);
-        }
-
-        return cloneElement(this.props.overlay, {
-            onRequestHide: this.hide,
-            placement: this.props.placement,
-            positionLeft: this.state.overlayLeft,
-            positionTop: this.state.overlayTop
-        });
-    },
-
-    render: function render() {
-        if (this.props.trigger === "manual") {
-            return React.Children.only(this.props.children);
-        }
-
-        var props = {};
-
-        if (isOneOf("click", this.props.trigger)) {
-            props.onClick = createChainedFunction(this.toggle, this.props.onClick);
-        }
-
-        if (isOneOf("hover", this.props.trigger)) {
-            props.onMouseOver = createChainedFunction(this.handleDelayedShow, this.props.onMouseOver);
-            props.onMouseOut = createChainedFunction(this.handleDelayedHide, this.props.onMouseOut);
-        }
-
-        if (isOneOf("focus", this.props.trigger)) {
-            props.onFocus = createChainedFunction(this.handleDelayedShow, this.props.onFocus);
-            props.onBlur = createChainedFunction(this.handleDelayedHide, this.props.onBlur);
-        }
-
-        return cloneElement(React.Children.only(this.props.children), props);
-    },
-
-    componentWillUnmount: function componentWillUnmount() {
-        clearTimeout(this._hoverDelay);
-    },
-
-    componentDidMount: function componentDidMount() {
-        if (this.props.defaultOverlayShown) {
-            this.updateOverlayPosition();
-        }
-    },
-
-    handleDelayedShow: function handleDelayedShow() {
-        if (this._hoverDelay != null) {
-            clearTimeout(this._hoverDelay);
-            this._hoverDelay = null;
-            return;
-        }
-
-        var delay = this.props.delayShow != null ? this.props.delayShow : this.props.delay;
-
-        if (!delay) {
-            this.show();
-            return;
-        }
-
-        this._hoverDelay = setTimeout((function () {
-            this._hoverDelay = null;
-            this.show();
-        }).bind(this), delay);
-    },
-
-    handleDelayedHide: function handleDelayedHide() {
-        if (this._hoverDelay != null) {
-            clearTimeout(this._hoverDelay);
-            this._hoverDelay = null;
-            return;
-        }
-
-        var delay = this.props.delayHide != null ? this.props.delayHide : this.props.delay;
-
-        if (!delay) {
-            this.hide();
-            return;
-        }
-
-        this._hoverDelay = setTimeout((function () {
-            this._hoverDelay = null;
-            this.hide();
-        }).bind(this), delay);
-    },
-
-    updateOverlayPosition: function updateOverlayPosition() {
-        if (!this.isMounted()) {
-            return;
-        }
-
-        var pos = this.calcOverlayPosition();
-
-        this.setState({
-            overlayLeft: pos.left,
-            overlayTop: pos.top
-        });
-    },
-
-    calcOverlayPosition: function calcOverlayPosition() {
-        var childOffset = this.getPosition();
-
-        var overlayNode = this.getOverlayDOMNode();
-        console.log('overlayNode', overlayNode);
-        var overlayHeight = overlayNode.offsetHeight;
-        console.log('overlayNode.offsetHeight', overlayNode.offsetHeight);
-        var overlayWidth = overlayNode.offsetWidth;
-        console.log('overlayNode.offsetWidth', overlayNode.offsetWidth);
-
-        switch (this.props.placement) {
-            case "right":
-                return {
-                    top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
-                    left: childOffset.left + childOffset.width
-                };
-            case "left":
-                return {
-                    top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
-                    left: childOffset.left - overlayWidth
-                };
-            case "top":
-                return {
-                    top: childOffset.top - overlayHeight,
-                    left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
-                };
-            case "bottom":
-                return {
-                    top: childOffset.top + childOffset.height,
-                    left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
-                };
-            default:
-                throw new Error("calcOverlayPosition(): No such placement of \"" + this.props.placement + "\" found.");
-        }
-    },
-
-    getPosition: function getPosition() {
-        var node = React.findDOMNode(this);
-        console.log('getPosition node', node, node.offsetHeight, node.offsetWidth);
-        var container = this.getContainerDOMNode();
-        console.log('getPosition container', container);
-
-        //var offset = container.tagName === "BODY" ? domUtils.getOffset(node) : domUtils.getPosition(node, container);
-        var offset = domUtils.getOffset(node);
-        console.log('offset', offset);
-        var position = domUtils.getPosition(node, container);
-        console.log('position', position);
-
-        return assign({}, offset, {
-            height: node.offsetHeight,
-            width: node.offsetWidth
-        });
-    }
-});
-
-module.exports = OverlayTrigger;
-},{"../../../../../node_modules/react-bootstrap/lib/OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js","../../../../../node_modules/react-bootstrap/lib/utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/Object.assign.js","../../../../../node_modules/react-bootstrap/lib/utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","../../../../../node_modules/react-bootstrap/lib/utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
+},{"../../../../../node_modules/react-bootstrap/lib/BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","../../../../../node_modules/react-bootstrap/node_modules/classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
 
 var React = require('react')
     ;
@@ -73883,7 +73643,8 @@ React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
 
 //React.AutosizeInput = require('react-input-autosize');
-React.OverlayTrigger = require('./OverlayTrigger');
+//React.OverlayTrigger = require('./OverlayTrigger');
+React.OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 React.Tooltip = require('react-bootstrap').Tooltip;
 
 React.Button = require('react-bootstrap').Button;
@@ -73940,4 +73701,4 @@ React.ListView = React.createClass({
 
 module.exports = React;
 
-},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","./OverlayTrigger":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/OverlayTrigger.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
+},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
