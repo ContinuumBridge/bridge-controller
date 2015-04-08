@@ -1,88 +1,81 @@
 
+Portal.BridgeStatusView = React.createClass({
 
-Portal.StaffBridgeView = Marionette.ItemView.extend({
+    render: function() {
 
-    //tagName: 'table',
-    template: require('./templates/staffBridge.html'),
+        var bridge = this.props.model;
+        var name = bridge.get('name');
 
-    bindings: {
-        '.bridge-name': 'name',
-        '.bridge-id': 'id'
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
+        return (
+            <div>
+                <h2>Status</h2>
+                <ul className="animated-list device-list">
+                    <li className="panel">
+                        <div className="panel-heading">
+                            <table className="table">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">CBID:</th>
+                                        <td>{bridge.get('cbid')}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Description: </th>
+                                        <td>{bridge.get('description')}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Status: </th>
+                                        <td>{bridge.get('status') + bridge.get('status_message')}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Z Wave: </th>
+                                        <td>{bridge.get('zwave')}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        )
     }
 });
 
-Portal.BridgeView = Marionette.ItemView.extend({
+/*
+Portal.BridgeView = React.createClass({
 
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/bridge.html'),
+    renderBody: function() {
 
-    events: {
-        'click .uninstall-button': 'uninstall'
-    },
+        var self = this;
 
-    bindings: {
-        '.list-group-item-heading': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    },
-
-    initialize: function() {
-
-        this.staffView = new Portal.StaffBridgeView({
-            model: this.model
-        });
-    },
-
-    getClass: function(val) {
-
-        var enabled = this.model.get('hasChangedSinceLastSync') ? 'disabled' : 'new-item';
-        //var isNew = this.model.isNew();
-        //return isNew || hasChangedSinceLastSync ? 'unconfirmed' : 'new-item';
-        return enabled;
-    },
-
-    uninstall: function() {
-        this.model.uninstall();
-    },
-
-    onRender: function() {
-        this.stickit();
-        this.staffView.setElement(this.$('.staff-panel')).render();
+        return (
+            <li className="panel">
+                <div className="panel-heading item-heading">
+                    Bridge details
+                </div>
+            </li>
+        );
     }
 });
 
-Portal.BridgeListView = Marionette.CompositeView.extend({
+Portal.BridgeListView = React.createClass({
 
-    template: require('./templates/bridgeSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
     itemView: Portal.BridgeView,
-    itemViewContainer: '.bridge-list',
 
-    emptyView: Portal.ListItemLoadingView,
+    mixins: [Portal.ListView],
 
-
-    events: {
-        'click .discover-devices-button': 'discoverDevices'
+    getInitialState: function () {
+        return {
+            title: 'Bridge'
+        };
     },
 
-    discoverDevices: function() {
-        Portal.Config.controller.discoverDevices();
-    },
+    renderItem: function (bridge) {
 
-    onRender : function() {
+        var cid = bridge.cid;
 
+        return < Portal.BridgeView key={cid} model={bridge} />
     }
 });
+
+ */

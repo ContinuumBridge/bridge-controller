@@ -1,5 +1,7 @@
 
 $ = require('jquery-browserify');
+jQuery = $;
+
 _ = require('underscore');
 
 Dispatcher = require('flux').Dispatcher;

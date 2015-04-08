@@ -8,7 +8,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        var self = this;
+        var self =
         /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
@@ -215,9 +215,10 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
             initializeCollection: 'userCollection',
         }
     ]
-}); 
+});
 
-Portal.BridgeControlCollection = Backbone.Collection.extend({
+//Portal.BridgeControlCollection = Backbone.Collection.extend({
+Portal.BridgeControlCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.BridgeControl,
     backend: 'bridgeControl',

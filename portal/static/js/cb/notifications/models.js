@@ -60,6 +60,25 @@ Portal.ConnectionStatus = Portal.Notification.extend({
 
 }, { modelType: "connectionStatus" });
 
+Portal.ModelStatus = Portal.Notification.extend({
+
+    defaults: {
+        type: 'installStatus'
+    },
+
+    getTitle: function() {
+        //var installable = this.get('model');
+        //return installable.get('status');
+        return this.get('model').get('friendly_name') + " " + "not uninstalled";
+    },
+
+    getSubtitle: function() {
+        var installable = this.get('model');
+        return installable.get('status_message');
+    }
+
+}, { modelType: "installStatus" });
+
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
 Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
 

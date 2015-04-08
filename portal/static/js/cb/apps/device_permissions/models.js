@@ -13,7 +13,6 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
-        //this.startTracking();
         //Backbone.Deferred.Model.prototype.initialize.apply(this);
         this.listenTo(this.get('appInstall'), 'destroy', function() {
             //console.log('ADP heard destroy on deviceInstall')
@@ -110,16 +109,10 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appDevicePermission" });
 
-Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+//Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+Portal.AppDevicePermissionCollection = QueryEngine.QueryCollection.extend({
 
     model: Portal.AppDevicePermission,
-    backend: 'appDevicePermission',
-
-    /*
-    initialize: function() {
-
-        this.bindBackend();
-    }
-    */
+    backend: 'appDevicePermission'
 
 });

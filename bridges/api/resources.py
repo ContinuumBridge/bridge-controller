@@ -56,7 +56,8 @@ class BridgeResource(CBResource, CBIDResourceMixin):
         authorization = BridgeAuthorization()
         #authorization = ReadOnlyAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
+        fields = ['id', 'cbid', 'name', 'description', 'date_joined'
+                  , 'manager_version', 'last_login', 'status', 'status_message', 'zwave']
         user_related_through = 'controls'
         create_user_through_model = True
         related_user_permissions = ['read', 'create', 'update', 'delete']

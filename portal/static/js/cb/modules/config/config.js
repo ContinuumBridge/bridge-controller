@@ -4,8 +4,6 @@ var ConfigViews = require('./views');
 
 Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
 
-    console.log('Config ran!');
-
     Config.Router = Marionette.SubRouter.extend({
         appRoutes: {
           //"": "showConfig",
@@ -33,21 +31,6 @@ Portal.module('Config', function(Config, CBApp, Backbone, Marionette, $, _) {
       },
       showConfig: function() {
 
-          /*
-          Config.mainView = React.render(
-              < ConfigViews.Main model={currentBridge} />,
-              $('#main-region')[0]
-          );
-          */
-
-          /*
-          var currentBridge = Portal.getCurrentBridge();
-          currentBridge.fetch();
-          Config.mainView = React.render(
-              < ConfigViews.Main model={currentBridge} />,
-              $('#main-region')[0]
-          );
-          */
           var $mainRegion = $('#main-region')[0];
           React.unmountComponentAtNode($mainRegion[0]);
           //$mainRegion.remove();

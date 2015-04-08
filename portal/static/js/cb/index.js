@@ -33,6 +33,8 @@ Portal.addInitializer(function () {
   Portal.router = require('./router');
 
   Portal.router.run(function (Handler, state) {
+      console.log('router run');
+
       Portal.route = state;
 
       var params = state.params;
@@ -59,7 +61,7 @@ Portal.addInitializer(function () {
       React.render(
           <BaseView params={params} handler={Handler}
               path={state.path}
-              //key={state.path}
+              key={currentBridgeID}
               collection={collections} model={models} />,
           document.getElementById('app')
       );
