@@ -26,7 +26,7 @@ Portal.InstallableModelMixin = {
 
         var self = this;
 
-        if(_.contains(['not_uninstalled'], value)) {
+        if(_.contains(['uninstall_error'], value)) {
             var notification;
             notification = this.get('notification');
             if (!notification) {

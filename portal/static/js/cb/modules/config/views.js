@@ -71,6 +71,11 @@ module.exports.Main = React.createClass({
                 break;
             case "uninstall-device":
                 var deviceInstall = Portal.deviceInstallCollection.getID(itemID);
+                /*
+                deviceInstall.once('destroy', function() {
+                    Portal.router.setParams({action: ''});
+                });
+                */
                 if (deviceInstall) {
                     return <UninstallDeviceModal container={this} model={deviceInstall} />;
                 }

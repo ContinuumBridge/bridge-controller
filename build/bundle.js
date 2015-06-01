@@ -14832,7 +14832,7 @@ Portal.InstallableModelMixin = {
 
         var self = this;
 
-        if(_.contains(['not_uninstalled'], value)) {
+        if(_.contains(['uninstall_error'], value)) {
             var notification;
             notification = this.get('notification');
             if (!notification) {
@@ -15132,6 +15132,11 @@ module.exports.Main = React.createClass({displayName: 'Main',
                 break;
             case "uninstall-device":
                 var deviceInstall = Portal.deviceInstallCollection.getID(itemID);
+                /*
+                deviceInstall.once('destroy', function() {
+                    Portal.router.setParams({action: ''});
+                });
+                */
                 if (deviceInstall) {
                     return React.createElement(UninstallDeviceModal, {container: this, model: deviceInstall});
                 }
