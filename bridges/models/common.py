@@ -63,7 +63,7 @@ class BroadcastMixin(CBIDModelMixin):
             data = {}
             for field in fields:
                 if field == 'resource_uri':
-                    data['resource_uri'] = resource.get_resource_uri() + str(self.pk)
+                    data['resource_uri'] = resource.get_resource_uri() + "/" + str(self.pk)
                 if field == 'id':
                     data['id'] = str(self.pk)
 
