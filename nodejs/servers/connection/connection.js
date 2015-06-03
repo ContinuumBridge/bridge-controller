@@ -5,14 +5,39 @@ var _ = require('underscore')
     ;
 
 var Message = require('../../message')
+    ,Router = require('./router')
+    ,Django = require('./django')
     ,authorization = require('./authorization')
     ,redis = require('redis')
     ,util = require('util')
     ,utils = require('../utils')
     ;
 
-function Connection() {
+function Connection(server, socket) {
 
+    var self = this;
+
+    this.server = server;
+    this.socket = socket;
+
+    this.django = new Django(self);
+    this.router = new Router(self);
+
+    //PortalConnection.super_.call(this);
+
+    //console.log('PortalConnection socket is ', socket.sessionID);
+    server.getConfig(socket.sessionID).then(function(config) {
+
+        self.config = socket.config = config;
+
+        // Router and django must be defined
+        self.setupBuses();
+        self.setupSocket();
+        self.setupRedis();
+        self.setupRouting();
+        self.logConnection('portal');
+
+    }).done();
 }
 
 var EventEmitter = require('events').EventEmitter;
@@ -24,9 +49,6 @@ Connection.prototype.setupBuses = function() {
     this.toClient = new Bacon.Bus();
     this.fromRedis = new Bacon.Bus();
     this.toRedis = new Bacon.Bus();
-
-    //this.socketWrapper = new SocketWrapper(socket, this);
-    //this.redisWrapper = new RedisWrapper(this.authData, redisClient, this.fromRedis, this.toRedis);
 }
 
 Connection.prototype.setupSocket = function() {
@@ -40,9 +62,7 @@ Connection.prototype.setupSocket = function() {
 
         logger.log('debug', 'Socket message', rawMessage);
         if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
-            //console.log('Received Message: ' + rawMessage.utf8Data);
             rawMessage = rawMessage.utf8Data;
-            //socket.sendUTF(message.utf8Data);
         }
         /*
         else if (rawMessage.type === 'binary') {
@@ -52,18 +72,10 @@ Connection.prototype.setupSocket = function() {
         */
 
         var message = new Message(rawMessage);
-        //logger.log('debug', 'Socket sessionID', socket.sessionID);
-        //logger.log('debug', 'Socket id', socket.id);
-        //logger.log('debug', 'Socket handshake query', socket.handshake.query);
         message.set('sessionID', socket.sessionID);
-        //logger.log('debug', Object.keys(socket));
 
         //message.filterDestination(self.config.publicationAddresses);
-        //logger.log('debug', 'Socket subscriptionAddresses', self.config.subscriptionAddress);
         message.conformSource(self.config.cbid);
-
-        //logger.log('debug', 'socket message config', self.config);
-        //logger.log('debug', 'socket message', message);
 
         self.router.dispatch(message);
     });
@@ -80,11 +92,8 @@ Connection.prototype.setupSocket = function() {
         }
 
         if (resource && resource == '/api/bridge/v1/device_discovery/') {
-            //logger.log('debug', 'socket server is ', Object.keys(socket.server));
-            //io.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
-            //socket.emit('discoveredDeviceInstall:reset', body.body);
-            socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
 
+            socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
         } else {
 
             socket.server.to(socket.id).emit('message', jsonMessage);
@@ -110,10 +119,6 @@ Connection.prototype.logConnection = function(type) {
         , type, subAddressesString, pubAddressesString);
 }
 
-Connection.prototype.onMessageToClient = function(message) {
-
-}
-
 Connection.prototype.setupRedis = function() {
 
     var self = this;
@@ -121,14 +126,10 @@ Connection.prototype.setupRedis = function() {
     var subscriptionAddresses = this.config.subscriptionAddresses;
     var publicationAddresses = this.config.publicationAddresses;
 
-    //console.log('subscriptionAddresses', subscriptionAddresses);
-    //console.log('publicationAddresses', publicationAddresses);
-
     var redisPub = redis.createClient();
 
     var publishAll = function(message) {
 
-        //logger.log('debug', 'Publish redis message', message.toJSON());
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var source = message.get('source');
@@ -137,8 +138,6 @@ Connection.prototype.setupRedis = function() {
         var publish = function(address) {
 
             // Publish to the first part of the address
-            //var addressArray = address.match();
-            //var addressMatches = utils.cbidRegex.exec(address);
             var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
                 logger.log('debug', 'publish addressMatches', addressMatches);
@@ -150,21 +149,14 @@ Connection.prototype.setupRedis = function() {
 
         if (typeof destination == 'string') {
 
-            //console.log('debug', 'destination is a string')
-
             publish(destination, message);
         } else if (destination instanceof Array) {
 
-            //console.log('debug', 'destination is an array')
             destination.forEach(function(dest) {
 
-                //console.log('debug', 'dest is', dest);
                 publish(dest);
-                //redisPub.publish(String(address), jsonMessage);
             }, this);
         }
-
-        //logger.log('message', source, '=>', destination, '    ');
     };
 
     var unsubscribeToRedis = this.toRedis.onValue(function(message) {
@@ -172,30 +164,20 @@ Connection.prototype.setupRedis = function() {
         publishAll(message);
     });
 
-    //var message = new Message({ destination: 'BID2'});
-    //publish(message);
-
     // Subscription to Redis
     var redisSub = redis.createClient();
-    //logger.log('debug', 'subscriptionAddresses', subscriptionAddresses);
     _.each(subscriptionAddresses, function(address) {
-        //logger.log('debug', 'subscriptionAddress', address);
+
         redisSub.subscribe(address);
     });
+
     redisSub.on('message', function(channel, jsonMessage) {
 
-        //logger.log('debug', 'Redis received ', jsonMessage);
-
-        //var source = _.property('source')(jsonMessage);
-
         var message = new Message(jsonMessage);
-        //logger.log('debug', 'redis source', message.get('source'), 'self.config.cbid', self.config.cbid);
         // If this is a message from the client which has bounced back, do nothing
         if(message.get('source') != self.config.cbid) {
             self.router.dispatch(message);
         }
-        //logger.log('debug', 'Redis received', message.toJSON());
-        //self.fromRedis.push(message);
     });
 
     this.disconnect = function() {
@@ -209,27 +191,6 @@ Connection.prototype.setupRedis = function() {
         //self.removeListener('disconnect');
     });
 
-}
-
-Connection.prototype.setupRouting = function() {
-
-    var self = this;
-
-    /*
-    this.fromRedis.onValue(function(message) {
-
-        // Forward messages from redis to the client
-        //self.toClient.push(message);
-        self.router.dispatch(message)
-    });
-
-    logger.log('debug', 'setupRoutes config', self.config);
-    this.fromClient.onValue(function(message) {
-
-        logger.log('debug', 'fromClient config', self.config)
-        self.router.dispatch(message);
-    });
-    */
 }
 
 Connection.prototype.unauthorizedResult = function(message, exception) {

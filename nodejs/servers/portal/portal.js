@@ -1,4 +1,5 @@
 
+var inherit = require('utils').inherit;
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
 var Server = require('../server');
@@ -8,21 +9,49 @@ logger = require('./logger');
 
 var Portal = function(port, djangoRootURL) {
 
-    var self = this;
-
-    this.djangoURL = djangoRootURL + '/api/user/v1/';
+    var djangoURL = this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
 
-    var options = {
-        port: port,
-        djangoURL: this.djangoURL
-    }
-    this.socketServer =  this.createSocketServer(BackboneIOServer, options);
+    var httpServer = http.createServer();
 
-    //console.log('portal socketserver is', this.socketServer);
+    var controllerURLs = {
+        app: 'app/',
+        appConnection: 'app_connection/',
+        appInstall: 'app_install/',
+        appDevicePermission: 'app_device_permission/',
+        appLicence: 'app_licence/',
+        appOwnership: 'app_ownership/',
+        client: 'client/',
+        clientControl: 'client_control/',
+        device: 'device/',
+        deviceInstall: 'device_install/',
+        discoveredDevice: 'discovered_device/',
+        bridge: 'bridge/',
+        bridgeControl: 'bridge_control/',
+        currentUser: 'current_user/',
+        user: 'user/'
+    }
+
+    // Map the controllerURLs to create instances for them
+    var controllers = _.reduce(controllerURLs, function(controller, url, name) {
+        controller[name] = new djangoBackbone(djangoURL + url);
+        return controller;
+    }, {});
+
+    controllers.discoveredDevice = new DeviceDiscovery().backboneSocket;
+
+    // Start backbone io listening
+    this.sockets = backboneio.listen(httpServer, controllers);
+
+    httpServer.listen(options.port);
+    // Set the socket io log level
+    //socketServer.set('log level', 1);
+
+    Portal.super_.call(this);
 };
 
-Portal.prototype = new Server();
+inherit(Portal, Server);
+//Portal.prototype = new Server();
 
 Portal.prototype.onConnection = function(socket) {
 

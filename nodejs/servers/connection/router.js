@@ -31,9 +31,7 @@ Router.prototype.setupRoutes = function() {
 
     //logger.log('debug', 'Router setupRoutes config', self.connection.config);
 
-
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
-
 
         //logger.log('debug', 'Matched cbAddress', message.toJSONString());
         self.connection.toRedis.push(message);
@@ -66,7 +64,7 @@ Router.prototype.setupRoutes = function() {
     });
     //this.bypassed.add(console.log, console);
     router.bypassed.add(function(message) {
-        //logger.log('message_error', 'Route not matched', message.toJSON());
+        logger.log('message_error', 'Route not matched', message.toJSON());
     });
 
     /*

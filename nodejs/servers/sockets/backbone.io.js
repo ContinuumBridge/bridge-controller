@@ -4,7 +4,8 @@ var http = require('http')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
-    ,url = require('url')
+    ,inherits = require('utils').inherits
+    iurl = require('url')
     ;
 
 var djangoBackbone = require('./djangoBackbone.js');
@@ -17,6 +18,7 @@ var SocketServer = require('./socket')
 
 function BackboneIOServer(getConfig, options) {
 
+    /*
     var djangoURL = options.djangoURL;
 
     var httpServer = http.createServer();
@@ -56,11 +58,13 @@ function BackboneIOServer(getConfig, options) {
 
 
     this.setupAuthorization(socketServer, getConfig);
+    */
 
-    return socketServer;
+    //return socketServer;
 }
 
-BackboneIOServer.prototype = new SocketServer();
+inherits(BackboneIOServer, SocketServer);
+//BackboneIOServer.prototype = new SocketServer();
 
 module.exports = BackboneIOServer;
 
