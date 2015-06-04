@@ -7,10 +7,12 @@ var utils = require('../utils');
 
 logger = require('./logger');
 
-var Portal = function(port, djangoRootURL) {
+var Portal = function(port, djangoRootURL, swarm) {
 
+    this.port = port;
     var djangoURL = this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
+    this.swarm = swarm;
 
     var httpServer = http.createServer();
 
@@ -47,7 +49,7 @@ var Portal = function(port, djangoRootURL) {
     // Set the socket io log level
     //socketServer.set('log level', 1);
 
-    Portal.super_.call(this);
+    Portal.super_.call();
 };
 
 inherit(Portal, Server);

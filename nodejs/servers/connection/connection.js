@@ -51,6 +51,11 @@ Connection.prototype.setupBuses = function() {
     this.toRedis = new Bacon.Bus();
 }
 
+Connection.prototype.setupPresence = function() {
+
+
+};
+
 Connection.prototype.setupSocket = function() {
 
     var self = this;

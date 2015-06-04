@@ -5,6 +5,8 @@ var Bacon = require('baconjs').Bacon
     ,rest = require('restler')
     ;
 
+var swarm = require('./swarm/host');
+
 var backendAuth = require('../backendAuth.js')
     ,RedisClient = require('./redisClient')
     ;
@@ -13,14 +15,17 @@ var backendAuth = require('../backendAuth.js')
 
 //Bridge.DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080/api/bridge/v1/' : 'http://localhost:8000/api/bridge/v1/'
 
-function Server(port, djangoRootURL) {
+function Server() {
 
     var self = this;
 
+    /*
     var options = {
         port: port,
         djangoURL: this.djangoURL
     }
+    */
+
     //if (!this.sockets) logger.log('warn', '')
     //this.sockets = this.createSocketServer(BackboneIOServer, options);
     this.setupAuthorization();
@@ -88,7 +93,7 @@ Server.prototype.setupAuthorization = function(socketServer, getConfig) {
         console.log('Authorisation sessionID', sessionID);
         //console.log('socket sessionID is', sessionID);
 
-        this.getConnectionConfig(sessionID).then(function(config) {
+        self.getConnectionConfig(sessionID).then(function(config) {
             socket.config = config;
             socket.sessionID = sessionID;
             next();
