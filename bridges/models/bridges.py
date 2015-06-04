@@ -52,7 +52,7 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
 
     class Meta:
         verbose_name = _('bridge')
-        broadcast_resource = 'bridges.api.resources.BridgeResource'
+        broadcast_resource = 'bridges.api.resources.BroadcastBridgeResource'
         app_label = 'bridges'
 
     def get_full_name(self):
