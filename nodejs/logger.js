@@ -23,7 +23,8 @@ Logger.levels = {
         info: 9,
         help: 10,
         warn: 11,
-        error: 12
+        connection: 12,
+        error: 13
     },
     colors: {
         silly: 'magenta',
@@ -38,6 +39,7 @@ Logger.levels = {
         info: 'green',
         help: 'cyan',
         warn: 'orange',
+        connection: 'orange',
         error: 'red'
     }
 };

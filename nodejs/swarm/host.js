@@ -19,7 +19,7 @@ var argv = require('minimist')(args, {
     },
     boolean: ['debug'],
     default: {
-        models: './models/',
+        models: './nodejs/swarm/models/',
         store: '.swarm',
         port: 5000,
         debug: false
@@ -32,7 +32,7 @@ Swarm.env.debug = argv.debug;
 var fileStorage = new Swarm.FileStorage(argv.store);
 
 // create Swarm Host
-var swarmHost = new Swarm.Host('swarm~nodejs', 0, fileStorage);
+var swarmHost = new Swarm.Host('dev_1', 0, fileStorage);
 Swarm.env.localhost = swarmHost;
 
 process.on('SIGTERM', onExit);

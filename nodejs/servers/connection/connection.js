@@ -9,6 +9,7 @@ var Message = require('../../message')
     ,Django = require('./django')
     ,authorization = require('./authorization')
     ,redis = require('redis')
+    ,Session = require('../../swarm/models/sessions').Session
     ,util = require('util')
     ,utils = require('../utils')
     ;
@@ -18,6 +19,8 @@ function Connection(server, socket) {
     var self = this;
 
     this.server = server;
+    //this.swarm = server.swarm;
+    console.log('Connection init socket', socket);
     this.socket = socket;
 
     this.django = new Django(self);
@@ -26,18 +29,23 @@ function Connection(server, socket) {
     //PortalConnection.super_.call(this);
 
     //console.log('PortalConnection socket is ', socket.sessionID);
+    /*
     server.getConfig(socket.sessionID).then(function(config) {
 
-        self.config = socket.config = config;
+        //self.config = socket.config = config;
+        self.setupPresence(config).then(function() {
 
-        // Router and django must be defined
-        self.setupBuses();
-        self.setupSocket();
-        self.setupRedis();
-        self.setupRouting();
-        self.logConnection('portal');
+            // Router and django must be defined
+            self.setupBuses();
+            self.setupSocket();
+            self.setupRedis();
+            self.logConnection('portal');
+        });
+    }, function(error) {
 
+        return new Error(error);
     }).done();
+    */
 }
 
 var EventEmitter = require('events').EventEmitter;
@@ -51,9 +59,9 @@ Connection.prototype.setupBuses = function() {
     this.toRedis = new Bacon.Bus();
 }
 
-Connection.prototype.setupPresence = function() {
+Connection.prototype.setupPresence = function(config) {
 
-
+    //this.swarm.get('/Session#')
 };
 
 Connection.prototype.setupSocket = function() {

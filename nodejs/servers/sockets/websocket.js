@@ -1,5 +1,4 @@
 
-
 var cookie_reader = require('cookie')
     ,EventEmitter = require('events').EventEmitter
     ,http = require('http')

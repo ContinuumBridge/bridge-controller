@@ -4,11 +4,11 @@ var http = require('http')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
-    ,inherits = require('utils').inherits
-    iurl = require('url')
+    ,inherits = require('util').inherits
+    url = require('url')
     ;
 
-var djangoBackbone = require('./djangoBackbone.js');
+//var djangoBackbone = require('./djangoBackbone.js');
 
 var SocketServer = require('./socket')
     ,DeviceDiscovery = require('../portal/deviceDiscovery.js')

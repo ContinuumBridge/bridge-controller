@@ -162,7 +162,8 @@ gulp.task('watch', function() {
 */
 
 gulp.task('node_server', function () {
-    nodemon({ script: './nodejs/index.js', watch: './nodejs/**'})
+    gulp.src(['../presence_store/swarm/models/**/*']).pipe(gulp.dest('./nodejs/swarm/models'));
+    nodemon({ script: './nodejs/index.js', watch: './nodejs/**'});
     //.on('restart', ['lint'])
 });
 

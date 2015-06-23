@@ -3,33 +3,55 @@
 var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var Server = require('../server');
+var inherits = require('util').inherits;
 var utils = require('../utils');
 
 logger = require('./logger');
 
-var Bridge = function(port, djangoRootURL) {
+var Bridge = function(options) {
 
     var self = this;
 
-    this.djangoRootURL = djangoRootURL;
-    this.djangoURL = djangoRootURL + '/api/bridge/v1/';
+    this.djangoRootURL = options.djangoRootURL;
+    this.djangoURL = this.djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
+    /*
     var options = {
-        port: port,
+        port: options.port,
         heartbeatInterval: 300000,
         heartbeatTimeout: 630000
     }
+    */
 
-    this.socketServer = this.createSocketServer(SocketIOServer, options);
+    //var heartbeatInterval = options.heartbeatInterval || 25000;
+    var heartbeatInterval = 300000;
+    //var heartbeatTimeout = 60000;
+    var heartbeatTimeout = 6300000;
+
+    var httpServer = require('http').createServer();
+    this.sockets = require('socket.io')(httpServer, {
+        'pingInterval': heartbeatInterval,
+        'pingTimeout': heartbeatTimeout
+    });
+    httpServer.listen(options.port);
+
+    // Set the socket io log level
+    //socketServer.set('log level', 1);
+
+    Bridge.super_.call(this);
+    //this.setupAuthorization(socketServer, getConfig);
 };
 
-Bridge.prototype = new Server();
+inherits(Bridge, Server);
 
 Bridge.prototype.onConnection = function(socket) {
 
     var self = this;
 
+    logger.log('debug', 'bridge onConnection', socket.config);
+
+    /*
     socket.getConfig = function() {
         var sessionID = socket.handshake.query.sessionID;
         return self.getConnectionConfig(self.authURL, sessionID);
@@ -40,6 +62,7 @@ Bridge.prototype.onConnection = function(socket) {
     var connection = new BridgeConnection(socket);
     connection.djangoRootURL = this.djangoRootURL;
     connection.djangoURL = this.djangoURL;
+    */
 }
 
 Bridge.prototype.formatConfig = function(authData) {
@@ -69,7 +92,6 @@ Bridge.prototype.formatConfig = function(authData) {
             subscriptionAddresses: subscriptionAddresses,
             publicationAddresses: publicationAddresses
         }
-
 }
 
 module.exports = Bridge;

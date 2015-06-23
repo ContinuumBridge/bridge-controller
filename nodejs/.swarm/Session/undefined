@@ -1,0 +1,11 @@
+{
+  "_version": "!0",
+  "_tail": {
+    "!2kDox02+swarm~nodejs.set": {
+      "client": "/Client#BID2"
+    },
+    "!2kDox05+swarm~nodejs.set": {
+      "server": "/Server#dev_1"
+    }
+  }
+}

@@ -1,18 +1,23 @@
 
-var inherit = require('utils').inherit;
+var http = require('http')
+    ,_ = require('underscore');
+var inherits = require('util').inherits;
 var PortalConnection = require('./connection');
-var BackboneIOServer = require('../sockets/backbone.io');
+var djangoBackbone = require('./djangoBackbone');
+var DeviceDiscovery = require('./deviceDiscovery');
+//var BackboneIOServer = require('../sockets/backbone.io');
+var backboneio = require('cb-backbone.io')
 var Server = require('../server');
 var utils = require('../utils');
 
 logger = require('./logger');
 
-var Portal = function(port, djangoRootURL, swarm) {
+var Portal = function(options) {
 
-    this.port = port;
-    var djangoURL = this.djangoURL = djangoRootURL + '/api/user/v1/';
+    this.port = options.port;
+    var djangoURL = this.djangoURL = options.djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
-    this.swarm = swarm;
+    //this.swarm = swarm;
 
     var httpServer = http.createServer();
 
@@ -49,24 +54,26 @@ var Portal = function(port, djangoRootURL, swarm) {
     // Set the socket io log level
     //socketServer.set('log level', 1);
 
-    Portal.super_.call();
+    Portal.super_.call(this);
 };
 
-inherit(Portal, Server);
+inherits(Portal, Server);
 //Portal.prototype = new Server();
 
 Portal.prototype.onConnection = function(socket) {
 
     var self = this;
 
+    /*
     socket.getConfig = function(sessionID) {
         //var sessionID = socket.handshake;
         //var sessionID = socket.handshake.query.sessionID;
         console.log('portal getConfig sessionID', sessionID);
         return self.getConnectionConfig(self.authURL, sessionID);
     };
+    */
 
-    var connection = new PortalConnection(socket);
+    var connection = new PortalConnection(socket, this);
 }
 
 Portal.prototype.formatConfig = function(authData) {
@@ -93,8 +100,8 @@ Portal.prototype.formatConfig = function(authData) {
 
         return {
             cbid: authData.cbid,
-            subscriptionAddresses: subscriptionAddresses,
-            publicationAddresses: publicationAddresses,
+            subscribees: subscriptionAddresses,
+            publishees: publicationAddresses,
             email: authData.email
         }
 }

@@ -3,9 +3,10 @@ var Bacon = require('baconjs').Bacon
     ,io = require('socket.io')
     ,Q = require('q')
     ,rest = require('restler')
+    ,format = require('util').format;
     ;
 
-var swarm = require('./swarm/host');
+var swarm = require('../swarm/host');
 
 var backendAuth = require('../backendAuth.js')
     ,RedisClient = require('./redisClient')
@@ -26,10 +27,64 @@ function Server() {
     }
     */
 
+    this.sockets.on('connection', function (socket) {
+
+        console.log('server on connection', socket.config);
+        var config = socket.config;
+        var session = swarmHost.get(format('/Session#S%s', config.sessionID));
+        //var session = swarmHost.get('/Session#test');
+        var client = swarmHost.get(format('/Client#%s', config.cbid));
+
+        logger.log('debug', 'on connection client._id', client._id);
+
+        client.on('.init', function() {
+            logger.log('debug', 'client on init', client._id);
+            //client.sessions.target(swarmHost).addObject(session);
+            logger.log('debug', 'client on init client.sessions', client.sessions.toPojo());
+            logger.log('debug', 'client on init client.sessions keys', Object.keys(client.sessions));
+            logger.log('debug', 'client on init session', session._id);
+            session.on('.init', function() {
+                logger.log('debug', 'session on init session', session._id);
+                //client.sessions.call('addObject', session, function(err) { console.log('session added', err) });
+                session.set({
+                    client: client,
+                    server: localServer
+                });
+                client.sessions.call('list', null, function(list) { console.log('list', list) });
+            });
+            //client.sessions.addObject(session);
+        });
+
+        /*
+        session.on('.init', function() {
+            logger.log('debug', 'session on init');
+        });
+        */
+        //console.log('server on connection session', session);
+
+        self.onConnection(socket);
+    });
     //if (!this.sockets) logger.log('warn', '')
     //this.sockets = this.createSocketServer(BackboneIOServer, options);
-    this.setupAuthorization();
+    this.setupAuthentication();
 };
+
+Server.prototype.onConnection = function(socket) {
+
+    console.log('server onConnection');
+    /*
+    var self = this;
+
+    socket.getConfig = function(sessionID) {
+        //var sessionID = socket.handshake;
+        //var sessionID = socket.handshake.query.sessionID;
+        console.log('portal getConfig sessionID', sessionID);
+        return self.getConnectionConfig(self.authURL, sessionID);
+    };
+
+    var connection = new PortalConnection(socket);
+    */
+}
 
 Server.prototype.createSocketServer = function(SocketServer, options) {
 
@@ -40,9 +95,11 @@ Server.prototype.createSocketServer = function(SocketServer, options) {
     }
     var socketServer = new SocketServer(getConfig, options);
 
+    /*
     socketServer.sockets.on('connection', function (socket) {
         self.onConnection(socket);
     });
+    */
 
     return socketServer;
 }
@@ -55,21 +112,21 @@ Server.prototype.getConnectionConfig = function(sessionID) {
 
     backendAuth(this.authURL, sessionID).then(function(authData) {
 
-        //console.log('authData is', authData);
+        //logger.log('debug', 'backendAuth succeeded', authData);
         var config = self.formatConfig(authData);
-        //console.log('getConnectionConfig config is', config);
         config.sessionID = sessionID;
         deferredConfig.resolve(config);
 
     }, function(error) {
 
+        logger.log('connection', 'backendAuth failed', error);
         deferredConfig.reject(error);
     }).done();
 
     return deferredConfig.promise;
 }
 
-Server.prototype.setupAuthorization = function(socketServer, getConfig) {
+Server.prototype.setupAuthentication = function() {
 
     // Setup authorization for socket io >1.0
     var self = this;
@@ -90,16 +147,20 @@ Server.prototype.setupAuthorization = function(socketServer, getConfig) {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
 
-        console.log('Authorisation sessionID', sessionID);
+        console.log('Authentication sessionID', sessionID);
         //console.log('socket sessionID is', sessionID);
 
         self.getConnectionConfig(sessionID).then(function(config) {
-            socket.config = config;
-            socket.sessionID = sessionID;
+            //socket.config = config;
+            config.sessionID = sessionID;
+            logger.log('debug', 'authenticated', config);
+            socket.config = self.formatConfig(config);
+            //socket.client = swarmHost.get('/Client#') // TODO
+            //socket.sessionID = sessionID;
             next();
         }, function(error) {
 
-            logger.log('warning', error);
+            logger.log('connection', error);
             next(error);
         });
     });

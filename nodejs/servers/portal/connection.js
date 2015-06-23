@@ -11,12 +11,12 @@ var Connection = require('../connection/connection')
     ,Message = require('../../message');
     ;
 
-var PortalConnection = function(socket) {
+var PortalConnection = function(server, socket) {
 
-
+    PortalConnection.super_.call(this, server, socket);
 };
 
-utils.inherits(PortalConnection, Connection);
+util.inherits(PortalConnection, Connection);
 //PortalConnection.prototype = new Connection();
 
 PortalConnection.prototype.disconnect = function(error) {
