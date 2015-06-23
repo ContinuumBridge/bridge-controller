@@ -1,6 +1,5 @@
 import re
 import sys
-import redis
 
 from django.utils import six
 
@@ -101,6 +100,72 @@ class CBResource(ModelResource):
             self.create_user_through_model(bundle)
 
         return bundle
+
+    def save_m2m(self, bundle):
+        """
+        Handles the saving of related M2M data.
+        Due to the way Django works, the M2M data must be handled after the
+        main instance, which is why this isn't a part of the main ``save`` bits.
+        Currently slightly inefficient in that it will clear out the whole
+        relation and recreate the related data as needed.
+        """
+        for field_name, field_object in self.fields.items():
+            if not getattr(field_object, 'is_m2m', False):
+                continue
+
+            if not field_object.attribute:
+                continue
+
+            if field_object.readonly:
+                continue
+
+            # Get the manager.
+            related_mngr = None
+
+            if isinstance(field_object.attribute, six.string_types):
+                related_mngr = getattr(bundle.obj, field_object.attribute)
+            elif callable(field_object.attribute):
+                related_mngr = field_object.attribute(bundle)
+
+            if not related_mngr:
+                continue
+
+            if hasattr(related_mngr, 'clear'):
+                # FIXME: Dupe the original bundle, copy in the new object &
+                #        check the perms on that (using the related resource)?
+
+                # Clear it out, just to be safe.
+                related_mngr.clear()
+
+            related_objs = []
+
+            for related_bundle in bundle.data[field_name]:
+                #print "related_bundle  is", related_bundle
+                related_resource = field_object.get_related_resource(bundle.obj)
+
+                # Before we build the bundle & try saving it, let's make sure we
+                # haven't already saved it.
+                obj_id = self.create_identifier(related_bundle.obj)
+
+                if obj_id in bundle.objects_saved:
+                    # It's already been saved. We're done here.
+                    continue
+
+                # Only build & save if there's data, not just a URI.
+                updated_related_bundle = related_resource.build_bundle(
+                    obj=related_bundle.obj,
+                    data=related_bundle.data,
+                    request=bundle.request,
+                    objects_saved=bundle.objects_saved
+                )
+
+                #Only save related models if they're newly added.
+                if updated_related_bundle.obj._state.adding:
+                    related_resource.save(updated_related_bundle)
+                    # ADDED indented this line by one tab
+                    related_objs.append(updated_related_bundle.obj)
+
+            related_mngr.add(*related_objs)
 
     def obj_get_list(self, bundle, **kwargs):
         """

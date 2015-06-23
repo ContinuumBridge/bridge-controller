@@ -1,5 +1,6 @@
 import json
 import redis
+import traceback
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
@@ -104,16 +105,15 @@ class BroadcastMixin(CBIDModelMixin):
 
     def save(self, *args, **kwargs):
         verb = "update" if self.pk else "create"
-        broadcast = kwargs.pop('broadcast', True)
+        #traceback.print_stack()
         super(BroadcastMixin, self).save(*args, **kwargs)
-        if broadcast:
-            #if settings.ENVIRONMENT == "development":
-                message = self.create_message(verb)
-                self.broadcast(message)
-            #else:
-                # User the task queue if we're not in development
-                #message = self.create_message(verb)
-                #tasks.broadcast.delay(self, message)
+        #if settings.ENVIRONMENT == "development":
+        message = self.create_message(verb)
+        self.broadcast(message)
+        #else:
+            # User the task queue if we're not in development
+            #message = self.create_message(verb)
+            #tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
         message = self.create_message('delete')
