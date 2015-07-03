@@ -6,6 +6,7 @@ var Syncable = Swarm.Syncable;
 
 var Servers = Set.extend('Servers', {
 
+    /*
     authenticate: function(id, token) {
 
         //var server = _.find(this.list(), {id: id});
@@ -18,6 +19,7 @@ var Servers = Set.extend('Servers', {
             return server.authenticate(token);
         }
     }
+    */
 });
 
 //console.log('Servers Syncable types', Swarm.Syncable.types);

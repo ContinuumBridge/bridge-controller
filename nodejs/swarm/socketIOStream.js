@@ -11,6 +11,7 @@ function SocketStream(socket) {
 
     socket.on('swarm', function (msg) {
         try {
+            console.log('received swarm message', msg);
             ln.data && ln.data(msg);
         } catch (ex) {
             console.error('message processing fails', ex);

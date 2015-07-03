@@ -67,8 +67,8 @@ Bridge.prototype.onConnection = function(socket) {
 
 Bridge.prototype.formatConfig = function(authData) {
 
-        var publicationAddresses = new Array();
-        var subscriptionAddresses = new Array();
+        var publishees = new Array();
+        var subscribees = new Array();
 
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
@@ -81,16 +81,16 @@ Bridge.prototype.formatConfig = function(authData) {
 
                 var resourceMatch = user.match(utils.apiRegex);
                 var cbid = 'UID' + resourceMatch[2];
-                publicationAddresses.push(cbid);
+                publishees.push(cbid);
             });
         }
 
-        subscriptionAddresses.push(authData.cbid);
+        subscribees.push(authData.cbid);
 
         return {
             cbid: authData.cbid,
-            subscriptionAddresses: subscriptionAddresses,
-            publicationAddresses: publicationAddresses
+            subscribees: subscribees,
+            publishees: publishees
         }
 }
 

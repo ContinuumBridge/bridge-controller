@@ -31,29 +31,12 @@ function Server() {
 
         console.log('server on connection', socket.config);
         var config = socket.config;
-        var session = swarmHost.get(format('/Session#S%s', config.sessionID));
-        //var session = swarmHost.get('/Session#test');
-        var client = swarmHost.get(format('/Client#%s', config.cbid));
+        session = swarmHost.get(format('/Session#%s', config.sessionID));
+        client = swarmHost.get(format('/Client#%s', config.cbid));
+
+        localServer.addSession(session, client);
 
         logger.log('debug', 'on connection client._id', client._id);
-
-        client.on('.init', function() {
-            logger.log('debug', 'client on init', client._id);
-            //client.sessions.target(swarmHost).addObject(session);
-            logger.log('debug', 'client on init client.sessions', client.sessions.toPojo());
-            logger.log('debug', 'client on init client.sessions keys', Object.keys(client.sessions));
-            logger.log('debug', 'client on init session', session._id);
-            session.on('.init', function() {
-                logger.log('debug', 'session on init session', session._id);
-                //client.sessions.call('addObject', session, function(err) { console.log('session added', err) });
-                session.set({
-                    client: client,
-                    server: localServer
-                });
-                client.sessions.call('list', null, function(list) { console.log('list', list) });
-            });
-            //client.sessions.addObject(session);
-        });
 
         /*
         session.on('.init', function() {
@@ -114,7 +97,9 @@ Server.prototype.getConnectionConfig = function(sessionID) {
 
         //logger.log('debug', 'backendAuth succeeded', authData);
         var config = self.formatConfig(authData);
+        logger.log('debug', 'backendAuth sessionID', sessionID);
         config.sessionID = sessionID;
+        logger.log('debug', 'backendAuth config', config);
         deferredConfig.resolve(config);
 
     }, function(error) {
@@ -152,9 +137,10 @@ Server.prototype.setupAuthentication = function() {
 
         self.getConnectionConfig(sessionID).then(function(config) {
             //socket.config = config;
-            config.sessionID = sessionID;
+            //config.sessionID = sessionID;
             logger.log('debug', 'authenticated', config);
-            socket.config = self.formatConfig(config);
+            socket.config = config;
+            //socket.config = self.formatConfig(config);
             //socket.client = swarmHost.get('/Client#') // TODO
             //socket.sessionID = sessionID;
             next();

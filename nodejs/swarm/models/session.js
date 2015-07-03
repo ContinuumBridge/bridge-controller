@@ -13,6 +13,7 @@ module.exports = Model.extend('Session', {
         client: {type:Ref, value:'#0'}
     },
 
+    /*
     reactions: {
 
         init: function (spec,val,src) {
@@ -25,6 +26,7 @@ module.exports = Model.extend('Session', {
             });
         }
     },
+    */
 
     /*
     relations: {

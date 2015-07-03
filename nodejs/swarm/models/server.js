@@ -18,42 +18,63 @@ var Server = Model.extend('Server', {
 
             console.log('Server init');
             var self = this;
-            var relations = {};
 
-            //logger.log('debug', 'Client init sessions', this.sessions);
-            _.each(['sessions'], function(key) {
-                if (self[key]._ref == '#0') {
-                    relations[key] = swarmHost.get(format('/Sessions#%s%s', key, self._id));
-                }
-            });
-            this.set(relations);
+            console.log('Client init sessions', this.sessions);
+            if (this.sessions.ref == '#0') {
+                var sessions = swarmHost.get(format('/Sessions#%s', self._id));
+                this.set({sessions: sessions});
+                console.log('Client init sessions', this.sessions);
+            }
+
+            this.sessions.fill();
         }
     },
 
-    addSession: function(authData) {
+    addSession: function(session, client) {
 
-        var session = swarmHost.get(format('/Session#%s', authData.sessionID));
+        var self = this;
+        var sessionDeferred = Q.defer();
 
-        var client = swarmHost.get(format('/Client#%s', authData.cbid));
         client.on('.init', function() {
-            client.addSession(authData, session);
+            logger.log('debug', 'client on init', client._id);
+            //client.sessions.target(swarmHost).addObject(session);
+            session.on('.init', function() {
+                var clientSessions = client.sessions.target();
+                //logger.log('debug', 'clientSessions ', clientSessions);
+                //logger.log('debug', 'clientSessions ', Object.keys(clientSessions));
+                clientSessions.addObject(session);
+                //logger.log('debug', 'clientSessions list', clientSessions.list());
+                //client.sessions.call('addObject', [session], function(err) { console.log('session added', err) });
+
+                logger.log('debug', 'server addSession self', Object.keys(self));
+                //logger.log('debug', 'serverSessions ', self.sessions);
+                var serverSessions = self.sessions.target();
+                logger.log('debug', 'server addSession serverSessions', Object.keys(serverSessions));
+                serverSessions.addObject(session);
+
+                //logger.log('debug', 'server addSession serverSessions list', serverSessions.list());
+                //client.sessions.call('addObject', [session], function(err) { console.log('session added', err) });
+
+                session.set({
+                    client: client,
+                    server: localServer
+                });
+                //client.sessions.call('list', [], function(list) { console.log('list', list) });
+                sessionDeferred.resolve();
+            });
         });
 
-        session.set({
-            client: client,
-            server: localServer
-        });
-
-        //this.sessions.fill(swarmHost);
-        //this.sessions.target(swarmHost).addObject(session);
+        return sessionDeferred.promise;
     },
 
     setToken: function(token) {
+        console.log('authenticate setToken', token);
         var hashed = passwordHash.generate(token);
         this.set({token: hashed});
     },
 
     authenticate: function(token) {
+        console.log('authenticate tokens', token, this.token);
         return passwordHash.verify(token, this.token);
     }
 });
