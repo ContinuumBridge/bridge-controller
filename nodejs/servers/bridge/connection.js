@@ -1,6 +1,7 @@
 
 var rest = require('restler')
-    ,Q = require('q');
+    ,Q = require('q')
+    ,util = require('util');
 
 var DjangoError = require('../../errors').DjangoError;
 
@@ -12,12 +13,17 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-var BridgeConnection = function(socket) {
+var BridgeConnection = function(server, socket) {
 
     var self = this;
-    this.socket = socket;
-    this.logger = logger;
+    this.log = logger.log;
 
+    console.log('BridgeConnection init');
+
+    BridgeConnection.super_.call(this, server, socket);
+
+    self.logConnection(self.config, 'bridge');
+    /*
     socket.getConfig().then(function(config) {
 
         self.config = config;
@@ -29,12 +35,14 @@ var BridgeConnection = function(socket) {
         self.setupSocket();
         self.setupRedis();
         self.setupRouting();
-        self.logConnection('bridge');
+        self.logConnection(config, 'bridge');
 
     }).done();
+    */
 };
 
-BridgeConnection.prototype = new Connection();
+util.inherits(BridgeConnection, Connection);
+//BridgeConnection.prototype = new Connection();
 
 BridgeConnection.prototype.deviceDiscovery = function(message) {
 

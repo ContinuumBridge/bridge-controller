@@ -1,34 +1,35 @@
 
 var _ = require('underscore');
-var format = require('util').format;
 var Model = require('swarm').Model;
 var Ref = require('swarm').Syncable.Ref;
+var format = require('util').format;
 //var RelationalModel = require('./relationalModel');
 
 module.exports = Model.extend('Client', {
 
     defaults: {
+        cbid: '',
         email: '',
         sessions: {type:Ref, value:'#0'},
         publishees: {type:Ref, value:'#0'},
-        subscribees: {type:Ref, value:'#0'}
+        subscriptions: {type:Ref, value:'#0'}
     },
 
     reactions: {
 
-        init: function (spec,val,src) {
+        init: function(spec, val, src) {
 
             console.log('Client init');
             var self = this;
             var relations = {};
 
-            _.each(['publishees', 'subscribees'], function(key) {
+            _.each(['publishees', 'subscriptions'], function(key) {
                 if (self[key].ref == '#0') {
                     relations[key] = swarmHost.get(format('/Clients#%s%s', key, self._id));
                 }
             });
 
-            logger.log('debug', 'Client init cbid', this._id);
+            console.log('debug', 'Client init cbid', this._id);
             if (this.sessions.ref == '#0') {
                 relations.sessions = swarmHost.get(format('/Sessions#%s', this._id));
             }
@@ -56,34 +57,34 @@ module.exports = Model.extend('Client', {
     },
     */
 
-    addSession: function(authData, session) {
+    addSession: function(session) {
+
+        var config = this.config;
 
         this.set({
-            cbid: authData.cbid,
-            email: authData.email
+            cbid: config.cbid,
+            email: config.email
         });
 
-        var publisheeAddresses = [];
-        var subscribeeAddresses = [];
+        this.publishees.target(swarmHost).update(config.publishees);
+        this.subscriptions.target(swarmHost).update(config.subscriptions);
 
-        if (authData.bridge_controls) {
-            authData.bridge_controls.forEach(function(control) {
-                var resourceMatch = control.bridge.match(utils.apiRegex);
-                if(resourceMatch && resourceMatch[2]) {
-                    var cbid = 'BID' + resourceMatch[2];
-                    publisheeAddresses.push(cbid);
-                    subscribeeAddresses.push(cbid);
-                }
-            });
-        }
+        this.sessions.target(swarmHost).addObject(session);
+    },
 
+    destroySession: function(session) {
+        this.sessions.target().removeObject(session);
+    },
+
+    findSubscription: function(subscription) {
+
+        this.subscriptions.fill(swarmHost);
+        return this.subscriptions.target().get(format('/Client#%s', subscription));
+    },
+
+    getPublishees: function() {
         this.publishees.fill(swarmHost);
-        this.publishees.update(publisheeAddresses);
-        this.subscribees.fill(swarmHost);
-        this.subscribees.update(subscribeeAddresses);
-
-        this.sessions.fill(swarmHost);
-        this.sessions.addObject(session);
+        return this.publishees.target().list();
     }
 });
 

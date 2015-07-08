@@ -51,6 +51,8 @@ Bridge.prototype.onConnection = function(socket) {
 
     logger.log('debug', 'bridge onConnection', socket.config);
 
+    var connection = new BridgeConnection(this, socket);
+
     /*
     socket.getConfig = function() {
         var sessionID = socket.handshake.query.sessionID;
@@ -59,7 +61,6 @@ Bridge.prototype.onConnection = function(socket) {
         //return config;
     };
 
-    var connection = new BridgeConnection(socket);
     connection.djangoRootURL = this.djangoRootURL;
     connection.djangoURL = this.djangoURL;
     */
@@ -68,7 +69,7 @@ Bridge.prototype.onConnection = function(socket) {
 Bridge.prototype.formatConfig = function(authData) {
 
         var publishees = new Array();
-        var subscribees = new Array();
+        var subscriptions = new Array();
 
         if (authData.controllers) {
             authData.controllers.forEach(function(controller) {
@@ -85,11 +86,11 @@ Bridge.prototype.formatConfig = function(authData) {
             });
         }
 
-        subscribees.push(authData.cbid);
+        subscriptions.push(authData.cbid);
 
         return {
             cbid: authData.cbid,
-            subscribees: subscribees,
+            subscriptions: subscriptions,
             publishees: publishees
         }
 }

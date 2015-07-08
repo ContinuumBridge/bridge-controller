@@ -30,20 +30,8 @@ function Server() {
     this.sockets.on('connection', function (socket) {
 
         console.log('server on connection', socket.config);
-        var config = socket.config;
-        session = swarmHost.get(format('/Session#%s', config.sessionID));
-        client = swarmHost.get(format('/Client#%s', config.cbid));
 
-        localServer.addSession(session, client);
-
-        logger.log('debug', 'on connection client._id', client._id);
-
-        /*
-        session.on('.init', function() {
-            logger.log('debug', 'session on init');
-        });
-        */
-        //console.log('server on connection session', session);
+        //logger.log('debug', 'on connection client._id', client._id);
 
         self.onConnection(socket);
     });
@@ -53,6 +41,8 @@ function Server() {
 };
 
 Server.prototype.onConnection = function(socket) {
+
+    // Override this method
 
     console.log('server onConnection');
     /*

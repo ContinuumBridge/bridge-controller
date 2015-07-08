@@ -3,6 +3,7 @@ var rest = require('restler')
     ,logger = require('./logger')
     ,Message = require('../../message')
     ,Q = require('q')
+    ,util = require('util')
     ;
 
 var deviceDiscovery = require('./deviceDiscovery')
@@ -10,13 +11,11 @@ var deviceDiscovery = require('./deviceDiscovery')
     ;
 
 var PortalRouter = function(connection) {
-    this.connection = connection;
-    this.django = connection.django;
 
-    this.setupRoutes();
+    PortalRouter.super_.call(this, connection);
 }
 
-PortalRouter.prototype = new Router();
+util.inherits(PortalRouter, Router);
 
 module.exports = PortalRouter;
 

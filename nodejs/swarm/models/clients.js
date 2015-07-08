@@ -1,5 +1,6 @@
 
 var _ = require('underscore');
+var format = require('util').format;
 var Set = require('swarm').Set;
 
 module.exports = Set.extend('Clients', {
@@ -20,9 +21,13 @@ module.exports = Set.extend('Clients', {
         });
         // Add any addresses which haven't been removed
         _.each(cbids, function(cbid) {
-            var publishee = swarmHost.get(format('/Client#%s', cbid));
-            self.addObject(publishee);
+            var client = swarmHost.get(format('/Client#%s', cbid));
+            self.addObject(client);
         });
+    },
+
+    find: function(item) {
+
     }
 });
 

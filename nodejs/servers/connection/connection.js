@@ -11,6 +11,7 @@ var Message = require('../../message')
     ,redis = require('redis')
     ,Session = require('../../swarm/models/sessions').Session
     ,util = require('util')
+    ,format = util.format
     ,utils = require('../utils')
     ;
 
@@ -18,34 +19,30 @@ function Connection(server, socket) {
 
     var self = this;
 
+    //console.log('Connection init socket', socket);
+
     this.server = server;
-    //this.swarm = server.swarm;
-    console.log('Connection init socket', socket);
     this.socket = socket;
+
+    var config = this.config = socket.config;
 
     this.django = new Django(self);
     this.router = new Router(self);
 
-    //PortalConnection.super_.call(this);
+    this.setupPresence(config).then(function() {
 
-    //console.log('PortalConnection socket is ', socket.sessionID);
-    /*
-    server.getConfig(socket.sessionID).then(function(config) {
+        self.setupBuses();
+        self.setupSocket();
+        self.setupRedis();
+        console.log('setup presence promise returned');
+        self.log('debug', 'setup presence promise returned');
 
-        //self.config = socket.config = config;
-        self.setupPresence(config).then(function() {
+    }).fail(function(error) {
 
-            // Router and django must be defined
-            self.setupBuses();
-            self.setupSocket();
-            self.setupRedis();
-            self.logConnection('portal');
-        });
-    }, function(error) {
-
-        return new Error(error);
-    }).done();
-    */
+        self.log('warn', self.config.cbid, error);
+        self.socket.close();
+    });
+    //this.setupRouting();
 }
 
 var EventEmitter = require('events').EventEmitter;
@@ -61,7 +58,12 @@ Connection.prototype.setupBuses = function() {
 
 Connection.prototype.setupPresence = function(config) {
 
-    //this.swarm.get('/Session#')
+    session = this.session = swarmHost.get(format('/Session#%s', config.sessionID));
+    client = this.client = swarmHost.get(format('/Client#%s', config.cbid));
+
+    client.config = config;
+    // Returns promise
+    return localServer.addSession(session, client);
 };
 
 Connection.prototype.setupSocket = function() {
@@ -122,14 +124,12 @@ Connection.prototype.setupSocket = function() {
     });
 };
 
-Connection.prototype.logConnection = function(type) {
+Connection.prototype.logConnection = function(config, type) {
 
-    var config = this.config;
-
-    var pubAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
-    var subAddressesString = config.subscriptionAddresses ? config.subscriptionAddresses.join(', ') : "";
+    var publisheesString = config.publishees ? config.publishees.join(', ') : "";
+    var subscriptionsString = config.subscriptions ? config.subscriptions.join(', ') : "";
     logger.log('info', 'New %s connection. Subscribed to %s, publishing to %s'
-        , type, subAddressesString, pubAddressesString);
+        , type, subscriptionsString, publisheesString);
 }
 
 Connection.prototype.setupRedis = function() {
@@ -137,7 +137,7 @@ Connection.prototype.setupRedis = function() {
     var self = this;
 
     var subscriptionAddresses = this.config.subscriptionAddresses;
-    var publicationAddresses = this.config.publicationAddresses;
+    //var publicationAddresses = this.config.publicationAddresses;
 
     var redisPub = redis.createClient();
 

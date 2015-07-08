@@ -100,7 +100,7 @@ Portal.prototype.formatConfig = function(authData) {
 
         return {
             cbid: authData.cbid,
-            subscribees: subscriptionAddresses,
+            subscriptions: subscriptionAddresses,
             publishees: publicationAddresses,
             email: authData.email
         }

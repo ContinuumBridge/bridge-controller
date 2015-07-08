@@ -1,5 +1,6 @@
 var format = require('util').format;
 var _ = require('underscore');
+var Q = require('q');
 var passwordHash = require('password-hash');
 var Ref = require('swarm').Syncable.Ref;
 var Model = require('swarm').Model;
@@ -38,6 +39,11 @@ var Server = Model.extend('Server', {
         client.on('.init', function() {
             logger.log('debug', 'client on init', client._id);
             //client.sessions.target(swarmHost).addObject(session);
+            //client.subscribees.target()
+
+            console.log('addSession client config', client.config);
+            client.addSession(session);
+
             session.on('.init', function() {
                 var clientSessions = client.sessions.target();
                 //logger.log('debug', 'clientSessions ', clientSessions);
@@ -65,6 +71,15 @@ var Server = Model.extend('Server', {
         });
 
         return sessionDeferred.promise;
+    },
+
+    destroySession: function(session) {
+        session.destroy();
+    },
+
+    clearSessions: function() {
+
+        this.sessions.target().clearAll();
     },
 
     setToken: function(token) {

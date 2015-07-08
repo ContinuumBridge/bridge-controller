@@ -8,11 +8,23 @@ module.exports = Model.extend('Session', {
     defaults: {
         cbid: '',
         started: '',
-        sessionID: '',
+        connected: 'true',
         server: {type:Ref, value:'#0'},
         client: {type:Ref, value:'#0'}
     },
 
+    disconnect: function() {
+
+        this.set({
+            connected: 'false'
+        });
+    },
+
+    destroy: function() {
+
+        this.server.target().destroySession(this);
+        this.client.target().destroySession(this);
+    }
     /*
     reactions: {
 

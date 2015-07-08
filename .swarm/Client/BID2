@@ -1,9 +1,9 @@
 {
   "_version": "!0",
   "_tail": {
-    "!2pXc206+dev_1.set": {
+    "!2r90p0B+dev_1.set": {
       "publishees": "/Clients#publisheesBID2",
-      "subscribees": "/Clients#subscribeesBID2",
+      "subscriptions": "/Clients#subscriptionsBID2",
       "sessions": "/Sessions#BID2"
     }
   }

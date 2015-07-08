@@ -1,8 +1,12 @@
 {
   "_version": "!0",
   "_tail": {
-    "!2pXby01+dev_1.set": {
+    "!2r90n01+dev_1.set": {},
+    "!2r95E06+swarm~presence_store.set": {
       "sessions": "/Sessions#dev_1"
+    },
+    "!2r95g+swarm~presence_store.set": {
+      "token": "sha1$3910d926$1$1263ab8779a42b66693a352ab69f42a9580ab8ff"
     }
   }
 }

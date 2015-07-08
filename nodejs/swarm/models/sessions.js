@@ -1,5 +1,6 @@
 //"use strict";
 var Swarm = require('swarm');
+var _ = require('underscore');
 var Set = Swarm.Set;
 var Syncable = Swarm.Syncable;
 
@@ -16,6 +17,25 @@ var Sessions = Set.extend('Sessions', {
         } else {
             return server.authenticate(token);
         }
+    },
+
+    clearAll: function() {
+
+        var self = this;
+
+        _.each(this.list(), function(session) {
+            session.destroy();
+            //self.removeObject(session);
+        });
+    },
+
+    disconnectAll: function() {
+
+        _.each(this.list(), function(session) {
+            session.set({
+                connected: 'false'
+            });
+        });
     }
 });
 

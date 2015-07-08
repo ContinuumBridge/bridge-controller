@@ -3,20 +3,18 @@ var rest = require('restler')
     ,logger = require('./logger')
     ,Message = require('../../message')
     ,Q = require('q')
+    ,util = require('util')
     ;
 
 var Router = require('../connection/router')
     ;
 
 var BridgeRouter = function(connection) {
-    this.connection = connection;
-    this.django = connection.django;
 
-    this.setupRoutes();
+    BridgeRouter.super_.call(this, connection);
 }
 
-BridgeRouter.prototype = new Router();
-
+util.inherits(BridgeRouter, Router);
 
 BridgeRouter.prototype.matchCB = function(message) {
 
