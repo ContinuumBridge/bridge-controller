@@ -2,11 +2,11 @@
   "_version": "!0",
   "_tail": {
     "!2r90n01+dev_1.set": {},
-    "!2r95E06+swarm~presence_store.set": {
+    "!2roI106+swarm~presence_store.set": {
       "sessions": "/Sessions#dev_1"
     },
-    "!2r95g+swarm~presence_store.set": {
-      "token": "sha1$3910d926$1$1263ab8779a42b66693a352ab69f42a9580ab8ff"
+    "!2roJG06+swarm~presence_store.set": {
+      "token": "sha1$ea5897ed$1$1237f60f9bfd31b4ce878ffb7fd544e8c24b74e5"
     }
   }
 }

@@ -31,7 +31,7 @@ var Server = Model.extend('Server', {
         }
     },
 
-    addSession: function(session, client) {
+    addSession: function(config, session, client) {
 
         var self = this;
         var sessionDeferred = Q.defer();
@@ -42,7 +42,7 @@ var Server = Model.extend('Server', {
             //client.subscribees.target()
 
             console.log('addSession client config', client.config);
-            client.addSession(session);
+            client.addSession(config, session);
 
             session.on('.init', function() {
                 var clientSessions = client.sessions.target();

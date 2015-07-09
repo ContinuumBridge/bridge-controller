@@ -61,9 +61,10 @@ Connection.prototype.setupPresence = function(config) {
     session = this.session = swarmHost.get(format('/Session#%s', config.sessionID));
     client = this.client = swarmHost.get(format('/Client#%s', config.cbid));
 
+    console.log('client before init', client);
     client.config = config;
     // Returns promise
-    return localServer.addSession(session, client);
+    return localServer.addSession(config, session, client);
 };
 
 Connection.prototype.setupSocket = function() {

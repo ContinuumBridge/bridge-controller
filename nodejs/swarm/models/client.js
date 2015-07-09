@@ -1,5 +1,6 @@
 
 var _ = require('underscore');
+var Q = require('q');
 var Model = require('swarm').Model;
 var Ref = require('swarm').Syncable.Ref;
 var format = require('util').format;
@@ -57,9 +58,9 @@ module.exports = Model.extend('Client', {
     },
     */
 
-    addSession: function(session) {
+    addSession: function(config, session) {
 
-        var config = this.config;
+        //var config = this.config;
 
         this.set({
             cbid: config.cbid,
@@ -76,15 +77,49 @@ module.exports = Model.extend('Client', {
         this.sessions.target().removeObject(session);
     },
 
-    findSubscription: function(subscription) {
+    find: function() {
 
-        this.subscriptions.fill(swarmHost);
-        return this.subscriptions.target().get(format('/Client#%s', subscription));
+    },
+
+    findSubscription: function(subscriptionString) {
+
+        var self = this;
+        var deferred = Q.defer();
+        if (!this.version) {
+
+            this.on('.init', function() {
+
+                var subscription = self.subscriptions.target().get(format('/Client#%s', subscriptionString));
+                deferred.resolve(subscription);
+            });
+        } else {
+
+            var subscription = self.subscriptions.target().get(format('/Client#%s', subscriptionString));
+            deferred.resolve(subscription);
+            //return this.subscriptions.target().get(format('/Client#%s', subscription));
+        }
+        return deferred.promise;
     },
 
     getPublishees: function() {
-        this.publishees.fill(swarmHost);
-        return this.publishees.target().list();
+
+        var self = this;
+        var deferred = Q.defer();
+        if (!this.version) {
+
+            this.on('.init', function() {
+
+                var publishees = this.publishees.target().list();
+                deferred.resolve(publishees);
+            });
+        } else {
+
+            var publishees = this.publishees.target().list();
+            deferred.resolve(publishees);
+        }
+        return deferred.promise;
+        //this.publishees.fill(swarmHost);
+        //return this.publishees.target().list();
     }
 });
 

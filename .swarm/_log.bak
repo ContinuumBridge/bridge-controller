@@ -2,6 +2,26 @@
 {
   "/Client#BID2": {
     "!2r94P05+dev_1.set": {},
-    "!2r96205+dev_1.set": {}
+    "!2r96205+dev_1.set": {},
+    "!2r98k+dev_1.set": {},
+    "!2rnrA05+dev_1.set": {},
+    "!2ro3t05+dev_1.set": {}
+  },
+  "/Sessions#dev_1": {
+    "!2rIEx0M+dev_1.change": {
+      "/Session#0z1qafe0ciub54jchzxpbpy3u00ollox": 1
+    }
   }
-}}
+},
+"/Client#BID2!2ro8M05+dev_1.set":	{},
+"/Sessions#dev_1!2ro8M0R+dev_1.change":	{"/Session#tmveok3pgx830bjaljsblioiqss5zc5k":1},
+"/Clients#publisheesBID2!2ro8M0F+dev_1.change":	{"/Client#UID1":1},
+"/Clients#publisheesBID2!2ro8M0B+dev_1.change":	{"/Client#UID3":1},
+"/Sessions#BID2!2ro8M0Q+dev_1.change":	{"/Session#tmveok3pgx830bjaljsblioiqss5zc5k":1},
+"/Client#BID2!2roCy0j+dev_1.set":	{},
+"/Client#BID2!2ro8N04+swarm~presence_store.set":	{},
+"/Client#BID2!2r96205+swarm~presence_store.set":	{"publishees":"/Clients#publisheesBID2","subscriptions":"/Clients#subscriptionsBID2","sessions":"/Sessions#BID2"},
+"/Client#UID3!2roCy0o+dev_1.set":	{},
+"/Client#UID3!2ro8N06+swarm~presence_store.set":	{},
+"/Client#UID1!2roCy0p+dev_1.set":	{},
+"/Client#UID1!2ro8N05+swarm~presence_store.set":	{}}

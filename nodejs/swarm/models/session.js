@@ -22,8 +22,8 @@ module.exports = Model.extend('Session', {
 
     destroy: function() {
 
-        this.server.target().destroySession(this);
-        this.client.target().destroySession(this);
+        //this.server.target().destroySession(this);
+        //this.client.target().destroySession(this);
     }
     /*
     reactions: {
