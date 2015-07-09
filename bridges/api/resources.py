@@ -91,9 +91,13 @@ class BridgeResource(ProtoBridgeResource):
     devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
                                  'device_installs', full=True, null=True, use_in=controlled_by_client)
 
+    class Meta(ProtoBridgeResource.Meta):
+        pass
 
 class BroadcastBridgeResource(ProtoBridgeResource):
-    pass
+
+    class Meta(ProtoBridgeResource.Meta):
+        pass
 
 class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
 

@@ -15289,20 +15289,29 @@ var UninstallDeviceModal = React.createClass({displayName: 'UninstallDeviceModal
         var friendlyName = deviceInstall.get('friendly_name');
 
         var title = "Uninstall device " + friendlyName;
+        var zwave = deviceInstall.get('device').get('protocol') == "zwave";
         //var device = this.getModel().get('device');
         //var title = device ? "Install " + device.get('name') : "Unknown device";
-        var instructions = Portal.getCurrentBridge().get('zwave') == 'exclude'
-            ? "find it and press the button on it"
-            : "wait for the bridge to go into Z-Exclude mode";
+
+        var message;
+        if (zwave) {
+
+            message = Portal.getCurrentBridge().get('zwave') == 'exclude'
+                ? "Follow the manufacturers instructions to uninstall this zwave device (normally clicking a button three times"
+                : "wait for the bridge to go into Z-Exclude mode";
+        } else {
+
+            message = "The device is being uninstalled";
+        }
 
         return (
             React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
                 onRequestHide: this.cancelInstall, animation: false}, 
                 React.createElement("div", {className: "modal-body"}, 
-                    React.createElement("div", null, "In order to uninstall device ", friendlyName, " ", instructions)
+                    React.createElement("div", null, message)
                 ), 
                 React.createElement("div", {className: "modal-footer"}, 
-                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "Cancel uninstall")
+                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "OK")
                 )
             )
         )
