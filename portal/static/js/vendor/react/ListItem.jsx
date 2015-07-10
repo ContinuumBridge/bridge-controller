@@ -20,9 +20,9 @@ var React = _interopRequire(_react);
 
 var cloneElement = _react.cloneElement;
 
-var BootstrapMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/BootstrapMixin"));
+var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
 
-var classSet = _interopRequire(require("../../../../../node_modules/react-bootstrap/node_modules/classnames"));
+var classSet = require('../../../../../node_modules/react-bootstrap/utils/classSet');
 
 
 var CollapsableMixin = require('react-bootstrap').CollapsableMixin;

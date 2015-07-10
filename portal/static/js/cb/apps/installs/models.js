@@ -57,7 +57,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstalls',
                 collectionType: 'Portal.AppInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'appInstallCollection',
+                initializeCollection: 'appInstallCollection'
             }   
         },
         /*
@@ -114,6 +114,9 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
         }
     ]
 }, { modelType: "appInstall" });
+
+Backbone.Cocktail.mixin(Portal.AppInstall, Portal.InstallableModelMixin);
+
 
 Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
 

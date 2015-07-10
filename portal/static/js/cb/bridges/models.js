@@ -8,7 +8,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        var self =
+        var self = this;
         /*
         this.on('all', function(event, payload) {
             console.log('Bridge event ', event, payload);
@@ -44,11 +44,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     },
 
     /*
+    parse : function(response){
+        console.log('bridge parse', response);
+        return response.objects;
+    },
     removeDeviceInstall: function() {
 
         console.log('Remove device install!');
     },
     */
+
 
     getCBID: function() {
 
@@ -85,6 +90,9 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Portal.Bridge',
                 collectionType: 'Portal.BridgeCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'bridgeCollection'

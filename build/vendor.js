@@ -47602,78 +47602,51 @@ return Q;
 
 }).call(this);
 
-},{"backbone":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Accordion.js":[function(require,module,exports){
-"use strict";
+},{"backbone":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js","exoskeleton":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Accordion.js":[function(require,module,exports){
+var React = require('react');
+var PanelGroup = require('./PanelGroup');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var PanelGroup = _interopRequire(require("./PanelGroup"));
-
-var Accordion = React.createClass({
-  displayName: "Accordion",
-
-  render: function render() {
-    return React.createElement(
-      PanelGroup,
-      _extends({}, this.props, { accordion: true }),
-      this.props.children
+var Accordion = React.createClass({displayName: "Accordion",
+  render: function () {
+    return (
+      React.createElement(PanelGroup, React.__spread({},  this.props, {accordion: true}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Accordion;
-},{"./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PanelGroup.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Affix.js":[function(require,module,exports){
-"use strict";
+},{"./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Affix.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var AffixMixin = require('./AffixMixin');
+var domUtils = require('./utils/domUtils');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var AffixMixin = _interopRequire(require("./AffixMixin"));
-
-var domUtils = _interopRequire(require("./utils/domUtils"));
-
-var Affix = React.createClass({
-  displayName: "Affix",
-
+var Affix = React.createClass({displayName: "Affix",
   statics: {
     domUtils: domUtils
   },
 
   mixins: [AffixMixin],
 
-  render: function render() {
-    var holderStyle = { top: this.state.affixPositionTop };
-
-    return React.createElement(
-      "div",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, this.state.affixClass),
-        style: holderStyle }),
-      this.props.children
+  render: function () {
+    var holderStyle = {top: this.state.affixPositionTop};
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, this.state.affixClass), style: holderStyle}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Affix;
-},{"./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/AffixMixin.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/AffixMixin.js":[function(require,module,exports){
-"use strict";
+},{"./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js":[function(require,module,exports){
+/* global window, document */
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var domUtils = _interopRequire(require("./utils/domUtils"));
-
-var EventListener = _interopRequire(require("./utils/EventListener"));
+var React = require('react');
+var domUtils = require('./utils/domUtils');
+var EventListener = require('./utils/EventListener');
 
 var AffixMixin = {
   propTypes: {
@@ -47682,52 +47655,49 @@ var AffixMixin = {
     offsetBottom: React.PropTypes.number
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
-      affixClass: "affix-top"
+      affixClass: 'affix-top'
     };
   },
 
-  getPinnedOffset: function getPinnedOffset(DOMNode) {
+  getPinnedOffset: function (DOMNode) {
     if (this.pinnedOffset) {
       return this.pinnedOffset;
     }
 
-    DOMNode.className = DOMNode.className.replace(/affix-top|affix-bottom|affix/, "");
-    DOMNode.className += DOMNode.className.length ? " affix" : "affix";
+    DOMNode.className = DOMNode.className.replace(/affix-top|affix-bottom|affix/, '');
+    DOMNode.className += DOMNode.className.length ? ' affix' : 'affix';
 
     this.pinnedOffset = domUtils.getOffset(DOMNode).top - window.pageYOffset;
 
     return this.pinnedOffset;
   },
 
-  checkPosition: function checkPosition() {
-    var DOMNode = undefined,
-        scrollHeight = undefined,
-        scrollTop = undefined,
-        position = undefined,
-        offsetTop = undefined,
-        offsetBottom = undefined,
-        affix = undefined,
-        affixType = undefined,
-        affixPositionTop = undefined;
+  checkPosition: function () {
+    var DOMNode, scrollHeight, scrollTop, position, offsetTop, offsetBottom,
+        affix, affixType, affixPositionTop;
 
     // TODO: or not visible
     if (!this.isMounted()) {
       return;
     }
 
-    DOMNode = React.findDOMNode(this);
+    DOMNode = this.getDOMNode();
     scrollHeight = document.documentElement.offsetHeight;
     scrollTop = window.pageYOffset;
     position = domUtils.getOffset(DOMNode);
+    offsetTop;
+    offsetBottom;
 
-    if (this.affixed === "top") {
+    if (this.affixed === 'top') {
       position.top += scrollTop;
     }
 
-    offsetTop = this.props.offsetTop != null ? this.props.offsetTop : this.props.offset;
-    offsetBottom = this.props.offsetBottom != null ? this.props.offsetBottom : this.props.offset;
+    offsetTop = this.props.offsetTop != null ?
+      this.props.offsetTop : this.props.offset;
+    offsetBottom = this.props.offsetBottom != null ?
+      this.props.offsetBottom : this.props.offset;
 
     if (offsetTop == null && offsetBottom == null) {
       return;
@@ -47739,12 +47709,12 @@ var AffixMixin = {
       offsetBottom = 0;
     }
 
-    if (this.unpin != null && scrollTop + this.unpin <= position.top) {
+    if (this.unpin != null && (scrollTop + this.unpin <= position.top)) {
       affix = false;
-    } else if (offsetBottom != null && position.top + DOMNode.offsetHeight >= scrollHeight - offsetBottom) {
-      affix = "bottom";
-    } else if (offsetTop != null && scrollTop <= offsetTop) {
-      affix = "top";
+    } else if (offsetBottom != null && (position.top + DOMNode.offsetHeight >= scrollHeight - offsetBottom)) {
+      affix = 'bottom';
+    } else if (offsetTop != null && (scrollTop <= offsetTop)) {
+      affix = 'top';
     } else {
       affix = false;
     }
@@ -47754,16 +47724,17 @@ var AffixMixin = {
     }
 
     if (this.unpin != null) {
-      DOMNode.style.top = "";
+      DOMNode.style.top = '';
     }
 
-    affixType = "affix" + (affix ? "-" + affix : "");
+    affixType = 'affix' + (affix ? '-' + affix : '');
 
     this.affixed = affix;
-    this.unpin = affix === "bottom" ? this.getPinnedOffset(DOMNode) : null;
+    this.unpin = affix === 'bottom' ?
+      this.getPinnedOffset(DOMNode) : null;
 
-    if (affix === "bottom") {
-      DOMNode.className = DOMNode.className.replace(/affix-top|affix-bottom|affix/, "affix-bottom");
+    if (affix === 'bottom') {
+      DOMNode.className = DOMNode.className.replace(/affix-top|affix-bottom|affix/, 'affix-bottom');
       affixPositionTop = scrollHeight - offsetBottom - DOMNode.offsetHeight - domUtils.getOffset(DOMNode).top;
     }
 
@@ -47773,16 +47744,18 @@ var AffixMixin = {
     });
   },
 
-  checkPositionWithEventLoop: function checkPositionWithEventLoop() {
+  checkPositionWithEventLoop: function () {
     setTimeout(this.checkPosition, 0);
   },
 
-  componentDidMount: function componentDidMount() {
-    this._onWindowScrollListener = EventListener.listen(window, "scroll", this.checkPosition);
-    this._onDocumentClickListener = EventListener.listen(document, "click", this.checkPositionWithEventLoop);
+  componentDidMount: function () {
+    this._onWindowScrollListener =
+      EventListener.listen(window, 'scroll', this.checkPosition);
+    this._onDocumentClickListener =
+      EventListener.listen(document, 'click', this.checkPositionWithEventLoop);
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function () {
     if (this._onWindowScrollListener) {
       this._onWindowScrollListener.remove();
     }
@@ -47792,7 +47765,7 @@ var AffixMixin = {
     }
   },
 
-  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate: function (prevProps, prevState) {
     if (prevState.affixClass === this.state.affixClass) {
       this.checkPositionWithEventLoop();
     }
@@ -47800,22 +47773,14 @@ var AffixMixin = {
 };
 
 module.exports = AffixMixin;
-},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/EventListener.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Alert.js":[function(require,module,exports){
-"use strict";
+},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Alert.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Alert = React.createClass({
-  displayName: "Alert",
-
+var Alert = React.createClass({displayName: "Alert",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -47823,98 +47788,88 @@ var Alert = React.createClass({
     dismissAfter: React.PropTypes.number
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "alert",
-      bsStyle: "info"
+      bsClass: 'alert',
+      bsStyle: 'info'
     };
   },
 
-  renderDismissButton: function renderDismissButton() {
-    return React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "close",
-        onClick: this.props.onDismiss,
-        "aria-hidden": "true" },
-      "×"
+  renderDismissButton: function () {
+    return (
+      React.createElement("button", {
+        type: "button", 
+        className: "close", 
+        onClick: this.props.onDismiss, 
+        "aria-hidden": "true"}, 
+        "×"
+      )
     );
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
     var isDismissable = !!this.props.onDismiss;
 
-    classes["alert-dismissable"] = isDismissable;
+    classes['alert-dismissable'] = isDismissable;
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      isDismissable ? this.renderDismissButton() : null,
-      this.props.children
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        isDismissable ? this.renderDismissButton() : null, 
+        this.props.children
+      )
     );
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount: function() {
     if (this.props.dismissAfter && this.props.onDismiss) {
       this.dismissTimer = setTimeout(this.props.onDismiss, this.props.dismissAfter);
     }
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function() {
     clearTimeout(this.dismissTimer);
   }
 });
 
 module.exports = Alert;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Badge.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Badge.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var classSet = require('./utils/classSet');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Badge = React.createClass({
-  displayName: "Badge",
-
+var Badge = React.createClass({displayName: "Badge",
   propTypes: {
     pullRight: React.PropTypes.bool
   },
 
-  hasContent: function hasContent() {
-    return ValidComponentChildren.hasValidComponent(this.props.children) || typeof this.props.children === "string" || typeof this.props.children === "number";
+  hasContent: function () {
+    return ValidComponentChildren.hasValidComponent(this.props.children) ||
+      (typeof this.props.children === 'string') ||
+      (typeof this.props.children === 'number')
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      "pull-right": this.props.pullRight,
-      badge: this.hasContent()
+      'pull-right': this.props.pullRight,
+      'badge': this.hasContent()
     };
-    return React.createElement(
-      "span",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("span", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Badge;
-},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var constants = _interopRequire(require("./constants"));
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js":[function(require,module,exports){
+var React = require('react');
+var constants = require('./constants');
 
 var BootstrapMixin = {
   propTypes: {
@@ -47923,14 +47878,14 @@ var BootstrapMixin = {
     bsSize: React.PropTypes.oneOf(Object.keys(constants.SIZES))
   },
 
-  getBsClassSet: function getBsClassSet() {
+  getBsClassSet: function () {
     var classes = {};
 
     var bsClass = this.props.bsClass && constants.CLASSES[this.props.bsClass];
     if (bsClass) {
       classes[bsClass] = true;
 
-      var prefix = bsClass + "-";
+      var prefix = bsClass + '-';
 
       var bsSize = this.props.bsSize && constants.SIZES[this.props.bsSize];
       if (bsSize) {
@@ -47944,214 +47899,177 @@ var BootstrapMixin = {
     }
 
     return classes;
-  },
-
-  prefixClass: function prefixClass(subClass) {
-    return constants.CLASSES[this.props.bsClass] + "-" + subClass;
   }
 };
 
 module.exports = BootstrapMixin;
-},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Button.js":[function(require,module,exports){
-"use strict";
+},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Button = React.createClass({
-  displayName: "Button",
-
+var Button = React.createClass({displayName: "Button",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    active: React.PropTypes.bool,
+    active:   React.PropTypes.bool,
     disabled: React.PropTypes.bool,
-    block: React.PropTypes.bool,
-    navItem: React.PropTypes.bool,
+    block:    React.PropTypes.bool,
+    navItem:    React.PropTypes.bool,
     navDropdown: React.PropTypes.bool,
     componentClass: React.PropTypes.node,
     href: React.PropTypes.string,
     target: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "button",
-      bsStyle: "default",
-      type: "button"
+      bsClass: 'button',
+      bsStyle: 'default',
+      type: 'button'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.props.navDropdown ? {} : this.getBsClassSet();
-    var renderFuncName = undefined;
+    var renderFuncName;
 
-    classes = _extends({
-      active: this.props.active,
-      "btn-block": this.props.block }, classes);
+    classes['active'] = this.props.active;
+    classes['btn-block'] = this.props.block;
 
     if (this.props.navItem) {
       return this.renderNavItem(classes);
     }
 
-    renderFuncName = this.props.href || this.props.target || this.props.navDropdown ? "renderAnchor" : "renderButton";
+    renderFuncName = this.props.href || this.props.target || this.props.navDropdown ?
+      'renderAnchor' : 'renderButton';
 
     return this[renderFuncName](classes);
   },
 
-  renderAnchor: function renderAnchor(classes) {
+  renderAnchor: function (classes) {
 
-    var Component = this.props.componentClass || "a";
-    var href = this.props.href || "#";
-    classes.disabled = this.props.disabled;
+    var Component = this.props.componentClass || 'a';
+    var href = this.props.href || '#';
+    classes['disabled'] = this.props.disabled;
 
-    return React.createElement(
-      Component,
-      _extends({}, this.props, {
-        href: href,
-        className: classSet(this.props.className, classes),
-        role: "button" }),
-      this.props.children
+    return (
+      React.createElement(Component, React.__spread({}, 
+        this.props, 
+        {href: href, 
+        className: joinClasses(this.props.className, classSet(classes)), 
+        role: "button"}), 
+        this.props.children
+      )
     );
   },
 
-  renderButton: function renderButton(classes) {
-    var Component = this.props.componentClass || "button";
+  renderButton: function (classes) {
+    var Component = this.props.componentClass || 'button';
 
-    return React.createElement(
-      Component,
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement(Component, React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   },
 
-  renderNavItem: function renderNavItem(classes) {
+  renderNavItem: function (classes) {
     var liClasses = {
       active: this.props.active
     };
 
-    return React.createElement(
-      "li",
-      { className: classSet(liClasses) },
-      this.renderAnchor(classes)
+    return (
+      React.createElement("li", {className: classSet(liClasses)}, 
+        this.renderAnchor(classes)
+      )
     );
   }
 });
 
 module.exports = Button;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonGroup.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
+var Button = require('./Button');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var ButtonGroup = React.createClass({
-  displayName: "ButtonGroup",
-
+var ButtonGroup = React.createClass({displayName: "ButtonGroup",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    vertical: React.PropTypes.bool,
+    vertical:  React.PropTypes.bool,
     justified: React.PropTypes.bool
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "button-group"
+      bsClass: 'button-group'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
-    classes["btn-group"] = !this.props.vertical;
-    classes["btn-group-vertical"] = this.props.vertical;
-    classes["btn-group-justified"] = this.props.justified;
+    classes['btn-group'] = !this.props.vertical;
+    classes['btn-group-vertical'] = this.props.vertical;
+    classes['btn-group-justified'] = this.props.justified;
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("div", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = ButtonGroup;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonToolbar.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
+var Button = require('./Button');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var ButtonToolbar = React.createClass({
-  displayName: "ButtonToolbar",
-
+var ButtonToolbar = React.createClass({displayName: "ButtonToolbar",
   mixins: [BootstrapMixin],
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "button-toolbar"
+      bsClass: 'button-toolbar'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, {
-        role: "toolbar",
-        className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("div", React.__spread({}, 
+        this.props, 
+        {role: "toolbar", 
+        className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = ButtonToolbar;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Carousel.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Carousel.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
+var BootstrapMixin = require('./BootstrapMixin');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var Carousel = React.createClass({
-  displayName: "Carousel",
-
+var Carousel = React.createClass({displayName: "Carousel",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -48164,10 +48082,10 @@ var Carousel = React.createClass({
     onSlideEnd: React.PropTypes.func,
     activeIndex: React.PropTypes.number,
     defaultActiveIndex: React.PropTypes.number,
-    direction: React.PropTypes.oneOf(["prev", "next"])
+    direction: React.PropTypes.oneOf(['prev', 'next'])
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
       slide: true,
       interval: 5000,
@@ -48178,43 +48096,46 @@ var Carousel = React.createClass({
     };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
-      activeIndex: this.props.defaultActiveIndex == null ? 0 : this.props.defaultActiveIndex,
+      activeIndex: this.props.defaultActiveIndex == null ?
+        0 : this.props.defaultActiveIndex,
       previousActiveIndex: null,
       direction: null
     };
   },
 
-  getDirection: function getDirection(prevIndex, index) {
+  getDirection: function (prevIndex, index) {
     if (prevIndex === index) {
       return null;
     }
 
-    return prevIndex > index ? "prev" : "next";
+    return prevIndex > index ?
+      'prev' : 'next';
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps: function (nextProps) {
     var activeIndex = this.getActiveIndex();
 
     if (nextProps.activeIndex != null && nextProps.activeIndex !== activeIndex) {
       clearTimeout(this.timeout);
       this.setState({
         previousActiveIndex: activeIndex,
-        direction: nextProps.direction != null ? nextProps.direction : this.getDirection(activeIndex, nextProps.activeIndex)
+        direction: nextProps.direction != null ?
+          nextProps.direction : this.getDirection(activeIndex, nextProps.activeIndex)
       });
     }
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount: function () {
     this.waitForNext();
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function() {
     clearTimeout(this.timeout);
   },
 
-  next: function next(e) {
+  next: function (e) {
     if (e) {
       e.preventDefault();
     }
@@ -48229,10 +48150,10 @@ var Carousel = React.createClass({
       index = 0;
     }
 
-    this.handleSelect(index, "next");
+    this.handleSelect(index, 'next');
   },
 
-  prev: function prev(e) {
+  prev: function (e) {
     if (e) {
       e.preventDefault();
     }
@@ -48246,121 +48167,133 @@ var Carousel = React.createClass({
       index = ValidComponentChildren.numberOf(this.props.children) - 1;
     }
 
-    this.handleSelect(index, "prev");
+    this.handleSelect(index, 'prev');
   },
 
-  pause: function pause() {
+  pause: function () {
     this.isPaused = true;
     clearTimeout(this.timeout);
   },
 
-  play: function play() {
+  play: function () {
     this.isPaused = false;
     this.waitForNext();
   },
 
-  waitForNext: function waitForNext() {
-    if (!this.isPaused && this.props.slide && this.props.interval && this.props.activeIndex == null) {
+  waitForNext: function () {
+    if (!this.isPaused && this.props.slide && this.props.interval &&
+        this.props.activeIndex == null) {
       this.timeout = setTimeout(this.next, this.props.interval);
     }
   },
 
-  handleMouseOver: function handleMouseOver() {
+  handleMouseOver: function () {
     if (this.props.pauseOnHover) {
       this.pause();
     }
   },
 
-  handleMouseOut: function handleMouseOut() {
+  handleMouseOut: function () {
     if (this.isPaused) {
       this.play();
     }
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
       carousel: true,
       slide: this.props.slide
     };
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes),
-        onMouseOver: this.handleMouseOver,
-        onMouseOut: this.handleMouseOut }),
-      this.props.indicators ? this.renderIndicators() : null,
-      React.createElement(
-        "div",
-        { className: "carousel-inner", ref: "inner" },
-        ValidComponentChildren.map(this.props.children, this.renderItem)
-      ),
-      this.props.controls ? this.renderControls() : null
+    return (
+      React.createElement("div", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes)), 
+        onMouseOver: this.handleMouseOver, 
+        onMouseOut: this.handleMouseOut}), 
+        this.props.indicators ? this.renderIndicators() : null, 
+        React.createElement("div", {className: "carousel-inner", ref: "inner"}, 
+          ValidComponentChildren.map(this.props.children, this.renderItem)
+        ), 
+        this.props.controls ? this.renderControls() : null
+      )
     );
   },
 
-  renderPrev: function renderPrev() {
-    return React.createElement(
-      "a",
-      { className: "left carousel-control", href: "#prev", key: 0, onClick: this.prev },
-      React.createElement("span", { className: "glyphicon glyphicon-chevron-left" })
+  renderPrev: function () {
+    return (
+      React.createElement("a", {className: "left carousel-control", href: "#prev", key: 0, onClick: this.prev}, 
+        React.createElement("span", {className: "glyphicon glyphicon-chevron-left"})
+      )
     );
   },
 
-  renderNext: function renderNext() {
-    return React.createElement(
-      "a",
-      { className: "right carousel-control", href: "#next", key: 1, onClick: this.next },
-      React.createElement("span", { className: "glyphicon glyphicon-chevron-right" })
+  renderNext: function () {
+    return (
+      React.createElement("a", {className: "right carousel-control", href: "#next", key: 1, onClick: this.next}, 
+        React.createElement("span", {className: "glyphicon glyphicon-chevron-right"})
+      )
     );
   },
 
-  renderControls: function renderControls() {
+  renderControls: function () {
     if (this.props.wrap) {
       var activeIndex = this.getActiveIndex();
       var count = ValidComponentChildren.numberOf(this.props.children);
 
-      return [activeIndex !== 0 ? this.renderPrev() : null, activeIndex !== count - 1 ? this.renderNext() : null];
+      return [
+        (activeIndex !== 0) ? this.renderPrev() : null,
+        (activeIndex !== count - 1) ? this.renderNext() : null
+      ];
     }
 
-    return [this.renderPrev(), this.renderNext()];
+    return [
+      this.renderPrev(),
+      this.renderNext()
+    ];
   },
 
-  renderIndicator: function renderIndicator(child, index) {
-    var className = index === this.getActiveIndex() ? "active" : null;
+  renderIndicator: function (child, index) {
+    var className = (index === this.getActiveIndex()) ?
+      'active' : null;
 
-    return React.createElement("li", {
-      key: index,
-      className: className,
-      onClick: this.handleSelect.bind(this, index, null) });
-  },
-
-  renderIndicators: function renderIndicators() {
-    var indicators = [];
-    ValidComponentChildren.forEach(this.props.children, function (child, index) {
-      indicators.push(this.renderIndicator(child, index),
-
-      // Force whitespace between indicator elements, bootstrap
-      // requires this for correct spacing of elements.
-      " ");
-    }, this);
-
-    return React.createElement(
-      "ol",
-      { className: "carousel-indicators" },
-      indicators
+    return (
+      React.createElement("li", {
+        key: index, 
+        className: className, 
+        onClick: this.handleSelect.bind(this, index, null)})
     );
   },
 
-  getActiveIndex: function getActiveIndex() {
+  renderIndicators: function () {
+    var indicators = [];
+    ValidComponentChildren
+      .forEach(this.props.children, function(child, index) {
+        indicators.push(
+          this.renderIndicator(child, index),
+
+          // Force whitespace between indicator elements, bootstrap
+          // requires this for correct spacing of elements.
+          ' '
+        );
+      }, this);
+
+    return (
+      React.createElement("ol", {className: "carousel-indicators"}, 
+        indicators
+      )
+    );
+  },
+
+  getActiveIndex: function () {
     return this.props.activeIndex != null ? this.props.activeIndex : this.state.activeIndex;
   },
 
-  handleItemAnimateOutEnd: function handleItemAnimateOutEnd() {
+  handleItemAnimateOutEnd: function () {
     this.setState({
       previousActiveIndex: null,
       direction: null
-    }, function () {
+    }, function() {
       this.waitForNext();
 
       if (this.props.onSlideEnd) {
@@ -48369,24 +48302,28 @@ var Carousel = React.createClass({
     });
   },
 
-  renderItem: function renderItem(child, index) {
+  renderItem: function (child, index) {
     var activeIndex = this.getActiveIndex();
-    var isActive = index === activeIndex;
-    var isPreviousActive = this.state.previousActiveIndex != null && this.state.previousActiveIndex === index && this.props.slide;
+    var isActive = (index === activeIndex);
+    var isPreviousActive = this.state.previousActiveIndex != null &&
+            this.state.previousActiveIndex === index && this.props.slide;
 
-    return cloneElement(child, {
-      active: isActive,
-      ref: child.ref,
-      key: child.key ? child.key : index,
-      index: index,
-      animateOut: isPreviousActive,
-      animateIn: isActive && this.state.previousActiveIndex != null && this.props.slide,
-      direction: this.state.direction,
-      onAnimateOutEnd: isPreviousActive ? this.handleItemAnimateOutEnd : null
-    });
+    return cloneWithProps(
+        child,
+        {
+          active: isActive,
+          ref: child.ref,
+          key: child.key ? child.key : index,
+          index: index,
+          animateOut: isPreviousActive,
+          animateIn: isActive && this.state.previousActiveIndex != null && this.props.slide,
+          direction: this.state.direction,
+          onAnimateOutEnd: isPreviousActive ? this.handleItemAnimateOutEnd: null
+        }
+      );
   },
 
-  handleSelect: function handleSelect(index, direction) {
+  handleSelect: function (index, direction) {
     clearTimeout(this.timeout);
 
     var previousActiveIndex = this.getActiveIndex();
@@ -48414,48 +48351,39 @@ var Carousel = React.createClass({
 });
 
 module.exports = Carousel;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CarouselItem.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CarouselItem.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var TransitionEvents = require('./utils/TransitionEvents');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var TransitionEvents = _interopRequire(require("./utils/TransitionEvents"));
-
-var CarouselItem = React.createClass({
-  displayName: "CarouselItem",
-
+var CarouselItem = React.createClass({displayName: "CarouselItem",
   propTypes: {
-    direction: React.PropTypes.oneOf(["prev", "next"]),
+    direction: React.PropTypes.oneOf(['prev', 'next']),
     onAnimateOutEnd: React.PropTypes.func,
     active: React.PropTypes.bool,
     caption: React.PropTypes.node
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
       direction: null
     };
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
       animation: true
     };
   },
 
-  handleAnimateOutEnd: function handleAnimateOutEnd() {
+  handleAnimateOutEnd: function () {
     if (this.props.onAnimateOutEnd && this.isMounted()) {
       this.props.onAnimateOutEnd(this.props.index);
     }
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps: function (nextProps) {
     if (this.props.active !== nextProps.active) {
       this.setState({
         direction: null
@@ -48463,9 +48391,12 @@ var CarouselItem = React.createClass({
     }
   },
 
-  componentDidUpdate: function componentDidUpdate(prevProps) {
+  componentDidUpdate: function (prevProps) {
     if (!this.props.active && prevProps.active) {
-      TransitionEvents.addEndEventListener(React.findDOMNode(this), this.handleAnimateOutEnd);
+      TransitionEvents.addEndEventListener(
+        this.getDOMNode(),
+        this.handleAnimateOutEnd
+      );
     }
 
     if (this.props.active !== prevProps.active) {
@@ -48473,62 +48404,55 @@ var CarouselItem = React.createClass({
     }
   },
 
-  startAnimation: function startAnimation() {
+  startAnimation: function () {
     if (!this.isMounted()) {
       return;
     }
 
     this.setState({
-      direction: this.props.direction === "prev" ? "right" : "left"
+      direction: this.props.direction === 'prev' ?
+        'right' : 'left'
     });
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
       item: true,
-      active: this.props.active && !this.props.animateIn || this.props.animateOut,
-      next: this.props.active && this.props.animateIn && this.props.direction === "next",
-      prev: this.props.active && this.props.animateIn && this.props.direction === "prev"
+      active: (this.props.active && !this.props.animateIn) || this.props.animateOut,
+      next: this.props.active && this.props.animateIn && this.props.direction === 'next',
+      prev: this.props.active && this.props.animateIn && this.props.direction === 'prev'
     };
 
     if (this.state.direction && (this.props.animateIn || this.props.animateOut)) {
       classes[this.state.direction] = true;
     }
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children,
-      this.props.caption ? this.renderCaption() : null
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children, 
+        this.props.caption ? this.renderCaption() : null
+      )
     );
   },
 
-  renderCaption: function renderCaption() {
-    return React.createElement(
-      "div",
-      { className: "carousel-caption" },
-      this.props.caption
+  renderCaption: function () {
+    return (
+      React.createElement("div", {className: "carousel-caption"}, 
+        this.props.caption
+      )
     );
   }
 });
 
 module.exports = CarouselItem;
-},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/TransitionEvents.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Col.js":[function(require,module,exports){
-"use strict";
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Col.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var constants = require('./constants');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var constants = _interopRequire(require("./constants"));
-
-var Col = React.createClass({
-  displayName: "Col",
-
+var Col = React.createClass({displayName: "Col",
   propTypes: {
     xs: React.PropTypes.number,
     sm: React.PropTypes.number,
@@ -48549,467 +48473,290 @@ var Col = React.createClass({
     componentClass: React.PropTypes.node.isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      componentClass: "div"
+      componentClass: 'div'
     };
   },
 
-  render: function render() {
+  render: function () {
     var ComponentClass = this.props.componentClass;
     var classes = {};
 
     Object.keys(constants.SIZES).forEach(function (key) {
       var size = constants.SIZES[key];
       var prop = size;
-      var classPart = size + "-";
+      var classPart = size + '-';
 
       if (this.props[prop]) {
-        classes["col-" + classPart + this.props[prop]] = true;
+        classes['col-' + classPart + this.props[prop]] = true;
       }
 
-      prop = size + "Offset";
-      classPart = size + "-offset-";
-      if (this.props[prop] >= 0) {
-        classes["col-" + classPart + this.props[prop]] = true;
+      prop = size + 'Offset';
+      classPart = size + '-offset-';
+      if (this.props[prop]) {
+        classes['col-' + classPart + this.props[prop]] = true;
       }
 
-      prop = size + "Push";
-      classPart = size + "-push-";
-      if (this.props[prop] >= 0) {
-        classes["col-" + classPart + this.props[prop]] = true;
+      prop = size + 'Push';
+      classPart = size + '-push-';
+      if (this.props[prop]) {
+        classes['col-' + classPart + this.props[prop]] = true;
       }
 
-      prop = size + "Pull";
-      classPart = size + "-pull-";
-      if (this.props[prop] >= 0) {
-        classes["col-" + classPart + this.props[prop]] = true;
+      prop = size + 'Pull';
+      classPart = size + '-pull-';
+      if (this.props[prop]) {
+        classes['col-' + classPart + this.props[prop]] = true;
       }
     }, this);
 
-    return React.createElement(
-      ComponentClass,
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement(ComponentClass, React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Col;
-},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/constants.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableMixin.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var TransitionEvents = _interopRequire(require("react/lib/ReactTransitionEvents"));
+},{"./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js":[function(require,module,exports){
+var React = require('react');
+var TransitionEvents = require('./utils/TransitionEvents');
 
 var CollapsableMixin = {
 
   propTypes: {
+    collapsable: React.PropTypes.bool,
     defaultExpanded: React.PropTypes.bool,
     expanded: React.PropTypes.bool
   },
 
-  getInitialState: function getInitialState() {
-    var defaultExpanded = this.props.defaultExpanded != null ? this.props.defaultExpanded : this.props.expanded != null ? this.props.expanded : false;
-
+  getInitialState: function () {
     return {
-      expanded: defaultExpanded,
+      expanded: this.props.defaultExpanded != null ? this.props.defaultExpanded : null,
       collapsing: false
     };
   },
 
-  componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
-    var willExpanded = nextProps.expanded != null ? nextProps.expanded : nextState.expanded;
-    if (willExpanded === this.isExpanded()) {
-      return;
-    }
-
-    // if the expanded state is being toggled, ensure node has a dimension value
-    // this is needed for the animation to work and needs to be set before
-    // the collapsing class is applied (after collapsing is applied the in class
-    // is removed and the node's dimension will be wrong)
-
-    var node = this.getCollapsableDOMNode();
-    var dimension = this.dimension();
-    var value = "0";
-
-    if (!willExpanded) {
-      value = this.getCollapsableDimensionValue();
-    }
-
-    node.style[dimension] = value + "px";
-
-    this._afterWillUpdate();
-  },
-
-  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
-    // check if expanded is being toggled; if so, set collapsing
-    this._checkToggleCollapsing(prevProps, prevState);
-
-    // check if collapsing was turned on; if so, start animation
-    this._checkStartAnimation();
-  },
-
-  // helps enable test stubs
-  _afterWillUpdate: function _afterWillUpdate() {},
-
-  _checkStartAnimation: function _checkStartAnimation() {
-    if (!this.state.collapsing) {
-      return;
-    }
-
-    var node = this.getCollapsableDOMNode();
-    var dimension = this.dimension();
-    var value = this.getCollapsableDimensionValue();
-
-    // setting the dimension here starts the transition animation
-    var result = undefined;
-    if (this.isExpanded()) {
-      result = value + "px";
-    } else {
-      result = "0px";
-    }
-    node.style[dimension] = result;
-  },
-
-  _checkToggleCollapsing: function _checkToggleCollapsing(prevProps, prevState) {
-    var wasExpanded = prevProps.expanded != null ? prevProps.expanded : prevState.expanded;
-    var isExpanded = this.isExpanded();
-    if (wasExpanded !== isExpanded) {
-      if (wasExpanded) {
-        this._handleCollapse();
-      } else {
-        this._handleExpand();
-      }
-    }
-  },
-
-  _handleExpand: function _handleExpand() {
-    var _this = this;
-
-    var node = this.getCollapsableDOMNode();
-    var dimension = this.dimension();
-
-    var complete = function () {
-      _this._removeEndEventListener(node, complete);
-      // remove dimension value - this ensures the collapsable item can grow
-      // in dimension after initial display (such as an image loading)
-      node.style[dimension] = "";
-      _this.setState({
-        collapsing: false
-      });
-    };
-
-    this._addEndEventListener(node, complete);
-
+  handleTransitionEnd: function () {
+    this._collapseEnd = true;
     this.setState({
-      collapsing: true
+      collapsing: false
     });
   },
 
-  _handleCollapse: function _handleCollapse() {
-    var _this = this;
+  componentWillReceiveProps: function (newProps) {
+    if (this.props.collapsable && newProps.expanded !== this.props.expanded) {
+      this._collapseEnd = false;
+      this.setState({
+        collapsing: true
+      });
+    }
+  },
 
+  _addEndTransitionListener: function () {
     var node = this.getCollapsableDOMNode();
 
-    var complete = function () {
-      _this._removeEndEventListener(node, complete);
-      _this.setState({
-        collapsing: false
-      });
-    };
-
-    this._addEndEventListener(node, complete);
-
-    this.setState({
-      collapsing: true
-    });
+    if (node) {
+      TransitionEvents.addEndEventListener(
+        node,
+        this.handleTransitionEnd
+      );
+    }
   },
 
-  // helps enable test stubs
-  _addEndEventListener: function _addEndEventListener(node, complete) {
-    TransitionEvents.addEndEventListener(node, complete);
+  _removeEndTransitionListener: function () {
+    var node = this.getCollapsableDOMNode();
+
+    if (node) {
+      TransitionEvents.removeEndEventListener(
+        node,
+        this.handleTransitionEnd
+      );
+    }
   },
 
-  // helps enable test stubs
-  _removeEndEventListener: function _removeEndEventListener(node, complete) {
-    TransitionEvents.removeEndEventListener(node, complete);
+  componentDidMount: function () {
+    this._afterRender();
   },
 
-  dimension: function dimension() {
-    return typeof this.getCollapsableDimension === "function" ? this.getCollapsableDimension() : "height";
+  componentWillUnmount: function () {
+    this._removeEndTransitionListener();
   },
 
-  isExpanded: function isExpanded() {
-    return this.props.expanded != null ? this.props.expanded : this.state.expanded;
+  componentWillUpdate: function (nextProps) {
+    var dimension = (typeof this.getCollapsableDimension === 'function') ?
+      this.getCollapsableDimension() : 'height';
+    var node = this.getCollapsableDOMNode();
+
+    this._removeEndTransitionListener();
   },
 
-  getCollapsableClassSet: function getCollapsableClassSet(className) {
+  componentDidUpdate: function (prevProps, prevState) {
+    this._afterRender();
+  },
+
+  _afterRender: function () {
+    if (!this.props.collapsable) {
+      return;
+    }
+
+    this._addEndTransitionListener();
+    setTimeout(this._updateDimensionAfterRender, 0);
+  },
+
+  _updateDimensionAfterRender: function () {
+    var node = this.getCollapsableDOMNode();
+    if (node) {
+        var dimension = (typeof this.getCollapsableDimension === 'function') ?
+            this.getCollapsableDimension() : 'height';
+        node.style[dimension] = this.isExpanded() ?
+            this.getCollapsableDimensionValue() + 'px' : '0px';
+    }
+  },
+
+  isExpanded: function () {
+    return (this.props.expanded != null) ?
+      this.props.expanded : this.state.expanded;
+  },
+
+  getCollapsableClassSet: function (className) {
     var classes = {};
 
-    if (typeof className === "string") {
-      className.split(" ").forEach(function (subClasses) {
-        if (subClasses) {
-          classes[subClasses] = true;
+    if (typeof className === 'string') {
+      className.split(' ').forEach(function (className) {
+        if (className) {
+          classes[className] = true;
         }
       });
     }
 
     classes.collapsing = this.state.collapsing;
     classes.collapse = !this.state.collapsing;
-    classes["in"] = this.isExpanded() && !this.state.collapsing;
+    classes['in'] = this.isExpanded() && !this.state.collapsing;
 
     return classes;
   }
 };
 
 module.exports = CollapsableMixin;
-},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react/lib/ReactTransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactTransitionEvents.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableNav.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownButton.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _react = require("react");
+var createChainedFunction = require('./utils/createChainedFunction');
+var BootstrapMixin = require('./BootstrapMixin');
+var DropdownStateMixin = require('./DropdownStateMixin');
+var Button = require('./Button');
+var ButtonGroup = require('./ButtonGroup');
+var DropdownMenu = require('./DropdownMenu');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var React = _interopRequire(_react);
 
-var cloneElement = _react.cloneElement;
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var CollapsableMixin = _interopRequire(require("./CollapsableMixin"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var domUtils = _interopRequire(require("./utils/domUtils"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var CollapsableNav = React.createClass({
-  displayName: "CollapsableNav",
-
-  mixins: [BootstrapMixin, CollapsableMixin],
-
-  propTypes: {
-    onSelect: React.PropTypes.func,
-    expanded: React.PropTypes.bool,
-    eventKey: React.PropTypes.any
-  },
-
-  getCollapsableDOMNode: function getCollapsableDOMNode() {
-    return this.getDOMNode();
-  },
-
-  getCollapsableDimensionValue: function getCollapsableDimensionValue() {
-    var height = 0;
-    var nodes = this.refs;
-    for (var key in nodes) {
-      if (nodes.hasOwnProperty(key)) {
-
-        var n = nodes[key].getDOMNode(),
-            h = n.offsetHeight,
-            computedStyles = domUtils.getComputedStyles(n);
-
-        height += h + parseInt(computedStyles.marginTop, 10) + parseInt(computedStyles.marginBottom, 10);
-      }
-    }
-    return height;
-  },
-
-  render: function render() {
-    /*
-     * this.props.collapsable is set in NavBar when a eventKey is supplied.
-     */
-    var classes = this.props.collapsable ? this.getCollapsableClassSet() : {};
-    /*
-     * prevent duplicating navbar-collapse call if passed as prop. kind of overkill... good cadidate to have check implemented as a util that can
-     * also be used elsewhere.
-     */
-    if (this.props.className === undefined || this.props.className.split(" ").indexOf("navbar-collapse") === -2) {
-      classes["navbar-collapse"] = this.props.collapsable;
-    }
-
-    return React.createElement(
-      "div",
-      { eventKey: this.props.eventKey, className: classSet(this.props.className, classes) },
-      ValidComponentChildren.map(this.props.children, this.props.collapsable ? this.renderCollapsableNavChildren : this.renderChildren)
-    );
-  },
-
-  getChildActiveProp: function getChildActiveProp(child) {
-    if (child.props.active) {
-      return true;
-    }
-    if (this.props.activeKey != null) {
-      if (child.props.eventKey === this.props.activeKey) {
-        return true;
-      }
-    }
-    if (this.props.activeHref != null) {
-      if (child.props.href === this.props.activeHref) {
-        return true;
-      }
-    }
-
-    return child.props.active;
-  },
-
-  renderChildren: function renderChildren(child, index) {
-    var key = child.key ? child.key : index;
-    return cloneElement(child, {
-      activeKey: this.props.activeKey,
-      activeHref: this.props.activeHref,
-      ref: "nocollapse_" + key,
-      key: key,
-      navItem: true
-    });
-  },
-
-  renderCollapsableNavChildren: function renderCollapsableNavChildren(child, index) {
-    var key = child.key ? child.key : index;
-    return cloneElement(child, {
-      active: this.getChildActiveProp(child),
-      activeKey: this.props.activeKey,
-      activeHref: this.props.activeHref,
-      onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
-      ref: "collapsable_" + key,
-      key: key,
-      navItem: true
-    });
-  }
-});
-
-module.exports = CollapsableNav;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownButton.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var DropdownStateMixin = _interopRequire(require("./DropdownStateMixin"));
-
-var Button = _interopRequire(require("./Button"));
-
-var ButtonGroup = _interopRequire(require("./ButtonGroup"));
-
-var DropdownMenu = _interopRequire(require("./DropdownMenu"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var DropdownButton = React.createClass({
-  displayName: "DropdownButton",
-
+var DropdownButton = React.createClass({displayName: "DropdownButton",
   mixins: [BootstrapMixin, DropdownStateMixin],
 
   propTypes: {
     pullRight: React.PropTypes.bool,
-    dropup: React.PropTypes.bool,
-    title: React.PropTypes.node,
-    href: React.PropTypes.string,
-    onClick: React.PropTypes.func,
-    onSelect: React.PropTypes.func,
-    navItem: React.PropTypes.bool,
-    noCaret: React.PropTypes.bool
+    dropup:    React.PropTypes.bool,
+    title:     React.PropTypes.node,
+    href:      React.PropTypes.string,
+    onClick:   React.PropTypes.func,
+    onSelect:  React.PropTypes.func,
+    navItem:   React.PropTypes.bool
   },
 
-  render: function render() {
-    var renderMethod = this.props.navItem ? "renderNavItem" : "renderButtonGroup";
+  render: function () {
+    var className = 'dropdown-toggle';
 
-    var caret = this.props.noCaret ? null : React.createElement("span", { className: "caret" });
+    var renderMethod = this.props.navItem ?
+      'renderNavItem' : 'renderButtonGroup';
 
-    return this[renderMethod]([React.createElement(
-      Button,
-      _extends({}, this.props, {
-        ref: "dropdownButton",
-        className: "dropdown-toggle",
-        onClick: this.handleDropdownClick,
-        key: 0,
-        navDropdown: this.props.navItem,
-        navItem: null,
-        title: null,
-        pullRight: null,
-        dropup: null }),
-      this.props.title,
-      " ",
-      caret
-    ), React.createElement(
-      DropdownMenu,
-      {
-        ref: "menu",
-        "aria-labelledby": this.props.id,
-        pullRight: this.props.pullRight,
-        key: 1 },
-      ValidComponentChildren.map(this.props.children, this.renderMenuItem)
-    )]);
+    return this[renderMethod]([
+      React.createElement(Button, React.__spread({}, 
+        this.props, 
+        {ref: "dropdownButton", 
+        className: joinClasses(this.props.className, className), 
+        onClick: this.handleDropdownClick, 
+        key: 0, 
+        navDropdown: this.props.navItem, 
+        navItem: null, 
+        title: null, 
+        pullRight: null, 
+        dropup: null}), 
+        this.props.title, ' ', 
+        React.createElement("span", {className: "caret"})
+      ),
+      React.createElement(DropdownMenu, {
+        ref: "menu", 
+        "aria-labelledby": this.props.id, 
+        pullRight: this.props.pullRight, 
+        key: 1}, 
+        ValidComponentChildren.map(this.props.children, this.renderMenuItem)
+      )
+    ]);
   },
 
-  renderButtonGroup: function renderButtonGroup(children) {
+  renderButtonGroup: function (children) {
     var groupClasses = {
-      open: this.state.open,
-      dropup: this.props.dropup
-    };
+        'open': this.state.open,
+        'dropup': this.props.dropup
+      };
 
-    return React.createElement(
-      ButtonGroup,
-      {
-        bsSize: this.props.bsSize,
-        className: classSet(this.props.className, groupClasses) },
-      children
+    return (
+      React.createElement(ButtonGroup, {
+        bsSize: this.props.bsSize, 
+        className: classSet(groupClasses)}, 
+        children
+      )
     );
   },
 
-  renderNavItem: function renderNavItem(children) {
+  renderNavItem: function (children) {
     var classes = {
-      dropdown: true,
-      open: this.state.open,
-      dropup: this.props.dropup
-    };
+        'dropdown': true,
+        'open': this.state.open,
+        'dropup': this.props.dropup
+      };
 
-    return React.createElement(
-      "li",
-      { className: classSet(this.props.className, classes) },
-      children
+    return (
+      React.createElement("li", {className: classSet(classes)}, 
+        children
+      )
     );
   },
 
-  renderMenuItem: function renderMenuItem(child, index) {
+  renderMenuItem: function (child, index) {
     // Only handle the option selection if an onSelect prop has been set on the
     // component or it's child, this allows a user not to pass an onSelect
     // handler and have the browser preform the default action.
-    var handleOptionSelect = this.props.onSelect || child.props.onSelect ? this.handleOptionSelect : null;
+    var handleOptionSelect = this.props.onSelect || child.props.onSelect ?
+      this.handleOptionSelect : null;
 
-    return cloneElement(child, {
-      // Capture onSelect events
-      onSelect: createChainedFunction(child.props.onSelect, handleOptionSelect),
-      key: child.key ? child.key : index
-    });
+    return cloneWithProps(
+      child,
+      {
+        // Capture onSelect events
+        onSelect: createChainedFunction(child.props.onSelect, handleOptionSelect),
+
+        // Force special props to be transferred
+        key: child.key ? child.key : index,
+        ref: child.ref
+      }
+    );
   },
 
-  handleDropdownClick: function handleDropdownClick(e) {
+  handleDropdownClick: function (e) {
     e.preventDefault();
 
     this.setDropdownState(!this.state.open);
   },
 
-  handleOptionSelect: function handleOptionSelect(key) {
+  handleOptionSelect: function (key) {
     if (this.props.onSelect) {
       this.props.onSelect(key);
     }
@@ -49019,68 +48766,56 @@ var DropdownButton = React.createClass({
 });
 
 module.exports = DropdownButton;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownStateMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownMenu.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var createChainedFunction = require('./utils/createChainedFunction');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var DropdownMenu = React.createClass({
-  displayName: "DropdownMenu",
-
+var DropdownMenu = React.createClass({displayName: "DropdownMenu",
   propTypes: {
     pullRight: React.PropTypes.bool,
     onSelect: React.PropTypes.func
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      "dropdown-menu": true,
-      "dropdown-menu-right": this.props.pullRight
-    };
+        'dropdown-menu': true,
+        'dropdown-menu-right': this.props.pullRight
+      };
 
-    return React.createElement(
-      "ul",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes),
-        role: "menu" }),
-      ValidComponentChildren.map(this.props.children, this.renderMenuItem)
-    );
+    return (
+        React.createElement("ul", React.__spread({}, 
+          this.props, 
+          {className: joinClasses(this.props.className, classSet(classes)), 
+          role: "menu"}), 
+          ValidComponentChildren.map(this.props.children, this.renderMenuItem)
+        )
+      );
   },
 
-  renderMenuItem: function renderMenuItem(child, index) {
-    return cloneElement(child, {
-      // Capture onSelect events
-      onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
+  renderMenuItem: function (child, index) {
+    return cloneWithProps(
+      child,
+      {
+        // Capture onSelect events
+        onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
 
-      // Force special props to be transferred
-      key: child.key ? child.key : index
-    });
+        // Force special props to be transferred
+        key: child.key ? child.key : index,
+        ref: child.ref
+      }
+    );
   }
 });
 
 module.exports = DropdownMenu;
-},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownStateMixin.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var EventListener = _interopRequire(require("./utils/EventListener"));
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js":[function(require,module,exports){
+var React = require('react');
+var EventListener = require('./utils/EventListener');
 
 /**
  * Checks whether a node is within
@@ -49102,13 +48837,13 @@ function isNodeInRoot(node, root) {
 }
 
 var DropdownStateMixin = {
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
       open: false
     };
   },
 
-  setDropdownState: function setDropdownState(newState, onStateChangeComplete) {
+  setDropdownState: function (newState, onStateChangeComplete) {
     if (newState) {
       this.bindRootCloseHandlers();
     } else {
@@ -49120,28 +48855,30 @@ var DropdownStateMixin = {
     }, onStateChangeComplete);
   },
 
-  handleDocumentKeyUp: function handleDocumentKeyUp(e) {
+  handleDocumentKeyUp: function (e) {
     if (e.keyCode === 27) {
       this.setDropdownState(false);
     }
   },
 
-  handleDocumentClick: function handleDocumentClick(e) {
+  handleDocumentClick: function (e) {
     // If the click originated from within this component
     // don't do anything.
-    if (isNodeInRoot(e.target, React.findDOMNode(this))) {
+    if (isNodeInRoot(e.target, this.getDOMNode())) {
       return;
     }
 
     this.setDropdownState(false);
   },
 
-  bindRootCloseHandlers: function bindRootCloseHandlers() {
-    this._onDocumentClickListener = EventListener.listen(document, "click", this.handleDocumentClick);
-    this._onDocumentKeyupListener = EventListener.listen(document, "keyup", this.handleDocumentKeyUp);
+  bindRootCloseHandlers: function () {
+    this._onDocumentClickListener =
+      EventListener.listen(document, 'click', this.handleDocumentClick);
+    this._onDocumentKeyupListener =
+      EventListener.listen(document, 'keyup', this.handleDocumentKeyUp);
   },
 
-  unbindRootCloseHandlers: function unbindRootCloseHandlers() {
+  unbindRootCloseHandlers: function () {
     if (this._onDocumentClickListener) {
       this._onDocumentClickListener.remove();
     }
@@ -49151,29 +48888,22 @@ var DropdownStateMixin = {
     }
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function () {
     this.unbindRootCloseHandlers();
   }
 };
 
 module.exports = DropdownStateMixin;
-},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/EventListener.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/FadeMixin.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
+},{"./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js":[function(require,module,exports){
+/*global document */
 // TODO: listen for onTransitionEnd to remove el
-function getElementsAndSelf(root, classes) {
-  var els = root.querySelectorAll("." + classes.join("."));
+function getElementsAndSelf (root, classes){
+  var els = root.querySelectorAll('.' + classes.join('.'));
 
-  els = [].map.call(els, function (e) {
-    return e;
-  });
+  els = [].map.call(els, function(e){ return e; });
 
-  for (var i = 0; i < classes.length; i++) {
-    if (!root.className.match(new RegExp("\\b" + classes[i] + "\\b"))) {
+  for(var i = 0; i < classes.length; i++){
+    if( !root.className.match(new RegExp('\\b' +  classes[i] + '\\b'))){
       return els;
     }
   }
@@ -49182,157 +48912,131 @@ function getElementsAndSelf(root, classes) {
 }
 
 module.exports = {
-  _fadeIn: function _fadeIn() {
-    var els = undefined;
+  _fadeIn: function () {
+    var els;
 
     if (this.isMounted()) {
-      els = getElementsAndSelf(React.findDOMNode(this), ["fade"]);
+      els = getElementsAndSelf(this.getDOMNode(), ['fade']);
 
       if (els.length) {
         els.forEach(function (el) {
-          el.className += " in";
+          el.className += ' in';
         });
       }
     }
   },
 
-  _fadeOut: function _fadeOut() {
-    var els = getElementsAndSelf(this._fadeOutEl, ["fade", "in"]);
+  _fadeOut: function () {
+    var els = getElementsAndSelf(this._fadeOutEl, ['fade', 'in']);
 
     if (els.length) {
       els.forEach(function (el) {
-        el.className = el.className.replace(/\bin\b/, "");
+        el.className = el.className.replace(/\bin\b/, '');
       });
     }
 
     setTimeout(this._handleFadeOutEnd, 300);
   },
 
-  _handleFadeOutEnd: function _handleFadeOutEnd() {
+  _handleFadeOutEnd: function () {
     if (this._fadeOutEl && this._fadeOutEl.parentNode) {
       this._fadeOutEl.parentNode.removeChild(this._fadeOutEl);
     }
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount: function () {
     if (document.querySelectorAll) {
       // Firefox needs delay for transition to be triggered
       setTimeout(this._fadeIn, 20);
     }
   },
 
-  componentWillUnmount: function componentWillUnmount() {
-    var els = getElementsAndSelf(React.findDOMNode(this), ["fade"]),
-        container = this.props.container && React.findDOMNode(this.props.container) || document.body;
+  componentWillUnmount: function () {
+    var els = getElementsAndSelf(this.getDOMNode(), ['fade']),
+        container = (this.props.container && this.props.container.getDOMNode()) || document.body;
 
     if (els.length) {
-      this._fadeOutEl = document.createElement("div");
+      this._fadeOutEl = document.createElement('div');
       container.appendChild(this._fadeOutEl);
-      this._fadeOutEl.appendChild(React.findDOMNode(this).cloneNode(true));
+      this._fadeOutEl.appendChild(this.getDOMNode().cloneNode(true));
       // Firefox needs delay for transition to be triggered
       setTimeout(this._fadeOut, 20);
     }
   }
 };
-},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Glyphicon.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Glyphicon.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
+var constants = require('./constants');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var constants = _interopRequire(require("./constants"));
-
-var Glyphicon = React.createClass({
-  displayName: "Glyphicon",
-
+var Glyphicon = React.createClass({displayName: "Glyphicon",
   mixins: [BootstrapMixin],
 
   propTypes: {
     glyph: React.PropTypes.oneOf(constants.GLYPHS).isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "glyphicon"
+      bsClass: 'glyphicon'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
 
-    classes["glyphicon-" + this.props.glyph] = true;
+    classes['glyphicon-' + this.props.glyph] = true;
 
-    return React.createElement(
-      "span",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("span", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Glyphicon;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/constants.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Grid.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./constants":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Grid.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Grid = React.createClass({
-  displayName: "Grid",
-
+var Grid = React.createClass({displayName: "Grid",
   propTypes: {
     fluid: React.PropTypes.bool,
     componentClass: React.PropTypes.node.isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      componentClass: "div"
+      componentClass: 'div'
     };
   },
 
-  render: function render() {
+  render: function () {
     var ComponentClass = this.props.componentClass;
-    var className = this.props.fluid ? "container-fluid" : "container";
+    var className = this.props.fluid ? 'container-fluid' : 'container';
 
-    return React.createElement(
-      ComponentClass,
-      _extends({}, this.props, {
-        className: classSet(this.props.className, className) }),
-      this.props.children
+    return (
+      React.createElement(ComponentClass, React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, className)}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Grid;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Input.js":[function(require,module,exports){
-"use strict";
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Input.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var Button = require('./Button');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Button = _interopRequire(require("./Button"));
-
-var Input = React.createClass({
-  displayName: "Input",
-
+var Input = React.createClass({displayName: "Input",
   propTypes: {
     type: React.PropTypes.string,
     label: React.PropTypes.node,
@@ -49341,15 +49045,14 @@ var Input = React.createClass({
     addonAfter: React.PropTypes.node,
     buttonBefore: React.PropTypes.node,
     buttonAfter: React.PropTypes.node,
-    bsSize: React.PropTypes.oneOf(["small", "medium", "large"]),
-    bsStyle: function bsStyle(props) {
-      if (props.type === "submit") {
+    bsStyle: function(props) {
+      if (props.type === 'submit') {
         // Return early if `type=submit` as the `Button` component
         // it transfers these props to has its own propType checks.
-        return null;
+        return;
       }
 
-      return React.PropTypes.oneOf(["success", "warning", "error"]).apply(null, arguments);
+      return React.PropTypes.oneOf(['success', 'warning', 'error']).apply(null, arguments);
     },
     hasFeedback: React.PropTypes.bool,
     groupClassName: React.PropTypes.string,
@@ -49358,241 +49061,237 @@ var Input = React.createClass({
     disabled: React.PropTypes.bool
   },
 
-  getInputDOMNode: function getInputDOMNode() {
-    return React.findDOMNode(this.refs.input);
+  getInputDOMNode: function () {
+    return this.refs.input.getDOMNode();
   },
 
-  getValue: function getValue() {
-    if (this.props.type === "static") {
+  getValue: function () {
+    if (this.props.type === 'static') {
       return this.props.value;
-    } else if (this.props.type) {
-      if (this.props.type === "select" && this.props.multiple) {
-        return this.getSelectedOptions();
-      } else {
-        return this.getInputDOMNode().value;
-      }
-    } else {
-      throw "Cannot use getValue without specifying input type.";
+    }
+    else if (this.props.type) {
+      return this.getInputDOMNode().value;
+    }
+    else {
+      throw Error('Cannot use getValue without specifying input type.');
     }
   },
 
-  getChecked: function getChecked() {
+  getChecked: function () {
     return this.getInputDOMNode().checked;
   },
 
-  getSelectedOptions: function getSelectedOptions() {
-    var values = [];
-
-    Array.prototype.forEach.call(this.getInputDOMNode().getElementsByTagName("option"), function (option) {
-      if (option.selected) {
-        var value = option.getAttribute("value") || option.innerHTML;
-
-        values.push(value);
-      }
-    });
-
-    return values;
+  isCheckboxOrRadio: function () {
+    return this.props.type === 'radio' || this.props.type === 'checkbox';
   },
 
-  isCheckboxOrRadio: function isCheckboxOrRadio() {
-    return this.props.type === "radio" || this.props.type === "checkbox";
+  isFile: function () {
+    return this.props.type === 'file';
   },
 
-  isFile: function isFile() {
-    return this.props.type === "file";
-  },
-
-  renderInput: function renderInput() {
+  renderInput: function () {
     var input = null;
 
     if (!this.props.type) {
-      return this.props.children;
+      return this.props.children
     }
 
     switch (this.props.type) {
-      case "select":
-        input = React.createElement(
-          "select",
-          _extends({}, this.props, { className: classSet(this.props.className, "form-control"), ref: "input", key: "input" }),
-          this.props.children
+      case 'select':
+        input = (
+          React.createElement("select", React.__spread({},  this.props, {className: joinClasses(this.props.className, 'form-control'), ref: "input", key: "input"}), 
+            this.props.children
+          )
         );
         break;
-      case "textarea":
-        input = React.createElement("textarea", _extends({}, this.props, { className: classSet(this.props.className, "form-control"), ref: "input", key: "input" }));
+      case 'textarea':
+        input = React.createElement("textarea", React.__spread({},  this.props, {className: joinClasses(this.props.className, 'form-control'), ref: "input", key: "input"}));
         break;
-      case "static":
-        input = React.createElement(
-          "p",
-          _extends({}, this.props, { className: classSet(this.props.className, "form-control-static"), ref: "input", key: "input" }),
-          this.props.value
+      case 'static':
+        input = (
+          React.createElement("p", React.__spread({},  this.props, {className: joinClasses(this.props.className, 'form-control-static'), ref: "input", key: "input"}), 
+            this.props.value
+          )
         );
         break;
-      case "submit":
-        input = React.createElement(Button, _extends({}, this.props, { componentClass: "input", ref: "input", key: "input" }));
+      case 'submit':
+        input = (
+          React.createElement(Button, React.__spread({},  this.props, {componentClass: "input", ref: "input", key: "input"}))
+        );
         break;
       default:
-        var className = this.isCheckboxOrRadio() || this.isFile() ? "" : "form-control";
-        input = React.createElement("input", _extends({}, this.props, { className: classSet(this.props.className, className), ref: "input", key: "input" }));
+        var className = this.isCheckboxOrRadio() || this.isFile() ? '' : 'form-control';
+        input = React.createElement("input", React.__spread({},  this.props, {className: joinClasses(this.props.className, className), ref: "input", key: "input"}));
     }
 
     return input;
   },
 
-  renderInputGroup: function renderInputGroup(children) {
-    var addonBefore = this.props.addonBefore ? React.createElement(
-      "span",
-      { className: "input-group-addon", key: "addonBefore" },
-      this.props.addonBefore
+  renderInputGroup: function (children) {
+    var addonBefore = this.props.addonBefore ? (
+      React.createElement("span", {className: "input-group-addon", key: "addonBefore"}, 
+        this.props.addonBefore
+      )
     ) : null;
 
-    var addonAfter = this.props.addonAfter ? React.createElement(
-      "span",
-      { className: "input-group-addon", key: "addonAfter" },
-      this.props.addonAfter
+    var addonAfter = this.props.addonAfter ? (
+      React.createElement("span", {className: "input-group-addon", key: "addonAfter"}, 
+        this.props.addonAfter
+      )
     ) : null;
 
-    var buttonBefore = this.props.buttonBefore ? React.createElement(
-      "span",
-      { className: "input-group-btn" },
-      this.props.buttonBefore
+    var buttonBefore = this.props.buttonBefore ? (
+      React.createElement("span", {className: "input-group-btn"}, 
+        this.props.buttonBefore
+      )
     ) : null;
 
-    var buttonAfter = this.props.buttonAfter ? React.createElement(
-      "span",
-      { className: "input-group-btn" },
-      this.props.buttonAfter
+    var buttonAfter = this.props.buttonAfter ? (
+      React.createElement("span", {className: "input-group-btn"}, 
+        this.props.buttonAfter
+      )
     ) : null;
 
-    var inputGroupClassName = undefined;
-    switch (this.props.bsSize) {
-      case "small":
-        inputGroupClassName = "input-group-sm";break;
-      case "large":
-        inputGroupClassName = "input-group-lg";break;
-    }
-
-    return addonBefore || addonAfter || buttonBefore || buttonAfter ? React.createElement(
-      "div",
-      { className: classSet(inputGroupClassName, "input-group"), key: "input-group" },
-      addonBefore,
-      buttonBefore,
-      children,
-      addonAfter,
-      buttonAfter
+    return addonBefore || addonAfter || buttonBefore || buttonAfter ? (
+      React.createElement("div", {className: "input-group", key: "input-group"}, 
+        addonBefore, 
+        buttonBefore, 
+        children, 
+        addonAfter, 
+        buttonAfter
+      )
     ) : children;
   },
 
-  renderIcon: function renderIcon() {
+  renderIcon: function () {
     var classes = {
-      glyphicon: true,
-      "form-control-feedback": true,
-      "glyphicon-ok": this.props.bsStyle === "success",
-      "glyphicon-warning-sign": this.props.bsStyle === "warning",
-      "glyphicon-remove": this.props.bsStyle === "error"
+      'glyphicon': true,
+      'form-control-feedback': true,
+      'glyphicon-ok': this.props.bsStyle === 'success',
+      'glyphicon-warning-sign': this.props.bsStyle === 'warning',
+      'glyphicon-remove': this.props.bsStyle === 'error'
     };
 
-    return this.props.hasFeedback ? React.createElement("span", { className: classSet(classes), key: "icon" }) : null;
-  },
-
-  renderHelp: function renderHelp() {
-    return this.props.help ? React.createElement(
-      "span",
-      { className: "help-block", key: "help" },
-      this.props.help
+    return this.props.hasFeedback ? (
+      React.createElement("span", {className: classSet(classes), key: "icon"})
     ) : null;
   },
 
-  renderCheckboxandRadioWrapper: function renderCheckboxandRadioWrapper(children) {
+  renderHelp: function () {
+    return this.props.help ? (
+      React.createElement("span", {className: "help-block", key: "help"}, 
+        this.props.help
+      )
+    ) : null;
+  },
+
+  renderCheckboxandRadioWrapper: function (children) {
     var classes = {
-      checkbox: this.props.type === "checkbox",
-      radio: this.props.type === "radio"
+      'checkbox': this.props.type === 'checkbox',
+      'radio': this.props.type === 'radio'
     };
 
-    return React.createElement(
-      "div",
-      { className: classSet(classes), key: "checkboxRadioWrapper" },
-      children
+    return (
+      React.createElement("div", {className: classSet(classes), key: "checkboxRadioWrapper"}, 
+        children
+      )
     );
   },
 
-  renderWrapper: function renderWrapper(children) {
-    return this.props.wrapperClassName ? React.createElement(
-      "div",
-      { className: this.props.wrapperClassName, key: "wrapper" },
-      children
+  renderWrapper: function (children) {
+    return this.props.wrapperClassName ? (
+      React.createElement("div", {className: this.props.wrapperClassName, key: "wrapper"}, 
+        children
+      )
     ) : children;
   },
 
-  renderLabel: function renderLabel(children) {
+  renderLabel: function (children) {
     var classes = {
-      "control-label": !this.isCheckboxOrRadio()
+      'control-label': !this.isCheckboxOrRadio()
     };
     classes[this.props.labelClassName] = this.props.labelClassName;
 
-    return this.props.label ? React.createElement(
-      "label",
-      { htmlFor: this.props.id, className: classSet(classes), key: "label" },
-      children,
-      this.props.label
+    return this.props.label ? (
+      React.createElement("label", {htmlFor: this.props.id, className: classSet(classes), key: "label"}, 
+        children, 
+        this.props.label
+      )
     ) : children;
   },
 
-  renderFormGroup: function renderFormGroup(children) {
+  renderFormGroup: function (children) {
     var classes = {
-      "form-group": true,
-      "has-feedback": this.props.hasFeedback,
-      "has-success": this.props.bsStyle === "success",
-      "has-warning": this.props.bsStyle === "warning",
-      "has-error": this.props.bsStyle === "error"
+      'form-group': true,
+      'has-feedback': this.props.hasFeedback,
+      'has-success': this.props.bsStyle === 'success',
+      'has-warning': this.props.bsStyle === 'warning',
+      'has-error': this.props.bsStyle === 'error'
     };
     classes[this.props.groupClassName] = this.props.groupClassName;
 
-    return React.createElement(
-      "div",
-      { className: classSet(classes) },
-      children
+    return (
+      React.createElement("div", {className: classSet(classes)}, 
+        children
+      )
     );
   },
 
-  render: function render() {
+  render: function () {
     if (this.isCheckboxOrRadio()) {
-      return this.renderFormGroup(this.renderWrapper([this.renderCheckboxandRadioWrapper(this.renderLabel(this.renderInput())), this.renderHelp()]));
-    } else {
-      return this.renderFormGroup([this.renderLabel(), this.renderWrapper([this.renderInputGroup(this.renderInput()), this.renderIcon(), this.renderHelp()])]);
+      return this.renderFormGroup(
+        this.renderWrapper([
+          this.renderCheckboxandRadioWrapper(
+            this.renderLabel(
+              this.renderInput()
+            )
+          ),
+          this.renderHelp()
+        ])
+      );
+    }
+    else {
+      return this.renderFormGroup([
+        this.renderLabel(),
+        this.renderWrapper([
+          this.renderInputGroup(
+            this.renderInput()
+          ),
+          this.renderIcon(),
+          this.renderHelp()
+        ])
+      ]);
     }
   }
 });
 
 module.exports = Input;
-},{"./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Button.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Interpolate.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
+},{"./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js":[function(require,module,exports){
 // https://www.npmjs.org/package/react-interpolate-component
-// TODO: Drop this in favor of es6 string interpolation
+'use strict';
 
-var React = _interopRequire(require("react"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var assign = _interopRequire(require("./utils/Object.assign"));
+var React = require('react');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var assign = require('./utils/Object.assign');
 
 var REGEXP = /\%\((.+?)\)s/;
 
 var Interpolate = React.createClass({
-  displayName: "Interpolate",
+  displayName: 'Interpolate',
 
   propTypes: {
     format: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
-    return { component: "span" };
+  getDefaultProps: function() {
+    return { component: 'span' };
   },
 
-  render: function render() {
-    var format = ValidComponentChildren.hasValidComponent(this.props.children) || typeof this.props.children === "string" ? this.props.children : this.props.format;
+  render: function() {
+    var format = (ValidComponentChildren.hasValidComponent(this.props.children) ||
+        (typeof this.props.children === 'string')) ?
+        this.props.children : this.props.format;
     var parent = this.props.component;
     var unsafe = this.props.unsafe === true;
     var props = assign({}, this.props);
@@ -49603,8 +49302,8 @@ var Interpolate = React.createClass({
     delete props.unsafe;
 
     if (unsafe) {
-      var content = format.split(REGEXP).reduce(function (memo, match, index) {
-        var html = undefined;
+      var content = format.split(REGEXP).reduce(function(memo, match, index) {
+        var html;
 
         if (index % 2 === 0) {
           html = match;
@@ -49614,20 +49313,20 @@ var Interpolate = React.createClass({
         }
 
         if (React.isValidElement(html)) {
-          throw new Error("cannot interpolate a React component into unsafe text");
+          throw new Error('cannot interpolate a React component into unsafe text');
         }
 
         memo += html;
 
         return memo;
-      }, "");
+      }, '');
 
       props.dangerouslySetInnerHTML = { __html: content };
 
       return React.createElement(parent, props);
     } else {
-      var kids = format.split(REGEXP).reduce(function (memo, match, index) {
-        var child = undefined;
+      var kids = format.split(REGEXP).reduce(function(memo, match, index) {
+        var child;
 
         if (index % 2 === 0) {
           if (match.length === 0) {
@@ -49651,127 +49350,97 @@ var Interpolate = React.createClass({
 });
 
 module.exports = Interpolate;
-},{"./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/Object.assign.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Jumbotron.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Jumbotron.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var Jumbotron = React.createClass({displayName: "Jumbotron",
 
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Jumbotron = React.createClass({
-  displayName: "Jumbotron",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, "jumbotron") }),
-      this.props.children
+  render: function () {
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, 'jumbotron')}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Jumbotron;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Label.js":[function(require,module,exports){
-"use strict";
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Label.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Label = React.createClass({
-  displayName: "Label",
-
+var Label = React.createClass({displayName: "Label",
   mixins: [BootstrapMixin],
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "label",
-      bsStyle: "default"
+      bsClass: 'label',
+      bsStyle: 'default'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
 
-    return React.createElement(
-      "span",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("span", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Label;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ListGroup.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroup.js":[function(require,module,exports){
+var React = require('react');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var createChainedFunction = require('./utils/createChainedFunction');
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var ListGroup = React.createClass({
-  displayName: "ListGroup",
-
+var ListGroup = React.createClass({displayName: "ListGroup",
   propTypes: {
     onClick: React.PropTypes.func
   },
 
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "list-group" },
-      ValidComponentChildren.map(this.props.children, this.renderListItem)
+  render: function () {
+    return (
+      React.createElement("div", {className: "list-group"}, 
+        ValidComponentChildren.map(this.props.children, this.renderListItem)
+      )
     );
   },
 
-  renderListItem: function renderListItem(child, index) {
-    return cloneElement(child, {
+  renderListItem: function (child, index) {
+    return cloneWithProps(child, {
+      onClick: createChainedFunction(child.props.onClick, this.props.onClick),
+      ref: child.ref,
       key: child.key ? child.key : index
     });
   }
 });
 
 module.exports = ListGroup;
-},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ListGroupItem.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var BootstrapMixin = require('./BootstrapMixin');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var ListGroupItem = React.createClass({
-  displayName: "ListGroupItem",
-
+var ListGroupItem = React.createClass({displayName: "ListGroupItem",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    bsStyle: React.PropTypes.oneOf(["danger", "info", "success", "warning"]),
+    bsStyle: React.PropTypes.oneOf(['danger','info','success','warning']),
     active: React.PropTypes.any,
     disabled: React.PropTypes.any,
     header: React.PropTypes.node,
@@ -49781,17 +49450,17 @@ var ListGroupItem = React.createClass({
     target: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "list-group-item"
+      bsClass: 'list-group-item'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
 
-    classes.active = this.props.active;
-    classes.disabled = this.props.disabled;
+    classes['active'] = this.props.active;
+    classes['disabled'] = this.props.disabled;
 
     if (this.props.href || this.props.target || this.props.onClick) {
       return this.renderAnchor(classes);
@@ -49800,100 +49469,103 @@ var ListGroupItem = React.createClass({
     }
   },
 
-  renderSpan: function renderSpan(classes) {
-    return React.createElement(
-      "span",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.header ? this.renderStructuredContent() : this.props.children
+  renderSpan: function (classes) {
+    return (
+      React.createElement("span", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.header ? this.renderStructuredContent() : this.props.children
+      )
     );
   },
 
-  renderAnchor: function renderAnchor(classes) {
-    return React.createElement(
-      "a",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes)
-      }),
-      this.props.header ? this.renderStructuredContent() : this.props.children
+  renderAnchor: function (classes) {
+    return (
+      React.createElement("a", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes)), 
+        onClick: this.handleClick}), 
+        this.props.header ? this.renderStructuredContent() : this.props.children
+      )
     );
   },
 
-  renderStructuredContent: function renderStructuredContent() {
-    var header = undefined;
+  renderStructuredContent: function () {
+    var header;
     if (React.isValidElement(this.props.header)) {
-      header = cloneElement(this.props.header, {
-        key: "header",
-        className: classSet(this.props.header.props.className, "list-group-item-heading")
+      header = cloneWithProps(this.props.header, {
+        className: 'list-group-item-heading'
       });
     } else {
-      header = React.createElement(
-        "h4",
-        { key: "header", className: "list-group-item-heading" },
-        this.props.header
+      header = (
+        React.createElement("h4", {className: "list-group-item-heading"}, 
+          this.props.header
+        )
       );
     }
 
-    var content = React.createElement(
-      "p",
-      { key: "content", className: "list-group-item-text" },
-      this.props.children
+    var content = (
+      React.createElement("p", {className: "list-group-item-text"}, 
+        this.props.children
+      )
     );
 
-    return [header, content];
+    return {
+      header: header,
+      content: content
+    };
+  },
+
+  handleClick: function (e) {
+    if (this.props.onClick) {
+      e.preventDefault();
+      this.props.onClick(this.props.eventKey, this.props.href, this.props.target);
+    }
   }
 });
 
 module.exports = ListGroupItem;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/MenuItem.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/MenuItem.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var MenuItem = React.createClass({
-  displayName: "MenuItem",
-
+var MenuItem = React.createClass({displayName: "MenuItem",
   propTypes: {
-    header: React.PropTypes.bool,
-    divider: React.PropTypes.bool,
-    href: React.PropTypes.string,
-    title: React.PropTypes.string,
-    target: React.PropTypes.string,
-    onSelect: React.PropTypes.func,
-    eventKey: React.PropTypes.any
+    header:    React.PropTypes.bool,
+    divider:   React.PropTypes.bool,
+    href:      React.PropTypes.string,
+    title:     React.PropTypes.string,
+    target:    React.PropTypes.string,
+    onSelect:  React.PropTypes.func,
+    eventKey:  React.PropTypes.any
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      href: "#"
+      href: '#'
     };
   },
 
-  handleClick: function handleClick(e) {
+  handleClick: function (e) {
     if (this.props.onSelect) {
       e.preventDefault();
       this.props.onSelect(this.props.eventKey, this.props.href, this.props.target);
     }
   },
 
-  renderAnchor: function renderAnchor() {
-    return React.createElement(
-      "a",
-      { onClick: this.handleClick, href: this.props.href, target: this.props.target, title: this.props.title, tabIndex: "-1" },
-      this.props.children
+  renderAnchor: function () {
+    return (
+      React.createElement("a", {onClick: this.handleClick, href: this.props.href, target: this.props.target, title: this.props.title, tabIndex: "-1"}, 
+        this.props.children
+      )
     );
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      "dropdown-header": this.props.header,
-      divider: this.props.divider
-    };
+        'dropdown-header': this.props.header,
+        'divider': this.props.divider
+      };
 
     var children = null;
     if (this.props.header) {
@@ -49902,55 +49574,47 @@ var MenuItem = React.createClass({
       children = this.renderAnchor();
     }
 
-    return React.createElement(
-      "li",
-      _extends({}, this.props, { role: "presentation", title: null, href: null,
-        className: classSet(this.props.className, classes) }),
-      children
+    return (
+      React.createElement("li", React.__spread({},  this.props, {role: "presentation", title: null, href: null, 
+        className: joinClasses(this.props.className, classSet(classes))}), 
+        children
+      )
     );
   }
 });
 
 module.exports = MenuItem;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Modal.js":[function(require,module,exports){
-"use strict";
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Modal.js":[function(require,module,exports){
+/* global document:false */
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
+var FadeMixin = require('./FadeMixin');
+var EventListener = require('./utils/EventListener');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var FadeMixin = _interopRequire(require("./FadeMixin"));
-
-var EventListener = _interopRequire(require("./utils/EventListener"));
 
 // TODO:
 // - aria-labelledby
 // - Add `modal-body` div if only one child passed in that doesn't already have it
 // - Tests
 
-var Modal = React.createClass({
-  displayName: "Modal",
-
+var Modal = React.createClass({displayName: "Modal",
   mixins: [BootstrapMixin, FadeMixin],
 
   propTypes: {
     title: React.PropTypes.node,
-    backdrop: React.PropTypes.oneOf(["static", true, false]),
+    backdrop: React.PropTypes.oneOf(['static', true, false]),
     keyboard: React.PropTypes.bool,
     closeButton: React.PropTypes.bool,
     animation: React.PropTypes.bool,
     onRequestHide: React.PropTypes.func.isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "modal",
+      bsClass: 'modal',
       backdrop: true,
       keyboard: true,
       animation: true,
@@ -49958,128 +49622,116 @@ var Modal = React.createClass({
     };
   },
 
-  render: function render() {
-    var modalStyle = { display: "block" };
+  render: function () {
+    var modalStyle = {display: 'block'};
     var dialogClasses = this.getBsClassSet();
     delete dialogClasses.modal;
-    dialogClasses["modal-dialog"] = true;
+    dialogClasses['modal-dialog'] = true;
 
     var classes = {
       modal: true,
       fade: this.props.animation,
-      "in": !this.props.animation || !document.querySelectorAll
+      'in': !this.props.animation || !document.querySelectorAll
     };
 
-    var modal = React.createElement(
-      "div",
-      _extends({}, this.props, {
-        title: null,
-        tabIndex: "-1",
-        role: "dialog",
-        style: modalStyle,
-        className: classSet(this.props.className, classes),
-        onClick: this.props.backdrop === true ? this.handleBackdropClick : null,
-        ref: "modal" }),
-      React.createElement(
-        "div",
-        { className: classSet(dialogClasses) },
-        React.createElement(
-          "div",
-          { className: "modal-content", style: { overflow: "hidden" } },
-          this.props.title ? this.renderHeader() : null,
-          this.props.children
+    var modal = (
+      React.createElement("div", React.__spread({}, 
+        this.props, 
+        {title: null, 
+        tabIndex: "-1", 
+        role: "dialog", 
+        style: modalStyle, 
+        className: joinClasses(this.props.className, classSet(classes)), 
+        onClick: this.props.backdrop === true ? this.handleBackdropClick : null, 
+        ref: "modal"}), 
+        React.createElement("div", {className: classSet(dialogClasses)}, 
+          React.createElement("div", {className: "modal-content"}, 
+            this.props.title ? this.renderHeader() : null, 
+            this.props.children
+          )
         )
       )
     );
 
-    return this.props.backdrop ? this.renderBackdrop(modal) : modal;
+    return this.props.backdrop ?
+      this.renderBackdrop(modal) : modal;
   },
 
-  renderBackdrop: function renderBackdrop(modal) {
+  renderBackdrop: function (modal) {
     var classes = {
-      "modal-backdrop": true,
-      fade: this.props.animation
+      'modal-backdrop': true,
+      'fade': this.props.animation
     };
 
-    classes["in"] = !this.props.animation || !document.querySelectorAll;
+    classes['in'] = !this.props.animation || !document.querySelectorAll;
 
-    var onClick = this.props.backdrop === true ? this.handleBackdropClick : null;
+    var onClick = this.props.backdrop === true ?
+      this.handleBackdropClick : null;
 
-    return React.createElement(
-      "div",
-      null,
-      React.createElement("div", { className: classSet(classes), ref: "backdrop", onClick: onClick }),
-      modal
+    return (
+      React.createElement("div", null, 
+        React.createElement("div", {className: classSet(classes), ref: "backdrop", onClick: onClick}), 
+        modal
+      )
     );
   },
 
-  renderHeader: function renderHeader() {
-    var closeButton = undefined;
+  renderHeader: function () {
+    var closeButton;
     if (this.props.closeButton) {
-      closeButton = React.createElement(
-        "button",
-        { type: "button", className: "close", "aria-hidden": "true", onClick: this.props.onRequestHide },
-        "×"
-      );
+      closeButton = (
+          React.createElement("button", {type: "button", className: "close", "aria-hidden": "true", onClick: this.props.onRequestHide}, "×")
+        );
     }
 
-    var style = this.props.bsStyle;
-    var classes = {
-      "modal-header": true
-    };
-    classes["bg-" + style] = style;
-    classes["text-" + style] = style;
-
-    var className = classSet(classes);
-
-    return React.createElement(
-      "div",
-      { className: className },
-      closeButton,
-      this.renderTitle()
+    return (
+      React.createElement("div", {className: "modal-header"}, 
+        closeButton, 
+        this.renderTitle()
+      )
     );
   },
 
-  renderTitle: function renderTitle() {
-    return React.isValidElement(this.props.title) ? this.props.title : React.createElement(
-      "h4",
-      { className: "modal-title" },
-      this.props.title
+  renderTitle: function () {
+    return (
+      React.isValidElement(this.props.title) ?
+        this.props.title : React.createElement("h4", {className: "modal-title"}, this.props.title)
     );
   },
 
-  iosClickHack: function iosClickHack() {
+  iosClickHack: function () {
     // IOS only allows click events to be delegated to the document on elements
     // it considers 'clickable' - anchors, buttons, etc. We fake a click handler on the
     // DOM nodes themselves. Remove if handled by React: https://github.com/facebook/react/issues/1169
-    React.findDOMNode(this.refs.modal).onclick = function () {};
-    React.findDOMNode(this.refs.backdrop).onclick = function () {};
+    this.refs.modal.getDOMNode().onclick = function () {};
+    this.refs.backdrop.getDOMNode().onclick = function () {};
   },
 
-  componentDidMount: function componentDidMount() {
-    this._onDocumentKeyupListener = EventListener.listen(document, "keyup", this.handleDocumentKeyUp);
+  componentDidMount: function () {
+    this._onDocumentKeyupListener =
+      EventListener.listen(document, 'keyup', this.handleDocumentKeyUp);
 
-    var container = this.props.container && React.findDOMNode(this.props.container) || document.body;
-    container.className += container.className.length ? " modal-open" : "modal-open";
+    var container = (this.props.container && this.props.container.getDOMNode()) || document.body;
+    container.className += container.className.length ? ' modal-open' : 'modal-open';
 
     if (this.props.backdrop) {
       this.iosClickHack();
     }
   },
 
-  componentDidUpdate: function componentDidUpdate(prevProps) {
+  componentDidUpdate: function (prevProps) {
     if (this.props.backdrop && this.props.backdrop !== prevProps.backdrop) {
       this.iosClickHack();
     }
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function () {
     this._onDocumentKeyupListener.remove();
-    var container = this.props.container && React.findDOMNode(this.props.container) || document.body;
-    container.className = container.className.replace(/ ?modal-open/, "");
+    var container = (this.props.container && this.props.container.getDOMNode()) || document.body;
+    container.className = container.className.replace(/ ?modal-open/, '');
   },
 
-  handleBackdropClick: function handleBackdropClick(e) {
+  handleBackdropClick: function (e) {
     if (e.target !== e.currentTarget) {
       return;
     }
@@ -50087,7 +49739,7 @@ var Modal = React.createClass({
     this.props.onRequestHide();
   },
 
-  handleDocumentKeyUp: function handleDocumentKeyUp(e) {
+  handleDocumentKeyUp: function (e) {
     if (this.props.keyboard && e.keyCode === 27) {
       this.props.onRequestHide();
     }
@@ -50095,105 +49747,88 @@ var Modal = React.createClass({
 });
 
 module.exports = Modal;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/FadeMixin.js","./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/EventListener.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ModalTrigger.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./utils/EventListener":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js":[function(require,module,exports){
+var React = require('react');
+var OverlayMixin = require('./OverlayMixin');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _react = require("react");
+var createChainedFunction = require('./utils/createChainedFunction');
 
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var OverlayMixin = _interopRequire(require("./OverlayMixin"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var ModalTrigger = React.createClass({
-  displayName: "ModalTrigger",
-
+var ModalTrigger = React.createClass({displayName: "ModalTrigger",
   mixins: [OverlayMixin],
 
   propTypes: {
     modal: React.PropTypes.node.isRequired
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
       isOverlayShown: false
     };
   },
 
-  show: function show() {
+  show: function () {
     this.setState({
       isOverlayShown: true
     });
   },
 
-  hide: function hide() {
+  hide: function () {
     this.setState({
       isOverlayShown: false
     });
   },
 
-  toggle: function toggle() {
+  toggle: function () {
     this.setState({
       isOverlayShown: !this.state.isOverlayShown
     });
   },
 
-  renderOverlay: function renderOverlay() {
+  renderOverlay: function () {
     if (!this.state.isOverlayShown) {
       return React.createElement("span", null);
     }
 
-    return cloneElement(this.props.modal, {
-      onRequestHide: this.hide
-    });
+    return cloneWithProps(
+      this.props.modal,
+      {
+        onRequestHide: this.hide
+      }
+    );
   },
 
-  render: function render() {
+  render: function () {
     var child = React.Children.only(this.props.children);
-    return cloneElement(child, {
-      onClick: createChainedFunction(child.props.onClick, this.toggle)
-    });
+    return cloneWithProps(
+      child,
+      {
+        onClick: createChainedFunction(child.props.onClick, this.toggle)
+      }
+    );
   }
 });
 
 module.exports = ModalTrigger;
-},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Nav.js":[function(require,module,exports){
-"use strict";
+},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var BootstrapMixin = require('./BootstrapMixin');
+var CollapsableMixin = require('./CollapsableMixin');
+var classSet = require('./utils/classSet');
+var domUtils = require('./utils/domUtils');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var createChainedFunction = require('./utils/createChainedFunction');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var CollapsableMixin = _interopRequire(require("./CollapsableMixin"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var domUtils = _interopRequire(require("./utils/domUtils"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var Nav = React.createClass({
-  displayName: "Nav",
-
+var Nav = React.createClass({displayName: "Nav",
   mixins: [BootstrapMixin, CollapsableMixin],
 
   propTypes: {
-    bsStyle: React.PropTypes.oneOf(["tabs", "pills"]),
+    bsStyle: React.PropTypes.oneOf(['tabs','pills']),
     stacked: React.PropTypes.bool,
     justified: React.PropTypes.bool,
     onSelect: React.PropTypes.func,
@@ -50204,62 +49839,62 @@ var Nav = React.createClass({
     right: React.PropTypes.bool
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "nav"
+      bsClass: 'nav'
     };
   },
 
-  getCollapsableDOMNode: function getCollapsableDOMNode() {
-    return React.findDOMNode(this);
+  getCollapsableDOMNode: function () {
+    return this.getDOMNode();
   },
 
-  getCollapsableDimensionValue: function getCollapsableDimensionValue() {
-    var node = React.findDOMNode(this.refs.ul),
+  getCollapsableDimensionValue: function () {
+    var node = this.refs.ul.getDOMNode(),
         height = node.offsetHeight,
         computedStyles = domUtils.getComputedStyles(node);
 
     return height + parseInt(computedStyles.marginTop, 10) + parseInt(computedStyles.marginBottom, 10);
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.props.collapsable ? this.getCollapsableClassSet() : {};
 
-    classes["navbar-collapse"] = this.props.collapsable;
+    classes['navbar-collapse'] = this.props.collapsable;
 
     if (this.props.navbar && !this.props.collapsable) {
-      return this.renderUl();
+      return (this.renderUl());
     }
 
-    return React.createElement(
-      "nav",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.renderUl()
+    return (
+      React.createElement("nav", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.renderUl()
+      )
     );
   },
 
-  renderUl: function renderUl() {
+  renderUl: function () {
     var classes = this.getBsClassSet();
 
-    classes["nav-stacked"] = this.props.stacked;
-    classes["nav-justified"] = this.props.justified;
-    classes["navbar-nav"] = this.props.navbar;
-    classes["pull-right"] = this.props.pullRight;
-    classes["navbar-right"] = this.props.right;
+    classes['nav-stacked'] = this.props.stacked;
+    classes['nav-justified'] = this.props.justified;
+    classes['navbar-nav'] = this.props.navbar;
+    classes['pull-right'] = this.props.pullRight;
+    classes['navbar-right'] = this.props.right;
 
-    return React.createElement(
-      "ul",
-      _extends({}, this.props, { className: classSet(this.props.className, classes), ref: "ul" }),
-      ValidComponentChildren.map(this.props.children, this.renderNavItem)
+    return (
+      React.createElement("ul", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), ref: "ul"}), 
+        ValidComponentChildren.map(this.props.children, this.renderNavItem)
+      )
     );
   },
 
-  getChildActiveProp: function getChildActiveProp(child) {
+  getChildActiveProp: function (child) {
     if (child.props.active) {
       return true;
     }
     if (this.props.activeKey != null) {
-      if (child.props.eventKey === this.props.activeKey) {
+      if (child.props.eventKey == this.props.activeKey) {
         return true;
       }
     }
@@ -50272,37 +49907,31 @@ var Nav = React.createClass({
     return child.props.active;
   },
 
-  renderNavItem: function renderNavItem(child, index) {
-    return cloneElement(child, {
-      active: this.getChildActiveProp(child),
-      activeKey: this.props.activeKey,
-      activeHref: this.props.activeHref,
-      onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
-      key: child.key ? child.key : index,
-      navItem: true
-    });
+  renderNavItem: function (child, index) {
+    return cloneWithProps(
+      child,
+      {
+        active: this.getChildActiveProp(child),
+        activeKey: this.props.activeKey,
+        activeHref: this.props.activeHref,
+        onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
+        ref: child.ref,
+        key: child.key ? child.key : index,
+        navItem: true
+      }
+    );
   }
 });
 
 module.exports = Nav;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/NavItem.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _objectWithoutProperties = function (obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var NavItem = React.createClass({
-  displayName: "NavItem",
-
+var NavItem = React.createClass({displayName: "NavItem",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -50315,51 +49944,41 @@ var NavItem = React.createClass({
     target: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      href: "#"
+      href: '#'
     };
   },
 
-  render: function render() {
-    var _props = this.props;
-    var disabled = _props.disabled;
-    var active = _props.active;
-    var href = _props.href;
-    var title = _props.title;
-    var target = _props.target;
-    var children = _props.children;
+  render: function () {
+    var $__0= 
+        
+        
+        
+        
+        
+        
+           this.props,disabled=$__0.disabled,active=$__0.active,href=$__0.href,title=$__0.title,target=$__0.target,children=$__0.children,props=(function(source, exclusion) {var rest = {};var hasOwn = Object.prototype.hasOwnProperty;if (source == null) {throw new TypeError();}for (var key in source) {if (hasOwn.call(source, key) && !hasOwn.call(exclusion, key)) {rest[key] = source[key];}}return rest;})($__0,{disabled:1,active:1,href:1,title:1,target:1,children:1}),
+        classes = {
+          'active': active,
+          'disabled': disabled
+        };
 
-    var props = _objectWithoutProperties(_props, ["disabled", "active", "href", "title", "target", "children"]);
-
-    var classes = {
-      active: active,
-      disabled: disabled
-    };
-    var linkProps = {
-      href: href,
-      title: title,
-      target: target,
-      onClick: this.handleClick,
-      ref: "anchor"
-    };
-
-    if (href === "#") {
-      linkProps.role = "button";
-    }
-
-    return React.createElement(
-      "li",
-      _extends({}, props, { className: classSet(props.className, classes) }),
-      React.createElement(
-        "a",
-        linkProps,
-        children
+    return (
+      React.createElement("li", React.__spread({},  props, {className: joinClasses(props.className, classSet(classes))}), 
+        React.createElement("a", {
+          href: href, 
+          title: title, 
+          target: target, 
+          onClick: this.handleClick, 
+          ref: "anchor"}, 
+          children 
+        )
       )
     );
   },
 
-  handleClick: function handleClick(e) {
+  handleClick: function (e) {
     if (this.props.onSelect) {
       e.preventDefault();
 
@@ -50371,30 +49990,19 @@ var NavItem = React.createClass({
 });
 
 module.exports = NavItem;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Navbar.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Navbar.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var BootstrapMixin = require('./BootstrapMixin');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var createChainedFunction = require('./utils/createChainedFunction');
+var Nav = require('./Nav');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var Navbar = React.createClass({
-  displayName: "Navbar",
-
+var Navbar = React.createClass({displayName: "Navbar",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -50407,33 +50015,32 @@ var Navbar = React.createClass({
     componentClass: React.PropTypes.node.isRequired,
     brand: React.PropTypes.node,
     toggleButton: React.PropTypes.node,
-    toggleNavKey: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
     onToggle: React.PropTypes.func,
     navExpanded: React.PropTypes.bool,
     defaultNavExpanded: React.PropTypes.bool
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "navbar",
-      bsStyle: "default",
-      role: "navigation",
-      componentClass: "Nav"
+      bsClass: 'navbar',
+      bsStyle: 'default',
+      role: 'navigation',
+      componentClass: 'Nav'
     };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
       navExpanded: this.props.defaultNavExpanded
     };
   },
 
-  shouldComponentUpdate: function shouldComponentUpdate() {
+  shouldComponentUpdate: function() {
     // Defer any updates to this component during the `onSelect` handler.
     return !this._isChanging;
   },
 
-  handleToggle: function handleToggle() {
+  handleToggle: function () {
     if (this.props.onToggle) {
       this._isChanging = true;
       this.props.onToggle();
@@ -50445,127 +50052,133 @@ var Navbar = React.createClass({
     });
   },
 
-  isNavExpanded: function isNavExpanded() {
+  isNavExpanded: function () {
     return this.props.navExpanded != null ? this.props.navExpanded : this.state.navExpanded;
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
     var ComponentClass = this.props.componentClass;
 
-    classes["navbar-fixed-top"] = this.props.fixedTop;
-    classes["navbar-fixed-bottom"] = this.props.fixedBottom;
-    classes["navbar-static-top"] = this.props.staticTop;
-    classes["navbar-inverse"] = this.props.inverse;
+    classes['navbar-fixed-top'] = this.props.fixedTop;
+    classes['navbar-fixed-bottom'] = this.props.fixedBottom;
+    classes['navbar-static-top'] = this.props.staticTop;
+    classes['navbar-inverse'] = this.props.inverse;
 
-    return React.createElement(
-      ComponentClass,
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      React.createElement(
-        "div",
-        { className: this.props.fluid ? "container-fluid" : "container" },
-        this.props.brand || this.props.toggleButton || this.props.toggleNavKey != null ? this.renderHeader() : null,
-        ValidComponentChildren.map(this.props.children, this.renderChild)
+    return (
+      React.createElement(ComponentClass, React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        React.createElement("div", {className: this.props.fluid ? 'container-fluid' : 'container'}, 
+          (this.props.brand || this.props.toggleButton || this.props.toggleNavKey) ? this.renderHeader() : null, 
+          ValidComponentChildren.map(this.props.children, this.renderChild)
+        )
       )
     );
   },
 
-  renderChild: function renderChild(child, index) {
-    return cloneElement(child, {
+  renderChild: function (child, index) {
+    return cloneWithProps(child, {
       navbar: true,
       collapsable: this.props.toggleNavKey != null && this.props.toggleNavKey === child.props.eventKey,
       expanded: this.props.toggleNavKey != null && this.props.toggleNavKey === child.props.eventKey && this.isNavExpanded(),
-      key: child.key ? child.key : index
+      key: child.key ? child.key : index,
+      ref: child.ref
     });
   },
 
-  renderHeader: function renderHeader() {
-    var brand = undefined;
+  renderHeader: function () {
+    var brand;
 
     if (this.props.brand) {
-      if (React.isValidElement(this.props.brand)) {
-        brand = cloneElement(this.props.brand, {
-          className: classSet(this.props.brand.props.className, "navbar-brand")
-        });
-      } else {
-        brand = React.createElement(
-          "span",
-          { className: "navbar-brand" },
-          this.props.brand
-        );
-      }
+      brand = React.isValidElement(this.props.brand) ?
+        cloneWithProps(this.props.brand, {
+          className: 'navbar-brand'
+        }) : React.createElement("span", {className: "navbar-brand"}, this.props.brand);
     }
 
-    return React.createElement(
-      "div",
-      { className: "navbar-header" },
-      brand,
-      this.props.toggleButton || this.props.toggleNavKey != null ? this.renderToggleButton() : null
+    return (
+      React.createElement("div", {className: "navbar-header"}, 
+        brand, 
+        (this.props.toggleButton || this.props.toggleNavKey != null) ? this.renderToggleButton() : null
+      )
     );
   },
 
-  renderToggleButton: function renderToggleButton() {
-    var children = undefined;
+  renderToggleButton: function () {
+    var children;
 
     if (React.isValidElement(this.props.toggleButton)) {
-
-      return cloneElement(this.props.toggleButton, {
-        className: classSet(this.props.toggleButton.props.className, "navbar-toggle"),
+      return cloneWithProps(this.props.toggleButton, {
+        className: 'navbar-toggle',
         onClick: createChainedFunction(this.handleToggle, this.props.toggleButton.props.onClick)
       });
     }
 
-    children = this.props.toggleButton != null ? this.props.toggleButton : [React.createElement(
-      "span",
-      { className: "sr-only", key: 0 },
-      "Toggle navigation"
-    ), React.createElement("span", { className: "icon-bar", key: 1 }), React.createElement("span", { className: "icon-bar", key: 2 }), React.createElement("span", { className: "icon-bar", key: 3 })];
+    children = (this.props.toggleButton != null) ?
+      this.props.toggleButton : [
+        React.createElement("span", {className: "sr-only", key: 0}, "Toggle navigation"),
+        React.createElement("span", {className: "icon-bar", key: 1}),
+        React.createElement("span", {className: "icon-bar", key: 2}),
+        React.createElement("span", {className: "icon-bar", key: 3})
+    ];
 
-    return React.createElement(
-      "button",
-      { className: "navbar-toggle", type: "button", onClick: this.handleToggle },
-      children
+    return (
+      React.createElement("button", {className: "navbar-toggle", type: "button", onClick: this.handleToggle}, 
+        children
+      )
     );
   }
 });
 
 module.exports = Navbar;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
-
-var CustomPropTypes = _interopRequire(require("./utils/CustomPropTypes"));
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js":[function(require,module,exports){
+var React = require('react');
+var CustomPropTypes = require('./utils/CustomPropTypes');
 
 module.exports = {
   propTypes: {
     container: CustomPropTypes.mountable
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  getDefaultProps: function () {
+    return {
+      container: {
+        // Provide `getDOMNode` fn mocking a React component API. The `document.body`
+        // reference needs to be contained within this function so that it is not accessed
+        // in environments where it would not be defined, e.g. nodejs. Equally this is needed
+        // before the body is defined where `document.body === null`, this ensures
+        // `document.body` is only accessed after componentDidMount.
+        getDOMNode: function getDOMNode() {
+          return document.body;
+        }
+      }
+    };
+  },
+
+  componentWillUnmount: function () {
     this._unrenderOverlay();
     if (this._overlayTarget) {
-      this.getContainerDOMNode().removeChild(this._overlayTarget);
+      this.getContainerDOMNode()
+        .removeChild(this._overlayTarget);
       this._overlayTarget = null;
     }
   },
 
-  componentDidUpdate: function componentDidUpdate() {
+  componentDidUpdate: function () {
     this._renderOverlay();
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount: function () {
     this._renderOverlay();
   },
 
-  _mountOverlayTarget: function _mountOverlayTarget() {
-    this._overlayTarget = document.createElement("div");
-    this.getContainerDOMNode().appendChild(this._overlayTarget);
+  _mountOverlayTarget: function () {
+    this._overlayTarget = document.createElement('div');
+    this.getContainerDOMNode()
+      .appendChild(this._overlayTarget);
   },
 
-  _renderOverlay: function _renderOverlay() {
+  _renderOverlay: function () {
     if (!this._overlayTarget) {
       this._mountOverlayTarget();
     }
@@ -50581,45 +50194,37 @@ module.exports = {
     }
   },
 
-  _unrenderOverlay: function _unrenderOverlay() {
+  _unrenderOverlay: function () {
     React.unmountComponentAtNode(this._overlayTarget);
     this._overlayInstance = null;
   },
 
-  getOverlayDOMNode: function getOverlayDOMNode() {
+  getOverlayDOMNode: function () {
     if (!this.isMounted()) {
-      throw new Error("getOverlayDOMNode(): A component must be mounted to have a DOM node.");
+      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
     }
 
     if (this._overlayInstance) {
-      return React.findDOMNode(this._overlayInstance);
+      return this._overlayInstance.getDOMNode();
     }
 
     return null;
   },
 
-  getContainerDOMNode: function getContainerDOMNode() {
-    return React.findDOMNode(this.props.container || document.body);
+  getContainerDOMNode: function () {
+    return this.props.container.getDOMNode ?
+      this.props.container.getDOMNode() : this.props.container;
   }
 };
-},{"./utils/CustomPropTypes":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/CustomPropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayTrigger.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./utils/CustomPropTypes":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js":[function(require,module,exports){
+var React = require('react');
+var OverlayMixin = require('./OverlayMixin');
+var domUtils = require('./utils/domUtils');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var OverlayMixin = _interopRequire(require("./OverlayMixin"));
-
-var domUtils = _interopRequire(require("./utils/domUtils"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var assign = _interopRequire(require("./utils/Object.assign"));
+var createChainedFunction = require('./utils/createChainedFunction');
+var assign = require('./utils/Object.assign');
 
 /**
  * Check if value one is inside or equal to the of value
@@ -50635,14 +50240,15 @@ function isOneOf(one, of) {
   return one === of;
 }
 
-var OverlayTrigger = React.createClass({
-  displayName: "OverlayTrigger",
-
+var OverlayTrigger = React.createClass({displayName: "OverlayTrigger",
   mixins: [OverlayMixin],
 
   propTypes: {
-    trigger: React.PropTypes.oneOfType([React.PropTypes.oneOf(["manual", "click", "hover", "focus"]), React.PropTypes.arrayOf(React.PropTypes.oneOf(["click", "hover", "focus"]))]),
-    placement: React.PropTypes.oneOf(["top", "right", "bottom", "left"]),
+    trigger: React.PropTypes.oneOfType([
+      React.PropTypes.oneOf(['manual', 'click', 'hover', 'focus']),
+      React.PropTypes.arrayOf(React.PropTypes.oneOf(['click', 'hover', 'focus']))
+    ]),
+    placement: React.PropTypes.oneOf(['top','right', 'bottom', 'left']),
     delay: React.PropTypes.number,
     delayShow: React.PropTypes.number,
     delayHide: React.PropTypes.number,
@@ -50650,131 +50256,135 @@ var OverlayTrigger = React.createClass({
     overlay: React.PropTypes.node.isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      placement: "right",
-      trigger: ["hover", "focus"]
+      placement: 'right',
+      trigger: ['hover', 'focus']
     };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
-      isOverlayShown: this.props.defaultOverlayShown == null ? false : this.props.defaultOverlayShown,
+      isOverlayShown: this.props.defaultOverlayShown == null ?
+        false : this.props.defaultOverlayShown,
       overlayLeft: null,
       overlayTop: null
     };
   },
 
-  show: function show() {
+  show: function () {
     this.setState({
       isOverlayShown: true
-    }, function () {
+    }, function() {
       this.updateOverlayPosition();
     });
   },
 
-  hide: function hide() {
+  hide: function () {
     this.setState({
       isOverlayShown: false
     });
   },
 
-  toggle: function toggle() {
-    if (this.state.isOverlayShown) {
-      this.hide();
-    } else {
-      this.show();
-    }
+  toggle: function () {
+    this.state.isOverlayShown ?
+      this.hide() : this.show();
   },
 
-  renderOverlay: function renderOverlay() {
+  renderOverlay: function () {
     if (!this.state.isOverlayShown) {
       return React.createElement("span", null);
     }
 
-    return cloneElement(this.props.overlay, {
-      onRequestHide: this.hide,
-      placement: this.props.placement,
-      positionLeft: this.state.overlayLeft,
-      positionTop: this.state.overlayTop
-    });
+    return cloneWithProps(
+      this.props.overlay,
+      {
+        onRequestHide: this.hide,
+        placement: this.props.placement,
+        positionLeft: this.state.overlayLeft,
+        positionTop: this.state.overlayTop
+      }
+    );
   },
 
-  render: function render() {
-    if (this.props.trigger === "manual") {
+  render: function () {
+    if (this.props.trigger === 'manual') {
       return React.Children.only(this.props.children);
     }
 
     var props = {};
 
-    if (isOneOf("click", this.props.trigger)) {
+    if (isOneOf('click', this.props.trigger)) {
       props.onClick = createChainedFunction(this.toggle, this.props.onClick);
     }
 
-    if (isOneOf("hover", this.props.trigger)) {
+    if (isOneOf('hover', this.props.trigger)) {
       props.onMouseOver = createChainedFunction(this.handleDelayedShow, this.props.onMouseOver);
       props.onMouseOut = createChainedFunction(this.handleDelayedHide, this.props.onMouseOut);
     }
 
-    if (isOneOf("focus", this.props.trigger)) {
+    if (isOneOf('focus', this.props.trigger)) {
       props.onFocus = createChainedFunction(this.handleDelayedShow, this.props.onFocus);
       props.onBlur = createChainedFunction(this.handleDelayedHide, this.props.onBlur);
     }
 
-    return cloneElement(React.Children.only(this.props.children), props);
+    return cloneWithProps(
+      React.Children.only(this.props.children),
+      props
+    );
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount: function() {
     clearTimeout(this._hoverDelay);
   },
 
-  componentDidMount: function componentDidMount() {
-    if (this.props.defaultOverlayShown) {
-      this.updateOverlayPosition();
-    }
+  componentDidMount: function() {
+    this.updateOverlayPosition();
   },
 
-  handleDelayedShow: function handleDelayedShow() {
+  handleDelayedShow: function () {
     if (this._hoverDelay != null) {
       clearTimeout(this._hoverDelay);
       this._hoverDelay = null;
       return;
     }
 
-    var delay = this.props.delayShow != null ? this.props.delayShow : this.props.delay;
+    var delay = this.props.delayShow != null ?
+      this.props.delayShow : this.props.delay;
 
     if (!delay) {
       this.show();
       return;
     }
 
-    this._hoverDelay = setTimeout((function () {
+    this._hoverDelay = setTimeout(function() {
       this._hoverDelay = null;
       this.show();
-    }).bind(this), delay);
+    }.bind(this), delay);
   },
 
-  handleDelayedHide: function handleDelayedHide() {
+  handleDelayedHide: function () {
     if (this._hoverDelay != null) {
       clearTimeout(this._hoverDelay);
       this._hoverDelay = null;
       return;
     }
 
-    var delay = this.props.delayHide != null ? this.props.delayHide : this.props.delay;
+    var delay = this.props.delayHide != null ?
+      this.props.delayHide : this.props.delay;
 
     if (!delay) {
       this.hide();
       return;
     }
 
-    this._hoverDelay = setTimeout((function () {
+    this._hoverDelay = setTimeout(function() {
       this._hoverDelay = null;
       this.hide();
-    }).bind(this), delay);
+    }.bind(this), delay);
   },
 
-  updateOverlayPosition: function updateOverlayPosition() {
+  updateOverlayPosition: function () {
     if (!this.isMounted()) {
       return;
     }
@@ -50787,7 +50397,7 @@ var OverlayTrigger = React.createClass({
     });
   },
 
-  calcOverlayPosition: function calcOverlayPosition() {
+  calcOverlayPosition: function () {
     var childOffset = this.getPosition();
 
     var overlayNode = this.getOverlayDOMNode();
@@ -50795,36 +50405,37 @@ var OverlayTrigger = React.createClass({
     var overlayWidth = overlayNode.offsetWidth;
 
     switch (this.props.placement) {
-      case "right":
+      case 'right':
         return {
           top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
           left: childOffset.left + childOffset.width
         };
-      case "left":
+      case 'left':
         return {
           top: childOffset.top + childOffset.height / 2 - overlayHeight / 2,
           left: childOffset.left - overlayWidth
         };
-      case "top":
+      case 'top':
         return {
           top: childOffset.top - overlayHeight,
           left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
         };
-      case "bottom":
+      case 'bottom':
         return {
           top: childOffset.top + childOffset.height,
           left: childOffset.left + childOffset.width / 2 - overlayWidth / 2
         };
       default:
-        throw new Error("calcOverlayPosition(): No such placement of \"" + this.props.placement + "\" found.");
+        throw new Error('calcOverlayPosition(): No such placement of "' + this.props.placement + '" found.');
     }
   },
 
-  getPosition: function getPosition() {
-    var node = React.findDOMNode(this);
+  getPosition: function () {
+    var node = this.getDOMNode();
     var container = this.getContainerDOMNode();
 
-    var offset = container.tagName === "BODY" ? domUtils.getOffset(node) : domUtils.getPosition(node, container);
+    var offset = container.tagName == 'BODY' ?
+      domUtils.getOffset(node) : domUtils.getPosition(node, container);
 
     return assign({}, offset, {
       height: node.offsetHeight,
@@ -50834,47 +50445,28 @@ var OverlayTrigger = React.createClass({
 });
 
 module.exports = OverlayTrigger;
-},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js","./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/Object.assign.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PageHeader.js":[function(require,module,exports){
-"use strict";
+},{"./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./utils/Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/domUtils":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageHeader.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var PageHeader = React.createClass({displayName: "PageHeader",
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var PageHeader = React.createClass({
-  displayName: "PageHeader",
-
-  render: function render() {
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, "page-header") }),
-      React.createElement(
-        "h1",
-        null,
-        this.props.children
+  render: function () {
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, 'page-header')}), 
+        React.createElement("h1", null, this.props.children)
       )
     );
   }
 });
 
 module.exports = PageHeader;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PageItem.js":[function(require,module,exports){
-"use strict";
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageItem.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var PageItem = React.createClass({
-  displayName: "PageItem",
+var PageItem = React.createClass({displayName: "PageItem",
 
   propTypes: {
     href: React.PropTypes.string,
@@ -50886,37 +50478,36 @@ var PageItem = React.createClass({
     eventKey: React.PropTypes.any
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      href: "#"
+      href: '#'
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      disabled: this.props.disabled,
-      previous: this.props.previous,
-      next: this.props.next
+      'disabled': this.props.disabled,
+      'previous': this.props.previous,
+      'next': this.props.next
     };
 
-    return React.createElement(
-      "li",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes) }),
-      React.createElement(
-        "a",
-        {
-          href: this.props.href,
-          title: this.props.title,
-          target: this.props.target,
-          onClick: this.handleSelect,
-          ref: "anchor" },
-        this.props.children
+    return (
+      React.createElement("li", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, classSet(classes))}), 
+        React.createElement("a", {
+          href: this.props.href, 
+          title: this.props.title, 
+          target: this.props.target, 
+          onClick: this.handleSelect, 
+          ref: "anchor"}, 
+          this.props.children
+        )
       )
     );
   },
 
-  handleSelect: function handleSelect(e) {
+  handleSelect: function (e) {
     if (this.props.onSelect) {
       e.preventDefault();
 
@@ -50928,209 +50519,130 @@ var PageItem = React.createClass({
 });
 
 module.exports = PageItem;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Pager.js":[function(require,module,exports){
-"use strict";
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Pager.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var createChainedFunction = require('./utils/createChainedFunction');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var Pager = React.createClass({
-  displayName: "Pager",
+var Pager = React.createClass({displayName: "Pager",
 
   propTypes: {
     onSelect: React.PropTypes.func
   },
 
-  render: function render() {
-    return React.createElement(
-      "ul",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, "pager") }),
-      ValidComponentChildren.map(this.props.children, this.renderPageItem)
+  render: function () {
+    return (
+      React.createElement("ul", React.__spread({}, 
+        this.props, 
+        {className: joinClasses(this.props.className, 'pager')}), 
+        ValidComponentChildren.map(this.props.children, this.renderPageItem)
+      )
     );
   },
 
-  renderPageItem: function renderPageItem(child, index) {
-    return cloneElement(child, {
-      onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
-      key: child.key ? child.key : index
-    });
+  renderPageItem: function (child, index) {
+    return cloneWithProps(
+      child,
+      {
+        onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
+        ref: child.ref,
+        key: child.key ? child.key : index
+      }
+    );
   }
 });
 
 module.exports = Pager;
-},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Panel.js":[function(require,module,exports){
-"use strict";
+},{"./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Panel.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var BootstrapMixin = require('./BootstrapMixin');
+var CollapsableMixin = require('./CollapsableMixin');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var CollapsableMixin = _interopRequire(require("./CollapsableMixin"));
-
-var Panel = React.createClass({
-  displayName: "Panel",
-
+var Panel = React.createClass({displayName: "Panel",
   mixins: [BootstrapMixin, CollapsableMixin],
 
   propTypes: {
-    collapsable: React.PropTypes.bool,
     onSelect: React.PropTypes.func,
     header: React.PropTypes.node,
     footer: React.PropTypes.node,
     eventKey: React.PropTypes.any
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "panel",
-      bsStyle: "default"
+      bsClass: 'panel',
+      bsStyle: 'default'
     };
   },
 
-  handleSelect: function handleSelect(e) {
-    e.selected = true;
-
+  handleSelect: function (e) {
     if (this.props.onSelect) {
-      this.props.onSelect(e, this.props.eventKey);
-    } else {
-      e.preventDefault();
+      this._isChanging = true;
+      this.props.onSelect(this.props.eventKey);
+      this._isChanging = false;
     }
 
-    if (e.selected) {
-      this.handleToggle();
-    }
+    e.preventDefault();
+
+    this.setState({
+      expanded: !this.state.expanded
+    });
   },
 
-  handleToggle: function handleToggle() {
-    this.setState({ expanded: !this.state.expanded });
+  shouldComponentUpdate: function () {
+    return !this._isChanging;
   },
 
-  getCollapsableDimensionValue: function getCollapsableDimensionValue() {
-    return React.findDOMNode(this.refs.panel).scrollHeight;
+  getCollapsableDimensionValue: function () {
+    return this.refs.body.getDOMNode().offsetHeight;
   },
 
-  getCollapsableDOMNode: function getCollapsableDOMNode() {
+  getCollapsableDOMNode: function () {
     if (!this.isMounted() || !this.refs || !this.refs.panel) {
       return null;
     }
 
-    return React.findDOMNode(this.refs.panel);
+    return this.refs.panel.getDOMNode();
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
+    classes['panel'] = true;
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, {
-        className: classSet(this.props.className, classes),
-        id: this.props.collapsable ? null : this.props.id, onSelect: null }),
-      this.renderHeading(),
-      this.props.collapsable ? this.renderCollapsableBody() : this.renderBody(),
-      this.renderFooter()
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), 
+        id: this.props.collapsable ? null : this.props.id, onSelect: null}), 
+        this.renderHeading(), 
+        this.props.collapsable ? this.renderCollapsableBody() : this.renderBody(), 
+        this.renderFooter()
+      )
     );
   },
 
-  renderCollapsableBody: function renderCollapsableBody() {
-    var collapseClass = this.prefixClass("collapse");
-
-    return React.createElement(
-      "div",
-      {
-        className: classSet(this.getCollapsableClassSet(collapseClass)),
-        id: this.props.id,
-        ref: "panel",
-        "aria-expanded": this.isExpanded() ? "true" : "false" },
-      this.renderBody()
+  renderCollapsableBody: function () {
+    return (
+      React.createElement("div", {className: classSet(this.getCollapsableClassSet('panel-collapse')), id: this.props.id, ref: "panel"}, 
+        this.renderBody()
+      )
     );
   },
 
-  renderBody: function renderBody() {
-    var allChildren = this.props.children;
-    var bodyElements = [];
-    var panelBodyChildren = [];
-    var bodyClass = this.prefixClass("body");
-
-    function getProps() {
-      return { key: bodyElements.length };
-    }
-
-    function addPanelChild(child) {
-      bodyElements.push(cloneElement(child, getProps()));
-    }
-
-    function addPanelBody(children) {
-      bodyElements.push(React.createElement(
-        "div",
-        _extends({ className: bodyClass }, getProps()),
-        children
-      ));
-    }
-
-    function maybeRenderPanelBody() {
-      if (panelBodyChildren.length === 0) {
-        return;
-      }
-
-      addPanelBody(panelBodyChildren);
-      panelBodyChildren = [];
-    }
-
-    // Handle edge cases where we should not iterate through children.
-    if (!Array.isArray(allChildren) || allChildren.length === 0) {
-      if (this.shouldRenderFill(allChildren)) {
-        addPanelChild(allChildren);
-      } else {
-        addPanelBody(allChildren);
-      }
-    } else {
-
-      allChildren.forEach((function (child) {
-        if (this.shouldRenderFill(child)) {
-          maybeRenderPanelBody();
-
-          // Separately add the filled element.
-          addPanelChild(child);
-        } else {
-          panelBodyChildren.push(child);
-        }
-      }).bind(this));
-
-      maybeRenderPanelBody();
-    }
-
-    return bodyElements;
+  renderBody: function () {
+    return (
+      React.createElement("div", {className: "panel-body", ref: "body"}, 
+        this.props.children
+      )
+    );
   },
 
-  shouldRenderFill: function shouldRenderFill(child) {
-    return React.isValidElement(child) && child.props.fill != null;
-  },
-
-  renderHeading: function renderHeading() {
+  renderHeading: function () {
     var header = this.props.header;
 
     if (!header) {
@@ -51138,83 +50650,69 @@ var Panel = React.createClass({
     }
 
     if (!React.isValidElement(header) || Array.isArray(header)) {
-      header = this.props.collapsable ? this.renderCollapsableTitle(header) : header;
+      header = this.props.collapsable ?
+        this.renderCollapsableTitle(header) : header;
     } else if (this.props.collapsable) {
-
-      header = cloneElement(header, {
-        className: classSet(this.prefixClass("title")),
+      header = cloneWithProps(header, {
+        className: 'panel-title',
         children: this.renderAnchor(header.props.children)
       });
     } else {
-
-      header = cloneElement(header, {
-        className: classSet(this.prefixClass("title"))
+      header = cloneWithProps(header, {
+        className: 'panel-title'
       });
     }
 
-    return React.createElement(
-      "div",
-      { className: this.prefixClass("heading") },
-      header
+    return (
+      React.createElement("div", {className: "panel-heading"}, 
+        header
+      )
     );
   },
 
-  renderAnchor: function renderAnchor(header) {
-    return React.createElement(
-      "a",
-      {
-        href: "#" + (this.props.id || ""),
-        className: this.isExpanded() ? null : "collapsed",
-        "aria-expanded": this.isExpanded() ? "true" : "false",
-        onClick: this.handleSelect },
-      header
+  renderAnchor: function (header) {
+    return (
+      React.createElement("a", {
+        href: '#' + (this.props.id || ''), 
+        className: this.isExpanded() ? null : 'collapsed', 
+        onClick: this.handleSelect}, 
+        header
+      )
     );
   },
 
-  renderCollapsableTitle: function renderCollapsableTitle(header) {
-    return React.createElement(
-      "h4",
-      { className: this.prefixClass("title") },
-      this.renderAnchor(header)
+  renderCollapsableTitle: function (header) {
+    return (
+      React.createElement("h4", {className: "panel-title"}, 
+        this.renderAnchor(header)
+      )
     );
   },
 
-  renderFooter: function renderFooter() {
+  renderFooter: function () {
     if (!this.props.footer) {
       return null;
     }
 
-    return React.createElement(
-      "div",
-      { className: this.prefixClass("footer") },
-      this.props.footer
+    return (
+      React.createElement("div", {className: "panel-footer"}, 
+        this.props.footer
+      )
     );
   }
 });
 
 module.exports = Panel;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PanelGroup.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var BootstrapMixin = require('./BootstrapMixin');
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var PanelGroup = React.createClass({
-  displayName: "PanelGroup",
-
+var PanelGroup = React.createClass({displayName: "PanelGroup",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -51224,13 +50722,13 @@ var PanelGroup = React.createClass({
     onSelect: React.PropTypes.func
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "panel-group"
+      bsClass: 'panel-group'
     };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     var defaultActiveKey = this.props.defaultActiveKey;
 
     return {
@@ -51238,17 +50736,18 @@ var PanelGroup = React.createClass({
     };
   },
 
-  render: function render() {
+  render: function () {
     var classes = this.getBsClassSet();
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes), onSelect: null }),
-      ValidComponentChildren.map(this.props.children, this.renderPanel)
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), onSelect: null}), 
+        ValidComponentChildren.map(this.props.children, this.renderPanel)
+      )
     );
   },
 
-  renderPanel: function renderPanel(child, index) {
-    var activeKey = this.props.activeKey != null ? this.props.activeKey : this.state.activeKey;
+  renderPanel: function (child, index) {
+    var activeKey =
+      this.props.activeKey != null ? this.props.activeKey : this.state.activeKey;
 
     var props = {
       bsStyle: child.props.bsStyle || this.props.bsStyle,
@@ -51258,21 +50757,22 @@ var PanelGroup = React.createClass({
 
     if (this.props.accordion) {
       props.collapsable = true;
-      props.expanded = child.props.eventKey === activeKey;
+      props.expanded = (child.props.eventKey === activeKey);
       props.onSelect = this.handleSelect;
     }
 
-    return cloneElement(child, props);
+    return cloneWithProps(
+      child,
+      props
+    );
   },
 
-  shouldComponentUpdate: function shouldComponentUpdate() {
+  shouldComponentUpdate: function() {
     // Defer any updates to this component during the `onSelect` handler.
     return !this._isChanging;
   },
 
-  handleSelect: function handleSelect(e, key) {
-    e.preventDefault();
-
+  handleSelect: function (key) {
     if (this.props.onSelect) {
       this._isChanging = true;
       this.props.onSelect(key);
@@ -51290,28 +50790,18 @@ var PanelGroup = React.createClass({
 });
 
 module.exports = PanelGroup;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Popover.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Popover.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Popover = React.createClass({
-  displayName: "Popover",
-
+var Popover = React.createClass({displayName: "Popover",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    placement: React.PropTypes.oneOf(["top", "right", "bottom", "left"]),
+    placement: React.PropTypes.oneOf(['top','right', 'bottom', 'left']),
     positionLeft: React.PropTypes.number,
     positionTop: React.PropTypes.number,
     arrowOffsetLeft: React.PropTypes.number,
@@ -51319,84 +50809,58 @@ var Popover = React.createClass({
     title: React.PropTypes.node
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      placement: "right"
+      placement: 'right'
     };
   },
 
-  render: function render() {
-    var _this = this;
+  render: function () {
+    var classes = {};
+    classes['popover'] = true;
+    classes[this.props.placement] = true;
+    classes['in'] = this.props.positionLeft != null || this.props.positionTop != null;
 
-    var classes = (function () {
-      var _classes = {
-        popover: true };
+    var style = {};
+    style['left'] = this.props.positionLeft;
+    style['top'] = this.props.positionTop;
+    style['display'] = 'block';
 
-      _defineProperty(_classes, _this.props.placement, true);
+    var arrowStyle = {};
+    arrowStyle['left'] = this.props.arrowOffsetLeft;
+    arrowStyle['top'] = this.props.arrowOffsetTop;
 
-      _defineProperty(_classes, "in", _this.props.positionLeft != null || _this.props.positionTop != null);
-
-      return _classes;
-    })();
-
-    var style = {
-      left: this.props.positionLeft,
-      top: this.props.positionTop,
-      display: "block"
-    };
-
-    var arrowStyle = {
-      left: this.props.arrowOffsetLeft,
-      top: this.props.arrowOffsetTop
-    };
-
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes), style: style, title: null }),
-      React.createElement("div", { className: "arrow", style: arrowStyle }),
-      this.props.title ? this.renderTitle() : null,
-      React.createElement(
-        "div",
-        { className: "popover-content" },
-        this.props.children
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), style: style, title: null}), 
+        React.createElement("div", {className: "arrow", style: arrowStyle}), 
+        this.props.title ? this.renderTitle() : null, 
+        React.createElement("div", {className: "popover-content"}, 
+          this.props.children
+        )
       )
     );
   },
 
-  renderTitle: function renderTitle() {
-    return React.createElement(
-      "h3",
-      { className: "popover-title" },
-      this.props.title
+  renderTitle: function() {
+    return (
+      React.createElement("h3", {className: "popover-title"}, this.props.title)
     );
   }
 });
 
 module.exports = Popover;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ProgressBar.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ProgressBar.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var Interpolate = require('./Interpolate');
+var BootstrapMixin = require('./BootstrapMixin');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var Interpolate = _interopRequire(require("./Interpolate"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var ProgressBar = React.createClass({
-  displayName: "ProgressBar",
-
+var ProgressBar = React.createClass({displayName: "ProgressBar",
   propTypes: {
     min: React.PropTypes.number,
     now: React.PropTypes.number,
@@ -51409,60 +50873,67 @@ var ProgressBar = React.createClass({
 
   mixins: [BootstrapMixin],
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "progress-bar",
+      bsClass: 'progress-bar',
       min: 0,
       max: 100
     };
   },
 
-  getPercentage: function getPercentage(now, min, max) {
+  getPercentage: function (now, min, max) {
     return Math.ceil((now - min) / (max - min) * 100);
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      progress: true
-    };
+        progress: true
+      };
 
     if (this.props.active) {
-      classes["progress-striped"] = true;
-      classes.active = true;
+      classes['progress-striped'] = true;
+      classes['active'] = true;
     } else if (this.props.striped) {
-      classes["progress-striped"] = true;
+      classes['progress-striped'] = true;
     }
 
     if (!ValidComponentChildren.hasValidComponent(this.props.children)) {
       if (!this.props.isChild) {
-        return React.createElement(
-          "div",
-          _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-          this.renderProgressBar()
+        return (
+          React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+            this.renderProgressBar()
+          )
         );
       } else {
-        return this.renderProgressBar();
+        return (
+          this.renderProgressBar()
+        );
       }
     } else {
-      return React.createElement(
-        "div",
-        _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-        ValidComponentChildren.map(this.props.children, this.renderChildBar)
+      return (
+        React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+          ValidComponentChildren.map(this.props.children, this.renderChildBar)
+        )
       );
     }
   },
 
-  renderChildBar: function renderChildBar(child, index) {
-    return cloneElement(child, {
+  renderChildBar: function (child, index) {
+    return cloneWithProps(child, {
       isChild: true,
-      key: child.key ? child.key : index
+      key: child.key ? child.key : index,
+      ref: child.ref
     });
   },
 
-  renderProgressBar: function renderProgressBar() {
-    var percentage = this.getPercentage(this.props.now, this.props.min, this.props.max);
+  renderProgressBar: function () {
+    var percentage = this.getPercentage(
+        this.props.now,
+        this.props.min,
+        this.props.max
+      );
 
-    var label = undefined;
+    var label;
 
     if (typeof this.props.label === "string") {
       label = this.renderLabel(percentage);
@@ -51476,181 +50947,151 @@ var ProgressBar = React.createClass({
 
     var classes = this.getBsClassSet();
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes), role: "progressbar",
-        style: { width: percentage + "%" },
-        "aria-valuenow": this.props.now,
-        "aria-valuemin": this.props.min,
-        "aria-valuemax": this.props.max }),
-      label
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), role: "progressbar", 
+        style: {width: percentage + '%'}, 
+        "aria-valuenow": this.props.now, 
+        "aria-valuemin": this.props.min, 
+        "aria-valuemax": this.props.max}), 
+        label
+      )
     );
   },
 
-  renderLabel: function renderLabel(percentage) {
+  renderLabel: function (percentage) {
     var InterpolateClass = this.props.interpolateClass || Interpolate;
 
-    return React.createElement(
-      InterpolateClass,
-      {
-        now: this.props.now,
-        min: this.props.min,
-        max: this.props.max,
-        percent: percentage,
-        bsStyle: this.props.bsStyle },
-      this.props.label
+    return (
+      React.createElement(InterpolateClass, {
+        now: this.props.now, 
+        min: this.props.min, 
+        max: this.props.max, 
+        percent: percentage, 
+        bsStyle: this.props.bsStyle}, 
+        this.props.label
+      )
     );
   },
 
-  renderScreenReaderOnlyLabel: function renderScreenReaderOnlyLabel(label) {
-    return React.createElement(
-      "span",
-      { className: "sr-only" },
-      label
+  renderScreenReaderOnlyLabel: function (label) {
+    return (
+      React.createElement("span", {className: "sr-only"}, 
+        label
+      )
     );
   }
 });
 
 module.exports = ProgressBar;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Interpolate.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Row.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Row.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Row = React.createClass({
-  displayName: "Row",
-
+var Row = React.createClass({displayName: "Row",
   propTypes: {
     componentClass: React.PropTypes.node.isRequired
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      componentClass: "div"
+      componentClass: 'div'
     };
   },
 
-  render: function render() {
+  render: function () {
     var ComponentClass = this.props.componentClass;
 
-    return React.createElement(
-      ComponentClass,
-      _extends({}, this.props, { className: classSet(this.props.className, "row") }),
-      this.props.children
+    return (
+      React.createElement(ComponentClass, React.__spread({},  this.props, {className: joinClasses(this.props.className, 'row')}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = Row;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/SplitButton.js":[function(require,module,exports){
-"use strict";
+},{"./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SplitButton.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
+var DropdownStateMixin = require('./DropdownStateMixin');
+var Button = require('./Button');
+var ButtonGroup = require('./ButtonGroup');
+var DropdownMenu = require('./DropdownMenu');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var DropdownStateMixin = _interopRequire(require("./DropdownStateMixin"));
-
-var Button = _interopRequire(require("./Button"));
-
-var ButtonGroup = _interopRequire(require("./ButtonGroup"));
-
-var DropdownMenu = _interopRequire(require("./DropdownMenu"));
-
-var SplitButton = React.createClass({
-  displayName: "SplitButton",
-
+var SplitButton = React.createClass({displayName: "SplitButton",
   mixins: [BootstrapMixin, DropdownStateMixin],
 
   propTypes: {
-    pullRight: React.PropTypes.bool,
-    title: React.PropTypes.node,
-    href: React.PropTypes.string,
-    target: React.PropTypes.string,
+    pullRight:     React.PropTypes.bool,
+    title:         React.PropTypes.node,
+    href:          React.PropTypes.string,
+    target:        React.PropTypes.string,
     dropdownTitle: React.PropTypes.node,
-    onClick: React.PropTypes.func,
-    onSelect: React.PropTypes.func,
-    disabled: React.PropTypes.bool
+    onClick:       React.PropTypes.func,
+    onSelect:      React.PropTypes.func,
+    disabled:      React.PropTypes.bool
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      dropdownTitle: "Toggle dropdown"
+      dropdownTitle: 'Toggle dropdown'
     };
   },
 
-  render: function render() {
+  render: function () {
     var groupClasses = {
-      open: this.state.open,
-      dropup: this.props.dropup
-    };
+        'open': this.state.open,
+        'dropup': this.props.dropup
+      };
 
-    var button = React.createElement(
-      Button,
-      _extends({}, this.props, {
-        ref: "button",
-        onClick: this.handleButtonClick,
-        title: null,
-        id: null }),
-      this.props.title
-    );
-
-    var dropdownButton = React.createElement(
-      Button,
-      _extends({}, this.props, {
-        ref: "dropdownButton",
-        className: classSet(this.props.className, "dropdown-toggle"),
-        onClick: this.handleDropdownClick,
-        title: null,
-        href: null,
-        target: null,
-        id: null }),
-      React.createElement(
-        "span",
-        { className: "sr-only" },
-        this.props.dropdownTitle
-      ),
-      React.createElement("span", { className: "caret" }),
-      React.createElement(
-        "span",
-        { style: { letterSpacing: "-.3em" } },
-        " "
+    var button = (
+      React.createElement(Button, React.__spread({}, 
+        this.props, 
+        {ref: "button", 
+        onClick: this.handleButtonClick, 
+        title: null, 
+        id: null}), 
+        this.props.title
       )
     );
 
-    return React.createElement(
-      ButtonGroup,
-      {
-        bsSize: this.props.bsSize,
-        className: classSet(groupClasses),
-        id: this.props.id },
-      button,
-      dropdownButton,
-      React.createElement(
-        DropdownMenu,
-        {
-          ref: "menu",
-          onSelect: this.handleOptionSelect,
-          "aria-labelledby": this.props.id,
-          pullRight: this.props.pullRight },
-        this.props.children
+    var dropdownButton = (
+      React.createElement(Button, React.__spread({}, 
+        this.props, 
+        {ref: "dropdownButton", 
+        className: joinClasses(this.props.className, 'dropdown-toggle'), 
+        onClick: this.handleDropdownClick, 
+        title: null, 
+        href: null, 
+        target: null, 
+        id: null}), 
+        React.createElement("span", {className: "sr-only"}, this.props.dropdownTitle), 
+        React.createElement("span", {className: "caret"})
+      )
+    );
+
+    return (
+      React.createElement(ButtonGroup, {
+        bsSize: this.props.bsSize, 
+        className: classSet(groupClasses), 
+        id: this.props.id}, 
+        button, 
+        dropdownButton, 
+        React.createElement(DropdownMenu, {
+          ref: "menu", 
+          onSelect: this.handleOptionSelect, 
+          "aria-labelledby": this.props.id, 
+          pullRight: this.props.pullRight}, 
+          this.props.children
+        )
       )
     );
   },
 
-  handleButtonClick: function handleButtonClick(e) {
+  handleButtonClick: function (e) {
     if (this.state.open) {
       this.setDropdownState(false);
     }
@@ -51660,13 +51101,13 @@ var SplitButton = React.createClass({
     }
   },
 
-  handleDropdownClick: function handleDropdownClick(e) {
+  handleDropdownClick: function (e) {
     e.preventDefault();
 
     this.setDropdownState(!this.state.open);
   },
 
-  handleOptionSelect: function handleOptionSelect(key) {
+  handleOptionSelect: function (key) {
     if (this.props.onSelect) {
       this.props.onSelect(key);
     }
@@ -51676,30 +51117,19 @@ var SplitButton = React.createClass({
 });
 
 module.exports = SplitButton;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownStateMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/SubNav.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SubNav.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var createChainedFunction = require('./utils/createChainedFunction');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _react = require("react");
 
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var classSet = _interopRequire(require("classnames"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var createChainedFunction = _interopRequire(require("./utils/createChainedFunction"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var SubNav = React.createClass({
-  displayName: "SubNav",
-
+var SubNav = React.createClass({displayName: "SubNav",
   mixins: [BootstrapMixin],
 
   propTypes: {
@@ -51712,13 +51142,13 @@ var SubNav = React.createClass({
     target: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      bsClass: "nav"
+      bsClass: 'nav'
     };
   },
 
-  handleClick: function handleClick(e) {
+  handleClick: function (e) {
     if (this.props.onSelect) {
       e.preventDefault();
 
@@ -51728,13 +51158,11 @@ var SubNav = React.createClass({
     }
   },
 
-  isActive: function isActive() {
+  isActive: function () {
     return this.isChildActive(this);
   },
 
-  isChildActive: function isChildActive(child) {
-    var _this = this;
-
+  isChildActive: function (child) {
     if (child.props.active) {
       return true;
     }
@@ -51748,34 +51176,30 @@ var SubNav = React.createClass({
     }
 
     if (child.props.children) {
-      var _ret = (function () {
-        var isActive = false;
+      var isActive = false;
 
-        ValidComponentChildren.forEach(child.props.children, function (grandchild) {
-          if (this.isChildActive(grandchild)) {
+      ValidComponentChildren.forEach(
+        child.props.children,
+        function (child) {
+          if (this.isChildActive(child)) {
             isActive = true;
           }
-        }, _this);
+        },
+        this
+      );
 
-        return {
-          v: isActive
-        };
-      })();
-
-      if (typeof _ret === "object") {
-        return _ret.v;
-      }
+      return isActive;
     }
 
     return false;
   },
 
-  getChildActiveProp: function getChildActiveProp(child) {
+  getChildActiveProp: function (child) {
     if (child.props.active) {
       return true;
     }
     if (this.props.activeKey != null) {
-      if (child.props.eventKey === this.props.activeKey) {
+      if (child.props.eventKey == this.props.activeKey) {
         return true;
       }
     }
@@ -51788,73 +51212,65 @@ var SubNav = React.createClass({
     return child.props.active;
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      active: this.isActive(),
-      disabled: this.props.disabled
+      'active': this.isActive(),
+      'disabled': this.props.disabled
     };
 
-    return React.createElement(
-      "li",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      React.createElement(
-        "a",
-        {
-          href: this.props.href,
-          title: this.props.title,
-          target: this.props.target,
-          onClick: this.handleClick,
-          ref: "anchor" },
-        this.props.text
-      ),
-      React.createElement(
-        "ul",
-        { className: "nav" },
-        ValidComponentChildren.map(this.props.children, this.renderNavItem)
+    return (
+      React.createElement("li", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        React.createElement("a", {
+          href: this.props.href, 
+          title: this.props.title, 
+          target: this.props.target, 
+          onClick: this.handleClick, 
+          ref: "anchor"}, 
+          this.props.text
+        ), 
+        React.createElement("ul", {className: "nav"}, 
+          ValidComponentChildren.map(this.props.children, this.renderNavItem)
+        )
       )
     );
   },
 
-  renderNavItem: function renderNavItem(child, index) {
-    return cloneElement(child, {
-      active: this.getChildActiveProp(child),
-      onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
-      key: child.key ? child.key : index
-    });
+  renderNavItem: function (child, index) {
+    return cloneWithProps(
+      child,
+      {
+        active: this.getChildActiveProp(child),
+        onSelect: createChainedFunction(child.props.onSelect, this.props.onSelect),
+        ref: child.ref,
+        key: child.key ? child.key : index
+      }
+    );
   }
 });
 
 module.exports = SubNav;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/TabPane.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","./utils/createChainedFunction":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabPane.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var TransitionEvents = require('./utils/TransitionEvents');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var TransitionEvents = _interopRequire(require("./utils/TransitionEvents"));
-
-var TabPane = React.createClass({
-  displayName: "TabPane",
-
-  getDefaultProps: function getDefaultProps() {
+var TabPane = React.createClass({displayName: "TabPane",
+  getDefaultProps: function () {
     return {
       animation: true
     };
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState: function () {
     return {
       animateIn: false,
       animateOut: false
     };
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps: function (nextProps) {
     if (this.props.animation) {
       if (!this.state.animateIn && nextProps.active && !this.props.active) {
         this.setState({
@@ -51868,16 +51284,19 @@ var TabPane = React.createClass({
     }
   },
 
-  componentDidUpdate: function componentDidUpdate() {
+  componentDidUpdate: function () {
     if (this.state.animateIn) {
       setTimeout(this.startAnimateIn, 0);
     }
     if (this.state.animateOut) {
-      TransitionEvents.addEndEventListener(React.findDOMNode(this), this.stopAnimateOut);
+      TransitionEvents.addEndEventListener(
+        this.getDOMNode(),
+        this.stopAnimateOut
+      );
     }
   },
 
-  startAnimateIn: function startAnimateIn() {
+  startAnimateIn: function () {
     if (this.isMounted()) {
       this.setState({
         animateIn: false
@@ -51885,60 +51304,48 @@ var TabPane = React.createClass({
     }
   },
 
-  stopAnimateOut: function stopAnimateOut() {
+  stopAnimateOut: function () {
     if (this.isMounted()) {
       this.setState({
         animateOut: false
       });
 
-      if (typeof this.props.onAnimateOutEnd === "function") {
+      if (typeof this.props.onAnimateOutEnd === 'function') {
         this.props.onAnimateOutEnd();
       }
     }
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      "tab-pane": true,
-      fade: true,
-      active: this.props.active || this.state.animateOut,
-      "in": this.props.active && !this.state.animateIn
+      'tab-pane': true,
+      'fade': true,
+      'active': this.props.active || this.state.animateOut,
+      'in': this.props.active && !this.state.animateIn
     };
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
   }
 });
 
 module.exports = TabPane;
-},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/TransitionEvents.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/TabbedArea.js":[function(require,module,exports){
-"use strict";
+},{"./utils/TransitionEvents":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabbedArea.js":[function(require,module,exports){
+var React = require('react');
+var BootstrapMixin = require('./BootstrapMixin');
+var cloneWithProps = require('./utils/cloneWithProps');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = require("react");
-
-var React = _interopRequire(_react);
-
-var cloneElement = _react.cloneElement;
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var ValidComponentChildren = _interopRequire(require("./utils/ValidComponentChildren"));
-
-var Nav = _interopRequire(require("./Nav"));
-
-var NavItem = _interopRequire(require("./NavItem"));
+var ValidComponentChildren = require('./utils/ValidComponentChildren');
+var Nav = require('./Nav');
+var NavItem = require('./NavItem');
 
 function getDefaultActiveKeyFromChildren(children) {
-  var defaultActiveKey = undefined;
+  var defaultActiveKey;
 
-  ValidComponentChildren.forEach(children, function (child) {
+  ValidComponentChildren.forEach(children, function(child) {
     if (defaultActiveKey == null) {
       defaultActiveKey = child.props.eventKey;
     }
@@ -51947,26 +51354,25 @@ function getDefaultActiveKeyFromChildren(children) {
   return defaultActiveKey;
 }
 
-var TabbedArea = React.createClass({
-  displayName: "TabbedArea",
-
+var TabbedArea = React.createClass({displayName: "TabbedArea",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    bsStyle: React.PropTypes.oneOf(["tabs", "pills"]),
+    bsStyle: React.PropTypes.oneOf(['tabs','pills']),
     animation: React.PropTypes.bool,
     onSelect: React.PropTypes.func
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
       bsStyle: "tabs",
       animation: true
     };
   },
 
-  getInitialState: function getInitialState() {
-    var defaultActiveKey = this.props.defaultActiveKey != null ? this.props.defaultActiveKey : getDefaultActiveKeyFromChildren(this.props.children);
+  getInitialState: function () {
+    var defaultActiveKey = this.props.defaultActiveKey != null ?
+      this.props.defaultActiveKey : getDefaultActiveKeyFromChildren(this.props.children);
 
     // TODO: In __DEV__ mode warn via `console.warn` if no `defaultActiveKey` has
     // been set by this point, invalid children or missing key properties are likely the cause.
@@ -51977,7 +51383,7 @@ var TabbedArea = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps: function (nextProps) {
     if (nextProps.activeKey != null && nextProps.activeKey !== this.props.activeKey) {
       this.setState({
         previousActiveKey: this.props.activeKey
@@ -51985,69 +51391,74 @@ var TabbedArea = React.createClass({
     }
   },
 
-  handlePaneAnimateOutEnd: function handlePaneAnimateOutEnd() {
+  handlePaneAnimateOutEnd: function () {
     this.setState({
       previousActiveKey: null
     });
   },
 
-  render: function render() {
-    var activeKey = this.props.activeKey != null ? this.props.activeKey : this.state.activeKey;
+  render: function () {
+    var activeKey =
+      this.props.activeKey != null ? this.props.activeKey : this.state.activeKey;
 
     function renderTabIfSet(child) {
       return child.props.tab != null ? this.renderTab(child) : null;
     }
 
-    var nav = React.createElement(
-      Nav,
-      _extends({}, this.props, { activeKey: activeKey, onSelect: this.handleSelect, ref: "tabs" }),
-      ValidComponentChildren.map(this.props.children, renderTabIfSet, this)
+    var nav = (
+      React.createElement(Nav, React.__spread({},  this.props, {activeKey: activeKey, onSelect: this.handleSelect, ref: "tabs"}), 
+        ValidComponentChildren.map(this.props.children, renderTabIfSet, this)
+      )
     );
 
-    return React.createElement(
-      "div",
-      null,
-      nav,
-      React.createElement(
-        "div",
-        { id: this.props.id, className: "tab-content", ref: "panes" },
-        ValidComponentChildren.map(this.props.children, this.renderPane)
+    return (
+      React.createElement("div", null, 
+        nav, 
+        React.createElement("div", {id: this.props.id, className: "tab-content", ref: "panes"}, 
+          ValidComponentChildren.map(this.props.children, this.renderPane)
+        )
       )
     );
   },
 
-  getActiveKey: function getActiveKey() {
+  getActiveKey: function () {
     return this.props.activeKey != null ? this.props.activeKey : this.state.activeKey;
   },
 
-  renderPane: function renderPane(child, index) {
+  renderPane: function (child, index) {
     var activeKey = this.getActiveKey();
 
-    return cloneElement(child, {
-      active: child.props.eventKey === activeKey && (this.state.previousActiveKey == null || !this.props.animation),
-      key: child.key ? child.key : index,
-      animation: this.props.animation,
-      onAnimateOutEnd: this.state.previousActiveKey != null && child.props.eventKey === this.state.previousActiveKey ? this.handlePaneAnimateOutEnd : null
-    });
+    return cloneWithProps(
+        child,
+        {
+          active: (child.props.eventKey === activeKey &&
+            (this.state.previousActiveKey == null || !this.props.animation)),
+          ref: child.ref,
+          key: child.key ? child.key : index,
+          animation: this.props.animation,
+          onAnimateOutEnd: (this.state.previousActiveKey != null &&
+            child.props.eventKey === this.state.previousActiveKey) ? this.handlePaneAnimateOutEnd: null
+        }
+      );
   },
 
-  renderTab: function renderTab(child) {
+  renderTab: function (child) {
     var key = child.props.eventKey;
-    return React.createElement(
-      NavItem,
-      {
-        ref: "tab" + key,
-        eventKey: key },
-      child.props.tab
+    return (
+      React.createElement(NavItem, {
+        ref: 'tab' + key, 
+        eventKey: key}, 
+        child.props.tab
+      )
     );
   },
 
-  shouldComponentUpdate: function shouldComponentUpdate() {
+  shouldComponentUpdate: function() {
     // Defer any updates to this component during the `onSelect` handler.
     return !this._isChanging;
   },
 
-  handleSelect: function handleSelect(key) {
+  handleSelect: function (key) {
     if (this.props.onSelect) {
       this._isChanging = true;
       this.props.onSelect(key);
@@ -52062,20 +51473,12 @@ var TabbedArea = React.createClass({
 });
 
 module.exports = TabbedArea;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/NavItem.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Table.js":[function(require,module,exports){
-"use strict";
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js","./utils/ValidComponentChildren":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js","./utils/cloneWithProps":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Table.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var Table = React.createClass({
-  displayName: "Table",
-
+var Table = React.createClass({displayName: "Table",
   propTypes: {
     striped: React.PropTypes.bool,
     bordered: React.PropTypes.bool,
@@ -52084,339 +51487,406 @@ var Table = React.createClass({
     responsive: React.PropTypes.bool
   },
 
-  render: function render() {
+  render: function () {
     var classes = {
-      table: true,
-      "table-striped": this.props.striped,
-      "table-bordered": this.props.bordered,
-      "table-condensed": this.props.condensed,
-      "table-hover": this.props.hover
+      'table': true,
+      'table-striped': this.props.striped,
+      'table-bordered': this.props.bordered,
+      'table-condensed': this.props.condensed,
+      'table-hover': this.props.hover
     };
-    var table = React.createElement(
-      "table",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
+    var table = (
+      React.createElement("table", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
+        this.props.children
+      )
     );
 
-    return this.props.responsive ? React.createElement(
-      "div",
-      { className: "table-responsive" },
-      table
+    return this.props.responsive ? (
+      React.createElement("div", {className: "table-responsive"}, 
+        table
+      )
     ) : table;
   }
 });
 
 module.exports = Table;
-},{"classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Tooltip.js":[function(require,module,exports){
-"use strict";
+},{"./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Tooltip.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Tooltip = React.createClass({
-  displayName: "Tooltip",
-
+var Tooltip = React.createClass({displayName: "Tooltip",
   mixins: [BootstrapMixin],
 
   propTypes: {
-    placement: React.PropTypes.oneOf(["top", "right", "bottom", "left"]),
+    placement: React.PropTypes.oneOf(['top','right', 'bottom', 'left']),
     positionLeft: React.PropTypes.number,
     positionTop: React.PropTypes.number,
     arrowOffsetLeft: React.PropTypes.number,
     arrowOffsetTop: React.PropTypes.number
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps: function () {
     return {
-      placement: "right"
+      placement: 'right'
     };
   },
 
-  render: function render() {
-    var _this = this;
+  render: function () {
+    var classes = {};
+    classes['tooltip'] = true;
+    classes[this.props.placement] = true;
+    classes['in'] = this.props.positionLeft != null || this.props.positionTop != null;
 
-    var classes = (function () {
-      var _classes = {
-        tooltip: true };
+    var style = {};
+    style['left'] = this.props.positionLeft;
+    style['top'] = this.props.positionTop;
 
-      _defineProperty(_classes, _this.props.placement, true);
+    var arrowStyle = {};
+    arrowStyle['left'] = this.props.arrowOffsetLeft;
+    arrowStyle['top'] = this.props.arrowOffsetTop;
 
-      _defineProperty(_classes, "in", _this.props.positionLeft != null || _this.props.positionTop != null);
+    return (
+        React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes)), style: style}), 
+          React.createElement("div", {className: "tooltip-arrow", style: arrowStyle}), 
+          React.createElement("div", {className: "tooltip-inner"}, 
+            this.props.children
+          )
+        )
+      );
+  }
+});
 
-      return _classes;
-    })();
+module.exports = Tooltip;
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Well.js":[function(require,module,exports){
+var React = require('react');
+var joinClasses = require('./utils/joinClasses');
+var classSet = require('./utils/classSet');
+var BootstrapMixin = require('./BootstrapMixin');
 
-    var style = {
-      left: this.props.positionLeft,
-      top: this.props.positionTop
+var Well = React.createClass({displayName: "Well",
+  mixins: [BootstrapMixin],
+
+  getDefaultProps: function () {
+    return {
+      bsClass: 'well'
     };
+  },
 
-    var arrowStyle = {
-      left: this.props.arrowOffsetLeft,
-      top: this.props.arrowOffsetTop
-    };
+  render: function () {
+    var classes = this.getBsClassSet();
 
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes), style: style }),
-      React.createElement("div", { className: "tooltip-arrow", style: arrowStyle }),
-      React.createElement(
-        "div",
-        { className: "tooltip-inner" },
+    return (
+      React.createElement("div", React.__spread({},  this.props, {className: joinClasses(this.props.className, classSet(classes))}), 
         this.props.children
       )
     );
   }
 });
 
-module.exports = Tooltip;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Well.js":[function(require,module,exports){
-"use strict";
-
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = _interopRequire(require("react"));
-
-var classSet = _interopRequire(require("classnames"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Well = React.createClass({
-  displayName: "Well",
-
-  mixins: [BootstrapMixin],
-
-  getDefaultProps: function getDefaultProps() {
-    return {
-      bsClass: "well"
-    };
-  },
-
-  render: function render() {
-    var classes = this.getBsClassSet();
-
-    return React.createElement(
-      "div",
-      _extends({}, this.props, { className: classSet(this.props.className, classes) }),
-      this.props.children
-    );
-  }
-});
-
 module.exports = Well;
-},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/constants.js":[function(require,module,exports){
-"use strict";
-
+},{"./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./utils/joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/constants.js":[function(require,module,exports){
 module.exports = {
   CLASSES: {
-    alert: "alert",
-    button: "btn",
-    "button-group": "btn-group",
-    "button-toolbar": "btn-toolbar",
-    column: "col",
-    "input-group": "input-group",
-    form: "form",
-    glyphicon: "glyphicon",
-    label: "label",
-    "list-group-item": "list-group-item",
-    panel: "panel",
-    "panel-group": "panel-group",
-    "progress-bar": "progress-bar",
-    nav: "nav",
-    navbar: "navbar",
-    modal: "modal",
-    row: "row",
-    well: "well"
+    'alert': 'alert',
+    'button': 'btn',
+    'button-group': 'btn-group',
+    'button-toolbar': 'btn-toolbar',
+    'column': 'col',
+    'input-group': 'input-group',
+    'form': 'form',
+    'glyphicon': 'glyphicon',
+    'label': 'label',
+    'list-group-item': 'list-group-item',
+    'panel': 'panel',
+    'panel-group': 'panel-group',
+    'progress-bar': 'progress-bar',
+    'nav': 'nav',
+    'navbar': 'navbar',
+    'modal': 'modal',
+    'row': 'row',
+    'well': 'well'
   },
   STYLES: {
-    "default": "default",
-    primary: "primary",
-    success: "success",
-    info: "info",
-    warning: "warning",
-    danger: "danger",
-    link: "link",
-    inline: "inline",
-    tabs: "tabs",
-    pills: "pills"
+    'default': 'default',
+    'primary': 'primary',
+    'success': 'success',
+    'info': 'info',
+    'warning': 'warning',
+    'danger': 'danger',
+    'link': 'link',
+    'inline': 'inline',
+    'tabs': 'tabs',
+    'pills': 'pills'
   },
   SIZES: {
-    large: "lg",
-    medium: "md",
-    small: "sm",
-    xsmall: "xs"
+    'large': 'lg',
+    'medium': 'md',
+    'small': 'sm',
+    'xsmall': 'xs'
   },
-  GLYPHS: ["asterisk", "plus", "euro", "eur", "minus", "cloud", "envelope", "pencil", "glass", "music", "search", "heart", "star", "star-empty", "user", "film", "th-large", "th", "th-list", "ok", "remove", "zoom-in", "zoom-out", "off", "signal", "cog", "trash", "home", "file", "time", "road", "download-alt", "download", "upload", "inbox", "play-circle", "repeat", "refresh", "list-alt", "lock", "flag", "headphones", "volume-off", "volume-down", "volume-up", "qrcode", "barcode", "tag", "tags", "book", "bookmark", "print", "camera", "font", "bold", "italic", "text-height", "text-width", "align-left", "align-center", "align-right", "align-justify", "list", "indent-left", "indent-right", "facetime-video", "picture", "map-marker", "adjust", "tint", "edit", "share", "check", "move", "step-backward", "fast-backward", "backward", "play", "pause", "stop", "forward", "fast-forward", "step-forward", "eject", "chevron-left", "chevron-right", "plus-sign", "minus-sign", "remove-sign", "ok-sign", "question-sign", "info-sign", "screenshot", "remove-circle", "ok-circle", "ban-circle", "arrow-left", "arrow-right", "arrow-up", "arrow-down", "share-alt", "resize-full", "resize-small", "exclamation-sign", "gift", "leaf", "fire", "eye-open", "eye-close", "warning-sign", "plane", "calendar", "random", "comment", "magnet", "chevron-up", "chevron-down", "retweet", "shopping-cart", "folder-close", "folder-open", "resize-vertical", "resize-horizontal", "hdd", "bullhorn", "bell", "certificate", "thumbs-up", "thumbs-down", "hand-right", "hand-left", "hand-up", "hand-down", "circle-arrow-right", "circle-arrow-left", "circle-arrow-up", "circle-arrow-down", "globe", "wrench", "tasks", "filter", "briefcase", "fullscreen", "dashboard", "paperclip", "heart-empty", "link", "phone", "pushpin", "usd", "gbp", "sort", "sort-by-alphabet", "sort-by-alphabet-alt", "sort-by-order", "sort-by-order-alt", "sort-by-attributes", "sort-by-attributes-alt", "unchecked", "expand", "collapse-down", "collapse-up", "log-in", "flash", "log-out", "new-window", "record", "save", "open", "saved", "import", "export", "send", "floppy-disk", "floppy-saved", "floppy-remove", "floppy-save", "floppy-open", "credit-card", "transfer", "cutlery", "header", "compressed", "earphone", "phone-alt", "tower", "stats", "sd-video", "hd-video", "subtitles", "sound-stereo", "sound-dolby", "sound-5-1", "sound-6-1", "sound-7-1", "copyright-mark", "registration-mark", "cloud-download", "cloud-upload", "tree-conifer", "tree-deciduous", "cd", "save-file", "open-file", "level-up", "copy", "paste", "alert", "equalizer", "king", "queen", "pawn", "bishop", "knight", "baby-formula", "tent", "blackboard", "bed", "apple", "erase", "hourglass", "lamp", "duplicate", "piggy-bank", "scissors", "bitcoin", "yen", "ruble", "scale", "ice-lolly", "ice-lolly-tasted", "education", "option-horizontal", "option-vertical", "menu-hamburger", "modal-window", "oil", "grain", "sunglasses", "text-size", "text-color", "text-background", "object-align-top", "object-align-bottom", "object-align-horizontal", "object-align-left", "object-align-vertical", "object-align-right", "triangle-right", "triangle-left", "triangle-bottom", "triangle-top", "console", "superscript", "subscript", "menu-left", "menu-right", "menu-down", "menu-up"]
+  GLYPHS: [
+    'asterisk',
+    'plus',
+    'euro',
+    'minus',
+    'cloud',
+    'envelope',
+    'pencil',
+    'glass',
+    'music',
+    'search',
+    'heart',
+    'star',
+    'star-empty',
+    'user',
+    'film',
+    'th-large',
+    'th',
+    'th-list',
+    'ok',
+    'remove',
+    'zoom-in',
+    'zoom-out',
+    'off',
+    'signal',
+    'cog',
+    'trash',
+    'home',
+    'file',
+    'time',
+    'road',
+    'download-alt',
+    'download',
+    'upload',
+    'inbox',
+    'play-circle',
+    'repeat',
+    'refresh',
+    'list-alt',
+    'lock',
+    'flag',
+    'headphones',
+    'volume-off',
+    'volume-down',
+    'volume-up',
+    'qrcode',
+    'barcode',
+    'tag',
+    'tags',
+    'book',
+    'bookmark',
+    'print',
+    'camera',
+    'font',
+    'bold',
+    'italic',
+    'text-height',
+    'text-width',
+    'align-left',
+    'align-center',
+    'align-right',
+    'align-justify',
+    'list',
+    'indent-left',
+    'indent-right',
+    'facetime-video',
+    'picture',
+    'map-marker',
+    'adjust',
+    'tint',
+    'edit',
+    'share',
+    'check',
+    'move',
+    'step-backward',
+    'fast-backward',
+    'backward',
+    'play',
+    'pause',
+    'stop',
+    'forward',
+    'fast-forward',
+    'step-forward',
+    'eject',
+    'chevron-left',
+    'chevron-right',
+    'plus-sign',
+    'minus-sign',
+    'remove-sign',
+    'ok-sign',
+    'question-sign',
+    'info-sign',
+    'screenshot',
+    'remove-circle',
+    'ok-circle',
+    'ban-circle',
+    'arrow-left',
+    'arrow-right',
+    'arrow-up',
+    'arrow-down',
+    'share-alt',
+    'resize-full',
+    'resize-small',
+    'exclamation-sign',
+    'gift',
+    'leaf',
+    'fire',
+    'eye-open',
+    'eye-close',
+    'warning-sign',
+    'plane',
+    'calendar',
+    'random',
+    'comment',
+    'magnet',
+    'chevron-up',
+    'chevron-down',
+    'retweet',
+    'shopping-cart',
+    'folder-close',
+    'folder-open',
+    'resize-vertical',
+    'resize-horizontal',
+    'hdd',
+    'bullhorn',
+    'bell',
+    'certificate',
+    'thumbs-up',
+    'thumbs-down',
+    'hand-right',
+    'hand-left',
+    'hand-up',
+    'hand-down',
+    'circle-arrow-right',
+    'circle-arrow-left',
+    'circle-arrow-up',
+    'circle-arrow-down',
+    'globe',
+    'wrench',
+    'tasks',
+    'filter',
+    'briefcase',
+    'fullscreen',
+    'dashboard',
+    'paperclip',
+    'heart-empty',
+    'link',
+    'phone',
+    'pushpin',
+    'usd',
+    'gbp',
+    'sort',
+    'sort-by-alphabet',
+    'sort-by-alphabet-alt',
+    'sort-by-order',
+    'sort-by-order-alt',
+    'sort-by-attributes',
+    'sort-by-attributes-alt',
+    'unchecked',
+    'expand',
+    'collapse-down',
+    'collapse-up',
+    'log-in',
+    'flash',
+    'log-out',
+    'new-window',
+    'record',
+    'save',
+    'open',
+    'saved',
+    'import',
+    'export',
+    'send',
+    'floppy-disk',
+    'floppy-saved',
+    'floppy-remove',
+    'floppy-save',
+    'floppy-open',
+    'credit-card',
+    'transfer',
+    'cutlery',
+    'header',
+    'compressed',
+    'earphone',
+    'phone-alt',
+    'tower',
+    'stats',
+    'sd-video',
+    'hd-video',
+    'subtitles',
+    'sound-stereo',
+    'sound-dolby',
+    'sound-5-1',
+    'sound-6-1',
+    'sound-7-1',
+    'copyright-mark',
+    'registration-mark',
+    'cloud-download',
+    'cloud-upload',
+    'tree-conifer',
+    'tree-deciduous'
+  ]
 };
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var Accordion = _interopRequire(require("./Accordion"));
-
-var Affix = _interopRequire(require("./Affix"));
-
-var AffixMixin = _interopRequire(require("./AffixMixin"));
-
-var Alert = _interopRequire(require("./Alert"));
-
-var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
-
-var Badge = _interopRequire(require("./Badge"));
-
-var Button = _interopRequire(require("./Button"));
-
-var ButtonGroup = _interopRequire(require("./ButtonGroup"));
-
-var ButtonToolbar = _interopRequire(require("./ButtonToolbar"));
-
-var CollapsableNav = _interopRequire(require("./CollapsableNav"));
-
-var Carousel = _interopRequire(require("./Carousel"));
-
-var CarouselItem = _interopRequire(require("./CarouselItem"));
-
-var Col = _interopRequire(require("./Col"));
-
-var CollapsableMixin = _interopRequire(require("./CollapsableMixin"));
-
-var DropdownButton = _interopRequire(require("./DropdownButton"));
-
-var DropdownMenu = _interopRequire(require("./DropdownMenu"));
-
-var DropdownStateMixin = _interopRequire(require("./DropdownStateMixin"));
-
-var FadeMixin = _interopRequire(require("./FadeMixin"));
-
-var Glyphicon = _interopRequire(require("./Glyphicon"));
-
-var Grid = _interopRequire(require("./Grid"));
-
-var Input = _interopRequire(require("./Input"));
-
-var Interpolate = _interopRequire(require("./Interpolate"));
-
-var Jumbotron = _interopRequire(require("./Jumbotron"));
-
-var Label = _interopRequire(require("./Label"));
-
-var ListGroup = _interopRequire(require("./ListGroup"));
-
-var ListGroupItem = _interopRequire(require("./ListGroupItem"));
-
-var MenuItem = _interopRequire(require("./MenuItem"));
-
-var Modal = _interopRequire(require("./Modal"));
-
-var Nav = _interopRequire(require("./Nav"));
-
-var Navbar = _interopRequire(require("./Navbar"));
-
-var NavItem = _interopRequire(require("./NavItem"));
-
-var ModalTrigger = _interopRequire(require("./ModalTrigger"));
-
-var OverlayTrigger = _interopRequire(require("./OverlayTrigger"));
-
-var OverlayMixin = _interopRequire(require("./OverlayMixin"));
-
-var PageHeader = _interopRequire(require("./PageHeader"));
-
-var Panel = _interopRequire(require("./Panel"));
-
-var PanelGroup = _interopRequire(require("./PanelGroup"));
-
-var PageItem = _interopRequire(require("./PageItem"));
-
-var Pager = _interopRequire(require("./Pager"));
-
-var Popover = _interopRequire(require("./Popover"));
-
-var ProgressBar = _interopRequire(require("./ProgressBar"));
-
-var Row = _interopRequire(require("./Row"));
-
-var SplitButton = _interopRequire(require("./SplitButton"));
-
-var SubNav = _interopRequire(require("./SubNav"));
-
-var TabbedArea = _interopRequire(require("./TabbedArea"));
-
-var Table = _interopRequire(require("./Table"));
-
-var TabPane = _interopRequire(require("./TabPane"));
-
-var Tooltip = _interopRequire(require("./Tooltip"));
-
-var Well = _interopRequire(require("./Well"));
-
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js":[function(require,module,exports){
 module.exports = {
-  Accordion: Accordion,
-  Affix: Affix,
-  AffixMixin: AffixMixin,
-  Alert: Alert,
-  BootstrapMixin: BootstrapMixin,
-  Badge: Badge,
-  Button: Button,
-  ButtonGroup: ButtonGroup,
-  ButtonToolbar: ButtonToolbar,
-  CollapsableNav: CollapsableNav,
-  Carousel: Carousel,
-  CarouselItem: CarouselItem,
-  Col: Col,
-  CollapsableMixin: CollapsableMixin,
-  DropdownButton: DropdownButton,
-  DropdownMenu: DropdownMenu,
-  DropdownStateMixin: DropdownStateMixin,
-  FadeMixin: FadeMixin,
-  Glyphicon: Glyphicon,
-  Grid: Grid,
-  Input: Input,
-  Interpolate: Interpolate,
-  Jumbotron: Jumbotron,
-  Label: Label,
-  ListGroup: ListGroup,
-  ListGroupItem: ListGroupItem,
-  MenuItem: MenuItem,
-  Modal: Modal,
-  Nav: Nav,
-  Navbar: Navbar,
-  NavItem: NavItem,
-  ModalTrigger: ModalTrigger,
-  OverlayTrigger: OverlayTrigger,
-  OverlayMixin: OverlayMixin,
-  PageHeader: PageHeader,
-  Panel: Panel,
-  PanelGroup: PanelGroup,
-  PageItem: PageItem,
-  Pager: Pager,
-  Popover: Popover,
-  ProgressBar: ProgressBar,
-  Row: Row,
-  SplitButton: SplitButton,
-  SubNav: SubNav,
-  TabbedArea: TabbedArea,
-  Table: Table,
-  TabPane: TabPane,
-  Tooltip: Tooltip,
-  Well: Well
+  Accordion: require('./Accordion'),
+  Affix: require('./Affix'),
+  AffixMixin: require('./AffixMixin'),
+  Alert: require('./Alert'),
+  BootstrapMixin: require('./BootstrapMixin'),
+  Badge: require('./Badge'),
+  Button: require('./Button'),
+  ButtonGroup: require('./ButtonGroup'),
+  ButtonToolbar: require('./ButtonToolbar'),
+  Carousel: require('./Carousel'),
+  CarouselItem: require('./CarouselItem'),
+  Col: require('./Col'),
+  CollapsableMixin: require('./CollapsableMixin'),
+  DropdownButton: require('./DropdownButton'),
+  DropdownMenu: require('./DropdownMenu'),
+  DropdownStateMixin: require('./DropdownStateMixin'),
+  FadeMixin: require('./FadeMixin'),
+  Glyphicon: require('./Glyphicon'),
+  Grid: require('./Grid'),
+  Input: require('./Input'),
+  Interpolate: require('./Interpolate'),
+  Jumbotron: require('./Jumbotron'),
+  Label: require('./Label'),
+  ListGroup: require('./ListGroup'),
+  ListGroupItem: require('./ListGroupItem'),
+  MenuItem: require('./MenuItem'),
+  Modal: require('./Modal'),
+  Nav: require('./Nav'),
+  Navbar: require('./Navbar'),
+  NavItem: require('./NavItem'),
+  ModalTrigger: require('./ModalTrigger'),
+  OverlayTrigger: require('./OverlayTrigger'),
+  OverlayMixin: require('./OverlayMixin'),
+  PageHeader: require('./PageHeader'),
+  Panel: require('./Panel'),
+  PanelGroup: require('./PanelGroup'),
+  PageItem: require('./PageItem'),
+  Pager: require('./Pager'),
+  Popover: require('./Popover'),
+  ProgressBar: require('./ProgressBar'),
+  Row: require('./Row'),
+  SplitButton: require('./SplitButton'),
+  SubNav: require('./SubNav'),
+  TabbedArea: require('./TabbedArea'),
+  Table: require('./Table'),
+  TabPane: require('./TabPane'),
+  Tooltip: require('./Tooltip'),
+  Well: require('./Well')
 };
-},{"./Accordion":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Accordion.js","./Affix":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Affix.js","./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/AffixMixin.js","./Alert":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Alert.js","./Badge":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Badge.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonGroup.js","./ButtonToolbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ButtonToolbar.js","./Carousel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Carousel.js","./CarouselItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CarouselItem.js","./Col":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Col.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableMixin.js","./CollapsableNav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/CollapsableNav.js","./DropdownButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownButton.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/DropdownStateMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/FadeMixin.js","./Glyphicon":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Glyphicon.js","./Grid":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Grid.js","./Input":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Input.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Interpolate.js","./Jumbotron":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Jumbotron.js","./Label":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Label.js","./ListGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ListGroup.js","./ListGroupItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ListGroupItem.js","./MenuItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/MenuItem.js","./Modal":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Modal.js","./ModalTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ModalTrigger.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/NavItem.js","./Navbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Navbar.js","./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayMixin.js","./OverlayTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/OverlayTrigger.js","./PageHeader":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PageHeader.js","./PageItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PageItem.js","./Pager":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Pager.js","./Panel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Panel.js","./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/PanelGroup.js","./Popover":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Popover.js","./ProgressBar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/ProgressBar.js","./Row":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Row.js","./SplitButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/SplitButton.js","./SubNav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/SubNav.js","./TabPane":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/TabPane.js","./TabbedArea":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/TabbedArea.js","./Table":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Table.js","./Tooltip":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Tooltip.js","./Well":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/Well.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/CustomPropTypes.js":[function(require,module,exports){
-"use strict";
 
-var ANONYMOUS = "<<anonymous>>";
+},{"./Accordion":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Accordion.js","./Affix":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Affix.js","./AffixMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/AffixMixin.js","./Alert":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Alert.js","./Badge":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Badge.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/BootstrapMixin.js","./Button":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Button.js","./ButtonGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonGroup.js","./ButtonToolbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ButtonToolbar.js","./Carousel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Carousel.js","./CarouselItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CarouselItem.js","./Col":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Col.js","./CollapsableMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/CollapsableMixin.js","./DropdownButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownButton.js","./DropdownMenu":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownMenu.js","./DropdownStateMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/DropdownStateMixin.js","./FadeMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/FadeMixin.js","./Glyphicon":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Glyphicon.js","./Grid":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Grid.js","./Input":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Input.js","./Interpolate":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Interpolate.js","./Jumbotron":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Jumbotron.js","./Label":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Label.js","./ListGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroup.js","./ListGroupItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ListGroupItem.js","./MenuItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/MenuItem.js","./Modal":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Modal.js","./ModalTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ModalTrigger.js","./Nav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Nav.js","./NavItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/NavItem.js","./Navbar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Navbar.js","./OverlayMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayMixin.js","./OverlayTrigger":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/OverlayTrigger.js","./PageHeader":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageHeader.js","./PageItem":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PageItem.js","./Pager":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Pager.js","./Panel":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Panel.js","./PanelGroup":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/PanelGroup.js","./Popover":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Popover.js","./ProgressBar":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/ProgressBar.js","./Row":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Row.js","./SplitButton":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SplitButton.js","./SubNav":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/SubNav.js","./TabPane":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabPane.js","./TabbedArea":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/TabbedArea.js","./Table":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Table.js","./Tooltip":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Tooltip.js","./Well":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/Well.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/CustomPropTypes.js":[function(require,module,exports){
+var React = require('react');
+
+var ANONYMOUS = '<<anonymous>>';
 
 var CustomPropTypes = {
   /**
@@ -52445,7 +51915,10 @@ function createChainableTypeChecker(validate) {
     componentName = componentName || ANONYMOUS;
     if (props[propName] == null) {
       if (isRequired) {
-        return new Error("Required prop `" + propName + "` was not specified in " + "`" + componentName + "`.");
+        return new Error(
+          'Required prop `' + propName + '` was not specified in ' +
+            '`' + componentName + '`.'
+        );
       }
     } else {
       return validate(props, propName, componentName);
@@ -52460,8 +51933,12 @@ function createChainableTypeChecker(validate) {
 
 function createMountableChecker() {
   function validate(props, propName, componentName) {
-    if (typeof props[propName] !== "object" || typeof props[propName].render !== "function" && props[propName].nodeType !== 1) {
-      return new Error("Invalid prop `" + propName + "` supplied to " + "`" + componentName + "`, expected a DOM element or an object that has a `render` method");
+    if (typeof props[propName] !== 'object' ||
+      typeof props[propName].getDOMNode !== 'function' && props[propName].nodeType !== 1) {
+      return new Error(
+        'Invalid prop `' + propName + '` supplied to ' +
+          '`' + componentName + '`, expected a DOM element or an object that has a `getDOMNode` method'
+      );
     }
   }
 
@@ -52469,7 +51946,7 @@ function createMountableChecker() {
 }
 
 module.exports = CustomPropTypes;
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/EventListener.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/EventListener.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -52495,8 +51972,6 @@ module.exports = CustomPropTypes;
 /**
  * Does not take into account specific nature of platform.
  */
-"use strict";
-
 var EventListener = {
   /**
    * Listen to DOM events during the bubble phase.
@@ -52506,19 +51981,19 @@ var EventListener = {
    * @param {function} callback Callback function.
    * @return {object} Object with a `remove` method.
    */
-  listen: function listen(target, eventType, callback) {
+  listen: function(target, eventType, callback) {
     if (target.addEventListener) {
       target.addEventListener(eventType, callback, false);
       return {
-        remove: function remove() {
+        remove: function() {
           target.removeEventListener(eventType, callback, false);
         }
       };
     } else if (target.attachEvent) {
-      target.attachEvent("on" + eventType, callback);
+      target.attachEvent('on' + eventType, callback);
       return {
-        remove: function remove() {
-          target.detachEvent("on" + eventType, callback);
+        remove: function() {
+          target.detachEvent('on' + eventType, callback);
         }
       };
     }
@@ -52526,7 +52001,8 @@ var EventListener = {
 };
 
 module.exports = EventListener;
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/Object.assign.js":[function(require,module,exports){
+
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js":[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -52542,11 +52018,9 @@ module.exports = EventListener;
 
 // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.assign
 
-"use strict";
-
 function assign(target, sources) {
   if (target == null) {
-    throw new TypeError("Object.assign target cannot be null or undefined");
+    throw new TypeError('Object.assign target cannot be null or undefined');
   }
 
   var to = Object(target);
@@ -52573,10 +52047,11 @@ function assign(target, sources) {
   }
 
   return to;
-}
+};
 
 module.exports = assign;
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/TransitionEvents.js":[function(require,module,exports){
+
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/TransitionEvents.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -52590,9 +52065,11 @@ module.exports = assign;
  * https://github.com/facebook/react/blob/v0.12.0/PATENTS
  */
 
-"use strict";
-
-var canUseDOM = !!(typeof window !== "undefined" && window.document && window.document.createElement);
+var canUseDOM = !!(
+  typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement
+  );
 
 /**
  * EVENT_NAME_MAP is used to determine which event fired when a
@@ -52601,26 +52078,26 @@ var canUseDOM = !!(typeof window !== "undefined" && window.document && window.do
  */
 var EVENT_NAME_MAP = {
   transitionend: {
-    transition: "transitionend",
-    WebkitTransition: "webkitTransitionEnd",
-    MozTransition: "mozTransitionEnd",
-    OTransition: "oTransitionEnd",
-    msTransition: "MSTransitionEnd"
+    'transition': 'transitionend',
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'mozTransitionEnd',
+    'OTransition': 'oTransitionEnd',
+    'msTransition': 'MSTransitionEnd'
   },
 
   animationend: {
-    animation: "animationend",
-    WebkitAnimation: "webkitAnimationEnd",
-    MozAnimation: "mozAnimationEnd",
-    OAnimation: "oAnimationEnd",
-    msAnimation: "MSAnimationEnd"
+    'animation': 'animationend',
+    'WebkitAnimation': 'webkitAnimationEnd',
+    'MozAnimation': 'mozAnimationEnd',
+    'OAnimation': 'oAnimationEnd',
+    'msAnimation': 'MSAnimationEnd'
   }
 };
 
 var endEvents = [];
 
 function detectEvents() {
-  var testEl = document.createElement("div");
+  var testEl = document.createElement('div');
   var style = testEl.style;
 
   // On some platforms, in particular some releases of Android 4.x,
@@ -52628,11 +52105,11 @@ function detectEvents() {
   // style object but the events that fire will still be prefixed, so we need
   // to check if the un-prefixed events are useable, and if not remove them
   // from the map
-  if (!("AnimationEvent" in window)) {
+  if (!('AnimationEvent' in window)) {
     delete EVENT_NAME_MAP.animationend.animation;
   }
 
-  if (!("TransitionEvent" in window)) {
+  if (!('TransitionEvent' in window)) {
     delete EVENT_NAME_MAP.transitionend.transition;
   }
 
@@ -52665,35 +52142,32 @@ function removeEventListener(node, eventName, eventListener) {
 }
 
 var ReactTransitionEvents = {
-  addEndEventListener: function addEndEventListener(node, eventListener) {
+  addEndEventListener: function(node, eventListener) {
     if (endEvents.length === 0) {
       // If CSS transitions are not supported, trigger an "end animation"
       // event immediately.
       window.setTimeout(eventListener, 0);
       return;
     }
-    endEvents.forEach(function (endEvent) {
+    endEvents.forEach(function(endEvent) {
       addEventListener(node, endEvent, eventListener);
     });
   },
 
-  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+  removeEndEventListener: function(node, eventListener) {
     if (endEvents.length === 0) {
       return;
     }
-    endEvents.forEach(function (endEvent) {
+    endEvents.forEach(function(endEvent) {
       removeEventListener(node, endEvent, eventListener);
     });
   }
 };
 
 module.exports = ReactTransitionEvents;
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/ValidComponentChildren.js":[function(require,module,exports){
-"use strict";
 
-var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-var React = _interopRequire(require("react"));
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/ValidComponentChildren.js":[function(require,module,exports){
+var React = require('react');
 
 /**
  * Maps children that are typically specified as `props.children`,
@@ -52753,9 +52227,7 @@ function numberOfValidComponents(children) {
   var count = 0;
 
   React.Children.forEach(children, function (child) {
-    if (React.isValidElement(child)) {
-      count++;
-    }
+    if (React.isValidElement(child)) { count++; }
   });
 
   return count;
@@ -52785,7 +52257,191 @@ module.exports = {
   numberOf: numberOfValidComponents,
   hasValidComponent: hasValidComponent
 };
-},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/createChainedFunction.js":[function(require,module,exports){
+},{"react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This file contains an unmodified version of:
+ * https://github.com/facebook/react/blob/v0.12.0/src/vendor/stubs/cx.js
+ *
+ * This source code is licensed under the BSD-style license found here:
+ * https://github.com/facebook/react/blob/v0.12.0/LICENSE
+ * An additional grant of patent rights can be found here:
+ * https://github.com/facebook/react/blob/v0.12.0/PATENTS
+ */
+
+/**
+ * This function is used to mark string literals representing CSS class names
+ * so that they can be transformed statically. This allows for modularization
+ * and minification of CSS class names.
+ *
+ * In static_upstream, this function is actually implemented, but it should
+ * eventually be replaced with something more descriptive, and the transform
+ * that is used in the main stack should be ported for use elsewhere.
+ *
+ * @param string|object className to modularize, or an object of key/values.
+ *                      In the object case, the values are conditions that
+ *                      determine if the className keys should be included.
+ * @param [string ...]  Variable list of classNames in the string case.
+ * @return string       Renderable space-separated CSS className.
+ */
+function cx(classNames) {
+  if (typeof classNames == 'object') {
+    return Object.keys(classNames).filter(function(className) {
+      return classNames[className];
+    }).join(' ');
+  } else {
+    return Array.prototype.join.call(arguments, ' ');
+  }
+}
+
+module.exports = cx;
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/cloneWithProps.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This file contains modified versions of:
+ * https://github.com/facebook/react/blob/v0.12.0/src/utils/cloneWithProps.js
+ * https://github.com/facebook/react/blob/v0.12.0/src/core/ReactPropTransferer.js
+ *
+ * This source code is licensed under the BSD-style license found here:
+ * https://github.com/facebook/react/blob/v0.12.0/LICENSE
+ * An additional grant of patent rights can be found here:
+ * https://github.com/facebook/react/blob/v0.12.0/PATENTS
+ *
+ * TODO: This should be replaced as soon as cloneWithProps is available via
+ *  the core React package or a separate package.
+ *  @see https://github.com/facebook/react/issues/1906
+ */
+
+var React = require('react');
+var joinClasses = require('./joinClasses');
+var assign = require("./Object.assign");
+
+/**
+ * Creates a transfer strategy that will merge prop values using the supplied
+ * `mergeStrategy`. If a prop was previously unset, this just sets it.
+ *
+ * @param {function} mergeStrategy
+ * @return {function}
+ */
+function createTransferStrategy(mergeStrategy) {
+  return function(props, key, value) {
+    if (!props.hasOwnProperty(key)) {
+      props[key] = value;
+    } else {
+      props[key] = mergeStrategy(props[key], value);
+    }
+  };
+}
+
+var transferStrategyMerge = createTransferStrategy(function(a, b) {
+  // `merge` overrides the first object's (`props[key]` above) keys using the
+  // second object's (`value`) keys. An object's style's existing `propA` would
+  // get overridden. Flip the order here.
+  return assign({}, b, a);
+});
+
+function emptyFunction() {}
+
+/**
+ * Transfer strategies dictate how props are transferred by `transferPropsTo`.
+ * NOTE: if you add any more exceptions to this list you should be sure to
+ * update `cloneWithProps()` accordingly.
+ */
+var TransferStrategies = {
+  /**
+   * Never transfer `children`.
+   */
+  children: emptyFunction,
+  /**
+   * Transfer the `className` prop by merging them.
+   */
+  className: createTransferStrategy(joinClasses),
+  /**
+   * Transfer the `style` prop (which is an object) by merging them.
+   */
+  style: transferStrategyMerge
+};
+
+/**
+ * Mutates the first argument by transferring the properties from the second
+ * argument.
+ *
+ * @param {object} props
+ * @param {object} newProps
+ * @return {object}
+ */
+function transferInto(props, newProps) {
+  for (var thisKey in newProps) {
+    if (!newProps.hasOwnProperty(thisKey)) {
+      continue;
+    }
+
+    var transferStrategy = TransferStrategies[thisKey];
+
+    if (transferStrategy && TransferStrategies.hasOwnProperty(thisKey)) {
+      transferStrategy(props, thisKey, newProps[thisKey]);
+    } else if (!props.hasOwnProperty(thisKey)) {
+      props[thisKey] = newProps[thisKey];
+    }
+  }
+  return props;
+}
+
+/**
+ * Merge two props objects using TransferStrategies.
+ *
+ * @param {object} oldProps original props (they take precedence)
+ * @param {object} newProps new props to merge in
+ * @return {object} a new object containing both sets of props merged.
+ */
+function mergeProps(oldProps, newProps) {
+  return transferInto(assign({}, oldProps), newProps);
+}
+
+
+var ReactPropTransferer = {
+  mergeProps: mergeProps
+};
+
+var CHILDREN_PROP = 'children';
+
+/**
+ * Sometimes you want to change the props of a child passed to you. Usually
+ * this is to add a CSS class.
+ *
+ * @param {object} child child component you'd like to clone
+ * @param {object} props props you'd like to modify. They will be merged
+ * as if you used `transferPropsTo()`.
+ * @return {object} a clone of child with props merged in.
+ */
+function cloneWithProps(child, props) {
+  var newProps = ReactPropTransferer.mergeProps(props, child.props);
+
+  // Use `child.props.children` if it is provided.
+  if (!newProps.hasOwnProperty(CHILDREN_PROP) &&
+    child.props.hasOwnProperty(CHILDREN_PROP)) {
+    newProps.children = child.props.children;
+  }
+
+  if (React.version.substr(0, 4) === '0.12'){
+    var mockLegacyFactory = function(){};
+    mockLegacyFactory.isReactLegacyFactory = true;
+    mockLegacyFactory.type = child.type;
+
+    return React.createElement(mockLegacyFactory, newProps);
+  }
+
+  // The current API doesn't retain _owner and _context, which is why this
+  // doesn't use ReactElement.cloneAndReplaceProps.
+  return React.createElement(child.type, newProps);
+}
+
+module.exports = cloneWithProps;
+},{"./Object.assign":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/Object.assign.js","./joinClasses":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/createChainedFunction.js":[function(require,module,exports){
 /**
  * Safe chained function
  *
@@ -52796,21 +52452,13 @@ module.exports = {
  * @param {function} two
  * @returns {function|null}
  */
-"use strict";
-
 function createChainedFunction(one, two) {
-  var hasOne = typeof one === "function";
-  var hasTwo = typeof two === "function";
+  var hasOne = typeof one === 'function';
+  var hasTwo = typeof two === 'function';
 
-  if (!hasOne && !hasTwo) {
-    return null;
-  }
-  if (!hasOne) {
-    return two;
-  }
-  if (!hasTwo) {
-    return one;
-  }
+  if (!hasOne && !hasTwo) { return null; }
+  if (!hasOne) { return two; }
+  if (!hasTwo) { return one; }
 
   return function chainedFunction() {
     one.apply(this, arguments);
@@ -52819,15 +52467,14 @@ function createChainedFunction(one, two) {
 }
 
 module.exports = createChainedFunction;
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/utils/domUtils.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/domUtils.js":[function(require,module,exports){
+
 /**
  * Shortcut to compute element style
  *
  * @param {HTMLElement} elem
  * @returns {CssStyle}
  */
-"use strict";
-
 function getComputedStyles(elem) {
   return elem.ownerDocument.defaultView.getComputedStyle(elem, null);
 }
@@ -52850,7 +52497,7 @@ function getOffset(DOMNode) {
 
   // If we don't have gBCR, just use 0,0 rather than error
   // BlackBerry 5, iOS 3 (original iPhone)
-  if (typeof DOMNode.getBoundingClientRect !== "undefined") {
+  if ( typeof DOMNode.getBoundingClientRect !== 'undefined' ) {
     box = DOMNode.getBoundingClientRect();
   }
 
@@ -52874,22 +52521,23 @@ function getPosition(elem, offsetParent) {
     return window.jQuery(elem).position();
   }
 
-  var offset = undefined,
-      parentOffset = { top: 0, left: 0 };
+  var offset,
+      parentOffset = {top: 0, left: 0};
 
   // Fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is its only offset parent
-  if (getComputedStyles(elem).position === "fixed") {
+  if (getComputedStyles(elem).position === 'fixed' ) {
     // We assume that getBoundingClientRect is available when computed position is fixed
     offset = elem.getBoundingClientRect();
+
   } else {
     if (!offsetParent) {
       // Get *real* offsetParent
-      offsetParent = offsetParentFunc(elem);
+      offsetParent = offsetParent(elem);
     }
 
     // Get correct offsets
     offset = getOffset(elem);
-    if (offsetParent.nodeName !== "HTML") {
+    if ( offsetParent.nodeName !== 'HTML') {
       parentOffset = getOffset(offsetParent);
     }
 
@@ -52911,11 +52559,12 @@ function getPosition(elem, offsetParent) {
  * @param {HTMLElement?} elem
  * @returns {HTMLElement}
  */
-function offsetParentFunc(elem) {
+function offsetParent(elem) {
   var docElem = document.documentElement;
   var offsetParent = elem.offsetParent || docElem;
 
-  while (offsetParent && (offsetParent.nodeName !== "HTML" && getComputedStyles(offsetParent).position === "static")) {
+  while ( offsetParent && ( offsetParent.nodeName !== 'HTML' &&
+    getComputedStyles(offsetParent).position === 'static' ) ) {
     offsetParent = offsetParent.offsetParent;
   }
 
@@ -52926,39 +52575,49 @@ module.exports = {
   getComputedStyles: getComputedStyles,
   getOffset: getOffset,
   getPosition: getPosition,
-  offsetParent: offsetParentFunc
+  offsetParent: offsetParent
 };
-},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js":[function(require,module,exports){
-function classNames() {
-	var classes = '';
-	var arg;
+},{}],"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/joinClasses.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This file contains an unmodified version of:
+ * https://github.com/facebook/react/blob/v0.12.0/src/utils/joinClasses.js
+ *
+ * This source code is licensed under the BSD-style license found here:
+ * https://github.com/facebook/react/blob/v0.12.0/LICENSE
+ * An additional grant of patent rights can be found here:
+ * https://github.com/facebook/react/blob/v0.12.0/PATENTS
+ */
 
-	for (var i = 0; i < arguments.length; i++) {
-		arg = arguments[i];
-		if (!arg) {
-			continue;
-		}
+"use strict";
 
-		if ('string' === typeof arg || 'number' === typeof arg) {
-			classes += ' ' + arg;
-		} else if (Object.prototype.toString.call(arg) === '[object Array]') {
-			classes += ' ' + classNames.apply(null, arg);
-		} else if ('object' === typeof arg) {
-			for (var key in arg) {
-				if (!arg.hasOwnProperty(key) || !arg[key]) {
-					continue;
-				}
-				classes += ' ' + key;
-			}
-		}
-	}
-	return classes.substr(1);
+/**
+ * Combines multiple className strings into one.
+ * http://jsperf.com/joinclasses-args-vs-array
+ *
+ * @param {...?string} classes
+ * @return {string}
+ */
+function joinClasses(className/*, ... */) {
+  if (!className) {
+    className = '';
+  }
+  var nextClass;
+  var argLength = arguments.length;
+  if (argLength > 1) {
+    for (var ii = 1; ii < argLength; ii++) {
+      nextClass = arguments[ii];
+      if (nextClass) {
+        className = (className ? className + ' ' : '') + nextClass;
+      }
+    }
+  }
+  return className;
 }
 
-// safely export classNames in case the script is included directly on a page
-if (typeof module !== 'undefined' && module.exports) {
-	module.exports = classNames;
-}
+module.exports = joinClasses;
 
 },{}],"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js":[function(require,module,exports){
 // IE shim
@@ -56631,345 +56290,101 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/AutoFocusMixin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/AutoFocusMixin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/AutoFocusMixin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/BeforeInputEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/BeforeInputEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/BeforeInputEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/BeforeInputEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSProperty.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSProperty.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSProperty.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSProperty.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CSSPropertyOperations.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSPropertyOperations.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSPropertyOperations.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CSSPropertyOperations.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/CallbackQueue.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CallbackQueue.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CallbackQueue.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/CallbackQueue.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ChangeEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ChangeEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ChangeEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ChangeEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ClientReactRootIndex.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ClientReactRootIndex.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ClientReactRootIndex.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ClientReactRootIndex.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMChildrenOperations.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMChildrenOperations.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMChildrenOperations.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMChildrenOperations.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMProperty.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMProperty.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMProperty.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMProperty.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DOMPropertyOperations.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMPropertyOperations.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMPropertyOperations.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DOMPropertyOperations.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Danger.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Danger.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Danger.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Danger.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/DefaultEventPluginOrder.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DefaultEventPluginOrder.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DefaultEventPluginOrder.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/DefaultEventPluginOrder.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EnterLeaveEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EnterLeaveEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EnterLeaveEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EnterLeaveEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventConstants.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventConstants.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventConstants.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventConstants.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventListener.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventListener.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventListener.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventListener.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginHub.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginHub.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginHub.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginHub.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginRegistry.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginRegistry.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginRegistry.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginRegistry.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPluginUtils.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginUtils.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginUtils.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPluginUtils.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/EventPropagators.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPropagators.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPropagators.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/EventPropagators.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ExecutionEnvironment.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ExecutionEnvironment.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/FallbackCompositionState.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/FallbackCompositionState.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/FallbackCompositionState.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/FallbackCompositionState.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/HTMLDOMPropertyConfig.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/HTMLDOMPropertyConfig.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/HTMLDOMPropertyConfig.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/HTMLDOMPropertyConfig.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/LinkedValueUtils.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LinkedValueUtils.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LinkedValueUtils.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LinkedValueUtils.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/LocalEventTrapMixin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LocalEventTrapMixin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LocalEventTrapMixin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/LocalEventTrapMixin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/MobileSafariClickEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/MobileSafariClickEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/MobileSafariClickEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/MobileSafariClickEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Object.assign.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Object.assign.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Object.assign.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/PooledClass.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/PooledClass.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/PooledClass.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/PooledClass.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/React.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/React.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/React.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/React.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserComponentMixin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserComponentMixin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserComponentMixin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserComponentMixin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactBrowserEventEmitter.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserEventEmitter.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserEventEmitter.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactBrowserEventEmitter.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactChildReconciler.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildReconciler.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildReconciler.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildReconciler.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactChildren.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildren.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildren.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactChildren.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactClass.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactClass.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactClass.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactClass.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponentBrowserEnvironment.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentBrowserEnvironment.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentBrowserEnvironment.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentBrowserEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactComponentEnvironment.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentEnvironment.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentEnvironment.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactComponentEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCompositeComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCompositeComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCompositeComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCompositeComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactContext.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactContext.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactContext.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactContext.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactCurrentOwner.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCurrentOwner.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCurrentOwner.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactCurrentOwner.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOM.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOM.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOM.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOM.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMButton.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMButton.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMButton.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMButton.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMForm.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMForm.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMForm.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMForm.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMIDOperations.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIDOperations.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIDOperations.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIDOperations.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMIframe.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIframe.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIframe.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMIframe.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMImg.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMImg.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMImg.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMImg.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMInput.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMInput.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMInput.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMInput.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMOption.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMOption.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMOption.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMOption.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelect.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelect.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelect.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelect.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMSelection.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelection.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelection.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMSelection.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMTextComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDOMTextarea.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextarea.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextarea.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDOMTextarea.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultBatchingStrategy.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultBatchingStrategy.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultBatchingStrategy.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultBatchingStrategy.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultInjection.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultInjection.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultInjection.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultInjection.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerf.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerf.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerf.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactDefaultPerfAnalysis.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerfAnalysis.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerfAnalysis.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactDefaultPerfAnalysis.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElement.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElement.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElement.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactElementValidator.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElementValidator.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElementValidator.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactElementValidator.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEmptyComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEmptyComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEmptyComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEmptyComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactErrorUtils.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactErrorUtils.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactErrorUtils.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactErrorUtils.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventEmitterMixin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventEmitterMixin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventEmitterMixin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventEmitterMixin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactEventListener.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventListener.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventListener.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactEventListener.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactFragment.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactFragment.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactFragment.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactFragment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInjection.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInjection.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInjection.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInjection.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInputSelection.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInputSelection.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInputSelection.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInputSelection.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceHandles.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceHandles.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceHandles.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceHandles.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactInstanceMap.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceMap.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceMap.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactInstanceMap.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactLifeCycle.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactLifeCycle.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactLifeCycle.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactLifeCycle.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMarkupChecksum.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMarkupChecksum.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMarkupChecksum.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMarkupChecksum.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMount.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMount.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMount.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMount.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChild.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChild.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChild.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChild.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactMultiChildUpdateTypes.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChildUpdateTypes.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChildUpdateTypes.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactMultiChildUpdateTypes.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactNativeComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactNativeComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactNativeComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactNativeComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactOwner.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactOwner.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactOwner.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactOwner.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPerf.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPerf.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPerf.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPerf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocationNames.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocationNames.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocationNames.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocationNames.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypeLocations.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocations.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocations.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypeLocations.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPropTypes.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypes.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypes.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPropTypes.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactPutListenerQueue.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPutListenerQueue.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPutListenerQueue.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactPutListenerQueue.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactReconcileTransaction.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconcileTransaction.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconcileTransaction.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconcileTransaction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactReconciler.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconciler.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconciler.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactReconciler.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactRef.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRef.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRef.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRef.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactRootIndex.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRootIndex.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRootIndex.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactRootIndex.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRendering.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRendering.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRendering.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRendering.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactServerRenderingTransaction.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRenderingTransaction.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRenderingTransaction.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactServerRenderingTransaction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactTransitionEvents.js":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js":[function(require,module,exports){
 /**
- * Copyright 2013-2015, Facebook, Inc.
+ * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * @providesModule ReactTransitionEvents
+ * @providesModule ExecutionEnvironment
  */
 
-'use strict';
+/*jslint evil: true */
 
-var ExecutionEnvironment = require("./ExecutionEnvironment");
+"use strict";
+
+var canUseDOM = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
 /**
- * EVENT_NAME_MAP is used to determine which event fired when a
- * transition/animation ends, based on the style property used to
- * define that event.
+ * Simple, lightweight module assisting with the detection and context of
+ * Worker. Helps avoid circular dependencies and allows code to reason about
+ * whether or not they are in a Worker, even if they never include the main
+ * `ReactWorker` dependency.
  */
-var EVENT_NAME_MAP = {
-  transitionend: {
-    'transition': 'transitionend',
-    'WebkitTransition': 'webkitTransitionEnd',
-    'MozTransition': 'mozTransitionEnd',
-    'OTransition': 'oTransitionEnd',
-    'msTransition': 'MSTransitionEnd'
-  },
+var ExecutionEnvironment = {
 
-  animationend: {
-    'animation': 'animationend',
-    'WebkitAnimation': 'webkitAnimationEnd',
-    'MozAnimation': 'mozAnimationEnd',
-    'OAnimation': 'oAnimationEnd',
-    'msAnimation': 'MSAnimationEnd'
-  }
+  canUseDOM: canUseDOM,
+
+  canUseWorkers: typeof Worker !== 'undefined',
+
+  canUseEventListeners:
+    canUseDOM && !!(window.addEventListener || window.attachEvent),
+
+  canUseViewport: canUseDOM && !!window.screen,
+
+  isInWorker: !canUseDOM // For now, this is true - might change in the future.
+
 };
 
-var endEvents = [];
+module.exports = ExecutionEnvironment;
 
-function detectEvents() {
-  var testEl = document.createElement('div');
-  var style = testEl.style;
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Object.assign.js":[function(require,module,exports){
+/**
+ * Copyright 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule Object.assign
+ */
 
-  // On some platforms, in particular some releases of Android 4.x,
-  // the un-prefixed "animation" and "transition" properties are defined on the
-  // style object but the events that fire will still be prefixed, so we need
-  // to check if the un-prefixed events are useable, and if not remove them
-  // from the map
-  if (!('AnimationEvent' in window)) {
-    delete EVENT_NAME_MAP.animationend.animation;
+// https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.assign
+
+function assign(target, sources) {
+  if (target == null) {
+    throw new TypeError('Object.assign target cannot be null or undefined');
   }
 
-  if (!('TransitionEvent' in window)) {
-    delete EVENT_NAME_MAP.transitionend.transition;
-  }
+  var to = Object(target);
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-  for (var baseEventName in EVENT_NAME_MAP) {
-    var baseEvents = EVENT_NAME_MAP[baseEventName];
-    for (var styleName in baseEvents) {
-      if (styleName in style) {
-        endEvents.push(baseEvents[styleName]);
-        break;
+  for (var nextIndex = 1; nextIndex < arguments.length; nextIndex++) {
+    var nextSource = arguments[nextIndex];
+    if (nextSource == null) {
+      continue;
+    }
+
+    var from = Object(nextSource);
+
+    // We don't currently support accessors nor proxies. Therefore this
+    // copy cannot throw. If we ever supported this then we must handle
+    // exceptions and side-effects. We don't support symbols so they won't
+    // be transferred.
+
+    for (var key in from) {
+      if (hasOwnProperty.call(from, key)) {
+        to[key] = from[key];
       }
     }
   }
-}
 
-if (ExecutionEnvironment.canUseDOM) {
-  detectEvents();
-}
-
-// We use the raw {add|remove}EventListener() call because EventListener
-// does not know how to remove event listeners and we really should
-// clean up. Also, these events are not triggered in older browsers
-// so we should be A-OK here.
-
-function addEventListener(node, eventName, eventListener) {
-  node.addEventListener(eventName, eventListener, false);
-}
-
-function removeEventListener(node, eventName, eventListener) {
-  node.removeEventListener(eventName, eventListener, false);
-}
-
-var ReactTransitionEvents = {
-  addEndEventListener: function(node, eventListener) {
-    if (endEvents.length === 0) {
-      // If CSS transitions are not supported, trigger an "end animation"
-      // event immediately.
-      window.setTimeout(eventListener, 0);
-      return;
-    }
-    endEvents.forEach(function(endEvent) {
-      addEventListener(node, endEvent, eventListener);
-    });
-  },
-
-  removeEndEventListener: function(node, eventListener) {
-    if (endEvents.length === 0) {
-      return;
-    }
-    endEvents.forEach(function(endEvent) {
-      removeEventListener(node, endEvent, eventListener);
-    });
-  }
+  return to;
 };
 
-module.exports = ReactTransitionEvents;
+module.exports = assign;
 
-},{"./ExecutionEnvironment":"/home/ubuntu/bridge-controller/node_modules/react/lib/ExecutionEnvironment.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdateQueue.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdateQueue.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdateQueue.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdateQueue.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ReactUpdates.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdates.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdates.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ReactUpdates.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SVGDOMPropertyConfig.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SVGDOMPropertyConfig.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SVGDOMPropertyConfig.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SVGDOMPropertyConfig.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SelectEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SelectEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SelectEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SelectEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ServerReactRootIndex.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ServerReactRootIndex.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ServerReactRootIndex.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ServerReactRootIndex.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SimpleEventPlugin.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SimpleEventPlugin.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SimpleEventPlugin.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SimpleEventPlugin.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticClipboardEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticClipboardEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticClipboardEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticClipboardEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticCompositionEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticCompositionEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticCompositionEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticCompositionEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticDragEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticDragEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticDragEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticDragEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticFocusEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticFocusEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticFocusEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticFocusEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticInputEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticInputEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticInputEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticInputEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticKeyboardEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticKeyboardEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticKeyboardEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticKeyboardEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticMouseEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticMouseEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticMouseEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticMouseEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticTouchEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticTouchEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticTouchEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticTouchEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticUIEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticUIEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticUIEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticUIEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/SyntheticWheelEvent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticWheelEvent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticWheelEvent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/SyntheticWheelEvent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/Transaction.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Transaction.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Transaction.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/Transaction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/ViewportMetrics.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ViewportMetrics.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ViewportMetrics.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/ViewportMetrics.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/accumulateInto.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/accumulateInto.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/accumulateInto.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/accumulateInto.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/adler32.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/adler32.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/adler32.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/adler32.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/camelize.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelize.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelize.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelize.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/camelizeStyleName.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelizeStyleName.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelizeStyleName.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/camelizeStyleName.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/containsNode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/containsNode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/containsNode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/containsNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createArrayFromMixed.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createArrayFromMixed.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createArrayFromMixed.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createArrayFromMixed.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createFullPageComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createFullPageComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createFullPageComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createFullPageComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/createNodesFromMarkup.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createNodesFromMarkup.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createNodesFromMarkup.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/createNodesFromMarkup.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/cx.js":[function(require,module,exports){
-(function (process){
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/cx.js":[function(require,module,exports){
 /**
- * Copyright 2013-2015, Facebook, Inc.
+ * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -56994,22 +56409,7 @@ module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-rea
  * @param [string ...]  Variable list of classNames in the string case.
  * @return string       Renderable space-separated CSS className.
  */
-
-'use strict';
-var warning = require("./warning");
-
-var warned = false;
-
 function cx(classNames) {
-  if ("production" !== process.env.NODE_ENV) {
-    ("production" !== process.env.NODE_ENV ? warning(
-      warned,
-      'React.addons.classSet will be deprecated in a future version. See ' +
-      'http://fb.me/react-addons-classset'
-    ) : null);
-    warned = true;
-  }
-
   if (typeof classNames == 'object') {
     return Object.keys(classNames).filter(function(className) {
       return classNames[className];
@@ -57021,92 +56421,143 @@ function cx(classNames) {
 
 module.exports = cx;
 
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule emptyFunction
+ */
+
+function makeEmptyFunction(arg) {
+  return function() {
+    return arg;
+  };
+}
+
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+function emptyFunction() {}
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+emptyFunction.thatReturnsThis = function() { return this; };
+emptyFunction.thatReturnsArgument = function(arg) { return arg; };
+
+module.exports = emptyFunction;
+
+},{}],"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js":[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule invariant
+ */
+
+"use strict";
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if ("production" !== process.env.NODE_ENV) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        'Invariant Violation: ' +
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
+
 }).call(this,require('_process'))
-},{"./warning":"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/dangerousStyleValue.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/dangerousStyleValue.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/dangerousStyleValue.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/dangerousStyleValue.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyFunction.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyFunction.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyFunction.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyObject.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyObject.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyObject.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/emptyObject.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/escapeTextContentForBrowser.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/escapeTextContentForBrowser.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/escapeTextContentForBrowser.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/escapeTextContentForBrowser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/findDOMNode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/findDOMNode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/findDOMNode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/findDOMNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/flattenChildren.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/flattenChildren.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/flattenChildren.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/flattenChildren.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/focusNode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/focusNode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/focusNode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/focusNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/forEachAccumulated.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/forEachAccumulated.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/forEachAccumulated.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/forEachAccumulated.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getActiveElement.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getActiveElement.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getActiveElement.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getActiveElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventCharCode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventCharCode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventCharCode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventCharCode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventKey.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventKey.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventKey.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventKey.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventModifierState.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventModifierState.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventModifierState.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventModifierState.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getEventTarget.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventTarget.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventTarget.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getEventTarget.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getIteratorFn.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getIteratorFn.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getIteratorFn.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getIteratorFn.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getMarkupWrap.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getMarkupWrap.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getMarkupWrap.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getMarkupWrap.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getNodeForCharacterOffset.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getNodeForCharacterOffset.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getNodeForCharacterOffset.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getNodeForCharacterOffset.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getReactRootElementInContainer.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getReactRootElementInContainer.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getReactRootElementInContainer.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getReactRootElementInContainer.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getTextContentAccessor.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getTextContentAccessor.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getTextContentAccessor.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getTextContentAccessor.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/getUnboundedScrollPosition.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getUnboundedScrollPosition.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getUnboundedScrollPosition.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/getUnboundedScrollPosition.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenate.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenate.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenate.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenate.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/hyphenateStyleName.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenateStyleName.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenateStyleName.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/hyphenateStyleName.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/instantiateReactComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/instantiateReactComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/instantiateReactComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/instantiateReactComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/invariant.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/invariant.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/invariant.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/invariant.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isEventSupported.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isEventSupported.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isEventSupported.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isEventSupported.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isNode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isNode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isNode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextInputElement.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextInputElement.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextInputElement.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextInputElement.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/isTextNode.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextNode.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextNode.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/isTextNode.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/keyMirror.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyMirror.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyMirror.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyMirror.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/keyOf.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyOf.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyOf.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/keyOf.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/mapObject.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/mapObject.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/mapObject.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/mapObject.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/memoizeStringOnly.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/memoizeStringOnly.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/memoizeStringOnly.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/memoizeStringOnly.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/onlyChild.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/onlyChild.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/onlyChild.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/onlyChild.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/performance.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performance.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performance.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performance.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/performanceNow.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performanceNow.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performanceNow.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/performanceNow.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/quoteAttributeValueForBrowser.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/quoteAttributeValueForBrowser.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/quoteAttributeValueForBrowser.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/quoteAttributeValueForBrowser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/setInnerHTML.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setInnerHTML.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setInnerHTML.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setInnerHTML.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/setTextContent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setTextContent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setTextContent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/setTextContent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/shallowEqual.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shallowEqual.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shallowEqual.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shallowEqual.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/shouldUpdateReactComponent.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shouldUpdateReactComponent.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shouldUpdateReactComponent.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/shouldUpdateReactComponent.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/toArray.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/toArray.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/toArray.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/toArray.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/traverseAllChildren.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/traverseAllChildren.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/traverseAllChildren.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/traverseAllChildren.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js":[function(require,module,exports){
-module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/warning.js")
-},{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/warning.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/lib/warning.js"}],"/home/ubuntu/bridge-controller/node_modules/react/react.js":[function(require,module,exports){
+},{"_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/lib/warning.js":[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @providesModule warning
+ */
+
+"use strict";
+
+var emptyFunction = require("./emptyFunction");
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var warning = emptyFunction;
+
+if ("production" !== process.env.NODE_ENV) {
+  warning = function(condition, format ) {for (var args=[],$__0=2,$__1=arguments.length;$__0<$__1;$__0++) args.push(arguments[$__0]);
+    if (format === undefined) {
+      throw new Error(
+        '`warning(condition, format, ...args)` requires a warning ' +
+        'message argument'
+      );
+    }
+
+    if (!condition) {
+      var argIndex = 0;
+      console.warn('Warning: ' + format.replace(/%s/g, function()  {return args[argIndex++];}));
+    }
+  };
+}
+
+module.exports = warning;
+
+}).call(this,require('_process'))
+},{"./emptyFunction":"/home/ubuntu/bridge-controller/node_modules/react/lib/emptyFunction.js","_process":"/home/ubuntu/bridge-controller/node_modules/browserify/node_modules/process/browser.js"}],"/home/ubuntu/bridge-controller/node_modules/react/react.js":[function(require,module,exports){
 module.exports=require("/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/react.js")
 },{"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/react.js":"/home/ubuntu/bridge-controller/node_modules/backbone-react-component/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/node_modules/socket.io-client/index.js":[function(require,module,exports){
 
@@ -64733,7 +64184,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
                 // ADDED If the keyContents are a uri, extract the id and create an object
                 var idArray = Portal.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[2]) {
-                        this.keyContents = { id: idArray[2] };
+                        this.keyContents = { id: parseInt(idArray[2]) };
                 }
 
                 //var opts = _.defaults( { create: this.options.createModels }, options );
@@ -64794,13 +64245,13 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = Portal.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[2]) {
-                                        attributes = { id: idArray[2] };
+                                        attributes = { id: parseInt(idArray[2]) };
                                 }
-
                                 // If `merge` is true, update models here, instead of during update.
                                 model = this.relatedModel.findOrCreate( attributes,
                                         _.extend( { merge: true }, options, { create: this.options.createModels } )
                                 );
+                                console.log('relatedModel findOrCreate', attributes, model);
 
                                 // ADDED Add model to initializeCollection
                                 var initializeCollection = this.options.initializeCollection
@@ -64840,6 +64291,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
         return related;
     }
 });
+
 
 
 /*
@@ -73694,7 +73146,44 @@ _ = global._ = require("underscore");
   });
 
 })();
-},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js":[function(require,module,exports){
+
+var React = require('react');
+var constants = require('./constants');
+
+var BootstrapMixin = {
+    propTypes: {
+        bsClass: React.PropTypes.oneOf(Object.keys(constants.CLASSES)),
+        bsStyle: React.PropTypes.oneOf(Object.keys(constants.STYLES)),
+        bsSize: React.PropTypes.oneOf(Object.keys(constants.SIZES))
+    },
+
+    getBsClassSet: function () {
+        var classes = {};
+
+        var bsClass = this.props.bsClass && constants.CLASSES[this.props.bsClass];
+        if (bsClass) {
+            classes[bsClass] = true;
+
+            var prefix = bsClass + '-';
+
+            var bsSize = this.props.bsSize && constants.SIZES[this.props.bsSize];
+            if (bsSize) {
+                classes[prefix + bsSize] = true;
+            }
+
+            var bsStyle = this.props.bsStyle && constants.STYLES[this.props.bsStyle];
+            if (this.props.bsStyle) {
+                classes[prefix + bsStyle] = true;
+            }
+        }
+
+        return classes;
+    }
+};
+
+module.exports = BootstrapMixin;
+},{"./constants":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx":[function(require,module,exports){
 
 /*
 var React = require('react');
@@ -73717,9 +73206,9 @@ var React = _interopRequire(_react);
 
 var cloneElement = _react.cloneElement;
 
-var BootstrapMixin = _interopRequire(require("../../../../../node_modules/react-bootstrap/lib/BootstrapMixin"));
+var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
 
-var classSet = _interopRequire(require("../../../../../node_modules/react-bootstrap/node_modules/classnames"));
+var classSet = require('../../../../../node_modules/react-bootstrap/utils/classSet');
 
 
 var CollapsableMixin = require('react-bootstrap').CollapsableMixin;
@@ -73932,7 +73421,252 @@ var ListItem = React.createClass({displayName: 'ListItem',
 });
 
 module.exports = ListItem;
-},{"../../../../../node_modules/react-bootstrap/lib/BootstrapMixin":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/BootstrapMixin.js","../../../../../node_modules/react-bootstrap/node_modules/classnames":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/node_modules/classnames/index.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
+},{"../../../../../node_modules/react-bootstrap/utils/classSet":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/utils/classSet.js","./BootstrapMixin":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/BootstrapMixin.js","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js"}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/constants.js":[function(require,module,exports){
+module.exports = {
+    CLASSES: {
+        'alert': 'alert',
+        'button': 'btn',
+        'button-group': 'btn-group',
+        'button-toolbar': 'btn-toolbar',
+        'column': 'col',
+        'input-group': 'input-group',
+        'form': 'form',
+        'glyphicon': 'glyphicon',
+        'label': 'label',
+        'list-group-item': 'list-group-item',
+        'panel': 'panel',
+        'panel-group': 'panel-group',
+        'progress-bar': 'progress-bar',
+        'nav': 'nav',
+        'navbar': 'navbar',
+        'modal': 'modal',
+        'row': 'row',
+        'well': 'well'
+    },
+    STYLES: {
+        'default': 'default',
+        'primary': 'primary',
+        'success': 'success',
+        'info': 'info',
+        'warning': 'warning',
+        'danger': 'danger',
+        'link': 'link',
+        'inline': 'inline',
+        'tabs': 'tabs',
+        'pills': 'pills',
+        // ADDED
+        '':''
+    },
+    SIZES: {
+        'large': 'lg',
+        'medium': 'md',
+        'small': 'sm',
+        'xsmall': 'xs'
+    },
+    GLYPHS: [
+        'asterisk',
+        'plus',
+        'euro',
+        'minus',
+        'cloud',
+        'envelope',
+        'pencil',
+        'glass',
+        'music',
+        'search',
+        'heart',
+        'star',
+        'star-empty',
+        'user',
+        'film',
+        'th-large',
+        'th',
+        'th-list',
+        'ok',
+        'remove',
+        'zoom-in',
+        'zoom-out',
+        'off',
+        'signal',
+        'cog',
+        'trash',
+        'home',
+        'file',
+        'time',
+        'road',
+        'download-alt',
+        'download',
+        'upload',
+        'inbox',
+        'play-circle',
+        'repeat',
+        'refresh',
+        'list-alt',
+        'lock',
+        'flag',
+        'headphones',
+        'volume-off',
+        'volume-down',
+        'volume-up',
+        'qrcode',
+        'barcode',
+        'tag',
+        'tags',
+        'book',
+        'bookmark',
+        'print',
+        'camera',
+        'font',
+        'bold',
+        'italic',
+        'text-height',
+        'text-width',
+        'align-left',
+        'align-center',
+        'align-right',
+        'align-justify',
+        'list',
+        'indent-left',
+        'indent-right',
+        'facetime-video',
+        'picture',
+        'map-marker',
+        'adjust',
+        'tint',
+        'edit',
+        'share',
+        'check',
+        'move',
+        'step-backward',
+        'fast-backward',
+        'backward',
+        'play',
+        'pause',
+        'stop',
+        'forward',
+        'fast-forward',
+        'step-forward',
+        'eject',
+        'chevron-left',
+        'chevron-right',
+        'plus-sign',
+        'minus-sign',
+        'remove-sign',
+        'ok-sign',
+        'question-sign',
+        'info-sign',
+        'screenshot',
+        'remove-circle',
+        'ok-circle',
+        'ban-circle',
+        'arrow-left',
+        'arrow-right',
+        'arrow-up',
+        'arrow-down',
+        'share-alt',
+        'resize-full',
+        'resize-small',
+        'exclamation-sign',
+        'gift',
+        'leaf',
+        'fire',
+        'eye-open',
+        'eye-close',
+        'warning-sign',
+        'plane',
+        'calendar',
+        'random',
+        'comment',
+        'magnet',
+        'chevron-up',
+        'chevron-down',
+        'retweet',
+        'shopping-cart',
+        'folder-close',
+        'folder-open',
+        'resize-vertical',
+        'resize-horizontal',
+        'hdd',
+        'bullhorn',
+        'bell',
+        'certificate',
+        'thumbs-up',
+        'thumbs-down',
+        'hand-right',
+        'hand-left',
+        'hand-up',
+        'hand-down',
+        'circle-arrow-right',
+        'circle-arrow-left',
+        'circle-arrow-up',
+        'circle-arrow-down',
+        'globe',
+        'wrench',
+        'tasks',
+        'filter',
+        'briefcase',
+        'fullscreen',
+        'dashboard',
+        'paperclip',
+        'heart-empty',
+        'link',
+        'phone',
+        'pushpin',
+        'usd',
+        'gbp',
+        'sort',
+        'sort-by-alphabet',
+        'sort-by-alphabet-alt',
+        'sort-by-order',
+        'sort-by-order-alt',
+        'sort-by-attributes',
+        'sort-by-attributes-alt',
+        'unchecked',
+        'expand',
+        'collapse-down',
+        'collapse-up',
+        'log-in',
+        'flash',
+        'log-out',
+        'new-window',
+        'record',
+        'save',
+        'open',
+        'saved',
+        'import',
+        'export',
+        'send',
+        'floppy-disk',
+        'floppy-saved',
+        'floppy-remove',
+        'floppy-save',
+        'floppy-open',
+        'credit-card',
+        'transfer',
+        'cutlery',
+        'header',
+        'compressed',
+        'earphone',
+        'phone-alt',
+        'tower',
+        'stats',
+        'sd-video',
+        'hd-video',
+        'subtitles',
+        'sound-stereo',
+        'sound-dolby',
+        'sound-5-1',
+        'sound-6-1',
+        'sound-7-1',
+        'copyright-mark',
+        'registration-mark',
+        'cloud-download',
+        'cloud-upload',
+        'tree-conifer',
+        'tree-deciduous'
+    ]
+};
+},{}],"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/react-bundle.js":[function(require,module,exports){
 
 var React = require('react')
     ;
@@ -74001,4 +73735,4 @@ React.ListView = React.createClass({
 
 module.exports = React;
 
-},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/lib/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
+},{"./ListItem.jsx":"/home/ubuntu/bridge-controller/portal/static/js/vendor/react/ListItem.jsx","react":"/home/ubuntu/bridge-controller/node_modules/react/react.js","react-bootstrap":"/home/ubuntu/bridge-controller/node_modules/react-bootstrap/main.js","react-ellipsis":"/home/ubuntu/bridge-controller/node_modules/react-ellipsis/src/react-ellipsis.js"}]},{},["./portal/static/js/vendor/vendor.js"]);
