@@ -58,8 +58,20 @@ Connection.prototype.setupBuses = function() {
 
 Connection.prototype.setupPresence = function(config) {
 
-    session = this.session = swarmHost.get(format('/Session#%s', config.sessionID));
-    client = this.client = swarmHost.get(format('/Client#%s', config.cbid));
+    var session = this.session = swarmHost.get(format('/Session#%s', config.sessionID));
+    var client = this.client = swarmHost.get(format('/Client#%s', config.cbid));
+
+    var presenceExp = new RegExp('swarm~presence_store');
+
+    session.on('.set', function(spec, val, source) {
+        console.log('session set spec', spec, 'val', val);
+        if (presenceExp.test(spec.value)) {
+            if (val.connected && val.connected == 'false') {
+                console.log('session setting connected to true');
+                session.set({connected: 'true'});
+            }
+        }
+    });
 
     console.log('client before init', client);
     client.config = config;

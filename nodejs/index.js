@@ -26,7 +26,8 @@ env = {localhost: swarmHost};
 var hostAddress = 'http://localhost';
 var socket = require('socket.io-client')(hostAddress + ':5000', { query: "id=dev_1&token=testing" });
 
-localServer = new Server('dev_1');
+//localServer = new Server('dev_1');
+localServer = swarmHost.get('/Server#dev_1');
 
 socket.on('connect', function() {
     console.log('Presence store connected');
@@ -34,7 +35,10 @@ socket.on('connect', function() {
     var stream = new SocketIOStream(socket);
     swarmHost.connect(stream);
 
-    localServer.clearSessions();
+    localServer.on('.init', function() {
+        console.log('localServer init');
+        localServer.clearSessions();
+    });
 });
 
 

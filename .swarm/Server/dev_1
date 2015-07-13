@@ -1,12 +1,12 @@
 {
   "_version": "!0",
   "_tail": {
-    "!2r90n01+dev_1.set": {},
-    "!2roI106+swarm~presence_store.set": {
+    "!2t4qa01+dev_1.set": {},
+    "!2t6s406+swarm~presence_store.set": {
       "sessions": "/Sessions#dev_1"
     },
-    "!2roJG06+swarm~presence_store.set": {
-      "token": "sha1$ea5897ed$1$1237f60f9bfd31b4ce878ffb7fd544e8c24b74e5"
+    "!2t6s407+swarm~presence_store.set": {
+      "token": "sha1$7aecdad6$1$ea3594802565b2c61195db07355fb2ba11ae0c11"
     }
   }
 }

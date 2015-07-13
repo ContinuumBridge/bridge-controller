@@ -1,47 +1,394 @@
 {"":
 {
-  "/Client#BID2": {
-    "!2r94P05+dev_1.set": {},
-    "!2r96205+dev_1.set": {},
-    "!2r98k+dev_1.set": {},
-    "!2rnrA05+dev_1.set": {},
-    "!2ro3t05+dev_1.set": {},
-    "!2ro8M05+dev_1.set": {},
-    "!2roCy0j+dev_1.set": {},
-    "!2ro8N04+swarm~presence_store.set": {},
-    "!2r96205+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesBID2",
-      "subscriptions": "/Clients#subscriptionsBID2",
-      "sessions": "/Sessions#BID2"
+  "/Sessions#dev_1": {
+    "!2t4qg0R+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t56z0Q+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t5BP0D+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t5Mc0Q+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t60A+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t61s01+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 0
+    },
+    "!2t61w0K+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t62o0H+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t6RO0E+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t6tO0B+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t6xj+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 0
+    },
+    "!2t6xj04+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 0
+    },
+    "!2t6zs0Q+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7DT0Q+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Hv0Q+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Kg0M+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
     }
   },
-  "/Sessions#dev_1": {
-    "!2rIEx0M+dev_1.change": {
-      "/Session#0z1qafe0ciub54jchzxpbpy3u00ollox": 1
+  "/Client#BID2": {
+    "!2t56z04+dev_1.set": {},
+    "!2t5BH01+dev_1.set": {},
+    "!2t5BI01+dev_1.set": {},
+    "!2t5BJ+swarm~presence_store.set": {},
+    "!2t5BO02+dev_1.set": {
+      "cbid": "BID2",
+      "email": null
     },
-    "!2ro8M0R+dev_1.change": {
-      "/Session#tmveok3pgx830bjaljsblioiqss5zc5k": 1
+    "!2t5Md0A+dev_1.set": {},
+    "!2t5Mc+swarm~presence_store.set": {},
+    "!2t60904+dev_1.set": {},
+    "!2t61s04+dev_1.set": {},
+    "!2t61t+swarm~presence_store.set": {},
+    "!2t61v02+dev_1.set": {
+      "cbid": "BID2",
+      "email": null
+    },
+    "!2t62o04+dev_1.set": {
+      "cbid": "BID2",
+      "email": null
+    },
+    "!2t6RO02+dev_1.set": {
+      "cbid": "BID2",
+      "email": null
+    },
+    "!2t6tN04+dev_1.set": {},
+    "!2t6zs04+dev_1.set": {},
+    "!2t7DT04+dev_1.set": {},
+    "!2t7Hv04+dev_1.set": {},
+    "!2t7Kg+dev_1.set": {}
+  },
+  "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": {
+    "!2t56z0R+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t5BP0E+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t5CZ+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t5Mc0R+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t60A01+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t61w0M+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t639+swarm~presence_store.set": {
+      "connected": "false"
     }
   },
   "/Clients#publisheesBID2": {
-    "!2ro8M0F+dev_1.change": {
+    "!2t56z0E+dev_1.change": {
       "/Client#UID1": 1
     },
-    "!2ro8M0B+dev_1.change": {
+    "!2t56z0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t5BP01+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t5BO07+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t5Mc0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t5Mc0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t6090E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t6090A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t61w08+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t61w04+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t6RO09+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t6RO07+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t6tN0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t6tN0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t6zs0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t6zs0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t7DT0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t7DT0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t7Hv0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t7Hv0A+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t7Kg0A+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t7Kg06+dev_1.change": {
       "/Client#UID3": 1
     }
   },
-  "/Sessions#BID2": {
-    "!2ro8M0Q+dev_1.change": {
-      "/Session#tmveok3pgx830bjaljsblioiqss5zc5k": 1
-    }
-  },
   "/Client#UID3": {
-    "!2roCy0o+dev_1.set": {},
-    "!2ro8N06+swarm~presence_store.set": {}
+    "!2t56~04+dev_1.set": {},
+    "!2t4ql05+swarm~presence_store.set": {},
+    "!2t4qj02+swarm~presence_store.set": {
+      "publishees": "/Clients#publisheesUID3",
+      "subscriptions": "/Clients#subscriptionsUID3",
+      "sessions": "/Sessions#UID3"
+    },
+    "!2t5BQ04+dev_1.set": {},
+    "!2t5Me04+dev_1.set": {},
+    "!2t5BR+swarm~presence_store.set": {},
+    "!2t60A0H+dev_1.set": {},
+    "!2t5Me0B+swarm~presence_store.set": {},
+    "!2t61y+dev_1.set": {},
+    "!2t60A0G+swarm~presence_store.set": {},
+    "!2t6d70Z+dev_1.set": {},
+    "!2t61y0E+swarm~presence_store.set": {},
+    "!2t6tO0M+dev_1.set": {},
+    "!2t6zt09+dev_1.set": {},
+    "!2t7DT0a+dev_1.set": {},
+    "!2t7Hv0g+dev_1.set": {},
+    "!2t7DT0C+swarm~presence_store.set": {},
+    "!2t6tO04+swarm~presence_store.set": {
+      "publishees": "/Clients#publisheesUID3",
+      "subscriptions": "/Clients#subscriptionsUID3",
+      "sessions": "/Sessions#UID3"
+    },
+    "!2t7Kg0e+dev_1.set": {},
+    "!2t7Hv0G+swarm~presence_store.set": {}
   },
   "/Client#UID1": {
-    "!2roCy0p+dev_1.set": {},
-    "!2ro8N05+swarm~presence_store.set": {}
+    "!2t56~05+dev_1.set": {},
+    "!2t4ql04+swarm~presence_store.set": {},
+    "!2t4qj06+swarm~presence_store.set": {
+      "publishees": "/Clients#publisheesUID1",
+      "subscriptions": "/Clients#subscriptionsUID1",
+      "sessions": "/Sessions#UID1"
+    },
+    "!2t5BQ05+dev_1.set": {},
+    "!2t5Me05+dev_1.set": {},
+    "!2t5BR03+swarm~presence_store.set": {},
+    "!2t60A0I+dev_1.set": {},
+    "!2t5Me0D+swarm~presence_store.set": {},
+    "!2t61y01+dev_1.set": {},
+    "!2t61x01+swarm~presence_store.set": {},
+    "!2t6d70_+dev_1.set": {},
+    "!2t61z01+swarm~presence_store.set": {},
+    "!2t6tP+dev_1.set": {},
+    "!2t6zt0A+dev_1.set": {},
+    "!2t7DT0b+dev_1.set": {},
+    "!2t7Hv0h+dev_1.set": {},
+    "!2t7DT0B+swarm~presence_store.set": {},
+    "!2t6tO09+swarm~presence_store.set": {
+      "publishees": "/Clients#publisheesUID1",
+      "subscriptions": "/Clients#subscriptionsUID1",
+      "sessions": "/Sessions#UID1"
+    },
+    "!2t7Kg0f+dev_1.set": {},
+    "!2t7Hv0I+swarm~presence_store.set": {}
+  },
+  "/Clients#subscriptionsBID2": {
+    "!2t56z0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t5BP05+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t5Mc0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t6090I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t61w0C+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t6tO03+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t6zs0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t7DT0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t7Hv0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t7Kg0E+dev_1.change": {
+      "/Client#BID2": 1
+    }
+  },
+  "/Sessions#BID2": {
+    "!2t56z0P+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t5BP0C+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t5Mc0P+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t6090P+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t61w0J+dev_1.change": {
+      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
+    },
+    "!2t6RO0D+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t6tO0A+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t6zs0P+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7DT0P+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Hv0P+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Kg0L+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    }
+  },
+  "/Session#4znptvfftclf0j4piv8ysf520okm48fp": {
+    "!2t6tO0C+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t6zs0S+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t6~e+dev_1.set": {
+      "connected": "true"
+    },
+    "!2t72v+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t74o+swarm~presence_store.set": {
+      "connected": "true"
+    },
+    "!2t7DT0R+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t7Dh+swarm~presence_store.set": {
+      "connected": "true"
+    },
+    "!2t7Do+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7Do+dev_1.set": {},
+    "!2t7F9+swarm~presence_store.set": {
+      "connected": "true"
+    },
+    "!2t7FN+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7FN+dev_1.set": {},
+    "!2t7GA+dev_1.set": {
+      "connected": "true"
+    },
+    "!2t7GR+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7GR+dev_1.set": {},
+    "!2t7Hv0R+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t7II+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7II+dev_1.set": {},
+    "!2t7JD+dev_1.set": {
+      "connected": "true"
+    },
+    "!2t7JU+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7JU+dev_1.set": {},
+    "!2t7Kg0N+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t7LE+dev_1.set": {
+      "connected": "true"
+    },
+    "!2t7LL+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7LL+dev_1.set": {}
   }
-}}
+},
+"/Client#BID2!2t7MF04+dev_1.set":	{},
+"/Sessions#dev_1!2t7MF0Q+dev_1.change":	{"/Session#4znptvfftclf0j4piv8ysf520okm48fp":1},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MF0R+dev_1.set":	{"client":"/Client#BID2","server":"/Server#dev_1"},
+"/Clients#publisheesBID2!2t7MF0E+dev_1.change":	{"/Client#UID1":1},
+"/Clients#publisheesBID2!2t7MF0A+dev_1.change":	{"/Client#UID3":1},
+"/Client#UID3!2t7MF0i+dev_1.set":	{},
+"/Client#UID3!2t7Kg0H+swarm~presence_store.set":	{},
+"/Client#UID1!2t7MF0j+dev_1.set":	{},
+"/Client#UID1!2t7Kg0J+swarm~presence_store.set":	{},
+"/Clients#subscriptionsBID2!2t7MF0I+dev_1.change":	{"/Client#BID2":1},
+"/Sessions#BID2!2t7MF0P+dev_1.change":	{"/Session#4znptvfftclf0j4piv8ysf520okm48fp":1},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MK+swarm~presence_store.set":	{"connected":"false"},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MK+dev_1.set":	{},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MW+swarm~presence_store.set":	{"connected":"true"},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MZ+swarm~presence_store.set":	{"connected":"false"},
+"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7MZ+dev_1.set":	{}}

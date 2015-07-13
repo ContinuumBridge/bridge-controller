@@ -73,9 +73,11 @@ var Server = Model.extend('Server', {
         return sessionDeferred.promise;
     },
 
+    /*
     destroySession: function(session) {
         session.destroy();
     },
+    */
 
     clearSessions: function() {
 
