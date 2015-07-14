@@ -105,7 +105,7 @@ module.exports = Model.extend('Client', {
 
         var self = this;
         var deferred = Q.defer();
-        if (!this.version) {
+        if (!this._version) {
 
             this.on('.init', function() {
 

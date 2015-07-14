@@ -45,6 +45,12 @@
     },
     "!2t7Hv0Q+dev_1.change": {
       "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Kg0M+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7MF0Q+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
     }
   },
   "/Client#BID2": {
@@ -76,7 +82,9 @@
     "!2t6tN04+dev_1.set": {},
     "!2t6zs04+dev_1.set": {},
     "!2t7DT04+dev_1.set": {},
-    "!2t7Hv04+dev_1.set": {}
+    "!2t7Hv04+dev_1.set": {},
+    "!2t7Kg+dev_1.set": {},
+    "!2t7MF04+dev_1.set": {}
   },
   "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": {
     "!2t56z0R+dev_1.set": {
@@ -166,6 +174,18 @@
     },
     "!2t7Hv0A+dev_1.change": {
       "/Client#UID3": 1
+    },
+    "!2t7Kg0A+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t7Kg06+dev_1.change": {
+      "/Client#UID3": 1
+    },
+    "!2t7MF0E+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2t7MF0A+dev_1.change": {
+      "/Client#UID3": 1
     }
   },
   "/Client#UID3": {
@@ -194,7 +214,11 @@
       "publishees": "/Clients#publisheesUID3",
       "subscriptions": "/Clients#subscriptionsUID3",
       "sessions": "/Sessions#UID3"
-    }
+    },
+    "!2t7Kg0e+dev_1.set": {},
+    "!2t7Hv0G+swarm~presence_store.set": {},
+    "!2t7MF0i+dev_1.set": {},
+    "!2t7Kg0H+swarm~presence_store.set": {}
   },
   "/Client#UID1": {
     "!2t56~05+dev_1.set": {},
@@ -222,7 +246,11 @@
       "publishees": "/Clients#publisheesUID1",
       "subscriptions": "/Clients#subscriptionsUID1",
       "sessions": "/Sessions#UID1"
-    }
+    },
+    "!2t7Kg0f+dev_1.set": {},
+    "!2t7Hv0I+swarm~presence_store.set": {},
+    "!2t7MF0j+dev_1.set": {},
+    "!2t7Kg0J+swarm~presence_store.set": {}
   },
   "/Clients#subscriptionsBID2": {
     "!2t56z0I+dev_1.change": {
@@ -250,6 +278,12 @@
       "/Client#BID2": 1
     },
     "!2t7Hv0I+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t7Kg0E+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2t7MF0I+dev_1.change": {
       "/Client#BID2": 1
     }
   },
@@ -282,6 +316,12 @@
       "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
     },
     "!2t7Hv0P+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7Kg0L+dev_1.change": {
+      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
+    },
+    "!2t7MF0P+dev_1.change": {
       "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
     }
   },
@@ -342,20 +382,32 @@
     "!2t7JU+swarm~presence_store.set": {
       "connected": "false"
     },
-    "!2t7JU+dev_1.set": {}
+    "!2t7JU+dev_1.set": {},
+    "!2t7Kg0N+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t7LE+dev_1.set": {
+      "connected": "true"
+    },
+    "!2t7LL+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7LL+dev_1.set": {},
+    "!2t7MF0R+dev_1.set": {
+      "client": "/Client#BID2",
+      "server": "/Server#dev_1"
+    },
+    "!2t7MK+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7MK+dev_1.set": {},
+    "!2t7MW+swarm~presence_store.set": {
+      "connected": "true"
+    },
+    "!2t7MZ+swarm~presence_store.set": {
+      "connected": "false"
+    },
+    "!2t7MZ+dev_1.set": {}
   }
-},
-"/Client#BID2!2t7Kg+dev_1.set":	{},
-"/Sessions#dev_1!2t7Kg0M+dev_1.change":	{"/Session#4znptvfftclf0j4piv8ysf520okm48fp":1},
-"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7Kg0N+dev_1.set":	{"client":"/Client#BID2","server":"/Server#dev_1"},
-"/Clients#publisheesBID2!2t7Kg0A+dev_1.change":	{"/Client#UID1":1},
-"/Clients#publisheesBID2!2t7Kg06+dev_1.change":	{"/Client#UID3":1},
-"/Client#UID3!2t7Kg0e+dev_1.set":	{},
-"/Client#UID3!2t7Hv0G+swarm~presence_store.set":	{},
-"/Client#UID1!2t7Kg0f+dev_1.set":	{},
-"/Client#UID1!2t7Hv0I+swarm~presence_store.set":	{},
-"/Clients#subscriptionsBID2!2t7Kg0E+dev_1.change":	{"/Client#BID2":1},
-"/Sessions#BID2!2t7Kg0L+dev_1.change":	{"/Session#4znptvfftclf0j4piv8ysf520okm48fp":1},
-"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7LE+dev_1.set":	{"connected":"true"},
-"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7LL+swarm~presence_store.set":	{"connected":"false"},
-"/Session#4znptvfftclf0j4piv8ysf520okm48fp!2t7LL+dev_1.set":	{}}
+}}

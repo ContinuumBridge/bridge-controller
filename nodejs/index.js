@@ -1,6 +1,7 @@
 
 var fs = require('fs')
     ,format = require('util').format
+    ,Q = require('q')
     ,redis = require('redis')
     ;
 
@@ -24,45 +25,38 @@ swarmHost = require('./swarm/host');
 env = {localhost: swarmHost};
 
 var hostAddress = 'http://localhost';
-var socket = require('socket.io-client')(hostAddress + ':5000', { query: "id=dev_1&token=testing" });
+var presenceSocket = require('socket.io-client')(hostAddress + ':5000', { query: "id=dev_1&token=testing" });
 
 //localServer = new Server('dev_1');
 localServer = swarmHost.get('/Server#dev_1');
 
-socket.on('connect', function() {
+var presenceDeferred = Q.defer();
+localServer.on('.init', function() {
+    localServer.clearSessions();
+    presenceDeferred.resolve();
+});
+
+presenceSocket.on('connect', function() {
+
     console.log('Presence store connected');
 
-    var stream = new SocketIOStream(socket);
+    var stream = new SocketIOStream(presenceSocket);
     swarmHost.connect(stream);
+});
 
-    localServer.on('.init', function() {
-        console.log('localServer init');
-        localServer.clearSessions();
+presenceDeferred.promise.then(function() {
+
+    var Portal = require('./servers/portal/portal');
+    var portal = new Portal({
+        port: 9415,
+        djangoRootURL: DJANGO_URL
     });
-});
 
-
-//localServer = swarmHost.get(format('/Server#%s', 'dev_1'));
-/*
-var servers = swarmHost.get('/Servers#servers');
-servers.on('.init', function() {
-
-    servers.addObject(localServer);
-});
-*/
-//localServer.sessions.fill();
-//swarmHost.connect(stream, {delay: 50});
-
-Portal = require('./servers/portal/portal');
-portal = new Portal({
-    port: 9415,
-    djangoRootURL: DJANGO_URL
-});
-
-Bridge = require('./servers/bridge/bridge');
-Bridge.server = new Bridge({
-    port: 9416,
-    djangoRootURL: DJANGO_URL
+    var Bridge = require('./servers/bridge/bridge');
+    var bridge = new Bridge({
+        port: 9416,
+        djangoRootURL: DJANGO_URL
+    });
 });
 
 /*

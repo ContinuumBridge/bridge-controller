@@ -1,5 +1,6 @@
 
 var Bacon = require('baconjs').Bacon
+    ,cookie_reader = require('cookie')
     ,io = require('socket.io')
     ,Q = require('q')
     ,rest = require('restler')
