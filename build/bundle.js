@@ -12995,6 +12995,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
     },
     */
 
+
     getCBID: function() {
 
         return "BID" + this.get('id');
@@ -15321,7 +15322,7 @@ var UninstallDeviceModal = React.createClass({displayName: 'UninstallDeviceModal
                     React.createElement("div", null, message)
                 ), 
                 React.createElement("div", {className: "modal-footer"}, 
-                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "OK")
+                    React.createElement(React.Button, {onClick: this.cancelUninstall}, "Cancel Uninstall")
                 )
             )
         )

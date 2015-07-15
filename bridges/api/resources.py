@@ -24,7 +24,6 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
 
 def controlled_by_client(bundle):
     #print "bundle.request.META['REQUEST_METHOD'] is", bundle.request
-    #if bundle.request.META['REQUEST_METHOD'] == "GET":
     try:
         return getattr(bundle, 'controlled_by_client')
     except AttributeError:
@@ -35,10 +34,12 @@ def controlled_by_client(bundle):
             return controlled
         except AttributeError:
             # The request is being made by the system
-            return True
+            return False
 
-    #else:
-    #    return False
+def get_request(bundle):
+    print "bundle.request.META['REQUEST_METHOD'] is", bundle.request.META['REQUEST_METHOD']
+    return bundle.request.META['REQUEST_METHOD'] == "GET"
+
 
 class ProtoBridgeResource(CBResource, CBIDResourceMixin):
 
@@ -79,17 +80,19 @@ class ProtoBridgeResource(CBResource, CBIDResourceMixin):
             pass
         return bundle
 
+def controlled_by_client_get(bundle):
+    return controlled_by_client(bundle) and get_request(bundle)
 
 class BridgeResource(ProtoBridgeResource):
 
     controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
-                                 'controls', full=True, null=True, use_in=controlled_by_client)
+                                 'controls', full=True, null=True, use_in=controlled_by_client_get)
 
     apps = fields.ToManyField('apps.api.resources.AppInstallResource',
-                                 'app_installs', full=True, null=True, use_in=controlled_by_client)
+                                 'app_installs', full=True, null=True, use_in=controlled_by_client_get)
 
     devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
-                                 'device_installs', full=True, null=True, use_in=controlled_by_client)
+                                 'device_installs', full=True, null=True, use_in=controlled_by_client_get)
 
     class Meta(ProtoBridgeResource.Meta):
         pass

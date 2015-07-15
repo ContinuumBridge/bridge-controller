@@ -167,6 +167,43 @@ class CBResource(ModelResource):
 
             related_mngr.add(*related_objs)
 
+    def full_dehydrate(self, bundle, for_list=False):
+        """
+        Given a bundle with an object instance, extract the information from it
+        to populate the resource.
+        """
+        use_in = ['all', 'list' if for_list else 'detail']
+
+        # Dehydrate each field.
+        for field_name, field_object in self.fields.items():
+            # If it's not for use in this mode, skip
+            field_use_in = getattr(field_object, 'use_in', 'all')
+            if callable(field_use_in):
+                if not field_use_in(bundle):
+                    # ADDED Completely remove unused fields from the response, used in PATCHes
+                    if field_name in bundle.data:
+                        del bundle.data[field_name]
+                    continue
+            else:
+                if field_use_in not in use_in:
+                    continue
+
+            # A touch leaky but it makes URI resolution work.
+            if getattr(field_object, 'dehydrated_type', None) == 'related':
+                field_object.api_name = self._meta.api_name
+                field_object.resource_name = self._meta.resource_name
+
+            bundle.data[field_name] = field_object.dehydrate(bundle, for_list=for_list)
+
+            # Check for an optional method to do further dehydration.
+            method = getattr(self, "dehydrate_%s" % field_name, None)
+
+            if method:
+                bundle.data[field_name] = method(bundle)
+
+        bundle = self.dehydrate(bundle)
+        return bundle
+
     def obj_get_list(self, bundle, **kwargs):
         """
         A ORM-specific implementation of ``obj_get_list``.
@@ -210,6 +247,46 @@ class CBResource(ModelResource):
                 through_model.save()
         except AttributeError:
             pass
+
+    '''
+    def patch_detail(self, request, **kwargs):
+        """
+        Updates a resource in-place.
+        Calls ``obj_update``.
+        If the resource is updated, return ``HttpAccepted`` (202 Accepted).
+        If the resource did not exist, return ``HttpNotFound`` (404 Not Found).
+        """
+        request = convert_post_to_patch(request)
+        basic_bundle = self.build_bundle(request=request)
+
+        # We want to be able to validate the update, but we can't just pass
+        # the partial data into the validator since all data needs to be
+        # present. Instead, we basically simulate a PUT by pulling out the
+        # original data and updating it in-place.
+        # So first pull out the original object. This is essentially
+        # ``get_detail``.
+        try:
+            obj = self.cached_obj_get(bundle=basic_bundle, **self.remove_api_resource_names(kwargs))
+        except ObjectDoesNotExist:
+            return http.HttpNotFound()
+        except MultipleObjectsReturned:
+            return http.HttpMultipleChoices("More than one resource is found at this URI.")
+
+        bundle = self.build_bundle(obj=obj, request=request)
+        bundle = self.full_dehydrate(bundle)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+
+        # Now update the bundle in-place.
+        deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        self.update_in_place(request, bundle, deserialized)
+
+        if not self._meta.always_return_data:
+            return http.HttpAccepted()
+        else:
+            bundle = self.full_dehydrate(bundle)
+            bundle = self.alter_detail_data_to_serialize(request, bundle)
+            return self.create_response(request, bundle, response_class=http.HttpAccepted)
+    '''
 
     def obj_delete(self, bundle, **kwargs):
         """

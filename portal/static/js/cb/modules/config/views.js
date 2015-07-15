@@ -250,7 +250,7 @@ var UninstallDeviceModal = React.createClass({
                     <div>{message}</div>
                 </div>
                 <div className="modal-footer">
-                    <React.Button onClick={this.cancelUninstall}>OK</React.Button>
+                    <React.Button onClick={this.cancelUninstall}>Cancel Uninstall</React.Button>
                 </div>
             </ React.Modal>
         )
