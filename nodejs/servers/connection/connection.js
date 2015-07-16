@@ -25,6 +25,7 @@ function Connection(server, socket) {
     this.socket = socket;
 
     var config = this.config = socket.config;
+    logger.log('debug', 'connection config', config);
 
     this.django = new Django(self);
     this.router = new Router(self);
@@ -149,7 +150,7 @@ Connection.prototype.setupRedis = function() {
 
     var self = this;
 
-    var subscriptionAddresses = this.config.subscriptionAddresses;
+    //var subscriptionAddresses = this.config.subscriptionAddresses;
     //var publicationAddresses = this.config.publicationAddresses;
 
     var redisPub = redis.createClient();
@@ -159,7 +160,6 @@ Connection.prototype.setupRedis = function() {
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var source = message.get('source');
-        var jsonMessage = message.toJSONString();
 
         var publish = function(address) {
 
@@ -192,18 +192,39 @@ Connection.prototype.setupRedis = function() {
 
     // Subscription to Redis
     var redisSub = redis.createClient();
-    _.each(subscriptionAddresses, function(address) {
+    var activeSubscriptions = [];
+    var updateSubscriptions = function(subscriptions) {
 
-        redisSub.subscribe(address);
+        logger.log('debug', 'updateSubscriptions', subscriptions);
+        // Unsubscribe active subscriptions which are not in the new addresses
+        _.each(activeSubscriptions, function(activeAddress) {
+
+            var subscription = _.findWhere({_id: activeAddress});
+            if (subscription) {
+                subscriptions = _.without(subscriptions, subscription);
+            } else {
+                redisSub.unsubscribe(activeAddress);
+            }
+        });
+
+        _.each(subscriptions, function(subscription) {
+
+            redisSub.subscribe(subscription);
+            activeSubscriptions.push(subscription._id);
+        });
+    }
+
+    client.on('.set', function(spec, value) {
+
+        if (value.subscriptions) {
+            updateSubscriptions(client.getSubscriptions());
+        }
     });
 
     redisSub.on('message', function(channel, jsonMessage) {
 
         var message = new Message(jsonMessage);
-        // If this is a message from the client which has bounced back, do nothing
-        if(message.get('source') != self.config.cbid) {
-            self.router.dispatch(message);
-        }
+        self.router.deliver(message);
     });
 
     this.disconnect = function() {
@@ -216,7 +237,6 @@ Connection.prototype.setupRedis = function() {
         self.disconnect();
         //self.removeListener('disconnect');
     });
-
 }
 
 Connection.prototype.unauthorizedResult = function(message, exception) {

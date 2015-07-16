@@ -22,8 +22,8 @@ Router.prototype.setupRoutes = function() {
     var django = this.connection.django;
     var client = connection.client;
 
-    var subscriptionAddress = connection.config.subscriptionAddress;
-    var publicationAddresses = connection.config.publicationAddresses;
+    //var subscriptionAddress = connection.config.subscriptionAddress;
+    //var publicationAddresses = connection.config.publicationAddresses;
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
@@ -51,9 +51,12 @@ Router.prototype.setupRoutes = function() {
         if (message.get('source') == 'cb') {
             self.connection.toClient.push(message);
         }
-        var publishees = connection.client.getPublishees();
-        message.set('destination', publishees);
-        connection.toRedis.push(message);
+
+        client.getPublishees().then(function(publishees) {
+            logger.log('debug', 'broadcast message to publishees', publishees);
+            message.set('destination', publishees);
+            connection.toRedis.push(message);
+        });
     });
     //this.bypassed.add(console.log, console);
     router.bypassed.add(function(message) {
@@ -69,7 +72,17 @@ Router.prototype.setupRoutes = function() {
 
 Router.prototype.deliver = function(message) {
 
-    this.connection.toClient.push(message);
+    // If this is a message from the client which has bounced back, do nothing
+    var source = message.get('source');
+    if(source != this.connection.config.cbid) {
+        this.connection.toClient.push(message);
+    } else {
+        logger.log('message_error', 'Trying to deliver message from self to self', message);
+    }
+
+    if(source == 'cb' && message.get('')) {
+
+    }
     /*
     if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
         logger.log('debug', 'Push to client');

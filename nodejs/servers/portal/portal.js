@@ -73,7 +73,7 @@ Portal.prototype.onConnection = function(socket) {
     };
     */
 
-    var connection = new PortalConnection(socket, this);
+    var connection = new PortalConnection(this, socket);
 }
 
 Portal.prototype.formatConfig = function(authData) {

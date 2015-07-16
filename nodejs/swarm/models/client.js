@@ -101,7 +101,7 @@ module.exports = Model.extend('Client', {
         return deferred.promise;
     },
 
-    getPublishees: function() {
+    getClients: function(type) {
 
         var self = this;
         var deferred = Q.defer();
@@ -109,17 +109,23 @@ module.exports = Model.extend('Client', {
 
             this.on('.init', function() {
 
-                var publishees = this.publishees.target().list();
-                deferred.resolve(publishees);
+                var clients = this[type].target().list();
+                deferred.resolve(clients);
             });
         } else {
 
-            var publishees = this.publishees.target().list();
-            deferred.resolve(publishees);
+            var clients = this[type].target().list();
+            deferred.resolve(clients);
         }
         return deferred.promise;
-        //this.publishees.fill(swarmHost);
-        //return this.publishees.target().list();
+    },
+
+    getPublishees: function() {
+        return this.getClients('publishees');
+    },
+
+    getSubscriptions: function() {
+        return this.getClients('subscriptions');
     }
 });
 
