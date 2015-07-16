@@ -1,10 +1,30 @@
+
+/*
 var React = require('react');
 
-var joinClasses = require('../../../../../node_modules/react-bootstrap/utils/joinClasses');
-var classSet = require('../../../../../node_modules/react-bootstrap/utils/classSet');
-var cloneWithProps = require('../../../../../node_modules/react-bootstrap/utils/cloneWithProps');
+var joinClasses = require('../../../../../node_modules/react-bootstrap/lib/utils/joinClasses');
+var classSet = require('../../../../../node_modules/react-bootstrap/lib/utils/classSet');
+//var cloneWithProps = require('../../../../../node_modules/react-bootstrap/lib/utils/cloneWithProps');
 
-var BootstrapMixin = require('./BootstrapMixin');
+var BootstrapMixin = require('../../../../../node_modules/react-bootstrap/lib/BootstrapMixin');
+var CollapsableMixin = require('react-bootstrap').CollapsableMixin;
+*/
+
+var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = require("react");
+
+var React = _interopRequire(_react);
+
+var cloneElement = _react.cloneElement;
+
+var BootstrapMixin = _interopRequire(require("./BootstrapMixin"));
+
+var classSet = require('../../../../../node_modules/react-bootstrap/utils/classSet');
+
+
 var CollapsableMixin = require('react-bootstrap').CollapsableMixin;
 
 var ListItem = React.createClass({
@@ -58,10 +78,10 @@ var ListItem = React.createClass({
         var classes = this.getBsClassSet();
         classes['panel'] = true;
         //classes = joinClasses(classes, this.props.className);
-
+        //{...this.props}
         return (
             // ADDED replace div with li
-            <li {...this.props} className={joinClasses(this.props.className, classSet(classes))}
+            <li className={classSet(this.props.className, classes)}
                 onSelect={null}>
         {this.renderHeading()}
         {this.props.collapsable ? this.renderCollapsableBody() : ''}
@@ -128,6 +148,8 @@ var ListItem = React.createClass({
         var renderButtons = this.props.renderButtons;
         var renderedButtons = renderButtons ? renderButtons() : "";
 
+        var status = this.props.status || "";
+
         var buttons = this.props.buttons || [];
 
         return (
@@ -140,6 +162,7 @@ var ListItem = React.createClass({
                     </small>
                 </h4>
                 <div className="item-buttons">
+                    {status}
                     {buttons.map(this.renderButton)}
                     {renderedButtons}
                 </div>

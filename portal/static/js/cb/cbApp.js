@@ -1,13 +1,5 @@
 
 var utils = require('./utils');
-//var Portals = require('./portals/models');
-
-/*
-var optionalParam = /\((.*?)\)/g;
-var namedParam    = /(\(\?)?:\w+/g;
-var splatParam    = /\*\w+/g;
-var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-*/
 
 var CBApp = Marionette.Application.extend({
 
@@ -21,29 +13,6 @@ var CBApp = Marionette.Application.extend({
 
         //this.portals = new Portals();
     },
-    /*
-
-    setupCBIDTypes: function(cbidTypes) {
-
-        var self = this;
-
-        // Setup regex expressions to match CBIDs to their types
-        this.cbidTypesRegex = {};
-        _.each(cbidTypes, function(type, pattern) {
-            self.cbidTypesRegex[self.patternToRegex(pattern)] = type;
-        });
-    },
-
-    patternToRegex: function(pattern) {
-        pattern = pattern.replace(escapeRegExp, '\\$&')
-            .replace(optionalParam, '(?:$1)?')
-            .replace(namedParam, function (match, optional) {
-                return optional ? match : '([^/?]+)';
-            })
-            .replace(splatParam, '([^?]*?)');
-        return new RegExp('^' + pattern + '(?:\\?([\\s\\S]*))?$');
-    },
-    */
 
     dispatch: function(message) {
 

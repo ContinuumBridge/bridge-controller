@@ -1,0 +1,10 @@
+{
+  "_version": "!0",
+  "_tail": {
+    "!2rIEx0V+dev_1.set": {
+      "publishees": "/Clients#publisheesUID3",
+      "subscriptions": "/Clients#subscriptionsUID3",
+      "sessions": "/Sessions#UID3"
+    }
+  }
+}

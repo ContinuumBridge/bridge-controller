@@ -35,6 +35,7 @@ Django.prototype.request = function(request, sessionID) {
     var requestURL = this.connection.djangoRootURL + resource;
 
     //console.log('Django request', requestURL);
+    if (verb == 'delete') verb = 'del';
 
     rest[verb](requestURL, djangoOptions).on('complete', function(data, response) {
 

@@ -5,6 +5,7 @@ from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, BadRequest
 
 from accounts.models import CBAuth, CBUser
+from apps.models import AppLicence, AppInstall
 from bridge_controller.api.authorization import CBAuthorization
 
 class AppAuthorization(CBAuthorization):
@@ -54,8 +55,13 @@ class AppInstallAuthorization(CBAuthorization):
             if not licence.app.pk == app.pk:
                 raise Unauthorized("The licence supplied is not compatible with the app you are trying to install")
 
-            if bundle.request.method != "DELETE":
+            if bundle.request.method in ['PATCH', 'PUT']:
+                old_install = AppInstall.objects.get(id=app_install.id)
+                owner = old_install.licence.user
+                if not licence.user.pk == owner.pk:
+                    raise Unauthorized("You may not change the owner of the licence you are using to install this app")
 
+            if bundle.request.method == "CREATE":
                 # Ensure the licence is owned by the requester
                 if not licence.user.pk == requester.pk:
                     raise Unauthorized("You must own the licence you are attempting to use for this install")
@@ -66,6 +72,9 @@ class AppInstallAuthorization(CBAuthorization):
                     message = "Licence not valid for install. Your licence permits {0} installs, " \
                               "you have used {1}".format(existing_install_count, licence.installs_permitted)
                     raise Unauthorized(message)
+
+            #if bundle.request.method != "DELETE":
+
 
         print "end of validate app_install"
         return object_list

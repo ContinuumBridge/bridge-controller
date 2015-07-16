@@ -5,7 +5,7 @@ from apps.api.resources import AppResource, AppInstallResource, AppDevicePermiss
 from devices.api.resources import DeviceResource, DeviceInstallResource, DiscoveredDeviceResource, DiscoveredDeviceAliasResource
 from adaptors.api.resources import AdaptorResource, AdaptorDeviceCompatibilityResource
 
-from .resources import BridgeControlResource, BridgeAuthResource, BridgeAuthAliasResource, CurrentBridgeResource, BridgeResource
+from .resources import BridgeControlResource, BridgeAuthResource, BridgeAuthAliasResource, CurrentBridgeResource, BridgeResource, BroadcastBridgeResource
 
 v1 = Api("v1")
 v1.register(UserResource())
@@ -20,6 +20,8 @@ v1.register(DeviceInstallResource())
 v1.register(DiscoveredDeviceResource())
 v1.register(DiscoveredDeviceAliasResource())
 
+v1.register(BroadcastBridgeResource())
+# Override BroadcastBridgeResource with BridgeResource, but former still gets assigned uri
 v1.register(BridgeResource())
 v1.register(BridgeControlResource())
 v1.register(BridgeAuthResource())

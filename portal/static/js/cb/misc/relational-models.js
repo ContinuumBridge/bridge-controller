@@ -28,7 +28,7 @@ Backbone.HasOne = Backbone.HasOne.extend({
                 // ADDED If the keyContents are a uri, extract the id and create an object
                 var idArray = Portal.filters.apiRegex.exec(this.keyContents);
                 if (idArray && idArray[2]) {
-                        this.keyContents = { id: idArray[2] };
+                        this.keyContents = { id: parseInt(idArray[2]) };
                 }
 
                 //var opts = _.defaults( { create: this.options.createModels }, options );
@@ -89,13 +89,13 @@ Backbone.HasMany = Backbone.HasMany.extend({
                                 // ADDED If the keyContents are a uri, extract the id and create an object
                                 var idArray = Portal.filters.apiRegex.exec(attributes);
                                 if (idArray && idArray[2]) {
-                                        attributes = { id: idArray[2] };
+                                        attributes = { id: parseInt(idArray[2]) };
                                 }
-
                                 // If `merge` is true, update models here, instead of during update.
                                 model = this.relatedModel.findOrCreate( attributes,
                                         _.extend( { merge: true }, options, { create: this.options.createModels } )
                                 );
+                                console.log('relatedModel findOrCreate', attributes, model);
 
                                 // ADDED Add model to initializeCollection
                                 var initializeCollection = this.options.initializeCollection
@@ -137,6 +137,7 @@ Backbone.HasMany = Backbone.HasMany.extend({
 });
 
 
+
 /*
 Backbone.Collection = Backbone.Collection.extend({
 
@@ -167,6 +168,52 @@ Backbone.Collection = Backbone.Collection.extend({
 */
 
 Backbone.RelationalModel = Backbone.RelationalModel.extend({
+
+    constructor: function( attributes, options ) {
+        // Nasty hack, for cases like 'model.get( <HasMany key> ).add( item )'.
+        // Defer 'processQueue', so that when 'Relation.createModels' is used we trigger 'HasMany'
+        // collection events only after the model is really fully set up.
+        // Example: event for "p.on( 'add:jobs' )" -> "p.get('jobs').add( { company: c.id, person: p.id } )".
+        if ( options && options.collection ) {
+            var dit = this,
+                collection = this.collection = options.collection;
+
+            // Prevent `collection` from cascading down to nested models; they shouldn't go into this `if` clause.
+            delete options.collection;
+
+            this._deferProcessing = true;
+
+            var processQueue = function( model ) {
+                if ( model === dit ) {
+                    dit._deferProcessing = false;
+                    dit.processQueue();
+                    collection.off( 'relational:add', processQueue );
+                }
+            };
+            collection.on( 'relational:add', processQueue );
+
+            // So we do process the queue eventually, regardless of whether this model actually gets added to 'options.collection'.
+            _.defer( function() {
+                processQueue( dit );
+            });
+        }
+
+        Backbone.Relational.store.processOrphanRelations();
+        Backbone.Relational.store.listenTo( this, 'relational:unregister', Backbone.Relational.store.unregister );
+
+        this._queue = new Backbone.BlockingQueue();
+        this._queue.block();
+        Backbone.Relational.eventQueue.block();
+
+        try {
+            Backbone.Model.apply( this, arguments );
+        }
+        finally {
+            // Try to run the global queue holding external events
+            // ADDED Unblock queue once react has finished rendering
+            Backbone.Relational.eventQueue.unblock();
+        }
+    },
 
     set: function( key, value, options ) {
         Backbone.Relational.eventQueue.block();
