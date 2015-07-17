@@ -18,6 +18,7 @@ var BridgeConnection = function(server, socket) {
     var self = this;
     this.log = logger.log;
 
+    this.configURI = "/api/bridge/v1/bridge";
     console.log('BridgeConnection init');
 
     BridgeConnection.super_.call(this, server, socket);
@@ -42,7 +43,12 @@ var BridgeConnection = function(server, socket) {
 };
 
 util.inherits(BridgeConnection, Connection);
-//BridgeConnection.prototype = new Connection();
+
+/*
+BridgeConnection.prototype.onRedisMessage = function(message) {
+
+}
+*/
 
 BridgeConnection.prototype.deviceDiscovery = function(message) {
 

@@ -8,6 +8,9 @@ var fs = require('fs')
 var SocketIOStream = require('./swarm/socketIOStream');
 var Server = require('./swarm/models/server');
 
+var fsExtra = require('fs-extra');
+fsExtra.emptyDirSync('./.swarm');
+
 if (typeof localStorage === "undefined" || localStorage === null) {
   var LocalStorage = require('node-localstorage').LocalStorage;
   window = {};

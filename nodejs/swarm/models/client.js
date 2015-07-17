@@ -127,7 +127,7 @@ module.exports = Model.extend('Client', {
 
             var clientIDs = getIDs(this[type].target().list());
             console.log('clientIDs are', clientIDs);
-            deferred.resolve(getIDs(clientIDs));
+            deferred.resolve(clientIDs);
         }
         return deferred.promise;
     },

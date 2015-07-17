@@ -145,6 +145,12 @@ Connection.prototype.logConnection = function(config, type) {
         , type, subscriptionsString, publisheesString);
 }
 
+Connection.prototype.onRedisMessage = function() {
+    if (message.body && message.body.resource_uri == this.configURI) {
+        var config = this.server.formatConfig(message.body.body);
+        logger.log('debug', 'onRedisMessage config ', config);
+    }
+}
 Connection.prototype.setupRedis = function() {
 
     var self = this;
@@ -201,6 +207,7 @@ Connection.prototype.setupRedis = function() {
         client.getSubscriptions().then(function(subscriptions) {
             logger.log('debug', 'updateSubscriptions then', subscriptions);
             var changes = utils.updateArrayFromSwarm(activeSubscriptions, subscriptions);
+            logger.log('debug', 'updateSubscriptions changes', changes);
             _.each(changes.added, function(added) {
                 redisSub.subscribe(added);
             });
@@ -222,8 +229,11 @@ Connection.prototype.setupRedis = function() {
 
     redisSub.on('message', function(channel, jsonMessage) {
 
-        var message = new Message(jsonMessage);
-        self.router.deliver(message);
+        var message = JSON.parse(jsonMessage);
+        //var message = new Message(jsonMessage);
+        logger.log('message', format('Redis on channel %s received', channel), jsonMessage);
+        self.onRedisMessage(message);
+        //self.router.deliver(message);
     });
 
     this.disconnect = function() {
