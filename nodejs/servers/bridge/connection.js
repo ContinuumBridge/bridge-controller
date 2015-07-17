@@ -11,6 +11,7 @@ var Connection = require('../connection/connection')
     ,Django = require('../connection/django.js')
     ,logger = require('./logger')
     ,backendAuth = require('../../backendAuth.js')
+    ,utils = require('../utils');
     ;
 
 var BridgeConnection = function(server, socket) {
@@ -18,7 +19,8 @@ var BridgeConnection = function(server, socket) {
     var self = this;
     this.log = logger.log;
 
-    this.configURI = "/api/bridge/v1/bridge";
+    this.configURIs = ['/api/bridge/v1/bridge_control'];
+
     console.log('BridgeConnection init');
 
     BridgeConnection.super_.call(this, server, socket);
@@ -44,11 +46,12 @@ var BridgeConnection = function(server, socket) {
 
 util.inherits(BridgeConnection, Connection);
 
-/*
-BridgeConnection.prototype.onRedisMessage = function(message) {
-
+BridgeConnection.prototype.getPublisheeFromControl = function(cbid) {
+    // ie. BID2/UID3
+    console.log('cbid apiRegex is', utils.cbidRegex );
+    console.log('cbid match is', cbid.match(utils.cbidRegex));
+    return cbid.match(utils.cbidRegex)[1];
 }
-*/
 
 BridgeConnection.prototype.deviceDiscovery = function(message) {
 

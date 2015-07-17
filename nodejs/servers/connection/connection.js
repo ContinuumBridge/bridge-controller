@@ -145,12 +145,34 @@ Connection.prototype.logConnection = function(config, type) {
         , type, subscriptionsString, publisheesString);
 }
 
-Connection.prototype.onRedisMessage = function() {
-    if (message.body && message.body.resource_uri == this.configURI) {
-        var config = this.server.formatConfig(message.body.body);
-        logger.log('debug', 'onRedisMessage config ', config);
+Connection.prototype.onRedisMessage = function(message) {
+
+    logger.log('debug', 'onRedisMessage');
+    if (message.body && _.contains(this.configURIs, message.body.resource_uri)) {
+
+        var controlCBID = message.body.body.cbid;
+        logger.log('debug', 'onRedisMessage controlCBID ', controlCBID);
+        var publisheeCBID = this.getPublisheeFromControl(controlCBID);
+        var subscriptionCBID = this.getSubscriptionFromControl
+            ? this.getSubscriptionFromControl(controlCBID) : false;
+
+        var verb = message.body.verb;
+        if (verb == 'create' || verb == 'update') {
+
+            logger.log('debug', 'onRedisMessage ', verb, publisheeCBID, subscriptionCBID);
+            this.client.publishees.target().addCBIDs(publisheeCBID);
+            if (subscriptionCBID) this.client.subscriptions.target().addCBIDs(subscriptionCBID);
+
+        } else if (verb == 'delete') {
+
+            logger.log('debug', 'onRedisMessage delete', publisheeCBID, subscriptionCBID);
+            this.client.publishees.target().removeCBIDs(publisheeCBID);
+            if (subscriptionCBID) this.client.subscriptions.target().removeCBIDs(subscriptionCBID);
+        }
+
     }
 }
+
 Connection.prototype.setupRedis = function() {
 
     var self = this;
@@ -217,9 +239,9 @@ Connection.prototype.setupRedis = function() {
         });
     }
 
-    logger.log('debug', 'setupRedis before client on');
-    client.on('.set', function(spec, value) {
+    client.subscriptions.target().on('.change', function(spec, value) {
 
+        logger.log('debug', 'subscriptions on change', spec, value);
         if (value.subscriptions) {
             updateSubscriptions();
         }
