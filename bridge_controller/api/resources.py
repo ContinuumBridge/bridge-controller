@@ -1,6 +1,5 @@
 import re
 import sys
-import redis
 
 from django.utils import six
 
@@ -102,6 +101,109 @@ class CBResource(ModelResource):
 
         return bundle
 
+    def save_m2m(self, bundle):
+        """
+        Handles the saving of related M2M data.
+        Due to the way Django works, the M2M data must be handled after the
+        main instance, which is why this isn't a part of the main ``save`` bits.
+        Currently slightly inefficient in that it will clear out the whole
+        relation and recreate the related data as needed.
+        """
+        for field_name, field_object in self.fields.items():
+            if not getattr(field_object, 'is_m2m', False):
+                continue
+
+            if not field_object.attribute:
+                continue
+
+            if field_object.readonly:
+                continue
+
+            # Get the manager.
+            related_mngr = None
+
+            if isinstance(field_object.attribute, six.string_types):
+                related_mngr = getattr(bundle.obj, field_object.attribute)
+            elif callable(field_object.attribute):
+                related_mngr = field_object.attribute(bundle)
+
+            if not related_mngr:
+                continue
+
+            if hasattr(related_mngr, 'clear'):
+                # FIXME: Dupe the original bundle, copy in the new object &
+                #        check the perms on that (using the related resource)?
+
+                # Clear it out, just to be safe.
+                related_mngr.clear()
+
+            related_objs = []
+
+            for related_bundle in bundle.data[field_name]:
+                #print "related_bundle  is", related_bundle
+                related_resource = field_object.get_related_resource(bundle.obj)
+
+                # Before we build the bundle & try saving it, let's make sure we
+                # haven't already saved it.
+                obj_id = self.create_identifier(related_bundle.obj)
+
+                if obj_id in bundle.objects_saved:
+                    # It's already been saved. We're done here.
+                    continue
+
+                # Only build & save if there's data, not just a URI.
+                updated_related_bundle = related_resource.build_bundle(
+                    obj=related_bundle.obj,
+                    data=related_bundle.data,
+                    request=bundle.request,
+                    objects_saved=bundle.objects_saved
+                )
+
+                #Only save related models if they're newly added.
+                if updated_related_bundle.obj._state.adding:
+                    related_resource.save(updated_related_bundle)
+                    # ADDED indented this line by one tab
+                    related_objs.append(updated_related_bundle.obj)
+
+            related_mngr.add(*related_objs)
+
+    def full_dehydrate(self, bundle, for_list=False):
+        """
+        Given a bundle with an object instance, extract the information from it
+        to populate the resource.
+        """
+        use_in = ['all', 'list' if for_list else 'detail']
+
+        # Dehydrate each field.
+        for field_name, field_object in self.fields.items():
+            # If it's not for use in this mode, skip
+            field_use_in = getattr(field_object, 'use_in', 'all')
+            if callable(field_use_in):
+                if not field_use_in(bundle):
+                    # ADDED Completely remove unused fields from the response, used in PATCHes
+                    if field_name in bundle.data:
+                        del bundle.data[field_name]
+                    continue
+            else:
+                if field_use_in not in use_in:
+                    continue
+
+            # A touch leaky but it makes URI resolution work.
+            if getattr(field_object, 'dehydrated_type', None) == 'related':
+                field_object.api_name = self._meta.api_name
+                field_object.resource_name = self._meta.resource_name
+
+            bundle.data[field_name] = field_object.dehydrate(bundle, for_list=for_list)
+
+            # Check for an optional method to do further dehydration.
+            method = getattr(self, "dehydrate_%s" % field_name, None)
+
+            if method:
+                bundle.data[field_name] = method(bundle)
+
+        bundle = self.dehydrate(bundle)
+        return bundle
+
     def obj_get_list(self, bundle, **kwargs):
         """
         A ORM-specific implementation of ``obj_get_list``.
@@ -145,6 +247,46 @@ class CBResource(ModelResource):
                 through_model.save()
         except AttributeError:
             pass
+
+    '''
+    def patch_detail(self, request, **kwargs):
+        """
+        Updates a resource in-place.
+        Calls ``obj_update``.
+        If the resource is updated, return ``HttpAccepted`` (202 Accepted).
+        If the resource did not exist, return ``HttpNotFound`` (404 Not Found).
+        """
+        request = convert_post_to_patch(request)
+        basic_bundle = self.build_bundle(request=request)
+
+        # We want to be able to validate the update, but we can't just pass
+        # the partial data into the validator since all data needs to be
+        # present. Instead, we basically simulate a PUT by pulling out the
+        # original data and updating it in-place.
+        # So first pull out the original object. This is essentially
+        # ``get_detail``.
+        try:
+            obj = self.cached_obj_get(bundle=basic_bundle, **self.remove_api_resource_names(kwargs))
+        except ObjectDoesNotExist:
+            return http.HttpNotFound()
+        except MultipleObjectsReturned:
+            return http.HttpMultipleChoices("More than one resource is found at this URI.")
+
+        bundle = self.build_bundle(obj=obj, request=request)
+        bundle = self.full_dehydrate(bundle)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+
+        # Now update the bundle in-place.
+        deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        self.update_in_place(request, bundle, deserialized)
+
+        if not self._meta.always_return_data:
+            return http.HttpAccepted()
+        else:
+            bundle = self.full_dehydrate(bundle)
+            bundle = self.alter_detail_data_to_serialize(request, bundle)
+            return self.create_response(request, bundle, response_class=http.HttpAccepted)
+    '''
 
     def obj_delete(self, bundle, **kwargs):
         """

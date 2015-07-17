@@ -11,7 +11,7 @@ var gulp = require('gulp')
     ,reactify = require('reactify')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
-    ,uglify = require('gulp-uglify')
+    //,uglify = require('gulp-uglify')
     ,watchify = require('watchify');
     ;
 

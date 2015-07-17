@@ -1,12 +1,12 @@
 
 var $ = require('jquery')
-    ,_ = require('underscore')
-    ,Cocktail = require('backbone-cocktail');
+    ,_ = require('underscore');
 
 Backbone = require('backbone');
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
+Backbone.Cocktail = require('backbone-cocktail');
 
 require('./backbone-cb-model-pre');
 
@@ -31,8 +31,8 @@ require('../../cb/misc/relational-models');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
 
 var CBViewsMixin = require('./backbone-cb-views');
-Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
-Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
+Backbone.Cocktail.mixin(Marionette.ItemView, CBViewsMixin.ItemView);
+Backbone.Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 // Required for backbone deferred
 Q = require('q');
 
@@ -45,6 +45,8 @@ Backbone.Collection = Backbone.Deferred.Collection;
 require('./backbone-cb-collection');
 
 QueryEngine = require('query-engine');
+
+require('./backbone-cb-querycollection');
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(QueryEngine.QueryCollection, CBCollectionMixin);
