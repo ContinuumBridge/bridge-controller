@@ -1,15 +1,10 @@
 {
   "_version": "!0",
   "_tail": {
-    "!2touo05+swarm~presence_store.set": {
+    "!2uOSE06+dev_1.set": {
       "publishees": "/Clients#publisheesBID2",
       "subscriptions": "/Clients#subscriptionsBID2",
       "sessions": "/Sessions#BID2"
-    },
-    "!2u3_5+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2u3_Z07+swarm~presence_store.set": {}
+    }
   }
 }

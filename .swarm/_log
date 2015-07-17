@@ -1,656 +1,204 @@
 {"":
 {
   "/Sessions#dev_1": {
-    "!2t4qg0R+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t56z0Q+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t5BP0D+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t5Mc0Q+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t60A+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t61s01+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 0
-    },
-    "!2t61w0K+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t62o0H+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t6RO0E+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t6tO0B+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t6xj+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 0
-    },
-    "!2t6xj04+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 0
-    },
-    "!2t6zs0Q+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7DT0Q+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7Hv0Q+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7Kg0M+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7MF0Q+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2touo0S+dev_1.change": {
+    "!2uOSE0M+dev_1.change": {
       "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
     },
-    "!2tov70H+dev_1.change": {
-      "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": 1
+    "!2uOSF+dev_1.change": {
+      "/Session#y0vrtfexq0712kzpsoo6pqycexcgbk7l": 1
     },
-    "!2tspj0E+dev_1.change": {
-      "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": 1
+    "!2uOSG0F+dev_1.change": {
+      "/Session#rflgm82w352lohm4qu28pwxglgnqe9zf": 1
     },
-    "!2tsrz0E+dev_1.change": {
+    "!2uOTI0Q+dev_1.change": {
       "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
     },
-    "!2u3_50G+dev_1.change": {
+    "!2uOTJ0C+dev_1.change": {
+      "/Session#y0vrtfexq0712kzpsoo6pqycexcgbk7l": 1
+    },
+    "!2uOTO1F+dev_1.change": {
+      "/Session#rflgm82w352lohm4qu28pwxglgnqe9zf": 1
+    },
+    "!2uOkQ1F+dev_1.change": {
+      "/Session#rflgm82w352lohm4qu28pwxglgnqe9zf": 1
+    },
+    "!2uOkQ2Z+dev_1.change": {
       "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
-    },
-    "!2u3av0E+dev_1.change": {
-      "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": 1
-    },
-    "!2u6l30Q+dev_1.change": {
-      "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
-    },
-    "!2u6l30~+dev_1.change": {
-      "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": 1
     }
   },
   "/Client#BID2": {
-    "!2t56z04+dev_1.set": {},
-    "!2t5BH01+dev_1.set": {},
-    "!2t5BI01+dev_1.set": {},
-    "!2t5BJ+swarm~presence_store.set": {},
-    "!2t5BO02+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2t5Md0A+dev_1.set": {},
-    "!2t5Mc+swarm~presence_store.set": {},
-    "!2t60904+dev_1.set": {},
-    "!2t61s04+dev_1.set": {},
-    "!2t61t+swarm~presence_store.set": {},
-    "!2t61v02+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2t62o04+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2t6RO02+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2t6tN04+dev_1.set": {},
-    "!2t6zs04+dev_1.set": {},
-    "!2t7DT04+dev_1.set": {},
-    "!2t7Hv04+dev_1.set": {},
-    "!2t7Kg+dev_1.set": {},
-    "!2t7MF04+dev_1.set": {},
-    "!2touo06+dev_1.set": {},
-    "!2tpC10a+dev_1.set": {},
-    "!2toup06+swarm~presence_store.set": {},
-    "!2touo05+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesBID2",
-      "subscriptions": "/Clients#subscriptionsBID2",
-      "sessions": "/Sessions#BID2"
-    },
-    "!2tpCy0i+dev_1.set": {},
-    "!2tpD70W+dev_1.set": {},
-    "!2tpD70U+swarm~presence_store.set": {},
-    "!2tpFK0h+dev_1.set": {},
-    "!2tpFK0U+swarm~presence_store.set": {},
-    "!2tspj02+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2tsrz02+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2u3_403+dev_1.set": {},
-    "!2u3_5+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2u3_Z+dev_1.set": {},
-    "!2u3__03+swarm~presence_store.set": {},
-    "!2u3av01+dev_1.set": {
-      "cbid": "BID2",
-      "email": null
-    },
-    "!2u6l304+dev_1.set": {}
+    "!2uOTI04+dev_1.set": {}
   },
-  "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": {
-    "!2t56z0R+dev_1.set": {
+  "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": {
+    "!2uOTI0R+dev_1.set": {
       "client": "/Client#BID2",
       "server": "/Server#dev_1"
     },
-    "!2t5BP0E+dev_1.set": {
+    "!2uOkQ2_+dev_1.set": {
       "client": "/Client#BID2",
       "server": "/Server#dev_1"
-    },
-    "!2t5CZ+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t5Mc0R+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t60A01+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t61w0M+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t639+swarm~presence_store.set": {
-      "connected": "false"
     }
   },
   "/Clients#publisheesBID2": {
-    "!2t56z0E+dev_1.change": {
+    "!2uOTI0E+dev_1.change": {
       "/Client#UID1": 1
     },
-    "!2t56z0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t5BP01+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t5BO07+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t5Mc0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t5Mc0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t6090E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t6090A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t61w08+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t61w04+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t6RO09+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t6RO07+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t6tN0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t6tN0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t6zs0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t6zs0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t7DT0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t7DT0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t7Hv0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t7Hv0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t7Kg0A+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t7Kg06+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2t7MF0E+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2t7MF0A+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2touo0G+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2touo0C+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2tov70B+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2tov709+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2tspj03+dev_1.change": {
-      "/Client#UID3": 0
-    },
-    "!2tspj05+dev_1.change": {
-      "/Client#UID1": 0
-    },
-    "!2tspj07+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2tspj09+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2tsrz03+dev_1.change": {
-      "/Client#UID3": 0
-    },
-    "!2tsrz05+dev_1.change": {
-      "/Client#UID1": 0
-    },
-    "!2tsrz07+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2tsrz09+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2u3_506+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2u3_503+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2u3av02+dev_1.change": {
-      "/Client#UID3": 0
-    },
-    "!2u3av04+dev_1.change": {
-      "/Client#UID1": 0
-    },
-    "!2u3av06+dev_1.change": {
-      "/Client#UID3": 1
-    },
-    "!2u3av08+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2u6l30v+dev_1.change": {
-      "/Client#UID1": 1
-    },
-    "!2u6l30t+dev_1.change": {
+    "!2uOTI0A+dev_1.change": {
       "/Client#UID3": 1
     }
   },
   "/Client#UID3": {
-    "!2t56~04+dev_1.set": {},
-    "!2t4ql05+swarm~presence_store.set": {},
-    "!2t4qj02+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID3",
-      "subscriptions": "/Clients#subscriptionsUID3",
-      "sessions": "/Sessions#UID3"
-    },
-    "!2t5BQ04+dev_1.set": {},
-    "!2t5Me04+dev_1.set": {},
-    "!2t5BR+swarm~presence_store.set": {},
-    "!2t60A0H+dev_1.set": {},
-    "!2t5Me0B+swarm~presence_store.set": {},
-    "!2t61y+dev_1.set": {},
-    "!2t60A0G+swarm~presence_store.set": {},
-    "!2t6d70Z+dev_1.set": {},
-    "!2t61y0E+swarm~presence_store.set": {},
-    "!2t6tO0M+dev_1.set": {},
-    "!2t6zt09+dev_1.set": {},
-    "!2t7DT0a+dev_1.set": {},
-    "!2t7Hv0g+dev_1.set": {},
-    "!2t7DT0C+swarm~presence_store.set": {},
-    "!2t6tO04+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID3",
-      "subscriptions": "/Clients#subscriptionsUID3",
-      "sessions": "/Sessions#UID3"
-    },
-    "!2t7Kg0e+dev_1.set": {},
-    "!2t7Hv0G+swarm~presence_store.set": {},
-    "!2t7MF0i+dev_1.set": {},
-    "!2t7Kg0H+swarm~presence_store.set": {},
-    "!2touo0V+dev_1.set": {},
-    "!2tpC10X+dev_1.set": {},
-    "!2toup08+swarm~presence_store.set": {},
-    "!2touo0A+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID3",
-      "subscriptions": "/Clients#subscriptionsUID3",
-      "sessions": "/Sessions#UID3"
-    },
-    "!2tpCy0e+dev_1.set": {},
-    "!2tpD70Y+dev_1.set": {},
-    "!2tpD70W+swarm~presence_store.set": {},
-    "!2tpFK0j+dev_1.set": {},
-    "!2tpFK0W+swarm~presence_store.set": {},
-    "!2u3_60E+dev_1.set": {},
-    "!2u3_Z01+dev_1.set": {},
-    "!2u3__06+swarm~presence_store.set": {},
-    "!2u6l31L+dev_1.set": {},
-    "!2u6l304+swarm~presence_store.set": {}
+    "!2uOTI0j+dev_1.set": {},
+    "!2uOSI0B+swarm~presence_store.set": {}
   },
   "/Client#UID1": {
-    "!2t56~05+dev_1.set": {},
-    "!2t4ql04+swarm~presence_store.set": {},
-    "!2t4qj06+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID1",
-      "subscriptions": "/Clients#subscriptionsUID1",
-      "sessions": "/Sessions#UID1"
+    "!2uOTI0k+dev_1.set": {},
+    "!2uOSI0A+swarm~presence_store.set": {},
+    "!2uOSF08+dev_1.set": {
+      "cbid": "UID1",
+      "email": "mark.claydon@continuumbridge.com"
     },
-    "!2t5BQ05+dev_1.set": {},
-    "!2t5Me05+dev_1.set": {},
-    "!2t5BR03+swarm~presence_store.set": {},
-    "!2t60A0I+dev_1.set": {},
-    "!2t5Me0D+swarm~presence_store.set": {},
-    "!2t61y01+dev_1.set": {},
-    "!2t61x01+swarm~presence_store.set": {},
-    "!2t6d70_+dev_1.set": {},
-    "!2t61z01+swarm~presence_store.set": {},
-    "!2t6tP+dev_1.set": {},
-    "!2t6zt0A+dev_1.set": {},
-    "!2t7DT0b+dev_1.set": {},
-    "!2t7Hv0h+dev_1.set": {},
-    "!2t7DT0B+swarm~presence_store.set": {},
-    "!2t6tO09+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID1",
-      "subscriptions": "/Clients#subscriptionsUID1",
-      "sessions": "/Sessions#UID1"
-    },
-    "!2t7Kg0f+dev_1.set": {},
-    "!2t7Hv0I+swarm~presence_store.set": {},
-    "!2t7MF0j+dev_1.set": {},
-    "!2t7Kg0J+swarm~presence_store.set": {},
-    "!2touo0W+dev_1.set": {},
-    "!2tpC10Y+dev_1.set": {},
-    "!2toup07+swarm~presence_store.set": {},
-    "!2toup05+swarm~presence_store.set": {
-      "publishees": "/Clients#publisheesUID1",
-      "subscriptions": "/Clients#subscriptionsUID1",
-      "sessions": "/Sessions#UID1"
-    },
-    "!2tpCy0f+dev_1.set": {},
-    "!2tpD70X+dev_1.set": {},
-    "!2tpD70V+swarm~presence_store.set": {},
-    "!2tpFK0i+dev_1.set": {},
-    "!2tpFK0V+swarm~presence_store.set": {},
-    "!2u3_60F+dev_1.set": {},
-    "!2u3_Z02+dev_1.set": {},
-    "!2u3__07+swarm~presence_store.set": {},
-    "!2u6l31M+dev_1.set": {},
-    "!2u6l303+swarm~presence_store.set": {}
+    "!2uOkP04+dev_1.set": {}
   },
   "/Clients#subscriptionsBID2": {
-    "!2t56z0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t5BP05+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t5Mc0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t6090I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t61w0C+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t6tO03+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t6zs0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t7DT0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t7Hv0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t7Kg0E+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2t7MF0I+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2touo0K+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2u3_509+dev_1.change": {
-      "/Client#BID2": 1
-    },
-    "!2u6l30I+dev_1.change": {
+    "!2uOTI0I+dev_1.change": {
       "/Client#BID2": 1
     }
   },
   "/Sessions#BID2": {
-    "!2t56z0P+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t5BP0C+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t5Mc0P+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t6090P+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t61w0J+dev_1.change": {
-      "/Session#ukrqi3pdbj1hb28trj510ugfgoyethff": 1
-    },
-    "!2t6RO0D+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t6tO0A+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t6zs0P+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7DT0P+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7Hv0P+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7Kg0L+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2t7MF0P+dev_1.change": {
-      "/Session#4znptvfftclf0j4piv8ysf520okm48fp": 1
-    },
-    "!2touo0R+dev_1.change": {
+    "!2uOTI0P+dev_1.change": {
       "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
     },
-    "!2tov70G+dev_1.change": {
-      "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": 1
-    },
-    "!2tspj0B+dev_1.change": {
-      "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": 1
-    },
-    "!2tspj0D+dev_1.change": {
-      "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": 1
-    },
-    "!2tsrz0B+dev_1.change": {
-      "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
-    },
-    "!2tsrz0D+dev_1.change": {
-      "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
-    },
-    "!2u3_50F+dev_1.change": {
-      "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
-    },
-    "!2u3av0A+dev_1.change": {
-      "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": 1
-    },
-    "!2u3av0D+dev_1.change": {
-      "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": 1
-    },
-    "!2u6l30z+dev_1.change": {
-      "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": 1
-    },
-    "!2u6l30P+dev_1.change": {
-      "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": 1
+    "!2uOSE17+dev_1.change": {
+      "/Session#y0vrtfexq0712kzpsoo6pqycexcgbk7l": 1
     }
   },
-  "/Session#4znptvfftclf0j4piv8ysf520okm48fp": {
-    "!2t6tO0C+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t6zs0S+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t6~e+dev_1.set": {
-      "connected": "true"
-    },
-    "!2t72v+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t74o+swarm~presence_store.set": {
-      "connected": "true"
-    },
-    "!2t7DT0R+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t7Dh+swarm~presence_store.set": {
-      "connected": "true"
-    },
-    "!2t7Do+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7Do+dev_1.set": {},
-    "!2t7F9+swarm~presence_store.set": {
-      "connected": "true"
-    },
-    "!2t7FN+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7FN+dev_1.set": {},
-    "!2t7GA+dev_1.set": {
-      "connected": "true"
-    },
-    "!2t7GR+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7GR+dev_1.set": {},
-    "!2t7Hv0R+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t7II+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7II+dev_1.set": {},
-    "!2t7JD+dev_1.set": {
-      "connected": "true"
-    },
-    "!2t7JU+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7JU+dev_1.set": {},
-    "!2t7Kg0N+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t7LE+dev_1.set": {
-      "connected": "true"
-    },
-    "!2t7LL+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7LL+dev_1.set": {},
-    "!2t7MF0R+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2t7MK+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7MK+dev_1.set": {},
-    "!2t7MW+swarm~presence_store.set": {
-      "connected": "true"
-    },
-    "!2t7MZ+swarm~presence_store.set": {
-      "connected": "false"
-    },
-    "!2t7MZ+dev_1.set": {}
-  },
-  "/Server#dev_1": {
-    "!2tpDK+swarm~presence_store.set": {
-      "token": "test"
-    },
-    "!2tpFZ+swarm~presence_store.set": {
-      "token": "Test"
-    }
-  },
-  "/Session#s2bgfbsxwkwqjk4morm2t8aj30yjywz3": {
-    "!2tspj0F+dev_1.set": {
+  "/Session#y0vrtfexq0712kzpsoo6pqycexcgbk7l": {
+    "!2uOTJ0D+dev_1.set": {
       "client": "/Client#BID2",
       "server": "/Server#dev_1"
     }
   },
-  "/Session#9jletd5txojxqkc2kxflcgzi02sok3ed": {
-    "!2tsrz0F+dev_1.set": {
-      "client": "/Client#BID2",
+  "/Session#rflgm82w352lohm4qu28pwxglgnqe9zf": {
+    "!2uOTO1G+dev_1.set": {
+      "client": "/Client#UID1",
       "server": "/Server#dev_1"
     },
-    "!2u3_50H+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
-    },
-    "!2u6l30R+dev_1.set": {
-      "client": "/Client#BID2",
+    "!2uOkQ1G+dev_1.set": {
+      "client": "/Client#UID1",
       "server": "/Server#dev_1"
     }
   },
-  "/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l": {
-    "!2u6l310+dev_1.set": {
-      "client": "/Client#BID2",
-      "server": "/Server#dev_1"
+  "/Clients#publisheesUID1": {
+    "!2uOTO0i+dev_1.change": {
+      "/Client#BID9": 1
+    },
+    "!2uOTO0e+dev_1.change": {
+      "/Client#BID8": 1
+    },
+    "!2uOTO0a+dev_1.change": {
+      "/Client#BID7": 1
+    },
+    "!2uOTO0X+dev_1.change": {
+      "/Client#BID22": 1
+    },
+    "!2uOTO0T+dev_1.change": {
+      "/Client#BID55": 1
+    },
+    "!2uOTO0P+dev_1.change": {
+      "/Client#BID54": 1
+    },
+    "!2uOTO0L+dev_1.change": {
+      "/Client#BID41": 1
+    },
+    "!2uOTO0H+dev_1.change": {
+      "/Client#BID44": 1
+    },
+    "!2uOTO0D+dev_1.change": {
+      "/Client#BID42": 1
+    },
+    "!2uOTO09+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2uOTO07+dev_1.change": {
+      "/Client#BID14": 1
+    }
+  },
+  "/Client#BID14": {
+    "!2uOTO1d+dev_1.set": {}
+  },
+  "/Client#BID42": {
+    "!2uOTO1e+dev_1.set": {}
+  },
+  "/Client#BID44": {
+    "!2uOTO1f+dev_1.set": {}
+  },
+  "/Client#BID41": {
+    "!2uOTO1g+dev_1.set": {}
+  },
+  "/Client#BID54": {
+    "!2uOTO1h+dev_1.set": {}
+  },
+  "/Client#BID55": {
+    "!2uOTO1i+dev_1.set": {}
+  },
+  "/Client#BID22": {
+    "!2uOTO1j+dev_1.set": {}
+  },
+  "/Client#BID7": {
+    "!2uOTO1k+dev_1.set": {}
+  },
+  "/Client#BID8": {
+    "!2uOTO1l+dev_1.set": {}
+  },
+  "/Client#BID9": {
+    "!2uOTO1m+dev_1.set": {}
+  },
+  "/Clients#subscriptionsUID1": {
+    "!2uOTO17+dev_1.change": {
+      "/Client#UID1": 1
+    },
+    "!2uOTO15+dev_1.change": {
+      "/Client#BID9": 1
+    },
+    "!2uOTO13+dev_1.change": {
+      "/Client#BID8": 1
+    },
+    "!2uOTO11+dev_1.change": {
+      "/Client#BID7": 1
+    },
+    "!2uOTO0~+dev_1.change": {
+      "/Client#BID22": 1
+    },
+    "!2uOTO0y+dev_1.change": {
+      "/Client#BID55": 1
+    },
+    "!2uOTO0w+dev_1.change": {
+      "/Client#BID54": 1
+    },
+    "!2uOTO0u+dev_1.change": {
+      "/Client#BID41": 1
+    },
+    "!2uOTO0s+dev_1.change": {
+      "/Client#BID44": 1
+    },
+    "!2uOTO0q+dev_1.change": {
+      "/Client#BID42": 1
+    },
+    "!2uOTO0o+dev_1.change": {
+      "/Client#BID2": 1
+    },
+    "!2uOTO0m+dev_1.change": {
+      "/Client#BID14": 1
+    }
+  },
+  "/Sessions#UID1": {
+    "!2uOTO1E+dev_1.change": {
+      "/Session#rflgm82w352lohm4qu28pwxglgnqe9zf": 1
     }
   }
 },
-"/Client#UID1!2u6pZ06+dev_1.set":	{},
-"/Sessions#dev_1!2u6p_0z+dev_1.change":	{"/Session#rflgm82w352lohm4qu28pwxglgnqe9zf":1},
-"/Sessions#dev_1!2u6pe0L+dev_1.change":	{"/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l":1},
-"/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l!2u6pe0M+dev_1.set":	{"client":"/Client#BID2","server":"/Server#dev_1"},
-"/Sessions#dev_1!2u6pe0Y+dev_1.change":	{"/Session#9jletd5txojxqkc2kxflcgzi02sok3ed":1},
-"/Session#9jletd5txojxqkc2kxflcgzi02sok3ed!2u6pe0Z+dev_1.set":	{"client":"/Client#BID2","server":"/Server#dev_1"},
-"/Client#BID2!2u6pe0_+dev_1.set":	{},
-"/Client#BID2!2u6pc01+swarm~presence_store.set":	{},
-"/Clients#subscriptionsBID2!2u6pe0D+dev_1.change":	{"/Client#BID2":1},
-"/Clients#publisheesBID2!2u6pe0S+dev_1.change":	{"/Client#UID3":1},
-"/Clients#publisheesBID2!2u6pe09+dev_1.change":	{"/Client#UID1":1},
-"/Client#UID3!2u6pf07+dev_1.set":	{},
-"/Sessions#BID2!2u6pe0X+dev_1.change":	{"/Session#9jletd5txojxqkc2kxflcgzi02sok3ed":1},
-"/Sessions#BID2!2u6pe0K+dev_1.change":	{"/Session#s3byskp0gixg2xsgyxbdfooxtzoyh46l":1}}
+"/Sessions#dev_1!2uOo_+dev_1.change":	{"/Session#9jletd5txojxqkc2kxflcgzi02sok3ed":1},
+"/Session#9jletd5txojxqkc2kxflcgzi02sok3ed!2uOo_01+dev_1.set":	{"client":"/Client#BID2","server":"/Server#dev_1"},
+"/Client#BID2!2uOo_03+dev_1.set":	{},
+"/Client#BID2!2uOkQ0D+swarm~presence_store.set":	{}}

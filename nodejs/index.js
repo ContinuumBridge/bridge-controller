@@ -32,6 +32,7 @@ localServer = swarmHost.get('/Server#dev_1');
 
 var presenceDeferred = Q.defer();
 localServer.on('.init', function() {
+    console.log('localServer init');
     localServer.clearSessions();
     presenceDeferred.resolve();
 });

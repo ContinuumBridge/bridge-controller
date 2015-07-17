@@ -105,17 +105,29 @@ module.exports = Model.extend('Client', {
 
         var self = this;
         var deferred = Q.defer();
+
+        var getIDs = function(list) {
+
+            var itemIDs = _.map(list, function(item) {
+                return item._id;
+            });
+            console.log('itemIDs are', itemIDs);
+            return itemIDs;
+        }
+
         if (!this._version) {
 
             this.on('.init', function() {
 
-                var clients = this[type].target().list();
-                deferred.resolve(clients);
+                var clientIDs = getIDs(this[type].target().list());
+                console.log('clientIDs .init are', clientIDs);
+                deferred.resolve(clientIDs);
             });
         } else {
 
-            var clients = this[type].target().list();
-            deferred.resolve(clients);
+            var clientIDs = getIDs(this[type].target().list());
+            console.log('clientIDs are', clientIDs);
+            deferred.resolve(getIDs(clientIDs));
         }
         return deferred.promise;
     },

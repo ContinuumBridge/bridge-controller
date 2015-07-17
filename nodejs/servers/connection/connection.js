@@ -35,14 +35,13 @@ function Connection(server, socket) {
         self.setupBuses();
         self.setupSocket();
         self.setupRedis();
-        console.log('setup presence promise returned');
-        self.log('debug', 'setup presence promise returned');
+        logger.log('debug', 'setup presence promise returned');
 
     }).fail(function(error) {
 
-        self.log('warn', self.config.cbid, error);
-        self.socket.close();
-    });
+        logger.log('warn', error);
+        //self.socket.close();
+    }).done();
     //this.setupRouting();
 }
 
@@ -150,6 +149,9 @@ Connection.prototype.setupRedis = function() {
 
     var self = this;
 
+    var client = this.client;
+    logger.log('debug', 'setupRedis');
+    //self.log('debug', 'setupRedis logger');
     //var subscriptionAddresses = this.config.subscriptionAddresses;
     //var publicationAddresses = this.config.publicationAddresses;
 
@@ -190,36 +192,33 @@ Connection.prototype.setupRedis = function() {
         publishAll(message);
     });
 
+    logger.log('debug', 'setupRedis before sub');
     // Subscription to Redis
     var redisSub = redis.createClient();
     var activeSubscriptions = [];
-    var updateSubscriptions = function(subscriptions) {
-
-        logger.log('debug', 'updateSubscriptions', subscriptions);
-        // Unsubscribe active subscriptions which are not in the new addresses
-        _.each(activeSubscriptions, function(activeAddress) {
-
-            var subscription = _.findWhere({_id: activeAddress});
-            if (subscription) {
-                subscriptions = _.without(subscriptions, subscription);
-            } else {
-                redisSub.unsubscribe(activeAddress);
-            }
-        });
-
-        _.each(subscriptions, function(subscription) {
-
-            redisSub.subscribe(subscription);
-            activeSubscriptions.push(subscription._id);
+    var updateSubscriptions = function() {
+        logger.log('debug', 'updateSubscriptions');
+        client.getSubscriptions().then(function(subscriptions) {
+            logger.log('debug', 'updateSubscriptions then', subscriptions);
+            var changes = utils.updateArrayFromSwarm(activeSubscriptions, subscriptions);
+            _.each(changes.added, function(added) {
+                redisSub.subscribe(added);
+            });
+            _.each(changes.removed, function(removed) {
+                redisSub.unsubscribe(removed);
+            });
         });
     }
 
+    logger.log('debug', 'setupRedis before client on');
     client.on('.set', function(spec, value) {
 
         if (value.subscriptions) {
-            updateSubscriptions(client.getSubscriptions());
+            updateSubscriptions();
         }
     });
+    logger.log('debug', 'call updateSubscriptions');
+    updateSubscriptions();
 
     redisSub.on('message', function(channel, jsonMessage) {
 

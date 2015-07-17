@@ -1,8 +1,11 @@
 {
   "_version": "!0",
   "_tail": {
-    "!2tsrz07+dev_1.change": {
+    "!2uOSE0_+dev_1.change": {
       "/Client#UID3": 1
+    },
+    "!2uOSE0b+dev_1.change": {
+      "/Client#UID1": 1
     }
   }
 }

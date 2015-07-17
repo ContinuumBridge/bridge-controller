@@ -3,6 +3,7 @@ var Q = require('q');
 
 var MessageUtils = {};
 
+/*
 MessageUtils.createMessage = function(source, destination, body, statusCode) {
 
     var message = {};
@@ -10,6 +11,80 @@ MessageUtils.createMessage = function(source, destination, body, statusCode) {
     message.destination = destination;
     message.body = body;
     message.statusCode = statusCode;
+    return message;
+}
+*/
+
+MessageUtils.returnToSender = function(message, source) {
+
+    // Switches the original source to the destination
+    var newDestination = message.source;
+    var src = source || "";
+    var newSource = src || message.destination;
+    message.destination = newDestination;
+    message.source = newSource;
+    return message;
+}
+
+MessageUtils.findDestinations = function(message, destinations) {
+
+    if(!_.isArray(destinations)) destinations = [destinations];
+    var messageDestinations = message.destination;
+    if(!_.isArray(messageDestinations)) messageDestinations = [messageDestinations];
+    var matches = [];
+    _.each(destinations, function(destination) {
+        var destRegex = new RegExp('^' + destination + '(.+)?');
+        _.find(messageDestinations, function(messageDestination) {
+            if (messageDestination) {
+                var match = messageDestination.match(destRegex);
+                if (match) matches.push(messageDestination);
+            }
+        });
+    });
+    return matches;
+}
+
+/*
+MessageUtils.filterDestination = function(message, destination) {
+    // Filters a message's destination based on destination provided
+    if (typeof destination == 'string') {
+        destination = [ destination ];
+    }
+    return _.filter(destination, this.findDestination, this);
+}
+
+MessageUtils.conformDestination = function(message, destination) {
+    // Unfinished
+
+    if (typeof destination == 'string') {
+        logger.log('debug', 'destination is a string')
+        if(!this.checkDestination(destination)) {
+            this.set('destination', destination);
+        }
+    } else if (destination instanceof Array) {
+
+    }
+}
+ */
+
+MessageUtils.checkSource = function(message, source) {
+    // Checks if a message's source conforms to the source given
+    var sourceRegex = new RegExp('^' + source + '(.+)?');
+    var proposedSource = message.source;
+    if (typeof proposedSource != 'string') {
+        return new errors.MessageError('The message source ', proposedSource
+            ,' (', typeof proposedSource, ') is incorrect');
+    }
+    return !!proposedSource.match(sourceRegex);
+}
+
+MessageUtils.conformSource = function(message, source) {
+    // Ensure that the message source conforms to the given source
+    //console.log('checkSource', !this.checkSource(source));
+    if (!MessageUtils.checkSource(message, source)) {
+        logger.log('authorization', 'Client ', source, ' is not allowed to send from source', message.source);
+        message.source = source;
+    }
     return message;
 }
 
