@@ -167,10 +167,12 @@ var CBCollection = OriginalCollection.extend({
     delete: function(models, options) {
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
-        options || (options = {});
+        options = options ? _.clone(options) : {};
         for (var i = 0; i < models.length; i++) {
             var attrs = models[i];
-            var model = this.findWhere({id: _.property(attrs, 'id')});
+            console.log('attrs for delete is', attrs);
+            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
+            console.log('model for delete is', model);
             //model = this.get(models[i]);
             if(model) model.delete();
         }
@@ -223,31 +225,6 @@ var CBCollection = OriginalCollection.extend({
 
         // id can be a string or int
         return this.findWhere({id: ''+id}) || this.findWhere({id: parseInt(id)});
-    },
-
-    getFiltered: function(name, filter) {
-
-        var self = this;
-        //return this.createLiveChildCollection();
-
-        var collection = this.filtered || this.createLiveChildCollection(this.models);
-
-        //var collection = this.filtered || this.createLiveChildCollection();
-        collection.setFilter(name, filter);
-
-        if (!this.filtered) {
-            // If the collection is newly created, proxy events
-            collection.on('reset', function(e) {
-                self.trigger('relational:change');
-            });
-        }
-
-        collection.parent = this;
-        this.filtered = collection;
-
-        collection.query();
-
-        return this.filtered;
     }
 });
 

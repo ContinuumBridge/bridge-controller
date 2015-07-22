@@ -6,7 +6,7 @@ Portal.AppDevicePermissionView = React.createClass({
 
 Portal.AppDevicePermissionListView = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin, Portal.InnerListView],
+    mixins: [Portal.InnerListView],
 
     getDefaultProps: function () {
         return {
@@ -14,11 +14,10 @@ Portal.AppDevicePermissionListView = React.createClass({
         };
     },
 
-    createItem: function(item) {
+    createItem: function(adp) {
 
-        var cid = item.cid;
-
-        var adp = this.getCollection().get({cid: cid});;
+        var cid = adp.cid;
+        //var adp = this.getCollection().get({cid: cid});;
         var label = adp.get('deviceInstall').get('friendly_name');
 
         return < Portal.Components.Switch key={cid} label={label} model={adp} />

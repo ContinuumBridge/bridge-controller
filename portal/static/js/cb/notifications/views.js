@@ -53,15 +53,14 @@ Portal.NotificationListView = React.createClass({
     renderNotification: function(model) {
 
         var title = model.getTitle();
+        var subtitle = model.getSubtitle();
 
         switch (model.get('type')) {
             case 'connectionStatus':
-                var subtitle = model.getSubtitle();
                 return <Portal.ConnectionStatusView title={title} subtitle={subtitle}
                     model={model} className="notification" />
                 break;
             case 'error':
-                var subtitle = model.getSubtitle();
                 return <Portal.NotificationView title={title} subtitle={subtitle}
                     hideSubtitleOnExpanded={true}
                     model={model} className="notification" />
@@ -90,37 +89,3 @@ Portal.NotificationListView = React.createClass({
         )
     }
 });
-
-/*
-Portal.NotificationView = Marionette.ItemView.extend({
-
-    tagName: 'li',
-    //className: 'new-item',
-    template: require('./templates/notification.html'),
-
-    events: {
-        'click .uninstall-button': 'uninstall'
-    },
-
-    bindings: {
-        '.': 'friendly_name',
-        ':el': {
-          attributes: [{
-            name: 'class',
-            observe: 'hasChangedSinceLastSync',
-            onGet: 'getClass'
-          }]
-        }
-    }
-});
-
-Portal.NotificationListView = Marionette.CompositeView.extend({
-
-    template: require('./templates/notificationSection.html'),
-    //tagName: 'ul',
-    //className: 'animated-list',
-    itemView: Portal.NotificationView,
-    itemViewContainer: '.notification-list',
-
-});
-*/
