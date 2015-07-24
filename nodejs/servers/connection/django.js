@@ -3,6 +3,7 @@ var rest = require('restler')
     Q = require('q')
     ;
 
+var messageUtils = require('../../messageUtils');
 var Errors = require('../../errors');
 
 var Django = function(connection) {
@@ -63,9 +64,9 @@ Django.prototype.messageRequest = function(message) {
 
     var self = this;
 
-    var requestData = message.get('body');
+    var requestData = message.body;
     var resource = requestData.url || requestData.resource;
-    var sessionID = message.get('sessionID');
+    var sessionID = message.sessionID;
 
     this.request(requestData, sessionID).then(function(data, response) {
         // Success
@@ -74,15 +75,15 @@ Django.prototype.messageRequest = function(message) {
             resource: resource,
             body: data
         }
-        message.set('body', responseBody);
-        message.return('cb');
+        message.body = responseBody;
+        messageUtils.returnToSender(message, 'cb');
         //logger.log('debug', 'Returning message', message.toJSONString());
-        self.connection.router.dispatch(message);
+        self.connection.router.deliver(message);
     }, function(error) {
         // Error
-        message.set('body', error);
-        message.return('cb');
-        self.connection.router.dispatch(message);
+        message.body = error;
+        messageUtils.returnToSender(message, 'cb');
+        self.connection.router.deliver(message);
     });
 };
 

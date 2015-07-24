@@ -21,23 +21,11 @@ function Server() {
 
     var self = this;
 
-    /*
-    var options = {
-        port: port,
-        djangoURL: this.djangoURL
-    }
-    */
-
     this.sockets.on('connection', function (socket) {
 
         console.log('server on connection', socket.config);
-
-        //logger.log('debug', 'on connection client._id', client._id);
-
         self.onConnection(socket);
     });
-    //if (!this.sockets) logger.log('warn', '')
-    //this.sockets = this.createSocketServer(BackboneIOServer, options);
     this.setupAuthentication();
 };
 
@@ -46,20 +34,9 @@ Server.prototype.onConnection = function(socket) {
     // Override this method
 
     console.log('server onConnection');
-    /*
-    var self = this;
-
-    socket.getConfig = function(sessionID) {
-        //var sessionID = socket.handshake;
-        //var sessionID = socket.handshake.query.sessionID;
-        console.log('portal getConfig sessionID', sessionID);
-        return self.getConnectionConfig(self.authURL, sessionID);
-    };
-
-    var connection = new PortalConnection(socket);
-    */
 }
 
+/*
 Server.prototype.createSocketServer = function(SocketServer, options) {
 
     var self = this;
@@ -73,10 +50,10 @@ Server.prototype.createSocketServer = function(SocketServer, options) {
     socketServer.sockets.on('connection', function (socket) {
         self.onConnection(socket);
     });
-    */
 
     return socketServer;
 }
+*/
 
 Server.prototype.getConnectionConfig = function(sessionID) {
 

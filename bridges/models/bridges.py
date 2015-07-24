@@ -108,3 +108,23 @@ class BridgeControl(BroadcastMixin, LoggedModel):
         bridge_id = "BID" + str(self.bridge.id)
         user_id = "UID" + str(self.user.id)
         return bridge_id + "/" + user_id
+
+
+'''
+class BridgeClientConnection(BroadcastMixin, LoggedModel):
+
+    class Meta:
+        verbose_name = _('bridge_client_connection')
+        broadcast_resource = 'bridges.api.resources.BridgeControlResource'
+        app_label = 'bridges'
+
+    bridge = models.ForeignKey(Bridge, related_name='client_connections')
+    client = models.ForeignKey(CBUser, related_name='bridge_connections')
+
+    @property
+    def cbid(self):
+        #prefix = '_'.join([a for a in re.split(r'([A-Z][a-z]*)', self.__class__.__name__) if a])
+        bridge_id = "BID" + str(self.bridge.id)
+        client_id = "CID" + str(self.client.id)
+        return bridge_id + "/" + client_id
+'''

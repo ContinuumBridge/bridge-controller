@@ -23,7 +23,10 @@ var Sessions = Set.extend('Sessions', {
 
         var self = this;
 
+        console.log('clearAll sessions');
+
         _.each(this.list(), function(session) {
+            console.log('removing session', session._id);
             session.destroy();
             //self.removeObject(session);
         });

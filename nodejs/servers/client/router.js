@@ -3,18 +3,17 @@ var rest = require('restler')
     ,logger = require('./logger')
     ,Message = require('../../message')
     ,Q = require('q')
+    ,util = require('util')
     ;
 
 var Router = require('../connection/router');
 
 var ClientRouter = function(connection) {
-    this.connection = connection;
-    this.django = connection.django;
 
-    this.setupRoutes();
+    ClientRouter.super_.call(this, connection);
 }
 
-ClientRouter.prototype = new Router();
+util.inherits(ClientRouter, Router);
 
 module.exports = ClientRouter;
 /*

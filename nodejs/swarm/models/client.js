@@ -1,10 +1,11 @@
 
 var _ = require('underscore');
 var Q = require('q');
-var Model = require('swarm').Model;
-var Ref = require('swarm').Syncable.Ref;
+var Swarm = require('swarm');
+var Model = Swarm.Model;
+var Ref = Swarm.Syncable.Ref;
 var format = require('util').format;
-//var RelationalModel = require('./relationalModel');
+var ProxyListener = require('./ProxyListener');
 
 module.exports = Model.extend('Client', {
 
@@ -30,33 +31,26 @@ module.exports = Model.extend('Client', {
                 }
             });
 
-            console.log('debug', 'Client init cbid', this._id);
             if (this.sessions.ref == '#0') {
                 relations.sessions = swarmHost.get(format('/Sessions#%s', this._id));
             }
 
-            //logger.log('debug', 'Client init sessions', collections['sessions']._id);
             this.set(relations);
-            /*
-            this.set({
-                sessions: sessions
-            });
-            */
+
+            if (!this._publisheeProxy) {
+                this._publisheeProxy = new ProxyListener();
+                this.publishees.target().onObjectEvent(this._publisheeProxy);
+            }
         }
     },
-    /*
-    relations: {
-        sessions: {
-            collection: 'Sessions'
-        },
-        publishees: {
-            collection: 'Clients'
-        },
-        subscribees: {
-            collection: 'Clients'
+
+    onPublisheeEvent: function (callback) {
+        // if hack
+        if (this._publisheeProxy) {
+            this._publisheeProxy.owner = this;
+            this._publisheeProxy.on(callback);
         }
     },
-    */
 
     addSession: function(config, session) {
 

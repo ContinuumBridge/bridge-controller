@@ -17,13 +17,12 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
-        #authorization = BridgeControlAuthorization()
         resource_name = 'bridge_control'
         #related_user_permissions = ['read', 'create', 'update', 'delete']
         related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
 def controlled_by_client(bundle):
-    #print "bundle.request.META['REQUEST_METHOD'] is", bundle.request
+    # Is the resource being modified controlled by the user in the bundle
     try:
         return getattr(bundle, 'controlled_by_client')
     except AttributeError:
@@ -37,7 +36,6 @@ def controlled_by_client(bundle):
             return False
 
 def get_request(bundle):
-    print "bundle.request.META['REQUEST_METHOD'] is", bundle.request.META['REQUEST_METHOD']
     return bundle.request.META['REQUEST_METHOD'] == "GET"
 
 
@@ -55,13 +53,6 @@ class ProtoBridgeResource(CBResource, CBIDResourceMixin):
         resource_name = 'bridge'
 
     def obj_create(self, bundle, **kwargs):
-
-        '''
-        print "obj_create bundle type", type(bundle)
-        print "obj_create bundle", bundle
-        print "obj_create bundle obj", bundle.obj
-        print "obj_create bundle data", bundle.data
-        '''
 
         # ADDED Create a bridge using manager method, but don't save it
         bundle.obj = Bridge.objects.create_bridge(save=False)

@@ -27,7 +27,7 @@ from bridges.models import Bridge, BridgeControl
 
 from bridge_controller.api.authentication import HTTPHeaderSessionAuthentication
 from bridge_controller.api import cb_fields
-from bridge_controller.api.resources import CBResource, ThroughModelResource
+from bridge_controller.api.resources import CBResource, ThroughModelResource, CBIDResourceMixin
 from bridges.api.resources import BridgeResource
 
 from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
@@ -49,7 +49,7 @@ class UserBridgeResource(CBResource):
         resource_name = 'bridge'
 
 
-class UserBridgeControlResource(CBResource):
+class UserBridgeControlResource(CBResource, CBIDResourceMixin):
 
     bridge = cb_fields.ToOneThroughField('accounts.api.bridge_resources.UserBridgeResource', 'bridge', full=True)
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)

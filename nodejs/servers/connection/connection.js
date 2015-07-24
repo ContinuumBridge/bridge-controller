@@ -27,14 +27,15 @@ function Connection(server, socket) {
     var config = this.config = socket.config;
     logger.log('debug', 'connection config', config);
 
-    this.django = new Django(self);
-    this.router = new Router(self);
-
     this.setupPresence(config).then(function() {
+
+        self.django = new Django(self);
+        self.router = new Router(self);
 
         self.setupBuses();
         self.setupSocket();
         self.setupRedis();
+        if (self.onInit) self.onInit();
         logger.log('debug', 'setup presence promise returned');
 
     }).fail(function(error) {
@@ -63,6 +64,8 @@ Connection.prototype.setupPresence = function(config) {
 
     var presenceExp = new RegExp('swarm~presence_store');
 
+    // If a session had been disconnected by the presence store while disconnected from
+    // this server, reconnect it.
     session.on('.set', function(spec, val, source) {
         console.log('session set spec', spec, 'val', val);
         if (presenceExp.test(spec.value)) {
@@ -73,10 +76,10 @@ Connection.prototype.setupPresence = function(config) {
         }
     });
 
-    console.log('client before init', client);
-    client.config = config;
+    //console.log('client before init', client);
+    //client.config = config;
     // Returns promise
-    return localServer.addSession(config, session, client);
+    return localServer.connectSession(config, session, client);
 };
 
 Connection.prototype.setupSocket = function() {
@@ -86,11 +89,11 @@ Connection.prototype.setupSocket = function() {
     var socket = this.socket;
 
     logger.log('debug', 'setupSocket');
-    socket.on('message', function (rawMessage) {
+    socket.on('message', function (messageString) {
 
-        logger.log('debug', 'Socket message', rawMessage);
-        if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
-            rawMessage = rawMessage.utf8Data;
+        //logger.log('debug', 'Socket message', messageString);
+        if (messageString.type === 'utf8' && messageString.utf8Data) {
+            messageString = messageString.utf8Data;
         }
         /*
         else if (rawMessage.type === 'binary') {
@@ -99,22 +102,33 @@ Connection.prototype.setupSocket = function() {
         }
         */
 
-        var message = new Message(rawMessage);
-        message.set('sessionID', socket.sessionID);
+        try{
+            var message = JSON.parse(messageString);
+        }catch(e){
+            logger.log('message_error', e, messageString); //error in the above string(in this case,yes)!
+            return;
+        }
+        message.sessionID = socket.sessionID;
 
+        if (message.source != self.config.cbid) {
+            logger.log('authorization', util.format('CBID %s is attempting to send from %s'
+                , self.config.cbid, message.source), message);
+            message.source - self.config.cbid;
+        }
         //message.filterDestination(self.config.publicationAddresses);
-        message.conformSource(self.config.cbid);
+        //message.conformSource(self.config.cbid);
 
         self.router.dispatch(message);
     });
 
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
-        //self.onMessageToClient(message)
-        var jsonMessage = message.toJSONString();
+        // Remove sensitive information
+        if (message.sessionID) delete message.sessionID;
+        var jsonMessage = JSON.stringify(message);
 
         // Device discovery hack
-        var body = message.get('body');
+        var body = message.body;
         if (body) {
             var resource = body.url || body.resource;
         }
@@ -130,6 +144,7 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('disconnect', function() {
         logger.log('info', 'Disconnected');
+        self.session.destroy();
         unsubscribeToClient();
         self.emit('disconnect');
         socket.removeAllListeners('message');
@@ -148,15 +163,22 @@ Connection.prototype.logConnection = function(config, type) {
 Connection.prototype.onRedisMessage = function(message) {
 
     logger.log('debug', 'onRedisMessage');
+
+    this.router.deliver(message);
+
+    // Update the
     if (message.body && _.contains(this.configURIs, message.body.resource_uri)) {
 
         var controlCBID = message.body.body.cbid;
-        logger.log('debug', 'onRedisMessage controlCBID ', controlCBID);
-        var publisheeCBID = this.getPublisheeFromControl(controlCBID);
-        var subscriptionCBID = this.getSubscriptionFromControl
-            ? this.getSubscriptionFromControl(controlCBID) : false;
+        //logger.log('debug', 'onRedisMessage controlCBID ', controlCBID);
+        var publisheeCBID = this.getPublisheeFromThroughModel(controlCBID);
+        var subscriptionCBID = this.getSubscriptionFromThroughModel
+            ? this.getSubscriptionFromThroughModel(controlCBID) : false;
 
         var verb = message.body.verb;
+        logger.log('debug', util.format('cbid %s %s publisheeCBID %s and subscriptionCBID %s'
+            , this.config.cbid, verb, publisheeCBID, subscriptionCBID));
+
         if (verb == 'create' || verb == 'update') {
 
             logger.log('debug', 'onRedisMessage ', verb, publisheeCBID, subscriptionCBID);
@@ -169,7 +191,6 @@ Connection.prototype.onRedisMessage = function(message) {
             this.client.publishees.target().removeCBIDs(publisheeCBID);
             if (subscriptionCBID) this.client.subscriptions.target().removeCBIDs(subscriptionCBID);
         }
-
     }
 }
 
@@ -179,26 +200,24 @@ Connection.prototype.setupRedis = function() {
 
     var client = this.client;
     logger.log('debug', 'setupRedis');
-    //self.log('debug', 'setupRedis logger');
-    //var subscriptionAddresses = this.config.subscriptionAddresses;
-    //var publicationAddresses = this.config.publicationAddresses;
 
     var redisPub = redis.createClient();
 
     var publishAll = function(message) {
 
-        // When a message appears on the bus, publish it
-        var destination = message.get('destination');
-        var source = message.get('source');
+        var destination = message.destination;
+        var source = message.source;
 
         var publish = function(address) {
 
+            logger.log('debug', 'publish address', address);
             // Publish to the first part of the address
             var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
                 logger.log('debug', 'publish addressMatches', addressMatches);
-                message = message.set('destination', address);
-                var jsonMessage = message.toJSONString();
+                message.destination = address;
+                var jsonMessage = JSON.stringify(message);
+                logger.log('debug', 'redis publishing to', addressMatches[1], jsonMessage);
                 redisPub.publish(addressMatches[1], jsonMessage)
             }
         }
@@ -220,52 +239,61 @@ Connection.prototype.setupRedis = function() {
         publishAll(message);
     });
 
-    logger.log('debug', 'setupRedis before sub');
     // Subscription to Redis
     var redisSub = redis.createClient();
-    var activeSubscriptions = [];
-    var updateSubscriptions = function() {
-        logger.log('debug', 'updateSubscriptions');
-        client.getSubscriptions().then(function(subscriptions) {
-            logger.log('debug', 'updateSubscriptions then', subscriptions);
-            var changes = utils.updateArrayFromSwarm(activeSubscriptions, subscriptions);
-            logger.log('debug', 'updateSubscriptions changes', changes);
-            _.each(changes.added, function(added) {
-                redisSub.subscribe(added);
-            });
-            _.each(changes.removed, function(removed) {
-                redisSub.unsubscribe(removed);
-            });
-        });
-    }
-
+    var subscriptionAddresses = [];
     client.subscriptions.target().on('.change', function(spec, value) {
 
+        // Value is ie. '/Client#BID2=1'. 1 is added, 0 is removed
         logger.log('debug', 'subscriptions on change', spec, value);
-        if (value.subscriptions) {
-            updateSubscriptions();
+
+        var cbid = self.config.cbid;
+
+        for (changeSpec in value) {
+
+            var removing = value[changeSpec] == 0 ? true : false;
+            var address = changeSpec.match(utils.changeSpecRegex)[1];
+            var index = subscriptionAddresses.indexOf(address);
+
+            if (removing && index != -1) {
+                logger.log('debug', util.format('removing subscription %s from %s', address, cbid));
+                redisSub.unsubscribe(address);
+                subscriptionAddresses.splice(index, 1);
+            } else if (!removing && index == -1) {
+                logger.log('debug', util.format('adding subscription %s to %s', address, cbid));
+                redisSub.subscribe(address);
+                subscriptionAddresses.push(address);
+            } else {
+                logger.log('debug', util.format('subscription %s not added to %s because it already exists', address, cbid));
+            }
         }
     });
-    logger.log('debug', 'call updateSubscriptions');
-    updateSubscriptions();
+
+    client.getSubscriptions().then(function(subscriptions) {
+        _.each(subscriptions, function(subscription) {
+            logger.log('debug', util.format('%s redis subscribing to %s',  client._id, subscription));
+            redisSub.subscribe(subscription);
+        });
+        subscriptionAddresses = subscriptions;
+        logger.log('debug', 'redis subscriptionAddresses', subscriptions);
+    });
 
     redisSub.on('message', function(channel, jsonMessage) {
 
         var message = JSON.parse(jsonMessage);
         //var message = new Message(jsonMessage);
-        logger.log('message', format('Redis on channel %s received', channel), jsonMessage);
+        //logger.log('message', format('Redis on channel %s received', channel), jsonMessage);
         self.onRedisMessage(message);
-        //self.router.deliver(message);
     });
 
-    this.disconnect = function() {
+    var disconnect = function() {
 
         //redisSub.removeListener('message', onRedisMessage);
         redisSub.unsubscribe();
         unsubscribeToRedis();
     }
     this.on('disconnect', function() {
-        self.disconnect();
+        disconnect();
         //self.removeListener('disconnect');
     });
 }

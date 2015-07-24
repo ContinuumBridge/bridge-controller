@@ -13,7 +13,7 @@ var http = require('http')
 var SocketServer = require('./socket')
     ,DeviceDiscovery = require('../portal/deviceDiscovery.js')
     ,backendAuth = require('../../backendAuth.js')
-    ,MessageUtils = require('../../message_utils')
+    ,messageUtils = require('../../messageUtils')
     ;
 
 function BackboneIOServer(getConfig, options) {

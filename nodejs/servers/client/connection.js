@@ -1,5 +1,6 @@
 
-var Q = require('q');
+var Q = require('q')
+    ,util = require('util');
 
 var DjangoError = require('../../errors').DjangoError;
 
@@ -10,40 +11,37 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-var ClientConnection = function(socket) {
+var ClientConnection = function(server, socket) {
 
     var self = this;
+
     this.socket = socket;
-    this.logger = logger;
+    this.log = logger.log;
 
-    var config = this.config = socket.config;
+    this.configURIs = ['/api/bridge/v1/client_control'];
 
-    console.log('ClientConnection');
-    socket.getConfig().then(function(config) {
+    ClientConnection.super_.call(this, server, socket);
 
-        self.config = config;
-
-        self.django = new Django(self);
-        self.router = new Router(self);
-
-        self.setupBuses();
-        self.setupSocket();
-        self.setupRedis();
-        self.setupRouting();
-
-        var connectedMessage = {
-            destination: config.subscriptionAddress,
-            source: 'cb',
-            body: 'connected'
-        }
-        logger.log('debug', 'connectedMessage', connectedMessage);
-        socket.emit('message', JSON.stringify(connectedMessage));
-        //socket.sendUTF('message', JSON.stringify(connectedMessage));
-        self.logConnection('client');
-
-    }).done();
+    self.logConnection(self.config, 'client');
 };
 
-ClientConnection.prototype = new Connection();
+util.inherits(ClientConnection, Connection);
+
+ClientConnection.prototype.onInit = function() {
+
+    var connectedMessage = {
+        destination: this.config.cbid,
+        source: 'cb',
+        body: 'connected'
+    }
+    logger.log('debug', 'connectedMessage', connectedMessage);
+    this.socket.emit('message', JSON.stringify(connectedMessage));
+    //socket.sendUTF('message', JSON.stringify(connectedMessage));
+}
+
+ClientConnection.prototype.getPublisheeFromThroughModel = function(cbid) {
+    // ie. CID25/UID3
+    return cbid.match(utils.cbidRegex)[2];
+}
 
 module.exports = ClientConnection;

@@ -3,6 +3,7 @@ var fs = require('fs')
     ,format = require('util').format
     ,Q = require('q')
     ,redis = require('redis')
+    ,util = require('util')
     ;
 
 var SocketIOStream = require('./swarm/socketIOStream');
@@ -28,17 +29,16 @@ swarmHost = require('./swarm/host');
 env = {localhost: swarmHost};
 
 var hostAddress = 'http://localhost';
-var presenceSocket = require('socket.io-client')(hostAddress + ':5000', { query: "id=dev_1&token=testing" });
+var serverName = process.env.SERVER_IDENTITY_NAME;
+var serverKey = process.env.SERVER_IDENTITY_KEY;
+console.log('serverKey ', serverKey );
+var presenceSocket = require('socket.io-client')(hostAddress + ':5000'
+    , { query: util.format("id=%s&token=%s", serverName, serverKey) });
 
 //localServer = new Server('dev_1');
 localServer = swarmHost.get('/Server#dev_1');
 
 var presenceDeferred = Q.defer();
-localServer.on('.init', function() {
-    console.log('localServer init');
-    localServer.clearSessions();
-    presenceDeferred.resolve();
-});
 
 presenceSocket.on('connect', function() {
 
@@ -46,6 +46,12 @@ presenceSocket.on('connect', function() {
 
     var stream = new SocketIOStream(presenceSocket);
     swarmHost.connect(stream);
+
+    localServer.on('.init', function() {
+        console.log('localServer init');
+        localServer.clearSessions();
+        presenceDeferred.resolve();
+    });
 });
 
 presenceDeferred.promise.then(function() {
@@ -61,11 +67,15 @@ presenceDeferred.promise.then(function() {
         port: 9416,
         djangoRootURL: DJANGO_URL
     });
-});
+
+    var Client = require('./servers/client/client');
+    var client = new Client({
+        port: 7521,
+        djangoRootURL: DJANGO_URL
+    });
+    //Client.server = new Client(7521, DJANGO_URL);
+
+}).done();
 
 /*
-//var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
-Client = require('./servers/client/client');
-Client.server = new Client(7521, DJANGO_URL);
-
 */

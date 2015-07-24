@@ -66,7 +66,9 @@ class BroadcastMixin(CBIDModelMixin):
                 if field == 'resource_uri':
                     data['resource_uri'] = resource.get_resource_uri() + "/" + str(self.pk)
                 if field == 'id':
-                    data['id'] = str(self.pk)
+                    data['id'] = self.pk
+                if field == 'cbid' and hasattr(self, 'cbid'):
+                    data['cbid'] = str(self.cbid)
 
                 # TODO Allow choosing of fields other than resource_uri
         else:
@@ -79,7 +81,7 @@ class BroadcastMixin(CBIDModelMixin):
             resource_uri, data = self.to_json()
         elif verb == "delete":
             # Only serialize specific fields if the model is being deleted
-            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id'])
+            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id', 'cbid'])
 
         body = {
             'verb': verb,

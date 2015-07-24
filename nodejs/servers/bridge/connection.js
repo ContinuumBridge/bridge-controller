@@ -21,36 +21,16 @@ var BridgeConnection = function(server, socket) {
 
     this.configURIs = ['/api/bridge/v1/bridge_control'];
 
-    console.log('BridgeConnection init');
-
     BridgeConnection.super_.call(this, server, socket);
 
     self.logConnection(self.config, 'bridge');
-    /*
-    socket.getConfig().then(function(config) {
-
-        self.config = config;
-
-        self.django = new Django(self);
-        self.router = new Router(self);
-
-        self.setupBuses();
-        self.setupSocket();
-        self.setupRedis();
-        self.setupRouting();
-        self.logConnection(config, 'bridge');
-
-    }).done();
-    */
 };
 
 util.inherits(BridgeConnection, Connection);
 
-BridgeConnection.prototype.getPublisheeFromControl = function(cbid) {
+BridgeConnection.prototype.getPublisheeFromThroughModel = function(cbid) {
     // ie. BID2/UID3
-    console.log('cbid apiRegex is', utils.cbidRegex );
-    console.log('cbid match is', cbid.match(utils.cbidRegex));
-    return cbid.match(utils.cbidRegex)[1];
+    return cbid.match(utils.cbidRegex)[2];
 }
 
 BridgeConnection.prototype.deviceDiscovery = function(message) {
