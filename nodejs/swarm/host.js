@@ -36,7 +36,7 @@ var fileStorage = new Swarm.FileStorage(argv.store);
 //this.host = Swarm.env.localhost = new Swarm.Host(this.ssnid,'',this.storage);
 
 var swarmID = "dev_1"
-window.localStorage.setItem('localuser',swarmID);
+//window.localStorage.setItem('localuser',swarmID);
 // create Swarm Host
 var swarmHost = new Swarm.Host('dev_1', 0, fileStorage);
 //var swarmHost = new Swarm.Host(swarmID, '', sharedWebStorage);
