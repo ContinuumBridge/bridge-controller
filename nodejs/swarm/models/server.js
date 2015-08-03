@@ -20,11 +20,9 @@ var Server = Model.extend('Server', {
             console.log('Server init');
             var self = this;
 
-            console.log('Client init sessions', this.sessions);
             if (this.sessions.ref == '#0') {
                 var sessions = swarmHost.get(format('/Sessions#%s', self._id));
                 this.set({sessions: sessions});
-                console.log('Client init sessions', this.sessions);
             }
 
             this.sessions.fill();
@@ -41,7 +39,6 @@ var Server = Model.extend('Server', {
             //client.sessions.target(swarmHost).addObject(session);
             //client.subscribees.target()
 
-            console.log('addSession client config', client.config);
             client.addSession(config, session);
 
             session.on('.init', function() {

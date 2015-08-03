@@ -82757,7 +82757,11 @@ var CBCollection = OriginalCollection.extend({
         var i, l, index, model;
         for (i = 0, l = models.length; i < l; i++) {
             var attrs = models[i];
-            var model = this.findWhere({id: _.property(attrs, 'id')});
+            var id = _.property('id')(attrs);
+            console.log('id', id);
+            var query = id ? {id: id} : {cbid: _.property('cbid')(attrs)};
+            console.log('query', query);
+            var model = this.findWhere(query);
             console.log('update match syncing', this.matchSyncing(attrs));
             if (!model) model = this.matchSyncing(attrs);
 

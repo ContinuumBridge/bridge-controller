@@ -12,6 +12,7 @@ module.exports = Model.extend('Client', {
     defaults: {
         cbid: '',
         email: '',
+        connected: 'false',
         sessions: {type:Ref, value:'#0'},
         publishees: {type:Ref, value:'#0'},
         subscriptions: {type:Ref, value:'#0'}
@@ -37,13 +38,23 @@ module.exports = Model.extend('Client', {
 
             this.set(relations);
 
+            var sessions = this.sessions.target();
+            var boundUpdateConnected = self.updateConnected.bind(self);
+            sessions.on('.init', function(spec, value) {
+                console.log('sessions on init', spec, value);
+                //console.log('sessions init this _proxy', this._proxy);
+                sessions.on('.change', boundUpdateConnected);
+            });
+            /*
             if (!this._publisheeProxy) {
                 this._publisheeProxy = new ProxyListener();
                 this.publishees.target().onObjectEvent(this._publisheeProxy);
             }
+            */
         }
     },
 
+    /*
     onPublisheeEvent: function (callback) {
         // if hack
         if (this._publisheeProxy) {
@@ -51,6 +62,7 @@ module.exports = Model.extend('Client', {
             this._publisheeProxy.on(callback);
         }
     },
+    */
 
     addSession: function(config, session) {
 
@@ -61,18 +73,28 @@ module.exports = Model.extend('Client', {
             email: config.email
         });
 
+        this.set({
+            connected: session.connected
+        });
+
         this.publishees.target(swarmHost).update(config.publishees);
         this.subscriptions.target(swarmHost).update(config.subscriptions);
-
         this.sessions.target(swarmHost).addObject(session);
     },
 
-    destroySession: function(session) {
-        this.sessions.target().removeObject(session);
-    },
+    updateConnected: function(spec, value) {
 
-    find: function() {
+        var self = this;
 
+        console.log('updateConnected', spec, value);
+
+        var sessions = this.sessions.target().list();
+        //sessions.removeObject(session);
+        var connected = 'false';
+        _.each(sessions, function(session) {
+            if (session.connected == 'true') connected = 'true';
+        });
+        if (connected == 'false') this.set({connected: 'false'});
     },
 
     findSubscription: function(subscriptionString) {

@@ -34,9 +34,23 @@ var CBApp = Marionette.Application.extend({
             }
             var verb = _.property('verb')(body);
             var actionType = actionTypes[verb.toLowerCase()];
-            var uri = _.property('resource_uri')(body);
-            var resourceMatches = uri.match(Portal.filters.apiRegex);
-            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+
+            var itemType;
+            var cbid = _.property('cbid')(body);
+            if (cbid) {
+
+                var cbidMatch = cbid.match(Portal.filters.apiRegex)[1];
+                if (cbidMatch[0] == 'B') {
+                    itemType = "bridge";
+                }
+
+            } else {
+
+                var uri = _.property('resource_uri')(body);
+                var resourceMatches = uri.match(Portal.filters.apiRegex);
+                itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            }
+
             var items = _.property('body')(body);
 
             var msg = {

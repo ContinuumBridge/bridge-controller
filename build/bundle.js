@@ -13302,9 +13302,23 @@ var CBApp = Marionette.Application.extend({
             }
             var verb = _.property('verb')(body);
             var actionType = actionTypes[verb.toLowerCase()];
-            var uri = _.property('resource_uri')(body);
-            var resourceMatches = uri.match(Portal.filters.apiRegex);
-            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+
+            var itemType;
+            var cbid = _.property('cbid')(body);
+            if (cbid) {
+
+                var cbidMatch = cbid.match(Portal.filters.apiRegex)[1];
+                if (cbidMatch[0] == 'B') {
+                    itemType = "bridge";
+                }
+
+            } else {
+
+                var uri = _.property('resource_uri')(body);
+                var resourceMatches = uri.match(Portal.filters.apiRegex);
+                itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            }
+
             var items = _.property('body')(body);
 
             var msg = {
@@ -14813,6 +14827,7 @@ Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 
 //Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
 Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?\/?([A-Z]ID[0-9]+)?/;
+
 
 },{"q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/mixins/installable.js":[function(require,module,exports){
 
@@ -16850,6 +16865,8 @@ module.exports.underscoredToCamelCase = function(underscored) {
     var camelCased = underscored.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
     return camelCased;
 }
+
+
 },{}],"/home/ubuntu/bridge-controller/portal/static/js/cb/views/account.js":[function(require,module,exports){
 
 require('../users/current/views');

@@ -10,6 +10,7 @@ var Message = require('../../message')
     ,authorization = require('./authorization')
     ,redis = require('redis')
     ,Session = require('../../swarm/models/sessions').Session
+    ,Swarm = require('swarm')
     ,util = require('util')
     ,format = util.format
     ,utils = require('../utils')
@@ -87,6 +88,7 @@ Connection.prototype.setupSocket = function() {
     var self = this;
 
     var socket = this.socket;
+    var client = this.client;
 
     logger.log('debug', 'setupSocket');
     socket.on('message', function (messageString) {
@@ -113,7 +115,7 @@ Connection.prototype.setupSocket = function() {
         if (message.source != self.config.cbid) {
             logger.log('authorization', util.format('CBID %s is attempting to send from %s'
                 , self.config.cbid, message.source), message);
-            message.source - self.config.cbid;
+            message.source = self.config.cbid;
         }
         //message.filterDestination(self.config.publicationAddresses);
         //message.conformSource(self.config.cbid);
@@ -121,11 +123,16 @@ Connection.prototype.setupSocket = function() {
         self.router.dispatch(message);
     });
 
+    var clientEmit = this.clientEmit = function(channel, message) {
+
+        var jsonMessage = JSON.stringify(message);
+        socket.server.to(socket.id).emit(channel, jsonMessage);
+    }
+
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
         // Remove sensitive information
         if (message.sessionID) delete message.sessionID;
-        var jsonMessage = JSON.stringify(message);
 
         // Device discovery hack
         var body = message.body;
@@ -135,17 +142,81 @@ Connection.prototype.setupSocket = function() {
 
         if (resource && resource == '/api/bridge/v1/device_discovery/') {
 
-            socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
+            clientEmit('discoveredDeviceInstall:reset', body.body);
+            //socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
         } else {
 
-            socket.server.to(socket.id).emit('message', jsonMessage);
+            clientEmit('message', message);
+            //socket.server.to(socket.id).emit('message', message);
         }
     });
+
+    /*
+    publishees.on('.init', function(spec, value) {
+
+        logger.log('debug', 'publishees on4 init _proxy', publishees._proxy);
+
+    });
+
+    client.publishees.target().on('.init', function(spec, value) {
+
+        logger.log('debug', 'client publishees on init', spec, value);
+        //logger.log('debug', 'client publishees on init  client.publishees', publishees);
+        //logger.log('debug', 'client publishees on init _proxy', publishees._proxy);
+
+        bridge = swarmHost.get('/Client#BID2');
+        bridge.on(function(spec, value) {
+
+            logger.log('debug', 'BID2 on', spec, value);
+        });
+
+        client.publishees.target().onObjectEvent({deliver: function(spec, value) {
+
+            // Value is ie. '/Client#BID2=1'. 1 is added, 0 is removed
+            logger.log('debug', 'publishees client on change');
+            logger.log('debug', 'publishees client on change', spec, value);
+
+            /*
+            var cbid = self.config.cbid;
+
+            for (changeSpec in value) {
+
+                var removing = value[changeSpec] == 0 ? true : false;
+                var address = changeSpec.match(utils.changeSpecRegex)[1];
+                //var index = subscriptionAddresses.indexOf(address);
+
+                if (removing) {
+                    logger.log('debug', util.format('removing publishee %s from %s', address, cbid));
+                    clientEmit('message', {
+                        destination: self.config.cbid,
+                        source: 'cb'
+                    });
+                } else if (!removing && index == -1) {
+                    logger.log('debug', util.format('adding publishee %s to %s', address, cbid));
+                } else {
+                    //logger.log('debug', util.format('subscription %s not added to %s because it already exists', address, cbid));
+                }
+            }
+        }});
+    });
+    */
+
+    /*
+    client.getSubscriptions().then(function(subscriptions) {
+        _.each(subscriptions, function(subscription) {
+            logger.log('debug', util.format('%s redis subscribing to %s',  client._id, subscription));
+            redisSub.subscribe(subscription);
+        });
+        subscriptionAddresses = subscriptions;
+        logger.log('debug', 'redis subscriptionAddresses', subscriptions);
+    });
+    */
 
     socket.on('disconnect', function() {
         logger.log('info', 'Disconnected');
         self.session.destroy();
         unsubscribeToClient();
+        // TODO self.client.publishees.off()
         self.emit('disconnect');
         socket.removeAllListeners('message');
         socket.removeAllListeners('disconnect');
