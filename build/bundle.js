@@ -13209,6 +13209,10 @@ Portal.BridgeStatusView = React.createClass({displayName: 'BridgeStatusView',
                                         React.createElement("td", null, bridge.get('description'))
                                     ), 
                                     React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Connected: "), 
+                                        React.createElement("td", null, bridge.get('connected') || '-')
+                                    ), 
+                                    React.createElement("tr", null, 
                                         React.createElement("th", {scope: "row"}, "Status: "), 
                                         React.createElement("td", null, bridge.get('status') + bridge.get('status_message'))
                                     ), 
@@ -14250,6 +14254,7 @@ Portal.addInitializer(function () {
 
       var collections = {
           apps: Portal.appCollection,
+          bridges: Portal.bridgeCollection,
           users: Portal.userCollection,
           messages: Portal.messageCollection,
           notifications: Portal.notificationCollection
@@ -16574,8 +16579,12 @@ Portal.addInitializer(function() {
             return;
         }
 
+        // Hold any messages until the initial data has arrived
+        //Portal.getCurrentBridge().then(function() {
+
         console.log('Server >', jsonMessage);
         Portal.dispatch(jsonMessage);
+        //});
         /*
         var message = new Portal.Message(jsonMessage);
 
@@ -18064,6 +18073,11 @@ module.exports.Topbar = React.createClass({displayName: 'Topbar',
     }
 });
 
+var connectionColours = {
+    true: 'led-green',
+    false: 'led-red'
+}
+
 var BridgeList = React.createClass({displayName: 'BridgeList',
 
     mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
@@ -18077,11 +18091,39 @@ var BridgeList = React.createClass({displayName: 'BridgeList',
         Portal.setCurrentBridge(bridge);
     },
 
+    getLEDType: function(connected, error) {
+
+        if (connected) {
+            if (connected == 'true') {
+                return error ? 'led-amber' : 'led-green';
+            } else if (connected == 'false') {
+                return 'led-red';
+            }
+        } else {
+            return 'led-off';
+        }
+    },
+
     createItem: function(bridge) {
+
+        var error = bridge.status != 'operational';
+        var imgPath = "/static/img/leds/" + this.getLEDType(bridge.connected, error) + ".png";
+        var led = React.createElement("img", {className: "led", src: imgPath});
+        /*
+        var ledClass = connected ? connectionColours[connected] : "led-off";
+        led = <div className="led-box">
+                <div className={ledClass}></div>
+              </div>;
+        */
 
         return (
             React.createElement("li", {key: bridge.id}, 
-                React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, bridge.name)
+                React.createElement("a", {'data-tag': bridge.id, onClick: this.bridgeClick}, 
+                    React.createElement("div", null, 
+                        led
+                    ), 
+                    React.createElement("div", {className: "bridge-name"}, bridge.name)
+                )
             )
         );
     },

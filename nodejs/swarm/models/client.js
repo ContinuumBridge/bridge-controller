@@ -41,7 +41,7 @@ module.exports = Model.extend('Client', {
             var sessions = this.sessions.target();
             var boundUpdateConnected = self.updateConnected.bind(self);
             sessions.on('.init', function(spec, value) {
-                console.log('sessions on init', spec, value);
+                //console.log('sessions on init', spec, value);
                 //console.log('sessions init this _proxy', this._proxy);
                 sessions.on('.change', boundUpdateConnected);
             });
@@ -127,7 +127,6 @@ module.exports = Model.extend('Client', {
             var itemIDs = _.map(list, function(item) {
                 return item._id;
             });
-            console.log('itemIDs are', itemIDs);
             return itemIDs;
         }
 
@@ -136,13 +135,11 @@ module.exports = Model.extend('Client', {
             this.on('.init', function() {
 
                 var clientIDs = getIDs(this[type].target().list());
-                console.log('clientIDs .init are', clientIDs);
                 deferred.resolve(clientIDs);
             });
         } else {
 
             var clientIDs = getIDs(this[type].target().list());
-            console.log('clientIDs are', clientIDs);
             deferred.resolve(clientIDs);
         }
         return deferred.promise;

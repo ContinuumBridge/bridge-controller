@@ -24,6 +24,10 @@ Portal.BridgeStatusView = React.createClass({
                                         <td>{bridge.get('description')}</td>
                                     </tr>
                                     <tr>
+                                        <th scope="row">Connected: </th>
+                                        <td>{bridge.get('connected') || '-'}</td>
+                                    </tr>
+                                    <tr>
                                         <th scope="row">Status: </th>
                                         <td>{bridge.get('status') + bridge.get('status_message')}</td>
                                     </tr>

@@ -1,6 +1,7 @@
 
 var util = require("util");
 var Q = require('q');
+var _ = require('underscore');
 
 var DjangoError = require('../../errors').DjangoError;
 
@@ -36,25 +37,32 @@ PortalConnection.prototype.setupSocket = function() {
 
     publishees = this.client.publishees.target();
 
-    logger.log('debug', 'publishees proxy', publishees._proxy);
+    logger.log('debug', 'PortalConnection setupSocket');
+
+    var createMessage = function(body) {
+
+        return {
+            destination: self.client.cbid,
+            source: 'cb',
+            body: {
+                verb: 'update',
+                resource_uri: '/api/bridge/v1/bridge/',
+                body: body
+            }
+        }
+    }
 
     var updateClient = function(spec, value) {
 
         var cbid = spec.get('#');
         // Value is ie. '/Client#BID2=1'. 1 is added, 0 is removed
         if (value.connected) {
-            self.clientEmit('message', {
-                destination: self.client.cbid,
-                source: 'cb',
-                body: {
-                    verb: 'update',
-                    resource_uri: '/api/bridge/v1/bridge/',
-                    body: {
-                        connected: value.connected,
-                        cbid: cbid
-                    }
-                }
+            var message = createMessage({
+                connected: value.connected,
+                cbid: cbid
             });
+
+            self.clientEmit('message', message);
         }
 
         logger.log('debug', 'publishees client on change');
@@ -62,18 +70,40 @@ PortalConnection.prototype.setupSocket = function() {
     }
 
     logger.log('debug', 'publishees._version', publishees._version);
-    if (publishees._version == '#0') {
+    var updateClientFull = function() {
+
+        var body = _.map(publishees.list(), function(publishee) {
+            return {
+                connected: publishee.connected,
+                cbid: publishee._id
+            }
+        });
+        var message = createMessage(body);
+        self.clientEmit('message', message);
+    }
+
+    if (!publishees.initialized) {
         publishees.on(function(spec, value) {
 
             var op = spec.get('.');
             if (op == 'init') {
 
+                publishees.initialized = true;
                 publishees.onObjectEvent(updateClient);
+                updateClientFull();
             }
         });
     } else {
         publishees.onObjectEvent(updateClient);
+        updateClientFull();
     }
+
+
+
+    this.socket.on('reconnect', function() {
+
+        publishees.onObjectEvent(updateClient);
+    });
 
     this.socket.on('disconnect', function() {
         publishees.offObjectEvent(updateClient);

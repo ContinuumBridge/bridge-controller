@@ -28,6 +28,9 @@ function Connection(server, socket) {
     var config = this.config = socket.config;
     logger.log('debug', 'connection config', config);
 
+    socket.on('connect', this.connect.bind(this));
+    this.connect();
+
     this.setupPresence(config).then(function() {
 
         self.django = new Django(self);
@@ -37,6 +40,7 @@ function Connection(server, socket) {
         self.setupSocket();
         self.setupRedis();
         if (self.onInit) self.onInit();
+
         logger.log('debug', 'setup presence promise returned');
 
     }).fail(function(error) {
@@ -49,6 +53,12 @@ function Connection(server, socket) {
 
 var EventEmitter = require('events').EventEmitter;
 util.inherits(Connection, EventEmitter);
+
+Connection.prototype.connect = function() {
+
+    var self = this;
+
+}
 
 Connection.prototype.setupBuses = function() {
 
@@ -151,66 +161,21 @@ Connection.prototype.setupSocket = function() {
         }
     });
 
-    /*
-    publishees.on('.init', function(spec, value) {
-
-        logger.log('debug', 'publishees on4 init _proxy', publishees._proxy);
-
+    socket.on('reconnect_failed', function() {
+        logger.log('info', 'Reconnect failed');
     });
 
-    client.publishees.target().on('.init', function(spec, value) {
-
-        logger.log('debug', 'client publishees on init', spec, value);
-        //logger.log('debug', 'client publishees on init  client.publishees', publishees);
-        //logger.log('debug', 'client publishees on init _proxy', publishees._proxy);
-
-        bridge = swarmHost.get('/Client#BID2');
-        bridge.on(function(spec, value) {
-
-            logger.log('debug', 'BID2 on', spec, value);
-        });
-
-        client.publishees.target().onObjectEvent({deliver: function(spec, value) {
-
-            // Value is ie. '/Client#BID2=1'. 1 is added, 0 is removed
-            logger.log('debug', 'publishees client on change');
-            logger.log('debug', 'publishees client on change', spec, value);
-
-            /*
-            var cbid = self.config.cbid;
-
-            for (changeSpec in value) {
-
-                var removing = value[changeSpec] == 0 ? true : false;
-                var address = changeSpec.match(utils.changeSpecRegex)[1];
-                //var index = subscriptionAddresses.indexOf(address);
-
-                if (removing) {
-                    logger.log('debug', util.format('removing publishee %s from %s', address, cbid));
-                    clientEmit('message', {
-                        destination: self.config.cbid,
-                        source: 'cb'
-                    });
-                } else if (!removing && index == -1) {
-                    logger.log('debug', util.format('adding publishee %s to %s', address, cbid));
-                } else {
-                    //logger.log('debug', util.format('subscription %s not added to %s because it already exists', address, cbid));
-                }
-            }
-        }});
+    socket.on('reconnect', function() {
+        logger.log('info', 'Reconnect');
     });
-    */
 
-    /*
-    client.getSubscriptions().then(function(subscriptions) {
-        _.each(subscriptions, function(subscription) {
-            logger.log('debug', util.format('%s redis subscribing to %s',  client._id, subscription));
-            redisSub.subscribe(subscription);
-        });
-        subscriptionAddresses = subscriptions;
-        logger.log('debug', 'redis subscriptionAddresses', subscriptions);
+    socket.on('reconnect_attempt', function() {
+        logger.log('info', 'Reconnect attempt');
     });
-    */
+
+    socket.on('error', function() {
+        logger.log('error', 'Socket error');
+    });
 
     socket.on('disconnect', function() {
         logger.log('info', 'Disconnected');

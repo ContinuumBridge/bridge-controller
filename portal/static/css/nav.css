@@ -1,2 +1,9 @@
 /* Navigation Bar */
 
+
+.dropdown-menu > li > a > .bridge-name {
+    position: relative;
+    left: -15px;
+    /*top: -1px;*/
+    font-size: 13px;
+}

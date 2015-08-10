@@ -86,7 +86,7 @@ Portal.prototype.formatConfig = function(authData) {
         if (authData.bridge_controls) {
             authData.bridge_controls.forEach(function(control) {
                 var resourceMatch = control.bridge.match(utils.apiRegex);
-                console.log('formatConfig resourceMatch', resourceMatch);
+                //console.log('formatConfig resourceMatch', resourceMatch);
                 if(resourceMatch && resourceMatch[2]) {
                     var cbid = 'BID' + resourceMatch[2];
                     //console.log('formatConfig cbid', cbid);

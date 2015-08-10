@@ -106,8 +106,12 @@ Portal.addInitializer(function() {
             return;
         }
 
+        // Hold any messages until the initial data has arrived
+        //Portal.getCurrentBridge().then(function() {
+
         console.log('Server >', jsonMessage);
         Portal.dispatch(jsonMessage);
+        //});
         /*
         var message = new Portal.Message(jsonMessage);
 

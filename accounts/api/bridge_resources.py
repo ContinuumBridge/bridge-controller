@@ -36,7 +36,7 @@ from .abstract_resources import UserObjectsResource, RelatedUserObjectsResource
 from django.core.urlresolvers import NoReverseMatch, reverse, resolve, Resolver404, get_script_prefix
 
 
-class UserBridgeResource(CBResource):
+class UserBridgeResource(CBResource, CBIDResourceMixin):
 
     """
     Used for fetching bootstrapped data on initial load
