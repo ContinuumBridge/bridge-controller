@@ -35,9 +35,7 @@ var Sessions = Set.extend('Sessions', {
     disconnectAll: function() {
 
         _.each(this.list(), function(session) {
-            session.set({
-                connected: 'false'
-            });
+            session.disconnect();
         });
     }
 });

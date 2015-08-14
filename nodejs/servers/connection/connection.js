@@ -26,7 +26,7 @@ function Connection(server, socket) {
     this.socket = socket;
 
     var config = this.config = socket.config;
-    logger.log('debug', 'connection config', config);
+    //logger.log('debug', 'connection config', config);
 
     socket.on('connect', this.connect.bind(this));
     this.connect();
@@ -41,7 +41,7 @@ function Connection(server, socket) {
         self.setupRedis();
         if (self.onInit) self.onInit();
 
-        logger.log('debug', 'setup presence promise returned');
+        //logger.log('debug', 'setup presence promise returned');
 
     }).fail(function(error) {
 
@@ -78,7 +78,7 @@ Connection.prototype.setupPresence = function(config) {
     // If a session had been disconnected by the presence store while disconnected from
     // this server, reconnect it.
     session.on('.set', function(spec, val, source) {
-        console.log('session set spec', spec, 'val', val);
+        //console.log('session set spec', spec, 'val', val);
         if (presenceExp.test(spec.value)) {
             if (val.connected && val.connected == 'false') {
                 console.log('session setting connected to true');
@@ -87,8 +87,6 @@ Connection.prototype.setupPresence = function(config) {
         }
     });
 
-    //console.log('client before init', client);
-    //client.config = config;
     // Returns promise
     return localServer.connectSession(config, session, client);
 };
@@ -100,7 +98,7 @@ Connection.prototype.setupSocket = function() {
     var socket = this.socket;
     var client = this.client;
 
-    logger.log('debug', 'setupSocket');
+    //logger.log('debug', 'setupSocket');
     socket.on('message', function (messageString) {
 
         //logger.log('debug', 'Socket message', messageString);
@@ -178,7 +176,7 @@ Connection.prototype.setupSocket = function() {
     });
 
     socket.on('disconnect', function() {
-        logger.log('info', 'Disconnected');
+        logger.log('info', util.format('%s Disconnected', self.config.cbid));
         self.session.destroy();
         unsubscribeToClient();
         // TODO self.client.publishees.off()
@@ -190,6 +188,7 @@ Connection.prototype.setupSocket = function() {
 
 Connection.prototype.logConnection = function(config, type) {
 
+    logger.log('debug', 'logConnection config', config);
     var publisheesString = config.publishees ? config.publishees.join(', ') : "";
     var subscriptionsString = config.subscriptions ? config.subscriptions.join(', ') : "";
     logger.log('info', 'New %s connection. Subscribed to %s, publishing to %s'
@@ -198,7 +197,7 @@ Connection.prototype.logConnection = function(config, type) {
 
 Connection.prototype.onRedisMessage = function(message) {
 
-    logger.log('debug', 'onRedisMessage');
+    //logger.log('debug', 'onRedisMessage');
 
     this.router.deliver(message);
 
@@ -212,18 +211,18 @@ Connection.prototype.onRedisMessage = function(message) {
             ? this.getSubscriptionFromThroughModel(controlCBID) : false;
 
         var verb = message.body.verb;
-        logger.log('debug', util.format('cbid %s %s publisheeCBID %s and subscriptionCBID %s'
-            , this.config.cbid, verb, publisheeCBID, subscriptionCBID));
+        //logger.log('debug', util.format('cbid %s %s publisheeCBID %s and subscriptionCBID %s'
+        //    , this.config.cbid, verb, publisheeCBID, subscriptionCBID));
 
         if (verb == 'create' || verb == 'update') {
 
-            logger.log('debug', 'onRedisMessage ', verb, publisheeCBID, subscriptionCBID);
+            //logger.log('debug', 'onRedisMessage ', verb, publisheeCBID, subscriptionCBID);
             this.client.publishees.target().addCBIDs(publisheeCBID);
             if (subscriptionCBID) this.client.subscriptions.target().addCBIDs(subscriptionCBID);
 
         } else if (verb == 'delete') {
 
-            logger.log('debug', 'onRedisMessage delete', publisheeCBID, subscriptionCBID);
+            //logger.log('debug', 'onRedisMessage delete', publisheeCBID, subscriptionCBID);
             this.client.publishees.target().removeCBIDs(publisheeCBID);
             if (subscriptionCBID) this.client.subscriptions.target().removeCBIDs(subscriptionCBID);
         }
@@ -235,7 +234,7 @@ Connection.prototype.setupRedis = function() {
     var self = this;
 
     var client = this.client;
-    logger.log('debug', 'setupRedis');
+    //logger.log('debug', 'setupRedis');
 
     var redisPub = redis.createClient();
 
@@ -246,14 +245,14 @@ Connection.prototype.setupRedis = function() {
 
         var publish = function(address) {
 
-            logger.log('debug', 'publish address', address);
+            //logger.log('debug', 'publish address', address);
             // Publish to the first part of the address
             var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
-                logger.log('debug', 'publish addressMatches', addressMatches);
+                //logger.log('debug', 'publish addressMatches', addressMatches);
                 message.destination = address;
                 var jsonMessage = JSON.stringify(message);
-                logger.log('debug', 'redis publishing to', addressMatches[1], jsonMessage);
+                //logger.log('debug', 'redis publishing to', addressMatches[1], jsonMessage);
                 redisPub.publish(addressMatches[1], jsonMessage)
             }
         }
@@ -281,7 +280,7 @@ Connection.prototype.setupRedis = function() {
     client.subscriptions.target().on('.change', function(spec, value) {
 
         // Value is ie. '/Client#BID2=1'. 1 is added, 0 is removed
-        logger.log('debug', 'subscriptions on change', spec, value);
+        //logger.log('debug', 'subscriptions on change', spec, value);
 
         var cbid = self.config.cbid;
 
@@ -292,11 +291,11 @@ Connection.prototype.setupRedis = function() {
             var index = subscriptionAddresses.indexOf(address);
 
             if (removing && index != -1) {
-                logger.log('debug', util.format('removing subscription %s from %s', address, cbid));
+                //logger.log('debug', util.format('removing subscription %s from %s', address, cbid));
                 redisSub.unsubscribe(address);
                 subscriptionAddresses.splice(index, 1);
             } else if (!removing && index == -1) {
-                logger.log('debug', util.format('adding subscription %s to %s', address, cbid));
+                //logger.log('debug', util.format('adding subscription %s to %s', address, cbid));
                 redisSub.subscribe(address);
                 subscriptionAddresses.push(address);
             } else {
@@ -307,11 +306,11 @@ Connection.prototype.setupRedis = function() {
 
     client.getSubscriptions().then(function(subscriptions) {
         _.each(subscriptions, function(subscription) {
-            logger.log('debug', util.format('%s redis subscribing to %s',  client._id, subscription));
+            //logger.log('debug', util.format('%s redis subscribing to %s',  client._id, subscription));
             redisSub.subscribe(subscription);
         });
         subscriptionAddresses = subscriptions;
-        logger.log('debug', 'redis subscriptionAddresses', subscriptions);
+        //logger.log('debug', 'redis subscriptionAddresses', subscriptions);
     });
 
     redisSub.on('message', function(channel, jsonMessage) {

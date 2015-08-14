@@ -18,14 +18,19 @@ module.exports = Model.extend('Session', {
         this.set({
             connected: 'false'
         });
+        this.client.target().updateConnected();
     },
 
     destroy: function() {
 
         console.log('destroy session', this._id);
         //console.log('session destroy client', this.client);
+        this.set({
+            connected: 'false'
+        });
         this.server.target().sessions.target().removeObject(this);
         this.client.target().sessions.target().removeObject(this);
+        this.client.target().updateConnected();
     }
     /*
     reactions: {

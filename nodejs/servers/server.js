@@ -23,7 +23,7 @@ function Server() {
 
     this.sockets.on('connection', function (socket) {
 
-        console.log('server on connection', socket.config);
+        //console.log('server on connection', socket.config);
         self.onConnection(socket);
     });
     this.setupAuthentication();
@@ -33,7 +33,7 @@ Server.prototype.onConnection = function(socket) {
 
     // Override this method
 
-    console.log('server onConnection');
+    //console.log('server onConnection');
 }
 
 /*
@@ -65,9 +65,9 @@ Server.prototype.getConnectionConfig = function(sessionID) {
 
         //logger.log('debug', 'backendAuth succeeded', authData);
         var config = self.formatConfig(authData);
-        logger.log('debug', 'backendAuth sessionID', sessionID);
+        //logger.log('debug', 'backendAuth sessionID', sessionID);
         config.sessionID = sessionID;
-        logger.log('debug', 'backendAuth config', config);
+        //logger.log('debug', 'backendAuth config', config);
         deferredConfig.resolve(config);
 
     }, function(error) {
@@ -100,13 +100,13 @@ Server.prototype.setupAuthentication = function() {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
 
-        console.log('Authentication sessionID', sessionID);
+        //console.log('Authentication sessionID', sessionID);
         //console.log('socket sessionID is', sessionID);
 
         self.getConnectionConfig(sessionID).then(function(config) {
             //socket.config = config;
             //config.sessionID = sessionID;
-            logger.log('debug', 'authenticated', config);
+            //logger.log('debug', 'authenticated', config);
             socket.config = config;
             //socket.config = self.formatConfig(config);
             //socket.client = swarmHost.get('/Client#') // TODO

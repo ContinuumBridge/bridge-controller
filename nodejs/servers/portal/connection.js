@@ -20,7 +20,7 @@ var PortalConnection = function(server, socket) {
 
     this.configURIs = ['/api/bridge/v1/bridge_control'];
 
-    console.log('PortalConnection init');
+    //console.log('PortalConnection init');
 
     PortalConnection.super_.call(this, server, socket);
 
@@ -37,7 +37,7 @@ PortalConnection.prototype.setupSocket = function() {
 
     publishees = this.client.publishees.target();
 
-    logger.log('debug', 'PortalConnection setupSocket');
+    //logger.log('debug', 'PortalConnection setupSocket');
 
     var createMessage = function(body) {
 
@@ -65,11 +65,11 @@ PortalConnection.prototype.setupSocket = function() {
             self.clientEmit('message', message);
         }
 
-        logger.log('debug', 'publishees client on change');
-        logger.log('debug', 'publishees client on change', spec, value);
+        //logger.log('debug', 'publishees client on change');
+        //logger.log('debug', 'publishees client on change', spec, value);
     }
 
-    logger.log('debug', 'publishees._version', publishees._version);
+    //logger.log('debug', 'publishees._version', publishees._version);
     var updateClientFull = function() {
 
         var body = _.map(publishees.list(), function(publishee) {
@@ -97,8 +97,6 @@ PortalConnection.prototype.setupSocket = function() {
         publishees.onObjectEvent(updateClient);
         updateClientFull();
     }
-
-
 
     this.socket.on('reconnect', function() {
 

@@ -22,7 +22,7 @@ module.exports = Model.extend('Client', {
 
         init: function(spec, val, src) {
 
-            console.log('Client init');
+            //console.log('Client init');
             var self = this;
             var relations = {};
 
@@ -39,12 +39,14 @@ module.exports = Model.extend('Client', {
             this.set(relations);
 
             var sessions = this.sessions.target();
+            /*
             var boundUpdateConnected = self.updateConnected.bind(self);
             sessions.on('.init', function(spec, value) {
                 //console.log('sessions on init', spec, value);
                 //console.log('sessions init this _proxy', this._proxy);
                 sessions.on('.change', boundUpdateConnected);
             });
+            */
             /*
             if (!this._publisheeProxy) {
                 this._publisheeProxy = new ProxyListener();

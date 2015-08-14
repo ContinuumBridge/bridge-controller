@@ -35,7 +35,7 @@ Router.prototype.setupRoutes = function() {
     // Update the publisheeAddresses from swarm client
     client.publishees.target().on('.change', function(spec, value) {
 
-        logger.log('debug', 'publishees on change', spec, value);
+        //logger.log('debug', 'publishees on change', spec, value);
         //publisheeValue = value;
         for (changeSpec in value) {
 
@@ -44,10 +44,10 @@ Router.prototype.setupRoutes = function() {
             var index = publisheeAddresses.indexOf(address);
 
             if (removing && index != -1) {
-                logger.log('debug', util.format('removing publishee %s from %s', address, cbid));
+                //logger.log('debug', util.format('removing publishee %s from %s', address, cbid));
                 publisheeAddresses.splice(index, 1);
             } else if (!removing && index == -1) {
-                logger.log('debug', util.format('adding publishee %s to %s', address, cbid));
+                //logger.log('debug', util.format('adding publishee %s to %s', address, cbid));
                 publisheeAddresses.push(address);
             } else {
                 logger.log('debug', util.format('publishee %s not added to %s because it already exists'
@@ -59,8 +59,8 @@ Router.prototype.setupRoutes = function() {
     // Get the publishees for this client
     client.getPublishees().then(function(publishees) {
         publisheeAddresses = publishees;
-        logger.log('debug', util.format('router publisheeAddresses for %s: %s'
-            , cbid, publisheeAddresses));
+        //logger.log('debug', util.format('router publisheeAddresses for %s: %s'
+        //    , cbid, publisheeAddresses));
     });
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
@@ -99,7 +99,7 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('broadcast', function(message) {
 
-        logger.log('debug', 'broadcast message to publishees', publisheeAddresses);
+        //logger.log('debug', 'broadcast message to publishees', publisheeAddresses);
 
         message.destination = publisheeAddresses;
         connection.toRedis.push(message);
