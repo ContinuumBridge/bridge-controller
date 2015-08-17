@@ -10,9 +10,9 @@ module.exports = Set.extend('Clients', {
 
     reactions: {
         init: function (spec,val,src) {
-            console.log('Clients init set proxy', spec, this._proxy);
+            //console.log('Clients init set proxy', spec, this._proxy);
             if (!this._proxy) {
-                console.log('Clients init proxy', this._proxy);
+                //console.log('Clients init proxy', this._proxy);
                 this._proxy = new ProxyListener();
             }
             this.forEach(function (obj) {
