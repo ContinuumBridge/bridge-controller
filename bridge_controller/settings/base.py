@@ -2,6 +2,7 @@
 
 # -*- coding: utf-8 -*-
 import os
+import sys
 from django.core.exceptions import ImproperlyConfigured 
 
 # For importing environment variables
@@ -171,6 +172,56 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
+
+LOGGING_CONFIG = None
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'site.log',
+            'formatter': 'verbose'
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'INFO',
+        },
+        'bridge_controller': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
+}
+
+'''
+        'bridge-controller': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+'''
+
+import logging.config
+logging.config.dictConfig(LOGGING)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

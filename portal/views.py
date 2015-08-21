@@ -32,7 +32,7 @@ class PortalView(LoginRequiredMixin, TemplateView):
         initial_user_json = user_resource._meta.serializer.serialize(initial_user_data, 'application/json')
         # Escape single quotes in the json to allow insertion into js script
         escaped_json = re.sub("'", "\\'", initial_user_json)
-        print "escaped json", escaped_json
+        #print "escaped json", escaped_json
         context['initial_user_data'] = escaped_json
 
         #raise Exception('ally bad')

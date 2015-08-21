@@ -1,12 +1,15 @@
 import operator
 from django.db.models import Q
 
+import logging
+logger = logging.getLogger('bridge_controller')
+
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, BadRequest
 
 from accounts.models import CBAuth, CBUser
 from apps.models import AppLicence, AppInstall
-from bridge_controller.api.authorization import CBAuthorization
+from bridge_controller.api.authorization import CBAuthorization, CBValidateAuthorization
 
 class AppAuthorization(CBAuthorization):
 
@@ -32,7 +35,7 @@ class AppAuthorization(CBAuthorization):
         ))
         return self.filter_with_querylist(object_list, query_list, bundle)
 
-class AppInstallAuthorization(CBAuthorization):
+class AppInstallAuthorization(CBValidateAuthorization):
 
     def validate(self, object_list, bundle):
         for app_install in object_list:
@@ -74,16 +77,14 @@ class AppInstallAuthorization(CBAuthorization):
                     raise Unauthorized(message)
 
             #if bundle.request.method != "DELETE":
-
-
-        print "end of validate app_install"
         return object_list
 
+    '''
     def create_list(self, object_list, bundle):
         return self.validate(object_list, bundle)
 
     def create_detail(self, object_list, bundle):
-        print "Create app install"
+        #print "Create app install"
         return bool(self.validate([bundle.obj], bundle))
         #return super(AppInstallAuthorization, self).create_detail(object_list, bundle)
 
@@ -99,6 +100,7 @@ class AppInstallAuthorization(CBAuthorization):
 
     def delete_detail(self, object_list, bundle):
         return bool(self.validate([bundle.obj], bundle))
+    '''
 
 
 class AppDevicePermissionAuthorization(CBAuthorization):
@@ -132,7 +134,7 @@ class AppLicenceAuthorization(CBAuthorization):
             query_list = self.get_client_related_query(verb, query_list, bundle)
         return query_list
 
-class AppConnectionAuthorization(AppLicenceAuthorization):
+class AppConnectionAuthorization(CBAuthorization):
 
    def get_query_list(self, verb, bundle):
         # A user who has an AppOwnership to the same App as the AppLicence and controls the client

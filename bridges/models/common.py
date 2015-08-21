@@ -1,3 +1,4 @@
+import sys
 import json
 import redis
 import traceback
@@ -6,10 +7,11 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.importlib import import_module
+import logging
+logger = logging.getLogger('bridge_controller')
 from bridge_controller.utils import RawJSON, RawJSONEncoder
 
 from bridge_controller import tasks
-
 
 class CBIDModelMixin(object):
 
@@ -99,11 +101,14 @@ class BroadcastMixin(CBIDModelMixin):
 
         #modified_by = self.modified_by
         for d in destinations:
+            logger.debug('%s %s destination %s', self.__class__.__name__, sys._getframe().f_code.co_name, d)
             message['destination'] = d
             json_message = json.dumps(message, cls=RawJSONEncoder)
             r.publish(d, json_message)
 
     def save(self, *args, **kwargs):
+
+        logger.debug('%s %s', self.__class__.__name__, sys._getframe().f_code.co_name)
         verb = "update" if self.pk else "create"
         #traceback.print_stack()
         super(BroadcastMixin, self).save(*args, **kwargs)
@@ -116,6 +121,8 @@ class BroadcastMixin(CBIDModelMixin):
             #tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
+
+        logger.debug('%s %s', self.__class__.__name__, sys._getframe().f_code.co_name)
         message = self.create_message('delete')
         super(BroadcastMixin, self).delete(using=using)
         if broadcast:

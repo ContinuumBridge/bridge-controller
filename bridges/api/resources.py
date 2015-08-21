@@ -37,7 +37,6 @@ def controlled_by_client(bundle):
             return False
 
 def get_request(bundle):
-    print "bundle.request.META['REQUEST_METHOD'] is", bundle.request.META['REQUEST_METHOD']
     return bundle.request.META['REQUEST_METHOD'] == "GET"
 
 

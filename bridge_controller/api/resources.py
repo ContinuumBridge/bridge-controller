@@ -9,6 +9,8 @@ from tastypie.authorization import Authorization
 
 from django.contrib.auth import authenticate, login, logout
 from django.conf.urls import url
+import logging
+logger = logging.getLogger('bridge_controller')
 from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.utils import trailing_slash
 
@@ -28,9 +30,6 @@ from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from tastypie.resources import BaseModelResource, ObjectDoesNotExist, ResourceOptions
 from tastypie.http import HttpAccepted, HttpGone, HttpMultipleChoices
 
-from bridges.models import Bridge, BridgeControl
-
-from accounts.models import CBUser
 from accounts.api.authorization import CurrentUserAuthorization, UserObjectsOnlyAuthorization
 from .authorization import AuthAuthorization, CBAuthorization
 from .authentication import HTTPHeaderSessionAuthentication
@@ -49,18 +48,23 @@ class CBResource(ModelResource):
         resource_name = 'cb_resource'
 
     def unauthorized_result(self, exception):
+
+        logger.warning('%s %s exception %s', self.__class__.__name__, sys._getframe().f_code.co_name, exception)
         # ADDED return the exception rather than a generic HttpUnauthorized
         raise ImmediateHttpResponse(response=http.HttpUnauthorized(exception))
 
     def update_modified_by(self, bundle):
-        print "Update modified by obj meta fields", bundle.obj._meta.fields
+        #print "Update modified by obj meta fields", bundle.obj._meta.fields
         if 'created_by' in bundle.obj._meta.fields and not bundle.obj.pk:
             bundle.obj.created_by = bundle.request.user
         if 'updated_by' in bundle.obj._meta.fields:
-            print "Update updated_by"
+            #print "Update updated_by"
             bundle.obj.modified_by = bundle.request.user
 
     def save(self, bundle, skip_errors=False):
+
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         self.is_valid(bundle)
 
         if bundle.errors and not skip_errors:
@@ -95,7 +99,7 @@ class CBResource(ModelResource):
         self.save_m2m(m2m_bundle)
 
         # ADDED
-        print "create_user_through_model is", create_user_through_model
+        #print "create_user_through_model is", create_user_through_model
         if create_user_through_model:
             self.create_user_through_model(bundle)
 
@@ -168,10 +172,14 @@ class CBResource(ModelResource):
             related_mngr.add(*related_objs)
 
     def full_dehydrate(self, bundle, for_list=False):
+
         """
         Given a bundle with an object instance, extract the information from it
         to populate the resource.
         """
+
+        #logger.debug('%s %s', self.__class__.__name__, sys._getframe().f_code.co_name)
+
         use_in = ['all', 'list' if for_list else 'detail']
 
         # Dehydrate each field.
@@ -234,6 +242,9 @@ class CBResource(ModelResource):
             raise BadRequest("Invalid resource lookup data provided (mismatched type).")
 
     def create_user_through_model(self, bundle):
+
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name)
+
         # Create an appropriate through model between the current user and the current item
         try:
             user_through = getattr(self._meta, 'user_related_through')
@@ -247,46 +258,6 @@ class CBResource(ModelResource):
                 through_model.save()
         except AttributeError:
             pass
-
-    '''
-    def patch_detail(self, request, **kwargs):
-        """
-        Updates a resource in-place.
-        Calls ``obj_update``.
-        If the resource is updated, return ``HttpAccepted`` (202 Accepted).
-        If the resource did not exist, return ``HttpNotFound`` (404 Not Found).
-        """
-        request = convert_post_to_patch(request)
-        basic_bundle = self.build_bundle(request=request)
-
-        # We want to be able to validate the update, but we can't just pass
-        # the partial data into the validator since all data needs to be
-        # present. Instead, we basically simulate a PUT by pulling out the
-        # original data and updating it in-place.
-        # So first pull out the original object. This is essentially
-        # ``get_detail``.
-        try:
-            obj = self.cached_obj_get(bundle=basic_bundle, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return http.HttpNotFound()
-        except MultipleObjectsReturned:
-            return http.HttpMultipleChoices("More than one resource is found at this URI.")
-
-        bundle = self.build_bundle(obj=obj, request=request)
-        bundle = self.full_dehydrate(bundle)
-        bundle = self.alter_detail_data_to_serialize(request, bundle)
-
-        # Now update the bundle in-place.
-        deserialized = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        self.update_in_place(request, bundle, deserialized)
-
-        if not self._meta.always_return_data:
-            return http.HttpAccepted()
-        else:
-            bundle = self.full_dehydrate(bundle)
-            bundle = self.alter_detail_data_to_serialize(request, bundle)
-            return self.create_response(request, bundle, response_class=http.HttpAccepted)
-    '''
 
     def obj_delete(self, bundle, **kwargs):
         """
@@ -314,49 +285,6 @@ class CBResource(ModelResource):
                 uri = uri[len(api_prefix)-1:]
 
         return super(CBResource, self).get_via_uri(uri, request)
-
-    '''
-    def obj_created(self, bundle):
-        self.create_user_through_model(bundle)
-        message = self.create_message(bundle, 'CREATE')
-        self.publish_message(message)
-        print "object created"
-
-    def obj_updated(self, bundle):
-        #self.create_user_through_model(bundle)
-        message = self.create_message(bundle, 'UPDATE')
-        self.publish_message(message)
-
-    def obj_deleted(self, bundle):
-        #message = self.create_message(bundle, 'DELETE')
-        self.publish_message(bundle.message)
-        print "object deleted"
-
-    def get_message_destination(self, bundle):
-        return ""
-
-    def create_message(self, bundle, verb):
-        bundle = self.full_dehydrate(bundle)
-        body = {
-            'cbid': bundle.data.get('cbid', ''),
-            'verb': verb
-        }
-        if verb != "DELETE":
-            body['body'] = bundle.data
-        return {
-            'source': 'cb',
-            'destination': self.get_message_destination(bundle),
-            'body': body
-        }
-
-    def publish_message(self, message):
-        print "publish"
-        r = redis.Redis()
-        destination = message.get('destination')
-        r.publish(destination, message)
-        print "published"
-    '''
-
 
         
 class CBIDResourceMixin(ModelResource):
