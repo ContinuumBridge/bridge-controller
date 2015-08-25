@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger('bridge_controller')
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
@@ -6,15 +8,16 @@ from tastypie.exceptions import Unauthorized
 class CurrentUserAuthorization(Authorization):
 
     def read_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         # This assumes a ``QuerySet`` from ``ModelResource``.
         #raise Unauthorized("You may only GET details.")
         return object_list.filter(id=bundle.request.user.id)
 
     def read_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s, object id %s', self.__class__.__name__,
+                     sys._getframe().f_code.co_name, bundle.request.user.cbid, bundle.obj.id)
         # Is the requested object owned by the user?
-        #return bundle.obj.user == bundle.request.user
-        print "Request user is", bundle.request.user
-        print "Obj id", bundle.obj.id, "Request id", bundle.request.user.id
         return bundle.obj.id == bundle.request.user.id
 
     '''
@@ -27,6 +30,8 @@ class CurrentUserAuthorization(Authorization):
     '''
 
     def update_list(self, object_list, bundle):
+
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         allowed = []
 
         # Since they may not all be saved, iterate over them.
@@ -37,63 +42,31 @@ class CurrentUserAuthorization(Authorization):
         return allowed
 
     def update_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         return bundle.obj == bundle.request.user
 
     def delete_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         # Sorry user, no deletes for you!
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         raise Unauthorized("Sorry, no deletes.")
 
 class UserObjectsOnlyAuthorization(Authorization):
 
     def create_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         # Assuming they're auto-assigned to ``user``.
         return object_list
-'''
-class UserObjectsOnlyAuthorization(Authorization):
-
-    def read_list(self, object_list, bundle):
-        # This assumes a ``QuerySet`` from ``ModelResource``.
-        return object_list.filter(user=bundle.request.user)
-
-    def read_detail(self, object_list, bundle):
-        # Is the requested object owned by the user?
-        return bundle.obj.user == bundle.request.user
-
-    def create_list(self, object_list, bundle):
-        # Assuming they're auto-assigned to ``user``.
-        return object_list
-
-    def create_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
-
-    def update_list(self, object_list, bundle):
-        allowed = []
-
-        # Since they may not all be saved, iterate over them.
-        for obj in object_list:
-            if obj.user == bundle.request.user:
-                allowed.append(obj)
-
-        return allowed
-
-    def update_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
-
-    def delete_list(self, object_list, bundle):
-        # Sorry user, no deletes for you!
-        raise Unauthorized("Sorry, no deletes.")
-
-    def delete_detail(self, object_list, bundle):
-        raise Unauthorized("Sorry, no deletes.")
-'''
 
 
 class RelatedUserObjectsOnlyAuthorization(Authorization):
 
     def read_list(self, object_list, bundle):
+
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         # This assumes a ``QuerySet`` from ``ModelResource``.
         # Allow reads of objects which have a through model between themselves and the current user
         filters = {
@@ -102,16 +75,19 @@ class RelatedUserObjectsOnlyAuthorization(Authorization):
         return object_list.filter(**filters)
 
     def read_detail(self, object_list, bundle):
-        # Is the requested object conneced by the specified through model to the user?
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+        # Is the requested object connected by the specified through model to the user?
         through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
         return through_model_manager.filter(user=bundle.request.user).exists()
 
     def create_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         # Assuming they're auto-assigned to ``user``.
         return object_list
 
     def create_detail(self, object_list, bundle):
 
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
         # Create a through model of specified type between this one and the current user
         through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
         creation_parameters = {
@@ -125,6 +101,8 @@ class RelatedUserObjectsOnlyAuthorization(Authorization):
         #return bundle.obj.user == bundle.request.user
 
     def update_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         allowed = []
 
         # Since they may not all be saved, iterate over them.
@@ -136,11 +114,15 @@ class RelatedUserObjectsOnlyAuthorization(Authorization):
         return allowed
 
     def update_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
         return through_model_manager.filter(user=bundle.request.user).exists()
         #return bundle.obj.user == bundle.request.user
 
     def delete_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         allowed = []
 
         # Since they may not all be deleted, iterate over them.
@@ -153,6 +135,8 @@ class RelatedUserObjectsOnlyAuthorization(Authorization):
         #raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         through_model_manager = getattr(bundle.obj, self.resource_meta.user_related_through)
         return through_model_manager.filter(user=bundle.request.user).exists()
         #raise Unauthorized("Sorry, no deletes.")

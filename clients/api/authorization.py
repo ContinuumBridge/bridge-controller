@@ -1,14 +1,20 @@
+import logging
+logger = logging.getLogger('bridge_controller')
+
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
-
 
 class ClientObjectsOnlyAuthorization(ReadOnlyAuthorization):
 
     def read_list(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         # This assumes a ``QuerySet`` from ``ModelResource``.
         return object_list.filter(client=bundle.request.user)
 
     def read_detail(self, object_list, bundle):
+        logger.debug('%s %s client %s', self.__class__.__name__, sys._getframe().f_code.co_name, bundle.request.user.cbid)
+
         # Is the requested object owned by the user?
         return bundle.obj.client == bundle.request.user
 

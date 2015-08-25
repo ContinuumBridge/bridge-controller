@@ -40,7 +40,6 @@ class CBAuthorization(Authorization, CBCommonAuthorizationMixin):
             ))
             return query_list
         except FieldDoesNotExist:
-            #print "Field ", related, " not present"
             return query_list
 
     def get_m2m_relation_query(self, related_objects, m2m_related, query_list, bundle):
@@ -130,7 +129,6 @@ class CBAuthorization(Authorization, CBCommonAuthorizationMixin):
                         rel = getattr(rel, field)
                         # Check if this rel is the object we're after
                         if isinstance(rel, related_list[0].__class__) and rel in related_list:
-                            #print "test_relationship return True"
                             return True
                     except AttributeError:
                         return False
