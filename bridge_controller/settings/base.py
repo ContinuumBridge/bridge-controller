@@ -177,10 +177,14 @@ LOGGING_CONFIG = None
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
             'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s %(message)s',
             'datefmt' : "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
@@ -192,24 +196,31 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'site.log',
-            'formatter': 'verbose'
+            'formatter': 'default'
         },
-        'console':{
+        'consoleout':{
             'level':'DEBUG',
             'class':'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'default',
+            'stream': sys.stdout
         },
+        'consoleerr':{
+            'level':'WARNING',
+            'class':'logging.StreamHandler',
+            'formatter': 'default',
+            'stream': sys.stderr
+        }
     },
     'loggers': {
         'django': {
-            'handlers':['console'],
+            'handlers':['consoleout', 'consoleerr'],
             'propagate': True,
             'level':'INFO',
         },
         'bridge_controller': {
-            'handlers': ['console'],
+            'handlers': ['consoleout', 'consoleerr'],
             'level': 'DEBUG',
-        },
+        }
     }
 }
 
