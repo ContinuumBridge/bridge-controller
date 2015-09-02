@@ -42,6 +42,8 @@ class CBResource(ModelResource):
         authentication = HTTPHeaderSessionAuthentication()
         authorization = CBAuthorization()
         always_return_data = True
+        limit = 50
+        max_limit = 50
         filtering = {
             "user": ALL
             }
