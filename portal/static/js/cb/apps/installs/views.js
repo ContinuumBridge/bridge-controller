@@ -36,6 +36,7 @@ Portal.AppInstallView = React.createClass({
 
         deviceInstalls.each(function(deviceInstall) {
 
+            // Create ghost appDevicePermissions for displaying
             var adp;
             var adpData = {
                 deviceInstall: deviceInstall,

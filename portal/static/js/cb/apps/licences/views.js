@@ -83,6 +83,8 @@ Portal.AppLicenceRowView = React.createClass({
         var installsPermitted = licence.get('installs_permitted');
 
         var name = this.props.name;
+        //var description = this.props.description;
+        var description = "test";
         var appInstall = this.props.appInstall;
         console.log('AppLicenceView props', this.props);
 
@@ -92,7 +94,14 @@ Portal.AppLicenceRowView = React.createClass({
 
         return (
             <tr>
-                <td className="app-name">{name}</td>
+                <td className="app-name">
+                    <div>
+                        <React.OverlayTrigger placement='top'
+                            overlay={<React.Tooltip>{description}</React.Tooltip>}>
+                            <div>{name}</div>
+                        </React.OverlayTrigger>
+                    </div>
+                </td>
                 <td className="installs-permitted">{installsPermitted}</td>
                 <td className="installs-remaining">{installsRemaining}</td>
                 <td>{installButton}</td>
@@ -119,10 +128,12 @@ Portal.AppLicenceTableView = React.createClass({
 
         var app = licence.get('app');
         var name = app.get('name');
+        var description = app.get('description');
 
         var appInstall = licence.getInstall(this.props.bridge);
 
         return < Portal.AppLicenceRowView key={cid} name={name}
+                    description={description}
                     appInstall={appInstall} model={licence} />
     },
 
@@ -131,7 +142,10 @@ Portal.AppLicenceTableView = React.createClass({
         return (
             <div>
                 <h4>My Licences</h4>
-
+                <React.OverlayTrigger placement='top'
+                    overlay={<React.Tooltip>test</React.Tooltip>}>
+                    <div>Test</div>
+                </React.OverlayTrigger>
                 <React.Table>
                     <thead>
                         <td className="col-md-6">

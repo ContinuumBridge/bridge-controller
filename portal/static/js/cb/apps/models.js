@@ -73,9 +73,14 @@ Portal.AppCollection = Backbone.Collection.extend({
             self.add(model);
         });
     },
-    
+
+    comparator: function(app) {
+        return app.get('name');
+    }
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 

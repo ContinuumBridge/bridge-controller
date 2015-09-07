@@ -21472,6 +21472,7 @@ Portal.AppInstallView = React.createClass({displayName: 'AppInstallView',
 
         deviceInstalls.each(function(deviceInstall) {
 
+            // Create ghost appDevicePermissions for displaying
             var adp;
             var adpData = {
                 deviceInstall: deviceInstall,
@@ -21795,6 +21796,8 @@ Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
         var installsPermitted = licence.get('installs_permitted');
 
         var name = this.props.name;
+        //var description = this.props.description;
+        var description = "test";
         var appInstall = this.props.appInstall;
         console.log('AppLicenceView props', this.props);
 
@@ -21804,7 +21807,14 @@ Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
 
         return (
             React.createElement("tr", null, 
-                React.createElement("td", {className: "app-name"}, name), 
+                React.createElement("td", {className: "app-name"}, 
+                    React.createElement("div", null, 
+                        React.createElement(React.OverlayTrigger, {placement: "top", 
+                            overlay: React.createElement(React.Tooltip, null, description)}, 
+                            React.createElement("div", null, name)
+                        )
+                    )
+                ), 
                 React.createElement("td", {className: "installs-permitted"}, installsPermitted), 
                 React.createElement("td", {className: "installs-remaining"}, installsRemaining), 
                 React.createElement("td", null, installButton)
@@ -21831,10 +21841,12 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
 
         var app = licence.get('app');
         var name = app.get('name');
+        var description = app.get('description');
 
         var appInstall = licence.getInstall(this.props.bridge);
 
         return React.createElement(Portal.AppLicenceRowView, {key: cid, name: name, 
+                    description: description, 
                     appInstall: appInstall, model: licence})
     },
 
@@ -21843,7 +21855,10 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
         return (
             React.createElement("div", null, 
                 React.createElement("h4", null, "My Licences"), 
-
+                React.createElement(React.OverlayTrigger, {placement: "top", 
+                    overlay: React.createElement(React.Tooltip, null, "test")}, 
+                    React.createElement("div", null, "Test")
+                ), 
                 React.createElement(React.Table, null, 
                     React.createElement("thead", null, 
                         React.createElement("td", {className: "col-md-6"}, 
@@ -22038,10 +22053,15 @@ Portal.AppCollection = Backbone.Collection.extend({
             self.add(model);
         });
     },
-    
+
+    comparator: function(app) {
+        return app.get('name');
+    }
+    /*
     parse : function(response){
         return response.objects;
     }
+    */
 });
 
 
@@ -22236,6 +22256,12 @@ Portal.AppView = React.createClass({displayName: 'AppView',
         };
     },
 
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
     renderButtons: function() {
 
         console.log('AppView renderButtons');
@@ -22249,8 +22275,10 @@ Portal.AppView = React.createClass({displayName: 'AppView',
 
         var self = this;
 
+        var description = this.props.model.get('description');
+
         return (
-            React.createElement("div", null)
+            React.createElement("div", {className: "inner-item"}, description)
         );
     }
 });
@@ -22540,6 +22568,7 @@ module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partial
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
+<<<<<<< Updated upstream
 
   return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
   });
@@ -22573,6 +22602,36 @@ Portal.StaffBridgeView = Marionette.ItemView.extend({
         if (this.model) {
             this.stickit();
         }
+=======
+        return (
+            React.createElement("div", null, 
+                React.createElement("h2", null, "Status"), 
+                React.createElement("ul", {className: "animated-list device-list"}, 
+                    React.createElement("li", {className: "panel"}, 
+                        React.createElement("div", {className: "panel-heading"}, 
+                            React.createElement("table", {className: "table"}, 
+                                React.createElement("thead", null), 
+                                React.createElement("tbody", null, 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "CBID:"), 
+                                        React.createElement("td", null, bridge.get('cbid'))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Description: "), 
+                                        React.createElement("td", null, bridge.get('description'))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", {scope: "row"}, "Status: "), 
+                                        React.createElement("td", null, bridge.get('status') + bridge.get('status_message'))
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+>>>>>>> Stashed changes
     }
 });
 
@@ -26669,15 +26728,22 @@ Portal.ItemView = {
     render: function() {
         //console.log('ItemView props', this.props);
         var model = this.props.model;
-        var body = this.renderBody ? this.renderBody() : "";
+        //var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         var className = this.props.className;
         return (
             React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
+<<<<<<< Updated upstream
                 className: className, bsStyle: "", 
                 collapsable: this.props.openable, eventKey: "1"}, 
                 body
+=======
+                renderBody: this.renderBody, 
+                className: className, bsStyle: "", status: this.props.status, 
+                hideSubtitleOnExpanded: this.props.hideSubtitleOnExpanded, 
+                collapsable: this.props.openable, eventKey: "1"}
+>>>>>>> Stashed changes
             )
         );
     }

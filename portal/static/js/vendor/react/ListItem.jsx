@@ -71,47 +71,28 @@ var ListItem = React.createClass({
     },
 
     renderCollapsableBody: function () {
+        var body = this.props.renderBody ? this.props.renderBody() : <div></div>;
         return (
             <div className={classSet(this.getCollapsableClassSet('panel-collapse'))} id={this.props.id} ref="panel">
-        {this.renderBody()}
+                <div className="panel-body item-body" ref="body">
+                    {body}
+                </div>
             </div>
         );
     },
 
+    /*
     renderBody: function () {
         return (
             <div className="panel-body item-body" ref="body">
-        {this.props.children}
+                {this.props.children}
             </div>
         );
     },
+    */
 
     renderHeading: function () {
-        //var header = this.props.header;
 
-        /*
-        if (!header) {
-            return null;
-        }
-
-        if (!React.isValidElement(header) || Array.isArray(header)) {
-            header = this.props.collapsable ?
-                this.renderCollapsableTitle(header) : header;
-        } else if (this.props.collapsable) {
-        if (this.props.collapsable) {
-            header = this.props.collapsable ?
-                this.renderTitle(header) : header;
-            /*
-            header = cloneWithProps(header, {
-                className: 'panel-title',
-                children: this.renderAnchor(header.props.children)
-            });
-        } else {
-            header = cloneWithProps(header, {
-                className: 'panel-title item-title'
-            });
-        }
-        */
         var title = this.props.title;
 
         var renderedTitle = React.isValidElement(title) ? title
@@ -145,11 +126,13 @@ var ListItem = React.createClass({
     },
 
     renderAnchor: function () {
+
+        var linkClass = this.isExpanded() ? "item-anchor-link" : "collapsed item-anchor-link";
+
         return (
-            <a
-                href={'#' + (this.props.id || '')}
-                className={this.isExpanded() ? null : 'collapsed'}
-                onClick={this.handleSelect}>
+            <a href={'#' + (this.props.id || '')}
+               className={linkClass}
+               onClick={this.handleSelect}>
                 <i className="icon ion-chevron-right item-anchor" />
             </a>
         );

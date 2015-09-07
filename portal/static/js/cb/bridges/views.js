@@ -1,19 +1,39 @@
 
+Portal.BridgeStatusView = React.createClass({
 
-Portal.StaffBridgeView = Marionette.ItemView.extend({
+    render: function() {
 
-    //tagName: 'table',
-    template: require('./templates/staffBridge.html'),
+        var bridge = this.props.model;
+        var name = bridge.get('name');
 
-    bindings: {
-        '.bridge-name': 'name',
-        '.bridge-id': 'id'
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
+        return (
+            <div>
+                <h2>Status</h2>
+                <ul className="animated-list device-list">
+                    <li className="panel">
+                        <div className="panel-heading">
+                            <table className="table">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">CBID:</th>
+                                        <td>{bridge.get('cbid')}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Description: </th>
+                                        <td>{bridge.get('description')}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Status: </th>
+                                        <td>{bridge.get('status') + bridge.get('status_message')}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        )
     }
 });
 

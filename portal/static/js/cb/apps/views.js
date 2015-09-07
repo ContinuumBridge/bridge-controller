@@ -18,6 +18,12 @@ Portal.AppView = React.createClass({
         };
     },
 
+    getDefaultProps: function () {
+        return {
+            openable: true
+        };
+    },
+
     renderButtons: function() {
 
         console.log('AppView renderButtons');
@@ -31,8 +37,10 @@ Portal.AppView = React.createClass({
 
         var self = this;
 
+        var description = this.props.model.get('description');
+
         return (
-            <div></div>
+            <div className="inner-item">{description}</div>
         );
     }
 });

@@ -12,7 +12,8 @@ li [class*=" icon-"] {
 */
 
 .inner-item {
-    /*padding: 12px;*/
+    padding: 12px 0px;
+    /*line-height: 1.428571429px;*/
     position: relative;
     list-style: none;
 }
@@ -122,11 +123,15 @@ header p{
     */
 }
 
+.item-anchor-link {
+    width: 0px;
+}
+
 .item-anchor {
     position: relative;
     float: left;
-    right: 10px;
-    /*top: 21px;*/
+    right: 14px;
+    top: 0.5px;
     font-size: 15px;
     cursor: pointer;
 }
@@ -203,7 +208,7 @@ button .icon-trash {
   color: #444;
   text-align: left;
   min-height: 50px;
-  line-height: 30px;
+  /*line-height: 30px;*/
   /*font-size: 20px;*/
   background-color: white;
   margin-bottom: 10px;

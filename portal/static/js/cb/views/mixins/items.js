@@ -90,15 +90,16 @@ Portal.ItemView = {
     render: function() {
         //console.log('ItemView props', this.props);
         var model = this.props.model;
-        var body = this.renderBody ? this.renderBody() : "";
+        //var body = this.renderBody ? this.renderBody() : "";
         var buttons = this.state.buttons || [];
         var className = this.props.className;
         return (
             <React.ListItem title={this.props.title} subtitle={this.props.subtitle}
                 buttons={buttons} renderButtons={this.renderButtons}
-                className={className} bsStyle=''
+                renderBody={this.renderBody}
+                className={className} bsStyle='' status={this.props.status}
+                hideSubtitleOnExpanded={this.props.hideSubtitleOnExpanded}
                 collapsable={this.props.openable} eventKey="1">
-                {body}
             </React.ListItem>
         );
     }
