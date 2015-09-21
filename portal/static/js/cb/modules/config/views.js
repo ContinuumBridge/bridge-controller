@@ -64,15 +64,31 @@ module.exports.Main = React.createClass({
         Portal.router.setParams({action: ''});
     },
 
-
     renderModals: function () {
+
+        /*
+        return (
+            <React.Modal show={true} onHide={function(){}}>
+                 <React.Modal.Header>
+                 <React.Modal.Title></React.Modal.Title>
+                 </React.Modal.Header>
+                <React.Modal.Body>
+                    <h4>Text in a modal</h4>
+                </React.Modal.Body>
+                <React.Modal.Footer>
+                    Footer
+                </React.Modal.Footer>
+            </React.Modal>
+        );
+        */
 
         var action = this.getParams().action;
         var itemID = this.getParams().item;
         console.log('renderModals params', action);
         switch (action) {
             case "install-app":
-                return <InstallAppModal container={this} />;
+                console.log('renderModals InstallAppModal');
+                return <InstallAppModal show={true} container={this} />;
                 break;
             case "install-device":
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
@@ -182,17 +198,19 @@ var InstallDeviceModal = React.createClass({
         var title = device ? "Install " + device.get('name') : "Unknown device";
 
         return (
-            <React.Modal className="portal-modal" title={title} container={this.props.container}
-                onRequestHide={this.cancelInstall} animation={false}>
-                <div className="modal-body">
+            <React.Modal show={true} onHide={function(){}}>
+                <React.Modal.Header closeButton>
+                    <React.Modal.Title>{title}</React.Modal.Title>
+                </React.Modal.Header>
+                <React.Modal.Body>
                     <div>Type a name to help you remember this device ie. Kitchen Thermometer</div>
                     <br/>
                     <input type="text" value={friendlyName} onChange={this.handleFriendlyName} />
-                </div>
-                <div className="modal-footer">
+                </React.Modal.Body>
+                <React.Modal.Footer>
                     <React.Button onClick={this.cancelInstall}>Close</React.Button>
                     <React.Button onClick={this.installDevice}>Install</React.Button>
-                </div>
+                </React.Modal.Footer>
             </ React.Modal>
         )
     }
@@ -223,17 +241,27 @@ var InstallAppModal = React.createClass({
         var licenceCollection = Portal.currentUser.get('appLicences');
         var bridge = Portal.getCurrentBridge();
 
+        console.log('render InstallAppModal');
+
         return (
-            <React.Modal className="portal-modal" title="Install Apps" container={this.props.container}
-                onRequestHide={this.cancelInstall} animation={false}>
-                <div className="modal-body">
+            <React.Modal show={true} onHide={function(){}}>
+                <React.Modal.Header>
+                    <React.Modal.Title></React.Modal.Title>
+                </React.Modal.Header>
+                <React.Modal.Body>
                     <Portal.AppLicenceTableView collection={licenceCollection} bridge={bridge} />
-                </div>
-                <div className="modal-footer">
+                </React.Modal.Body>
+                <React.Modal.Footer>
                     <React.Button onClick={this.cancelInstall}>Close</React.Button>
                     <React.Button onClick={this.showAppMarket}>App Market</React.Button>
-                </div>
+                </React.Modal.Footer>
             </ React.Modal>
         )
     }
 });
+
+/*
+
+ <React.Modal className="portal-modal" title={title} container={this.props.container}
+ onRequestHide={this.cancelInstall} show={true} onHide={function(){}} animation={false}>
+ */

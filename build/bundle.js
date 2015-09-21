@@ -21796,8 +21796,6 @@ Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
         var installsPermitted = licence.get('installs_permitted');
 
         var name = this.props.name;
-        //var description = this.props.description;
-        var description = "test";
         var appInstall = this.props.appInstall;
         console.log('AppLicenceView props', this.props);
 
@@ -21807,14 +21805,7 @@ Portal.AppLicenceRowView = React.createClass({displayName: 'AppLicenceRowView',
 
         return (
             React.createElement("tr", null, 
-                React.createElement("td", {className: "app-name"}, 
-                    React.createElement("div", null, 
-                        React.createElement(React.OverlayTrigger, {placement: "top", 
-                            overlay: React.createElement(React.Tooltip, null, description)}, 
-                            React.createElement("div", null, name)
-                        )
-                    )
-                ), 
+                React.createElement("td", {className: "app-name"}, name), 
                 React.createElement("td", {className: "installs-permitted"}, installsPermitted), 
                 React.createElement("td", {className: "installs-remaining"}, installsRemaining), 
                 React.createElement("td", null, installButton)
@@ -21841,12 +21832,10 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
 
         var app = licence.get('app');
         var name = app.get('name');
-        var description = app.get('description');
 
         var appInstall = licence.getInstall(this.props.bridge);
 
         return React.createElement(Portal.AppLicenceRowView, {key: cid, name: name, 
-                    description: description, 
                     appInstall: appInstall, model: licence})
     },
 
@@ -21855,10 +21844,7 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
         return (
             React.createElement("div", null, 
                 React.createElement("h4", null, "My Licences"), 
-                React.createElement(React.OverlayTrigger, {placement: "top", 
-                    overlay: React.createElement(React.Tooltip, null, "test")}, 
-                    React.createElement("div", null, "Test")
-                ), 
+
                 React.createElement(React.Table, null, 
                     React.createElement("thead", null, 
                         React.createElement("td", {className: "col-md-6"}, 
@@ -21874,7 +21860,7 @@ Portal.AppLicenceTableView = React.createClass({displayName: 'AppLicenceTableVie
                         )
                     ), 
                     React.createElement("tbody", null, 
-                        this.props.collection.map(this.createItem)
+                      this.props.collection.map(this.createItem)
                     )
                 )
             )
@@ -22568,41 +22554,19 @@ module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partial
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
-<<<<<<< Updated upstream
 
   return "<h2>Bridge Status</h2>\n\n<div class=\"animated-list bridge-list\"></div>\n";
   });
 
-},{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html":[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "<table class=\"table\">\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge name:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-name\">\n        </td>\n    </tr>\n    <tr>\n        <td class=\"col-md-6 panel-item\">\n            Bridge ID:\n        </td>\n        <td class=\"col-md-6 panel-item bridge-id\">\n        </td>\n    </tr>\n</table>\n\n";
-  });
-
 },{"hbsfy/runtime":"/home/ubuntu/bridge-controller/node_modules/hbsfy/runtime.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js":[function(require,module,exports){
 
+Portal.BridgeStatusView = React.createClass({displayName: 'BridgeStatusView',
 
-Portal.StaffBridgeView = Marionette.ItemView.extend({
+    render: function() {
 
-    //tagName: 'table',
-    template: require('./templates/staffBridge.html'),
+        var bridge = this.props.model;
+        var name = bridge.get('name');
 
-    bindings: {
-        '.bridge-name': 'name',
-        '.bridge-id': 'id'
-    },
-
-    onRender: function() {
-        if (this.model) {
-            this.stickit();
-        }
-=======
         return (
             React.createElement("div", null, 
                 React.createElement("h2", null, "Status"), 
@@ -22631,7 +22595,6 @@ Portal.StaffBridgeView = Marionette.ItemView.extend({
                 )
             )
         )
->>>>>>> Stashed changes
     }
 });
 
@@ -22705,7 +22668,7 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
     }
 });
 
-},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html","./templates/staffBridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/staffBridge.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
+},{"./templates/bridge.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridge.html","./templates/bridgeSection.html":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/templates/bridgeSection.html"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/cbApp.js":[function(require,module,exports){
 
 var utils = require('./utils');
 
@@ -23559,7 +23522,8 @@ Portal.DeviceInstallListView = React.createClass({displayName: 'DeviceInstallLis
 
     discoverDevices: function() {
 
-        Portal.router.setParams({action: 'discover-devices'});
+        this.props.discoverDevices();
+        //Portal.router.setParams({action: 'discover-devices'});
     },
 
     renderItem: function (item) {
@@ -23763,7 +23727,7 @@ Portal.addInitializer(function () {
       React.render(
           React.createElement(BaseView, {params: params, handler: Handler, 
               //key={currentBridge.get('id')}
-              key: state.path, 
+              key: state.path, path: state.path, 
               collection: collections, model: models}),
           document.getElementById('app')
       );
@@ -24463,6 +24427,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
+    /*
     componentWillReceiveParams: function(params) {
 
         if (this.action != params.action) {
@@ -24472,10 +24437,14 @@ module.exports.Main = React.createClass({displayName: 'Main',
             this.action = params.action;
         }
     },
+    */
 
     discoverDevices: function() {
 
         console.log('config discoverDevices');
+
+        Portal.router.setParams({action: 'discover-devices'});
+
         Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
             discoveredDevice.delete();
         });
@@ -24506,19 +24475,37 @@ module.exports.Main = React.createClass({displayName: 'Main',
         Portal.router.setParams({action: ''});
     },
 
-
     renderModals: function () {
+
+        /*
+        return (
+            <React.Modal show={true} onHide={function(){}}>
+                 <React.Modal.Header>
+                 <React.Modal.Title></React.Modal.Title>
+                 </React.Modal.Header>
+                <React.Modal.Body>
+                    <h4>Text in a modal</h4>
+                </React.Modal.Body>
+                <React.Modal.Footer>
+                    Footer
+                </React.Modal.Footer>
+            </React.Modal>
+        );
+        */
 
         var action = this.getParams().action;
         var itemID = this.getParams().item;
         console.log('renderModals params', action);
         switch (action) {
             case "install-app":
-                return React.createElement(InstallAppModal, {container: this});
+                console.log('renderModals InstallAppModal');
+                return React.createElement(InstallAppModal, {show: true, container: this});
                 break;
             case "install-device":
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
-                return React.createElement(InstallDeviceModal, {container: this, model: discoveredDevice});
+                console.log('discoveredDevice for modal is', discoveredDevice);
+                return React.createElement(InstallDeviceModal, {container: this, installDevice: this.installDevice, 
+                            model: discoveredDevice});
                 break;
             default:
                 break;
@@ -24588,7 +24575,7 @@ module.exports.Main = React.createClass({displayName: 'Main',
 
 var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
 
-    mixins: [ Router.State, Backbone.React.Component.mixin],
+    mixins: [ Router.State ],
 
     getInitialState: function() {
         return {
@@ -24601,10 +24588,12 @@ var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
     },
 
     installDevice: function() {
-        console.log('Submitted installDevice modal');
-        var discoveredDevice = this.getModel();
-        discoveredDevice.install(this.state.friendlyName);
-        Portal.router.setParams({});
+        var model = this.props.model;
+        console.log('Submitted installDevice modal, props', this.props);
+        this.props.installDevice(model, this.state.friendlyName);
+        //var discoveredDevice = this.getModel();
+        //discoveredDevice.install(this.state.friendlyName);
+        //Portal.router.setParams({});
     },
 
     cancelInstall: function() {
@@ -24615,18 +24604,21 @@ var InstallDeviceModal = React.createClass({displayName: 'InstallDeviceModal',
     render: function() {
 
         var friendlyName = this.state.friendlyName;
-        var device = this.getModel().get('device');
+        //var device = this.getModel().get('device');
+        var device = this.props.model.get('device');
         var title = device ? "Install " + device.get('name') : "Unknown device";
 
         return (
-            React.createElement(React.Modal, {className: "portal-modal", title: title, container: this.props.container, 
-                onRequestHide: this.cancelInstall, animation: false}, 
-                React.createElement("div", {className: "modal-body"}, 
+            React.createElement(React.Modal, {show: true, onHide: function(){}}, 
+                React.createElement(React.Modal.Header, {closeButton: true}, 
+                    React.createElement(React.Modal.Title, null, title)
+                ), 
+                React.createElement(React.Modal.Body, null, 
                     React.createElement("div", null, "Type a name to help you remember this device ie. Kitchen Thermometer"), 
                     React.createElement("br", null), 
                     React.createElement("input", {type: "text", value: friendlyName, onChange: this.handleFriendlyName})
                 ), 
-                React.createElement("div", {className: "modal-footer"}, 
+                React.createElement(React.Modal.Footer, null, 
                     React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
                     React.createElement(React.Button, {onClick: this.installDevice}, "Install")
                 )
@@ -24660,13 +24652,17 @@ var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
         var licenceCollection = Portal.currentUser.get('appLicences');
         var bridge = Portal.getCurrentBridge();
 
+        console.log('render InstallAppModal');
+
         return (
-            React.createElement(React.Modal, {className: "portal-modal", title: "Install Apps", container: this.props.container, 
-                onRequestHide: this.cancelInstall, animation: false}, 
-                React.createElement("div", {className: "modal-body"}, 
+            React.createElement(React.Modal, {show: true, onHide: function(){}}, 
+                React.createElement(React.Modal.Header, null, 
+                    React.createElement(React.Modal.Title, null)
+                ), 
+                React.createElement(React.Modal.Body, null, 
                     React.createElement(Portal.AppLicenceTableView, {collection: licenceCollection, bridge: bridge})
                 ), 
-                React.createElement("div", {className: "modal-footer"}, 
+                React.createElement(React.Modal.Footer, null, 
                     React.createElement(React.Button, {onClick: this.cancelInstall}, "Close"), 
                     React.createElement(React.Button, {onClick: this.showAppMarket}, "App Market")
                 )
@@ -24675,6 +24671,11 @@ var InstallAppModal = React.createClass({displayName: 'InstallAppModal',
     }
 });
 
+/*
+
+ <React.Modal className="portal-modal" title={title} container={this.props.container}
+ onRequestHide={this.cancelInstall} show={true} onHide={function(){}} animation={false}>
+ */
 },{"../../apps/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/installs/views.js","../../apps/licences/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/apps/licences/views.js","../../bridges/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/bridges/views.js","../../devices/discovery/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/discovery/views.js","../../devices/installs/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/devices/installs/views.js","../../messages/views":"/home/ubuntu/bridge-controller/portal/static/js/cb/messages/views.js","../../views/generic-views":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/generic-views.js","../../views/regions":"/home/ubuntu/bridge-controller/portal/static/js/cb/views/regions.js","q":"/home/ubuntu/bridge-controller/node_modules/q/q.js"}],"/home/ubuntu/bridge-controller/portal/static/js/cb/modules/developer/developer.js":[function(require,module,exports){
 
 var DeveloperViews = require('./views');
@@ -25947,12 +25948,13 @@ module.exports = React.createClass({displayName: 'exports',
         //console.log('Handler in base', Handler);
         var params = this.props.params;
         console.log('params in base', params);
+        var path = this.props.path;
         //var currentBridge = this.getModel();
         //console.log('currentBridge in base', currentBridge);
         //currentBridge.fetch();
 
         return (
-            React.createElement(Handler, {params: params})
+            React.createElement(Handler, {params: params, key: path, path: path})
         );
     }
 });
@@ -25971,7 +25973,7 @@ module.exports.InstallButton = React.createClass({displayName: 'InstallButton',
 
         //var contents = "Install";
         //var contents = <Spinner />
-        console.log('Install button model', this.props);
+        //console.log('Install button model', this.props);
         //<div class="install-component btn btn-default app-install-button">Uninstall</div>
         var model = this.props.model;
 
@@ -26502,13 +26504,14 @@ module.exports = React.createClass({displayName: 'exports',
         console.log('mainView getParams()', this.getParams());
         console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());
+        var path = this.props.path;
 
         //var currentBridge = Portal.getCurrentBridge();
         return (
             React.createElement("div", null, 
                 React.createElement(Nav.Topbar, {activeSection: activeSection}), 
                 React.createElement("div", {className: "container"}, 
-                    React.createElement(Router.RouteHandler, {params: this.props.params})
+                    React.createElement(Router.RouteHandler, {params: this.props.params, key: path, path: path})
                 ), 
                 React.createElement(Portal.NotificationListView, null)
             )
@@ -26538,11 +26541,14 @@ Portal.ReactBackboneMixin = {
 
     getModel: function() {
 
+        return this.props.model;
+        /*
         var owner = this._owner;
         if (!owner) return false;
         var collection = owner.getCollection();
         return collection.get({cid: this.props.model.cid})
-    },
+        */
+    }
 }
 
 
@@ -26728,22 +26734,16 @@ Portal.ItemView = {
     render: function() {
         //console.log('ItemView props', this.props);
         var model = this.props.model;
-        //var body = this.renderBody ? this.renderBody() : "";
+        var body = this.renderBody ? this.renderBody() : "";
+        console.log('item body ', body );
         var buttons = this.state.buttons || [];
         var className = this.props.className;
         return (
             React.createElement(React.ListItem, {title: this.props.title, subtitle: this.props.subtitle, 
                 buttons: buttons, renderButtons: this.renderButtons, 
-<<<<<<< Updated upstream
                 className: className, bsStyle: "", 
-                collapsable: this.props.openable, eventKey: "1"}, 
+                collapsible: this.props.openable, eventKey: "1"}, 
                 body
-=======
-                renderBody: this.renderBody, 
-                className: className, bsStyle: "", status: this.props.status, 
-                hideSubtitleOnExpanded: this.props.hideSubtitleOnExpanded, 
-                collapsable: this.props.openable, eventKey: "1"}
->>>>>>> Stashed changes
             )
         );
     }

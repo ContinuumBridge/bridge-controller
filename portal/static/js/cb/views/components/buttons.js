@@ -11,7 +11,7 @@ module.exports.InstallButton = React.createClass({
 
         //var contents = "Install";
         //var contents = <Spinner />
-        console.log('Install button model', this.props);
+        //console.log('Install button model', this.props);
         //<div class="install-component btn btn-default app-install-button">Uninstall</div>
         var model = this.props.model;
 
