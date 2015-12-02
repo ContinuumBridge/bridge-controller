@@ -1,4 +1,8 @@
 
+var _ = require('underscore');
+//var Marionette = require('marionette');
+import Backbone from 'backbone-bundle';
+//import Marionette from 'backbone.marionette';
 var utils = require('./utils');
 
 var optionalParam = /\((.*?)\)/g;
@@ -6,7 +10,7 @@ var namedParam    = /(\(\?)?:\w+/g;
 var splatParam    = /\*\w+/g;
 var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
-var CBApp = Marionette.Application.extend({
+var CBApp = Backbone.Marionette.Application.extend({
 
     initialize: function(options) {
 

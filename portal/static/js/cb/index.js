@@ -1,4 +1,11 @@
 
+//import Backbone from 'backbone-bundle';
+var Backbone = require('backbone-bundle');
+var React = require('react');
+//console.log('index Object.keys(Backbone)', Object.keys(Backbone));
+//var Dispatcher = require('flux-dispatcher');
+//global.Backbone = Backbone;
+
 var CBApp = require('./cbApp')
 
 var cbidTypes = {
@@ -7,8 +14,9 @@ var cbidTypes = {
     'BID:b/DID:d': 'deviceInstall'
 }
 
-Portal = new CBApp();
-Portal.dispatcher = new Dispatcher();
+var Portal = new CBApp();
+Portal.dispatcher = require('flux-dispatcher');
+//Portal.dispatcher = new Dispatcher();
 Portal.setupCBIDTypes(cbidTypes);
 
 require('./views/mixins/backbone');
@@ -29,7 +37,7 @@ Portal.addRegions({
 
 Portal._isInitialized = false;
 
-Portal.Controller = Marionette.Controller.extend({
+Portal.Controller = Backbone.Marionette.Controller.extend({
   /*
   index: function () {
     console.log('index');

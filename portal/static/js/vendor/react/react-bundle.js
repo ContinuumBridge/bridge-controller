@@ -3,6 +3,7 @@ var React = require('react')
     ;
 
 React.ListItem = require('./bootstrap/ListItem.jsx');
+//React.ListItem = require('./bootstrap/ListItem');
 React.Modal = require('react-bootstrap').Modal;
 React.ModalTrigger = require('react-bootstrap').ModalTrigger;
 React.OverlayMixin = require('react-bootstrap').OverlayMixin;
@@ -22,3 +23,4 @@ React.Table = require('react-bootstrap').Table;
 //React.Route = Router.Route;
 
 module.exports = React;
+

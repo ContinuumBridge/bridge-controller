@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 module.exports.SearchInput = React.createClass({
 
     getInitialState: function() {

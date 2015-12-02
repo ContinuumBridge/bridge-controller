@@ -1,4 +1,8 @@
 
+var Backbone = require('backbone-bundle');
+var React = require('react');
+var Router = require('react-router');
+
 require('../users/current/views');
 require('../apps/licences/views');
 

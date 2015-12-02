@@ -1,4 +1,5 @@
 
+var Backbone = require('backbone-bundle');
 
 Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
 

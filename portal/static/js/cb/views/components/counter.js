@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 module.exports = React.createClass({
 
     mixins: [ Portal.Mixins.Counter ],

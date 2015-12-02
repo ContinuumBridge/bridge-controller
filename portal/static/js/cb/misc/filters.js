@@ -1,5 +1,5 @@
 
-require('q');
+var Q = require('q');
 
 Portal.filters = {};
 

@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 module.exports.TextInput = React.createClass({
 
     getInitialState: function() {

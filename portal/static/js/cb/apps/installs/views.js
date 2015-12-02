@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 require('../device_permissions/views');
 
 Portal.AppInstallView = React.createClass({

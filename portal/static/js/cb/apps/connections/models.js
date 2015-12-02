@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 require('../../common/models');
 
 Portal.AppConnection = Portal.ConnectionModel.extend({
@@ -31,7 +33,7 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
     ]
 }, { modelType: "appConnection" });
 
-Portal.AppConnectionCollection = QueryEngine.QueryCollection.extend({
+Portal.AppConnectionCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppConnection,
     backend: 'appConnection',

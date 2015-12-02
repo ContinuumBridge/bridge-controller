@@ -1,5 +1,7 @@
 
 var Q = require('q');
+var React = require('react');
+var Router = require('react-router');
 
 require('../../views/generic-views');
 require('../../views/regions');
@@ -197,8 +199,10 @@ var InstallDeviceModal = React.createClass({
         var device = this.props.model.get('device');
         var title = device ? "Install " + device.get('name') : "Unknown device";
 
+
         return (
-            <React.Modal show={true} onHide={function(){}}>
+            <React.Modal show={true} onHide={function(){}}
+                container={this.props.container} animation={false}>
                 <React.Modal.Header closeButton>
                     <React.Modal.Title>{title}</React.Modal.Title>
                 </React.Modal.Header>
@@ -244,7 +248,8 @@ var InstallAppModal = React.createClass({
         console.log('render InstallAppModal');
 
         return (
-            <React.Modal show={true} onHide={function(){}}>
+            <React.Modal show={true} onHide={function(){}}
+                container={this.props.container} animation={false}>
                 <React.Modal.Header>
                     <React.Modal.Title></React.Modal.Title>
                 </React.Modal.Header>

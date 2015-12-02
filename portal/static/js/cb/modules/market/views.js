@@ -1,4 +1,7 @@
 
+var Backbone = require('backbone-bundle');
+var React = require('react');
+var Router = require('react-router');
 var Q = require('q');
 
 //require('../../views/generic-views');

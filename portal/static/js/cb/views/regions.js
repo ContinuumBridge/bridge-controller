@@ -1,4 +1,5 @@
 
+/*
 Portal.Regions = {};
 
 Portal.Regions.Fade = Marionette.Region.extend({
@@ -9,3 +10,4 @@ Portal.Regions.Fade = Marionette.Region.extend({
         this.$el.slideDown("fast");
     }
 });
+*/

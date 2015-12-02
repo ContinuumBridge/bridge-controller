@@ -1,4 +1,5 @@
 
+/*
 Portal.StaffAppView = Marionette.ItemView.extend({
 
     tagName: 'table',
@@ -32,3 +33,4 @@ Portal.StaffAppView = Marionette.ItemView.extend({
         }
     }
 });
+*/

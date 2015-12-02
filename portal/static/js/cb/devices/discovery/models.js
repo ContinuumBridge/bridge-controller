@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -133,7 +135,7 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "discoveredDevice" });
 
-Portal.DiscoveredDeviceCollection = QueryEngine.QueryCollection.extend({
+Portal.DiscoveredDeviceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.DiscoveredDevice,
     backend: 'discoveredDevice',

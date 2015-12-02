@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
@@ -126,7 +128,7 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
 }, { modelType: "deviceInstall" });
 
 //Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
-Portal.DeviceInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.DeviceInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
     backend: 'deviceInstall',

@@ -1,3 +1,4 @@
+/*
 (function() {
   var root;
 
@@ -8,6 +9,11 @@
   };
 
 }).call(this);
+*/
+
+Backbone.Deferred = {
+    version: '0.4.0'
+};
 
 (function() {
   var __hasProp = {}.hasOwnProperty,

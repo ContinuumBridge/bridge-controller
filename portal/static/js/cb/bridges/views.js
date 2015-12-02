@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 Portal.BridgeStatusView = React.createClass({
 
     render: function() {
@@ -37,6 +39,7 @@ Portal.BridgeStatusView = React.createClass({
     }
 });
 
+/*
 Portal.BridgeView = Marionette.ItemView.extend({
 
     tagName: 'li',
@@ -106,3 +109,4 @@ Portal.BridgeListView = Marionette.CompositeView.extend({
 
     }
 });
+*/

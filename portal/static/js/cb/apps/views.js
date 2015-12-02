@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 Portal.AppView = React.createClass({
 
     mixins: [Portal.ItemView],

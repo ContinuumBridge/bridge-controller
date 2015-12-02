@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.User = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -107,7 +109,7 @@ Portal.User = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "user" });
 
-Portal.UserCollection = QueryEngine.QueryCollection.extend({
+Portal.UserCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.User,
     backend: 'user'

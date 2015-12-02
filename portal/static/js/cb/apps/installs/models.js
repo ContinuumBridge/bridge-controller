@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -124,7 +126,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appInstall" });
 
-Portal.AppInstallCollection = QueryEngine.QueryCollection.extend({
+Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppInstall,
     backend: 'appInstall'

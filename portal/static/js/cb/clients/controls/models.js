@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.ClientControl = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -28,7 +30,7 @@ Portal.ClientControl = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "clientControl" });
 
-Portal.ClientControlCollection = QueryEngine.QueryCollection.extend({
+Portal.ClientControlCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.ClientControl,
     backend: 'clientControl',

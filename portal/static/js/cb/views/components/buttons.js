@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 module.exports.InstallButton = React.createClass({
 
     mixins: [Portal.ConnectorMixin],

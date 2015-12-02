@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.Message = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
@@ -42,7 +44,7 @@ Portal.Message = Backbone.RelationalModel.extend({
 });
 
 //Portal.MessageCollection = Backbone.Collection.extend({
-Portal.MessageCollection = QueryEngine.QueryCollection.extend({
+Portal.MessageCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.Message,
     //backend: 'message',

@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.Device = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
@@ -41,7 +43,7 @@ Portal.Device = Backbone.Deferred.Model.extend({
 }, { modelType: "device" });
 
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
-Portal.DeviceCollection = QueryEngine.QueryCollection.extend({
+Portal.DeviceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.Device,
     backend: 'device',

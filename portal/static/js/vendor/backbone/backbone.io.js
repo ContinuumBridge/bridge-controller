@@ -1,3 +1,6 @@
+
+var $ = require('jquery');
+
 (function() {
     var connected = new Promise();
 

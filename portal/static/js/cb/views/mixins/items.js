@@ -1,4 +1,6 @@
 
+var ListItem = require('../components/bootstrap/ListItem.jsx');
+
 Portal.InnerItemView = {
 
     render: function() {
@@ -95,12 +97,12 @@ Portal.ItemView = {
         var buttons = this.state.buttons || [];
         var className = this.props.className;
         return (
-            <React.ListItem title={this.props.title} subtitle={this.props.subtitle}
+            <ListItem title={this.props.title} subtitle={this.props.subtitle}
                 buttons={buttons} renderButtons={this.renderButtons}
                 className={className} bsStyle=''
                 collapsible={this.props.openable} eventKey="1">
                 {body}
-            </React.ListItem>
+            </ListItem>
         );
     }
 };

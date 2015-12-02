@@ -1,4 +1,5 @@
 
+/*
 Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
 
     require('bootstrap');
@@ -160,3 +161,4 @@ Portal.module('Nav', function(Nav, CBApp, Backbone, Marionette, $, _) {
     });
 
 });
+*/

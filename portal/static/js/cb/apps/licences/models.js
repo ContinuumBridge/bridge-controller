@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.AppLicence = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -156,7 +158,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 
 //var QueryEngine = require('query-engine');
 //Portal.AppLicenceCollection = Backbone.Collection.extend({
-Portal.AppLicenceCollection = QueryEngine.QueryCollection.extend({
+Portal.AppLicenceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppLicence,
     backend: 'appLicence',

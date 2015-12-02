@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 require('../../users/views');
 
 Portal.AppOwnershipView = React.createClass({

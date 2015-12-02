@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.Notification = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -52,7 +54,7 @@ Portal.ConnectionStatus = Portal.Notification.extend({
 }, { modelType: "connectionStatus" });
 
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
-Portal.NotificationCollection = QueryEngine.QueryCollection.extend({
+Portal.NotificationCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.Notification,
     backend: 'notification'

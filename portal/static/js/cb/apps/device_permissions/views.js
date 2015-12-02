@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 Portal.AppDevicePermissionView = React.createClass({
     mixins: [Portal.InnerItemView],
 

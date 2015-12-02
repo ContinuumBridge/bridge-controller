@@ -16,6 +16,7 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+//var _BootstrapMixin = require('../../../../../../node_modules/react-bootstrap/BootstrapMixin');
 var _BootstrapMixin = require('./BootstrapMixin');
 
 var _BootstrapMixin2 = _interopRequireDefault(_BootstrapMixin);

@@ -1,4 +1,5 @@
 
+var React = require('react');
 
 Portal.CurrentUserView = React.createClass({
 

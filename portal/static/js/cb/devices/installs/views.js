@@ -1,4 +1,7 @@
 
+var Backbone = require('backbone-bundle');
+var React = require('react');
+
 Portal.DeviceInstallView = React.createClass({
 
     mixins: [Portal.ItemView],

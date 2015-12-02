@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 Portal.UserLicenceTableView = React.createClass({
 
     mixins: [ Portal.Mixins.TableView ],

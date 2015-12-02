@@ -4,7 +4,7 @@
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['../../../../.', 'backbone', 'backbone.marionette.js'], factory);
+        define(['../../../../.', 'backbone', 'backbone.marionette'], factory);
     } else {
         factory(_, Backbone, Marionette);
     }

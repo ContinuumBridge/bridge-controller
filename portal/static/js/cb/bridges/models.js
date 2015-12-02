@@ -1,5 +1,6 @@
 
 //var logger = require('logger');
+var Backbone = require('backbone-bundle');
 var Q = require('q');
 
 Portal.Bridge = Backbone.Deferred.Model.extend({

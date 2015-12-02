@@ -9,10 +9,12 @@ Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
 
         //router
         this.controller = new this.Controller();
+        /*
         this.router = new this.Router('portal/store/', {
             controller : this.controller,
             createTrailingSlashRoutes: true
         });
+        */
     });
 
     Store.Controller = Marionette.Controller.extend({
@@ -44,6 +46,7 @@ Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
       }
     });
 
+    /*
     Store.Router = Marionette.SubRouter.extend({
 
         appRoutes: {
@@ -51,6 +54,7 @@ Portal.module('Store', function(Store, CBApp, Backbone, Marionette, $, _) {
           //"config/bridge/:bridge": "config",
         }
     });
+    */
 
     Store.on('store:show', function(){
         console.log('show store');

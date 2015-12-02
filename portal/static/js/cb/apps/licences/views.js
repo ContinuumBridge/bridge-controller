@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+var React = require('react');
 
 Portal.AppLicenceView = React.createClass({
 

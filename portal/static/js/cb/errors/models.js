@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.Error = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
@@ -12,7 +14,7 @@ Portal.Error = Backbone.RelationalModel.extend({
 });
 
 //Portal.MessageCollection = Backbone.Collection.extend({
-Portal.ErrorCollection = QueryEngine.QueryCollection.extend({
+Portal.ErrorCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.Message,
     backend: 'error',

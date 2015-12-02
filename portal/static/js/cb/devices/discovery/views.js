@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 Portal.DiscoveredDeviceView = React.createClass({
 
     mixins: [Portal.ItemView],

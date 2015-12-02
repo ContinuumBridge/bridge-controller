@@ -1,4 +1,5 @@
 
+var React = require('react');
 //var Message = require('./message');
 
 Portal.MessageView = React.createClass({

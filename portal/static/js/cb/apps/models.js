@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.App = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',

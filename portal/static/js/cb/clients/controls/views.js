@@ -1,4 +1,5 @@
 
+var React = require('react');
 
 Portal.ClientControlView = React.createClass({
 

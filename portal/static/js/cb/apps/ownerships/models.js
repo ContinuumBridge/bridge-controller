@@ -1,4 +1,6 @@
 
+var Backbone = require('backbone-bundle');
+
 Portal.AppOwnership = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -59,7 +61,7 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appOwnership" });
 
-Portal.AppOwnershipCollection = QueryEngine.QueryCollection.extend({
+Portal.AppOwnershipCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppOwnership,
     backend: 'appOwnership'
