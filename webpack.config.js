@@ -70,5 +70,8 @@ module.exports = {
       // you can now require('file') instead of require('file.coffee')
       extensions: ['', '.js']
     },
-    watch: true
+    watch: true,
+    watchOptions: {
+        poll: true
+    }
 };

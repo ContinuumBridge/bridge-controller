@@ -1,5 +1,7 @@
 'use strict';
 
+var React = require('react');
+
 var _objectWithoutProperties = require('babel-runtime/helpers/object-without-properties')['default'];
 
 var _extends = require('babel-runtime/helpers/extends')['default'];

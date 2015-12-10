@@ -14,8 +14,8 @@ Portal.Client = Backbone.Deferred.Model.extend({
             type: Backbone.HasMany,
             key: 'clientControls',
             keySource: 'client_controls',
-            relatedModel: 'Portal.ClientControl',
-            collectionType: 'Portal.ClientControlCollection',
+            relatedModel: Portal.ClientControl,
+            collectionType: Portal.ClientControlCollection,
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'clientControlCollection'

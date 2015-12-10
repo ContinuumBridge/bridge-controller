@@ -114,6 +114,10 @@ Connection.prototype.onMessageToClient = function(message) {
 
 }
 
+Connection.prototype.createRedisClient = function() {
+
+}
+
 Connection.prototype.setupRedis = function() {
 
     var self = this;

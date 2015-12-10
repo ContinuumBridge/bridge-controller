@@ -2,7 +2,6 @@
 var $ = require('jquery');
 import global from 'global-object';
 
-
 //var CBApp = require('index');
 var Portal = global.Portal = require('index');
 require('./cb/views/mixins/mixins');

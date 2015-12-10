@@ -15,7 +15,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'Portal.App',
+            relatedModel: Portal.App,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
@@ -24,8 +24,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
                 key: 'appLicences',
                 keySource: 'app_licence',
                 keyDestination: 'app_licence',
-                relatedModel: 'Portal.AppLicence',
-                collectionType: 'Portal.AppLicenceCollection',
+                relatedModel: Portal.AppLicence,
+                collectionType: Portal.AppLicenceCollection,
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appLicenceCollection'
             }
@@ -35,8 +35,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'installs',
             keySource: 'installs',
             keyDestination: 'installs',
-            relatedModel: 'Portal.AppInstall',
-            collectionType: 'Portal.AppInstallCollection',
+            relatedModel: Portal.AppInstall,
+            collectionType: Portal.AppInstallCollection,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -46,21 +46,10 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: 'Portal.User',
-            collectionType: 'Portal.UserCollection',
+            relatedModel: Portal.User,
+            collectionType: Portal.UserCollection,
             createModels: true,
             includeInJSON: 'resource_uri'
-            /*
-            modelBuilder: {
-                'user': Portal.User,
-                'currentUser': Portal.CurrentUser
-            }
-            //initializeCollection: 'userCollection',
-            reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appLicence'
-            }
-            */
         }
     ],
 

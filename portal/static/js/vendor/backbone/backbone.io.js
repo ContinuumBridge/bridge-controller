@@ -1,5 +1,6 @@
 
 var $ = require('jquery');
+var io = require('socket.io-client');
 
 (function() {
     var connected = new Promise();

@@ -1,4 +1,6 @@
 
+var React = require('react');
+
 var ListItem = require('../components/bootstrap/ListItem.jsx');
 
 Portal.InnerItemView = {

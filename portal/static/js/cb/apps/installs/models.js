@@ -58,71 +58,35 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     */
 
     relations: [
-        /*
-        {   
-            type: Backbone.HasOne,
-            key: 'bridge',
-            keySource: 'bridge',
-            keyDestination: 'bridge',
-            relatedModel: 'Portal.Bridge',
-            collectionType: 'Portal.BridgeCollection',
-            createModels: true,
-            includeInJSON: 'resource_uri',
-            initializeCollection: 'bridgeCollection',
-        },
-        */
         {
             type: Backbone.HasOne,
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'Portal.App',
-            collectionType: 'Portal.AppCollection',
+            relatedModel: Portal.App,
+            collectionType: Portal.AppCollection,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'appInstalls',
-                collectionType: 'Portal.AppInstallCollection',
+                collectionType: Portal.AppInstallCollection,
                 includeInJSON: false,
                 initializeCollection: 'appInstallCollection',
-            }   
-        },
-        /*
-        {
-            type: Backbone.HasMany,
-            key: 'devicePermissions',
-            keySource: 'device_permissions',
-            keyDestination: 'device_permissions',
-            relatedModel: 'Portal.AppDevicePermission',
-            collectionType: 'Portal.AppDevicePermissionCollection',
-            createModels: true,
-            includeInJSON: false,
-            initializeCollection: 'appDevicePermissionCollection'
-            /*
-            reverseRelation: {
-                type: Backbone.HasOne,
-                key: 'appInstall',
-                keySource: 'app_install',
-                keyDestination: 'app_install',
-                collectionType: 'Portal.AppInstallCollection',
-                includeInJSON: 'resource_uri',
-                initializeCollection: 'appInstallCollection'
             }
         },
-        */
         {
             type: Backbone.HasOne,
             key: 'licence',
             keySource: 'licence',
             keyDestination: 'licence',
-            relatedModel: 'Portal.AppLicence',
-            collectionType: 'Portal.AppLicenceCollection',
+            relatedModel: Portal.AppLicence,
+            collectionType: Portal.AppLicenceCollection,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appLicenceCollection',
-        },
+        }
     ]
 }, { modelType: "appInstall" });
 

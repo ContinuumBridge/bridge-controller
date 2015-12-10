@@ -1,4 +1,6 @@
 
+import global from 'global-object';
+
 //import Backbone from 'backbone-bundle';
 var Backbone = require('backbone-bundle');
 var React = require('react');
@@ -14,7 +16,7 @@ var cbidTypes = {
     'BID:b/DID:d': 'deviceInstall'
 }
 
-var Portal = new CBApp();
+var Portal = global.Portal = new CBApp();
 Portal.dispatcher = require('flux-dispatcher');
 //Portal.dispatcher = new Dispatcher();
 Portal.setupCBIDTypes(cbidTypes);
@@ -150,59 +152,6 @@ Portal.addInitializer(function () {
       //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
       //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
   });
-
-  /*
-  React.renderComponent(
-      <Portal.NotificationListView collection={Portal.notificationCollection} />,
-      document.getElementById('notification-region')
-  );
-  */
-
-  //for routing purposes
-  /*
-  if(Backbone.history) {
-
-      Backbone.history.start({pushState: true});
-                              //root: '/portal'});
-
-      console.log('Backbone.history.fragment', Backbone.history.fragment);
-      if (this.getCurrentRoute() === "") {
-          Portal.request('config:show');
-          //Backbone.history.navigate('index');
-
-      }
-
-  } else {
-      console.warn('Backbone.history was not started');
-  }
-  */
 });
 
-/*
-Portal.Router = Marionette.SubRouter.extend({
-
-  appRoutes: {
-    '': 'showHome',
-    'config(/:slug)': 'showConfig',
-    'developer(/:slug)': 'showDeveloper',
-    'store(/:slug)': 'showStore'
-  }
-});
-
-Portal.reqres.setHandler("config:show", function(){
-    Portal.controller.showConfig();
-});
-
-Portal.reqres.setHandler("developer:show", function(){
-    Portal.controller.showDeveloper();
-});
-
-Portal.reqres.setHandler("home:show", function(){
-    Portal.controller.showHome();
-});
-
-Portal.reqres.setHandler("store:show", function(){
-    Portal.controller.showStore();
-});
-*/
 module.exports = Portal;

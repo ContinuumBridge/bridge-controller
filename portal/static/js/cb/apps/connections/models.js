@@ -13,8 +13,8 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: 'Portal.App',
-            collectionType: 'Portal.AppCollection',
+            relatedModel: Portal.App,
+            collectionType: Portal.AppCollection,
             createModels: true,
             initializeCollection: 'appCollection',
             includeInJSON: true
@@ -24,8 +24,8 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: 'Portal.Client',
-            collectionType: 'Portal.ClientCollection',
+            relatedModel: Portal.Client,
+            collectionType: Portal.ClientCollection,
             createModels: true,
             initializeCollection: 'clientCollection',
             includeInJSON: true

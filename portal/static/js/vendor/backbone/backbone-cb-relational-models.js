@@ -71,6 +71,31 @@ console.log('relational-models this', Object.keys(this));
 
     Backbone.HasMany = Backbone.HasMany.extend({
 
+        initialize: function( opts ) {
+            this.listenTo( this.instance, 'relational:change:' + this.key, this.onChange );
+
+            // Handle a custom 'collectionType'
+            this.collectionType = this.options.collectionType;
+            // ADDED just take this.collectionType rather than trying to convert it
+            console.log('this.collectionType', this.collectionType);
+            // ADDED Inheritance testing for collections does not work due to backbone.io and webpack, skip it
+            /*
+            if ( _.isFunction( this.collectionType ) && this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
+                console.log('this.collectionType', this.collectionType);
+                this.collectionType = _.result( this, 'collectionType' );
+            }
+            if ( _.isString( this.collectionType ) ) {
+                this.collectionType = Backbone.Relational.store.getObjectByName( this.collectionType );
+            }
+            if ( this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
+                throw new Error( '`collectionType` must inherit from Backbone.Collection' );
+            }
+            */
+
+            var related = this.findRelated( opts );
+            this.setRelated( related );
+        },
+
         findRelated: function( options ) {
 
             var related = null;
@@ -230,13 +255,15 @@ console.log('relational-models this', Object.keys(this));
          */
         initializeRelations: function( options ) {
 
+            var self = this;
             this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
             this._relations = {};
 
             // Pass silent: true to suppress change events on initialisation
             options.silent = true;
             _.each( this.relations || [], function( rel ) {
-                Backbone.Relational.store.initializeRelation( this, rel, options );
+                Backbone.Relational.store.initializeRelation( self, rel, options );
+                //Backbone.Relational.store.initializeRelation( this, rel, options );
 
                 //this.trigger( 'relational:change:' + rel.key, this, value, options || {} );
                 /*

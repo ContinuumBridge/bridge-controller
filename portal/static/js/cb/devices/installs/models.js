@@ -80,15 +80,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: 'Portal.Device',
-            collectionType: 'Portal.DeviceCollection',
+            relatedModel: Portal.Device,
+            collectionType: Portal.DeviceCollection,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: 'Portal.DeviceInstallCollection',
+                collectionType: Portal.DeviceInstallCollection,
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -98,15 +98,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: 'Portal.Adaptor',
-            collectionType: 'Portal.AdaptorCollection',
+            relatedModel: Portal.Adaptor,
+            collectionType: Portal.AdaptorCollection,
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: 'Portal.DeviceInstallCollection',
+                collectionType: Portal.DeviceInstallCollection,
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
