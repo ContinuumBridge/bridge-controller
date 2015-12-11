@@ -2,6 +2,7 @@
 var Q = require('q');
 
 var DjangoError = require('../../errors').DjangoError;
+var WebSocketConnection = require('websocket').connection;
 
 var Connection = require('../connection/connection')
     ,Router = require('./router')
@@ -50,5 +51,15 @@ var ClientConnection = function(socket) {
 };
 
 ClientConnection.prototype = new Connection();
+
+ClientConnection.prototype.destroySocket = function() {
+
+    if (this.socket) {
+        this.socket.removeAllListeners('message');
+        this.socket.removeAllListeners('disconnect');
+        this.socket.close(WebSocketConnection.CLOSE_REASON_NORMAL, 'Socket closed');
+    }
+    if (this.unsubscribeToClient) this.unsubscribeToClient();
+}
 
 module.exports = ClientConnection;
