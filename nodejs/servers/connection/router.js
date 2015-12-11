@@ -98,10 +98,10 @@ Router.prototype.dispatch = function(message) {
     //logger.log('debug', 'config.cbid', config.cbid);
     // source != config.cbid
     if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
-        logger.log('debug', 'Push to client');
+        //logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
     } else {
-        logger.log('debug', 'dispatch destination is', destination);
+        //logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
 

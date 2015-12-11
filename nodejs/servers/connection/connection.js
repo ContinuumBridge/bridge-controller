@@ -35,10 +35,10 @@ Connection.prototype.setupSocket = function() {
 
     var socket = this.socket;
 
-    logger.log('debug', 'setupSocket');
+    //logger.log('debug', 'setupSocket');
     socket.on('message', function (rawMessage) {
 
-        logger.log('debug', 'Socket message', rawMessage);
+        //logger.log('debug', 'Socket message', rawMessage);
         if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
             //console.log('Received Message: ' + rawMessage.utf8Data);
             rawMessage = rawMessage.utf8Data;
@@ -87,7 +87,7 @@ Connection.prototype.setupSocket = function() {
 
     socket.on('disconnect', function() {
 
-        this.emit('disconnect');
+        self.emit('disconnect');
 
         self.disconnect();
         /*
@@ -102,11 +102,8 @@ Connection.prototype.setupSocket = function() {
 Connection.prototype.destroySocket = function() {
 
     if (this.socket) {
-        logger.log('debug', 'destroySocket 1');
         this.socket.removeAllListeners('message');
-        logger.log('debug', 'destroySocket 2');
         this.socket.removeAllListeners('disconnect');
-        logger.log('debug', 'destroySocket 3');
         this.socket.disconnect();
     }
     if (this.unsubscribeToClient) this.unsubscribeToClient();
@@ -118,8 +115,8 @@ Connection.prototype.logConnection = function(type) {
 
     var pubAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
     var subAddressesString = config.subscriptionAddresses ? config.subscriptionAddresses.join(', ') : "";
-    logger.log('info', 'New %s connection. Subscribed to %s, publishing to %s'
-        , type, subAddressesString, pubAddressesString);
+    logger.log('info', 'New %s connection from %s. Subscribed to %s, publishing to %s'
+        , type, config.cbid, subAddressesString, pubAddressesString);
 }
 
 Connection.prototype.onMessageToClient = function(message) {
@@ -147,7 +144,7 @@ Connection.prototype.setupRedis = function() {
             // Publish to the first part of the address
             var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
-                logger.log('debug', 'publish addressMatches', addressMatches);
+                //logger.log('debug', 'publish addressMatches', addressMatches);
                 message = message.set('destination', address);
                 var jsonMessage = message.toJSONString();
                 redisPub.publish(addressMatches[1], jsonMessage)
@@ -203,11 +200,9 @@ Connection.prototype.setupRedis = function() {
 }
 
 Connection.prototype.destroyRedis = function() {
-    /*
     if (this.redisSub) this.redisSub.end();
     if (this.redisPub) this.redisPub.end();
     if (this.unsubscribeToRedis) this.unsubscribeToRedis();
-    */
 }
 
 Connection.prototype.setupRouting = function() {
@@ -233,14 +228,12 @@ Connection.prototype.setupRouting = function() {
 
 Connection.prototype.disconnect = function() {
 
-    logger.log('debug', 'disconnect called');
     // Cleans up everything to do with the connection on its destruction
-    this.destroyRedis();
-    logger.log('debug', 'disconnect 1');
     this.destroySocket();
-    logger.log('debug', 'disconnect 2');
+    this.destroyRedis();
     if (this.router) this.router.destroy();
-    logger.log('info', 'Disconnected');
+    var cbid = this.config && this.config.cbid || "";
+    logger.log('info', '%s Disconnected', cbid);
 }
 
 Connection.prototype.unauthorizedResult = function(message, exception) {

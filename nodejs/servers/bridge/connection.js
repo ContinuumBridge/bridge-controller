@@ -27,18 +27,13 @@ var BridgeConnection = function(socket) {
 
         self.setupBuses();
         self.setupSocket();
-        logger.log('info', Object.keys(self));
-        var err = new Error('Test error');
-        throw err;
         self.setupRedis();
         self.setupRouting();
         self.logConnection('bridge');
 
-    }).catch(function(error) {
+    }).fail(function(error) {
 
-        logger.log('error', 'Bridge Connection setup failed', error);
-        logger.log('error', error);
-        logger.log('debug', Object.keys(self));
+        logger.log('error', 'Bridge Connection setup failed', error.name, error.message);
         self.disconnect();
 
     }).done();

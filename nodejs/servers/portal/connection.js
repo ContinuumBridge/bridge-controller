@@ -20,7 +20,7 @@ var PortalConnection = function(socket) {
 
         self.config = socket.config = config;
 
-        console.log('Portal config is', config);
+        //console.log('Portal config is', config);
         // Router and django must be defined
         self.django = new Django(self);
         self.router = new Router(self);
@@ -38,9 +38,9 @@ var PortalConnection = function(socket) {
         logger.log('info', 'New portal connection subscribed to %s (%s), publishing to %s'
             , subAddressesString, config.email, pubAddressesString);
         */
-    }).catch(function(error) {
+    }).fail(function(error) {
 
-        logger.log('error', 'Portal Connection setup failed', error);
+        logger.log('error', 'Portal Connection setup failed:', error.name, error.message);
         self.disconnect();
 
     }).done();
@@ -48,12 +48,12 @@ var PortalConnection = function(socket) {
 
 PortalConnection.prototype = new Connection();
 
+/*
 PortalConnection.prototype.disconnect = function(error) {
 
     logger.log('info', 'Disconnect was called');
 }
 
-/*
 PortalConnection.prototype.onMessageToClient = function(message) {
 
     // Device discovery hack

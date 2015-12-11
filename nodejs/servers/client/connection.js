@@ -41,9 +41,9 @@ var ClientConnection = function(socket) {
         //socket.sendUTF('message', JSON.stringify(connectedMessage));
         self.logConnection('client');
 
-    }).catch(function(error) {
+    }).fail(function(error) {
 
-        logger.log('error', 'Client Connection setup failed', error);
+        logger.log('error', 'Client Connection setup failed', error.name, error.message);
         self.disconnect();
 
     }).done();
