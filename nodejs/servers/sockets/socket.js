@@ -22,11 +22,12 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         if(handshake.headers && handshake.headers.cookie) {
             // Pull out the cookies from the data
             var cookies = cookie_reader.parse(handshake.headers.cookie);
-            sessionID = cookies.sessionid;
+            sessionID = cookies.sessionid || cookies.io;
         } else if (handshake.query && handshake.query.sessionID) {
             sessionID = handshake.query.sessionID;
-            //console.log('handshake.query.sessionID is', handshake.query.sessionID);
-        } else {
+        }
+
+        if (!sessionID) {
             next(new Errors.Unauthorized('No sessionID was provided'));
         }
 
@@ -41,7 +42,7 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
             console.log(error);
             next(error);
-        });
+        }).done();
     });
 }
 

@@ -120,5 +120,10 @@ Router.prototype.dispatch = function(message) {
     */
 }
 
+Router.prototype.destroy = function() {
+
+    this.router.removeAllRoutes();
+}
+
 
 module.exports = Router;

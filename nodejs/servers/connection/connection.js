@@ -52,9 +52,6 @@ Connection.prototype.setupSocket = function() {
         */
 
         var message = new Message(rawMessage);
-        //logger.log('debug', 'Socket sessionID', socket.sessionID);
-        //logger.log('debug', 'Socket id', socket.id);
-        //logger.log('debug', 'Socket handshake query', socket.handshake.query);
         message.set('sessionID', socket.sessionID);
         //logger.log('debug', Object.keys(socket));
 
@@ -62,13 +59,10 @@ Connection.prototype.setupSocket = function() {
         //logger.log('debug', 'Socket subscriptionAddresses', self.config.subscriptionAddress);
         message.conformSource(self.config.cbid);
 
-        //logger.log('debug', 'socket message config', self.config);
-        //logger.log('debug', 'socket message', message);
-
         self.router.dispatch(message);
     });
 
-    var unsubscribeToClient = this.toClient.onValue(function(message) {
+    var unsubscribeToClient = this.unsubscribeToClient = this.toClient.onValue(function(message) {
 
         //self.onMessageToClient(message)
         var jsonMessage = message.toJSONString();
@@ -92,13 +86,31 @@ Connection.prototype.setupSocket = function() {
     });
 
     socket.on('disconnect', function() {
-        logger.log('info', 'Disconnected');
+
+        this.emit('disconnect');
+
+        self.disconnect();
+        /*
         unsubscribeToClient();
         self.emit('disconnect');
         socket.removeAllListeners('message');
         socket.removeAllListeners('disconnect');
+        */
     });
 };
+
+Connection.prototype.destroySocket = function() {
+
+    if (this.socket) {
+        logger.log('debug', 'destroySocket 1');
+        this.socket.removeAllListeners('message');
+        logger.log('debug', 'destroySocket 2');
+        this.socket.removeAllListeners('disconnect');
+        logger.log('debug', 'destroySocket 3');
+        this.socket.disconnect();
+    }
+    if (this.unsubscribeToClient) this.unsubscribeToClient();
+}
 
 Connection.prototype.logConnection = function(type) {
 
@@ -121,14 +133,10 @@ Connection.prototype.setupRedis = function() {
     var subscriptionAddresses = this.config.subscriptionAddresses;
     var publicationAddresses = this.config.publicationAddresses;
 
-    //console.log('subscriptionAddresses', subscriptionAddresses);
-    //console.log('publicationAddresses', publicationAddresses);
-
-    var redisPub = redis.createClient();
+    var redisPub = this.redisPub = redis.createClient();
 
     var publishAll = function(message) {
 
-        //logger.log('debug', 'Publish redis message', message.toJSON());
         // When a message appears on the bus, publish it
         var destination = message.get('destination');
         var source = message.get('source');
@@ -137,8 +145,6 @@ Connection.prototype.setupRedis = function() {
         var publish = function(address) {
 
             // Publish to the first part of the address
-            //var addressArray = address.match();
-            //var addressMatches = utils.cbidRegex.exec(address);
             var addressMatches = address.match(utils.cbidRegex);
             if (addressMatches && addressMatches[1]) {
                 logger.log('debug', 'publish addressMatches', addressMatches);
@@ -150,65 +156,58 @@ Connection.prototype.setupRedis = function() {
 
         if (typeof destination == 'string') {
 
-            //console.log('debug', 'destination is a string')
-
             publish(destination, message);
         } else if (destination instanceof Array) {
 
-            //console.log('debug', 'destination is an array')
             destination.forEach(function(dest) {
 
-                //console.log('debug', 'dest is', dest);
                 publish(dest);
-                //redisPub.publish(String(address), jsonMessage);
             }, this);
         }
-
-        //logger.log('message', source, '=>', destination, '    ');
     };
 
-    var unsubscribeToRedis = this.toRedis.onValue(function(message) {
+    var unsubscribeToRedis = this.unsubscribeToRedis = this.toRedis.onValue(function(message) {
 
         publishAll(message);
     });
 
-    //var message = new Message({ destination: 'BID2'});
-    //publish(message);
-
     // Subscription to Redis
-    var redisSub = redis.createClient();
-    //logger.log('debug', 'subscriptionAddresses', subscriptionAddresses);
+    var redisSub = this.redisSub = redis.createClient();
     _.each(subscriptionAddresses, function(address) {
         //logger.log('debug', 'subscriptionAddress', address);
         redisSub.subscribe(address);
     });
     redisSub.on('message', function(channel, jsonMessage) {
 
-        //logger.log('debug', 'Redis received ', jsonMessage);
-
         //var source = _.property('source')(jsonMessage);
-
         var message = new Message(jsonMessage);
-        //logger.log('debug', 'redis source', message.get('source'), 'self.config.cbid', self.config.cbid);
         // If this is a message from the client which has bounced back, do nothing
         if(message.get('source') != self.config.cbid) {
             self.router.dispatch(message);
         }
-        //logger.log('debug', 'Redis received', message.toJSON());
-        //self.fromRedis.push(message);
     });
 
+    /*
     this.disconnect = function() {
 
-        //redisSub.removeListener('message', onRedisMessage);
         redisSub.unsubscribe();
         unsubscribeToRedis();
     }
+    */
+
+    /*
     this.on('disconnect', function() {
         self.disconnect();
-        //self.removeListener('disconnect');
     });
+    */
+}
 
+Connection.prototype.destroyRedis = function() {
+    /*
+    if (this.redisSub) this.redisSub.end();
+    if (this.redisPub) this.redisPub.end();
+    if (this.unsubscribeToRedis) this.unsubscribeToRedis();
+    */
 }
 
 Connection.prototype.setupRouting = function() {
@@ -230,6 +229,18 @@ Connection.prototype.setupRouting = function() {
         self.router.dispatch(message);
     });
     */
+}
+
+Connection.prototype.disconnect = function() {
+
+    logger.log('debug', 'disconnect called');
+    // Cleans up everything to do with the connection on its destruction
+    this.destroyRedis();
+    logger.log('debug', 'disconnect 1');
+    this.destroySocket();
+    logger.log('debug', 'disconnect 2');
+    if (this.router) this.router.destroy();
+    logger.log('info', 'Disconnected');
 }
 
 Connection.prototype.unauthorizedResult = function(message, exception) {

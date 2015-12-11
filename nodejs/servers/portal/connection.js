@@ -15,7 +15,7 @@ var PortalConnection = function(socket) {
     var self = this;
     this.socket = socket;
 
-    console.log('PortalConnection socket is ', socket.sessionID);
+    //console.log('PortalConnection socket is ', socket.sessionID);
     socket.getConfig(socket.sessionID).then(function(config) {
 
         self.config = socket.config = config;
@@ -38,6 +38,11 @@ var PortalConnection = function(socket) {
         logger.log('info', 'New portal connection subscribed to %s (%s), publishing to %s'
             , subAddressesString, config.email, pubAddressesString);
         */
+    }).catch(function(error) {
+
+        logger.log('error', 'Portal Connection setup failed', error);
+        self.disconnect();
+
     }).done();
 };
 
