@@ -62,6 +62,8 @@ Portal.App = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "app" });
 
+Backbone.Relational.store.addModelScope({ App : Portal.App });
+
 Portal.AppCollection = Backbone.Collection.extend({
 
     model: Portal.App,
@@ -86,3 +88,4 @@ Portal.AppCollection = Backbone.Collection.extend({
     */
 });
 
+Backbone.Relational.store.addModelScope({ AppCollection : Portal.AppCollection });

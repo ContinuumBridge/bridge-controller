@@ -80,15 +80,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: Portal.Device,
-            collectionType: Portal.DeviceCollection,
+            relatedModel: 'Device',
+            collectionType: 'DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'deviceInstalls',
-                collectionType: Portal.DeviceInstallCollection,
+                collectionType: 'DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -98,15 +98,15 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
             key: 'adaptor',
             keySource: 'adaptor',
             keyDestination: 'adaptor',
-            relatedModel: Portal.Adaptor,
-            collectionType: Portal.AdaptorCollection,
+            relatedModel: 'Adaptor',
+            collectionType: 'AdaptorCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'adaptorCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'deviceInstall',
-                collectionType: Portal.DeviceInstallCollection,
+                collectionType: 'DeviceInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'deviceInstallCollection'
             }
@@ -127,30 +127,13 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "deviceInstall" });
 
+Backbone.Relational.store.addModelScope({ DeviceInstall : Portal.DeviceInstall });
+
 //Portal.DeviceInstallCollection = Backbone.Deferred.Collection.extend({
 Portal.DeviceInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
     backend: 'deviceInstall',
-
-    /*
-    initialize: function(options) {
-        var self = this;
-
-        //Portal.addInitializer(function(options) {
-
-        //});
-        /*
-        this.bind('backend:create', function(model) {
-            self.add(model);
-        });
-        Portal.DeviceInstallCollection.__super__.initialize.apply(this, arguments);
-    },
-    */
-
-    /*
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });
+
+Backbone.Relational.store.addModelScope({ DeviceInstallCollection : Portal.DeviceInstallCollection });

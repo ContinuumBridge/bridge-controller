@@ -8,6 +8,7 @@ Portal.Adaptor = Backbone.RelationalModel.extend({
     }
 }, { modelType: "adaptor" });
 
+Backbone.Relational.store.addModelScope({ Adaptor : Portal.Adaptor });
 
 Portal.AdaptorCollection = Backbone.Collection.extend({
 
@@ -16,3 +17,4 @@ Portal.AdaptorCollection = Backbone.Collection.extend({
 
 });
 
+Backbone.Relational.store.addModelScope({ AdaptorCollection : Portal.AdaptorCollection });

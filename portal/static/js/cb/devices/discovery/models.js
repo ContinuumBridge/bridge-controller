@@ -86,8 +86,8 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             key: 'bridge',
             keySource: 'bridge',
             keyDestination: 'bridge',
-            relatedModel: Portal.Bridge,
-            collectionType: Portal.BridgeCollection,
+            relatedModel: 'Bridge',
+            collectionType: 'BridgeCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'bridgeCollection',
@@ -103,8 +103,8 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             key: 'device',
             keySource: 'device',
             keyDestination: 'device',
-            relatedModel: Portal.Device,
-            collectionType: Portal.DeviceCollection,
+            relatedModel: 'Device',
+            collectionType: 'DeviceCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceCollection'
@@ -113,7 +113,7 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
             key: 'appPermissions',
             keySource: 'app_permissions',
             keyDestination: 'app_permissions',
-            collectionType: Portal.AppDevicePermissionCollection,
+            collectionType: 'AppDevicePermissionCollection',
             createModels: true,
             includeInJSON: false,
             initializeCollection: 'appDevicePermissionCollection'
@@ -135,6 +135,8 @@ Portal.DiscoveredDevice = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "discoveredDevice" });
 
+Backbone.Relational.store.addModelScope({ DiscoveredDevice : Portal.DiscoveredDevice });
+
 Portal.DiscoveredDeviceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.DiscoveredDevice,
@@ -148,3 +150,4 @@ Portal.DiscoveredDeviceCollection = Backbone.QueryEngine.QueryCollection.extend(
     */
 });
 
+Backbone.Relational.store.addModelScope({ DiscoveredDeviceCollection : Portal.DiscoveredDeviceCollection });

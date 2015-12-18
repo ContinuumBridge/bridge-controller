@@ -3,6 +3,9 @@
 var Backbone = require('backbone-bundle');
 var Q = require('q');
 
+var BridgeControl = require('./controls/models').BridgeControl;
+var BridgeControlCollection = require('./controls/models').BridgeControlCollection;
+
 Portal.Bridge = Backbone.Deferred.Model.extend({
 
     idAttribute: 'id',
@@ -61,8 +64,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             type: Backbone.HasMany,
             key: 'bridgeControls',
             keySource: 'controllers',
-            relatedModel: Portal.BridgeControl,
-            collectionType: Portal.BridgeControlCollection,
+            relatedModel: 'BridgeControl',
+            collectionType: 'BridgeControlCollection',
             createModels: false,
             includeInJSON: true,
             initializeCollection: 'bridgeControlCollection'
@@ -78,15 +81,15 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'appInstalls',
             keySource: 'apps',
             keyDestination: 'apps',
-            relatedModel: Portal.AppInstall,
-            collectionType: Portal.AppInstallCollection,
+            relatedModel: 'AppInstall',
+            collectionType: 'AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection',
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'bridge',
-                collectionType: Portal.BridgeCollection,
+                collectionType: 'BridgeCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'bridgeCollection'
             }
@@ -96,8 +99,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'deviceInstalls',
             keySource: 'devices',
             keyDestination: 'devices',
-            relatedModel: Portal.DeviceInstall,
-            collectionType: Portal.DeviceInstallCollection,
+            relatedModel: 'DeviceInstall',
+            collectionType: 'DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceInstallCollection',
@@ -106,8 +109,8 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
                 key: 'bridge',
                 keySource: 'bridge',
                 keyDestination: 'bridge',
-                relatedModel: Portal.Bridge,
-                collectionType: Portal.BridgeCollection,
+                relatedModel: 'Bridge',
+                collectionType: 'BridgeCollection',
                 includeInJSON: 'resource_uri'
             }
         },
@@ -116,14 +119,16 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             key: 'discoveredDevices',
             keySource: 'discovered_devices',
             keyDestination: 'discovered_devices',
-            relatedModel: Portal.DiscoveredDevice,
-            collectionType: Portal.DiscoveredDeviceCollection,
+            relatedModel: 'DiscoveredDevice',
+            collectionType: 'DiscoveredDeviceCollection',
             createModels: true,
             //includeInJSON: true,
             initializeCollection: 'discoveredDeviceCollection'
         }
     ]
 }, { modelType: "bridge" });
+
+Backbone.Relational.store.addModelScope({ Bridge : Portal.Bridge });
 
 Portal.BridgeCollection = Backbone.Collection.extend({
 
@@ -140,6 +145,8 @@ Portal.BridgeCollection = Backbone.Collection.extend({
     }
     */
 });
+
+Backbone.Relational.store.addModelScope({ BridgeCollection : Portal.BridgeCollection });
 
 /*
 Portal.getCurrentBridge = function() {
@@ -183,52 +190,3 @@ Portal.setCurrentBridge = function(bridge) {
         Portal.router.setQuery({bridge: bridge.get('id')});
     }
 }
-
-Portal.BridgeControl = Backbone.RelationalModel.extend({
-
-    idAttribute: 'id',
-
-    initialize: function() {
-
-    },
-
-    relations: [
-        {
-            type: Backbone.HasOne,
-            key: 'bridge',
-            keySource: 'bridge',
-            keyDestination: 'bridge',
-            relatedModel: Portal.Bridge,
-            collectionType: Portal.BridgeCollection,
-            createModels: true,
-            initializeCollection: 'bridgeCollection',
-            includeInJSON: true
-        },
-        {
-            type: Backbone.HasOne,
-            key: 'user',
-            keySource: 'user',
-            keyDestination: 'user',
-            relatedModel: Portal.User,
-            collectionType: Portal.UserCollection,
-            createModels: true,
-            includeInJSON: true,
-            initializeCollection: 'userCollection',
-        }
-    ]
-}); 
-
-Portal.BridgeControlCollection = Backbone.Collection.extend({
-
-    model: Portal.BridgeControl,
-    backend: 'bridgeControl',
-
-    initialize: function() {
-        this.bindBackend();
-    },
-    
-    parse : function(response){
-        return response.objects;
-    }
-}, { modelType: "bridgeControl" });
-

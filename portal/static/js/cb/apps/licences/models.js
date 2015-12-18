@@ -15,7 +15,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: Portal.App,
+            relatedModel: 'App',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
@@ -24,8 +24,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
                 key: 'appLicences',
                 keySource: 'app_licence',
                 keyDestination: 'app_licence',
-                relatedModel: Portal.AppLicence,
-                collectionType: Portal.AppLicenceCollection,
+                relatedModel: 'AppLicence',
+                collectionType: 'AppLicenceCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'appLicenceCollection'
             }
@@ -35,8 +35,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'installs',
             keySource: 'installs',
             keyDestination: 'installs',
-            relatedModel: Portal.AppInstall,
-            collectionType: Portal.AppInstallCollection,
+            relatedModel: 'AppInstall',
+            collectionType: 'AppInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appInstallCollection'
@@ -46,8 +46,8 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             key: 'user',
             keySource: 'user',
             keyDestination: 'user',
-            relatedModel: Portal.User,
-            collectionType: Portal.UserCollection,
+            relatedModel: 'User',
+            collectionType: 'UserCollection',
             createModels: true,
             includeInJSON: 'resource_uri'
         }
@@ -145,6 +145,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "appLicence" });
 
+Backbone.Relational.store.addModelScope({ AppLicence : Portal.AppLicence });
 //var QueryEngine = require('query-engine');
 //Portal.AppLicenceCollection = Backbone.Collection.extend({
 Portal.AppLicenceCollection = Backbone.QueryEngine.QueryCollection.extend({
@@ -168,3 +169,5 @@ Portal.AppLicenceCollection = Backbone.QueryEngine.QueryCollection.extend({
         return response.objects;
     }
 });
+
+Backbone.Relational.store.addModelScope({ AppLicenceCollection : Portal.AppLicenceCollection });

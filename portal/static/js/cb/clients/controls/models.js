@@ -14,21 +14,23 @@ Portal.ClientControl = Backbone.Deferred.Model.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: Portal.Client,
-            collectionType: Portal.ClientCollection,
+            relatedModel: 'Client',
+            collectionType: 'ClientCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'clientCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'clientControls',
-                collectionType: Portal.ClientCollection,
+                collectionType: 'ClientCollection',
                 includeInJSON: false,
                 initializeCollection: 'clientCollection',
             }   
         },
     ]
 }, { modelType: "clientControl" });
+
+Backbone.Relational.store.addModelScope({ ClientControl : Portal.ClientControl });
 
 Portal.ClientControlCollection = Backbone.QueryEngine.QueryCollection.extend({
 
@@ -45,3 +47,4 @@ Portal.ClientControlCollection = Backbone.QueryEngine.QueryCollection.extend({
     }
 });
 
+Backbone.Relational.store.addModelScope({ ClientControlCollection : Portal.ClientControlCollection });

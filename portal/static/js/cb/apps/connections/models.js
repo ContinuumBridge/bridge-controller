@@ -13,8 +13,8 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: Portal.App,
-            collectionType: Portal.AppCollection,
+            relatedModel: 'App',
+            collectionType: 'AppCollection',
             createModels: true,
             initializeCollection: 'appCollection',
             includeInJSON: true
@@ -24,14 +24,16 @@ Portal.AppConnection = Portal.ConnectionModel.extend({
             key: 'client',
             keySource: 'client',
             keyDestination: 'client',
-            relatedModel: Portal.Client,
-            collectionType: Portal.ClientCollection,
+            relatedModel: 'Client',
+            collectionType: 'ClientCollection',
             createModels: true,
             initializeCollection: 'clientCollection',
             includeInJSON: true
         }
     ]
 }, { modelType: "appConnection" });
+
+Backbone.Relational.store.addModelScope({ AppConnection : Portal.AppConnection });
 
 Portal.AppConnectionCollection = Backbone.QueryEngine.QueryCollection.extend({
 
@@ -44,3 +46,4 @@ Portal.AppConnectionCollection = Backbone.QueryEngine.QueryCollection.extend({
     }
 });
 
+Backbone.Relational.store.addModelScope({ AppConnectionCollection : Portal.AppConnectionCollection });

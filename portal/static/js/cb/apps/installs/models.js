@@ -63,15 +63,15 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
             key: 'app',
             keySource: 'app',
             keyDestination: 'app',
-            relatedModel: Portal.App,
-            collectionType: Portal.AppCollection,
+            relatedModel: 'App',
+            collectionType: 'AppCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'appCollection',
             reverseRelation: {
                 type: Backbone.HasMany,
                 key: 'appInstalls',
-                collectionType: Portal.AppInstallCollection,
+                collectionType: 'AppInstallCollection',
                 includeInJSON: false,
                 initializeCollection: 'appInstallCollection',
             }
@@ -90,6 +90,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "appInstall" });
 
+Backbone.Relational.store.addModelScope({ AppInstall : Portal.AppInstall });
+
 Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppInstall,
@@ -97,3 +99,4 @@ Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
 });
 
+Backbone.Relational.store.addModelScope({ AppInstallCollection : Portal.AppInstallCollection });

@@ -16,7 +16,7 @@ require('./backbone-cb-model-pre');
 
 require('./backbone.stickit');
 //require('cb-backbone.io');
-require('backbone.io');
+require('./backbone.io');
 require('./backbone.trackit');
 require('backbone.marionette');
 //require('backbone.marionette.subrouter');

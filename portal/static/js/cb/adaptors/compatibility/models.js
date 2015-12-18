@@ -8,6 +8,8 @@ Portal.AdaptorCompatibility = Backbone.RelationalModel.extend({
     }
 });
 
+Backbone.Relational.store.addModelScope({ AdaptorCompatibility : Portal.AdaptorCompatibility });
+
 Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
 
     model: Portal.AdaptorCompatibility,
@@ -36,3 +38,4 @@ Portal.AdaptorCompatibilityCollection = Backbone.Collection.extend({
     }
 });
 
+Backbone.Relational.store.addModelScope({ AdaptorCompatibilityCollection : Portal.AdaptorCompatibilityCollection });

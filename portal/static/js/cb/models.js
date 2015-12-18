@@ -12,6 +12,7 @@ require('./apps/licences/models');
 require('./apps/ownerships/models');
 require('./apps/device_permissions/models');
 require('./bridges/models');
+require('./bridges/controls/models');
 require('./clients/models');
 require('./clients/controls/models');
 require('./devices/models');

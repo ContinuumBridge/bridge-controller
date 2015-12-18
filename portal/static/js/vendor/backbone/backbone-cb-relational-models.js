@@ -79,9 +79,9 @@ console.log('relational-models this', Object.keys(this));
             // ADDED just take this.collectionType rather than trying to convert it
             console.log('this.collectionType', this.collectionType);
             // ADDED Inheritance testing for collections does not work due to backbone.io and webpack, skip it
-            /*
             if ( _.isFunction( this.collectionType ) && this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
                 console.log('this.collectionType', this.collectionType);
+                //this.collectionType = new this.collectionType;
                 this.collectionType = _.result( this, 'collectionType' );
             }
             if ( _.isString( this.collectionType ) ) {
@@ -90,7 +90,6 @@ console.log('relational-models this', Object.keys(this));
             if ( this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
                 throw new Error( '`collectionType` must inherit from Backbone.Collection' );
             }
-            */
 
             var related = this.findRelated( opts );
             this.setRelated( related );
@@ -102,11 +101,15 @@ console.log('relational-models this', Object.keys(this));
 
             options = _.defaults( { parse: this.options.parse }, options );
 
-
+            console.log('this.keyContents', this.keyContents);
+            // ADDED Inheritance broken by webpack, check if object instead of function
             // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
+            //if ( typeof this.keyContents == 'object') {
             if ( this.keyContents instanceof Backbone.Collection ) {
-                    this._prepareCollection( this.keyContents );
-                    related = this.keyContents;
+
+                this._prepareCollection( this.keyContents );
+                related = this.keyContents;
+
             }
             // Otherwise, 'this.keyContents' should be an array of related object ids.
             // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
@@ -131,11 +134,12 @@ console.log('relational-models this', Object.keys(this));
                                     );
 
                                     // ADDED Add model to initializeCollection
-                                    var initializeCollection = this.options.initializeCollection
+                                    var initializeCollection = this.options.initializeCollection;
                                     if ( _.isString( initializeCollection ) ) {
                                             initializeCollection = Portal[initializeCollection];
                                     }
-                                    if (initializeCollection instanceof Backbone.Collection) {
+                                    //if (initializeCollection instanceof Backbone.Collection) {
+                                    if (typeof initializeCollection == 'object') {
                                             initializeCollection.add(model);
                                     }
 
