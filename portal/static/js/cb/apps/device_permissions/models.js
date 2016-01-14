@@ -73,8 +73,8 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             key: 'deviceInstall',
             keySource: 'device_install',
             keyDestination: 'device_install',
-            relatedModel: Portal.DeviceInstall,
-            collectionType: Portal.DeviceInstallCollection,
+            relatedModel: 'DeviceInstall',
+            collectionType: 'DeviceInstallCollection',
             createModels: true,
             includeInJSON: 'resource_uri',
             initializeCollection: 'deviceInstallCollection',
@@ -83,7 +83,7 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
                 key: 'appPermissions',
                 keySource: 'app_permissions',
                 keyDestination: 'app_permissions',
-                collectionType: Portal.AppDevicePermissionCollection,
+                collectionType: 'AppDevicePermissionCollection',
                 includeInJSON: false,
                 initializeCollection: 'appDevicePermissionCollection'
             }

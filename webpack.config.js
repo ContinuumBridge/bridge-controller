@@ -1,4 +1,5 @@
 
+var nodemon = require('nodemon');
 var path = require('path');
 var webpack = require("webpack");
 
@@ -75,3 +76,21 @@ module.exports = {
         poll: true
     }
 };
+
+// Start the server
+nodemon({
+    ignore: ['portal/*', 'build/*'],
+    script: './nodejs/index.js',
+    execMap: {
+        js: 'node'
+    },
+    ext: 'js json'
+});
+
+nodemon.on('start', function () {
+    console.log('Node server has started');
+}).on('quit', function () {
+    console.log('Node server has quit');
+}).on('restart', function (files) {
+    console.log('Node server restarted due to: ', files);
+});

@@ -71122,6 +71122,8 @@
 	var React = __webpack_require__(223);
 	
 	var ListItem = __webpack_require__(378);
+	var Panel = __webpack_require__(400).Panel;
+	var PanelGroup = __webpack_require__(400).PanelGroup;
 	
 	Portal.InnerItemView = {
 	
@@ -71214,6 +71216,88 @@
 	    },
 	    */
 	
+	    renderButton: function renderButton(button) {
+	
+	        var onClick = button.onClick || function () {};
+	
+	        switch (button.type) {
+	            case 'delete':
+	                return React.createElement('i', { className: 'icon ion-trash-a icon-trash item-icon-button', onClick: onClick });
+	                break;
+	            case 'text':
+	                var label = button.label || "";
+	                var disabled = button.disabled ? "disabled" : "";
+	                var buttonClass = "btn btn-default " + disabled;
+	                return React.createElement(
+	                    'button',
+	                    { className: buttonClass, disabled: disabled, onClick: onClick },
+	                    label
+	                );
+	                break;
+	            default:
+	                console.log('Unrecognised button', button);
+	                return;
+	        }
+	    },
+	
+	    renderHeader: function renderHeader() {
+	
+	        var title = this.props.title;
+	
+	        var renderedTitle = React.isValidElement(title) ? title : React.createElement(
+	            'div',
+	            { className: 'inner-item-title' },
+	            title
+	        );
+	
+	        var subtitle = this.props.subtitle;
+	        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle : React.createElement(
+	            'div',
+	            { className: 'inner-item-subtitle' },
+	            subtitle
+	        );
+	
+	        // Render custom buttons
+	        var renderedButtons = this.props.renderButtons;
+	        var renderedButtons = renderedButtons ? renderedButtons() : "";
+	
+	        var buttons = this.props.buttons || [];
+	
+	        /*
+	        return (
+	            <div>
+	                Test Header
+	            </div>
+	        )
+	        <div className="panel-heading item-heading">
+	        */
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement('i', { className: 'icon ion-chevron-right item-anchor' }),
+	            React.createElement(
+	                'h4',
+	                { className: 'item-title' },
+	                renderedTitle
+	            ),
+	            React.createElement(
+	                'h4',
+	                { className: 'item-subtitle' },
+	                React.createElement(
+	                    'small',
+	                    null,
+	                    renderedSubtitle
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'item-buttons' },
+	                buttons.map(this.renderButton),
+	                renderedButtons
+	            )
+	        );
+	    },
+	
 	    render: function render() {
 	        //console.log('ItemView props', this.props);
 	        var model = this.props.model;
@@ -71222,13 +71306,24 @@
 	        var buttons = this.state.buttons || [];
 	        var className = this.props.className;
 	        return React.createElement(
-	            ListItem,
-	            { title: this.props.title, subtitle: this.props.subtitle,
-	                buttons: buttons, renderButtons: this.renderButtons,
-	                className: className, bsStyle: '',
-	                collapsible: this.props.openable, eventKey: '1' },
-	            body
-	        );
+	            PanelGroup /*defaultActiveKey="1"*/,
+	            { accordion: true },
+	            React.createElement(
+	                Panel,
+	                { className: 'item', header: this.renderHeader(), eventKey: '1' },
+	                body
+	            )
+	        )
+	        /*
+	        <Panel header={this.props.title} eventKey="1">
+	        <ListItem title={this.props.title} subtitle={this.props.subtitle}
+	            buttons={buttons} renderButtons={this.renderButtons}
+	            className={className} bsStyle=''
+	            collapsible={this.props.openable} eventKey="1">
+	            {body}
+	        </ListItem>
+	        */
+	        ;
 	    }
 	};
 	
@@ -77301,6 +77396,7 @@
 	router.setQuery = function (query) {
 	
 	    var route = Portal.route;
+	    console.log('setQuery', query);
 	    Portal.router.transitionTo(route.pathname, route.params, _.defaults(query, route.query));
 	};
 	
@@ -80367,8 +80463,8 @@
 	        //Portal.mainView = this;
 	        //mainView = this;
 	        var activeSection = this.getParams().section;
-	        console.log('mainView getParams()', this.getParams());
-	        console.log('mainView params', this.props.params);
+	        //console.log('mainView getParams()', this.getParams());
+	        //console.log('mainView params', this.props.params);
 	        //console.log('mainView model', this.getModel());
 	        var path = this.props.path;
 	
@@ -80412,6 +80508,8 @@
 	var Backbone = __webpack_require__(4);
 	var React = __webpack_require__(223);
 	var Router = __webpack_require__(460);
+	var DropdownButton = __webpack_require__(400).DropdownButton;
+	var MenuItem = __webpack_require__(400).MenuItem;
 	
 	module.exports.Topbar = React.createClass({
 	    displayName: 'Topbar',
@@ -80500,6 +80598,55 @@
 	
 	    createItem: function createItem(bridge) {
 	
+	        return(
+	            /*
+	            <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
+	            */
+	            React.createElement(
+	                'li',
+	                { key: bridge.id },
+	                React.createElement(
+	                    'a',
+	                    { 'data-tag': bridge.id, onClick: this.bridgeClick },
+	                    bridge.name
+	                )
+	            )
+	        );
+	    },
+	
+	    render: function render() {
+	
+	        var currentBridge = Portal.getCurrentBridge();
+	        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
+	        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
+	
+	        //var bridgeCollection = this.props.collection.without(currentBridge);
+	        return React.createElement(
+	            DropdownButton,
+	            { bsStyle: 'link', className: 'bridge-dropdown-header', title: bridgeName, key: 'bridge-dropdown', id: 'bridge-header' },
+	            this.props.collection.map(this.createItem)
+	        )
+	        /*
+	        <li className="dropdown">
+	            <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
+	                <div className="header-text">Test {bridgeName}</div><b className="caret"></b>
+	            </a>
+	            <ul className="dropdown-menu">
+	                {this.props.collection.map(this.createItem)}
+	            </ul>
+	        </li>
+	         */
+	        ;
+	    }
+	});
+	
+	var AccountList = React.createClass({
+	    displayName: 'AccountList',
+	
+	    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+	
+	    createItem: function createItem(bridge) {
+	
 	        return React.createElement(
 	            'li',
 	            { key: bridge.id },
@@ -80513,82 +80660,49 @@
 	
 	    render: function render() {
 	
-	        var currentBridge = Portal.getCurrentBridge();
-	        var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
-	        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
-	
-	        //var bridgeCollection = this.props.collection.without(currentBridge);
-	        return React.createElement(
-	            'li',
-	            { className: 'dropdown' },
-	            React.createElement(
-	                'a',
-	                { href: '#', id: 'bridge-header', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
-	                React.createElement(
-	                    'div',
-	                    { className: 'header-text' },
-	                    bridgeName
-	                ),
-	                React.createElement('b', { className: 'caret' })
-	            ),
-	            React.createElement(
-	                'ul',
-	                { className: 'dropdown-menu' },
-	                this.props.collection.map(this.createItem)
-	            )
-	        );
-	    }
-	});
-	
-	var AccountList = React.createClass({
-	    displayName: 'AccountList',
-	
-	    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
-	
-	    render: function render() {
-	
 	        var firstName = Portal.currentUser.get('first_name');
 	        var lastName = Portal.currentUser.get('last_name');
+	        var fullName = firstName + " " + lastName;
 	
 	        return React.createElement(
-	            'li',
-	            { id: 'account-dropdown', className: 'dropdown' },
+	            DropdownButton,
+	            { bsStyle: 'link', className: 'bridge-dropdown-header', title: fullName, key: 'account-dropdown', id: 'account-header' },
 	            React.createElement(
-	                'a',
-	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
-	                React.createElement(
-	                    'div',
-	                    { className: 'header-text' },
-	                    firstName,
-	                    ' ',
-	                    lastName
-	                ),
-	                React.createElement('b', { className: 'caret' })
+	                Tab,
+	                { to: 'account' },
+	                'My Account'
 	            ),
 	            React.createElement(
-	                'ul',
-	                { className: 'dropdown-menu' },
+	                Tab,
+	                { to: 'developer' },
+	                'Developer'
+	            ),
+	            React.createElement(
+	                'li',
+	                { name: 'logout' },
 	                React.createElement(
-	                    Tab,
-	                    { to: 'account' },
-	                    'My Account'
-	                ),
-	                React.createElement(
-	                    Tab,
-	                    { to: 'developer' },
-	                    'Developer'
-	                ),
-	                React.createElement(
-	                    'li',
-	                    { name: 'logout' },
-	                    React.createElement(
-	                        'a',
-	                        { href: '/accounts/logout/' },
-	                        'Logout'
-	                    )
+	                    'a',
+	                    { href: '/accounts/logout/' },
+	                    'Logout'
 	                )
 	            )
-	        );
+	        )
+	        /*
+	        <li id="account-dropdown" className="dropdown">
+	            <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+	                <div className="header-text">{firstName} {lastName}</div>
+	                <b className="caret"></b>
+	            </a>
+	            <ul className="dropdown-menu">
+	                <Tab to="account">My Account</Tab>
+	                <Tab to="developer">Developer</Tab>
+	                <li name="logout">
+	                    <a href="/accounts/logout/">Logout</a>
+	                </li>
+	            </ul>
+	        </li>
+	        */
+	        ;
 	    }
 	});
 	
@@ -83480,7 +83594,6 @@
 	__webpack_require__(544);
 	__webpack_require__(545);
 	__webpack_require__(546);
-	__webpack_require__(557);
 	__webpack_require__(547);
 	__webpack_require__(548);
 	__webpack_require__(549);
@@ -83489,9 +83602,10 @@
 	__webpack_require__(552);
 	__webpack_require__(553);
 	__webpack_require__(554);
-	
 	__webpack_require__(555);
+	
 	__webpack_require__(556);
+	__webpack_require__(557);
 	
 	//Portal.addInitializer(function () {
 	Portal.on('initialize:before', function () {
@@ -84265,8 +84379,8 @@
 	        key: 'deviceInstall',
 	        keySource: 'device_install',
 	        keyDestination: 'device_install',
-	        relatedModel: Portal.DeviceInstall,
-	        collectionType: Portal.DeviceInstallCollection,
+	        relatedModel: 'DeviceInstall',
+	        collectionType: 'DeviceInstallCollection',
 	        createModels: true,
 	        includeInJSON: 'resource_uri',
 	        initializeCollection: 'deviceInstallCollection',
@@ -84275,7 +84389,7 @@
 	            key: 'appPermissions',
 	            keySource: 'app_permissions',
 	            keyDestination: 'app_permissions',
-	            collectionType: Portal.AppDevicePermissionCollection,
+	            collectionType: 'AppDevicePermissionCollection',
 	            includeInJSON: false,
 	            initializeCollection: 'appDevicePermissionCollection'
 	        }
@@ -84328,8 +84442,8 @@
 	var Backbone = __webpack_require__(4);
 	var Q = __webpack_require__(65);
 	
-	var BridgeControl = __webpack_require__(557).BridgeControl;
-	var BridgeControlCollection = __webpack_require__(557).BridgeControlCollection;
+	var BridgeControl = __webpack_require__(547).BridgeControl;
+	var BridgeControlCollection = __webpack_require__(547).BridgeControlCollection;
 	
 	Portal.Bridge = Backbone.Deferred.Model.extend({
 	
@@ -84338,15 +84452,12 @@
 	    initialize: function initialize() {
 	
 	        var self = this;
-	        /*
-	        this.on('all', function(event, payload) {
-	            console.log('Bridge event ', event, payload);
-	        });
-	        */
 	
-	        this.listenTo(this, 'all', function (name) {
+	        /*
+	        this.listenTo(this, 'all', function(name) {
 	            console.log('EVENT bridge', name);
 	        });
+	        */
 	
 	        this.listenTo(this.get('appInstalls'), 'all', function (name) {
 	            //console.log('EVENT currentBridge appInstalls', name);
@@ -84515,6 +84626,62 @@
 	'use strict';
 	
 	var Backbone = __webpack_require__(4);
+	var Q = __webpack_require__(65);
+	
+	Portal.BridgeControl = Backbone.RelationalModel.extend({
+	
+	    idAttribute: 'id',
+	
+	    initialize: function initialize() {},
+	
+	    relations: [{
+	        type: Backbone.HasOne,
+	        key: 'bridge',
+	        keySource: 'bridge',
+	        keyDestination: 'bridge',
+	        relatedModel: 'Bridge',
+	        collectionType: 'BridgeCollection',
+	        createModels: true,
+	        initializeCollection: 'bridgeCollection',
+	        includeInJSON: true
+	    }, {
+	        type: Backbone.HasOne,
+	        key: 'user',
+	        keySource: 'user',
+	        keyDestination: 'user',
+	        relatedModel: 'User',
+	        collectionType: 'UserCollection',
+	        createModels: true,
+	        includeInJSON: true,
+	        initializeCollection: 'userCollection'
+	    }]
+	});
+	
+	Backbone.Relational.store.addModelScope({ BridgeControl: Portal.BridgeControl });
+	
+	Portal.BridgeControlCollection = Backbone.Collection.extend({
+	
+	    model: Portal.BridgeControl,
+	    backend: 'bridgeControl',
+	
+	    initialize: function initialize() {
+	        this.bindBackend();
+	    },
+	
+	    parse: function parse(response) {
+	        return response.objects;
+	    }
+	}, { modelType: "bridgeControl" });
+	
+	Backbone.Relational.store.addModelScope({ BridgeControlCollection: Portal.BridgeControlCollection });
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Backbone = __webpack_require__(4);
 	
 	Portal.Client = Backbone.Deferred.Model.extend({
 	
@@ -84555,7 +84722,7 @@
 	Backbone.Relational.store.addModelScope({ ClientCollection: Portal.ClientCollection });
 
 /***/ },
-/* 548 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84608,7 +84775,7 @@
 	Backbone.Relational.store.addModelScope({ ClientControlCollection: Portal.ClientControlCollection });
 
 /***/ },
-/* 549 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84669,7 +84836,7 @@
 	});
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84816,7 +84983,7 @@
 	Backbone.Relational.store.addModelScope({ DiscoveredDeviceCollection: Portal.DiscoveredDeviceCollection });
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84959,7 +85126,7 @@
 	Backbone.Relational.store.addModelScope({ DeviceInstallCollection: Portal.DeviceInstallCollection });
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -85025,7 +85192,7 @@
 	});
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -85143,12 +85310,12 @@
 	});
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(553);
+	__webpack_require__(554);
 	
 	Portal.CurrentUser = Portal.User.extend({
 	
@@ -85186,7 +85353,7 @@
 	});
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -85308,7 +85475,7 @@
 	};
 
 /***/ },
-/* 556 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -85359,62 +85526,6 @@
 	Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 	
 	Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
-
-/***/ },
-/* 557 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Backbone = __webpack_require__(4);
-	var Q = __webpack_require__(65);
-	
-	Portal.BridgeControl = Backbone.RelationalModel.extend({
-	
-	    idAttribute: 'id',
-	
-	    initialize: function initialize() {},
-	
-	    relations: [{
-	        type: Backbone.HasOne,
-	        key: 'bridge',
-	        keySource: 'bridge',
-	        keyDestination: 'bridge',
-	        relatedModel: 'Bridge',
-	        collectionType: 'BridgeCollection',
-	        createModels: true,
-	        initializeCollection: 'bridgeCollection',
-	        includeInJSON: true
-	    }, {
-	        type: Backbone.HasOne,
-	        key: 'user',
-	        keySource: 'user',
-	        keyDestination: 'user',
-	        relatedModel: 'User',
-	        collectionType: 'UserCollection',
-	        createModels: true,
-	        includeInJSON: true,
-	        initializeCollection: 'userCollection'
-	    }]
-	});
-	
-	Backbone.Relational.store.addModelScope({ BridgeControl: Portal.BridgeControl });
-	
-	Portal.BridgeControlCollection = Backbone.Collection.extend({
-	
-	    model: Portal.BridgeControl,
-	    backend: 'bridgeControl',
-	
-	    initialize: function initialize() {
-	        this.bindBackend();
-	    },
-	
-	    parse: function parse(response) {
-	        return response.objects;
-	    }
-	}, { modelType: "bridgeControl" });
-	
-	Backbone.Relational.store.addModelScope({ BridgeControlCollection: Portal.BridgeControlCollection });
 
 /***/ }
 /******/ ]);

@@ -39,6 +39,7 @@ var router = Router.create({
 router.setQuery = function(query) {
 
     var route = Portal.route;
+    console.log('setQuery', query);
     Portal.router.transitionTo(route.pathname, route.params,
         _.defaults(query, route.query));
 }

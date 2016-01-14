@@ -120,7 +120,7 @@ Portal.addInitializer(function () {
       console.log('new state ', state);
       var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
-      if(currentBridge) currentBridge.fetch();
+      if (currentBridge) currentBridge.fetch();
       //var apps = Portal.appCollection;
       console.log('router currentBridge', currentBridge);
       var models = {

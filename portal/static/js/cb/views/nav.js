@@ -2,6 +2,8 @@
 var Backbone = require('backbone-bundle');
 var React = require('react');
 var Router = require('react-router');
+var DropdownButton = require('react-bootstrap').DropdownButton;
+var MenuItem = require('react-bootstrap').MenuItem;
 
 module.exports.Topbar = React.createClass({
 
@@ -54,6 +56,9 @@ var BridgeList = React.createClass({
     createItem: function(bridge) {
 
         return (
+            /*
+            <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
+            */
             <li key={bridge.id}>
                 <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.name}</a>
             </li>
@@ -68,14 +73,19 @@ var BridgeList = React.createClass({
 
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
+            <DropdownButton bsStyle="link" className="bridge-dropdown-header" title={bridgeName} key="bridge-dropdown" id="bridge-header">
+                {this.props.collection.map(this.createItem)}
+            </DropdownButton>
+            /*
             <li className="dropdown">
                 <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
-                    <div className="header-text">{bridgeName}</div><b className="caret"></b>
+                    <div className="header-text">Test {bridgeName}</div><b className="caret"></b>
                 </a>
                 <ul className="dropdown-menu">
                     {this.props.collection.map(this.createItem)}
                 </ul>
             </li>
+             */
         )
     }
 });
@@ -84,12 +94,30 @@ var AccountList = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
 
+    createItem: function(bridge) {
+
+        return (
+            <li key={bridge.id}>
+                <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.name}</a>
+            </li>
+        );
+    },
+
     render: function () {
 
         var firstName = Portal.currentUser.get('first_name');
         var lastName = Portal.currentUser.get('last_name');
+        var fullName = firstName + " " + lastName;
 
         return (
+            <DropdownButton bsStyle="link" className="bridge-dropdown-header" title={fullName} key="account-dropdown" id="account-header">
+                <Tab to="account">My Account</Tab>
+                <Tab to="developer">Developer</Tab>
+                <li name="logout">
+                    <a href="/accounts/logout/">Logout</a>
+                </li>
+            </DropdownButton>
+            /*
             <li id="account-dropdown" className="dropdown">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                     <div className="header-text">{firstName} {lastName}</div>
@@ -103,6 +131,7 @@ var AccountList = React.createClass({
                     </li>
                 </ul>
             </li>
+            */
         )
     }
 })

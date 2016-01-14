@@ -2,6 +2,8 @@
 var React = require('react');
 
 var ListItem = require('../components/bootstrap/ListItem.jsx');
+var Panel = require('react-bootstrap').Panel;
+var PanelGroup = require('react-bootstrap').PanelGroup;
 
 Portal.InnerItemView = {
 
@@ -91,6 +93,72 @@ Portal.ItemView = {
     },
     */
 
+    renderButton: function(button) {
+
+        var onClick = button.onClick || function() {};
+
+        switch(button.type) {
+            case 'delete':
+                return <i className="icon ion-trash-a icon-trash item-icon-button" onClick={onClick}/>
+                break;
+            case 'text':
+                var label = button.label || "";
+                var disabled = button.disabled ? "disabled" : "";
+                var buttonClass = "btn btn-default " + disabled;
+                return (
+                    <button className={buttonClass} disabled={disabled} onClick={onClick}>
+                        {label}
+                    </button>
+                )
+                break;
+            default:
+                console.log('Unrecognised button', button);
+                return;
+        }
+    },
+
+    renderHeader: function() {
+
+        var title = this.props.title;
+
+        var renderedTitle = React.isValidElement(title) ? title
+            : <div className="inner-item-title">{title}</div>;
+
+        var subtitle = this.props.subtitle;
+        var renderedSubtitle = React.isValidElement(subtitle) ? subtitle
+            : <div className="inner-item-subtitle">{subtitle}</div>;
+
+        // Render custom buttons
+        var renderedButtons = this.props.renderButtons;
+        var renderedButtons = renderedButtons ? renderedButtons() : "";
+
+        var buttons = this.props.buttons || [];
+
+        /*
+        return (
+            <div>
+                Test Header
+            </div>
+        )
+        <div className="panel-heading item-heading">
+        */
+        return (
+            <div>
+                <i className="icon ion-chevron-right item-anchor" />
+                <h4 className="item-title">{renderedTitle}</h4>
+                <h4 className="item-subtitle">
+                    <small>
+                        {renderedSubtitle}
+                    </small>
+                </h4>
+                <div className="item-buttons">
+                    {buttons.map(this.renderButton)}
+                    {renderedButtons}
+                </div>
+            </div>
+        )
+    },
+
     render: function() {
         //console.log('ItemView props', this.props);
         var model = this.props.model;
@@ -99,12 +167,20 @@ Portal.ItemView = {
         var buttons = this.state.buttons || [];
         var className = this.props.className;
         return (
+            <PanelGroup /*defaultActiveKey="1"*/ accordion>
+                <Panel className="item" header={this.renderHeader()} eventKey="1">
+                    {body}
+                </Panel>
+            </PanelGroup>
+            /*
+            <Panel header={this.props.title} eventKey="1">
             <ListItem title={this.props.title} subtitle={this.props.subtitle}
                 buttons={buttons} renderButtons={this.renderButtons}
                 className={className} bsStyle=''
                 collapsible={this.props.openable} eventKey="1">
                 {body}
             </ListItem>
+            */
         );
     }
 };

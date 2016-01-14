@@ -91,17 +91,18 @@ header p{
   color:rgba(255,255,255,.6);
 }
 
-.item-heading {
+.item > .panel-heading {
     padding: 0 0px 0px 15px;
     height: 38px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    background-color: white;
 }
 
 .item-title {
-    margin: 0px;
     /*
+    margin: 0px;
     float: left;
     margin-top: 4px;
     margin-bottom: 5px;
@@ -131,7 +132,7 @@ header p{
     position: relative;
     float: left;
     right: 14px;
-    top: 0.5px;
+    top: 16.5px;
     font-size: 15px;
     cursor: pointer;
 }
