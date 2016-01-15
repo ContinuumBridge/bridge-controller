@@ -12,7 +12,8 @@ module.exports = React.createClass({
     render: function () {
         //Portal.mainView = this;
         //mainView = this;
-        var activeSection = this.getParams().section;
+        //var activeSection = this.getParams().section;
+        var activeSection = this.props.params.section;
         //console.log('mainView getParams()', this.getParams());
         //console.log('mainView params', this.props.params);
         //console.log('mainView model', this.getModel());

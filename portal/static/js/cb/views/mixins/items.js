@@ -1,7 +1,7 @@
 
 var React = require('react');
 
-var ListItem = require('../components/bootstrap/ListItem.jsx');
+//var ListItem = require('../components/bootstrap/ListItem.jsx');
 var Panel = require('react-bootstrap').Panel;
 var PanelGroup = require('react-bootstrap').PanelGroup;
 

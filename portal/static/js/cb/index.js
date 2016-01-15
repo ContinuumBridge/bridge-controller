@@ -4,6 +4,9 @@ import global from 'global-object';
 //import Backbone from 'backbone-bundle';
 var Backbone = require('backbone-bundle');
 var React = require('react');
+var ReactDOM = require('react-dom');
+var Router = require('react-router').Router;
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 //console.log('index Object.keys(Backbone)', Object.keys(Backbone));
 //var Dispatcher = require('flux-dispatcher');
 //global.Backbone = Backbone;
@@ -113,6 +116,23 @@ Portal.addInitializer(function () {
 
   Portal.appCollection.fetch();
 
+  var routes = require('./routes');
+
+  //ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'));
+
+  function createElement(Component, props) {
+      console.log('createElement props', props);
+      // make sure you pass all the props in!
+      //return <Component {...props} ds={ds} />
+      return <Component {...props} />
+  }
+
+  ReactDOM.render(<Router history={createBrowserHistory()} createElement={createElement} >
+          {routes}
+      </Router>,
+      document.getElementById('app')
+  );
+  /*
   Portal.router = require('./router');
 
   Portal.router.run(function (Handler, state) {
@@ -143,15 +163,10 @@ Portal.addInitializer(function () {
           document.getElementById('app')
       );
 
-      /*
-      Portal.mainView = React.render(
-          <Handler params={params} key={currentBridge.get('id')} model={currentBridge} />,
-          document.getElementById('app')
-      );
-      */
       //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
       //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
   });
+    */
 });
 
 module.exports = Portal;

@@ -67,7 +67,7 @@ Backbone.QueryEngine = require('./query-engine/query-engine-bundle.js');
 
 //Backbone.QueryCollection = QueryEngine.QueryCollection;
 
-require('backbone-react-component-cb');
+require('backbone-react-component');
 //require('./backbone-react-component');
 //require('imports?root=>{}!backbone-react-component');
 
