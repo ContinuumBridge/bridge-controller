@@ -24,7 +24,7 @@ var routes = (
     <Route component={MainView} path="/">
         <IndexRoute handler={HomeView} />
         <Route path="account" component={AccountView} />
-        <Route path="config/?:action?/?:item?" component={ConfigView} />
+        <Route path="config(/:action)(/:item)" component={ConfigView} />
         <Route path="dashboard" component={DashboardView} />
         <Route path="developer" component={DeveloperView} />
         <Route path="market" component={MarketView} />
@@ -33,28 +33,12 @@ var routes = (
 );
 
 /*
+ <Route path="config/?:action?/?:item?" component={ConfigView} />
 var router = Router.create({
     routes: routes,
     location: Router.HistoryLocation
 });
 
-router.setQuery = function(query) {
-
-    var route = Portal.route;
-    console.log('setQuery', query);
-    Portal.router.transitionTo(route.pathname, route.params,
-        _.defaults(query, route.query));
-}
-
-router.setParams = function(params) {
-
-    var route = Portal.route;
-    // Remove any extra slashes in the pathname
-    var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*//*);
-    //                                            ADDED /* ^^
-    console.log('pathnameMatch ', pathnameMatch );
-    Portal.router.transitionTo(pathnameMatch[1], params, route.query);
-}
 */
 
 module.exports = routes;

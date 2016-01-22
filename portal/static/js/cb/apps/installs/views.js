@@ -1,5 +1,6 @@
 
 var React = require('react');
+var History = require('react-router').History;
 
 require('../device_permissions/views');
 
@@ -18,7 +19,7 @@ Portal.AppInstallView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            openable: true
+            collapsible: true
         };
     },
 
@@ -61,7 +62,7 @@ Portal.AppInstallListView = React.createClass({
 
     itemView: Portal.AppInstallView,
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    mixins: [Backbone.React.Component.mixin, Portal.ListView, History],
 
     getInitialState: function () {
         return {
@@ -75,7 +76,8 @@ Portal.AppInstallListView = React.createClass({
     },
 
     installApps: function() {
-        Portal.router.setParams({action: 'install-app'});
+        //Portal.router.setParams({action: 'install-app'});
+        this.history.pushState(null, `/config/install-app`);
     },
 
     renderItem: function (item) {

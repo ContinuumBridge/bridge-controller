@@ -45,6 +45,7 @@ header {
       .navbar.navbar-inverse.navbar-static-top .container {
         margin-top: 0;
         margin-bottom: 0; }
+    .navbar.navbar-inverse .nav > .dropdown > .dropdown-toggle,
     .navbar.navbar-inverse .nav > li > a {
       font-size: 15px;
       font-weight: bold;
@@ -58,6 +59,9 @@ header {
       transition: all .2s linear;
       padding: 10px 15px 10px;
       text-decoration: none; }
+      .navbar.navbar-inverse .nav > .dropdown > .dropdown-toggle:hover,
+      .navbar.navbar-inverse .nav > .dropdown > .dropdown-toggle.active,
+      .navbar.navbar-inverse .nav > .dropdown > .dropdown-toggle:active,
       .navbar.navbar-inverse .nav > li > a:hover,
       .navbar.navbar-inverse .nav > li > a.active,
       .navbar.navbar-inverse .nav > li > a:active {
@@ -100,7 +104,7 @@ header {
       position: relative;
       float: left;
       top: 9px;
-      left: 3px;
+      left: -3px;
     }
     .navbar .container .collapse .nav .dropdown .dropdown-menu {
       background: #252528;

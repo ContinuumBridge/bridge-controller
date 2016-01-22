@@ -45,7 +45,7 @@ Portal.MessageListView = React.createClass({
     },
 
     commandSubmit: function() {
-        var command = this.refs.command.getDOMNode().value;
+        var command = this.refs.command.value;
         this.sendCommand(command);
         this.setState({command: ''});
     },
@@ -62,12 +62,17 @@ Portal.MessageListView = React.createClass({
 
     renderMessage: function(message) {
 
-        var direction = message.direction == 'outbound' ? '<=' : '=>';
-        var remote = message.direction == 'outbound' ? message.destination : message.source;
+        var direction = message.get('direction');
+        var directionSymbol = direction == 'outbound' ? '<=' : '=>';
+        var remote = direction == 'outbound' ? message.destination : message.source;
+
+        var body = message.get('body');
+        var content = body.status || body.command;
+
         return (
-            <tr key={message.cid}>
-                <td className="shrink">{remote} {direction}</td>
-                <td className="expand">{message.body}</td>
+            <tr key={message.get('cid')}>
+                <td className="shrink">{remote} {directionSymbol}</td>
+                <td className="expand">{content}</td>
             </tr>
         )
     },
@@ -76,7 +81,7 @@ Portal.MessageListView = React.createClass({
 
         var label = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         return (
-            <div className="topcoat-button-bar__item">
+            <div key={name} className="topcoat-button-bar__item">
                 <button data-tag={name} className="topcoat-button-bar__button" onClick={this.onButtonClick} >{label}</button>
             </div>
         )
@@ -100,7 +105,7 @@ Portal.MessageListView = React.createClass({
     componentDidUpdate: function() {
         if (this.shouldScrollBottom) {
             // Scroll the message window to its bottom
-            var messagesWrapper = this.refs.messagesWrapper.getDOMNode();
+            var messagesWrapper = this.refs.messagesWrapper;
             messagesWrapper.scrollTop = messagesWrapper.scrollHeight
         }
     },
@@ -111,6 +116,9 @@ Portal.MessageListView = React.createClass({
 
         var topButtons = this.props.buttons.slice(0, 5);
         var bottomButtons = this.props.buttons.slice(5);
+
+        console.log('MessageListView this.props.collection', this.props.collection);
+        console.log('MessageListView command ', command );
 
         return (
             <div id="messages">

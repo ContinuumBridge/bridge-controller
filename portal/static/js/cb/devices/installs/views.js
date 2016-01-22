@@ -8,7 +8,7 @@ Portal.DeviceInstallView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            openable: true
+            collapsible: false
         };
     },
 

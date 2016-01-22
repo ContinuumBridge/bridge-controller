@@ -6,7 +6,8 @@ var Backbone = require('backbone-bundle');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+//import createBrowserHistory from 'history/lib/createBrowserHistory'
+import history from './history';
 //console.log('index Object.keys(Backbone)', Object.keys(Backbone));
 //var Dispatcher = require('flux-dispatcher');
 //global.Backbone = Backbone;
@@ -20,6 +21,7 @@ var cbidTypes = {
 }
 
 var Portal = global.Portal = new CBApp();
+require('./router');
 Portal.dispatcher = require('flux-dispatcher');
 //Portal.dispatcher = new Dispatcher();
 Portal.setupCBIDTypes(cbidTypes);
@@ -120,25 +122,13 @@ Portal.addInitializer(function () {
 
   //ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'));
 
+  history.listen(function(location) {
+      console.log('history listen location', location);
+      Portal.route = location;
+  });
+
   function createElement(Component, props) {
       console.log('createElement props', props);
-      // make sure you pass all the props in!
-      //return <Component {...props} ds={ds} />
-      return <Component {...props} />
-  }
-
-  ReactDOM.render(<Router history={createBrowserHistory()} createElement={createElement} >
-          {routes}
-      </Router>,
-      document.getElementById('app')
-  );
-  /*
-  Portal.router = require('./router');
-
-  Portal.router.run(function (Handler, state) {
-      Portal.route = state;
-      console.log('new state ', state);
-      var params = state.params;
       var currentBridge = Portal.getCurrentBridge();
       if (currentBridge) currentBridge.fetch();
       //var apps = Portal.appCollection;
@@ -154,6 +144,25 @@ Portal.addInitializer(function () {
       }
 
       var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
+
+      // make sure you pass all the props in!
+      //return <Component {...props} ds={ds} />
+      return <Component key={currentBridgeID} collections={collections}
+                        models={models} {...props} />
+  }
+
+  ReactDOM.render(<Router history={history} createElement={createElement} >
+          {routes}
+      </Router>,
+      document.getElementById('app')
+  );
+  /*
+  Portal.router = require('./router');
+
+  Portal.router.run(function (Handler, state) {
+      Portal.route = state;
+      console.log('new state ', state);
+      var params = state.params;
 
       React.render(
           <BaseView params={params} handler={Handler}

@@ -2,6 +2,8 @@
 var Q = require('q');
 var React = require('react');
 var Router = require('react-router');
+var Modal = require('react-bootstrap').Modal;
+var Button = require('react-bootstrap').Button;
 
 require('../../views/generic-views');
 require('../../views/regions');
@@ -84,8 +86,10 @@ module.exports.Main = React.createClass({
         );
         */
 
-        var action = this.getParams().action;
-        var itemID = this.getParams().item;
+        //var action = this.getParams().action;
+        //var itemID = this.getParams().item;
+        var action = this.props.params.action;
+        var itemID = this.props.params.item;
         console.log('renderModals params', action);
         switch (action) {
             case "install-app":
@@ -106,6 +110,7 @@ module.exports.Main = React.createClass({
     render: function() {
 
         var currentBridge = Portal.getCurrentBridge();
+        //var currentBridge = Portal.bridgeCollection.get({id: 2});
 
         if (!currentBridge) {
             return (
@@ -128,7 +133,8 @@ module.exports.Main = React.createClass({
             });
 
         var deviceView;
-        if (this.getParams().action == 'discover-devices') {
+        //if (this.getParams().action == 'discover-devices') {
+        if (this.props.params.action == 'discover-devices') {
             var discoveredDevices = currentBridge.get('discoveredDevices');
             deviceView = <Portal.DiscoveredDeviceListView key={currentBridge.cid}
                 rescan={this.discoverDevicesRescan} stopDiscoveringDevices={this.stopDiscoveringDevices}
@@ -201,21 +207,21 @@ var InstallDeviceModal = React.createClass({
 
 
         return (
-            <React.Modal show={true} onHide={function(){}}
+            <Modal show={true} onHide={function(){}}
                 container={this.props.container} animation={false}>
-                <React.Modal.Header closeButton>
-                    <React.Modal.Title>{title}</React.Modal.Title>
-                </React.Modal.Header>
-                <React.Modal.Body>
+                <Modal.Header closeButton>
+                    <Modal.Title>{title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <div>Type a name to help you remember this device ie. Kitchen Thermometer</div>
                     <br/>
                     <input type="text" value={friendlyName} onChange={this.handleFriendlyName} />
-                </React.Modal.Body>
-                <React.Modal.Footer>
-                    <React.Button onClick={this.cancelInstall}>Close</React.Button>
-                    <React.Button onClick={this.installDevice}>Install</React.Button>
-                </React.Modal.Footer>
-            </ React.Modal>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.cancelInstall}>Close</Button>
+                    <Button onClick={this.installDevice}>Install</Button>
+                </Modal.Footer>
+            </ Modal>
         )
     }
 });
@@ -248,19 +254,19 @@ var InstallAppModal = React.createClass({
         console.log('render InstallAppModal');
 
         return (
-            <React.Modal show={true} onHide={function(){}}
+            <Modal show={true} onHide={function(){}}
                 container={this.props.container} animation={false}>
-                <React.Modal.Header>
-                    <React.Modal.Title></React.Modal.Title>
-                </React.Modal.Header>
-                <React.Modal.Body>
+                <Modal.Header>
+                    <Modal.Title></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <Portal.AppLicenceTableView collection={licenceCollection} bridge={bridge} />
-                </React.Modal.Body>
-                <React.Modal.Footer>
-                    <React.Button onClick={this.cancelInstall}>Close</React.Button>
-                    <React.Button onClick={this.showAppMarket}>App Market</React.Button>
-                </React.Modal.Footer>
-            </ React.Modal>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.cancelInstall}>Close</Button>
+                    <Button onClick={this.showAppMarket}>App Market</Button>
+                </Modal.Footer>
+            </ Modal>
         )
     }
 });

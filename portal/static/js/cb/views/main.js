@@ -24,7 +24,7 @@ module.exports = React.createClass({
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
                 <div className="container">
-                    <Router.RouteHandler params={this.props.params} key={path} path={path} />
+                    {this.props.children}
                 </div>
                 <Portal.NotificationListView />
             </div>
@@ -33,6 +33,9 @@ module.exports = React.createClass({
 });
 
 /*
+{React.cloneElement(this.props.children, { key: path, path: path })}
+//<Router.RouteHandler params={this.props.params} key={path} path={path} />
+
 var ConfigViews = require('../modules/config/views');
 
 Portal.MainView = React.createClass({

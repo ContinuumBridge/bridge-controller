@@ -1,11 +1,6 @@
 
 //var Backbone = window.Backbone;
-console.log('relational-models window', Object.keys(window));
-console.log('relational-models this', Object.keys(this));
-
 (function() {
-
-    console.log('relational-models Backbone', Object.keys(Backbone));
 
     Backbone.HasOne = Backbone.HasOne.extend({
 
@@ -76,11 +71,9 @@ console.log('relational-models this', Object.keys(this));
 
             // Handle a custom 'collectionType'
             this.collectionType = this.options.collectionType;
-            // ADDED just take this.collectionType rather than trying to convert it
-            console.log('this.collectionType', this.collectionType);
-            // ADDED Inheritance testing for collections does not work due to backbone.io and webpack, skip it
+            //console.log('this.collectionType', this.collectionType);
             if ( _.isFunction( this.collectionType ) && this.collectionType !== Backbone.Collection && !( this.collectionType.prototype instanceof Backbone.Collection ) ) {
-                console.log('this.collectionType', this.collectionType);
+                //console.log('this.collectionType', this.collectionType);
                 //this.collectionType = new this.collectionType;
                 this.collectionType = _.result( this, 'collectionType' );
             }
@@ -101,7 +94,7 @@ console.log('relational-models this', Object.keys(this));
 
             options = _.defaults( { parse: this.options.parse }, options );
 
-            console.log('this.keyContents', this.keyContents);
+            //console.log('this.keyContents', this.keyContents);
             // ADDED Inheritance broken by webpack, check if object instead of function
             // Replace 'this.related' by 'this.keyContents' if it is a Backbone.Collection
             //if ( typeof this.keyContents == 'object') {

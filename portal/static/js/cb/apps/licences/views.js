@@ -1,6 +1,7 @@
 
 var Backbone = require('backbone-bundle');
 var React = require('react');
+var Table = require('react-bootstrap').Table;
 
 Portal.AppLicenceView = React.createClass({
 
@@ -134,24 +135,26 @@ Portal.AppLicenceTableView = React.createClass({
             <div>
                 <h4>My Licences</h4>
 
-                <React.Table>
+                <Table>
                     <thead>
-                        <td className="col-md-6">
-                            <div className="list-group-item-heading app-name">App Name</div>
-                        </td>
-                        <td className="col-md-2">
-                            <div className="installs-permitted">Installs permitted</div>
-                        </td>
-                        <td className="col-md-2">
-                            <div className="installs-remaining">Installs remaining</div>
-                        </td>
-                        <td className="col-md-2">
-                        </td>
+                        <tr>
+                            <td className="col-md-6">
+                                <div className="list-group-item-heading app-name">App Name</div>
+                            </td>
+                            <td className="col-md-2">
+                                <div className="installs-permitted">Installs permitted</div>
+                            </td>
+                            <td className="col-md-2">
+                                <div className="installs-remaining">Installs remaining</div>
+                            </td>
+                            <td className="col-md-2">
+                            </td>
+                        </tr>
                     </thead>
                     <tbody>
                       {this.props.collection.map(this.createItem)}
                     </tbody>
-                </React.Table>
+                </Table>
             </div>
         )
     }

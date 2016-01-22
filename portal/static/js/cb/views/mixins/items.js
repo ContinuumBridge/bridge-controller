@@ -2,7 +2,8 @@
 var React = require('react');
 
 //var ListItem = require('../components/bootstrap/ListItem.jsx');
-var Panel = require('react-bootstrap').Panel;
+var Panel = require('../components/bootstrap/Panel.js');
+//var Panel = require('react-bootstrap').Panel;
 var PanelGroup = require('react-bootstrap').PanelGroup;
 
 Portal.InnerItemView = {
@@ -73,6 +74,7 @@ Portal.ItemView = {
     },
 
     handleDestroy: function() {
+        console.log('handleDestroy', this.getModel());
         this.getModel().destroy();
     },
 
@@ -96,6 +98,9 @@ Portal.ItemView = {
     renderButton: function(button) {
 
         var onClick = button.onClick || function() {};
+
+        console.log('renderButton button ', button );
+        console.log('renderButton onClick ', onClick );
 
         switch(button.type) {
             case 'delete':
@@ -132,7 +137,8 @@ Portal.ItemView = {
         var renderedButtons = this.props.renderButtons;
         var renderedButtons = renderedButtons ? renderedButtons() : "";
 
-        var buttons = this.props.buttons || [];
+        var buttons = this.state.buttons || [];
+        console.log('item buttons ', buttons );
 
         /*
         return (
@@ -143,8 +149,8 @@ Portal.ItemView = {
         <div className="panel-heading item-heading">
         */
         return (
-            <div>
-                <i className="icon ion-chevron-right item-anchor" />
+            <div className="item-heading">
+
                 <h4 className="item-title">{renderedTitle}</h4>
                 <h4 className="item-subtitle">
                     <small>
@@ -161,14 +167,15 @@ Portal.ItemView = {
 
     render: function() {
         //console.log('ItemView props', this.props);
-        var model = this.props.model;
+        //var model = this.props.model;
         var body = this.renderBody ? this.renderBody() : "";
-        console.log('item body ', body );
-        var buttons = this.state.buttons || [];
-        var className = this.props.className;
+        //console.log('item body ', body );
+        //var buttons = this.state.buttons || [];
+        //var className = this.props.className;
         return (
             <PanelGroup /*defaultActiveKey="1"*/ accordion>
-                <Panel className="item" header={this.renderHeader()} eventKey="1">
+                <Panel className="item" header={this.renderHeader()}
+                       collapsible={this.props.collapsible} eventKey="1">
                     {body}
                 </Panel>
             </PanelGroup>
@@ -205,7 +212,7 @@ Portal.ListView = {
         //var onClick = button.onClick || function(){};
 
         return (
-            <div className={className} onClick={button.onClick}>{button.name}</div>
+            <div className={className} key={button.name} onClick={button.onClick}>{button.name}</div>
         );
     },
 

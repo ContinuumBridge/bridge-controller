@@ -1,6 +1,7 @@
 
 //var logger = require('logger');
 var Backbone = require('backbone-bundle');
+var history = require('../history');
 var Q = require('q');
 
 var BridgeControl = require('./controls/models').BridgeControl;
@@ -183,7 +184,9 @@ Portal.getCurrentBridge = function() {
 Portal.setCurrentBridge = function(bridge) {
 
     if (bridge) {
+
         Portal.currentBridge = bridge;
-        Portal.router.setQuery({bridge: bridge.get('id')});
+
+        Portal.router.setQuery({bridge: bridge.id});
     }
 }

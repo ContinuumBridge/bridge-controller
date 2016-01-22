@@ -45,22 +45,26 @@ var BridgeList = React.createClass({
     mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
 
     bridgeClick: function(e) {
-        console.log('bridgeClick event target', e.target);
+        //console.log('bridgeClick event target', e.target);
         var bridgeID = parseInt(e.target.getAttribute('data-tag'));
-        console.log('bridgeClick bridgeID', bridgeID);
+        //console.log('bridgeClick bridgeID', bridgeID);
         var bridge = Portal.bridgeCollection.getID(bridgeID);
-        console.log('bridgeClick bridge', bridge);
+        //console.log('bridgeClick bridge', bridge);
         Portal.setCurrentBridge(bridge);
     },
 
     createItem: function(bridge) {
 
+        //console.log('createItem bridge', bridge);
         return (
             /*
             <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
+             <li key="test">
+             <a data-tag="bridgeID" onClick={this.bridgeClick}>Test Name</a>
+             </li>
             */
             <li key={bridge.id}>
-                <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.name}</a>
+                <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.get('name')}</a>
             </li>
         );
     },
@@ -68,15 +72,19 @@ var BridgeList = React.createClass({
     render: function () {
 
         var currentBridge = Portal.getCurrentBridge();
+        //var currentBridge = Portal.bridgeCollection.get({id: 2});
         var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
         //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
 
+        var bridges = this.props.collection.map(this.createItem);
+        console.log('bridgeList bridges ', bridges );
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
-            <DropdownButton bsStyle="link" className="bridge-dropdown-header" title={bridgeName} key="bridge-dropdown" id="bridge-header">
-                {this.props.collection.map(this.createItem)}
+            <DropdownButton bsStyle="link" className="bridge-dropdown-header btn-nav" title={bridgeName} key="bridge-dropdown" id="bridge-header">
+                {bridges}
             </DropdownButton>
             /*
+             {this.props.collection.map(this.createItem)}
             <li className="dropdown">
                 <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
                     <div className="header-text">Test {bridgeName}</div><b className="caret"></b>
@@ -147,13 +155,9 @@ var Tab = React.createClass({
     },
 
     render: function () {
-        var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
+        //var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
+        var isActive = false;
         var className = isActive ? 'active' : '';
-        //console.log('link props', this.props);
-        //var link = Router.Link(this.props);
-        //var link = (
-        //    <Router.Link {...this.props} />
-        //);
 
         return (
             <li className={className}>

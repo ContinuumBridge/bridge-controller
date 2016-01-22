@@ -3,6 +3,9 @@ var Backbone = require('backbone-bundle');
 var React = require('react');
 var Router = require('react-router');
 
+require('../apps/ownerships/views');
+require('../clients/controls/views');
+
 module.exports = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
@@ -30,8 +33,11 @@ module.exports = React.createClass({
 
     renderModals: function () {
 
-        var action = this.getParams().action;
-        var itemID = this.getParams().item;
+        /*
+        //var action = this.getParams().action;
+        //var itemID = this.getParams().item;
+        var action = this.props.params.action;
+        var itemID = this.props.params.item;
         console.log('renderModals params', action);
         switch (action) {
             case "install-app":
@@ -44,6 +50,7 @@ module.exports = React.createClass({
             default:
                 break;
         }
+        */
     },
 
     render: function() {
