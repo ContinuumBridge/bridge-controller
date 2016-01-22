@@ -9,7 +9,7 @@ require('./messages/models');
 
 Portal.addInitializer(function() {
 
-    Portal.socket = Backbone.io('http://' + HOST_ADDRESS + ':9415/');
+    Portal.socket = Backbone.io('http://' + window.location.hostname + ':9415/');
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
