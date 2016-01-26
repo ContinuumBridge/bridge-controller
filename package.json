@@ -9,7 +9,7 @@
   "dependencies": {
     "babel-loader": "^6.2.0",
     "backbone": "^1.2.3",
-    "backbone-react-component": "^0.10.0",
+    "backbone-react-component-cb": "^0.10.0",
     "backbone.babysitter": "^0.1.2",
     "backbone.marionette": "^2.4.4",
     "backbone.wreqr": "^1.2.1",

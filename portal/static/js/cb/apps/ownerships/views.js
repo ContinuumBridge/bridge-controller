@@ -18,7 +18,7 @@ Portal.AppOwnershipView = React.createClass({
 
     getDefaultProps: function () {
         return {
-            openable: true
+            collapsible: true
         };
     },
 

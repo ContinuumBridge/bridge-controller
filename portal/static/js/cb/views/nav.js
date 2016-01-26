@@ -49,8 +49,8 @@ var BridgeList = React.createClass({
         var bridgeID = parseInt(e.target.getAttribute('data-tag'));
         //console.log('bridgeClick bridgeID', bridgeID);
         var bridge = Portal.bridgeCollection.getID(bridgeID);
-        //console.log('bridgeClick bridge', bridge);
-        Portal.setCurrentBridge(bridge);
+        console.log('bridgeClick bridge', bridge);
+        Portal.setCurrentBridge(bridge, true);
     },
 
     createItem: function(bridge) {
@@ -71,7 +71,7 @@ var BridgeList = React.createClass({
 
     render: function () {
 
-        var currentBridge = Portal.getCurrentBridge();
+        var currentBridge = Portal.getCurrentBridge(false);
         //var currentBridge = Portal.bridgeCollection.get({id: 2});
         var bridgeName = currentBridge ? currentBridge.get('name') : "My Bridges";
         //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;

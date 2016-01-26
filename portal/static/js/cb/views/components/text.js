@@ -124,8 +124,8 @@ var AutosizeInput = React.createClass({
         if (!this.isMounted() || !window.getComputedStyle) {
             return;
         }
-        var inputStyle = window.getComputedStyle(this.refs.input.getDOMNode());
-        var widthNode = this.refs.sizer.getDOMNode();
+        var inputStyle = window.getComputedStyle(this.refs.input);
+        var widthNode = this.refs.sizer;
         widthNode.style.fontSize = inputStyle.fontSize;
         widthNode.style.fontFamily = inputStyle.fontFamily;
     },
@@ -134,7 +134,7 @@ var AutosizeInput = React.createClass({
         if (!this.isMounted()) {
             return;
         }
-        var newInputWidth = this.refs.sizer.getDOMNode().scrollWidth + 12;
+        var newInputWidth = this.refs.sizer.scrollWidth + 12;
         if (newInputWidth < this.props.minWidth) {
             newInputWidth = this.props.minWidth;
         }
@@ -150,11 +150,11 @@ var AutosizeInput = React.createClass({
     },
 
     focus: function() {
-        this.refs.input.getDOMNode().focus();
+        this.refs.input.focus();
     },
 
     select: function() {
-        this.refs.input.getDOMNode().select();
+        this.refs.input.select();
     },
 
     render: function() {

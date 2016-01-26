@@ -6,7 +6,7 @@ Portal.User = Backbone.Deferred.Model.extend({
     idAttribute: 'id',
 
     subModelTypes: {
-		'currentUser': 'Portal.CurrentUser'
+		'currentUser': 'CurrentUser'
 	},
 
     defaults: {
@@ -19,8 +19,8 @@ Portal.User = Backbone.Deferred.Model.extend({
             key: 'bridgeControls',
             keySource: 'bridge_controls',
             keyDestination: 'bridge_controls',
-            relatedModel: Portal.BridgeControl,
-            collectionType: Portal.BridgeControlCollection,
+            relatedModel: 'BridgeControl',
+            collectionType: 'BridgeControlCollection',
             createModels: true,
             includeInJSON: false,
             initializeCollection: 'bridgeControlCollection'
@@ -30,8 +30,8 @@ Portal.User = Backbone.Deferred.Model.extend({
             key: 'appLicences',
             keySource: 'app_licences',
             keyDestination: 'app_licences',
-            relatedModel: Portal.AppLicence,
-            collectionType: Portal.AppLicenceCollection,
+            relatedModel: 'AppLicence',
+            collectionType: 'AppLicenceCollection',
             createModels: true,
             includeInJSON: false,
             //includeInJSON: false,
@@ -41,7 +41,7 @@ Portal.User = Backbone.Deferred.Model.extend({
                 key: 'user',
                 keySource: 'user',
                 keyDestination: 'user',
-                relatedModel: Portal.User,
+                relatedModel: 'User',
                 //createModels: true,
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'userCollection'
@@ -52,8 +52,8 @@ Portal.User = Backbone.Deferred.Model.extend({
             key: 'appOwnerships',
             keySource: 'app_ownerships',
             keyDestination: 'app_ownerships',
-            relatedModel: Portal.AppOwnership,
-            collectionType: Portal.AppOwnershipCollection,
+            relatedModel: 'AppOwnership',
+            collectionType: 'AppOwnershipCollection',
             createModels: true,
             includeInJSON: false,
             //includeInJSON: false,
@@ -63,7 +63,7 @@ Portal.User = Backbone.Deferred.Model.extend({
                 key: 'user',
                 keySource: 'user',
                 keyDestination: 'user',
-                relatedModel: Portal.User,
+                relatedModel: 'User',
                 createModels: true,
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'userCollection'
@@ -74,8 +74,8 @@ Portal.User = Backbone.Deferred.Model.extend({
             key: 'clientControls',
             keySource: 'client_controls',
             keyDestination: 'client_controls',
-            relatedModel: Portal.ClientControl,
-            collectionType: Portal.ClientControlCollection,
+            relatedModel: 'ClientControl',
+            collectionType: 'ClientControlCollection',
             createModels: true,
             includeInJSON: false,
             initializeCollection: 'clientControlCollection',
@@ -84,7 +84,7 @@ Portal.User = Backbone.Deferred.Model.extend({
                 key: 'user',
                 keySource: 'user',
                 keyDestination: 'user',
-                relatedModel: Portal.User,
+                relatedModel: 'User',
                 createModels: true,
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'userCollection',
@@ -109,9 +109,13 @@ Portal.User = Backbone.Deferred.Model.extend({
     }
 }, { modelType: "user" });
 
+Backbone.Relational.store.addModelScope({ User : Portal.User });
+
 Portal.UserCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.User,
     backend: 'user'
 
 });
+
+Backbone.Relational.store.addModelScope({ UserCollection : Portal.UserCollection });

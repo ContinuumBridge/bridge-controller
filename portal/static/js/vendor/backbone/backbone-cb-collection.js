@@ -8,29 +8,29 @@ var CBCollection = OriginalCollection.extend({
         //if (!this.matchResource(message.itemType)) return;
         if( this.backend.name != message.itemType) return;
 
-        console.log('dispatchCallback', this.backend.name, message);
+        //console.log('dispatchCallback', this.backend.name, message);
 
         switch(message.actionType) {
 
             // Actions from CB server
             case 'add':
-                console.log('adding', message.payload);
+                //console.log('adding', message.payload);
                 this.update(message.payload);
                 break;
 
             case 'update':
-                console.log('updating', message.payload);
+                //console.log('updating', message.payload);
                 this.update(message.payload);
                 break;
 
             case 'delete':
-                console.log('deleting', message.payload);
+                //console.log('deleting', message.payload);
                 this.delete(message.payload);
                 break;
 
             // Actions from app views
             case 'create':
-                console.log('creating', message.payload);
+                //console.log('creating', message.payload);
                 this.create(message.payload);
                 break;
 
@@ -52,7 +52,7 @@ var CBCollection = OriginalCollection.extend({
         this.ghosts = [];
         this.bindBackend();
         this.dispatchID = Portal.register(this.dispatchCallback.bind(this));
-        console.log('collection subscribed', this.backend.name);
+        //console.log('collection subscribed', this.backend.name);
     },
 
     fetch: function(options) {
@@ -81,7 +81,7 @@ var CBCollection = OriginalCollection.extend({
 
     update: function(models, options) {
 
-        console.log('updating models', this.backend.name, models);
+        //console.log('updating models', this.backend.name, models);
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
         options || (options = {});
@@ -89,17 +89,17 @@ var CBCollection = OriginalCollection.extend({
         for (i = 0, l = models.length; i < l; i++) {
             var attrs = models[i];
             var model = this.findWhere({id: _.property(attrs, 'id')});
-            console.log('update match syncing', this.matchSyncing(attrs));
+            //console.log('update match syncing', this.matchSyncing(attrs));
             if (!model) model = this.matchSyncing(attrs);
 
             if (model) {
                 model.set(attrs);
-                console.log('setting model', model);
+                //console.log('setting model', model);
             } else {
-                console.log('adding model', attrs);
+                //console.log('adding model', attrs);
                 if (!(model = this._prepareModel(attrs, options))) return false;
                 this.add(model);
-                console.log('model added', model);
+                //console.log('model added', model);
             };
         }
     },
@@ -113,7 +113,7 @@ var CBCollection = OriginalCollection.extend({
             //var attrs = models[i];
             var model;
             if (!(model = this._prepareModel(models[i], options))) return false;
-            console.log('model matchFields', model.matchFields);
+            //console.log('model matchFields', model.matchFields);
             if (!model.cid && model.matchFields) {
                 var matchQuery = {};
                 _.each(model.matchFields, function(matchField) {
@@ -132,12 +132,12 @@ var CBCollection = OriginalCollection.extend({
             */
             model.save(null, options).then(
                 function(result) {
-                    console.log('create success');
+                    //console.log('create success');
                     if (options.wait) collection.add(model, options);
                     collection.unregisterSyncing(model);
                 },
                 function(error) {
-                    console.log('create error', error);
+                    console.error('create error', error);
                     collection.unregisterSyncing(model);
                     Portal.dispatch({
                         source: 'portal',

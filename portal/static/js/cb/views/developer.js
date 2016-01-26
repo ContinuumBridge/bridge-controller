@@ -10,18 +10,26 @@ module.exports = React.createClass({
 
     mixins: [ Router.State, Backbone.React.Component.mixin],
 
-    componentWillReceiveParams: function(params) {
+    fetchData: function() {
 
-        console.log('developer will receive params', params);
-        console.log('developer will receive this.params', this.params);
-        if (!this.params || this.params != params) {
-            console.log('developer fetch collections');
-            Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
-            Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+        Portal.appOwnershipCollection.fetch({data: { 'user': 'current' }});
+        Portal.clientControlCollection.fetch({data: { 'user': 'current' }});
+    },
+
+    componentDidMount: function() {
+        this.fetchData();
+    },
+
+    componentDidUpdate: function(prevProps) {
+
+        //console.log('developer will receive params', params);
+        console.log('developer will receive this.params', this.props.params);
+        if (!this.props.params || this.props.params != prevProps.params) {
+            this.fetchData();
         }
 
-        this.params = params;
         /*
+        this.params = params;
         if (this.action != params.action) {
             if (params.action == 'discover-devices') {
                 this.discoverDevices();

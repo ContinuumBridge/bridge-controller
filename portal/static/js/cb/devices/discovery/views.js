@@ -80,8 +80,10 @@ Portal.DiscoveredDeviceListView = React.createClass({
 
         var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device') ? name : name + " (Unknown device)";
-        var title = item.name;
-        var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
+        var title = item.get('name');
+        var address = item.get('address');
+        //var subtitle =  "(" + item.address.slice(item.address.length-5) + ")";
+        var subtitle =  "(" + address.slice(address.length-5) + ")";
 
         return < Portal.DiscoveredDeviceView key={item.cid}
                     title={title} subtitle={subtitle} model={item} />

@@ -155,12 +155,13 @@ Portal.getCurrentBridge = function() {
 //router = require('../router');
 
 
-Portal.getCurrentBridge = function() {
+Portal.getCurrentBridge = function(updateURL) {
 
     //console.log('getCurrentBridge router', router);
     var bridge, query;
+    updateURL = updateURL || false;
 
-    var query = Portal.route.query;
+    query = Portal.route.query;
 
     if (query && query.bridge) {
         bridge = Portal.bridgeCollection.getID(query.bridge);
@@ -169,24 +170,26 @@ Portal.getCurrentBridge = function() {
 
     if (!bridge && Portal.currentBridge) {
         bridge = Portal.currentBridge;
-        Portal.setCurrentBridge(bridge);
+        Portal.setCurrentBridge(bridge, updateURL);
     }
 
     if (!bridge) {
         bridge = Portal.bridgeCollection.at(0);
-        if (bridge) Portal.setCurrentBridge(bridge);
+        if (bridge) Portal.setCurrentBridge(bridge, updateURL);
     }
 
     return bridge;
     //return Portal.bridgeCollection.at(0);
 }
 
-Portal.setCurrentBridge = function(bridge) {
+Portal.setCurrentBridge = function(bridge, updateURL) {
 
     if (bridge) {
 
         Portal.currentBridge = bridge;
 
-        Portal.router.setQuery({bridge: bridge.id});
+        if (updateURL) {
+            Portal.router.setQuery({bridge: bridge.id});
+        }
     }
 }

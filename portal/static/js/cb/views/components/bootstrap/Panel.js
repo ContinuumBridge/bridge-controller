@@ -91,7 +91,9 @@ var Panel = _react2['default'].createClass({
                 className: _classnames2['default'](this.props.className, _utilsBootstrapUtils2['default'].getClassSet(this.props)),
                 id: this.props.collapsible ? null : this.props.id, onSelect: null }),
             this.renderHeading(headerRole),
-            this.props.collapsible ? this.renderCollapsibleBody(panelRole) : this.renderBody(),
+            // ADDED changed collapsible = false to render nothing
+            this.props.collapsible ? this.renderCollapsibleBody(panelRole) : "",
+            //this.props.collapsible ? this.renderCollapsibleBody(panelRole) : this.renderBody(),
             this.renderFooter()
         );
     },

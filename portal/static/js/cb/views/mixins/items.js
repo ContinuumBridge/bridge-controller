@@ -99,19 +99,16 @@ Portal.ItemView = {
 
         var onClick = button.onClick || function() {};
 
-        console.log('renderButton button ', button );
-        console.log('renderButton onClick ', onClick );
-
         switch(button.type) {
             case 'delete':
-                return <i className="icon ion-trash-a icon-trash item-icon-button" onClick={onClick}/>
+                return <i key="delete" className="icon ion-trash-a icon-trash item-icon-button" onClick={onClick}/>
                 break;
             case 'text':
                 var label = button.label || "";
                 var disabled = button.disabled ? "disabled" : "";
                 var buttonClass = "btn btn-default " + disabled;
                 return (
-                    <button className={buttonClass} disabled={disabled} onClick={onClick}>
+                    <button key={label} className={buttonClass} disabled={disabled} onClick={onClick}>
                         {label}
                     </button>
                 )
@@ -134,10 +131,15 @@ Portal.ItemView = {
             : <div className="inner-item-subtitle">{subtitle}</div>;
 
         // Render custom buttons
-        var renderedButtons = this.props.renderButtons;
-        var renderedButtons = renderedButtons ? renderedButtons() : "";
+        var renderButtons = this.renderButtons;
+        console.log('item renderButtons ', renderButtons );
+        var renderedButtons = renderButtons ? renderButtons() : "";
+        console.log('item renderedButtons ', renderedButtons );
 
-        var buttons = this.state.buttons || [];
+        var buttons = [];
+        if (this.state) {
+            buttons = this.state.buttons || [];
+        }
         console.log('item buttons ', buttons );
 
         /*
@@ -172,13 +174,14 @@ Portal.ItemView = {
         //console.log('item body ', body );
         //var buttons = this.state.buttons || [];
         //var className = this.props.className;
+        console.log('item this.props', this.props);
         return (
-            <PanelGroup /*defaultActiveKey="1"*/ accordion>
-                <Panel className="item" header={this.renderHeader()}
+            //<PanelGroup  /*defaultActiveKey="1"*/ accordion>
+                <Panel header={this.renderHeader()} key={this.props.key} className="item"
                        collapsible={this.props.collapsible} eventKey="1">
                     {body}
                 </Panel>
-            </PanelGroup>
+            //</PanelGroup>
             /*
             <Panel header={this.props.title} eventKey="1">
             <ListItem title={this.props.title} subtitle={this.props.subtitle}

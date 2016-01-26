@@ -81,7 +81,7 @@ Portal.AppInstallListView = React.createClass({
     },
 
     renderItem: function (item) {
-        console.log('appInstallView createItem item', item);
+
         var cid = item.cid;
 
         var appInstallCollection = this.getCollection()

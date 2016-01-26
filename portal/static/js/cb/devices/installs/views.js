@@ -46,6 +46,7 @@ Portal.DeviceInstallListView = React.createClass({
     },
 
     renderItem: function (item) {
+
         var cid = item.cid;
 
         var deviceInstall = this.getCollection().get({cid: cid});

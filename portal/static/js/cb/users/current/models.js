@@ -18,13 +18,17 @@ Portal.CurrentUser = Portal.User.extend({
 
         var self = this;
 
-        /*
         this.listenTo(this.get('appOwnerships'), 'all', function(name) {
             self.trigger('relational:change');
         });
-        */
+
+        this.listenTo(this.get('appLicences'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
     }
 }, { modelType: "currentUser" });
+
+Backbone.Relational.store.addModelScope({ CurrentUser : Portal.CurrentUser });
 
 Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
 
@@ -35,4 +39,6 @@ Portal.CurrentUserCollection = Backbone.Deferred.Collection.extend({
         this.bindBackend();
     }
 });
+
+Backbone.Relational.store.addModelScope({ CurrentUserCollection : Portal.CurrentUserCollection });
 

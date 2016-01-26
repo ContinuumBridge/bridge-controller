@@ -19,7 +19,8 @@ Portal.router = {
         console.log('history is', history);
         var route = Portal.route;
         // Remove any extra slashes in the pathname
-        var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
+        //var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
+        var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*?/);
         console.log('pathnameMatch ', pathnameMatch );
         var paramsString = "";
         for (var key in params) {

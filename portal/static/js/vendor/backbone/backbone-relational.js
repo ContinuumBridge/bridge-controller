@@ -45,9 +45,6 @@
 		monkey = zoo.get( 'animals' ).first(),
 		sameZoo = lion.get( 'livesIn' );
  */
-//console.log('backbone relational Object.keys(this)', Object.keys({test: 'testing'}));
-console.log('backbone relational Object.keys(window)', Object.keys(window));
-console.log('backbone relational Object.keys(this)', Object.keys(this));
 ( function( root, factory ) {
 	// Set up Backbone-relational for the environment. Start with AMD.
 	if ( typeof define === 'function' && define.amd ) {

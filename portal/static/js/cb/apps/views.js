@@ -7,22 +7,18 @@ Portal.AppView = React.createClass({
 
     getInitialState: function () {
         return {
+            /*
             buttons: [{
                 type: 'counter',
                 element: Portal.Components.Counter
             }]
+            */
         };
     },
 
     getDefaultProps: function () {
         return {
-            openable: true
-        };
-    },
-
-    getDefaultProps: function () {
-        return {
-            openable: true
+            collapsible: true
         };
     },
 
@@ -30,7 +26,9 @@ Portal.AppView = React.createClass({
 
         console.log('AppView renderButtons');
         var app = this.props.model;
+        console.log('AppView app ', app );
         var licence = app.getLicence(Portal.currentUser);
+        console.log('AppView licence ', licence );
         return <Portal.Components.Counter model={licence}
                         size="large" field="installs_permitted" />
     },

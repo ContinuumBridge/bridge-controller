@@ -38,9 +38,17 @@ module.exports.Main = React.createClass({
 
         Portal.router.setParams({action: 'discover-devices'});
 
+        var discoveredDevices = Portal.getCurrentBridge().get('discoveredDevices');
+
+        for (var i = 0; i <= discoveredDevices.length; i++) {
+            discoveredDevices.at(0).delete();
+        }
+
+        /*
         Portal.getCurrentBridge().get('discoveredDevices').each(function(discoveredDevice){
             discoveredDevice.delete();
         });
+        */
         Portal.messageCollection.sendCommand('discover');
     },
 
@@ -250,8 +258,6 @@ var InstallAppModal = React.createClass({
 
         var licenceCollection = Portal.currentUser.get('appLicences');
         var bridge = Portal.getCurrentBridge();
-
-        console.log('render InstallAppModal');
 
         return (
             <Modal show={true} onHide={function(){}}

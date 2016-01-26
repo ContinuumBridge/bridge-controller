@@ -128,11 +128,12 @@ Portal.addInitializer(function () {
   });
 
   function createElement(Component, props) {
-      console.log('createElement props', props);
-      var currentBridge = Portal.getCurrentBridge();
+      //console.log('createElement props', props);
+      //var currentBridge = Portal.bridgeCollection.at(0);
+      var currentBridge = Portal.getCurrentBridge(false);
       if (currentBridge) currentBridge.fetch();
       //var apps = Portal.appCollection;
-      console.log('router currentBridge', currentBridge);
+      //console.log('router currentBridge', currentBridge);
       var models = {
           currentBridge: currentBridge,
           currentUser: Portal.currentUser
@@ -151,7 +152,14 @@ Portal.addInitializer(function () {
                         models={models} {...props} />
   }
 
-  ReactDOM.render(<Router history={history} createElement={createElement} >
+  var onRouteUpdate = function(a, b) {
+
+      console.log('onRouteUpdate', a, b);
+      var bridge = Portal.getCurrentBridge(true);
+      console.log('onRouteUpdate bridge', bridge );
+  }
+
+  ReactDOM.render(<Router history={history} onUpdate={onRouteUpdate} createElement={createElement} >
           {routes}
       </Router>,
       document.getElementById('app')

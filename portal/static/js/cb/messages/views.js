@@ -70,7 +70,7 @@ Portal.MessageListView = React.createClass({
         var content = body.status || body.command;
 
         return (
-            <tr key={message.get('cid')}>
+            <tr key={message.cid}>
                 <td className="shrink">{remote} {directionSymbol}</td>
                 <td className="expand">{content}</td>
             </tr>

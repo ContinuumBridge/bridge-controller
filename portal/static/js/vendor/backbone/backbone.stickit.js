@@ -5,19 +5,16 @@
 
   // Set up Stickit appropriately for the environment. Start with AMD.
   if (typeof define === 'function' && define.amd) {
-    console.log('stickit amd');
     define(['underscore', 'backbone', 'exports'], factory);
   }
 
   // Next for Node.js or CommonJS.
   else if (typeof exports === 'object') {
-    console.log('stickit node js');
     factory(require('underscore'), require('backbone'), exports);
   }
 
   // Finally, as a browser global.
   else {
-    console.log('stickit browser global');
     factory(_, Backbone, {});
   }
 

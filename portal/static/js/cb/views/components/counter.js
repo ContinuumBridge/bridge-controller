@@ -8,8 +8,10 @@ module.exports = React.createClass({
     render: function() {
 
         var model = this.props.model;
+        console.log('counter model ', model );
 
         var value = model.get(this.props.field);
+        console.log('counter value ', value );
         var disabled = model.isSyncing();
 
         var counterClass = "input-group counter-" + this.props.size;
@@ -22,7 +24,7 @@ module.exports = React.createClass({
                     </button>
                 </span>
                 <input type="text" className="form-control number text-center"
-                    readonly="true" disabled={disabled} value={value} />
+                    disabled={disabled} value={value} />
                 <span className="input-group-btn data-up">
                     <button className="btn btn-default"
                             onClick={this.handleIncrement} data-increment="1">

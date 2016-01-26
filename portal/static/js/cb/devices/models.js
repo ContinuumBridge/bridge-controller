@@ -16,8 +16,8 @@ Portal.Device = Backbone.Deferred.Model.extend({
             key: 'adaptorCompatibilities',
             keySource: 'adaptor_compatibilities',
             keyDestination: 'adaptor_compatibilities',
-            relatedModel: Portal.AdaptorCompatibility,
-            collectionType: Portal.AdaptorCompatibilityCollection,
+            relatedModel: 'AdaptorCompatibility',
+            collectionType: 'AdaptorCompatibilityCollection',
             createModels: true,
             initializeCollection: 'adaptorCompatibilityCollection',
             includeInJSON: true
@@ -42,6 +42,8 @@ Portal.Device = Backbone.Deferred.Model.extend({
     ]
 }, { modelType: "device" });
 
+Backbone.Relational.store.addModelScope({ Device : Portal.Device });
+
 //Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
 Portal.DeviceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
@@ -57,3 +59,5 @@ Portal.DeviceCollection = Backbone.QueryEngine.QueryCollection.extend({
         return response.objects;
     }
 });
+
+Backbone.Relational.store.addModelScope({ DeviceCollection : Portal.DeviceCollection });
