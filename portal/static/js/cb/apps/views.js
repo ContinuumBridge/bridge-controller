@@ -24,11 +24,8 @@ Portal.AppView = React.createClass({
 
     renderButtons: function() {
 
-        console.log('AppView renderButtons');
         var app = this.props.model;
-        console.log('AppView app ', app );
         var licence = app.getLicence(Portal.currentUser);
-        console.log('AppView licence ', licence );
         return <Portal.Components.Counter model={licence}
                         size="large" field="installs_permitted" />
     },
@@ -58,7 +55,6 @@ Portal.AppListView = React.createClass({
     },
 
     renderItem: function (item) {
-        console.log('appView createItem item', item);
         var cid = item.cid;
 
         var app = Portal.appCollection.get({cid: cid});

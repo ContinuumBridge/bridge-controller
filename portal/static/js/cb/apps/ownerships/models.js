@@ -47,18 +47,16 @@ Portal.AppOwnership = Backbone.Deferred.Model.extend({
             }
         }
         */
-    ],
+    ]
 
+    /*
     initialize: function() {
 
         console.log('initialize AppOwnership');
         this.startTracking();
     },
+    */
 
-    removeOwnership: function(user) {
-
-        //this.get('app').toggleInstalled(bridge, this);
-    }
 }, { modelType: "appOwnership" });
 
 Backbone.Relational.store.addModelScope({ AppOwnership : Portal.AppOwnership });
@@ -68,17 +66,6 @@ Portal.AppOwnershipCollection = Backbone.QueryEngine.QueryCollection.extend({
     model: Portal.AppOwnership,
     backend: 'appOwnership'
 
-    /*
-    initialize: function() {
-        this.bindBackend();
-
-        Portal.AppOwnershipCollection.__super__.initialize.apply(this, arguments);
-    },
-
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });
 
 Backbone.Relational.store.addModelScope({ AppOwnershipCollection : Portal.AppOwnershipCollection });

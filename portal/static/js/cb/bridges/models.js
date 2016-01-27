@@ -41,16 +41,7 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
         this.listenTo(this.get('messages'), 'all', function(name) {
             self.trigger('relational:change');
         });
-        //this.listenTo(deviceInstalls, 'remove', this.removeDeviceInstall);
-        //this.listenTo(deviceInstalls, 'remove:', this.removeDeviceInstall);
     },
-
-    /*
-    removeDeviceInstall: function() {
-
-        console.log('Remove device install!');
-    },
-    */
 
     getCBID: function() {
 
@@ -137,27 +128,13 @@ Portal.BridgeCollection = Backbone.Collection.extend({
     initialize: function() {
         this.bindBackend();
     },
-
-    parse : function(response){
-        return response.objects;
-    }
     */
 });
 
 Backbone.Relational.store.addModelScope({ BridgeCollection : Portal.BridgeCollection });
 
-/*
-Portal.getCurrentBridge = function() {
-
-}
-*/
-
-//router = require('../router');
-
-
 Portal.getCurrentBridge = function(updateURL) {
 
-    //console.log('getCurrentBridge router', router);
     var bridge, query;
     updateURL = updateURL || false;
 

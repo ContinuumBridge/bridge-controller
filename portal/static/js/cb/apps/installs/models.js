@@ -18,44 +18,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
             self.trigger('relational:change');
         });
-
-        /*
-        this.on('change', function() {
-            console.log('Appinstall change event');
-        });
-        */
-        //this.startTracking();
     },
-
-    /*
-    install: function() {
-
-        console.log('installing AppInstall');
-        this.save().then(function() {
-            console.log('AppInstall successfully saved');
-        }, function(error) {
-            console.log('Error installing', error);
-            Portal.Notifications.trigger('error:show', error);
-        }).done();
-    },
-
-    uninstall: function() {
-
-        console.log('uninstalling AppInstall', this);
-        this.destroyOnServer().then(function(model, response, options) {
-            console.log('AppInstall successfully destroyed', model, response, options);
-        });
-    },
-
-    toggleInstalled: function() {
-
-        if(this.isNew()) {
-            this.install();
-        } else {
-            this.uninstall();
-        }
-    },
-    */
 
     relations: [
         {

@@ -77,7 +77,6 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
             var app = self.get('app');
             if(app instanceof Backbone.Model) app.trigger('relational:change');
         });
-        //this.startTracking();
     },
 
     toggleInstall: function(bridge) {
@@ -161,28 +160,23 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
 }, { modelType: "appLicence" });
 
 Backbone.Relational.store.addModelScope({ AppLicence : Portal.AppLicence });
-//var QueryEngine = require('query-engine');
-//Portal.AppLicenceCollection = Backbone.Collection.extend({
+
 Portal.AppLicenceCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.AppLicence,
     backend: 'appLicence',
 
+    /*
     initialize: function() {
         this.bindBackend();
 
-        /*
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
-        */
         Portal.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
-
-    parse : function(response){
-        return response.objects;
-    }
+    */
 });
 
 Backbone.Relational.store.addModelScope({ AppLicenceCollection : Portal.AppLicenceCollection });

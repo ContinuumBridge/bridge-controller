@@ -26,46 +26,6 @@ Portal.AppDevicePermission = Backbone.Deferred.Model.extend({
             self.delete();
         });
     },
-    /*
-
-    setConnection: function(connection) {
-
-        // Model is out of sync, prevent further changes
-        if (this.unsavedAttributes()) return void 0;
-
-        if (connection) {
-            console.log('saving');
-            this.set('connection', true);
-            this.save().then(function(result) {
-
-                console.log('save successful', result);
-            }, function(error) {
-
-                console.log('save error', error);
-                //this.set('permission', false);
-            });
-
-        } else if (!connection) {
-            console.log('disallowAll');
-            this.set('connection', false);
-            this.destroyOnServer().then(function(result) {
-
-                console.log('destroyOnServer succeeded for', result);
-            }, function(error) {
-
-                console.error('destroyOnServer failed', error);
-            });
-        } else {
-            console.error('AppDevicePermission not saved or destroyed');
-        }
-    },
-
-    toggleConnection: function() {
-
-        var currentConnection = !this.isNew();
-        this.setConnection(!currentConnection);
-    },
-    */
 
     relations: [
         {
@@ -116,14 +76,7 @@ Backbone.Relational.store.addModelScope({ AppDevicePermission : Portal.AppDevice
 Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
 
     model: Portal.AppDevicePermission,
-    backend: 'appDevicePermission',
-
-    /*
-    initialize: function() {
-
-        this.bindBackend();
-    }
-    */
+    backend: 'appDevicePermission'
 
 });
 

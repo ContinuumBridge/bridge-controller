@@ -6,9 +6,11 @@ Portal.BridgeControl = Backbone.RelationalModel.extend({
 
     idAttribute: 'id',
 
+    /*
     initialize: function() {
 
     },
+    */
 
     relations: [
         {
@@ -43,13 +45,12 @@ Portal.BridgeControlCollection = Backbone.Collection.extend({
     model: Portal.BridgeControl,
     backend: 'bridgeControl',
 
+    /*
     initialize: function() {
         this.bindBackend();
     },
+    */
 
-    parse : function(response){
-        return response.objects;
-    }
 }, { modelType: "bridgeControl" });
 
 Backbone.Relational.store.addModelScope({ BridgeControlCollection : Portal.BridgeControlCollection });

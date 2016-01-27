@@ -19,7 +19,6 @@ Portal.App = Backbone.Deferred.Model.extend({
     */
     toggleInstalled: function(bridge, licence) {
 
-        console.log('toggleInstalled');
         var install = this.getInstall(bridge);
 
         if (install.isNew()) {
@@ -70,22 +69,22 @@ Portal.AppCollection = Backbone.Collection.extend({
     backend: 'app',
 
     initialize: function() {
+
+        var self = this;
+
         this.bindBackend();
 
+        /*
         this.bind('backend:create', function(model) {
             //logger.log('debug', 'AppCollection create', model);
             self.add(model);
         });
+        */
     },
 
     comparator: function(app) {
         return app.get('name');
     }
-    /*
-    parse : function(response){
-        return response.objects;
-    }
-    */
 });
 
 Backbone.Relational.store.addModelScope({ AppCollection : Portal.AppCollection });

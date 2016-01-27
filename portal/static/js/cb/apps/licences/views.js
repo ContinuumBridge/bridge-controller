@@ -57,7 +57,7 @@ Portal.AppLicenceListView = React.createClass({
     },
 
     renderItem: function (item) {
-        console.log('appLicenceView createItem item', item);
+        //console.log('appLicenceView createItem item', item);
         var cid = item.cid;
 
         var appLicenceCollection = this.getCollection()
@@ -87,7 +87,6 @@ Portal.AppLicenceRowView = React.createClass({
 
         var name = this.props.name;
         var appInstall = this.props.appInstall;
-        console.log('AppLicenceView props', this.props);
 
         var canInstall = installsPermitted > 0;
         var installButton = canInstall ? <Portal.Components.InstallButton model={appInstall} />
@@ -159,98 +158,3 @@ Portal.AppLicenceTableView = React.createClass({
         )
     }
 });
-
-/*
-Portal.AppLicenceNestedRowView = React.createClass({
-
-    // Used in developer section
-
-    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
-
-    renderBody: function() {
-
-        var self = this;
-
-        /*
-        var deviceInstalls = this.props.deviceInstalls;
-        var appInstall = this.props.model;
-
-        var devicePermissions = appInstall.get('devicePermissions');
-
-        deviceInstalls.each(function(deviceInstall) {
-
-            var adp;
-            var adpData = {
-                deviceInstall: deviceInstall,
-                appInstall: appInstall
-            }
-            adp = devicePermissions.findWhere(adpData)
-            if (!adp) {
-                adp = new Portal.AppDevicePermission(adpData);
-                appInstall.set('devicePermissions', adp, {remove: false});
-            }
-        });
-        */
-
-        /*
-         var devicePermissions = appInstall.get('devicePermissions');
-
-         devicePermissions.on('change relational:change relational:add relational:remove', function(model, event) {
-         console.log('event on deviceInstalls', event);
-         self.getCollection().trigger('change');
-         });
-
-        return (
-            < Portal.AppDevicePermissionListView collection={devicePermissions} />
-        );
-    }
-});
-
-Portal.AppLicenceNestedTableView = React.createClass({
-
-    mixins: [Backbone.React.Component.mixin, Portal.TableView ],
-
-    getInitialState: function () {
-        return {
-            title: 'Licences'
-        };
-    },
-
-    renderHeader: function() {
-
-        var userCollection = this.getCollection();
-
-        return (
-            <div className="form-group form-group-sm">
-                <Portal.Components.SearchInput collection={userCollection} />
-            </div>
-        )
-        //<input className="form-control" type="text" value={searchString} />
-    },
-
-    renderRow: function (item) {
-        console.log('UserLicenceTableView createItem item', item);
-        var cid = item.cid;
-
-        //var app = this.props.app;
-
-        var licenceCollection = this.getCollection();
-        var licence = licenceCollection.get({cid: cid});
-
-        var user = licence.get('user');
-        var userName = user.get('first_name') + " " + user.get('last_name');
-        //var appLicence = app.getLicence(user);
-        //var title = app.get('name');
-
-        var installsPermitted = appLicence.get('installs_permitted');
-
-        return (
-            <tr key={cid}>
-                <td className="shrink">{userName}</td>
-                <td className="expand">{installsPermitted}</td>
-            </tr>
-        );
-    }
-});
-*/
-
