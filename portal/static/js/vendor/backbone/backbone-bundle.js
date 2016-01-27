@@ -18,7 +18,7 @@ require('./backbone.stickit');
 //require('cb-backbone.io');
 require('./backbone.io');
 require('./backbone.trackit');
-require('backbone.marionette');
+require('imports?_=underscore!backbone.marionette');
 //require('backbone.marionette.subrouter');
 //require('./backbone-bossview');
 require('backbone.modal');

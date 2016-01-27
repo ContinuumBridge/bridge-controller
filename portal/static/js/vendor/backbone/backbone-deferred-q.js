@@ -10,6 +10,7 @@
 
 }).call(this);
 */
+var _ = require('underscore');
 
 Backbone.Deferred = {
     version: '0.4.0'

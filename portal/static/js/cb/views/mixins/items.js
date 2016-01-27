@@ -132,15 +132,12 @@ Portal.ItemView = {
 
         // Render custom buttons
         var renderButtons = this.renderButtons;
-        console.log('item renderButtons ', renderButtons );
         var renderedButtons = renderButtons ? renderButtons() : "";
-        console.log('item renderedButtons ', renderedButtons );
 
         var buttons = [];
         if (this.state) {
             buttons = this.state.buttons || [];
         }
-        console.log('item buttons ', buttons );
 
         /*
         return (
@@ -174,7 +171,6 @@ Portal.ItemView = {
         //console.log('item body ', body );
         //var buttons = this.state.buttons || [];
         //var className = this.props.className;
-        console.log('item this.props', this.props);
         return (
             //<PanelGroup  /*defaultActiveKey="1"*/ accordion>
                 <Panel header={this.renderHeader()} key={this.props.key} className="item"

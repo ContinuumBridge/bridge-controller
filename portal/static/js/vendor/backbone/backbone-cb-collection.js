@@ -1,4 +1,6 @@
 
+var _ = require('underscore');
+
 var OriginalCollection = Backbone.Collection;
 
 var CBCollection = OriginalCollection.extend({

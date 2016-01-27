@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 (function() {
 
   // Unsaved Record Keeping

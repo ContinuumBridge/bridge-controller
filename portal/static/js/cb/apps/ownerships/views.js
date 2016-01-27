@@ -75,9 +75,12 @@ Portal.AppOwnershipListView = React.createClass({
     },
 
     renderItem: function (item) {
+
+        console.log('AppOwnershipListView renderBody');
+
         var cid = item.cid;
 
-        var appOwnershipCollection = this.getCollection()
+        var appOwnershipCollection = this.getCollection();
         var appOwnership = appOwnershipCollection.get({cid: cid});
 
         var app = appOwnership.get('app');

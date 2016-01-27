@@ -40,7 +40,7 @@ module.exports.Main = React.createClass({
 
         var discoveredDevices = Portal.getCurrentBridge().get('discoveredDevices');
 
-        for (var i = 0; i <= discoveredDevices.length; i++) {
+        for (var i = 0; i < discoveredDevices.length; i++) {
             discoveredDevices.at(0).delete();
         }
 

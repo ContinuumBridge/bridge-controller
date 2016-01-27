@@ -1,4 +1,6 @@
 
+var _ = require('underscore');
+
 var CBApp = require('index')
     ;
 

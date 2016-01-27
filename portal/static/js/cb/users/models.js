@@ -94,13 +94,15 @@ Portal.User = Backbone.Deferred.Model.extend({
 
     initialize: function() {
 
-        //this.bindBackend();
-        //var bridgeControlArray = this.get('bridgeControls');
+        var self = this;
 
-        // Set the current bridge
-        //var currentBridge = bridgeControlArray.at(0).get('bridge');
-        //currentBridge.set('current', true);
+        this.listenTo(this.get('appOwnerships'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
 
+        this.listenTo(this.get('appLicences'), 'all', function(name) {
+            self.trigger('relational:change');
+        });
     },
 
     getCBID: function() {

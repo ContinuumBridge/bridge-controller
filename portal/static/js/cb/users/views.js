@@ -1,5 +1,7 @@
 
 var React = require('react');
+var _ = require('underscore');
+var Backbone = require('backbone-bundle');
 
 Portal.UserLicenceTableView = React.createClass({
 
@@ -13,10 +15,10 @@ Portal.UserLicenceTableView = React.createClass({
                 search: {
                     prefixes: ['user:', ''],
                     callback: function(model, searchString) {
-                        console.log('UserLicenceTableView searchString', searchString);
-                        console.log('UserLicenceTableView model', model);
+                        //console.log('UserLicenceTableView searchString', searchString);
+                        //console.log('UserLicenceTableView model', model);
                         var filterRegex = searchString.toLowerCase() + ".*";
-                        var searchRegex = QueryEngine.createSafeRegex(filterRegex);
+                        var searchRegex = Backbone.QueryEngine.createSafeRegex(filterRegex);
                         var pass = false;
                         _.each(['first_name', 'last_name', 'email'], function(field) {
                             if (searchRegex.test(model.get(field).toLowerCase())) {

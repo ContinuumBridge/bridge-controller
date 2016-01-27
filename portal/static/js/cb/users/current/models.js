@@ -18,13 +18,6 @@ Portal.CurrentUser = Portal.User.extend({
 
         var self = this;
 
-        this.listenTo(this.get('appOwnerships'), 'all', function(name) {
-            self.trigger('relational:change');
-        });
-
-        this.listenTo(this.get('appLicences'), 'all', function(name) {
-            self.trigger('relational:change');
-        });
     }
 }, { modelType: "currentUser" });
 

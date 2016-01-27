@@ -1,5 +1,6 @@
 
 var $ = require('jquery');
+var _ = require('underscore');
 var io = require('socket.io-client');
 
 (function() {
