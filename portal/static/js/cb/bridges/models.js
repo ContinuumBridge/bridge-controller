@@ -35,7 +35,15 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             self.trigger('relational:change');
         });
 
-        var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        //var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+        var cbid = this.get('cbid');
+        var messages = Portal.messageCollection.findAllLive({
+            $or: {
+                destination: cbid,
+                source: cbid
+            }
+        });
+
         this.set('messages', messages);
 
         this.listenTo(this.get('messages'), 'all', function(name) {

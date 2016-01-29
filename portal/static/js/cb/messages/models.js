@@ -43,7 +43,6 @@ Portal.Message = Backbone.RelationalModel.extend({
     */
 });
 
-//Portal.MessageCollection = Backbone.Collection.extend({
 Portal.MessageCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.Message,

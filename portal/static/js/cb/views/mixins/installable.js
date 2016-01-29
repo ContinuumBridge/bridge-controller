@@ -1,4 +1,8 @@
 
+var React = require('react');
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Tooltip = require('react-bootstrap').Tooltip;
+
 module.exports = {
 
     statusHash: {
@@ -24,10 +28,10 @@ module.exports = {
         if (!status || status == 'operational') return "";
         statusLabel = this.statusHash[status];
 
-        if (statusLabel) return (<React.OverlayTrigger placement='top'
-                                    overlay={<React.Tooltip test='spinnerInfo'>{statusLabel}</React.Tooltip>}>
+        if (statusLabel) return (<OverlayTrigger placement='top'
+                                    overlay={<Tooltip id="install-status" test='spinnerInfo'>{statusLabel}</Tooltip>}>
                                     <Portal.Components.Spinner />
-                                 </React.OverlayTrigger>);
+                                 </OverlayTrigger>);
 
         statusLabel = this.errorStatusHash[status];
         if (statusLabel) {

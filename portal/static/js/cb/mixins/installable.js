@@ -1,4 +1,6 @@
 
+var _ = require('underscore');
+
 Portal.InstallableModelMixin = {
 
     relations: [

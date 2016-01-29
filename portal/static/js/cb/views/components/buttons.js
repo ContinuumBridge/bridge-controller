@@ -5,7 +5,7 @@ require('../mixins/connector');
 
 module.exports.InstallButton = React.createClass({
 
-    mixins: [Portal.ConnectorMixin],
+    mixins: [Backbone.React.Component.mixin, Portal.ConnectorMixin],
 
     handleClick: function() {
         this.toggleExistenceOnServer(this.props.model);

@@ -9,10 +9,9 @@ function SocketServer() {
 
 }
 
-/*
 SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
-    // Setup authorization for socket io >1.0
+    /* Setup authorization for socket io >1.0 */
     var self = this;
 
     socketServer.use(function(socket, next) {
@@ -45,12 +44,10 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         });
     });
 }
-*/
 
-/*
 SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConfig) {
 
-    // Setup authorization for socket io <1.0
+    /* Setup authorization for socket io <1.0 */
     var self = this;
     // Authenticate the sessionid from the socket with django
     socketServer.configure(function() {
@@ -79,6 +76,5 @@ SocketServer.prototype.setupLegacyAuthorization = function(socketServer, getConf
         });
     });
 }
-*/
 
 module.exports = SocketServer;

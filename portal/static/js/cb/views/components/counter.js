@@ -3,7 +3,7 @@ var React = require('react');
 
 module.exports = React.createClass({
 
-    mixins: [ Portal.Mixins.Counter ],
+    mixins: [Backbone.React.Component.mixin, Portal.Mixins.Counter],
 
     render: function() {
 

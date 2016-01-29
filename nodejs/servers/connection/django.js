@@ -3,7 +3,6 @@ var rest = require('restler')
     Q = require('q')
     ;
 
-var messageUtils = require('../../messageUtils');
 var Errors = require('../../errors');
 
 var Django = function(connection) {
@@ -36,7 +35,6 @@ Django.prototype.request = function(request, sessionID) {
     var requestURL = this.connection.djangoRootURL + resource;
 
     //console.log('Django request', requestURL);
-    if (verb == 'delete') verb = 'del';
 
     rest[verb](requestURL, djangoOptions).on('complete', function(data, response) {
 
@@ -64,9 +62,9 @@ Django.prototype.messageRequest = function(message) {
 
     var self = this;
 
-    var requestData = message.body;
+    var requestData = message.get('body');
     var resource = requestData.url || requestData.resource;
-    var sessionID = message.sessionID;
+    var sessionID = message.get('sessionID');
 
     this.request(requestData, sessionID).then(function(data, response) {
         // Success
@@ -75,15 +73,15 @@ Django.prototype.messageRequest = function(message) {
             resource: resource,
             body: data
         }
-        message.body = responseBody;
-        messageUtils.returnToSender(message, 'cb');
+        message.set('body', responseBody);
+        message.return('cb');
         //logger.log('debug', 'Returning message', message.toJSONString());
-        self.connection.router.deliver(message);
+        self.connection.router.dispatch(message);
     }, function(error) {
         // Error
-        message.body = error;
-        messageUtils.returnToSender(message, 'cb');
-        self.connection.router.deliver(message);
+        message.set('body', error);
+        message.return('cb');
+        self.connection.router.dispatch(message);
     });
 };
 

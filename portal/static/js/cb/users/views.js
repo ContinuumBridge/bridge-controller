@@ -5,7 +5,7 @@ var Backbone = require('backbone-bundle');
 
 Portal.UserLicenceTableView = React.createClass({
 
-    mixins: [ Portal.Mixins.TableView ],
+    mixins: [Backbone.React.Component.mixin, Portal.Mixins.TableView ],
 
     getInitialState: function () {
         return {

@@ -9284,8 +9284,6 @@
 
 	'use strict';
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _globalObject = __webpack_require__(1);
 	
 	var _globalObject2 = _interopRequireDefault(_globalObject);
@@ -9419,34 +9417,39 @@
 	    });
 	
 	    function createElement(Component, props) {
-	        //console.log('createElement props', props);
+	        console.log('createElement props', props);
 	        //var currentBridge = Portal.bridgeCollection.at(0);
 	        var currentBridge = Portal.getCurrentBridge(false);
 	        if (currentBridge) currentBridge.fetch();
 	        //var apps = Portal.appCollection;
 	        //console.log('router currentBridge', currentBridge);
+	        /*
 	        var models = {
 	            currentBridge: currentBridge,
 	            currentUser: Portal.currentUser
-	        };
+	        }
 	        var collections = {
 	            apps: Portal.appCollection,
 	            bridges: Portal.bridgeCollection,
 	            users: Portal.userCollection,
 	            notifications: Portal.notificationCollection
-	        };
+	        }
+	        */
 	
 	        var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 	
 	        // make sure you pass all the props in!
 	        //return <Component {...props} ds={ds} />
-	        return React.createElement(Component, _extends({ key: currentBridgeID, collections: collections,
-	            models: models }, props));
+	        return(
+	            //<BaseView key={currentBridgeID} collection={collections} model={models}>
+	            React.createElement(Component, props)
+	            //</BaseView>
+	
+	        );
 	    }
 	
-	    var onRouteUpdate = function onRouteUpdate(a, b) {
+	    var onRouteUpdate = function onRouteUpdate() {
 	
-	        console.log('onRouteUpdate', a, b);
 	        var bridge = Portal.getCurrentBridge(true);
 	        console.log('onRouteUpdate bridge', bridge);
 	    };
@@ -60182,6 +60185,7 @@
 	            React.createElement(
 	                'div',
 	                { className: 'item-buttons' },
+	                this.props.status,
 	                buttons.map(this.renderButton),
 	                renderedButtons
 	            )
@@ -77475,6 +77479,7 @@
 
 	'use strict';
 	
+	var Backbone = __webpack_require__(34);
 	var React = __webpack_require__(106);
 	
 	module.exports = React.createClass({
@@ -77482,14 +77487,27 @@
 	
 	    mixins: [Backbone.React.Component.mixin],
 	
-	    /*
+	    render: function render() {
+	
+	        return React.createElement(
+	            'div',
+	            null,
+	            this.props.children
+	        );
+	    }
+	});
+	/*
+	module.exports = React.createClass({
+	
+	    mixins: [Backbone.React.Component.mixin],
+	
 	    componentDidUpdate: function() {
-	         console.log('base componentDidUpdate');
+	
+	        console.log('base componentDidUpdate');
 	        Backbone.Relational.eventQueue.unblock();
 	    },
-	    */
 	
-	    render: function render() {
+	    render: function () {
 	
 	        var Handler = this.props.handler;
 	        //console.log('Handler in base', Handler);
@@ -77500,9 +77518,12 @@
 	        //console.log('currentBridge in base', currentBridge);
 	        //currentBridge.fetch();
 	
-	        return React.createElement(Handler, { params: params, key: path, path: path });
+	        return (
+	            <Handler params={params} key={path} path={path} />
+	        );
 	    }
 	});
+	*/
 
 /***/ },
 /* 545 */
@@ -77635,6 +77656,10 @@
 	        var path = this.props.path;
 	
 	        //var currentBridge = Portal.getCurrentBridge();
+	        var notifications = Portal.notificationCollection.getFiltered('isVisible', function (model, searchString) {
+	            return model.isVisible();
+	        });
+	
 	        return React.createElement(
 	            'div',
 	            null,
@@ -77644,7 +77669,7 @@
 	                { className: 'container' },
 	                this.props.children
 	            ),
-	            React.createElement(Portal.NotificationListView, null)
+	            React.createElement(Portal.NotificationListView, { collection: notifications })
 	        );
 	    }
 	});
@@ -78011,9 +78036,13 @@
 	
 	    render: function render() {
 	
-	        var collection = Portal.notificationCollection.getFiltered('isVisible', function (model, searchString) {
-	            return model.isVisible();
-	        });
+	        /*
+	        var collection = Portal.notificationCollection
+	                            .getFiltered('isVisible', function(model, searchString) {
+	                                return model.isVisible();
+	                            });
+	        */
+	        var collection = this.props.collection;
 	
 	        return React.createElement(
 	            'div',
@@ -78258,16 +78287,18 @@
 	
 	    // Used for installing apps modal in config
 	
+	    mixins: [Backbone.React.Component.mixin],
+	
 	    render: function render() {
 	
 	        var self = this;
 	
-	        var licence = this.props.model;
+	        var licence = this.props.model.licence;
 	        var installsRemaining = licence.getInstallsRemaining();
 	        var installsPermitted = licence.get('installs_permitted');
 	
 	        var name = this.props.name;
-	        var appInstall = this.props.appInstall;
+	        var appInstall = this.props.model.appInstall;
 	
 	        var canInstall = installsPermitted > 0;
 	        var installButton = canInstall ? React.createElement(Portal.Components.InstallButton, { model: appInstall }) : '';
@@ -78319,10 +78350,13 @@
 	        var app = licence.get('app');
 	        var name = app.get('name');
 	
-	        var appInstall = licence.getInstall(this.props.bridge);
+	        var models = {
+	            licence: licence,
+	            appInstall: licence.getInstall(this.props.bridge)
+	        };
 	
 	        return React.createElement(Portal.AppLicenceRowView, { key: cid, name: name,
-	            appInstall: appInstall, model: licence });
+	            model: models });
 	    },
 	
 	    render: function render() {
@@ -79149,7 +79183,7 @@
 	Portal.DiscoveredDeviceListView = React.createClass({
 	    displayName: 'DiscoveredDeviceListView',
 	
-	    mixins: [Portal.ListView],
+	    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -79238,7 +79272,7 @@
 	
 	    itemView: Portal.DeviceInstallView,
 	
-	    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
+	    mixins: [Backbone.React.Component.mixin, Portal.ListView, Portal.Mixins.InstallableList],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -79262,13 +79296,13 @@
 	        var cid = item.cid;
 	
 	        //var deviceInstall = this.getCollection().get({cid: cid});
-	        var title = React.createElement(Portal.Components.TextInput, { model: deviceInstall, field: 'friendly_name' });
+	        var title = React.createElement(Portal.Components.TextInput, { model: item, field: 'friendly_name' });
 	
-	        var status = this.getStatus(deviceInstall);
+	        var status = this.getStatus(item);
 	        //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
 	
 	        return React.createElement(Portal.DeviceInstallView, { key: cid, status: status,
-	            title: title, model: deviceInstall });
+	            title: title, model: item });
 	    }
 	});
 
@@ -79641,7 +79675,7 @@
 	
 	        var app = this.props.app;
 	
-	        var licences = app.get('appLicences');
+	        //var licences = app.get('appLicences');
 	
 	        var users = Portal.userCollection;
 	        /*
@@ -79709,7 +79743,7 @@
 	Portal.UserLicenceTableView = React.createClass({
 	    displayName: 'UserLicenceTableView',
 	
-	    mixins: [Portal.Mixins.TableView],
+	    mixins: [Backbone.React.Component.mixin, Portal.Mixins.TableView],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -80208,9 +80242,13 @@
 
 /***/ },
 /* 574 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var React = __webpack_require__(106);
+	var OverlayTrigger = __webpack_require__(352).OverlayTrigger;
+	var Tooltip = __webpack_require__(352).Tooltip;
 	
 	module.exports = {
 	
@@ -80238,11 +80276,11 @@
 	        statusLabel = this.statusHash[status];
 	
 	        if (statusLabel) return React.createElement(
-	            React.OverlayTrigger,
-	            { placement: "top",
+	            OverlayTrigger,
+	            { placement: 'top',
 	                overlay: React.createElement(
-	                    React.Tooltip,
-	                    { test: "spinnerInfo" },
+	                    Tooltip,
+	                    { id: 'install-status', test: 'spinnerInfo' },
 	                    statusLabel
 	                ) },
 	            React.createElement(Portal.Components.Spinner, null)
@@ -80252,13 +80290,13 @@
 	        if (statusLabel) {
 	            return React.createElement(
 	                React.OverlayTrigger,
-	                { placement: "top",
+	                { placement: 'top',
 	                    overlay: React.createElement(
 	                        React.Tooltip,
 	                        null,
 	                        statusLabel
 	                    ) },
-	                React.createElement("i", { className: "icon ion-alert-circled icon-error item-icon-button" })
+	                React.createElement('i', { className: 'icon ion-alert-circled icon-error item-icon-button' })
 	            );
 	        } else {
 	            return "";
@@ -80297,7 +80335,7 @@
 	module.exports = React.createClass({
 	    displayName: 'exports',
 	
-	    mixins: [Portal.Mixins.Counter],
+	    mixins: [Backbone.React.Component.mixin, Portal.Mixins.Counter],
 	
 	    render: function render() {
 	
@@ -80706,7 +80744,7 @@
 	module.exports.InstallButton = React.createClass({
 	    displayName: 'InstallButton',
 	
-	    mixins: [Portal.ConnectorMixin],
+	    mixins: [Backbone.React.Component.mixin, Portal.ConnectorMixin],
 	
 	    handleClick: function handleClick() {
 	        this.toggleExistenceOnServer(this.props.model);
@@ -81057,7 +81095,6 @@
 	    }
 	});
 	
-	//Portal.MessageCollection = Backbone.Collection.extend({
 	/*
 	relations: [
 	    {
@@ -81230,9 +81267,11 @@
 
 /***/ },
 /* 588 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	var _ = __webpack_require__(35);
 	
 	Portal.InstallableModelMixin = {
 	
@@ -82006,7 +82045,15 @@
 	            self.trigger('relational:change');
 	        });
 	
-	        var messages = Portal.messageCollection.findAllLive({ destination: this.get('cbid') });
+	        //var messages = Portal.messageCollection.findAllLive({destination: this.get('cbid')});
+	        var cbid = this.get('cbid');
+	        var messages = Portal.messageCollection.findAllLive({
+	            $or: {
+	                destination: cbid,
+	                source: cbid
+	            }
+	        });
+	
 	        this.set('messages', messages);
 	
 	        this.listenTo(this.get('messages'), 'all', function (name) {

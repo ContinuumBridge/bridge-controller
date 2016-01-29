@@ -5,7 +5,7 @@ require('../../users/views');
 
 Portal.AppOwnershipView = React.createClass({
 
-    mixins: [ Portal.ConnectorMixin, Portal.ItemView],
+    mixins: [Portal.ConnectorMixin, Portal.ItemView],
 
     getInitialState: function () {
         return {
@@ -35,7 +35,7 @@ Portal.AppOwnershipView = React.createClass({
 
         var app = this.props.app;
 
-        var licences = app.get('appLicences');
+        //var licences = app.get('appLicences');
 
         var users = Portal.userCollection;
             /*

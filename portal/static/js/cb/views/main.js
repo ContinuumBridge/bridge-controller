@@ -20,13 +20,18 @@ module.exports = React.createClass({
         var path = this.props.path;
 
         //var currentBridge = Portal.getCurrentBridge();
+        var notifications = Portal.notificationCollection
+            .getFiltered('isVisible', function(model, searchString) {
+                return model.isVisible();
+            });
+
         return (
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
                 <div className="container">
                     {this.props.children}
                 </div>
-                <Portal.NotificationListView />
+                <Portal.NotificationListView collection={notifications} />
             </div>
         );
     }

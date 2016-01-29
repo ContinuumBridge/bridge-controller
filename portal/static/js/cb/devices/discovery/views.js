@@ -48,7 +48,7 @@ Portal.DiscoveredDeviceView = React.createClass({
 
 Portal.DiscoveredDeviceListView = React.createClass({
 
-    mixins: [Portal.ListView],
+    mixins: [Backbone.React.Component.mixin, Portal.ListView],
 
     getInitialState: function () {
         return {

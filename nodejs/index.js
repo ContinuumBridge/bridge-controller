@@ -1,103 +1,42 @@
 
 var fs = require('fs')
-    ,format = require('util').format
-    ,Q = require('q')
     ,redis = require('redis')
-    ,util = require('util')
+    ,replServer = require('./utils/repl_server')
     ;
-
-/*
-var SocketIOStream = require('./swarm/socketIOStream');
-var Server = require('./swarm/models/server');
-
-var fsExtra = require('fs-extra');
-fsExtra.ensureDir('./.swarm');
-fsExtra.emptyDirSync('./.swarm');
-*/
-
-// Repl
-var replify = require('replify')
-    , app = require('http').createServer();
-replify({ name: 'portal', path: '/tmp/repl' }, app);
 
 DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080' : 'http://localhost:8000'
 
-var Portal = require('./servers/portal/portal');
-var portal = new Portal({
-    port: 9415,
-    djangoRootURL: DJANGO_URL
-});
+//redisAuthClient = redis.createClient();
 
-var Bridge = require('./servers/bridge/bridge');
-var bridge = new Bridge({
-    port: 9416,
-    djangoRootURL: DJANGO_URL
-});
+//var portalDjangoURL = DJANGO_URL + '/api/user/v1/';
+Portal = require('./servers/portal/portal');
+portal = new Portal(9415, DJANGO_URL);
 
-var Client = require('./servers/client/client');
-var client = new Client({
-    port: 7521,
-    djangoRootURL: DJANGO_URL
-});
+//var bridgeDjangoURL = DJANGO_URL + '/api/bridge/v1/';
+Bridge = require('./servers/bridge/bridge');
+Bridge.server = new Bridge(9416, DJANGO_URL);
 
+
+//var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
+Client = require('./servers/client/client');
+Client.server = new Client(7521, DJANGO_URL);
+
+
+//var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
+//var ClientController = new Controller(3500, clientDjangoURL, clientRouter);
 /*
+Client = {};
+Client.Controller = require('./controllers/client/client_controller.js');
+Client.controller = new Client.Controller(3500);
 
-if (typeof localStorage === "undefined" || localStorage === null) {
-  var LocalStorage = require('node-localstorage').LocalStorage;
-  window = {};
-  window.localStorage = new LocalStorage('./.localstorage');
-}
-
-swarmHost = require('./swarm/host');
-env = {localhost: swarmHost};
-
-var hostAddress = 'http://localhost';
-var serverName = process.env.SERVER_IDENTITY_NAME;
-var serverKey = process.env.SERVER_IDENTITY_KEY;
-console.log('serverKey ', serverKey );
-var presenceSocket = require('socket.io-client')(hostAddress + ':5000'
-    , { query: util.format("id=%s&token=%s", serverName, serverKey) });
-
-//localServer = new Server('dev_1');
-localServer = swarmHost.get('/Server#dev_1');
-
-var presenceDeferred = Q.defer();
-
-presenceSocket.on('connect', function() {
-
-    console.log('Presence store connected');
-
-    var stream = new SocketIOStream(presenceSocket);
-    swarmHost.connect(stream);
-
-    localServer.on('.init', function() {
-        console.log('localServer init');
-        localServer.clearSessions();
-        presenceDeferred.resolve();
-    });
-});
-
-presenceDeferred.promise.then(function() {
-
-    var Portal = require('./servers/portal/portal');
-    var portal = new Portal({
-        port: 9415,
-        djangoRootURL: DJANGO_URL
-    });
-
-    var Bridge = require('./servers/bridge/bridge');
-    var bridge = new Bridge({
-        port: 9416,
-        djangoRootURL: DJANGO_URL
-    });
-
-    var Client = require('./servers/client/client');
-    var client = new Client({
-        port: 7521,
-        djangoRootURL: DJANGO_URL
-    });
-    //Client.server = new Client(7521, DJANGO_URL);
-
-}).done();
+var bridgeDjangoURL = DJANGO_URL + '/api/bridge/v1/';
+Bridge = {};
+Bridge.Server = require('./servers/bridge/server');
+Bridge.server = new Bridge.Server(3000, bridgeDjangoURL);
 */
 
+/*
+ var BridgeController = new BridgeServer(3000, bridgeDjangoURL);
+Bridge.Controller = require('./controllers/bridge/bridge_controller.js');
+Bridge.controller = new Bridge.Controller(3000);
+*/

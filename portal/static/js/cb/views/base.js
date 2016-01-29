@@ -1,17 +1,30 @@
 
+var Backbone = require('backbone-bundle');
 var React = require('react');
 
 module.exports = React.createClass({
 
     mixins: [Backbone.React.Component.mixin],
 
-    /*
+    render: function() {
+
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        );
+    }
+});
+/*
+module.exports = React.createClass({
+
+    mixins: [Backbone.React.Component.mixin],
+
     componentDidUpdate: function() {
 
         console.log('base componentDidUpdate');
         Backbone.Relational.eventQueue.unblock();
     },
-    */
 
     render: function () {
 
@@ -29,3 +42,4 @@ module.exports = React.createClass({
         );
     }
 });
+*/

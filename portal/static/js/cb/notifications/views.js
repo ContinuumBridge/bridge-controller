@@ -57,10 +57,13 @@ Portal.NotificationListView = React.createClass({
 
     render: function() {
 
+        /*
         var collection = Portal.notificationCollection
                             .getFiltered('isVisible', function(model, searchString) {
                                 return model.isVisible();
                             });
+        */
+        var collection = this.props.collection;
 
         return (
             <div className="notification-region">

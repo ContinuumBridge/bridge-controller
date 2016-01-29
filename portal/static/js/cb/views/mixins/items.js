@@ -157,6 +157,7 @@ Portal.ItemView = {
                     </small>
                 </h4>
                 <div className="item-buttons">
+                    {this.props.status}
                     {buttons.map(this.renderButton)}
                     {renderedButtons}
                 </div>

@@ -4,21 +4,19 @@ var http = require('http')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
-    ,inherits = require('util').inherits
-    url = require('url')
+    ,url = require('url')
     ;
 
-//var djangoBackbone = require('./djangoBackbone.js');
+var djangoBackbone = require('./djangoBackbone.js');
 
 var SocketServer = require('./socket')
     ,DeviceDiscovery = require('../portal/deviceDiscovery.js')
     ,backendAuth = require('../../backendAuth.js')
-    ,messageUtils = require('../../messageUtils')
+    ,MessageUtils = require('../../message_utils')
     ;
 
 function BackboneIOServer(getConfig, options) {
 
-    /*
     var djangoURL = options.djangoURL;
 
     var httpServer = http.createServer();
@@ -65,13 +63,11 @@ function BackboneIOServer(getConfig, options) {
 
 
     this.setupAuthorization(socketServer, getConfig);
-    */
 
-    //return socketServer;
+    return socketServer;
 }
 
-inherits(BackboneIOServer, SocketServer);
-//BackboneIOServer.prototype = new SocketServer();
+BackboneIOServer.prototype = new SocketServer();
 
 module.exports = BackboneIOServer;
 

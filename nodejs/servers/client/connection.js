@@ -1,6 +1,5 @@
 
-var Q = require('q')
-    ,util = require('util');
+var Q = require('q');
 
 var DjangoError = require('../../errors').DjangoError;
 
@@ -11,37 +10,40 @@ var Connection = require('../connection/connection')
     ,backendAuth = require('../../backendAuth.js')
     ;
 
-var ClientConnection = function(server, socket) {
+var ClientConnection = function(socket) {
 
     var self = this;
-
     this.socket = socket;
-    this.log = logger.log;
+    this.logger = logger;
 
-    this.configURIs = ['/api/bridge/v1/client_control'];
+    var config = this.config = socket.config;
 
-    ClientConnection.super_.call(this, server, socket);
+    console.log('ClientConnection');
+    socket.getConfig().then(function(config) {
 
-    self.logConnection(self.config, 'client');
+        self.config = config;
+
+        self.django = new Django(self);
+        self.router = new Router(self);
+
+        self.setupBuses();
+        self.setupSocket();
+        self.setupRedis();
+        self.setupRouting();
+
+        var connectedMessage = {
+            destination: config.subscriptionAddress,
+            source: 'cb',
+            body: 'connected'
+        }
+        logger.log('debug', 'connectedMessage', connectedMessage);
+        socket.emit('message', JSON.stringify(connectedMessage));
+        //socket.sendUTF('message', JSON.stringify(connectedMessage));
+        self.logConnection('client');
+
+    }).done();
 };
 
-util.inherits(ClientConnection, Connection);
-
-ClientConnection.prototype.onInit = function() {
-
-    var connectedMessage = {
-        destination: this.config.cbid,
-        source: 'cb',
-        body: 'connected'
-    }
-    logger.log('debug', 'connectedMessage', connectedMessage);
-    this.socket.emit('message', JSON.stringify(connectedMessage));
-    //socket.sendUTF('message', JSON.stringify(connectedMessage));
-}
-
-ClientConnection.prototype.getPublisheeFromThroughModel = function(cbid) {
-    // ie. CID25/UID3
-    return cbid.match(utils.cbidRegex)[2];
-}
+ClientConnection.prototype = new Connection();
 
 module.exports = ClientConnection;
