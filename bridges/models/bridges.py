@@ -43,13 +43,16 @@ class Bridge(BroadcastMixin, CBAuth, AuthKeyMixin):
     #connected = models.BooleanField(_('connected'), default = False)
     #ip = models.GenericIPAddressField(_('ip'))
 
-    #state = models.CharField(_("status"), default = 'stopped', max_length = 255, blank = True)
+    status = models.CharField(_("status"), max_length = 255, default='', blank=True)
+    status_message = models.CharField(_("status_message"), max_length = 5000, default='', blank=True)
+
+    zwave = models.CharField(_("zwave"), max_length = 255, default='', blank=True)
 
     objects = BridgeModelManager()
 
     class Meta:
         verbose_name = _('bridge')
-        broadcast_resource = 'bridges.api.resources.BridgeResource'
+        broadcast_resource = 'bridges.api.resources.BroadcastBridgeResource'
         app_label = 'bridges'
 
     def get_full_name(self):
@@ -105,3 +108,23 @@ class BridgeControl(BroadcastMixin, LoggedModel):
         bridge_id = "BID" + str(self.bridge.id)
         user_id = "UID" + str(self.user.id)
         return bridge_id + "/" + user_id
+
+
+'''
+class BridgeClientConnection(BroadcastMixin, LoggedModel):
+
+    class Meta:
+        verbose_name = _('bridge_client_connection')
+        broadcast_resource = 'bridges.api.resources.BridgeControlResource'
+        app_label = 'bridges'
+
+    bridge = models.ForeignKey(Bridge, related_name='client_connections')
+    client = models.ForeignKey(CBUser, related_name='bridge_connections')
+
+    @property
+    def cbid(self):
+        #prefix = '_'.join([a for a in re.split(r'([A-Z][a-z]*)', self.__class__.__name__) if a])
+        bridge_id = "BID" + str(self.bridge.id)
+        client_id = "CID" + str(self.client.id)
+        return bridge_id + "/" + client_id
+'''

@@ -122,7 +122,7 @@ Portal.MessageListView = React.createClass({
 
         return (
             <div id="messages">
-                <h2>Bridge Messages</h2>
+                <h2>Messages</h2>
 
                 <div ref="messagesWrapper" id="messages-wrapper">
                     <table className="table-condensed table-hover table-striped">

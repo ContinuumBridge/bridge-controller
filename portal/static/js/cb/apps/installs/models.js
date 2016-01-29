@@ -9,13 +9,16 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     matchFields: ['bridge', 'app'],
 
+    defaults: {
+        "status":  "should_install"
+    },
+
     initialize: function() {
 
         var self = this;
 
         //change relational:change relational:add relational:remove
         this.listenTo(this.get('devicePermissions'), 'all', function(model, event, options) {
-
             self.trigger('relational:change');
         });
     },
@@ -36,8 +39,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
                 key: 'appInstalls',
                 collectionType: 'AppInstallCollection',
                 includeInJSON: false,
-                initializeCollection: 'appInstallCollection',
-            }
+                initializeCollection: 'appInstallCollection'
+            }   
         },
         {
             type: Backbone.HasOne,
@@ -54,6 +57,8 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 }, { modelType: "appInstall" });
 
 Backbone.Relational.store.addModelScope({ AppInstall : Portal.AppInstall });
+
+Backbone.Cocktail.mixin(Portal.AppInstall, Portal.InstallableModelMixin);
 
 Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 

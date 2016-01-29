@@ -1,5 +1,4 @@
 
-
 var cookie_reader = require('cookie')
     ,EventEmitter = require('events').EventEmitter
     ,http = require('http')
@@ -9,6 +8,45 @@ var backendAuth = require('../../backendAuth.js')
     ,Errors = require('../../errors')
     ;
 
+var emit = EventEmitter.prototype.emit;
+
+var WSSocket = function(ws) {
+
+    var self = this;
+    this.ws = ws;
+
+    ws.on('message', function(message) {
+        if (message.type === 'utf8') {
+            console.log('Received Message: ' + message.utf8Data);
+            emit.apply(self, ['message', message.utf8Data]);
+        }
+        else if (message.type === 'binary') {
+            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+            //connection.sendBytes(message.binaryData);
+        }
+        //socket.sendUTF(message.utf8Data);
+    });
+
+    this.server = {};
+    this.server.to = function() {
+        return self;
+    }
+}
+
+WSSocket.prototype.__proto__ = EventEmitter.prototype;
+
+WSSocket.prototype.emit = function(ev) {
+
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+
+    if (ev == 'message') {
+        this.ws.sendUTF(args.join())
+    }
+}
+
+module.exports = WSSocket;
+/*
 function WSServer(getConfig, options) {
 
     var httpServer = http.createServer(function(request, response) {
@@ -34,7 +72,7 @@ function WSServer(getConfig, options) {
 
 WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
-    /* Setup authorization for socket io >1.0 */
+    /* Setup authorization for socket io >1.0
     var self = this;
 
     wsServer.on('request', function(request) {
@@ -84,46 +122,7 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
         socket.on('close', function(reasonCode, description) {
             console.log((new Date()) + ' Peer ' + socket.remoteAddress + ' disconnected.');
         });
-        */
     });
 }
-
 module.exports = WSServer;
-
-var emit = EventEmitter.prototype.emit;
-
-var WSSocket = function(ws) {
-
-    var self = this;
-    this.ws = ws;
-
-    ws.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
-            emit.apply(self, ['message', message.utf8Data]);
-        }
-        else if (message.type === 'binary') {
-            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            //connection.sendBytes(message.binaryData);
-        }
-        //socket.sendUTF(message.utf8Data);
-    });
-
-    this.server = {};
-    this.server.to = function() {
-        return self;
-    }
-}
-
-WSSocket.prototype.__proto__ = EventEmitter.prototype;
-
-WSSocket.prototype.emit = function(ev) {
-
-    var args = Array.prototype.slice.call(arguments);
-    args.shift();
-
-    if (ev == 'message') {
-        this.ws.sendUTF(args.join())
-    }
-}
-
+ */

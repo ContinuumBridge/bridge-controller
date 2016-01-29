@@ -1,5 +1,6 @@
 import json
 import redis
+import traceback
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.conf import settings
@@ -63,9 +64,11 @@ class BroadcastMixin(CBIDModelMixin):
             data = {}
             for field in fields:
                 if field == 'resource_uri':
-                    data['resource_uri'] = resource.get_resource_uri() + str(self.pk)
+                    data['resource_uri'] = resource.get_resource_uri() + "/" + str(self.pk)
                 if field == 'id':
-                    data['id'] = str(self.pk)
+                    data['id'] = self.pk
+                if field == 'cbid' and hasattr(self, 'cbid'):
+                    data['cbid'] = str(self.cbid)
 
                 # TODO Allow choosing of fields other than resource_uri
         else:
@@ -78,7 +81,7 @@ class BroadcastMixin(CBIDModelMixin):
             resource_uri, data = self.to_json()
         elif verb == "delete":
             # Only serialize specific fields if the model is being deleted
-            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id'])
+            resource_uri, data = self.to_json(fields=['resource_uri', 'deleted_by', 'id', 'cbid'])
 
         body = {
             'verb': verb,
@@ -88,32 +91,32 @@ class BroadcastMixin(CBIDModelMixin):
 
         return {
             'source': 'cb',
-            'destination': 'broadcast',
+            #'destination': 'broadcast',
             'body': body
         }
 
     def broadcast(self, message):
         r = redis.Redis()
-        json_message = json.dumps(message, cls=RawJSONEncoder)
         destinations = self.get_related_cbids()
 
+        print "broadcasting to ", destinations
         #modified_by = self.modified_by
         for d in destinations:
-
+            message['destination'] = d
+            json_message = json.dumps(message, cls=RawJSONEncoder)
             r.publish(d, json_message)
 
     def save(self, *args, **kwargs):
         verb = "update" if self.pk else "create"
-        broadcast = kwargs.pop('broadcast', True)
+        #traceback.print_stack()
         super(BroadcastMixin, self).save(*args, **kwargs)
-        if broadcast:
-            #if settings.ENVIRONMENT == "development":
-                message = self.create_message(verb)
-                self.broadcast(message)
-            #else:
-                # User the task queue if we're not in development
-                #message = self.create_message(verb)
-                #tasks.broadcast.delay(self, message)
+        #if settings.ENVIRONMENT == "development":
+        message = self.create_message(verb)
+        self.broadcast(message)
+        #else:
+            # User the task queue if we're not in development
+            #message = self.create_message(verb)
+            #tasks.broadcast.delay(self, message)
 
     def delete(self, using=None, broadcast=True):
         message = self.create_message('delete')

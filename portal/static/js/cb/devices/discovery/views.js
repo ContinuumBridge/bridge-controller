@@ -14,7 +14,7 @@ Portal.DiscoveredDeviceView = React.createClass({
     getInitialState: function () {
         var buttons = [];
 
-        var discoveredDevice = this.getModel();
+        var discoveredDevice = this.props.model;
         var device = discoveredDevice.get('device');
         if (device && device.get('adaptorCompatibilities').at(0)) {
             buttons.push({
@@ -48,7 +48,7 @@ Portal.DiscoveredDeviceView = React.createClass({
 
 Portal.DiscoveredDeviceListView = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+    mixins: [Portal.ListView],
 
     getInitialState: function () {
         return {
@@ -78,7 +78,7 @@ Portal.DiscoveredDeviceListView = React.createClass({
 
     renderItem: function (item) {
 
-        var model = this.getCollection().findWhere({id: item.id});
+        //var model = this.getCollection().findWhere({id: item.id});
         //var title = model.get('device') ? name : name + " (Unknown device)";
         var title = item.get('name');
         var address = item.get('address');

@@ -1,6 +1,5 @@
 /* Navigation Bar */
 
-
 .bridge-dropdown-header {
 
 }
@@ -17,4 +16,11 @@
 
 .btn-nav > span > .caret {
     left: 20px;
+}
+
+.dropdown-menu > li > a > .bridge-name {
+    position: relative;
+    left: -15px;
+    /*top: -1px;*/
+    font-size: 13px;
 }

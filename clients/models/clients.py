@@ -5,7 +5,7 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 
-from bridges.models.common import CBIDModelMixin, LoggedModel
+from bridges.models.common import CBIDModelMixin, LoggedModel, BroadcastMixin
 
 from accounts.models import CBAuth, CBUser
 from .manager import ClientModelManager
@@ -50,13 +50,19 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
         return self.name
 
 
-class ClientControl(LoggedModel):
+class ClientControl(BroadcastMixin, LoggedModel):
 
     client = models.ForeignKey(Client, related_name='controllers')
     user = models.ForeignKey(CBUser, related_name='client_controls')
 
     class Meta:
         verbose_name = _('client_control')
-        verbose_name_plural = _('client_controls')
+        #verbose_name_plural = _('client_controls')
+        broadcast_resource = 'clients.api.resources.ClientControlResource'
         app_label = 'clients'
 
+    @property
+    def cbid(self):
+        user_id = "UID" + str(self.user.id)
+        client_id = "CID" + str(self.client.id)
+        return client_id + "/" + user_id

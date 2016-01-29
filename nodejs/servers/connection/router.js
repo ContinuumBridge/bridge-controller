@@ -1,22 +1,17 @@
 
 var crossroads = require('crossroads')
     ,_ = require('underscore')
+    ,util = require('util')
+    ,utils = require('../utils')
     ;
 
-var Router = function() {
+var Router = function(connection) {
 
-    /*
-    var rules = {
-        appID: /AID[0-9]+/,
-        bridgeID: /BID[0-9]+/,
-        clientID: /CID[0-9]+/,
-        userID: /UID[0-9]+/,
-        cbAddress: /\/?[A-Z]ID[0-9]+.+/
-    }
-    */
+    this.connection = connection;
+    this.django = connection.django;
+
+    this.setupRoutes();
 }
-
-//Router.prototype = crossroads.create();
 
 Router.prototype.setupRoutes = function() {
 
@@ -26,17 +21,69 @@ Router.prototype.setupRoutes = function() {
     router.ignoreState = true;
 
     var connection = this.connection;
-    var subscriptionAddress = connection.config.subscriptionAddress;
-    var publicationAddresses = connection.config.publicationAddresses;
+    //logger.log('debug', 'router connection is', Object.keys(connection));
+    var django = this.connection.django;
+    var client = connection.client;
 
-    //logger.log('debug', 'Router setupRoutes config', self.connection.config);
+    var cbid = this.connection.config.cbid;
+    //var subscriptionAddress = connection.client.subscriptionAddress;
+    //var subscriptionAddress = [];
+    //var publicationAddresses = connection.config.publicationAddresses;
 
+    var publisheeAddresses = [];
+
+    // Update the publisheeAddresses from swarm client
+    client.publishees.target().on('.change', function(spec, value) {
+
+        //logger.log('debug', 'publishees on change', spec, value);
+        //publisheeValue = value;
+        for (changeSpec in value) {
+
+            var removing = value[changeSpec] == 0 ? true : false;
+            var address = changeSpec.match(utils.changeSpecRegex)[1];
+            var index = publisheeAddresses.indexOf(address);
+
+            if (removing && index != -1) {
+                //logger.log('debug', util.format('removing publishee %s from %s', address, cbid));
+                publisheeAddresses.splice(index, 1);
+            } else if (!removing && index == -1) {
+                //logger.log('debug', util.format('adding publishee %s to %s', address, cbid));
+                publisheeAddresses.push(address);
+            } else {
+                logger.log('debug', util.format('publishee %s not added to %s because it already exists'
+                    , address, cbid));
+            }
+        }
+    });
+
+    // Get the publishees for this client
+    client.getPublishees().then(function(publishees) {
+        publisheeAddresses = publishees;
+        //logger.log('debug', util.format('router publisheeAddresses for %s: %s'
+        //    , cbid, publisheeAddresses));
+    });
 
     var cbAddressRoute = router.addRoute(/\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/, function(message) {
 
-
-        //logger.log('debug', 'Matched cbAddress', message.toJSONString());
-        self.connection.toRedis.push(message);
+        var destination = message.destination;
+        if (destination) {
+            var publishee = destination.match(utils.cbidRegex)[1];
+            var index = publisheeAddresses.indexOf(publishee);
+            if (index != -1) {
+                connection.toRedis.push(message);
+            } else {
+                if (message.source.charAt(0) != 'C') {
+                    logger.log('authorization', util.format('%s is not authorized to publish to %s'
+                        , cbid, destination));
+                } else {
+                    // Skip authorization for clients, for now
+                    connection.toRedis.push(message);
+                }
+            }
+        } else {
+            logger.log('message_error', util.format('%s is not authorized to publish to %s'
+                , cbid, destination));
+        }
     });
 
     /*
@@ -47,26 +94,25 @@ Router.prototype.setupRoutes = function() {
 
     router.addRoute('cb', function(message) {
 
-        //logger.log('debug', 'Matched cb', message);
-        if (self.matchCB) {
-            self.matchCB(message)
-        } else {
-            self.connection.django.messageRequest(message);
-        }
+        django.messageRequest(message);
     });
 
     router.addRoute('broadcast', function(message) {
 
-        //logger.log('debug', 'broadcast message', message.get('source'), message.get('destination'));
-        if (message.get('source') == 'cb') {
-            self.connection.toClient.push(message);
-        }
-        message.set('destination', publicationAddresses);
-        self.connection.toRedis.push(message);
+        //logger.log('debug', 'broadcast message to publishees', publisheeAddresses);
+
+        message.destination = publisheeAddresses;
+        connection.toRedis.push(message);
+        /*
+        _.each(publisheeAddresses, function(address) {
+            message.destination = address;
+            connection.toRedis.push(message);
+        });
+        */
     });
-    //this.bypassed.add(console.log, console);
+
     router.bypassed.add(function(message) {
-        //logger.log('message_error', 'Route not matched', message.toJSON());
+        logger.log('message_error', 'Route not matched', message);
     });
 
     /*
@@ -76,27 +122,43 @@ Router.prototype.setupRoutes = function() {
     */
 }
 
-Router.prototype.dispatch = function(message) {
+Router.prototype.deliver = function(message) {
 
-    //logger.log('debug', 'Dispatch message', message);
-    //logger.log('debug', 'Dispatch message config', this.connection.config);
+    // If this is a message from the client which has bounced back, do nothing
+    var source = message.source;
+    //logger.log('debug', 'deliver message', message);
+    //logger.log('debug', 'this.connection.config.cbid', this.connection.config.cbid);
+    if(source != this.connection.config.cbid) {
+        this.connection.toClient.push(message);
+    } else {
+        // If a client is subscribed to a channel it publishes to messages bounce back to here
+        //logger.log('message_error', 'Trying to deliver message from self to self', message);
+    }
+
+    /*
+    if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
+        logger.log('debug', 'Push to client');
+        this.connection.toClient.push(message);
+    } else {
+        logger.log('message_error', 'routing', message);
+    }
+    */
+}
+
+Router.prototype.dispatch = function(message) {
 
     // Authorization could sit here?
 
-    var destination = message.get('destination');
-    var source = message.get('source');
-    logger.log('message', source, '=>', destination, '    ', message.toJSON());
+    var destination = message.destination;
+    var source = message.source;
+    logger.log('message', source, '=>', destination, '    ', message);
 
-    //logger.log('debug', 'this.connection.config', this.connection.config);
-    //logger.log('debug', 'this.connection.config.cbid', this.connection.config.subscriptionAddresses);
-    //logger.log('debug', "message.findDestination(this.connection.config.cbid) is", message.findDestinations(this.connection.config.subscriptionAddresses));
+    this.router.parse(destination, [ message ]);
+
+    /*
     // Check if the destination is the client route
     var config = this.connection.config;
-    //logger.log('debug', 'source', source, 'config cbid', config.cbid);
-    //logger.log('debug', 'config.subscriptionAddresses', config.subscriptionAddresses);
-    //logger.log('debug', 'source', source);
-    //logger.log('debug', 'config.cbid', config.cbid);
-    // source != config.cbid
+
     if (message.findDestinations(config.subscriptionAddresses) && !message.checkSource(config.cbid)) {
         logger.log('debug', 'Push to client');
         this.connection.toClient.push(message);
@@ -104,6 +166,7 @@ Router.prototype.dispatch = function(message) {
         logger.log('debug', 'dispatch destination is', destination);
         this.router.parse(destination, [ message ]);
     }
+    */
 
     /*
     var clientRoute = new RegExp('^' + this.connection.config.subscriptionAddress + '(.+)?');
@@ -119,6 +182,5 @@ Router.prototype.dispatch = function(message) {
     }
     */
 }
-
 
 module.exports = Router;

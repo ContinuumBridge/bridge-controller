@@ -57,15 +57,15 @@
 	//var CBApp = require('index');
 	var Portal = _globalObject2.default.Portal = __webpack_require__(3);
 	__webpack_require__(570);
-	__webpack_require__(574);
-	__webpack_require__(580);
+	__webpack_require__(575);
+	__webpack_require__(582);
 	//require('./cb/modules/developer/developer');
 	//require('./cb/modules/home/home');
-	__webpack_require__(581);
+	__webpack_require__(583);
 	//require('./cb/modules/nav/nav');
 	//require('./cb/modules/notifications/notifications');
-	__webpack_require__(582);
 	__webpack_require__(584);
+	__webpack_require__(586);
 	//require('./cb/views');
 	
 	//(function($){
@@ -9431,6 +9431,7 @@
 	        };
 	        var collections = {
 	            apps: Portal.appCollection,
+	            bridges: Portal.bridgeCollection,
 	            users: Portal.userCollection,
 	            notifications: Portal.notificationCollection
 	        };
@@ -11861,15 +11862,15 @@
 	//import global from 'global-object';
 	
 	var $ = __webpack_require__(2)
-	    ,_ = __webpack_require__(35)
-	    ,Cocktail = __webpack_require__(36);
+	    ,_ = __webpack_require__(35);
 	
-	Backbone = __webpack_require__(37);
+	Backbone = __webpack_require__(36);
 	//global.Backbone = Backbone;
 	//export var Backbone = require('backbone');
 	Backbone.$ = $;
-	Backbone.Babysitter = __webpack_require__(39);
-	Backbone.Wreqr = __webpack_require__(40);
+	Backbone.Babysitter = __webpack_require__(38);
+	Backbone.Wreqr = __webpack_require__(39);
+	Backbone.Cocktail = __webpack_require__(40);
 	
 	__webpack_require__(41);
 	
@@ -11895,8 +11896,8 @@
 	__webpack_require__(94);
 	//require('imports?this=>window!exports?Backbone!./backbone-cb-relational-models');
 	
-	var CBModelMixin = __webpack_require__(95);
-	Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+	//var CBModelMixin = require('./backbone-cb-model-mixin');
+	//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 	
 	//var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 	//Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
@@ -11906,18 +11907,20 @@
 	//Cocktail.mixin(Marionette.CollectionView, CBViewsMixin.RelationalCollectionView);
 	
 	// Required for backbone deferred
-	Q = __webpack_require__(96);
+	Q = __webpack_require__(95);
 	//import Q from 'q';
+	
+	__webpack_require__(97);
 	
 	__webpack_require__(98);
 	
-	__webpack_require__(99);
-	
 	Backbone.Collection = Backbone.Deferred.Collection;
 	
-	__webpack_require__(100);
+	__webpack_require__(99);
 	
-	Backbone.QueryEngine = __webpack_require__(101);
+	QueryEngine = Backbone.QueryEngine = __webpack_require__(100);
+	
+	__webpack_require__(104);
 	
 	//var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 	//Cocktail.mixin(QueryEngine.QueryCollection, CBCollectionMixin);
@@ -13305,113 +13308,6 @@
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     (c) 2012 Onsi Fakhouri
-	//     Cocktail.js may be freely distributed under the MIT license.
-	//     http://github.com/onsi/cocktail
-	(function(factory) {
-	    if ("function" === 'function' && typeof module !== 'undefined' && module.exports) {
-	        module.exports = factory(__webpack_require__(35));
-	    } else if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(35)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else {
-	        this.Cocktail = factory(_);
-	    }
-	}(function (_) {
-	
-	    var Cocktail = {};
-	
-	    Cocktail.mixins = {};
-	
-	    Cocktail.mixin = function mixin(klass) {
-	        var mixins = _.chain(arguments).toArray().rest().flatten().value();
-	        // Allows mixing into the constructor's prototype or the dynamic instance
-	        var obj = klass.prototype || klass;
-	
-	        var collisions = {};
-	
-	        _.each(mixins, function(mixin) {
-	            if (_.isString(mixin)) {
-	                mixin = Cocktail.mixins[mixin];
-	            }
-	            _.each(mixin, function(value, key) {
-	                if (_.isFunction(value)) {
-	                    // If the mixer already has that exact function reference
-	                    // Note: this would occur on an accidental mixin of the same base
-	                    if (obj[key] === value) return;
-	
-	                    if (obj[key]) {
-	                        // Avoid accessing built-in properties like constructor (#39)
-	                        collisions[key] = collisions.hasOwnProperty(key) ? collisions[key] : [obj[key]];
-	                        collisions[key].push(value);
-	                    }
-	                    obj[key] = value;
-	                } else if (_.isArray(value)) {
-	                    obj[key] = _.union(value, obj[key] || []);
-	                } else if (_.isObject(value)) {
-	                    obj[key] = _.extend({}, value, obj[key] || {});
-	                } else if (!(key in obj)) {
-	                    obj[key] = value;
-	                }
-	            });
-	        });
-	
-	        _.each(collisions, function(propertyValues, propertyName) {
-	            obj[propertyName] = function() {
-	                var that = this,
-	                    args = arguments,
-	                    returnValue;
-	
-	                _.each(propertyValues, function(value) {
-	                    var returnedValue = _.isFunction(value) ? value.apply(that, args) : value;
-	                    returnValue = (typeof returnedValue === 'undefined' ? returnValue : returnedValue);
-	                });
-	
-	                return returnValue;
-	            };
-	        });
-	
-	        return klass;
-	    };
-	
-	    var originalExtend;
-	
-	    Cocktail.patch = function patch(Backbone) {
-	        originalExtend = Backbone.Model.extend;
-	
-	        var extend = function(protoProps, classProps) {
-	            var klass = originalExtend.call(this, protoProps, classProps);
-	
-	            var mixins = klass.prototype.mixins;
-	            if (mixins && klass.prototype.hasOwnProperty('mixins')) {
-	                Cocktail.mixin(klass, mixins);
-	            }
-	
-	            return klass;
-	        };
-	
-	        _.each([Backbone.Model, Backbone.Collection, Backbone.Router, Backbone.View], function(klass) {
-	            klass.mixin = function mixin() {
-	                Cocktail.mixin(this, _.toArray(arguments));
-	            };
-	
-	            klass.extend = extend;
-	        });
-	    };
-	
-	    Cocktail.unpatch = function unpatch(Backbone) {
-	        _.each([Backbone.Model, Backbone.Collection, Backbone.Router, Backbone.View], function(klass) {
-	            klass.mixin = undefined;
-	            klass.extend = originalExtend;
-	        });
-	    };
-	
-	    return Cocktail;
-	}));
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {//     Backbone.js 1.2.3
 	
 	//     (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -13428,7 +13324,7 @@
 	
 	  // Set up Backbone appropriately for the environment. Start with AMD.
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(38), __webpack_require__(2), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(37), __webpack_require__(2), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
 	      // Export global even in AMD case in case this script is loaded with
 	      // others that may still expect a global Backbone.
 	      root.Backbone = factory(root, exports, _, $);
@@ -15310,7 +15206,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -16864,7 +16760,7 @@
 
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Backbone.BabySitter
@@ -16879,7 +16775,7 @@
 	(function(root, factory) {
 	
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(37), __webpack_require__(35)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Backbone, _) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(36), __webpack_require__(35)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Backbone, _) {
 	      return factory(Backbone, _);
 	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  } else if (typeof exports !== 'undefined') {
@@ -17060,7 +16956,7 @@
 
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Backbone.Wreqr (Backbone.Marionette)
@@ -17076,7 +16972,7 @@
 	(function(root, factory) {
 	
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(37), __webpack_require__(35)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Backbone, _) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(36), __webpack_require__(35)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Backbone, _) {
 	      return factory(Backbone, _);
 	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  } else if (typeof exports !== 'undefined') {
@@ -17506,6 +17402,113 @@
 
 
 /***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     (c) 2012 Onsi Fakhouri
+	//     Cocktail.js may be freely distributed under the MIT license.
+	//     http://github.com/onsi/cocktail
+	(function(factory) {
+	    if ("function" === 'function' && typeof module !== 'undefined' && module.exports) {
+	        module.exports = factory(__webpack_require__(35));
+	    } else if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(35)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else {
+	        this.Cocktail = factory(_);
+	    }
+	}(function (_) {
+	
+	    var Cocktail = {};
+	
+	    Cocktail.mixins = {};
+	
+	    Cocktail.mixin = function mixin(klass) {
+	        var mixins = _.chain(arguments).toArray().rest().flatten().value();
+	        // Allows mixing into the constructor's prototype or the dynamic instance
+	        var obj = klass.prototype || klass;
+	
+	        var collisions = {};
+	
+	        _.each(mixins, function(mixin) {
+	            if (_.isString(mixin)) {
+	                mixin = Cocktail.mixins[mixin];
+	            }
+	            _.each(mixin, function(value, key) {
+	                if (_.isFunction(value)) {
+	                    // If the mixer already has that exact function reference
+	                    // Note: this would occur on an accidental mixin of the same base
+	                    if (obj[key] === value) return;
+	
+	                    if (obj[key]) {
+	                        // Avoid accessing built-in properties like constructor (#39)
+	                        collisions[key] = collisions.hasOwnProperty(key) ? collisions[key] : [obj[key]];
+	                        collisions[key].push(value);
+	                    }
+	                    obj[key] = value;
+	                } else if (_.isArray(value)) {
+	                    obj[key] = _.union(value, obj[key] || []);
+	                } else if (_.isObject(value)) {
+	                    obj[key] = _.extend({}, value, obj[key] || {});
+	                } else if (!(key in obj)) {
+	                    obj[key] = value;
+	                }
+	            });
+	        });
+	
+	        _.each(collisions, function(propertyValues, propertyName) {
+	            obj[propertyName] = function() {
+	                var that = this,
+	                    args = arguments,
+	                    returnValue;
+	
+	                _.each(propertyValues, function(value) {
+	                    var returnedValue = _.isFunction(value) ? value.apply(that, args) : value;
+	                    returnValue = (typeof returnedValue === 'undefined' ? returnValue : returnedValue);
+	                });
+	
+	                return returnValue;
+	            };
+	        });
+	
+	        return klass;
+	    };
+	
+	    var originalExtend;
+	
+	    Cocktail.patch = function patch(Backbone) {
+	        originalExtend = Backbone.Model.extend;
+	
+	        var extend = function(protoProps, classProps) {
+	            var klass = originalExtend.call(this, protoProps, classProps);
+	
+	            var mixins = klass.prototype.mixins;
+	            if (mixins && klass.prototype.hasOwnProperty('mixins')) {
+	                Cocktail.mixin(klass, mixins);
+	            }
+	
+	            return klass;
+	        };
+	
+	        _.each([Backbone.Model, Backbone.Collection, Backbone.Router, Backbone.View], function(klass) {
+	            klass.mixin = function mixin() {
+	                Cocktail.mixin(this, _.toArray(arguments));
+	            };
+	
+	            klass.extend = extend;
+	        });
+	    };
+	
+	    Cocktail.unpatch = function unpatch(Backbone) {
+	        _.each([Backbone.Model, Backbone.Collection, Backbone.Router, Backbone.View], function(klass) {
+	            klass.mixin = undefined;
+	            klass.extend = originalExtend;
+	        });
+	    };
+	
+	    return Cocktail;
+	}));
+
+/***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17703,7 +17706,7 @@
 	
 	  // Set up Stickit appropriately for the environment. Start with AMD.
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(35), __webpack_require__(37), exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(35), __webpack_require__(36), exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  }
 	
 	  // Next for Node.js or CommonJS.
@@ -28293,7 +28296,7 @@
 	( function( root, factory ) {
 		// Set up Backbone-relational for the environment. Start with AMD.
 		if ( true ) {
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ exports, __webpack_require__(37), __webpack_require__(35) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ exports, __webpack_require__(36), __webpack_require__(35) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		}
 		// Next for Node.js or CommonJS.
 		else if ( typeof exports !== 'undefined' ) {
@@ -30753,64 +30756,6 @@
 
 /***/ },
 /* 95 */
-/***/ function(module, exports) {
-
-	
-	
-	var wrapError = function(model, options) {
-	    var error = options.error;
-	    options.error = function(resp) {
-	      if (error) error(model, resp, options);
-	      model.trigger('error', model, resp, options);
-	    };
-	};
-	
-	module.exports = {
-	
-	    /*
-	    initialize: function() {
-	      Backbone.Deferred.Model.prototype.initialize.apply(this, arguments);
-	      _.bindAll(this, "mark_to_revert", "revert");
-	      return this.mark_to_revert();
-	    },
-	
-	    save: function(attrs, options) {
-	      var self, success, value;
-	      self = this;
-	      options || (options = {});
-	      success = options.success;
-	      options.success = function(resp) {
-	        self.trigger("save:success", self);
-	        if (success) {
-	          success(self, resp);
-	        }
-	        return self.mark_to_revert();
-	      };
-	      this.trigger("save", this);
-	      value = Backbone.Deferred.Model.prototype.save.call(this, attrs, options);
-	      return value;
-	    },
-	
-	    mark_to_revert: function() {
-	      return this._revertAttributes = _.clone(this.attributes);
-	    },
-	
-	    revert: function() {
-	      if (this._revertAttributes) {
-	        return this.set(this._revertAttributes, {
-	          silent: true
-	        });
-	      }
-	    }
-	    */
-	};
-	
-	
-	
-
-
-/***/ },
-/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// vim:ts=4:sts=4:sw=4:
@@ -32751,10 +32696,10 @@
 	
 	});
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(97).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(96).setImmediate))
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(10).nextTick;
@@ -32833,10 +32778,10 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(97).setImmediate, __webpack_require__(97).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(96).setImmediate, __webpack_require__(96).clearImmediate))
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -33195,7 +33140,7 @@
 
 
 /***/ },
-/* 99 */
+/* 98 */
 /***/ function(module, exports) {
 
 	
@@ -33400,7 +33345,7 @@
 	Backbone.Deferred.Model = CBModel;
 
 /***/ },
-/* 100 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -33497,6 +33442,7 @@
 	            var attrs = models[i];
 	            var model = this.findWhere({id: _.property(attrs, 'id')});
 	            //console.log('update match syncing', this.matchSyncing(attrs));
+	
 	            if (!model) model = this.matchSyncing(attrs);
 	
 	            if (model) {
@@ -33574,10 +33520,12 @@
 	    delete: function(models, options) {
 	        var singular = !_.isArray(models);
 	        models = singular ? [models] : _.clone(models);
-	        options || (options = {});
+	        options = options ? _.clone(options) : {};
 	        for (var i = 0; i < models.length; i++) {
 	            var attrs = models[i];
-	            var model = this.findWhere({id: _.property(attrs, 'id')});
+	            console.log('attrs for delete is', attrs);
+	            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
+	            console.log('model for delete is', model);
 	            //model = this.get(models[i]);
 	            if(model) model.delete();
 	        }
@@ -33651,18 +33599,18 @@
 	Backbone.Collection = CBCollection;
 
 /***/ },
-/* 101 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var QueryEngine = __webpack_require__(102);
+	var QueryEngine = __webpack_require__(101);
 	
 	
 	module.exports = QueryEngine;
 
 
 /***/ },
-/* 102 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {(function() {
@@ -33675,11 +33623,11 @@
 	
 	  Backbone = this.Backbone || (typeof window !== "undefined" && window !== null ? window.Backbone : void 0) || ((function() {
 	    try {
-	      return  true ? __webpack_require__(103) : void 0;
+	      return  true ? __webpack_require__(102) : void 0;
 	    } catch (_error) {}
 	  })()) || ((function() {
 	    try {
-	      return  true ? __webpack_require__(104) : void 0;
+	      return  true ? __webpack_require__(103) : void 0;
 	    } catch (_error) {}
 	  })()) || null;
 	
@@ -35359,6 +35307,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(73)(module)))
 
 /***/ },
+/* 102 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
 /* 103 */
 /***/ function(module, exports) {
 
@@ -35366,9 +35320,74 @@
 
 /***/ },
 /* 104 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	/* (ignored) */
+	
+	var _ = __webpack_require__(35);
+	
+	QueryEngine.QueryCollection.prototype.getFiltered = function(name, filter) {
+	
+	    var self = this;
+	    //return this.createLiveChildCollection();
+	
+	    var collection = this.filtered || this.createLiveChildCollection(this.models);
+	
+	    //var collection = this.filtered || this.createLiveChildCollection();
+	    collection.setFilter(name, filter);
+	
+	    if (!this.filtered) {
+	        // If the collection is newly created, proxy events
+	        collection.on('reset', function(e) {
+	            self.trigger('relational:change');
+	        });
+	    }
+	
+	    collection.parent = this;
+	    this.filtered = collection;
+	
+	    collection.query();
+	
+	    return this.filtered;
+	},
+	
+	QueryEngine.QueryCollection.prototype.add = function(models, options) {
+	    var model, passedModels, _i, _len;
+	    options = options ? _.clone(options) : {};
+	    models = _.isArray(models) ? models.slice() : [models];
+	    passedModels = [];
+	    for (_i = 0, _len = models.length; _i < _len; _i++) {
+	        model = models[_i];
+	        model = this._prepareModel(model, options);
+	        // ADDED If this.test exists
+	        if (model && this.test && this.test(model)) {
+	            passedModels.push(model);
+	        }
+	    }
+	    Backbone.Collection.prototype.add.apply(this, [passedModels, options]);
+	    return this;
+	},
+	
+	// Override queryengine query to allow silent option passing
+	QueryEngine.QueryCollection.prototype.query = function(criteria, options) {
+	
+	    var args, passed;
+	    options = options ? _.clone(options) : {};
+	    //args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+	    //if (args.length === 1) {
+	    if (criteria instanceof QueryEngine.Criteria) {
+	        criteria = criteria.options;
+	    } else {
+	        criteria = {
+	            paging: criteria
+	        };
+	    }
+	    //}
+	    passed = this.queryModels(criteria);
+	    this.reset(passed, options);
+	    return this;
+	}
+	
+	//QueryEngine.QueryCollection = CBCollection;
 
 /***/ },
 /* 105 */
@@ -35406,7 +35425,7 @@
 	(function (root, factory) {
 	  // Universal module definition
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(106), __webpack_require__(262), __webpack_require__(37), __webpack_require__(263)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(106), __webpack_require__(262), __webpack_require__(36), __webpack_require__(263)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  } else if (typeof module !== 'undefined' && module.exports) {
 	    module.exports = factory(require('react'), require('react-dom'), require('backbone'), require('underscore'));
 	  } else {
@@ -59469,16 +59488,22 @@
 	            var verb = _.property('verb')(body);
 	            console.log('verb ', verb);
 	            var actionType = actionTypes[verb.toLowerCase()];
-	            console.log('actionType ', actionType);
-	            var uri = _.property('resource_uri')(body);
-	            console.log('uri ', uri);
-	            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
-	            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
-	            var resourceMatches = uri.match(Portal.filters.apiRegex);
-	            console.log('resourceMatches ', resourceMatches);
-	            //var resource = resourceRegex.exec(resourceURI);
-	            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
-	            console.log('dispatch itemType ', itemType);
+	
+	            var itemType;
+	            var cbid = _.property('cbid')(body);
+	            if (cbid) {
+	
+	                var cbidMatch = cbid.match(Portal.filters.apiRegex)[1];
+	                if (cbidMatch[0] == 'B') {
+	                    itemType = "bridge";
+	                }
+	            } else {
+	
+	                var uri = _.property('resource_uri')(body);
+	                var resourceMatches = uri.match(Portal.filters.apiRegex);
+	                itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+	            }
+	
 	            var items = _.property('body')(body);
 	
 	            var msg = {
@@ -77457,6 +77482,13 @@
 	
 	    mixins: [Backbone.React.Component.mixin],
 	
+	    /*
+	    componentDidUpdate: function() {
+	         console.log('base componentDidUpdate');
+	        Backbone.Relational.eventQueue.unblock();
+	    },
+	    */
+	
 	    render: function render() {
 	
 	        var Handler = this.props.handler;
@@ -77719,6 +77751,11 @@
 	    }
 	});
 	
+	var connectionColours = {
+	    true: 'led-green',
+	    false: 'led-red'
+	};
+	
 	var BridgeList = React.createClass({
 	    displayName: 'BridgeList',
 	
@@ -77733,9 +77770,32 @@
 	        Portal.setCurrentBridge(bridge, true);
 	    },
 	
+	    getLEDType: function getLEDType(connected, error) {
+	
+	        if (connected) {
+	            if (connected == 'true') {
+	                return error ? 'led-amber' : 'led-green';
+	            } else if (connected == 'false') {
+	                return 'led-red';
+	            }
+	        } else {
+	            return 'led-off';
+	        }
+	    },
+	
 	    createItem: function createItem(bridge) {
 	
-	        //console.log('createItem bridge', bridge);
+	        /*
+	        var error = bridge.status != 'operational';
+	        var imgPath = "/static/img/leds/" + this.getLEDType(bridge.connected, error) + ".png";
+	        var led = <img className="led" src={imgPath}/>;
+	        */
+	        /*
+	        var ledClass = connected ? connectionColours[connected] : "led-off";
+	        led = <div className="led-box">
+	                <div className={ledClass}></div>
+	              </div>;
+	        */
 	        return(
 	            /*
 	            <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
@@ -77753,6 +77813,15 @@
 	                )
 	            )
 	        );
+	
+	        /*
+	        <a data-tag={bridge.id} onClick={this.bridgeClick}>
+	            <div>
+	                {led}
+	            </div>
+	            <div className="bridge-name">{bridge.name}</div>
+	        </a>
+	        */
 	    },
 	
 	    render: function render() {
@@ -77921,11 +77990,16 @@
 	    renderNotification: function renderNotification(model) {
 	
 	        var title = model.getTitle();
+	        var subtitle = model.getSubtitle();
 	
 	        switch (model.get('type')) {
 	            case 'connectionStatus':
-	                var subtitle = model.getSubtitle();
 	                return React.createElement(Portal.ConnectionStatusView, { title: title, subtitle: subtitle,
+	                    model: model, className: 'notification' });
+	                break;
+	            case 'error':
+	                return React.createElement(Portal.NotificationView, { title: title, subtitle: subtitle,
+	                    hideSubtitleOnExpanded: true,
 	                    model: model, className: 'notification' });
 	                break;
 	            default:
@@ -77952,40 +78026,6 @@
 	        );
 	    }
 	});
-	
-	/*
-	Portal.NotificationView = Marionette.ItemView.extend({
-	
-	    tagName: 'li',
-	    //className: 'new-item',
-	    template: require('./templates/notification.html'),
-	
-	    events: {
-	        'click .uninstall-button': 'uninstall'
-	    },
-	
-	    bindings: {
-	        '.': 'friendly_name',
-	        ':el': {
-	          attributes: [{
-	            name: 'class',
-	            observe: 'hasChangedSinceLastSync',
-	            onGet: 'getClass'
-	          }]
-	        }
-	    }
-	});
-	
-	Portal.NotificationListView = Marionette.CompositeView.extend({
-	
-	    template: require('./templates/notificationSection.html'),
-	    //tagName: 'ul',
-	    //className: 'animated-list',
-	    itemView: Portal.NotificationView,
-	    itemViewContainer: '.notification-list',
-	
-	});
-	*/
 
 /***/ },
 /* 550 */
@@ -78350,7 +78390,7 @@
 
 	'use strict';
 	
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	var React = __webpack_require__(106);
 	var Router = __webpack_require__(264);
 	var Modal = __webpack_require__(352).Modal;
@@ -78460,6 +78500,17 @@
 	                return React.createElement(InstallDeviceModal, { container: this, installDevice: this.installDevice,
 	                    model: discoveredDevice });
 	                break;
+	            case "uninstall-device":
+	                var deviceInstall = Portal.deviceInstallCollection.getID(itemID);
+	                /*
+	                deviceInstall.once('destroy', function() {
+	                    Portal.router.setParams({action: ''});
+	                });
+	                */
+	                if (deviceInstall) {
+	                    return React.createElement(UninstallDeviceModal, { container: this, model: deviceInstall });
+	                }
+	                break;
 	            default:
 	                break;
 	        }
@@ -78532,7 +78583,12 @@
 	                    React.createElement(Portal.MessageListView, { key: currentBridge.cid,
 	                        collection: messages })
 	                ),
-	                React.createElement('div', { ref: 'bridgeSection', className: 'bridge-section col-md-6' })
+	                React.createElement(
+	                    'div',
+	                    { ref: 'bridgeSection', className: 'bridge-section col-md-6' },
+	                    React.createElement(Portal.BridgeStatusView, { key: currentBridge.cid,
+	                        model: currentBridge })
+	                )
 	            )
 	        );
 	    }
@@ -78610,6 +78666,70 @@
 	                    Button,
 	                    { onClick: this.installDevice },
 	                    'Install'
+	                )
+	            )
+	        );
+	    }
+	});
+	
+	var UninstallDeviceModal = React.createClass({
+	    displayName: 'UninstallDeviceModal',
+	
+	    mixins: [Router.State, Backbone.React.Component.mixin],
+	
+	    installDevice: function installDevice() {
+	        console.log('Submitted installDevice modal');
+	        var discoveredDevice = this.getModel();
+	        discoveredDevice.install(this.state.friendlyName);
+	        Portal.router.setParams({});
+	    },
+	
+	    cancelUninstall: function cancelUninstall() {
+	
+	        this.getModel().set({ 'status': '' }).save();
+	        Portal.router.setParams({});
+	    },
+	
+	    render: function render() {
+	
+	        var deviceInstall = this.getModel();
+	
+	        var friendlyName = deviceInstall.get('friendly_name');
+	
+	        var title = "Uninstall device " + friendlyName;
+	        var zwave = deviceInstall.get('device').get('protocol') == "zwave";
+	        //var device = this.getModel().get('device');
+	        //var title = device ? "Install " + device.get('name') : "Unknown device";
+	
+	        var message;
+	        if (zwave) {
+	
+	            message = Portal.getCurrentBridge().get('zwave') == 'exclude' ? "Follow the manufacturers instructions to uninstall this zwave device (normally clicking a button three times" : "wait for the bridge to go into Z-Exclude mode";
+	        } else {
+	
+	            message = "The device is being uninstalled";
+	        }
+	
+	        return React.createElement(
+	            React.Modal,
+	            { className: 'portal-modal', title: title, container: this.props.container,
+	                onRequestHide: this.cancelInstall, animation: false },
+	            React.createElement(
+	                'div',
+	                { className: 'modal-body' },
+	                React.createElement(
+	                    'div',
+	                    null,
+	                    message
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'modal-footer' },
+	                React.createElement(
+	                    React.Button,
+	                    { onClick: this.cancelUninstall },
+	                    'Cancel Uninstall'
 	                )
 	            )
 	        );
@@ -78754,7 +78874,7 @@
 	        return {
 	            buttons: [{
 	                type: 'delete',
-	                onClick: this.uninstall
+	                onClick: this.handleUninstall
 	            }]
 	        };
 	    },
@@ -78765,9 +78885,12 @@
 	        };
 	    },
 	
-	    uninstall: function uninstall() {
+	    handleUninstall: function handleUninstall() {
 	
-	        this.toggleExistenceOnServer(this.props.model);
+	        var appInstall = this.props.model;
+	
+	        appInstall.set({ 'status': 'should_uninstall' });
+	        appInstall.save();
 	    },
 	
 	    renderBody: function renderBody() {
@@ -78790,7 +78913,7 @@
 	            adp = devicePermissions.findWhere(adpData);
 	            if (!adp) {
 	                adp = new Portal.AppDevicePermission(adpData);
-	                appInstall.set('devicePermissions', adp, { remove: false });
+	                appInstall.set('devicePermissions', adp, { remove: false, silent: true });
 	            }
 	        });
 	
@@ -78803,7 +78926,8 @@
 	
 	    itemView: Portal.AppInstallView,
 	
-	    mixins: [Backbone.React.Component.mixin, Portal.ListView, History],
+	    mixins: [Backbone.React.Component.mixin, Portal.ListView, History, Portal.Mixins.InstallableList],
+	    //mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -78821,19 +78945,22 @@
 	        this.history.pushState(null, '/config/install-app');
 	    },
 	
-	    renderItem: function renderItem(item) {
+	    renderItem: function renderItem(appInstall) {
 	
-	        var cid = item.cid;
+	        var cid = appInstall.cid;
 	
-	        var appInstallCollection = this.getCollection();
-	        var appInstall = appInstallCollection.get({ cid: cid });
+	        //var appInstallCollection = this.getCollection()
+	        //var appInstall = appInstallCollection.get({cid: cid});
 	
 	        var app = appInstall.get('app');
 	        var title = app.get('name');
+	        //var title = app.name;
 	
 	        var deviceInstalls = this.props.deviceInstalls;
 	
-	        return React.createElement(Portal.AppInstallView, { key: cid, title: title,
+	        var status = this.getStatus(appInstall);
+	
+	        return React.createElement(Portal.AppInstallView, { key: cid, title: title, status: status,
 	            deviceInstalls: deviceInstalls, model: appInstall });
 	    }
 	});
@@ -78856,7 +78983,7 @@
 	Portal.AppDevicePermissionListView = React.createClass({
 	    displayName: 'AppDevicePermissionListView',
 	
-	    mixins: [Backbone.React.Component.mixin, Portal.InnerListView],
+	    mixins: [Portal.InnerListView],
 	
 	    getDefaultProps: function getDefaultProps() {
 	        return {
@@ -78864,11 +78991,10 @@
 	        };
 	    },
 	
-	    createItem: function createItem(item) {
+	    createItem: function createItem(adp) {
 	
-	        var cid = item.cid;
-	
-	        var adp = this.getCollection().get({ cid: cid });;
+	        var cid = adp.cid;
+	        //var adp = this.getCollection().get({cid: cid});;
 	        var label = adp.get('deviceInstall').get('friendly_name');
 	
 	        return React.createElement(Portal.Components.Switch, { key: cid, label: label, model: adp });
@@ -78988,7 +79114,7 @@
 	    getInitialState: function getInitialState() {
 	        var buttons = [];
 	
-	        var discoveredDevice = this.getModel();
+	        var discoveredDevice = this.props.model;
 	        var device = discoveredDevice.get('device');
 	        if (device && device.get('adaptorCompatibilities').at(0)) {
 	            buttons.push({
@@ -79023,7 +79149,7 @@
 	Portal.DiscoveredDeviceListView = React.createClass({
 	    displayName: 'DiscoveredDeviceListView',
 	
-	    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+	    mixins: [Portal.ListView],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -79053,7 +79179,7 @@
 	
 	    renderItem: function renderItem(item) {
 	
-	        var model = this.getCollection().findWhere({ id: item.id });
+	        //var model = this.getCollection().findWhere({id: item.id});
 	        //var title = model.get('device') ? name : name + " (Unknown device)";
 	        var title = item.get('name');
 	        var address = item.get('address');
@@ -79088,10 +79214,22 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            buttons: [{
-	                onClick: this.handleDestroy,
+	                onClick: this.handleUninstall,
 	                type: 'delete'
 	            }]
 	        };
+	    },
+	
+	    handleUninstall: function handleUninstall() {
+	
+	        var deviceInstall = this.props.model;
+	
+	        deviceInstall.set({ 'status': 'should_uninstall' });
+	        deviceInstall.save();
+	        if (deviceInstall.get('device').get('protocol') == 'zwave') {
+	            Portal.router.setParams({ action: 'uninstall-device',
+	                item: deviceInstall.get('id') });
+	        }
 	    }
 	});
 	
@@ -79100,7 +79238,7 @@
 	
 	    itemView: Portal.DeviceInstallView,
 	
-	    mixins: [Backbone.React.Component.mixin, Portal.ListView],
+	    mixins: [Portal.ListView, Portal.Mixins.InstallableList],
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -79123,11 +79261,14 @@
 	
 	        var cid = item.cid;
 	
-	        var deviceInstall = this.getCollection().get({ cid: cid });
+	        //var deviceInstall = this.getCollection().get({cid: cid});
 	        var title = React.createElement(Portal.Components.TextInput, { model: deviceInstall, field: 'friendly_name' });
 	
-	        return React.createElement(Portal.DeviceInstallView, { key: cid,
-	            title: title, model: item });
+	        var status = this.getStatus(deviceInstall);
+	        //var subtitle = <Portal.Components.Spinner tooltip={tooltip} />;
+	
+	        return React.createElement(Portal.DeviceInstallView, { key: cid, status: status,
+	            title: title, model: deviceInstall });
 	    }
 	});
 
@@ -79282,7 +79423,7 @@
 	            React.createElement(
 	                "h2",
 	                null,
-	                "Bridge Messages"
+	                "Messages"
 	            ),
 	            React.createElement(
 	                "div",
@@ -79718,7 +79859,7 @@
 	var Backbone = __webpack_require__(34);
 	var React = __webpack_require__(106);
 	var Router = __webpack_require__(264);
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	
 	//require('../../views/generic-views');
 	//require('../../views/regions');
@@ -79861,6 +80002,7 @@
 	Mixins.Filter = __webpack_require__(572);
 	Mixins.RowView = __webpack_require__(573).RowView;
 	Mixins.TableView = __webpack_require__(573).TableView;
+	Mixins.InstallableList = __webpack_require__(574);
 	
 	Portal.Mixins = Mixins;
 
@@ -80066,23 +80208,86 @@
 
 /***/ },
 /* 574 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	
+	    statusHash: {
+	        operational: "",
+	        should_install: "Waiting for bridge to start installation",
+	        downloading: "Downloading onto bridge",
+	        installing: "Installing onto bridge",
+	        should_uninstall: "Waiting for bridge to start uninstalling",
+	        uninstalling: "Uninstalling from bridge"
+	    },
+	
+	    errorStatusHash: {
+	        install_error: "Error installing: ",
+	        uninstall_error: "Error uninstalling: ",
+	        not_uninstalled: "Not uninstalled",
+	        error: "Error: "
+	    },
+	
+	    getStatus: function getStatus(install) {
+	
+	        var statusLabel;
+	        var status = install.get('status');
+	        if (!status || status == 'operational') return "";
+	        statusLabel = this.statusHash[status];
+	
+	        if (statusLabel) return React.createElement(
+	            React.OverlayTrigger,
+	            { placement: "top",
+	                overlay: React.createElement(
+	                    React.Tooltip,
+	                    { test: "spinnerInfo" },
+	                    statusLabel
+	                ) },
+	            React.createElement(Portal.Components.Spinner, null)
+	        );
+	
+	        statusLabel = this.errorStatusHash[status];
+	        if (statusLabel) {
+	            return React.createElement(
+	                React.OverlayTrigger,
+	                { placement: "top",
+	                    overlay: React.createElement(
+	                        React.Tooltip,
+	                        null,
+	                        statusLabel
+	                    ) },
+	                React.createElement("i", { className: "icon ion-alert-circled icon-error item-icon-button" })
+	            );
+	        } else {
+	            return "";
+	        }
+	    }
+	};
+
+/***/ },
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Components = {};
 	
-	Components.Counter = __webpack_require__(575);
-	Components.Switch = __webpack_require__(576);
-	Components.TextInput = __webpack_require__(577).TextInput;
-	Components.SearchInput = __webpack_require__(578).SearchInput;
+	Components.Counter = __webpack_require__(576);
+	Components.Switch = __webpack_require__(577);
+	Components.TextInput = __webpack_require__(578).TextInput;
+	Components.SearchInput = __webpack_require__(579).SearchInput;
 	
-	Components.InstallButton = __webpack_require__(579).InstallButton;
+	//Components.Tooltip = require('./tooltip');
+	
+	Components.Spinner = __webpack_require__(580);
+	Components.InstallButton = __webpack_require__(581).InstallButton;
 	
 	Portal.Components = Components;
 
 /***/ },
-/* 575 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80134,7 +80339,7 @@
 	});
 
 /***/ },
-/* 576 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80148,7 +80353,8 @@
 	
 	    handleClick: function handleClick() {
 	
-	        var model = this.getModel();
+	        //var model = this.getModel();
+	        var model = this.props.model;
 	
 	        if (!model.isSyncing()) {
 	            if (model.isNew()) {
@@ -80191,7 +80397,7 @@
 	});
 
 /***/ },
-/* 577 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80380,7 +80586,7 @@
 	module.exports.AutosizeInput = AutosizeInput;
 
 /***/ },
-/* 578 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80450,7 +80656,45 @@
 	});
 
 /***/ },
-/* 579 */
+/* 580 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var React = __webpack_require__(106);
+	
+	module.exports = React.createClass({ displayName: 'Spinner',
+	
+	    /*
+	    componentDidMount: function() {
+	         var $spinner = $(this.refs.spinner.getDOMNode());
+	         $spinner.tipsy({gravity: 's'});
+	    },
+	    */
+	
+	    render: function render() {
+	
+	        //var { ...other } = this.props;
+	
+	        return React.createElement(
+	            'div',
+	            _extends({}, this.props, { className: 'spinner', ref: 'spinner' }),
+	            React.createElement('div', { className: 'bounce1' }),
+	            React.createElement('div', { className: 'bounce2' }),
+	            React.createElement('div', { className: 'bounce3' })
+	        );
+	    }
+	});
+	
+	/*
+	<a href="#" title="This is some information for our tooltip." className="floating-info">
+	</a>
+	*/
+
+/***/ },
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80499,7 +80743,7 @@
 	});
 
 /***/ },
-/* 580 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80595,7 +80839,7 @@
 	});
 
 /***/ },
-/* 581 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80663,7 +80907,7 @@
 	});
 
 /***/ },
-/* 582 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80672,7 +80916,7 @@
 	
 	var CBApp = __webpack_require__(3);
 	
-	__webpack_require__(583);
+	__webpack_require__(585);
 	//var routers = require('./routers');
 	//var Message = require('./message');
 	
@@ -80764,8 +81008,12 @@
 	            return;
 	        }
 	
+	        // Hold any messages until the initial data has arrived
+	        //Portal.getCurrentBridge().then(function() {
+	
 	        console.log('Server >', jsonMessage);
 	        Portal.dispatch(jsonMessage);
+	        //});
 	        /*
 	        var message = new Portal.Message(jsonMessage);
 	         var date = new Date();
@@ -80777,7 +81025,7 @@
 	});
 
 /***/ },
-/* 583 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80866,23 +81114,20 @@
 	});
 
 /***/ },
-/* 584 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	
 	var CBApp = __webpack_require__(3);
 	
-	__webpack_require__(585);
-	__webpack_require__(586);
 	__webpack_require__(587);
-	__webpack_require__(588);
+	__webpack_require__(589);
 	__webpack_require__(590);
 	__webpack_require__(591);
 	__webpack_require__(592);
-	__webpack_require__(593);
 	__webpack_require__(594);
 	__webpack_require__(595);
 	__webpack_require__(596);
@@ -80893,9 +81138,13 @@
 	__webpack_require__(601);
 	__webpack_require__(602);
 	__webpack_require__(603);
-	
 	__webpack_require__(604);
 	__webpack_require__(605);
+	__webpack_require__(606);
+	__webpack_require__(607);
+	
+	__webpack_require__(608);
+	__webpack_require__(609);
 	
 	//Portal.addInitializer(function () {
 	Portal.on('initialize:before', function () {
@@ -80972,7 +81221,66 @@
 	});
 
 /***/ },
-/* 585 */
+/* 587 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	__webpack_require__(588);
+
+/***/ },
+/* 588 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Portal.InstallableModelMixin = {
+	
+	    relations: [{
+	        type: Backbone.HasOne,
+	        key: 'notification',
+	        relatedModel: 'Portal.ModelStatus',
+	        createModels: true,
+	        includeInJSON: false,
+	        initializeCollection: 'notificationCollection',
+	        reverseRelation: {
+	            type: Backbone.HasOne,
+	            key: 'model',
+	            includeInJSON: false
+	        }
+	    }],
+	
+	    initialize: function initialize(undefined, options) {
+	
+	        this.on('change:status', this.onStatusChange, this);
+	    },
+	
+	    onStatusChange: function onStatusChange(model, value, options) {
+	
+	        var self = this;
+	
+	        if (_.contains(['uninstall_error'], value)) {
+	            var notification;
+	            notification = this.get('notification');
+	            if (!notification) {
+	                notification = new Portal.ModelStatus({ model: this, type: 'installStatus' });
+	                Portal.notificationCollection.add(notification);
+	                this.listenToOnce(notification, 'destroy', function () {
+	                    self.set({
+	                        status: "",
+	                        status_message: ""
+	                    });
+	                    self.save();
+	                });
+	            }
+	            //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
+	        }
+	        console.log('status changed', model, value, options);
+	    }
+	};
+
+/***/ },
+/* 589 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -80996,7 +81304,7 @@
 	Backbone.Relational.store.addModelScope({ AdaptorCollection: Portal.AdaptorCollection });
 
 /***/ },
-/* 586 */
+/* 590 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -81039,7 +81347,7 @@
 	Backbone.Relational.store.addModelScope({ AdaptorCompatibilityCollection: Portal.AdaptorCompatibilityCollection });
 
 /***/ },
-/* 587 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81130,14 +81438,14 @@
 	Backbone.Relational.store.addModelScope({ AppCollection: Portal.AppCollection });
 
 /***/ },
-/* 588 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Backbone = __webpack_require__(34);
 	
-	__webpack_require__(589);
+	__webpack_require__(593);
 	
 	Portal.AppConnection = Portal.ConnectionModel.extend({
 	
@@ -81182,7 +81490,7 @@
 	Backbone.Relational.store.addModelScope({ AppConnectionCollection: Portal.AppConnectionCollection });
 
 /***/ },
-/* 589 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81240,7 +81548,7 @@
 	}, { modelType: "connectionModel" });
 
 /***/ },
-/* 590 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81255,13 +81563,16 @@
 	
 	    matchFields: ['bridge', 'app'],
 	
+	    defaults: {
+	        "status": "should_install"
+	    },
+	
 	    initialize: function initialize() {
 	
 	        var self = this;
 	
 	        //change relational:change relational:add relational:remove
 	        this.listenTo(this.get('devicePermissions'), 'all', function (model, event, options) {
-	
 	            self.trigger('relational:change');
 	        });
 	    },
@@ -81298,6 +81609,8 @@
 	
 	Backbone.Relational.store.addModelScope({ AppInstall: Portal.AppInstall });
 	
+	Backbone.Cocktail.mixin(Portal.AppInstall, Portal.InstallableModelMixin);
+	
 	Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 	
 	    model: Portal.AppInstall,
@@ -81308,7 +81621,7 @@
 	Backbone.Relational.store.addModelScope({ AppInstallCollection: Portal.AppInstallCollection });
 
 /***/ },
-/* 591 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81412,7 +81725,7 @@
 	        install = licenceInstalls.findWhere(installData);
 	        if (!install) {
 	            install = new Portal.AppInstall(installData);
-	            this.set('installs', install, { remove: false });
+	            this.set('installs', install, { remove: false, silent: true });
 	        }
 	        return install;
 	    },
@@ -81491,7 +81804,7 @@
 	Backbone.Relational.store.addModelScope({ AppLicenceCollection: Portal.AppLicenceCollection });
 
 /***/ },
-/* 592 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81566,7 +81879,7 @@
 	Backbone.Relational.store.addModelScope({ AppOwnershipCollection: Portal.AppOwnershipCollection });
 
 /***/ },
-/* 593 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81586,7 +81899,6 @@
 	    initialize: function initialize() {
 	
 	        var self = this;
-	        //this.startTracking();
 	        //Backbone.Deferred.Model.prototype.initialize.apply(this);
 	        this.listenTo(this.get('appInstall'), 'destroy', function () {
 	            //console.log('ADP heard destroy on deviceInstall')
@@ -81642,7 +81954,8 @@
 	
 	Backbone.Relational.store.addModelScope({ AppDevicePermission: Portal.AppDevicePermission });
 	
-	Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+	//Portal.AppDevicePermissionCollection = Backbone.Collection.extend({
+	Portal.AppDevicePermissionCollection = Backbone.QueryEngine.QueryCollection.extend({
 	
 	    model: Portal.AppDevicePermission,
 	    backend: 'appDevicePermission'
@@ -81652,7 +81965,7 @@
 	Backbone.Relational.store.addModelScope({ AppDevicePermissionCollection: Portal.AppDevicePermissionCollection });
 
 /***/ },
-/* 594 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81660,10 +81973,10 @@
 	//var logger = require('logger');
 	var Backbone = __webpack_require__(34);
 	var history = __webpack_require__(4);
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	
-	var BridgeControl = __webpack_require__(595).BridgeControl;
-	var BridgeControlCollection = __webpack_require__(595).BridgeControlCollection;
+	var BridgeControl = __webpack_require__(599).BridgeControl;
+	var BridgeControlCollection = __webpack_require__(599).BridgeControlCollection;
 	
 	Portal.Bridge = Backbone.Deferred.Model.extend({
 	
@@ -81734,6 +82047,9 @@
 	        reverseRelation: {
 	            type: Backbone.HasOne,
 	            key: 'bridge',
+	            keySource: 'bridge',
+	            keyDestination: 'bridge',
+	            relatedModel: 'Bridge',
 	            collectionType: 'BridgeCollection',
 	            includeInJSON: 'resource_uri',
 	            initializeCollection: 'bridgeCollection'
@@ -81825,13 +82141,13 @@
 	};
 
 /***/ },
-/* 595 */
+/* 599 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Backbone = __webpack_require__(34);
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	
 	Portal.BridgeControl = Backbone.RelationalModel.extend({
 	
@@ -81883,7 +82199,7 @@
 	Backbone.Relational.store.addModelScope({ BridgeControlCollection: Portal.BridgeControlCollection });
 
 /***/ },
-/* 596 */
+/* 600 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81929,7 +82245,7 @@
 	Backbone.Relational.store.addModelScope({ ClientCollection: Portal.ClientCollection });
 
 /***/ },
-/* 597 */
+/* 601 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81982,7 +82298,7 @@
 	Backbone.Relational.store.addModelScope({ ClientControlCollection: Portal.ClientControlCollection });
 
 /***/ },
-/* 598 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82047,7 +82363,7 @@
 	Backbone.Relational.store.addModelScope({ DeviceCollection: Portal.DeviceCollection });
 
 /***/ },
-/* 599 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82066,16 +82382,6 @@
 	
 	        var self = this;
 	
-	        /*
-	        console.log('this in installDevice is', this);
-	        console.log('adaptor in installDevice is', adaptor);
-	        console.log('bridge in installDevice is', this.get('bridge').get('resource_uri'));
-	        console.log('device in installDevice is', this.get('device').get('resource_uri'));
-	        console.log('mac_addr in installDevice is', this.get('mac_addr'));
-	        */
-	        //this.set('friendly_name', friendlyName);
-	        //this.set('adaptor', adaptor);
-	
 	        var device = this.get('device');
 	        if (!device) return console.error('Cannot install device, no device found', this);
 	        var adaptor = device.get('adaptorCompatibilities').at(0).get('adaptor');
@@ -82092,37 +82398,6 @@
 	        var createOptions = { matchFields: this.matchFields };
 	
 	        Portal.deviceInstallCollection.create(deviceInstallData, createOptions);
-	        /*
-	        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData);
-	        if (!deviceInstall) {
-	            //deviceInstall = new
-	        }
-	        /*
-	        var deviceInstall = Portal.deviceInstallCollection.findWhere(deviceInstallData)
-	            || new Portal.DeviceInstall({
-	                bridge: this.get('bridge'),
-	                device: this.get('device'),
-	                address: address,
-	                adaptor: adaptor,
-	                friendly_name: friendlyName
-	            });
-	         /*
-	        var deviceInstall = Portal.deviceInstallCollection.findOrAdd({
-	         });
-	          // Add the optional data in for saving
-	        deviceInstallData = _.defaults(deviceInstallData, {
-	            adaptor: adaptor.resource_uri,
-	            friendly_name: friendlyName
-	        });
-	        console.log('deviceInstall is', deviceInstall.toJSON());
-	        // Add to the deviceInstall collection, to save with backbone io
-	        Portal.deviceInstallCollection.add(deviceInstall);
-	        deviceInstall.save().then(function(result) {
-	             console.log('deviceInstall saved successfully');
-	        }, function(error) {
-	             console.error('Error saving deviceInstall', error);
-	        });
-	        */
 	    },
 	
 	    relations: [{
@@ -82194,7 +82469,7 @@
 	Backbone.Relational.store.addModelScope({ DiscoveredDeviceCollection: Portal.DiscoveredDeviceCollection });
 
 /***/ },
-/* 600 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82205,20 +82480,15 @@
 	
 	    idAttribute: 'id',
 	
-	    matchFields: ['bridge', 'device'],
 	    backend: 'deviceInstall',
 	
-	    initialize: function initialize() {
+	    matchFields: ['bridge', 'device'],
 	
-	        //Backbone.Deferred.Model.prototype.initialize.apply(this);
-	        //this.bind("change", this.changeHandler)
-	
+	    defaults: {
+	        "status": "should_install"
 	    },
 	
-	    changeHandler: function changeHandler(e) {
-	
-	        console.log('Change in device install is', e);
-	    },
+	    initialize: function initialize() {},
 	
 	    uninstall: function uninstall() {
 	
@@ -82332,12 +82602,13 @@
 	
 	    model: Portal.DeviceInstall,
 	    backend: 'deviceInstall'
+	
 	});
 	
 	Backbone.Relational.store.addModelScope({ DeviceInstallCollection: Portal.DeviceInstallCollection });
 
 /***/ },
-/* 601 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82395,6 +82666,25 @@
 	
 	}, { modelType: "connectionStatus" });
 	
+	Portal.ModelStatus = Portal.Notification.extend({
+	
+	    defaults: {
+	        type: 'installStatus'
+	    },
+	
+	    getTitle: function getTitle() {
+	        //var installable = this.get('model');
+	        //return installable.get('status');
+	        return this.get('model').get('friendly_name') + " " + "not uninstalled";
+	    },
+	
+	    getSubtitle: function getSubtitle() {
+	        var installable = this.get('model');
+	        return installable.get('status_message');
+	    }
+	
+	}, { modelType: "installStatus" });
+	
 	//Portal.DeviceCollection = Backbone.Deferred.Collection.extend({
 	Portal.NotificationCollection = Backbone.QueryEngine.QueryCollection.extend({
 	
@@ -82403,7 +82693,7 @@
 	});
 
 /***/ },
-/* 602 */
+/* 606 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82527,12 +82817,12 @@
 	Backbone.Relational.store.addModelScope({ UserCollection: Portal.UserCollection });
 
 /***/ },
-/* 603 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(602);
+	__webpack_require__(606);
 	
 	Portal.CurrentUser = Portal.User.extend({
 	
@@ -82568,7 +82858,7 @@
 	Backbone.Relational.store.addModelScope({ CurrentUserCollection: Portal.CurrentUserCollection });
 
 /***/ },
-/* 604 */
+/* 608 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -82690,12 +82980,12 @@
 	};
 
 /***/ },
-/* 605 */
+/* 609 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Q = __webpack_require__(96);
+	var Q = __webpack_require__(95);
 	
 	Portal.filters = {};
 	
@@ -82740,7 +83030,9 @@
 	//Portal.filters.apiRegex = /[\w/]*\/([\d]{1,10})/;
 	Portal.filters.apiRegex = /\/[\w]+\/[\w]+\/v[0-9]+\/([\w]+)\/?([0-9]+)?\/?$/;
 	
-	Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+	//Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+	//Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?/;
+	Portal.filters.cbidRegex = /\/?([A-Z]ID[0-9]+)\/?([A-Z]ID[0-9]+)?\/?([A-Z]ID[0-9]+)?/;
 
 /***/ }
 /******/ ]);

@@ -140,6 +140,7 @@ Portal.addInitializer(function () {
       }
       var collections = {
           apps: Portal.appCollection,
+          bridges: Portal.bridgeCollection,
           users: Portal.userCollection,
           notifications: Portal.notificationCollection
       }

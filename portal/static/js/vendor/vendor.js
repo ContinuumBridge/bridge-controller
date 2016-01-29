@@ -1,9 +1,16 @@
 import 'es5-shim';
 
+<<<<<<< HEAD
 //import _ from 'underscore';
 //require("expose?XModule!underscore");
 //_ = require('underscore');
 import Backbone from 'backbone-bundle';
+=======
+$ = require('jquery-browserify');
+jQuery = $;
+
+_ = require('underscore');
+>>>>>>> staging-2
 
 import QueryEngine from 'query-engine';
 //import Marionette from 'backbone.marionette';

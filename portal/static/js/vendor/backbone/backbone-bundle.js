@@ -2,8 +2,7 @@
 //import global from 'global-object';
 
 var $ = require('jquery')
-    ,_ = require('underscore')
-    ,Cocktail = require('backbone-cocktail');
+    ,_ = require('underscore');
 
 Backbone = require('backbone');
 //global.Backbone = Backbone;
@@ -11,6 +10,7 @@ Backbone = require('backbone');
 Backbone.$ = $;
 Backbone.Babysitter = require('backbone.babysitter');
 Backbone.Wreqr = require('backbone.wreqr');
+Backbone.Cocktail = require('backbone-cocktail');
 
 require('./backbone-cb-model-pre');
 
@@ -36,8 +36,8 @@ console.log('backbone-bundle Backbone', Object.keys(Backbone));
 require('./backbone-cb-relational-models');
 //require('imports?this=>window!exports?Backbone!./backbone-cb-relational-models');
 
-var CBModelMixin = require('./backbone-cb-model-mixin');
-Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
+//var CBModelMixin = require('./backbone-cb-model-mixin');
+//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
@@ -58,7 +58,9 @@ Backbone.Collection = Backbone.Deferred.Collection;
 
 require('./backbone-cb-collection');
 
-Backbone.QueryEngine = require('./query-engine/query-engine-bundle.js');
+QueryEngine = Backbone.QueryEngine = require('./query-engine/query-engine-bundle.js');
+
+require('./backbone-cb-querycollection');
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(QueryEngine.QueryCollection, CBCollectionMixin);

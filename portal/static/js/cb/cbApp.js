@@ -66,16 +66,23 @@ var CBApp = Backbone.Marionette.Application.extend({
             var verb = _.property('verb')(body);
             console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
-            console.log('actionType ', actionType );
-            var uri = _.property('resource_uri')(body);
-            console.log('uri ', uri );
-            //var resource = resource_uri.match(/\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\/?[[0-9]+]?\/?/g);
-            //var resourceRegex = /\/[\w]+\/[\w]+\/[\w]+\/([\w]+)\//g;
-            var resourceMatches = uri.match(Portal.filters.apiRegex);
-            console.log('resourceMatches ', resourceMatches );
-            //var resource = resourceRegex.exec(resourceURI);
-            var itemType = utils.underscoredToCamelCase(resourceMatches[1]);
-            console.log('dispatch itemType ', itemType );
+
+            var itemType;
+            var cbid = _.property('cbid')(body);
+            if (cbid) {
+
+                var cbidMatch = cbid.match(Portal.filters.apiRegex)[1];
+                if (cbidMatch[0] == 'B') {
+                    itemType = "bridge";
+                }
+
+            } else {
+
+                var uri = _.property('resource_uri')(body);
+                var resourceMatches = uri.match(Portal.filters.apiRegex);
+                itemType = utils.underscoredToCamelCase(resourceMatches[1]);
+            }
+
             var items = _.property('body')(body);
 
             var msg = {

@@ -102,7 +102,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
         install = licenceInstalls.findWhere(installData);
         if (!install) {
             install = new Portal.AppInstall(installData);
-            this.set('installs', install, {remove: false});
+            this.set('installs', install, {remove: false, silent: true});
         }
         return install;
     },

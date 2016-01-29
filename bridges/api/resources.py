@@ -17,14 +17,12 @@ class BridgeControlResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         queryset = BridgeControl.objects.all()
-        #authorization = BridgeControlAuthorization()
         resource_name = 'bridge_control'
         #related_user_permissions = ['read', 'create', 'update', 'delete']
         related_bridge_permissions = ['read', 'create', 'update', 'delete']
 
 def controlled_by_client(bundle):
-    #print "bundle.request.META['REQUEST_METHOD'] is", bundle.request
-    #if bundle.request.META['REQUEST_METHOD'] == "GET":
+    # Is the resource being modified controlled by the user in the bundle
     try:
         return getattr(bundle, 'controlled_by_client')
     except AttributeError:
@@ -35,39 +33,26 @@ def controlled_by_client(bundle):
             return controlled
         except AttributeError:
             # The request is being made by the system
-            return True
+            return False
 
-    #else:
-    #    return False
+def get_request(bundle):
+    return bundle.request.META['REQUEST_METHOD'] == "GET"
 
-class BridgeResource(CBResource, CBIDResourceMixin):
 
-    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
-                                 'controls', full=True, null=True, use_in=controlled_by_client)
-
-    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
-                                 'app_installs', full=True, null=True, use_in=controlled_by_client)
-
-    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
-                                 'device_installs', full=True, null=True, use_in=controlled_by_client)
+class ProtoBridgeResource(CBResource, CBIDResourceMixin):
 
     class Meta(CBResource.Meta):
         queryset = Bridge.objects.all()
         authorization = BridgeAuthorization()
-        #authorization = ReadOnlyAuthorization()
         excludes = ['key', 'plaintext_key', 'is_staff', 'is_superuser']
-        fields = ['id', 'cbid', 'name', 'description', 'date_joined', 'manager_version', 'last_login']
+        fields = ['id', 'cbid', 'name', 'description', 'date_joined'
+                  , 'manager_version', 'last_login', 'status', 'status_message', 'zwave']
         user_related_through = 'controls'
         create_user_through_model = True
         related_user_permissions = ['read', 'create', 'update', 'delete']
         resource_name = 'bridge'
 
     def obj_create(self, bundle, **kwargs):
-
-        print "obj_create bundle type", type(bundle)
-        print "obj_create bundle", bundle
-        print "obj_create bundle obj", bundle.obj
-        print "obj_create bundle data", bundle.data
 
         # ADDED Create a bridge using manager method, but don't save it
         bundle.obj = Bridge.objects.create_bridge(save=False)
@@ -86,6 +71,27 @@ class BridgeResource(CBResource, CBIDResourceMixin):
             pass
         return bundle
 
+def controlled_by_client_get(bundle):
+    return controlled_by_client(bundle) and get_request(bundle)
+
+class BridgeResource(ProtoBridgeResource):
+
+    controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource',
+                                 'controls', full=True, null=True, use_in=controlled_by_client_get)
+
+    apps = fields.ToManyField('apps.api.resources.AppInstallResource',
+                                 'app_installs', full=True, null=True, use_in=controlled_by_client_get)
+
+    devices = fields.ToManyField('devices.api.resources.DeviceInstallResource',
+                                 'device_installs', full=True, null=True, use_in=controlled_by_client_get)
+
+    class Meta(ProtoBridgeResource.Meta):
+        pass
+
+class BroadcastBridgeResource(ProtoBridgeResource):
+
+    class Meta(ProtoBridgeResource.Meta):
+        pass
 
 class CurrentBridgeResource(LoggedInResource, CBIDResourceMixin):
 

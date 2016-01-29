@@ -5,6 +5,14 @@ module.exports = React.createClass({
 
     mixins: [Backbone.React.Component.mixin],
 
+    /*
+    componentDidUpdate: function() {
+
+        console.log('base componentDidUpdate');
+        Backbone.Relational.eventQueue.unblock();
+    },
+    */
+
     render: function () {
 
         var Handler = this.props.handler;

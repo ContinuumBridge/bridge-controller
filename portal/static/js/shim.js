@@ -1,6 +1,12 @@
 
 module.exports = {
     "jquery": "$",
+    "tipsy": {
+        "exports": null,
+        "depends": {
+            "jQuery": "$"
+        }
+    },
     "underscore": "_",
     "backbone": {
         "exports": "Backbone",

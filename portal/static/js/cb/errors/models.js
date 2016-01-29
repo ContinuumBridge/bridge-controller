@@ -7,9 +7,13 @@ Portal.Error = Backbone.RelationalModel.extend({
     /*
     initialize: function(attributes, options) {
 
+        if (attributes['type'] != "TransportError") {
+            var notification = new Portal.Notification({error: this,
+                type: 'error'});
+        }
 
-
-    }
+        Portal.notificationCollection.add(notification);
+    },
     */
 });
 

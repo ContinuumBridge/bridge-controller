@@ -11,6 +11,7 @@ var gulp = require('gulp')
     ,reactify = require('reactify')
     ,rename = require("gulp-rename")
     ,source = require('vinyl-source-stream')
+    //,uglify = require('gulp-uglify')
     ,watchify = require('watchify');
     ;
 
@@ -167,13 +168,20 @@ gulp.task('watch', function() {
 })
 */
 
-gulp.task('node_server', function () {
-    nodemon({ script: './nodejs/index.js', watch: './nodejs/**'})
+gulp.task('copy', function(cb) {
+    gulp.src(['../presence_store/swarm/models/**/*']).pipe(gulp.dest('./nodejs/swarm/models'));
+    cb();
+    //.on('restart', ['lint'])
+});
+
+gulp.task('node_server', ['copy'], function() {
+    nodemon({ script: './nodejs/index.js', watch: './nodejs/**'});
     //.on('restart', ['lint'])
 })
 
 // Dev server
 gulp.task('default', ['client', 'vendor', 'node_server']);
+
 //gulp.task('default', ['client', 'node_server']);
 //gulp.task('default', ['client', 'node_server', 'watch']);
 

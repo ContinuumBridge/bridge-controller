@@ -40,6 +40,11 @@ module.exports.Topbar = React.createClass({
     }
 });
 
+var connectionColours = {
+    true: 'led-green',
+    false: 'led-red'
+}
+
 var BridgeList = React.createClass({
 
     mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
@@ -53,9 +58,33 @@ var BridgeList = React.createClass({
         Portal.setCurrentBridge(bridge, true);
     },
 
+    getLEDType: function(connected, error) {
+
+        if (connected) {
+            if (connected == 'true') {
+                return error ? 'led-amber' : 'led-green';
+            } else if (connected == 'false') {
+                return 'led-red';
+            }
+        } else {
+            return 'led-off';
+        }
+    },
+
     createItem: function(bridge) {
 
-        //console.log('createItem bridge', bridge);
+
+        /*
+        var error = bridge.status != 'operational';
+        var imgPath = "/static/img/leds/" + this.getLEDType(bridge.connected, error) + ".png";
+        var led = <img className="led" src={imgPath}/>;
+        */
+        /*
+        var ledClass = connected ? connectionColours[connected] : "led-off";
+        led = <div className="led-box">
+                <div className={ledClass}></div>
+              </div>;
+        */
         return (
             /*
             <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
@@ -67,6 +96,15 @@ var BridgeList = React.createClass({
                 <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.get('name')}</a>
             </li>
         );
+
+            /*
+            <a data-tag={bridge.id} onClick={this.bridgeClick}>
+                <div>
+                    {led}
+                </div>
+                <div className="bridge-name">{bridge.name}</div>
+            </a>
+            */
     },
 
     render: function () {

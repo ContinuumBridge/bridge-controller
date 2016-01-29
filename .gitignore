@@ -12,3 +12,4 @@ media/
 local_settings.py
 
 .idea/
+.swarm/

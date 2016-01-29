@@ -3,6 +3,7 @@ var Q = require('q');
 
 var CBApp = require('index');
 
+require('./mixins/mixins');
 require('./adaptors/models');
 require('./adaptors/compatibility/models');
 require('./apps/models');

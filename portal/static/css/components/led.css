@@ -1,0 +1,9 @@
+
+.led {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    float: left;
+    left: -19px;
+    top: -2.5px;
+}

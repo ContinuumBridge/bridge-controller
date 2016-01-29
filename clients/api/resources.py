@@ -31,7 +31,7 @@ def requester_is_user(bundle):
     except AttributeError:
         return False
 
-class ClientControlResource(CBResource):
+class ClientControlResource(CBResource, CBIDResourceMixin):
 
     user = cb_fields.ToOneThroughField('accounts.api.resources.UserResource', 'user', full=False)
     client = cb_fields.ToOneThroughField('clients.api.resources.ClientResource',

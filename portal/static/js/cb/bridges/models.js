@@ -78,6 +78,9 @@ Portal.Bridge = Backbone.Deferred.Model.extend({
             reverseRelation: {
                 type: Backbone.HasOne,
                 key: 'bridge',
+                keySource: 'bridge',
+                keyDestination: 'bridge',
+                relatedModel: 'Bridge',
                 collectionType: 'BridgeCollection',
                 includeInJSON: 'resource_uri',
                 initializeCollection: 'bridgeCollection'

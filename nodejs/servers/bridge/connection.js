@@ -1,6 +1,7 @@
 
 var rest = require('restler')
-    ,Q = require('q');
+    ,Q = require('q')
+    ,util = require('util');
 
 var DjangoError = require('../../errors').DjangoError;
 
@@ -10,31 +11,27 @@ var Connection = require('../connection/connection')
     ,Django = require('../connection/django.js')
     ,logger = require('./logger')
     ,backendAuth = require('../../backendAuth.js')
+    ,utils = require('../utils');
     ;
 
-var BridgeConnection = function(socket) {
+var BridgeConnection = function(server, socket) {
 
     var self = this;
-    this.socket = socket;
-    this.logger = logger;
+    this.log = logger.log;
 
-    socket.getConfig().then(function(config) {
+    this.configURIs = ['/api/bridge/v1/bridge_control'];
 
-        self.config = config;
+    BridgeConnection.super_.call(this, server, socket);
 
-        self.django = new Django(self);
-        self.router = new Router(self);
-
-        self.setupBuses();
-        self.setupSocket();
-        self.setupRedis();
-        self.setupRouting();
-        self.logConnection('bridge');
-
-    }).done();
+    self.logConnection(self.config, 'bridge');
 };
 
-BridgeConnection.prototype = new Connection();
+util.inherits(BridgeConnection, Connection);
+
+BridgeConnection.prototype.getPublisheeFromThroughModel = function(cbid) {
+    // ie. BID2/UID3
+    return cbid.match(utils.cbidRegex)[2];
+}
 
 BridgeConnection.prototype.deviceDiscovery = function(message) {
 

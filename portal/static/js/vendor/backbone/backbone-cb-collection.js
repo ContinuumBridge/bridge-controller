@@ -92,6 +92,7 @@ var CBCollection = OriginalCollection.extend({
             var attrs = models[i];
             var model = this.findWhere({id: _.property(attrs, 'id')});
             //console.log('update match syncing', this.matchSyncing(attrs));
+
             if (!model) model = this.matchSyncing(attrs);
 
             if (model) {
@@ -169,10 +170,12 @@ var CBCollection = OriginalCollection.extend({
     delete: function(models, options) {
         var singular = !_.isArray(models);
         models = singular ? [models] : _.clone(models);
-        options || (options = {});
+        options = options ? _.clone(options) : {};
         for (var i = 0; i < models.length; i++) {
             var attrs = models[i];
-            var model = this.findWhere({id: _.property(attrs, 'id')});
+            console.log('attrs for delete is', attrs);
+            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
+            console.log('model for delete is', model);
             //model = this.get(models[i]);
             if(model) model.delete();
         }

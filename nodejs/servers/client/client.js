@@ -4,39 +4,105 @@ var ClientConnection = require('./connection')
     ,Server = require('../server')
     ,SocketIOServer = require('../sockets/socket.io')
     ,utils = require('../utils')
-    ,WSServer = require('../sockets/websocket')
+    ,util = require('util')
+    ,EventEmitter = require('events').EventEmitter
+    ,http = require('http')
+    ,WebSocketServer = require('websocket').server
+    ,WSSocket = require('../sockets/websocket')
+    //,WSServer = require('../sockets/websocket')
     ;
 
-var Client = function(port, djangoRootURL) {
+var Client = function(options) {
 
     var self = this;
 
-    this.djangoURL = djangoRootURL + '/api/client/v1/';
+    this.djangoRootURL = options.djangoRootURL;
+    this.djangoURL = this.djangoRootURL + '/api/client/v1/';
     this.authURL = this.djangoURL + 'current_client/client/';
 
-    var ioOptions = {
-        port: port
-    }
-    this.socketServer = this.createSocketServer(SocketIOServer, ioOptions);
-    var wsOptions = {
-        port: port + 1
-    }
-    this.wsServer = this.createSocketServer(WSServer, wsOptions);
+    //this.socketServer = this.createSocketServer(SocketIOServer, ioOptions);
+    var httpServer = require('http').createServer();
+    this.sockets = require('socket.io')(httpServer, {
+        //'pingInterval': heartbeatInterval,
+        //'pingTimeout': heartbeatTimeout
+    });
+    httpServer.listen(options.port);
+
+    Client.super_.call(this);
+
+    // Web sockets
+    var httpServer = http.createServer(function(request, response) {
+        console.log((new Date()) + ' Received request for ' + request.url);
+        response.writeHead(404);
+        response.end();
+    });
+    var wsPort = options.port + 1;
+    httpServer.listen(wsPort, function() {
+        console.log((new Date()) + ' Server is listening on port 8080');
+    });
+
+    var wsServer = this.wsServer = new WebSocketServer({
+        httpServer: httpServer,
+        autoAcceptConnections: false
+    });
+
+    wsServer.sockets = new EventEmitter();
+
+    this.setupWSAuthentication();
 };
 
-Client.prototype = new Server();
+util.inherits(Client, Server);
 
 Client.prototype.onConnection = function(socket) {
 
     var self = this;
 
-    socket.getConfig = function() {
-        var sessionID = socket.sessionID;
-        console.log('getConfig', socket.handshake);
-        return self.getConnectionConfig(self.authURL, sessionID);
-    };
+    logger.log('debug', 'client onConnection', socket.config);
 
-    var connection = new ClientConnection(socket);
+    var connection = new ClientConnection(this, socket);
+}
+
+
+Client.prototype.setupWSAuthentication = function() {
+
+    // Setup authorization for socket io >1.0
+    var self = this;
+
+    this.wsServer.on('request', function(request) {
+
+        var sessionID;
+
+        if(request.httpRequest && request.httpRequest.headers && request.httpRequest.headers.sessionid) {
+            sessionID = request.httpRequest.headers.sessionid;
+        } else {
+            var error = new Errors.Unauthorized('No sessionID was provided');
+            logger.log('unauthorized', error);
+            request.reject(error);
+        }
+        //console.log('wsServer httpRequest is', request.httpRequest);
+        console.log('wsServer sessionID ', sessionID);
+
+        //getConfig(sessionID).then(function(config) {
+        self.getConnectionConfig(sessionID).then(function(config) {
+
+            console.log('Websocket authorization successful', config);
+            console.log('request.origin', request.origin);
+
+            var ws = request.accept();
+
+            var socket = new WSSocket(ws);
+            socket.config = config;
+            socket.sessionID = sessionID;
+            self.onConnection(socket);
+            self.wsServer.sockets.emit('connection', socket);
+
+        }, function(error) {
+
+            request.reject();
+            logger.log('connection', error);
+            next(error);
+        }).done();
+    });
 }
 
 Client.prototype.formatConfig = function(authData) {

@@ -7,7 +7,8 @@ module.exports = React.createClass({
 
     handleClick: function() {
 
-        var model = this.getModel();
+        //var model = this.getModel();
+        var model = this.props.model;
 
         if (!model.isSyncing()) {
             if (model.isNew()) {

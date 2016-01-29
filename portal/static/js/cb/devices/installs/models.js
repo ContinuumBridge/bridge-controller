@@ -5,23 +5,19 @@ Portal.DeviceInstall = Backbone.Deferred.Model.extend({
     
     idAttribute: 'id',
 
-    matchFields: ['bridge', 'device'],
     backend: 'deviceInstall',
+
+    matchFields: ['bridge', 'device'],
+
+    defaults: {
+        "status":  "should_install"
+    },
 
     initialize: function() {
 
-        //Backbone.Deferred.Model.prototype.initialize.apply(this);
-        //this.bind("change", this.changeHandler)
-
-    },
-
-    changeHandler: function(e) {
-
-        console.log('Change in device install is', e);
     },
 
     uninstall: function() {
-
 
         this.relationalDestroy({wait: true});
     },
@@ -134,6 +130,7 @@ Portal.DeviceInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 
     model: Portal.DeviceInstall,
     backend: 'deviceInstall',
+
 });
 
 Backbone.Relational.store.addModelScope({ DeviceInstallCollection : Portal.DeviceInstallCollection });
