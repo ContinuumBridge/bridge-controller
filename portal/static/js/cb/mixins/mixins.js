@@ -1,2 +1,3 @@
 
 require('./installable');
+require('./connector');

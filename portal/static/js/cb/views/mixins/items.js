@@ -1,9 +1,7 @@
 
 var React = require('react');
 
-//var ListItem = require('../components/bootstrap/ListItem.jsx');
 var Panel = require('../components/bootstrap/Panel.js');
-//var Panel = require('react-bootstrap').Panel;
 var PanelGroup = require('react-bootstrap').PanelGroup;
 
 Portal.InnerItemView = {
@@ -220,8 +218,9 @@ Portal.ListView = {
 
         var buttons = this.state.buttons || [];
 
+        //className="topcoat-button-bar"
         return (
-            <div class="topcoat-button-bar">
+            <div>
                 {buttons.map(this.renderButton)}
             </div>
         )

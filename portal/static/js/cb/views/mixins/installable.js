@@ -29,16 +29,16 @@ module.exports = {
         statusLabel = this.statusHash[status];
 
         if (statusLabel) return (<OverlayTrigger placement='top'
-                                    overlay={<Tooltip id="install-status" test='spinnerInfo'>{statusLabel}</Tooltip>}>
+                                    overlay={<Tooltip id="install-status">{statusLabel}</Tooltip>}>
                                     <Portal.Components.Spinner />
                                  </OverlayTrigger>);
 
         statusLabel = this.errorStatusHash[status];
         if (statusLabel) {
-            return (<React.OverlayTrigger placement='top'
-                        overlay={<React.Tooltip>{statusLabel}</React.Tooltip>}>
+            return (<OverlayTrigger placement='top'
+                        overlay={<Tooltip>{statusLabel}</Tooltip>}>
                         <i className="icon ion-alert-circled icon-error item-icon-button"/>
-                    </React.OverlayTrigger>);
+                    </OverlayTrigger>);
         } else {
             return "";
         }

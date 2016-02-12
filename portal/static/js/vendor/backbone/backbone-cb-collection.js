@@ -91,16 +91,28 @@ var CBCollection = OriginalCollection.extend({
         for (i = 0, l = models.length; i < l; i++) {
             var attrs = models[i];
             var model = this.findWhere({id: _.property(attrs, 'id')});
+            //console.log('attrs', attrs);
+            //console.log('update findWhere model ', model );
             //console.log('update match syncing', this.matchSyncing(attrs));
 
             if (!model) model = this.matchSyncing(attrs);
+
+            if (!model) model = this.match(attrs);
+
+            //console.log('model ', model );
+            //console.log('this.match(attrs)', this.match(attrs));
+
+            attrs.isGhost = false;
 
             if (model) {
                 model.set(attrs);
                 //console.log('setting model', model);
             } else {
-                //console.log('adding model', attrs);
-                if (!(model = this._prepareModel(attrs, options))) return false;
+                console.log('adding model', attrs);
+                if (!(model = this._prepareModel(attrs, options))) {
+                    console.warning('Could not create model ', attrs, options)
+                    return false;
+                }
                 this.add(model);
                 //console.log('model added', model);
             };
@@ -115,9 +127,14 @@ var CBCollection = OriginalCollection.extend({
         for (var i = 0; i < models.length; i++) {
             //var attrs = models[i];
             var model;
+            //console.log('models[i] ', models[i] );
             if (!(model = this._prepareModel(models[i], options))) return false;
             //console.log('model matchFields', model.matchFields);
+            //console.log('model ', model );
+
             if (!model.cid && model.matchFields) {
+
+                //console.log('match model ', model );
                 var matchQuery = {};
                 _.each(model.matchFields, function(matchField) {
                     matchQuery[matchField] = model.get(matchField);
@@ -135,7 +152,7 @@ var CBCollection = OriginalCollection.extend({
             */
             model.save(null, options).then(
                 function(result) {
-                    //console.log('create success');
+                    console.log('create success', model);
                     if (options.wait) collection.add(model, options);
                     collection.unregisterSyncing(model);
                 },
@@ -173,11 +190,20 @@ var CBCollection = OriginalCollection.extend({
         options = options ? _.clone(options) : {};
         for (var i = 0; i < models.length; i++) {
             var attrs = models[i];
-            console.log('attrs for delete is', attrs);
-            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
-            console.log('model for delete is', model);
-            //model = this.get(models[i]);
-            if(model) model.delete();
+            var model = this.findWhere({id: _.property('id')(attrs)});
+            //console.log('model isConnector for delete is', model.isConnector);
+
+            if(model) {
+                console.log('Deleting model', model);
+                // If a model is a connector then reset it rather than deleting it
+                if (model.isConnector) {
+                    model.reset();
+                } else {
+                    model.delete();
+                }
+            } else {
+                console.log('Deleted model does not exist on client', attrs);
+            }
         }
     },
 
@@ -187,8 +213,16 @@ var CBCollection = OriginalCollection.extend({
     },
 
     unregisterSyncing: function(model) {
-        console.log('unregisterSyncing', model);
         this.ghosts = _.without(this.ghosts, _.findWhere(this.ghosts, {cid: model.cid}));
+    },
+
+    match: function(attrs) {
+        // Check if the incoming attributes match any registered ghosts
+        var matchQuery = {};
+        _.each(this.matchFields, function(matchField) {
+            matchQuery[matchField] = _.property(matchField)(attrs);
+        });
+        return this.findWhere(matchQuery);
     },
 
     matchSyncing: function(attrs) {

@@ -436,6 +436,7 @@
 			// Because the found object could be of any of the type's superModel
 			// types, only return it if it's actually of the type asked for.
 			if ( coll ) {
+
 				var obj = coll.get( id );
 
 				if ( obj instanceof type ) {

@@ -195,8 +195,6 @@ var Panel = _react2['default'].createClass({
         } else {
             //var className = _classnames2['default'](_utilsBootstrapUtils2['default'].prefix(this.props, 'title'), header.props.className);
 
-            console.log('Panel this.props.collapsible', this.props.collapsible);
-
             if (this.props.collapsible) {
                 header = <div className="item-heading panel-heading">
                              {this.renderAnchor(header.props.children, headerRole)}

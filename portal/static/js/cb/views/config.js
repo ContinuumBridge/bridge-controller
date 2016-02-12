@@ -4,21 +4,23 @@ var React = require('react');
 var Router = require('react-router');
 var Modal = require('react-bootstrap').Modal;
 var Button = require('react-bootstrap').Button;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Tooltip = require('react-bootstrap').Tooltip;
+var Popover = require('react-bootstrap').Popover;
 
-require('../../views/generic-views');
-require('../../views/regions');
+require('./generic-views');
 
-require('../../apps/installs/views');
-require('../../apps/licences/views');
-require('../../bridges/views');
-require('../../devices/discovery/views');
-require('../../devices/installs/views');
-require('../../messages/views');
+require('../apps/installs/views');
+require('../apps/licences/views');
+require('../bridges/views');
+require('../devices/discovery/views');
+require('../devices/installs/views');
+require('../messages/views');
 
 
 module.exports.Main = React.createClass({
 
-    mixins: [ Router.State, Backbone.React.Component.mixin],
+    mixins: [Backbone.React.Component.mixin],
 
     /*
     componentWillReceiveParams: function(params) {
@@ -33,8 +35,6 @@ module.exports.Main = React.createClass({
     */
 
     discoverDevices: function() {
-
-        console.log('config discoverDevices');
 
         Portal.router.setParams({action: 'discover-devices'});
 
@@ -78,35 +78,15 @@ module.exports.Main = React.createClass({
 
     renderModals: function () {
 
-        /*
-        return (
-            <React.Modal show={true} onHide={function(){}}>
-                 <React.Modal.Header>
-                 <React.Modal.Title></React.Modal.Title>
-                 </React.Modal.Header>
-                <React.Modal.Body>
-                    <h4>Text in a modal</h4>
-                </React.Modal.Body>
-                <React.Modal.Footer>
-                    Footer
-                </React.Modal.Footer>
-            </React.Modal>
-        );
-        */
-
-        //var action = this.getParams().action;
-        //var itemID = this.getParams().item;
         var action = this.props.params.action;
         var itemID = this.props.params.item;
-        console.log('renderModals params', action);
+
         switch (action) {
             case "install-app":
-                console.log('renderModals InstallAppModal');
                 return <InstallAppModal show={true} container={this} />;
                 break;
             case "install-device":
                 var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
-                console.log('discoveredDevice for modal is', discoveredDevice);
                 return <InstallDeviceModal container={this} installDevice={this.installDevice}
                             model={discoveredDevice} />;
                 break;
@@ -129,7 +109,6 @@ module.exports.Main = React.createClass({
     render: function() {
 
         var currentBridge = Portal.getCurrentBridge();
-        //var currentBridge = Portal.bridgeCollection.get({id: 2});
 
         if (!currentBridge) {
             return (
@@ -208,7 +187,6 @@ var InstallDeviceModal = React.createClass({
 
     installDevice: function() {
         var model = this.props.model;
-        console.log('Submitted installDevice modal, props', this.props);
         this.props.installDevice(model, this.state.friendlyName);
         //var discoveredDevice = this.getModel();
         //discoveredDevice.install(this.state.friendlyName);
@@ -250,10 +228,10 @@ var InstallDeviceModal = React.createClass({
 
 var UninstallDeviceModal = React.createClass({
 
-    mixins: [ Router.State, Backbone.React.Component.mixin],
+    mixins: [ Backbone.React.Component.mixin],
 
     installDevice: function() {
-        console.log('Submitted installDevice modal');
+
         var discoveredDevice = this.getModel();
         discoveredDevice.install(this.state.friendlyName);
         Portal.router.setParams({});
@@ -273,8 +251,6 @@ var UninstallDeviceModal = React.createClass({
 
         var title = "Uninstall device " + friendlyName;
         var zwave = deviceInstall.get('device').get('protocol') == "zwave";
-        //var device = this.getModel().get('device');
-        //var title = device ? "Install " + device.get('name') : "Unknown device";
 
         var message;
         if (zwave) {
@@ -303,16 +279,7 @@ var UninstallDeviceModal = React.createClass({
 
 var InstallAppModal = React.createClass({
 
-    mixins: [ Router.State, Router.Navigation, Backbone.React.Component.mixin],
-
-    handleFriendlyName: function(event) {
-        this.setState({friendlyName: event.target.value});
-    },
-
-    showAppMarket: function() {
-
-        this.transitionTo('market', {}, this.getQuery());
-    },
+    mixins: [ Backbone.React.Component.mixin],
 
     cancelInstall: function() {
 
@@ -327,10 +294,10 @@ var InstallAppModal = React.createClass({
         var bridge = Portal.getCurrentBridge();
 
         return (
-            <Modal show={true} onHide={function(){}}
+            <Modal.Dialog show={true} onHide={function(){}}
                 container={this.props.container} animation={false}>
                 <Modal.Header>
-                    <Modal.Title></Modal.Title>
+                    <Modal.Title>Manage Apps on {bridge.get('name')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Portal.AppLicenceTableView collection={licenceCollection} bridge={bridge} />
@@ -339,13 +306,7 @@ var InstallAppModal = React.createClass({
                     <Button onClick={this.cancelInstall}>Close</Button>
                     <Button onClick={this.showAppMarket}>App Market</Button>
                 </Modal.Footer>
-            </ Modal>
+            </ Modal.Dialog>
         )
     }
 });
-
-/*
-
- <React.Modal className="portal-modal" title={title} container={this.props.container}
- onRequestHide={this.cancelInstall} show={true} onHide={function(){}} animation={false}>
- */

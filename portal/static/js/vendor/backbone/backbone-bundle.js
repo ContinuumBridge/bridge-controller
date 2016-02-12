@@ -27,17 +27,12 @@ require('backbone.modal');
 //require('./backbone-notify');
 
 //require('expose?window.Backbone=>Backbone!./backbone-relational');
-//console.log('backbone-bundle global', Object.keys(global));
 //require('./backbone-relational');
 require('imports?this=>window!exports?Backbone!./backbone-relational');
-console.log('backbone-bundle Backbone', Object.keys(Backbone));
 //require('./backbone-relational');
 //require('./backbone-relational');
 require('./backbone-cb-relational-models');
 //require('imports?this=>window!exports?Backbone!./backbone-cb-relational-models');
-
-//var CBModelMixin = require('./backbone-cb-model-mixin');
-//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 
 //var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 //Cocktail.mixin(Backbone.Collection, CBCollectionMixin);

@@ -9,9 +9,11 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 
     matchFields: ['bridge', 'app'],
 
+    /*
     defaults: {
         "status":  "should_install"
     },
+    */
 
     initialize: function() {
 
@@ -59,6 +61,7 @@ Portal.AppInstall = Backbone.Deferred.Model.extend({
 Backbone.Relational.store.addModelScope({ AppInstall : Portal.AppInstall });
 
 Backbone.Cocktail.mixin(Portal.AppInstall, Portal.InstallableModelMixin);
+Backbone.Cocktail.mixin(Portal.AppInstall, Portal.ConnectorModelMixin);
 
 Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 

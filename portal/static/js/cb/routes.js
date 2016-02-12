@@ -12,12 +12,12 @@ require('./views/home');
 require('./views/main');
 
 var AccountView = require('./views/account');
-var ConfigView = require('./modules/config/views').Main;
+var ConfigView = require('./views/config').Main;
 var MainView = require('./views/main');
 var HomeView = require('./views/home');
 var DashboardView = require('./views/dashboard');
 var DeveloperView = require('./views/developer');
-var MarketView = require('./modules/market/views').Main;
+var MarketView = require('./views/market').Main;
 var NotFoundView = require('./views/notFound');
 
 var routes = (

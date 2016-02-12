@@ -77,7 +77,7 @@ Portal.AppLicenceRowView = React.createClass({
 
     // Used for installing apps modal in config
 
-    mixins: [Backbone.React.Component.mixin],
+    mixins: [Backbone.React.Component.mixin, Portal.Mixins.InstallableList],
 
     render: function() {
 
@@ -90,6 +90,8 @@ Portal.AppLicenceRowView = React.createClass({
         var name = this.props.name;
         var appInstall = this.props.model.appInstall;
 
+        var status = this.getStatus(appInstall);
+
         var canInstall = installsPermitted > 0;
         var installButton = canInstall ? <Portal.Components.InstallButton model={appInstall} />
                             : '';
@@ -99,6 +101,7 @@ Portal.AppLicenceRowView = React.createClass({
                 <td className="app-name">{name}</td>
                 <td className="installs-permitted">{installsPermitted}</td>
                 <td className="installs-remaining">{installsRemaining}</td>
+                <td>{status}</td>
                 <td>{installButton}</td>
             </tr>
         );
@@ -115,11 +118,11 @@ Portal.AppLicenceTableView = React.createClass({
         };
     },
 
-    createItem: function (item) {
-        var cid = item.cid;
+    createItem: function (licence) {
 
-        var appLicenceCollection = this.getCollection()
-        var licence = appLicenceCollection.get({cid: cid});
+        //var cid = item.cid;
+        //var appLicenceCollection = this.getCollection()
+        //var licence = appLicenceCollection.get({cid: cid});
 
         var app = licence.get('app');
         var name = app.get('name');
@@ -129,7 +132,7 @@ Portal.AppLicenceTableView = React.createClass({
             appInstall: licence.getInstall(this.props.bridge)
         }
 
-        return < Portal.AppLicenceRowView key={cid} name={name}
+        return < Portal.AppLicenceRowView key={licence.cid} name={name}
                     model={models} />
     },
 

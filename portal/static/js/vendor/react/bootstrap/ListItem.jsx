@@ -80,14 +80,12 @@ var Panel = _react2['default'].createClass({
     },
 
     render: function render() {
-        console.log('ListItem render');
+
         var _props = this.props;
         var headerRole = _props.headerRole;
         var panelRole = _props.panelRole;
 
         var props = _objectWithoutProperties(_props, ['headerRole', 'panelRole']);
-
-        console.log('this.props.collapsible', this.props.collapsible);
 
         return _react2['default'].createElement(
             'div',
@@ -101,7 +99,7 @@ var Panel = _react2['default'].createClass({
     },
 
     renderCollapsibleBody: function renderCollapsibleBody(panelRole) {
-        console.log('renderCollapsibleBody', renderCollapsibleBody);
+
         var props = {
             className: this.prefixClass('collapse'),
             id: this.props.id,
@@ -125,7 +123,6 @@ var Panel = _react2['default'].createClass({
 
     renderBody: function renderBody() {
 
-        console.log('ListItem renderBody');
         return (
             <div className="panel-body item-body" ref="body">
                 {this.props.children}
@@ -194,7 +191,6 @@ var Panel = _react2['default'].createClass({
     },
 
     renderHeading: function renderHeading(headerRole) {
-        console.log('ListItem renderHeading');
         /*
         var header = this.props.header;
 
@@ -232,7 +228,6 @@ var Panel = _react2['default'].createClass({
         var renderedButtons = renderedButtons ? renderedButtons() : "";
 
         var buttons = this.props.buttons || [];
-        console.log('buttons ', buttons );
 
         return (
             <div className="panel-heading item-heading">

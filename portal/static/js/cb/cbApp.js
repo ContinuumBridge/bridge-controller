@@ -43,7 +43,7 @@ var CBApp = Backbone.Marionette.Application.extend({
 
     dispatch: function(message) {
 
-        console.log('dispatch message', message);
+        console.log('Dispatch message', message);
 
         var source = _.property('source')(message);
         var body = _.property('body')(message);
@@ -54,9 +54,8 @@ var CBApp = Backbone.Marionette.Application.extend({
 
         } else if (source == 'cb') {
 
-            console.log('dispatch cb message', message);
-
-            console.log('body', body);
+            //console.log('dispatch cb message', message);
+            //console.log('body', body);
 
             var actionTypes = {
                 create: 'add',
@@ -64,7 +63,6 @@ var CBApp = Backbone.Marionette.Application.extend({
                 update: 'update'
             }
             var verb = _.property('verb')(body);
-            console.log('verb ', verb );
             var actionType = actionTypes[verb.toLowerCase()];
 
             var itemType;
@@ -102,7 +100,7 @@ var CBApp = Backbone.Marionette.Application.extend({
             Portal.messageCollection.add(message);
 
         } else {
-            console.warn('message source unrecognised', message);
+            console.warn('Message source unrecognised', message);
         }
 
         //this.dispatcher.dispatch(message);

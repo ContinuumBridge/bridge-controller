@@ -1,18 +1,14 @@
 
 var Backbone = require('backbone-bundle');
 var React = require('react');
-var Router = require('react-router');
-var Q = require('q');
+//var Router = require('react-router');
+//var Q = require('q');
 
-//require('../../views/generic-views');
-//require('../../views/regions');
-
-require('../../apps/views');
-
+require('../apps/views');
 
 module.exports.Main = React.createClass({
 
-    mixins: [ Router.State, Backbone.React.Component.mixin],
+    mixins: [ Backbone.React.Component.mixin],
 
     renderModals: function () {
 
@@ -21,7 +17,7 @@ module.exports.Main = React.createClass({
     render: function() {
 
         var apps = Portal.appCollection;
-        console.log('Market View apps', apps);
+
         return (
             <div>
                 <div className="row">

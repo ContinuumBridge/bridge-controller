@@ -90,17 +90,21 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
     },
 
     getInstall: function(bridge) {
+
         /* Get or create the install for this licence and the given bridge */
 
+        //console.log('getInstall');
         var install;
         var installData = {
             bridge: bridge,
             app: this.get('app'),
             licence: this
         }
+        //console.log('installData ', installData );
         var licenceInstalls = this.get('installs');
         install = licenceInstalls.findWhere(installData);
         if (!install) {
+            console.log('!install ');
             install = new Portal.AppInstall(installData);
             this.set('installs', install, {remove: false, silent: true});
         }

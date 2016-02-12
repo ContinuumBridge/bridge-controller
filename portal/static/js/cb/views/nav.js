@@ -7,9 +7,10 @@ var MenuItem = require('react-bootstrap').MenuItem;
 
 module.exports.Topbar = React.createClass({
 
-    mixins: [ Router.State ],
+    //mixins: [ Router.History ],
 
     render: function() {
+
         return (
             <div className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container">
@@ -47,14 +48,12 @@ var connectionColours = {
 
 var BridgeList = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+    mixins: [Backbone.React.Component.mixin],
 
     bridgeClick: function(e) {
-        //console.log('bridgeClick event target', e.target);
+
         var bridgeID = parseInt(e.target.getAttribute('data-tag'));
-        //console.log('bridgeClick bridgeID', bridgeID);
         var bridge = Portal.bridgeCollection.getID(bridgeID);
-        console.log('bridgeClick bridge', bridge);
         Portal.setCurrentBridge(bridge, true);
     },
 
@@ -73,7 +72,6 @@ var BridgeList = React.createClass({
 
     createItem: function(bridge) {
 
-
         /*
         var error = bridge.status != 'operational';
         var imgPath = "/static/img/leds/" + this.getLEDType(bridge.connected, error) + ".png";
@@ -86,25 +84,10 @@ var BridgeList = React.createClass({
               </div>;
         */
         return (
-            /*
-            <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
-             <li key="test">
-             <a data-tag="bridgeID" onClick={this.bridgeClick}>Test Name</a>
-             </li>
-            */
             <li key={bridge.id}>
                 <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.get('name')}</a>
             </li>
         );
-
-            /*
-            <a data-tag={bridge.id} onClick={this.bridgeClick}>
-                <div>
-                    {led}
-                </div>
-                <div className="bridge-name">{bridge.name}</div>
-            </a>
-            */
     },
 
     render: function () {
@@ -115,30 +98,18 @@ var BridgeList = React.createClass({
         //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
 
         var bridges = this.props.collection.map(this.createItem);
-        console.log('bridgeList bridges ', bridges );
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
             <DropdownButton bsStyle="link" className="bridge-dropdown-header btn-nav" title={bridgeName} key="bridge-dropdown" id="bridge-header">
                 {bridges}
             </DropdownButton>
-            /*
-             {this.props.collection.map(this.createItem)}
-            <li className="dropdown">
-                <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
-                    <div className="header-text">Test {bridgeName}</div><b className="caret"></b>
-                </a>
-                <ul className="dropdown-menu">
-                    {this.props.collection.map(this.createItem)}
-                </ul>
-            </li>
-             */
         )
     }
 });
 
 var AccountList = React.createClass({
 
-    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+    mixins: [Backbone.React.Component.mixin],
 
     createItem: function(bridge) {
 
@@ -184,17 +155,14 @@ var AccountList = React.createClass({
 
 var Tab = React.createClass({
 
-    mixins: [ Router.State, Router.Navigation ],
-
-    onClick: function() {
-
-        console.log('onClick nav query', this.getQuery());
-        this.transitionTo(this.props.to, {}, this.getQuery());
+    contextTypes: {
+        history: React.PropTypes.object
     },
 
     render: function () {
+
         //var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
-        var isActive = false;
+        var isActive = this.context.history.isActive(this.props.to);
         var className = isActive ? 'active' : '';
 
         return (

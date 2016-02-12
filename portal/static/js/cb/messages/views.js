@@ -117,13 +117,12 @@ Portal.MessageListView = React.createClass({
         var topButtons = this.props.buttons.slice(0, 5);
         var bottomButtons = this.props.buttons.slice(5);
 
-        console.log('MessageListView this.props.collection', this.props.collection);
-        console.log('MessageListView command ', command );
+        //console.log('MessageListView this.props.collection', this.props.collection);
+        //console.log('MessageListView command ', command );
 
         return (
             <div id="messages">
                 <h2>Messages</h2>
-
                 <div ref="messagesWrapper" id="messages-wrapper">
                     <table className="table-condensed table-hover table-striped">
                         <tbody>

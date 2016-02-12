@@ -32,7 +32,8 @@ var CBModel = OriginalModel.extend({
     save: function(key, val, options) {
 
         var self = this;
-        
+
+        console.log('save model', this);
         //this.set({isGhost: false}, {trackit_silent:true});
         this.set({isGhost: false});
         //this.trigger('change');
@@ -41,6 +42,7 @@ var CBModel = OriginalModel.extend({
             function(result) {
 
                 console.log('Save successful', result);
+                console.log('Save successful model', self);
                 return result;
                 //model.trigger('change');
             },

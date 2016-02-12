@@ -54,26 +54,19 @@
 	
 	var $ = __webpack_require__(2);
 	
-	//var CBApp = require('index');
 	var Portal = _globalObject2.default.Portal = __webpack_require__(3);
-	__webpack_require__(570);
-	__webpack_require__(575);
-	__webpack_require__(582);
-	//require('./cb/modules/developer/developer');
-	//require('./cb/modules/home/home');
-	__webpack_require__(583);
-	//require('./cb/modules/nav/nav');
-	//require('./cb/modules/notifications/notifications');
-	__webpack_require__(584);
-	__webpack_require__(586);
-	//require('./cb/views');
 	
-	//(function($){
+	__webpack_require__(569);
+	__webpack_require__(574);
+	//require('./cb/modules/config/config');
+	//require('./cb/modules/market/market');
+	__webpack_require__(581);
+	__webpack_require__(583);
+	
 	$(document).ready(function () {
 	
 	    Portal.start();
 	});
-	//})(jQuery);
 
 /***/ },
 /* 1 */
@@ -9301,7 +9294,6 @@
 	var Router = __webpack_require__(264).Router;
 	//import createBrowserHistory from 'history/lib/createBrowserHistory'
 	
-	//console.log('index Object.keys(Backbone)', Object.keys(Backbone));
 	//var Dispatcher = require('flux-dispatcher');
 	//global.Backbone = Backbone;
 	
@@ -9316,94 +9308,18 @@
 	var Portal = _globalObject2.default.Portal = new CBApp();
 	__webpack_require__(291);
 	Portal.dispatcher = __webpack_require__(292);
-	//Portal.dispatcher = new Dispatcher();
 	Portal.setupCBIDTypes(cbidTypes);
 	
 	__webpack_require__(296);
 	__webpack_require__(297);
 	__webpack_require__(298);
 	
-	/*
-	Portal.addRegions({
-	    navRegion: "#nav-region",
-	    mainRegion: "#main-region",
-	    notificationRegion: "#notification-region",
-	    modalsRegion: {
-	      selector: "#modals-region",
-	      regionType: Backbone.Marionette.Modals
-	    }
-	});
-	*/
-	
 	Portal._isInitialized = false;
-	
-	Portal.Controller = Backbone.Marionette.Controller.extend({
-	    /*
-	    index: function () {
-	      console.log('index');
-	    },
-	    showConfig: function(slug) {
-	        Portal.modalsRegion.reset();
-	        Portal.Nav.trigger('topbar:activate', 'config');
-	        Portal.Config.trigger('config:show', slug);
-	    },
-	    showDeveloper: function(slug) {
-	        Portal.modalsRegion.reset();
-	        Portal.Nav.trigger('topbar:activate', '');
-	        Portal.Developer.trigger('developer:show', slug);
-	    },
-	    showHome: function() {
-	        Portal.modalsRegion.reset();
-	        Portal.Nav.trigger('home:activate', '');
-	        Portal.Home.trigger('developer:show', slug);
-	    },
-	    showStore: function(slug) {
-	        Portal.modalsRegion.reset();
-	        Portal.Nav.trigger('topbar:activate', 'store');
-	        Portal.Store.trigger('store:show', slug);
-	    },
-	    setCurrentBridge: function(bridge) {
-	         console.log('setCurrentBridge bridge', bridge);
-	        var currentBridges = Portal.bridgeCollection.where({current: true})
-	        for (i=0; i < currentBridges.length; i++) {
-	            currentBridges[i].set('current', false, {silent: true});
-	        }
-	        console.log('setCurrentBridge currentBridges', currentBridges);
-	         bridge.set('current', true);
-	    }
-	    */
-	});
-	
-	Portal.addInitializer(function () {
-	
-	    //router
-	    Portal.controller = new Portal.Controller();
-	    /*
-	    Portal.router = new Portal.Router('portal', {
-	        controller : Portal.controller,
-	        createTrailingSlashRoutes: true
-	    });
-	    */
-	});
-	
-	/*
-	Portal.navigate = function(route,  options){
-	  options || (options = {});
-	  Backbone.history.navigate(route, options);
-	};
-	
-	Portal.getCurrentRoute = function(){
-	  return Backbone.history.fragment
-	};
-	*/
 	
 	var BaseView = __webpack_require__(544);
 	
 	Portal.addInitializer(function () {
 	    //Portal.on("initialize:after", function () {
-	
-	    //Portal.Nav.trigger('topbar:show');
-	    //Portal.Notifications.trigger('show');
 	
 	    Portal.appCollection.fetch();
 	
@@ -9412,17 +9328,15 @@
 	    //ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'));
 	
 	    _history2.default.listen(function (location) {
-	        console.log('history listen location', location);
+	        //console.log('history listen location', location);
 	        Portal.route = location;
 	    });
 	
 	    function createElement(Component, props) {
-	        console.log('createElement props', props);
-	        //var currentBridge = Portal.bridgeCollection.at(0);
+	
 	        var currentBridge = Portal.getCurrentBridge(false);
 	        if (currentBridge) currentBridge.fetch();
 	        //var apps = Portal.appCollection;
-	        //console.log('router currentBridge', currentBridge);
 	        /*
 	        var models = {
 	            currentBridge: currentBridge,
@@ -9436,22 +9350,15 @@
 	        }
 	        */
 	
-	        var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
+	        //var currentBridgeID = currentBridge ? currentBridge.get('id') : 0;
 	
-	        // make sure you pass all the props in!
-	        //return <Component {...props} ds={ds} />
-	        return(
-	            //<BaseView key={currentBridgeID} collection={collections} model={models}>
-	            React.createElement(Component, props)
-	            //</BaseView>
-	
-	        );
+	        return React.createElement(Component, props);
 	    }
 	
 	    var onRouteUpdate = function onRouteUpdate() {
 	
-	        var bridge = Portal.getCurrentBridge(true);
-	        console.log('onRouteUpdate bridge', bridge);
+	        // Make sure the current bridge is set when the route changes
+	        Portal.getCurrentBridge(true);
 	    };
 	
 	    ReactDOM.render(React.createElement(
@@ -9459,23 +9366,6 @@
 	        { history: _history2.default, onUpdate: onRouteUpdate, createElement: createElement },
 	        routes
 	    ), document.getElementById('app'));
-	    /*
-	    Portal.router = require('./router');
-	     Portal.router.run(function (Handler, state) {
-	        Portal.route = state;
-	        console.log('new state ', state);
-	        var params = state.params;
-	         React.render(
-	            <BaseView params={params} handler={Handler}
-	                //key={currentBridge.get('id')}
-	                key={state.path} path={state.path}
-	                collection={collections} model={models} />,
-	            document.getElementById('app')
-	        );
-	         //Portal.getCurrentBridge = Portal.mainView.getCurrentBridge;
-	        //Portal.setCurrentBridge = Portal.mainView.setCurrentBridge;
-	    });
-	      */
 	});
 	
 	module.exports = Portal;
@@ -11890,17 +11780,12 @@
 	//require('./backbone-notify');
 	
 	//require('expose?window.Backbone=>Backbone!./backbone-relational');
-	//console.log('backbone-bundle global', Object.keys(global));
 	//require('./backbone-relational');
 	__webpack_require__(93);
-	console.log('backbone-bundle Backbone', Object.keys(Backbone));
 	//require('./backbone-relational');
 	//require('./backbone-relational');
 	__webpack_require__(94);
 	//require('imports?this=>window!exports?Backbone!./backbone-cb-relational-models');
-	
-	//var CBModelMixin = require('./backbone-cb-model-mixin');
-	//Cocktail.mixin(Backbone.RelationalModel, CBModelMixin);
 	
 	//var CBCollectionMixin = require('./backbone-cb-collection-mixin');
 	//Cocktail.mixin(Backbone.Collection, CBCollectionMixin);
@@ -28687,6 +28572,7 @@
 				// Because the found object could be of any of the type's superModel
 				// types, only return it if it's actually of the type asked for.
 				if ( coll ) {
+	
 					var obj = coll.get( id );
 	
 					if ( obj instanceof type ) {
@@ -30339,6 +30225,28 @@
 	//var Backbone = window.Backbone;
 	(function() {
 	
+	    Backbone.Store.prototype.find = function(type, item) {
+	
+	        var id = this.resolveIdForItem( type, item ),
+	            coll = this.getCollection( type );
+	
+	        // Because the found object could be of any of the type's superModel
+	        // types, only return it if it's actually of the type asked for.
+	        if ( coll ) {
+	
+	            // ADDED replaced get with findWhere, get mysteriously doesn't work for updating
+	            // relations to an object which has just acquired an id
+	            var obj = coll.findWhere({id: id});
+	            //var obj = coll.get( id );
+	
+	            if ( obj instanceof type ) {
+	                return obj;
+	            }
+	        }
+	
+	        return null;
+	    }
+	
 	    Backbone.HasOne = Backbone.HasOne.extend({
 	
 	        initialize: function( opts ) {
@@ -30356,6 +30264,7 @@
 	
 	        findRelated: function( options ) {
 	
+	            //console.log('HasOne findRelated', this.key);
 	            var related = null;
 	
 	            options = _.defaults( { parse: this.options.parse }, options );
@@ -30368,7 +30277,7 @@
 	                    // ADDED If the keyContents are a uri, extract the id and create an object
 	                    var idArray = Portal.filters.apiRegex.exec(this.keyContents);
 	                    if (idArray && idArray[2]) {
-	                            this.keyContents = { id: idArray[2] };
+	                            this.keyContents = { id: parseInt(idArray[2]) };
 	                    }
 	
 	                    //var opts = _.defaults( { create: this.options.createModels }, options );
@@ -30427,6 +30336,7 @@
 	
 	        findRelated: function( options ) {
 	
+	            //console.log('HasMany findRelated', this.key);
 	            var related = null;
 	
 	            options = _.defaults( { parse: this.options.parse }, options );
@@ -30437,9 +30347,9 @@
 	            //if ( typeof this.keyContents == 'object') {
 	            if ( this.keyContents instanceof Backbone.Collection ) {
 	
+	                //console.log('this.keyContents instanceof Backbone.Collection');
 	                this._prepareCollection( this.keyContents );
 	                related = this.keyContents;
-	
 	            }
 	            // Otherwise, 'this.keyContents' should be an array of related object ids.
 	            // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
@@ -30449,20 +30359,25 @@
 	
 	                    _.each( this.keyContents, function( attributes ) {
 	                            if ( attributes instanceof this.relatedModel ) {
+	                                    //console.log('attributes instanceof this.relatedModel');
 	                                    var model = attributes;
 	                            }
 	                            else {
 	                                    // ADDED If the keyContents are a uri, extract the id and create an object
 	                                    var idArray = Portal.filters.apiRegex.exec(attributes);
 	                                    if (idArray && idArray[2]) {
-	                                            attributes = { id: idArray[2] };
+	                                            attributes = { id: parseInt(idArray[2]) };
 	                                    }
+	                                    //console.log('HasMany findRelated attributes', attributes);
+	                                    //console.log('HasMany this.relatedModel', this.relatedModel);
+	                                    //console.log('_.extend( { merge: true }, options, { create: this.options.createModels } )', _.extend( { merge: true }, options, { create: this.options.createModels } ));
 	
 	                                    // If `merge` is true, update models here, instead of during update.
 	                                    model = this.relatedModel.findOrCreate( attributes,
 	                                            _.extend( { merge: true }, options, { create: this.options.createModels } )
 	                                    );
 	
+	                                    //console.log('HasMany findRelated model', model);
 	                                    // ADDED Add model to initializeCollection
 	                                    var initializeCollection = this.options.initializeCollection;
 	                                    if ( _.isString( initializeCollection ) ) {
@@ -30562,8 +30477,14 @@
 	                // Ideal place to set up relations, if this is the first time we're here for this model
 	                if ( !this._isInitialized && !this.isLocked() ) {
 	                    this.constructor.initializeModelHierarchy();
-	                    Backbone.Relational.store.register( this );
+	
+	                    // Only register models that have an id. A model will be registered when/if it gets an id later on.
+	                    if ( newId || newId === 0 ) {
+	                        Backbone.Relational.store.register( this );
+	                    }
+	
 	                    this.initializeRelations( options );
+	
 	                }
 	                // The store should know about an `id` update asap
 	                else if ( newId && newId !== id ) {
@@ -30620,6 +30541,10 @@
 	            var models = rel.related instanceof Backbone.Collection
 	                ? rel.related.models : [ rel.related ];
 	            if (!models) return;
+	
+	            //console.log('updateRelationToSelf rel.keyIds', rel.keyIds);
+	            //console.log('this.idAttribute', this.idAttribute);
+	            if (rel.related instanceof Backbone.Collection) rel.keyIds.push(this[this.idAttribute]);
 	            /*
 	            if (!models[0]) {
 	                // Not sure why keyContents is sometimes needed
@@ -30665,10 +30590,10 @@
 	                            // Destroy the reverseModel if this model is being destroyed
 	                            if (reverseRelation instanceof Backbone.Collection) {
 	                                reverseRelation.remove(this);
-	                                debugger;
+	                                //debugger;
 	                            } else {
 	                                reverseModel.destroy();
-	                                debugger;
+	                                //debugger;
 	                            }
 	                        } else {
 	                            // Update the reverseModel if it exists
@@ -33180,7 +33105,8 @@
 	    save: function(key, val, options) {
 	
 	        var self = this;
-	        
+	
+	        console.log('save model', this);
 	        //this.set({isGhost: false}, {trackit_silent:true});
 	        this.set({isGhost: false});
 	        //this.trigger('change');
@@ -33189,6 +33115,7 @@
 	            function(result) {
 	
 	                console.log('Save successful', result);
+	                console.log('Save successful model', self);
 	                return result;
 	                //model.trigger('change');
 	            },
@@ -33444,16 +33371,28 @@
 	        for (i = 0, l = models.length; i < l; i++) {
 	            var attrs = models[i];
 	            var model = this.findWhere({id: _.property(attrs, 'id')});
+	            //console.log('attrs', attrs);
+	            //console.log('update findWhere model ', model );
 	            //console.log('update match syncing', this.matchSyncing(attrs));
 	
 	            if (!model) model = this.matchSyncing(attrs);
+	
+	            if (!model) model = this.match(attrs);
+	
+	            //console.log('model ', model );
+	            //console.log('this.match(attrs)', this.match(attrs));
+	
+	            attrs.isGhost = false;
 	
 	            if (model) {
 	                model.set(attrs);
 	                //console.log('setting model', model);
 	            } else {
-	                //console.log('adding model', attrs);
-	                if (!(model = this._prepareModel(attrs, options))) return false;
+	                console.log('adding model', attrs);
+	                if (!(model = this._prepareModel(attrs, options))) {
+	                    console.warning('Could not create model ', attrs, options)
+	                    return false;
+	                }
 	                this.add(model);
 	                //console.log('model added', model);
 	            };
@@ -33468,9 +33407,14 @@
 	        for (var i = 0; i < models.length; i++) {
 	            //var attrs = models[i];
 	            var model;
+	            //console.log('models[i] ', models[i] );
 	            if (!(model = this._prepareModel(models[i], options))) return false;
 	            //console.log('model matchFields', model.matchFields);
+	            //console.log('model ', model );
+	
 	            if (!model.cid && model.matchFields) {
+	
+	                //console.log('match model ', model );
 	                var matchQuery = {};
 	                _.each(model.matchFields, function(matchField) {
 	                    matchQuery[matchField] = model.get(matchField);
@@ -33488,7 +33432,7 @@
 	            */
 	            model.save(null, options).then(
 	                function(result) {
-	                    //console.log('create success');
+	                    console.log('create success', model);
 	                    if (options.wait) collection.add(model, options);
 	                    collection.unregisterSyncing(model);
 	                },
@@ -33526,11 +33470,20 @@
 	        options = options ? _.clone(options) : {};
 	        for (var i = 0; i < models.length; i++) {
 	            var attrs = models[i];
-	            console.log('attrs for delete is', attrs);
-	            var model = this.findWhere({id: parseInt(_.property('id')(attrs))});
-	            console.log('model for delete is', model);
-	            //model = this.get(models[i]);
-	            if(model) model.delete();
+	            var model = this.findWhere({id: _.property('id')(attrs)});
+	            //console.log('model isConnector for delete is', model.isConnector);
+	
+	            if(model) {
+	                console.log('Deleting model', model);
+	                // If a model is a connector then reset it rather than deleting it
+	                if (model.isConnector) {
+	                    model.reset();
+	                } else {
+	                    model.delete();
+	                }
+	            } else {
+	                console.log('Deleted model does not exist on client', attrs);
+	            }
 	        }
 	    },
 	
@@ -33540,8 +33493,16 @@
 	    },
 	
 	    unregisterSyncing: function(model) {
-	        console.log('unregisterSyncing', model);
 	        this.ghosts = _.without(this.ghosts, _.findWhere(this.ghosts, {cid: model.cid}));
+	    },
+	
+	    match: function(attrs) {
+	        // Check if the incoming attributes match any registered ghosts
+	        var matchQuery = {};
+	        _.each(this.matchFields, function(matchField) {
+	            matchQuery[matchField] = _.property(matchField)(attrs);
+	        });
+	        return this.findWhere(matchQuery);
 	    },
 	
 	    matchSyncing: function(attrs) {
@@ -59469,7 +59430,7 @@
 	
 	    dispatch: function dispatch(message) {
 	
-	        console.log('dispatch message', message);
+	        console.log('Dispatch message', message);
 	
 	        var source = _.property('source')(message);
 	        var body = _.property('body')(message);
@@ -59479,9 +59440,8 @@
 	            this.dispatcher.dispatch(message);
 	        } else if (source == 'cb') {
 	
-	            console.log('dispatch cb message', message);
-	
-	            console.log('body', body);
+	            //console.log('dispatch cb message', message);
+	            //console.log('body', body);
 	
 	            var actionTypes = {
 	                create: 'add',
@@ -59489,7 +59449,6 @@
 	                update: 'update'
 	            };
 	            var verb = _.property('verb')(body);
-	            console.log('verb ', verb);
 	            var actionType = actionTypes[verb.toLowerCase()];
 	
 	            var itemType;
@@ -59524,7 +59483,7 @@
 	                message.direction = "inbound";
 	                Portal.messageCollection.add(message);
 	            } else {
-	                console.warn('message source unrecognised', message);
+	                console.warn('Message source unrecognised', message);
 	            }
 	
 	        //this.dispatcher.dispatch(message);
@@ -59576,28 +59535,25 @@
 	    setQuery: function setQuery(query) {
 	
 	        var route = Portal.route;
-	        console.log('setQuery', query);
-	        //Portal.router.transitionTo(route.pathname, route.params,
-	        //    _.defaults(query, route.query));
+	        //console.log('setQuery', query);
 	        _history2.default.pushState(null, route.pathname, _.defaults(query, route.query));
 	    },
 	
 	    setParams: function setParams(params) {
 	
-	        console.log('history is', _history2.default);
 	        var route = Portal.route;
 	        // Remove any extra slashes in the pathname
 	        //var pathnameMatch = route.pathname.match(/\/(\w+)\/?.*/);
 	        var pathnameMatch = route.pathname.match(/\/?(\w+)\/?.*?/);
-	        console.log('pathnameMatch ', pathnameMatch);
+	        //console.log('pathnameMatch ', pathnameMatch );
 	        var paramsString = "";
 	        for (var key in params) {
 	            paramsString = paramsString + "/" + params[key];
 	        }
 	        var path = "/" + pathnameMatch[1] + paramsString;
-	        console.log('paramsString', paramsString);
-	        console.log('pathnameMatch[1]', pathnameMatch[1]);
-	        console.log('path ', path);
+	        //console.log('paramsString', paramsString);
+	        //console.log('pathnameMatch[1]', pathnameMatch[1]);
+	        //console.log('path ', path );
 	        _history2.default.pushState(null, path, route.query);
 	        //Portal.router.transitionTo(pathnameMatch[1], params, route.query);
 	    }
@@ -60010,9 +59966,7 @@
 	
 	var React = __webpack_require__(106);
 	
-	//var ListItem = require('../components/bootstrap/ListItem.jsx');
 	var Panel = __webpack_require__(299);
-	//var Panel = require('react-bootstrap').Panel;
 	var PanelGroup = __webpack_require__(352).PanelGroup;
 	
 	Portal.InnerItemView = {
@@ -60250,9 +60204,10 @@
 	
 	        var buttons = this.state.buttons || [];
 	
+	        //className="topcoat-button-bar"
 	        return React.createElement(
 	            'div',
-	            { 'class': 'topcoat-button-bar' },
+	            null,
 	            buttons.map(this.renderButton)
 	        );
 	    },
@@ -60468,8 +60423,6 @@
 	            header = this.props.collapsible ? this.renderCollapsibleTitle(header, headerRole) : header;
 	        } else {
 	            //var className = _classnames2['default'](_utilsBootstrapUtils2['default'].prefix(this.props, 'title'), header.props.className);
-	
-	            console.log('Panel this.props.collapsible', this.props.collapsible);
 	
 	            if (this.props.collapsible) {
 	                header = React.createElement(
@@ -77548,10 +77501,10 @@
 	var ConfigView = __webpack_require__(553).Main;
 	var MainView = __webpack_require__(547);
 	var HomeView = __webpack_require__(546);
-	var DashboardView = __webpack_require__(562);
-	var DeveloperView = __webpack_require__(563);
-	var MarketView = __webpack_require__(567).Main;
-	var NotFoundView = __webpack_require__(569);
+	var DashboardView = __webpack_require__(561);
+	var DeveloperView = __webpack_require__(562);
+	var MarketView = __webpack_require__(566).Main;
+	var NotFoundView = __webpack_require__(568);
 	
 	var routes = React.createElement(
 	    Route,
@@ -77708,9 +77661,10 @@
 	module.exports.Topbar = React.createClass({
 	    displayName: 'Topbar',
 	
-	    mixins: [Router.State],
+	    //mixins: [ Router.History ],
 	
 	    render: function render() {
+	
 	        return React.createElement(
 	            'div',
 	            { className: 'navbar navbar-inverse navbar-fixed-top' },
@@ -77784,14 +77738,12 @@
 	var BridgeList = React.createClass({
 	    displayName: 'BridgeList',
 	
-	    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    bridgeClick: function bridgeClick(e) {
-	        //console.log('bridgeClick event target', e.target);
+	
 	        var bridgeID = parseInt(e.target.getAttribute('data-tag'));
-	        //console.log('bridgeClick bridgeID', bridgeID);
 	        var bridge = Portal.bridgeCollection.getID(bridgeID);
-	        console.log('bridgeClick bridge', bridge);
 	        Portal.setCurrentBridge(bridge, true);
 	    },
 	
@@ -77821,32 +77773,15 @@
 	                <div className={ledClass}></div>
 	              </div>;
 	        */
-	        return(
-	            /*
-	            <MenuItem onClick={this.bridgeClick}>{bridge.name}</MenuItem>
-	             <li key="test">
-	             <a data-tag="bridgeID" onClick={this.bridgeClick}>Test Name</a>
-	             </li>
-	            */
+	        return React.createElement(
+	            'li',
+	            { key: bridge.id },
 	            React.createElement(
-	                'li',
-	                { key: bridge.id },
-	                React.createElement(
-	                    'a',
-	                    { 'data-tag': bridge.id, onClick: this.bridgeClick },
-	                    bridge.get('name')
-	                )
+	                'a',
+	                { 'data-tag': bridge.id, onClick: this.bridgeClick },
+	                bridge.get('name')
 	            )
 	        );
-	
-	        /*
-	        <a data-tag={bridge.id} onClick={this.bridgeClick}>
-	            <div>
-	                {led}
-	            </div>
-	            <div className="bridge-name">{bridge.name}</div>
-	        </a>
-	        */
 	    },
 	
 	    render: function render() {
@@ -77857,32 +77792,19 @@
 	        //this.currentBridgeID = currentBridge? currentBridge.get('id') : 0;
 	
 	        var bridges = this.props.collection.map(this.createItem);
-	        console.log('bridgeList bridges ', bridges);
 	        //var bridgeCollection = this.props.collection.without(currentBridge);
 	        return React.createElement(
 	            DropdownButton,
 	            { bsStyle: 'link', className: 'bridge-dropdown-header btn-nav', title: bridgeName, key: 'bridge-dropdown', id: 'bridge-header' },
 	            bridges
-	        )
-	        /*
-	         {this.props.collection.map(this.createItem)}
-	        <li className="dropdown">
-	            <a href="#" id="bridge-header" className="dropdown-toggle" data-toggle="dropdown">
-	                <div className="header-text">Test {bridgeName}</div><b className="caret"></b>
-	            </a>
-	            <ul className="dropdown-menu">
-	                {this.props.collection.map(this.createItem)}
-	            </ul>
-	        </li>
-	         */
-	        ;
+	        );
 	    }
 	});
 	
 	var AccountList = React.createClass({
 	    displayName: 'AccountList',
 	
-	    mixins: [Backbone.React.Component.mixin, Router.State, Router.Navigation],
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    createItem: function createItem(bridge) {
 	
@@ -77948,17 +77870,14 @@
 	var Tab = React.createClass({
 	    displayName: 'Tab',
 	
-	    mixins: [Router.State, Router.Navigation],
-	
-	    onClick: function onClick() {
-	
-	        console.log('onClick nav query', this.getQuery());
-	        this.transitionTo(this.props.to, {}, this.getQuery());
+	    contextTypes: {
+	        history: React.PropTypes.object
 	    },
 	
 	    render: function render() {
+	
 	        //var isActive = this.isActive(this.props.to, this.props.params, this.props.query);
-	        var isActive = false;
+	        var isActive = this.context.history.isActive(this.props.to);
 	        var className = isActive ? 'active' : '';
 	
 	        return React.createElement(
@@ -78287,7 +78206,7 @@
 	
 	    // Used for installing apps modal in config
 	
-	    mixins: [Backbone.React.Component.mixin],
+	    mixins: [Backbone.React.Component.mixin, Portal.Mixins.InstallableList],
 	
 	    render: function render() {
 	
@@ -78299,6 +78218,8 @@
 	
 	        var name = this.props.name;
 	        var appInstall = this.props.model.appInstall;
+	
+	        var status = this.getStatus(appInstall);
 	
 	        var canInstall = installsPermitted > 0;
 	        var installButton = canInstall ? React.createElement(Portal.Components.InstallButton, { model: appInstall }) : '';
@@ -78324,6 +78245,11 @@
 	            React.createElement(
 	                'td',
 	                null,
+	                status
+	            ),
+	            React.createElement(
+	                'td',
+	                null,
 	                installButton
 	            )
 	        );
@@ -78341,11 +78267,11 @@
 	        };
 	    },
 	
-	    createItem: function createItem(item) {
-	        var cid = item.cid;
+	    createItem: function createItem(licence) {
 	
-	        var appLicenceCollection = this.getCollection();
-	        var licence = appLicenceCollection.get({ cid: cid });
+	        //var cid = item.cid;
+	        //var appLicenceCollection = this.getCollection()
+	        //var licence = appLicenceCollection.get({cid: cid});
 	
 	        var app = licence.get('app');
 	        var name = app.get('name');
@@ -78355,7 +78281,7 @@
 	            appInstall: licence.getInstall(this.props.bridge)
 	        };
 	
-	        return React.createElement(Portal.AppLicenceRowView, { key: cid, name: name,
+	        return React.createElement(Portal.AppLicenceRowView, { key: licence.cid, name: name,
 	            model: models });
 	    },
 	
@@ -78429,21 +78355,23 @@
 	var Router = __webpack_require__(264);
 	var Modal = __webpack_require__(352).Modal;
 	var Button = __webpack_require__(352).Button;
+	var OverlayTrigger = __webpack_require__(352).OverlayTrigger;
+	var Tooltip = __webpack_require__(352).Tooltip;
+	var Popover = __webpack_require__(352).Popover;
 	
 	__webpack_require__(554);
-	__webpack_require__(555);
 	
-	__webpack_require__(556);
+	__webpack_require__(555);
 	__webpack_require__(552);
+	__webpack_require__(557);
 	__webpack_require__(558);
 	__webpack_require__(559);
 	__webpack_require__(560);
-	__webpack_require__(561);
 	
 	module.exports.Main = React.createClass({
 	    displayName: 'Main',
 	
-	    mixins: [Router.State, Backbone.React.Component.mixin],
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    /*
 	    componentWillReceiveParams: function(params) {
@@ -78457,8 +78385,6 @@
 	    */
 	
 	    discoverDevices: function discoverDevices() {
-	
-	        console.log('config discoverDevices');
 	
 	        Portal.router.setParams({ action: 'discover-devices' });
 	
@@ -78502,35 +78428,15 @@
 	
 	    renderModals: function renderModals() {
 	
-	        /*
-	        return (
-	            <React.Modal show={true} onHide={function(){}}>
-	                 <React.Modal.Header>
-	                 <React.Modal.Title></React.Modal.Title>
-	                 </React.Modal.Header>
-	                <React.Modal.Body>
-	                    <h4>Text in a modal</h4>
-	                </React.Modal.Body>
-	                <React.Modal.Footer>
-	                    Footer
-	                </React.Modal.Footer>
-	            </React.Modal>
-	        );
-	        */
-	
-	        //var action = this.getParams().action;
-	        //var itemID = this.getParams().item;
 	        var action = this.props.params.action;
 	        var itemID = this.props.params.item;
-	        console.log('renderModals params', action);
+	
 	        switch (action) {
 	            case "install-app":
-	                console.log('renderModals InstallAppModal');
 	                return React.createElement(InstallAppModal, { show: true, container: this });
 	                break;
 	            case "install-device":
 	                var discoveredDevice = Portal.discoveredDeviceCollection.getID(itemID);
-	                console.log('discoveredDevice for modal is', discoveredDevice);
 	                return React.createElement(InstallDeviceModal, { container: this, installDevice: this.installDevice,
 	                    model: discoveredDevice });
 	                break;
@@ -78553,7 +78459,6 @@
 	    render: function render() {
 	
 	        var currentBridge = Portal.getCurrentBridge();
-	        //var currentBridge = Portal.bridgeCollection.get({id: 2});
 	
 	        if (!currentBridge) {
 	            return React.createElement(
@@ -78645,7 +78550,6 @@
 	
 	    installDevice: function installDevice() {
 	        var model = this.props.model;
-	        console.log('Submitted installDevice modal, props', this.props);
 	        this.props.installDevice(model, this.state.friendlyName);
 	        //var discoveredDevice = this.getModel();
 	        //discoveredDevice.install(this.state.friendlyName);
@@ -78709,10 +78613,10 @@
 	var UninstallDeviceModal = React.createClass({
 	    displayName: 'UninstallDeviceModal',
 	
-	    mixins: [Router.State, Backbone.React.Component.mixin],
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    installDevice: function installDevice() {
-	        console.log('Submitted installDevice modal');
+	
 	        var discoveredDevice = this.getModel();
 	        discoveredDevice.install(this.state.friendlyName);
 	        Portal.router.setParams({});
@@ -78732,8 +78636,6 @@
 	
 	        var title = "Uninstall device " + friendlyName;
 	        var zwave = deviceInstall.get('device').get('protocol') == "zwave";
-	        //var device = this.getModel().get('device');
-	        //var title = device ? "Install " + device.get('name') : "Unknown device";
 	
 	        var message;
 	        if (zwave) {
@@ -78773,16 +78675,7 @@
 	var InstallAppModal = React.createClass({
 	    displayName: 'InstallAppModal',
 	
-	    mixins: [Router.State, Router.Navigation, Backbone.React.Component.mixin],
-	
-	    handleFriendlyName: function handleFriendlyName(event) {
-	        this.setState({ friendlyName: event.target.value });
-	    },
-	
-	    showAppMarket: function showAppMarket() {
-	
-	        this.transitionTo('market', {}, this.getQuery());
-	    },
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    cancelInstall: function cancelInstall() {
 	
@@ -78797,13 +78690,18 @@
 	        var bridge = Portal.getCurrentBridge();
 	
 	        return React.createElement(
-	            Modal,
+	            Modal.Dialog,
 	            { show: true, onHide: function onHide() {},
 	                container: this.props.container, animation: false },
 	            React.createElement(
 	                Modal.Header,
 	                null,
-	                React.createElement(Modal.Title, null)
+	                React.createElement(
+	                    Modal.Title,
+	                    null,
+	                    'Manage Apps on ',
+	                    bridge.get('name')
+	                )
 	            ),
 	            React.createElement(
 	                Modal.Body,
@@ -78827,12 +78725,6 @@
 	        );
 	    }
 	});
-	
-	/*
-	
-	 <React.Modal className="portal-modal" title={title} container={this.props.container}
-	 onRequestHide={this.cancelInstall} show={true} onHide={function(){}} animation={false}>
-	 */
 
 /***/ },
 /* 554 */
@@ -78871,25 +78763,6 @@
 
 /***/ },
 /* 555 */
-/***/ function(module, exports) {
-
-	
-	/*
-	Portal.Regions = {};
-
-	Portal.Regions.Fade = Marionette.Region.extend({
-
-	    open: function(view){
-	        this.$el.hide();
-	        this.$el.html(view.el);
-	        this.$el.slideDown("fast");
-	    }
-	});
-	*/
-	"use strict";
-
-/***/ },
-/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78897,7 +78770,7 @@
 	var React = __webpack_require__(106);
 	var History = __webpack_require__(264).History;
 	
-	__webpack_require__(557);
+	__webpack_require__(556);
 	
 	Portal.AppInstallView = React.createClass({
 	    displayName: 'AppInstallView',
@@ -79000,7 +78873,7 @@
 	});
 
 /***/ },
-/* 557 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79036,7 +78909,7 @@
 	});
 
 /***/ },
-/* 558 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79127,7 +79000,7 @@
 	});
 
 /***/ },
-/* 559 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79226,7 +79099,7 @@
 	});
 
 /***/ },
-/* 560 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79307,7 +79180,7 @@
 	});
 
 /***/ },
-/* 561 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -79448,8 +79321,8 @@
 	        var topButtons = this.props.buttons.slice(0, 5);
 	        var bottomButtons = this.props.buttons.slice(5);
 	
-	        console.log('MessageListView this.props.collection', this.props.collection);
-	        console.log('MessageListView command ', command);
+	        //console.log('MessageListView this.props.collection', this.props.collection);
+	        //console.log('MessageListView command ', command );
 	
 	        return React.createElement(
 	            "div",
@@ -79503,7 +79376,7 @@
 	});
 
 /***/ },
-/* 562 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79528,7 +79401,7 @@
 	*/
 
 /***/ },
-/* 563 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79537,8 +79410,8 @@
 	var React = __webpack_require__(106);
 	var Router = __webpack_require__(264);
 	
-	__webpack_require__(564);
-	__webpack_require__(566);
+	__webpack_require__(563);
+	__webpack_require__(565);
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -79633,14 +79506,14 @@
 	});
 
 /***/ },
-/* 564 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(106);
 	
-	__webpack_require__(565);
+	__webpack_require__(564);
 	
 	Portal.AppOwnershipView = React.createClass({
 	    displayName: 'AppOwnershipView',
@@ -79731,7 +79604,7 @@
 	});
 
 /***/ },
-/* 565 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79822,7 +79695,7 @@
 	});
 
 /***/ },
-/* 566 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79885,32 +79758,29 @@
 	});
 
 /***/ },
-/* 567 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Backbone = __webpack_require__(34);
 	var React = __webpack_require__(106);
-	var Router = __webpack_require__(264);
-	var Q = __webpack_require__(95);
+	//var Router = require('react-router');
+	//var Q = require('q');
 	
-	//require('../../views/generic-views');
-	//require('../../views/regions');
-	
-	__webpack_require__(568);
+	__webpack_require__(567);
 	
 	module.exports.Main = React.createClass({
 	    displayName: 'Main',
 	
-	    mixins: [Router.State, Backbone.React.Component.mixin],
+	    mixins: [Backbone.React.Component.mixin],
 	
 	    renderModals: function renderModals() {},
 	
 	    render: function render() {
 	
 	        var apps = Portal.appCollection;
-	        console.log('Market View apps', apps);
+	
 	        return React.createElement(
 	            'div',
 	            null,
@@ -79928,7 +79798,7 @@
 	});
 
 /***/ },
-/* 568 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80005,7 +79875,7 @@
 	});
 
 /***/ },
-/* 569 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80025,23 +79895,23 @@
 	});
 
 /***/ },
-/* 570 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Mixins = {};
 	
-	Mixins.Counter = __webpack_require__(571);
-	Mixins.Filter = __webpack_require__(572);
-	Mixins.RowView = __webpack_require__(573).RowView;
-	Mixins.TableView = __webpack_require__(573).TableView;
-	Mixins.InstallableList = __webpack_require__(574);
+	Mixins.Counter = __webpack_require__(570);
+	Mixins.Filter = __webpack_require__(571);
+	Mixins.RowView = __webpack_require__(572).RowView;
+	Mixins.TableView = __webpack_require__(572).TableView;
+	Mixins.InstallableList = __webpack_require__(573);
 	
 	Portal.Mixins = Mixins;
 
 /***/ },
-/* 571 */
+/* 570 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -80097,7 +79967,7 @@
 	};
 
 /***/ },
-/* 572 */
+/* 571 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -80115,7 +79985,7 @@
 	};
 
 /***/ },
-/* 573 */
+/* 572 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80241,7 +80111,7 @@
 	};
 
 /***/ },
-/* 574 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80280,7 +80150,7 @@
 	            { placement: 'top',
 	                overlay: React.createElement(
 	                    Tooltip,
-	                    { id: 'install-status', test: 'spinnerInfo' },
+	                    { id: 'install-status' },
 	                    statusLabel
 	                ) },
 	            React.createElement(Portal.Components.Spinner, null)
@@ -80289,10 +80159,10 @@
 	        statusLabel = this.errorStatusHash[status];
 	        if (statusLabel) {
 	            return React.createElement(
-	                React.OverlayTrigger,
+	                OverlayTrigger,
 	                { placement: 'top',
 	                    overlay: React.createElement(
-	                        React.Tooltip,
+	                        Tooltip,
 	                        null,
 	                        statusLabel
 	                    ) },
@@ -80305,27 +80175,27 @@
 	};
 
 /***/ },
-/* 575 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Components = {};
 	
-	Components.Counter = __webpack_require__(576);
-	Components.Switch = __webpack_require__(577);
-	Components.TextInput = __webpack_require__(578).TextInput;
-	Components.SearchInput = __webpack_require__(579).SearchInput;
+	Components.Counter = __webpack_require__(575);
+	Components.Switch = __webpack_require__(576);
+	Components.TextInput = __webpack_require__(577).TextInput;
+	Components.SearchInput = __webpack_require__(578).SearchInput;
 	
 	//Components.Tooltip = require('./tooltip');
 	
-	Components.Spinner = __webpack_require__(580);
-	Components.InstallButton = __webpack_require__(581).InstallButton;
+	Components.Spinner = __webpack_require__(579);
+	Components.InstallButton = __webpack_require__(580).InstallButton;
 	
 	Portal.Components = Components;
 
 /***/ },
-/* 576 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80377,7 +80247,7 @@
 	});
 
 /***/ },
-/* 577 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80435,7 +80305,7 @@
 	});
 
 /***/ },
-/* 578 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -80624,7 +80494,7 @@
 	module.exports.AutosizeInput = AutosizeInput;
 
 /***/ },
-/* 579 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80694,7 +80564,7 @@
 	});
 
 /***/ },
-/* 580 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80732,7 +80602,7 @@
 	*/
 
 /***/ },
-/* 581 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80740,14 +80610,42 @@
 	var React = __webpack_require__(106);
 	
 	__webpack_require__(297);
+	var InstallableMixin = __webpack_require__(573);
 	
 	module.exports.InstallButton = React.createClass({
 	    displayName: 'InstallButton',
 	
-	    mixins: [Backbone.React.Component.mixin, Portal.ConnectorMixin],
+	    mixins: [Backbone.React.Component.mixin, InstallableMixin],
 	
 	    handleClick: function handleClick() {
-	        this.toggleExistenceOnServer(this.props.model);
+	
+	        var model = this.props.model;
+	        var status = model.get('status');
+	
+	        if (!model.isSyncing()) {
+	
+	            if (model.get('isGhost') || status == 'should_uninstall') {
+	
+	                //console.log('install.isNew()', model.isNew());
+	
+	                model.set('status', 'should_install');
+	
+	                Portal.dispatch({
+	                    source: 'portal',
+	                    actionType: 'create',
+	                    itemType: model.__proto__.constructor.modelType,
+	                    payload: model
+	                });
+	            } else {
+	                //if (status == 'should_uninstall' || status == 'uninstalling') {
+	
+	                //console.log('install installing', status);
+	
+	                model.set('status', 'should_uninstall');
+	                model.save();
+	            }
+	        }
+	        //this.toggleExistenceOnServer(this.props.model);
 	    },
 	
 	    render: function render() {
@@ -80757,7 +80655,56 @@
 	        //console.log('Install button model', this.props);
 	        //<div class="install-component btn btn-default app-install-button">Uninstall</div>
 	        var model = this.props.model;
-	        console.log('install button model ', model);
+	        //console.log('install button model ', model );
+	
+	        var syncing = model.isSyncing();
+	        var status = model.get('status');
+	        var label;
+	        var disabled = false;
+	        //console.log('install button model.get(isGhost)', model.get('isGhost'));
+	        //console.log('status ', status );
+	        if (model.get('isGhost') || status == "should_uninstall") {
+	
+	            label = syncing ? "Uninstall" : "Install";
+	        } else {
+	
+	            //console.log('this.errorStatusHash', this.errorStatusHash);
+	            label = syncing ? "Install" : "Uninstall";
+	        }
+	
+	        if (syncing) disabled = true;
+	
+	        //console.log('label ', label );
+	        //var label = model.get('isGhost') ? "Install" :
+	        //var disabled = model.isSyncing() ? 'disabled' : '';
+	        var buttonClass = "btn btn-default "; // + disabled;
+	
+	        return React.createElement(
+	            'div',
+	            { className: buttonClass, disabled: disabled, onClick: this.handleClick },
+	            label
+	        );
+	    }
+	});
+	
+	// Code below is for a simple add/remove based on current thereness and sync
+	/*
+	module.exports.InstallButton = React.createClass({
+	
+	    mixins: [Backbone.React.Component.mixin, Portal.ConnectorMixin],
+	
+	    handleClick: function() {
+	        this.toggleExistenceOnServer(this.props.model);
+	    },
+	
+	    render: function() {
+	
+	        //var contents = "Install";
+	        //var contents = <Spinner />
+	        //console.log('Install button model', this.props);
+	        //<div class="install-component btn btn-default app-install-button">Uninstall</div>
+	        var model = this.props.model;
+	        console.log('install button model ', model );
 	
 	        var syncing = model.isSyncing();
 	        var label;
@@ -80767,185 +80714,22 @@
 	        } else {
 	            label = syncing ? "Install" : "Uninstall";
 	        }
-	        console.log('label ', label);
+	        console.log('label ', label );
 	        //var label = model.get('isGhost') ? "Install" :
 	        var disabled = model.isSyncing() ? 'disabled' : '';;
 	        var buttonClass = "btn btn-default " + disabled;
 	
-	        return React.createElement(
-	            'div',
-	            { className: buttonClass, onClick: this.handleClick },
-	            label
-	        );
+	        return (
+	            <div className={buttonClass} onClick={this.handleClick} >
+	                {label}
+	            </div>
+	        )
 	    }
 	});
+	*/
 
 /***/ },
-/* 582 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Backbone = __webpack_require__(34);
-	var ConfigViews = __webpack_require__(553);
-	
-	Portal.module('Config', function (Config, CBApp, Backbone, Marionette, $, _) {
-	
-	    console.log('Config ran!');
-	
-	    /*
-	    Config.Router = Marionette.SubRouter.extend({
-	        appRoutes: {
-	          //"": "showConfig",
-	          ":id": "showConfig",
-	          //"config/bridge/:bridge": "config",
-	          "install_device": "installDevice"
-	        }
-	    });
-	    */
-	
-	    Config.addInitializer(function () {
-	
-	        //router
-	        this.controller = new this.Controller();
-	        /*
-	        this.router = new this.Router('portal/config/', {
-	            controller : this.controller,
-	            createTrailingSlashRoutes: true
-	        });
-	        */
-	    });
-	
-	    Config.Controller = Marionette.Controller.extend({
-	
-	        index: function index() {
-	            Config.mainLayoutView = new ConfigViews.Main();
-	            Portal.mainRegion.show(Config.mainLayoutView);
-	        },
-	        showConfig: function showConfig() {
-	
-	            var $mainRegion = $('#main-region')[0];
-	            React.unmountComponentAtNode($mainRegion[0]);
-	            //$mainRegion.remove();
-	            Config.mainView = React.render(React.createElement(ConfigViews.Main, { collection: Portal.bridgeCollection }), $mainRegion);
-	        },
-	        installApps: function installApps() {
-	
-	            console.log('controller installApps');
-	            Config.mainView.setState({ installingApps: true });
-	            //var installAppModal = new ConfigViews.InstallAppModal();
-	            //Portal.modalsRegion.show(installAppModal);
-	        },
-	        cancelInstallApps: function cancelInstallApps() {
-	            Config.mainView.setState({ installingApps: false });
-	        },
-	        discoverDevices: function discoverDevices() {
-	
-	            Portal.getCurrentBridge().get('discoveredDevices').each(function (discoveredDevice) {
-	                discoveredDevice.delete();
-	            });
-	            Portal.messageCollection.sendCommand('discover');
-	            Config.mainView.setState({ discoveringDevices: true });
-	        },
-	        stopDiscoveringDevices: function stopDiscoveringDevices() {
-	            Config.mainView.setState({ discoveringDevices: false });
-	        },
-	        promptInstallDevice: function promptInstallDevice(discoveredDevice) {
-	            console.log('promptInstallDevice discoveredDevice', discoveredDevice);
-	            Config.mainView.setState({ installDevice: discoveredDevice });
-	        },
-	        installDevice: function installDevice(discoveredDevice, friendlyName) {
-	            console.log('installDevice discoveredDevice', discoveredDevice);
-	            discoveredDevice.install(friendlyName);
-	            Config.mainView.setState({ installDevice: false,
-	                discoveringDevices: false });
-	        },
-	        cancelInstallDevice: function cancelInstallDevice() {
-	            console.log('cancelInstallDevice');
-	            Config.mainView.setState({ installDevice: false });
-	        }
-	    });
-	
-	    Config.on('config:show', function (bridgeID) {
-	        console.log('show config');
-	        var slug = bridgeID || "";
-	        Portal.currentBridge = Portal.bridgeCollection.get(bridgeID);
-	        Config.controller.showConfig();
-	        console.log('slug in config config:show is', slug);
-	        Config.router.navigate(slug);
-	    });
-	});
-
-/***/ },
-/* 583 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var StoreViews = __webpack_require__(567);
-	
-	Portal.module('Store', function (Store, CBApp, Backbone, Marionette, $, _) {
-	
-	    console.log('Store ran!');
-	    Store.addInitializer(function () {
-	
-	        //router
-	        this.controller = new this.Controller();
-	        /*
-	        this.router = new this.Router('portal/store/', {
-	            controller : this.controller,
-	            createTrailingSlashRoutes: true
-	        });
-	        */
-	    });
-	
-	    Store.Controller = Marionette.Controller.extend({
-	
-	        /*
-	        index: function () {
-	          Store.mainLayoutView = new StoreViews.Main();
-	          console.log('mainLayoutView', Store.mainLayoutView);
-	          console.log('portalLayout', Portal.portalLayout);
-	          Portal.portalLayout.mainRegion.show(Store.mainLayoutView);
-	          console.log('config index');
-	        },
-	        */
-	        showStore: function showStore() {
-	
-	            Store.mainLayoutView = new StoreViews.Main();
-	            Portal.mainRegion.show(Store.mainLayoutView);
-	        },
-	        licenseApp: function licenseApp(discoveredDeviceInstall) {
-	            var that = this;
-	            console.log('We got to the controller!');
-	            var installDeviceModal = new ConfigViews.InstallDeviceModal({
-	                model: discoveredDeviceInstall,
-	                installDevice: function installDevice(friendlyName) {
-	                    console.log('Install callback!');
-	                }
-	            });
-	            Portal.modalsRegion.show(installDeviceModal);
-	        }
-	    });
-	
-	    /*
-	    Store.Router = Marionette.SubRouter.extend({
-	         appRoutes: {
-	          "": "showStore",
-	          //"config/bridge/:bridge": "config",
-	        }
-	    });
-	    */
-	
-	    Store.on('store:show', function () {
-	        console.log('show store');
-	        Store.controller.showStore();
-	        Store.router.navigate('');
-	    });
-	});
-
-/***/ },
-/* 584 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -80954,7 +80738,7 @@
 	
 	var CBApp = __webpack_require__(3);
 	
-	__webpack_require__(585);
+	__webpack_require__(582);
 	//var routers = require('./routers');
 	//var Message = require('./message');
 	
@@ -81063,7 +80847,7 @@
 	});
 
 /***/ },
-/* 585 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81151,7 +80935,7 @@
 	});
 
 /***/ },
-/* 586 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81160,11 +80944,13 @@
 	
 	var CBApp = __webpack_require__(3);
 	
+	__webpack_require__(584);
 	__webpack_require__(587);
+	__webpack_require__(588);
 	__webpack_require__(589);
 	__webpack_require__(590);
-	__webpack_require__(591);
 	__webpack_require__(592);
+	__webpack_require__(593);
 	__webpack_require__(594);
 	__webpack_require__(595);
 	__webpack_require__(596);
@@ -81177,11 +80963,9 @@
 	__webpack_require__(603);
 	__webpack_require__(604);
 	__webpack_require__(605);
+	
 	__webpack_require__(606);
 	__webpack_require__(607);
-	
-	__webpack_require__(608);
-	__webpack_require__(609);
 	
 	//Portal.addInitializer(function () {
 	Portal.on('initialize:before', function () {
@@ -81258,15 +81042,16 @@
 	});
 
 /***/ },
-/* 587 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(588);
+	__webpack_require__(585);
+	__webpack_require__(586);
 
 /***/ },
-/* 588 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81319,7 +81104,38 @@
 	};
 
 /***/ },
-/* 589 */
+/* 586 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _ = __webpack_require__(35);
+	
+	// For through models which the UI relies upon being there with isGhost=true
+	// ie. AppDevicePermissions, AppInstalls etc.
+	
+	Portal.ConnectorModelMixin = {
+	
+	    // A connector should be set to 'isGhost' rather than deleted by the server
+	    isConnector: true,
+	
+	    reset: function reset() {
+	
+	        var self = this;
+	
+	        _.each(['id', 'cbid', 'status', 'status_message', 'resource_uri', 'modified', 'created'], function (field) {
+	
+	            self.unset(field);
+	        });
+	
+	        this.set({
+	            isGhost: true
+	        });
+	    }
+	};
+
+/***/ },
+/* 587 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -81343,7 +81159,7 @@
 	Backbone.Relational.store.addModelScope({ AdaptorCollection: Portal.AdaptorCollection });
 
 /***/ },
-/* 590 */
+/* 588 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -81386,7 +81202,7 @@
 	Backbone.Relational.store.addModelScope({ AdaptorCompatibilityCollection: Portal.AdaptorCompatibilityCollection });
 
 /***/ },
-/* 591 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81477,14 +81293,14 @@
 	Backbone.Relational.store.addModelScope({ AppCollection: Portal.AppCollection });
 
 /***/ },
-/* 592 */
+/* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var Backbone = __webpack_require__(34);
 	
-	__webpack_require__(593);
+	__webpack_require__(591);
 	
 	Portal.AppConnection = Portal.ConnectionModel.extend({
 	
@@ -81529,7 +81345,7 @@
 	Backbone.Relational.store.addModelScope({ AppConnectionCollection: Portal.AppConnectionCollection });
 
 /***/ },
-/* 593 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81587,7 +81403,7 @@
 	}, { modelType: "connectionModel" });
 
 /***/ },
-/* 594 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81602,9 +81418,11 @@
 	
 	    matchFields: ['bridge', 'app'],
 	
+	    /*
 	    defaults: {
-	        "status": "should_install"
+	        "status":  "should_install"
 	    },
+	    */
 	
 	    initialize: function initialize() {
 	
@@ -81649,6 +81467,7 @@
 	Backbone.Relational.store.addModelScope({ AppInstall: Portal.AppInstall });
 	
 	Backbone.Cocktail.mixin(Portal.AppInstall, Portal.InstallableModelMixin);
+	Backbone.Cocktail.mixin(Portal.AppInstall, Portal.ConnectorModelMixin);
 	
 	Portal.AppInstallCollection = Backbone.QueryEngine.QueryCollection.extend({
 	
@@ -81660,7 +81479,7 @@
 	Backbone.Relational.store.addModelScope({ AppInstallCollection: Portal.AppInstallCollection });
 
 /***/ },
-/* 595 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81752,17 +81571,21 @@
 	    },
 	
 	    getInstall: function getInstall(bridge) {
+	
 	        /* Get or create the install for this licence and the given bridge */
 	
+	        //console.log('getInstall');
 	        var install;
 	        var installData = {
 	            bridge: bridge,
 	            app: this.get('app'),
 	            licence: this
 	        };
+	        //console.log('installData ', installData );
 	        var licenceInstalls = this.get('installs');
 	        install = licenceInstalls.findWhere(installData);
 	        if (!install) {
+	            console.log('!install ');
 	            install = new Portal.AppInstall(installData);
 	            this.set('installs', install, { remove: false, silent: true });
 	        }
@@ -81843,7 +81666,7 @@
 	Backbone.Relational.store.addModelScope({ AppLicenceCollection: Portal.AppLicenceCollection });
 
 /***/ },
-/* 596 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81918,7 +81741,7 @@
 	Backbone.Relational.store.addModelScope({ AppOwnershipCollection: Portal.AppOwnershipCollection });
 
 /***/ },
-/* 597 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82004,7 +81827,7 @@
 	Backbone.Relational.store.addModelScope({ AppDevicePermissionCollection: Portal.AppDevicePermissionCollection });
 
 /***/ },
-/* 598 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82014,8 +81837,8 @@
 	var history = __webpack_require__(4);
 	var Q = __webpack_require__(95);
 	
-	var BridgeControl = __webpack_require__(599).BridgeControl;
-	var BridgeControlCollection = __webpack_require__(599).BridgeControlCollection;
+	var BridgeControl = __webpack_require__(597).BridgeControl;
+	var BridgeControlCollection = __webpack_require__(597).BridgeControlCollection;
 	
 	Portal.Bridge = Backbone.Deferred.Model.extend({
 	
@@ -82188,7 +82011,7 @@
 	};
 
 /***/ },
-/* 599 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82246,7 +82069,7 @@
 	Backbone.Relational.store.addModelScope({ BridgeControlCollection: Portal.BridgeControlCollection });
 
 /***/ },
-/* 600 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82292,7 +82115,7 @@
 	Backbone.Relational.store.addModelScope({ ClientCollection: Portal.ClientCollection });
 
 /***/ },
-/* 601 */
+/* 599 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82345,7 +82168,7 @@
 	Backbone.Relational.store.addModelScope({ ClientControlCollection: Portal.ClientControlCollection });
 
 /***/ },
-/* 602 */
+/* 600 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82410,7 +82233,7 @@
 	Backbone.Relational.store.addModelScope({ DeviceCollection: Portal.DeviceCollection });
 
 /***/ },
-/* 603 */
+/* 601 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82516,7 +82339,7 @@
 	Backbone.Relational.store.addModelScope({ DiscoveredDeviceCollection: Portal.DiscoveredDeviceCollection });
 
 /***/ },
-/* 604 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82655,7 +82478,7 @@
 	Backbone.Relational.store.addModelScope({ DeviceInstallCollection: Portal.DeviceInstallCollection });
 
 /***/ },
-/* 605 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82740,7 +82563,7 @@
 	});
 
 /***/ },
-/* 606 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82864,12 +82687,12 @@
 	Backbone.Relational.store.addModelScope({ UserCollection: Portal.UserCollection });
 
 /***/ },
-/* 607 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(606);
+	__webpack_require__(604);
 	
 	Portal.CurrentUser = Portal.User.extend({
 	
@@ -82905,7 +82728,7 @@
 	Backbone.Relational.store.addModelScope({ CurrentUserCollection: Portal.CurrentUserCollection });
 
 /***/ },
-/* 608 */
+/* 606 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -83027,7 +82850,7 @@
 	};
 
 /***/ },
-/* 609 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

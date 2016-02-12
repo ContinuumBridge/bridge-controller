@@ -3,6 +3,28 @@ var _ = require('underscore');
 //var Backbone = window.Backbone;
 (function() {
 
+    Backbone.Store.prototype.find = function(type, item) {
+
+        var id = this.resolveIdForItem( type, item ),
+            coll = this.getCollection( type );
+
+        // Because the found object could be of any of the type's superModel
+        // types, only return it if it's actually of the type asked for.
+        if ( coll ) {
+
+            // ADDED replaced get with findWhere, get mysteriously doesn't work for updating
+            // relations to an object which has just acquired an id
+            var obj = coll.findWhere({id: id});
+            //var obj = coll.get( id );
+
+            if ( obj instanceof type ) {
+                return obj;
+            }
+        }
+
+        return null;
+    }
+
     Backbone.HasOne = Backbone.HasOne.extend({
 
         initialize: function( opts ) {
@@ -20,6 +42,7 @@ var _ = require('underscore');
 
         findRelated: function( options ) {
 
+            //console.log('HasOne findRelated', this.key);
             var related = null;
 
             options = _.defaults( { parse: this.options.parse }, options );
@@ -32,7 +55,7 @@ var _ = require('underscore');
                     // ADDED If the keyContents are a uri, extract the id and create an object
                     var idArray = Portal.filters.apiRegex.exec(this.keyContents);
                     if (idArray && idArray[2]) {
-                            this.keyContents = { id: idArray[2] };
+                            this.keyContents = { id: parseInt(idArray[2]) };
                     }
 
                     //var opts = _.defaults( { create: this.options.createModels }, options );
@@ -91,6 +114,7 @@ var _ = require('underscore');
 
         findRelated: function( options ) {
 
+            //console.log('HasMany findRelated', this.key);
             var related = null;
 
             options = _.defaults( { parse: this.options.parse }, options );
@@ -101,9 +125,9 @@ var _ = require('underscore');
             //if ( typeof this.keyContents == 'object') {
             if ( this.keyContents instanceof Backbone.Collection ) {
 
+                //console.log('this.keyContents instanceof Backbone.Collection');
                 this._prepareCollection( this.keyContents );
                 related = this.keyContents;
-
             }
             // Otherwise, 'this.keyContents' should be an array of related object ids.
             // Re-use the current 'this.related' if it is a Backbone.Collection; otherwise, create a new collection.
@@ -113,20 +137,25 @@ var _ = require('underscore');
 
                     _.each( this.keyContents, function( attributes ) {
                             if ( attributes instanceof this.relatedModel ) {
+                                    //console.log('attributes instanceof this.relatedModel');
                                     var model = attributes;
                             }
                             else {
                                     // ADDED If the keyContents are a uri, extract the id and create an object
                                     var idArray = Portal.filters.apiRegex.exec(attributes);
                                     if (idArray && idArray[2]) {
-                                            attributes = { id: idArray[2] };
+                                            attributes = { id: parseInt(idArray[2]) };
                                     }
+                                    //console.log('HasMany findRelated attributes', attributes);
+                                    //console.log('HasMany this.relatedModel', this.relatedModel);
+                                    //console.log('_.extend( { merge: true }, options, { create: this.options.createModels } )', _.extend( { merge: true }, options, { create: this.options.createModels } ));
 
                                     // If `merge` is true, update models here, instead of during update.
                                     model = this.relatedModel.findOrCreate( attributes,
                                             _.extend( { merge: true }, options, { create: this.options.createModels } )
                                     );
 
+                                    //console.log('HasMany findRelated model', model);
                                     // ADDED Add model to initializeCollection
                                     var initializeCollection = this.options.initializeCollection;
                                     if ( _.isString( initializeCollection ) ) {
@@ -226,8 +255,14 @@ var _ = require('underscore');
                 // Ideal place to set up relations, if this is the first time we're here for this model
                 if ( !this._isInitialized && !this.isLocked() ) {
                     this.constructor.initializeModelHierarchy();
-                    Backbone.Relational.store.register( this );
+
+                    // Only register models that have an id. A model will be registered when/if it gets an id later on.
+                    if ( newId || newId === 0 ) {
+                        Backbone.Relational.store.register( this );
+                    }
+
                     this.initializeRelations( options );
+
                 }
                 // The store should know about an `id` update asap
                 else if ( newId && newId !== id ) {
@@ -284,6 +319,10 @@ var _ = require('underscore');
             var models = rel.related instanceof Backbone.Collection
                 ? rel.related.models : [ rel.related ];
             if (!models) return;
+
+            //console.log('updateRelationToSelf rel.keyIds', rel.keyIds);
+            //console.log('this.idAttribute', this.idAttribute);
+            if (rel.related instanceof Backbone.Collection) rel.keyIds.push(this[this.idAttribute]);
             /*
             if (!models[0]) {
                 // Not sure why keyContents is sometimes needed
@@ -329,10 +368,10 @@ var _ = require('underscore');
                             // Destroy the reverseModel if this model is being destroyed
                             if (reverseRelation instanceof Backbone.Collection) {
                                 reverseRelation.remove(this);
-                                debugger;
+                                //debugger;
                             } else {
                                 reverseModel.destroy();
-                                debugger;
+                                //debugger;
                             }
                         } else {
                             // Update the reverseModel if it exists
