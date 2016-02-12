@@ -36,6 +36,8 @@ Django.prototype.request = function(request, sessionID) {
 
     //console.log('Django request', requestURL);
 
+    verb = verb == 'delete' ? 'del' : verb;
+
     rest[verb](requestURL, djangoOptions).on('complete', function(data, response) {
 
         if (response && response.statusCode) {

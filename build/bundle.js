@@ -78496,7 +78496,7 @@
 	
 	        return React.createElement(
 	            'div',
-	            null,
+	            { className: 'modal-container' },
 	            this.renderModals(),
 	            React.createElement(
 	                'div',
@@ -78691,7 +78691,7 @@
 	
 	        return React.createElement(
 	            Modal.Dialog,
-	            { show: true, onHide: function onHide() {},
+	            { show: true, onHide: this.cancelInstall,
 	                container: this.props.container, animation: false },
 	            React.createElement(
 	                Modal.Header,

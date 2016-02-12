@@ -51,8 +51,9 @@ class AppInstallAuthorization(CBAuthorization):
                 raise Unauthorized("You must control the bridge onto which you are attempting to install")
 
             # Ensure the licence is owned by the requester
-            if not licence.user.pk == requester.pk:
+            if not licence.user.pk == requester.pk and not bridge.pk == requester.pk:
                 raise Unauthorized("You must own the licence you are attempting to use for this install")
+
             # Ensure the licence is for this app
             if not licence.app.pk == app.pk:
                 raise Unauthorized("The licence supplied is not compatible with the app you are trying to install")

@@ -145,7 +145,7 @@ module.exports.Main = React.createClass({
         var messages = currentBridge.get('messages');
 
         return (
-            <div>
+            <div className="modal-container">
                 {this.renderModals()}
                 <div className="row">
                     <div ref="appSection" className="app-section col-md-6">
@@ -279,7 +279,7 @@ var UninstallDeviceModal = React.createClass({
 
 var InstallAppModal = React.createClass({
 
-    mixins: [ Backbone.React.Component.mixin],
+    mixins: [ Backbone.React.Component.mixin ],
 
     cancelInstall: function() {
 
@@ -294,7 +294,7 @@ var InstallAppModal = React.createClass({
         var bridge = Portal.getCurrentBridge();
 
         return (
-            <Modal.Dialog show={true} onHide={function(){}}
+            <Modal.Dialog show={true} onHide={this.cancelInstall}
                 container={this.props.container} animation={false}>
                 <Modal.Header>
                     <Modal.Title>Manage Apps on {bridge.get('name')}</Modal.Title>
