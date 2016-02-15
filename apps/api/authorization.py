@@ -64,10 +64,16 @@ class AppInstallAuthorization(CBAuthorization):
                 if not licence.user.pk == owner.pk:
                     raise Unauthorized("You may not change the owner of the licence you are using to install this app")
 
-            if bundle.request.method == "CREATE":
+            print "bundle.request.method is", bundle.request.method
+            if bundle.request.method in ['POST', 'PUT']:
                 # Ensure the licence is owned by the requester
                 if not licence.user.pk == requester.pk:
                     raise Unauthorized("You must own the licence you are attempting to use for this install")
+
+                # Only allow one install per app per bridge
+                print "bridge.app_installs.filter(app=app) is", bridge.app_installs.filter(app=app)
+                if bridge.app_installs.filter(app=app):
+                    raise Unauthorized("You may only install one of this app per bridge")
 
                 # Ensure the maximum number of installs is not exceeded
                 existing_install_count = licence.installs.count()
