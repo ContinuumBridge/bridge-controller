@@ -35,6 +35,10 @@
 .modal-container .modal, .modal-container .modal-backdrop {
     position: absolute;
 }
+
+#app .modal {
+    overflow: visible;
+}
 /*
 .new-item.nested-item {
   color: #ffffff;
