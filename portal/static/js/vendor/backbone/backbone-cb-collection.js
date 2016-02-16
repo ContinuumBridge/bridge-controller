@@ -90,10 +90,14 @@ var CBCollection = OriginalCollection.extend({
         var i, l, index, model;
         for (i = 0, l = models.length; i < l; i++) {
             var attrs = models[i];
-            var model = this.findWhere({id: _.property(attrs, 'id')});
-            //console.log('attrs', attrs);
-            //console.log('update findWhere model ', model );
-            //console.log('update match syncing', this.matchSyncing(attrs));
+            var model;
+            //_.property(attrs, 'id');
+            if (attrs.id) model = this.findWhere({id: attrs.id});
+            /*
+            console.log('attrs', attrs);
+            console.log('update findWhere model ', model );
+            console.log('update match syncing', this.matchSyncing(attrs));
+            */
 
             if (!model) model = this.matchSyncing(attrs);
 
@@ -108,7 +112,7 @@ var CBCollection = OriginalCollection.extend({
                 model.set(attrs);
                 //console.log('setting model', model);
             } else {
-                console.log('adding model', attrs);
+                //console.log('adding model', attrs);
                 if (!(model = this._prepareModel(attrs, options))) {
                     console.warning('Could not create model ', attrs, options)
                     return false;

@@ -181,6 +181,11 @@ Portal.AppLicenceCollection = Backbone.QueryEngine.QueryCollection.extend({
         Portal.AppLicenceCollection.__super__.initialize.apply(this, arguments);
     },
     */
+
+    comparator: function(licence) {
+        var app = licence.get('app');
+        return app.get('name');
+    }
 });
 
 Backbone.Relational.store.addModelScope({ AppLicenceCollection : Portal.AppLicenceCollection });

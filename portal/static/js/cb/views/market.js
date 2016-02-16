@@ -8,7 +8,7 @@ require('../apps/views');
 
 module.exports.Main = React.createClass({
 
-    mixins: [ Backbone.React.Component.mixin],
+    mixins: [ Backbone.React.Component.mixin ],
 
     renderModals: function () {
 
