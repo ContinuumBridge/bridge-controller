@@ -3,6 +3,8 @@ var React = require('react');
 
 Portal.BridgeStatusView = React.createClass({
 
+    mixins: [Backbone.React.Component.mixin],
+
     render: function() {
 
         var bridge = this.props.model;
