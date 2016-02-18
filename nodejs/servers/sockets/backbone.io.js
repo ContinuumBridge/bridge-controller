@@ -1,5 +1,6 @@
 
 var http = require('http')
+    ,https = require('https')
     ,_ = require('underscore')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
@@ -19,7 +20,17 @@ function BackboneIOServer(getConfig, options) {
 
     var djangoURL = options.djangoURL;
 
-    var httpServer = http.createServer();
+    var httpServer;
+    if (options.key && options.cert) {
+
+        var serverOptions = {
+            key: options.key,
+            cert: options.cert
+        }
+        httpServer = https.createServer(options, function(req, res) {});
+    } else {
+        httpServer = http.createServer();
+    }
 
     var controllerURLs = {
         app: 'app/',

@@ -1,4 +1,5 @@
 
+var fs = require('fs');
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
 var Server = require('../server');
@@ -15,7 +16,9 @@ var Portal = function(port, djangoRootURL) {
 
     var options = {
         port: port,
-        djangoURL: this.djangoURL
+        djangoURL: this.djangoURL,
+        key: fs.readFileSync('/home/ubuntu/ssl/ContinuumBridge.key'),
+        cert: fs.readFileSync('/home/ubuntu/ssl/ContinuumBridge.crt')
     }
     this.socketServer =  this.createSocketServer(BackboneIOServer, options);
 
