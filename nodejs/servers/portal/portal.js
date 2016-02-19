@@ -3,6 +3,8 @@ var fs = require('fs');
 var PortalConnection = require('./connection');
 var BackboneIOServer = require('../sockets/backbone.io');
 var Server = require('../server');
+var os = require('os');
+var path = require('path');
 var utils = require('../utils');
 
 logger = require('./logger');
@@ -14,13 +16,16 @@ var Portal = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
 
+    //console.log('key is', fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.key')));
+    //console.log('cert is', fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.crt')));
+
     var options = {
         port: port,
         djangoURL: this.djangoURL,
-        key: fs.readFileSync('/home/ubuntu/ssl/ContinuumBridge.key'),
-        cert: fs.readFileSync('/home/ubuntu/ssl/ContinuumBridge.crt')
+        key: fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.key')),
+        cert: fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.crt'))
     }
-    this.socketServer =  this.createSocketServer(BackboneIOServer, options);
+    this.socketServer = this.createSocketServer(BackboneIOServer, options);
 
     //console.log('portal socketserver is', this.socketServer);
 };

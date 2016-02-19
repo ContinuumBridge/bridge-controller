@@ -80749,7 +80749,7 @@
 	
 	Portal.addInitializer(function () {
 	
-	    Portal.socket = Backbone.io('http://' + window.location.hostname + ':9415/');
+	    Portal.socket = Backbone.io('https://' + window.location.hostname + ':9415/');
 	
 	    //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 	
