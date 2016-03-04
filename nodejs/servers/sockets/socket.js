@@ -1,12 +1,63 @@
 
+var http = require('http')
+    , https = require('https')
+    , express = require('express');
+
 var cookie_reader = require('cookie');
 
 var backendAuth = require('../../backendAuth.js')
     ,Errors = require('../../errors')
     ;
 
-function SocketServer() {
+function SocketServer(options) {
 
+}
+
+SocketServer.prototype.setupHTTPServer = function(options) {
+
+    //var httpApp = this.httpApp = express();
+
+    if (options.key && options.cert) {
+
+        console.log('setup https');
+        console.log('options.key', options.key);
+        console.log('options.cert', options.cert);
+
+        var serverOptions = {
+            key: options.key,
+            cert: options.cert,
+            requestCert: true
+        }
+
+        /*
+        httpApp.get('*', function(req,res){
+            console.log('req', req);
+            console.log('res', res);
+            //res.redirect('https://127.0.0.1:8080'+req.url)
+        });
+        */
+
+        var httpServer = this.httpServer = https.createServer(serverOptions, function(req, res) {
+            console.log('https req', req);
+            console.log('https res', res);
+        });
+        //httpServer.route('*').get
+
+    } else {
+
+        console.log('setup http');
+
+        this.httpServer = http.createServer();
+
+        /*
+        httpApp.get('*', function(req, res) {
+            console.log('route *');
+            console.log('req', req);
+            console.log('res', res);
+            //res.redirect('https://127.0.0.1:8080'+req.url)
+        });
+        */
+    }
 }
 
 SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {

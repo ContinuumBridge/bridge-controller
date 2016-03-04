@@ -13,6 +13,7 @@ var Client = function(port, djangoRootURL) {
 
     this.djangoURL = djangoRootURL + '/api/client/v1/';
     this.authURL = this.djangoURL + 'current_client/client/';
+    this.logger = logger;
 
     var ioOptions = {
         port: port

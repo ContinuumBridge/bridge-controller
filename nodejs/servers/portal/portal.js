@@ -15,15 +15,14 @@ var Portal = function(port, djangoRootURL) {
 
     this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
+    this.logger = logger;
 
     //console.log('key is', fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.key')));
     //console.log('cert is', fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.crt')));
 
     var options = {
         port: port,
-        djangoURL: this.djangoURL,
-        key: fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.key')),
-        cert: fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.crt'))
+        djangoURL: this.djangoURL
     }
     this.socketServer = this.createSocketServer(BackboneIOServer, options);
 

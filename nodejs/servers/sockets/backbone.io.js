@@ -1,10 +1,10 @@
 
-var http = require('http')
-    ,https = require('https')
-    ,_ = require('underscore')
+var _ = require('underscore')
     ,backboneio = require('cb-backbone.io')
     ,Bacon = require('baconjs').Bacon
     ,cookie_reader = require('cookie')
+    ,http = require('http')
+    ,https = require('https')
     ,url = require('url')
     ;
 
@@ -68,10 +68,10 @@ function BackboneIOServer(getConfig, options) {
     var socketServer = backboneio.listen(httpServer, controllers);
     //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
+    console.log('backbone io port', options.port);
     httpServer.listen(options.port);
     // Set the socket io log level
     //socketServer.set('log level', 1);
-
 
     this.setupAuthorization(socketServer, getConfig);
 

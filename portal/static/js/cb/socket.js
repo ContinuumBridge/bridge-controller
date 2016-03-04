@@ -1,5 +1,6 @@
 
 var _ = require('underscore');
+var util = require('util');
 
 var CBApp = require('index')
     ;
@@ -11,7 +12,11 @@ require('./messages/models');
 
 Portal.addInitializer(function() {
 
-    Portal.socket = Backbone.io('https://' + window.location.hostname + ':9415/');
+    var address = util.format('%s//%s:9415', window.location.protocol, window.location.hostname);
+    console.log('window.location.protocol', window.location.protocol);
+    console.log('window.location.hostname', window.location.hostname);
+    console.log('socket address ', address );
+    Portal.socket = Backbone.io(address);
 
     //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
 
