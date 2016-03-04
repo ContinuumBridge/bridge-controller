@@ -3,6 +3,7 @@ var Bacon = require('baconjs').Bacon
     ,io = require('socket.io')
     ,Q = require('q')
     ,rest = require('restler')
+    ,os = require('os')
     ;
 
 var backendAuth = require('../backendAuth.js')
@@ -27,6 +28,16 @@ Server.prototype.createSocketServer = function(SocketServer, options) {
     var getConfig = function(sessionID) {
         return self.getConnectionConfig(self.authURL, sessionID);
     }
+
+    try {
+        var key = fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.key'));
+        if (key) options.key = key;
+        var cert = fs.readFileSync(path.join(os.homedir(), 'ssl/ContinuumBridge.crt'));
+        if (cert) options.cert = cert;
+    } catch (e) {
+        this.logger.warn('SSL key or certificate not found', e);
+    }
+
     var socketServer = new SocketServer(getConfig, options);
 
     socketServer.sockets.on('connection', function (socket) {
