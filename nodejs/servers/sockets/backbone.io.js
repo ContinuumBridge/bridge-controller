@@ -19,7 +19,8 @@ function BackboneIOServer(getConfig, options) {
 
     var djangoURL = options.djangoURL;
 
-    var httpServer = http.createServer();
+    //var httpServer = http.createServer();
+    this.setupHTTPServer(options);
 
     var controllerURLs = {
         app: 'app/',
@@ -54,10 +55,10 @@ function BackboneIOServer(getConfig, options) {
 
     //var currentUserController = new djangoBackbone(djangoURL + 'current_user/');
     // Start backbone io listening
-    var socketServer = backboneio.listen(httpServer, controllers);
+    var socketServer = backboneio.listen(this.httpServer, controllers);
     //var socketServer = backboneio.listen(httpServer, {currentUser: currentUserController});
 
-    httpServer.listen(options.port);
+    this.httpServer.listen(options.port);
     // Set the socket io log level
     //socketServer.set('log level', 1);
 
