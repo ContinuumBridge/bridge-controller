@@ -18,12 +18,13 @@ function SocketIOServer(getConfig, options) {
     console.log('heartbeatInterval ', heartbeatInterval);
     console.log('heartbeatTimeout', heartbeatTimeout);
 
-    var httpServer = require('http').createServer();
-    var socketServer = require('socket.io')(httpServer, {
+    //var httpServer = require('http').createServer();
+    this.setupHTTPServer(options);
+    var socketServer = require('socket.io')(this.httpServer, {
         'pingInterval': heartbeatInterval,
         'pingTimeout': heartbeatTimeout
     });
-    httpServer.listen(options.port);
+    this.httpServer.listen(options.port);
 
     // Set the socket io log level
     //socketServer.set('log level', 1);
