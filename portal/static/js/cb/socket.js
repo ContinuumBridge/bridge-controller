@@ -12,9 +12,13 @@ require('./messages/models');
 
 Portal.addInitializer(function() {
 
-    var address = util.format('%s//%s:9415', window.location.protocol, window.location.hostname);
-    console.log('window.location.protocol', window.location.protocol);
-    console.log('window.location.hostname', window.location.hostname);
+    var protocol = window.location.protocol;
+    //var port = protocol == "https" ? "443" : "9415";
+    var url = protocol == "https"
+        ? window.location.hostname + "/sockets/portal:443"
+        : window.location.hostname + ":9415";
+
+    var address = util.format('%s//%s', protocol, url);
     console.log('socket address ', address );
     Portal.socket = Backbone.io(address);
 
