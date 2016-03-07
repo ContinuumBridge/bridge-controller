@@ -14,7 +14,7 @@ Portal.addInitializer(function() {
 
     var protocol = window.location.protocol;
     //var port = protocol == "https" ? "443" : "9415";
-    var url = protocol == "https"
+    var url = protocol == "https:"
         ? window.location.hostname + "/sockets/portal:443"
         : window.location.hostname + ":9415";
 
