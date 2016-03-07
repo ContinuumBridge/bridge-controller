@@ -19,8 +19,6 @@ function BackboneIOServer(getConfig, options) {
 
     var djangoURL = options.djangoURL;
 
-    //var httpServer = http.createServer();
-    //this.setupHTTPServer(options);
     var httpServer = http.createServer();
 
     var controllerURLs = {

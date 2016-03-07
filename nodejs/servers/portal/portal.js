@@ -12,7 +12,6 @@ var Portal = function(port, djangoRootURL) {
 
     this.djangoURL = djangoRootURL + '/api/user/v1/';
     this.authURL = this.djangoURL + 'auth/user/';
-    this.logger = logger;
 
     var options = {
         port: port,

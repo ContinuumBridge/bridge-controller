@@ -14,7 +14,6 @@ var Bridge = function(port, djangoRootURL) {
     this.djangoRootURL = djangoRootURL;
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
-    this.logger = logger;
 
     var options = {
         port: port,
