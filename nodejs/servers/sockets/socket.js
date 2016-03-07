@@ -1,5 +1,6 @@
 
 var cookie_reader = require('cookie')
+    , express = require('express')
     , http = require('http')
     , https = require('https');
 
@@ -13,9 +14,10 @@ function SocketServer() {
 
 SocketServer.prototype.setupHTTPServer = function(options) {
 
-    //var httpApp = this.httpApp = express();
-
+    /*
     if (options.key && options.cert) {
+
+        var httpApp = this.httpApp = express();
 
         console.log('setup https');
         console.log('options.key', options.key);
@@ -27,35 +29,41 @@ SocketServer.prototype.setupHTTPServer = function(options) {
             requestCert: true
         }
 
+        httpApp.use(function(req, res, next) {
+            console.log('httpApp use');
+            if (req.headers['x-forwarded-proto'] !== 'https') {
+                console.log('redirecting https');
+                console.log('req.headers.host', req.headers.host);
+                console.log('req.originalUrl', req.originalUrl);
+                return res.redirect('https://' + req.headers.host + req.originalUrl);
+            } else {
+              next();
+            }
+        });
         /*
         httpApp.get('*', function(req,res){
             console.log('req', req);
             console.log('res', res);
             //res.redirect('https://127.0.0.1:8080'+req.url)
         });
-        */
 
-        var httpServer = this.httpServer = https.createServer(serverOptions, function(req, res) {
-            console.log('https req', req);
-            console.log('https res', res);
-        });
+        var httpServer = this.httpServer = https.createServer(serverOptions, httpApp);
         //httpServer.route('*').get
 
-    } else {
-
-        console.log('setup http');
-
-        this.httpServer = http.createServer();
-
-        /*
-        httpApp.get('*', function(req, res) {
-            console.log('route *');
-            console.log('req', req);
-            console.log('res', res);
-            //res.redirect('https://127.0.0.1:8080'+req.url)
-        });
         */
-    }
+
+    console.log('setup http');
+
+    this.httpServer = http.createServer();
+
+    /*
+    httpApp.get('*', function(req, res) {
+        console.log('route *');
+        console.log('req', req);
+        console.log('res', res);
+        //res.redirect('https://127.0.0.1:8080'+req.url)
+    });
+    */
 }
 
 SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
