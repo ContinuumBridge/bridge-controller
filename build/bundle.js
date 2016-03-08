@@ -80759,9 +80759,9 @@
 	        : window.location.hostname + ":9415/";
 	    */
 	
-	    var options = protocol == "https:" ? { path: 'sockets/portal' } : null;
+	    var options = protocol == "https:" ? { path: '/sockets/portal' } : null;
 	
-	    var address = util.format('%s//%s:%s', protocol, window.location.hostname, port);
+	    var address = util.format('%s//%s:%s/', protocol, window.location.hostname, port);
 	    console.log('socket address ', address);
 	    Portal.socket = Backbone.io(address, options);
 	
