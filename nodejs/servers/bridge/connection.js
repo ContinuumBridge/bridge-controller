@@ -18,7 +18,7 @@ var BridgeConnection = function(socket) {
     this.socket = socket;
     this.logger = logger;
 
-    socket.getConfig().then(function(config) {
+    socket.getConfig(socket.sessionID).then(function(config) {
 
         self.config = config;
 
