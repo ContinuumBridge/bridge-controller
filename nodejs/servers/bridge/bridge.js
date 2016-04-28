@@ -30,8 +30,8 @@ Bridge.prototype.onConnection = function(socket) {
 
     var self = this;
 
-    socket.getConfig = function() {
-        var sessionID = socket.handshake.query.sessionID;
+    socket.getConfig = function(sessionID) {
+        //var sessionID = socket.handshake.query.sessionID;
         return self.getConnectionConfig(self.authURL, sessionID);
         //config.djangoRootURL = self.djangoRootURL;
         //return config;

@@ -39,6 +39,9 @@ Connection.prototype.setupSocket = function() {
     socket.on('message', function (rawMessage) {
 
         logger.log('debug', 'Socket message', rawMessage);
+
+        if (!rawMessage) return;
+
         if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
             //console.log('Received Message: ' + rawMessage.utf8Data);
             rawMessage = rawMessage.utf8Data;
