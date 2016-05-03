@@ -13,8 +13,9 @@ from django.utils.translation import ugettext as _
 from tastypie.http import HttpUnauthorized
 #from tastypie.compat import User, username_field
 
-
 from tastypie.authentication import BasicAuthentication
+from tastypie.exceptions import ImmediateHttpResponse
+from tastypie.http import HttpBadRequest
 
 from accounts.models import CBUser, CBAuth
 from bridges.models import Bridge
@@ -55,9 +56,21 @@ class HTTPHeaderSessionAuthentication(BasicAuthentication):
         #from django.contrib.sessions.models import Session
         from user_sessions.models import Session
 
+        # Get the session id from a request from Node
         sessionid =  request.META.get('HTTP_X_CB_SESSIONID')
+        # Get the session id from a request from a browser
         if not sessionid or sessionid == 'null':
-            sessionid = request.COOKIES['sessionid']
+            try:
+                sessionid = request.COOKIES['sessionid']
+            except KeyError:
+                print "request.META", request.META
+                # Get the session id from a request from ie. Advanced Rest Client
+                sessionid =  request.META.get('HTTP_X_CB_SESSIONID')
+            
+        if not sessionid or sessionid == 'null':
+            raise ImmediateHttpResponse(
+                HttpForbidden("No session id provided")
+            )
 
         s = Session.objects.get(pk=sessionid)
 
