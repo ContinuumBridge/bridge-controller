@@ -18,6 +18,7 @@ var Client = function(port, djangoRootURL) {
         port: port
     }
     this.socketServer = this.createSocketServer(SocketIOServer, ioOptions);
+
     var wsOptions = {
         port: port + 1
     }

@@ -29,7 +29,6 @@ function SocketIOServer(getConfig, options) {
     //socketServer.set('log level', 1);
 
     this.setupAuthorization(socketServer, getConfig);
-    //socketServer.config = config;
 
     return socketServer;
 }

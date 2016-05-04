@@ -4,11 +4,13 @@ var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var Server = require('../server');
 var utils = require('../utils');
+var WSServer = require('../sockets/websocket');
 
 logger = require('./logger');
 
 var Bridge = function(port, djangoRootURL) {
 
+    console.log('Bridge');
     var self = this;
 
     this.djangoRootURL = djangoRootURL;
@@ -20,8 +22,17 @@ var Bridge = function(port, djangoRootURL) {
         heartbeatInterval: 300000,
         heartbeatTimeout: 630000
     }
+    console.log('Bridge 2');
 
     this.socketServer = this.createSocketServer(SocketIOServer, options);
+    console.log('Bridge Socket IO server on port', port);
+
+    var wsOptions = {
+        port: port + 1
+    }
+
+    this.wsServer = this.createSocketServer(WSServer, wsOptions);
+    console.log('Bridge Websocket server on port', wsOptions.port);
 };
 
 Bridge.prototype = new Server();
@@ -30,8 +41,8 @@ Bridge.prototype.onConnection = function(socket) {
 
     var self = this;
 
-    socket.getConfig = function() {
-        var sessionID = socket.handshake.query.sessionID;
+    socket.getConfig = function(sessionID) {
+        //var sessionID = socket.handshake.query.sessionID;
         return self.getConnectionConfig(self.authURL, sessionID);
         //config.djangoRootURL = self.djangoRootURL;
         //return config;
@@ -69,7 +80,6 @@ Bridge.prototype.formatConfig = function(authData) {
             subscriptionAddresses: subscriptionAddresses,
             publicationAddresses: publicationAddresses
         }
-
 }
 
 module.exports = Bridge;

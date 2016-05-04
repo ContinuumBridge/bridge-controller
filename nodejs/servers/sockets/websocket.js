@@ -34,19 +34,23 @@ function WSServer(getConfig, options) {
 
 WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
-    /* Setup authorization for socket io >1.0 */
     var self = this;
+    console.log('WSServer setupAuthorization ');
 
     wsServer.on('request', function(request) {
 
+        logger.log('WS Server request', request);
+
         var sessionID;
 
-        if(request.httpRequest && request.httpRequest.headers && request.httpRequest.headers.sessionid) {
+        //console.log('request.httpRequest.headers.sessionid', !!request.httpRequest.headers.sessionid);
+
+        if (request.httpRequest && request.httpRequest.headers && request.httpRequest.headers.sessionid) {
             sessionID = request.httpRequest.headers.sessionid;
         } else {
-            var error = new Errors.Unauthorized('No sessionID was provided');
+            var error = new Errors.Unauthorized('No sessionid was provided');
             logger.log('unauthorized', error);
-            request.reject(error);
+            return request.reject(error);
         }
         //console.log('wsServer httpRequest is', request.httpRequest);
         console.log('wsServer sessionID ', sessionID);
@@ -98,6 +102,7 @@ var WSSocket = function(ws) {
     this.ws = ws;
 
     ws.on('message', function(message) {
+        console.log('ws message');
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
             emit.apply(self, ['message', message.utf8Data]);
