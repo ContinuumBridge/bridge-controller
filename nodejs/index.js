@@ -9,20 +9,16 @@ DJANGO_URL = (process.env.NODE_ENV == 'production') ? 'http://localhost:8080' : 
 //redisAuthClient = redis.createClient();
 
 //var portalDjangoURL = DJANGO_URL + '/api/user/v1/';
-/*
 Portal = require('./servers/portal/portal');
 portal = new Portal(9415, DJANGO_URL);
-*/
 
 //var bridgeDjangoURL = DJANGO_URL + '/api/bridge/v1/';
 BridgeServer = require('./servers/bridge/bridge');
 bridgeServer = new BridgeServer(9416, DJANGO_URL);
 
-/*
 //var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
 Client = require('./servers/client/client');
 Client.server = new Client(7521, DJANGO_URL);
-*/
 
 
 //var clientDjangoURL = DJANGO_URL + '/api/client/v1/';
