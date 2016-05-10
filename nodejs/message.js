@@ -139,6 +139,9 @@ _.extend(Message.prototype, {
         }
     },
 
+    removePrivateFields: function() {
+        this.unset('sessionID');
+    },
     /*
     returnError: function(error) {
 
