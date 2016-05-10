@@ -114,6 +114,11 @@ var WSSocket = function(ws) {
         //socket.sendUTF(message.utf8Data);
     });
 
+    ws.on('close', function(reasonCode, description) {
+
+        self.emit('disconnect');
+    });
+
     this.server = {};
     this.server.to = function() {
         return self;
