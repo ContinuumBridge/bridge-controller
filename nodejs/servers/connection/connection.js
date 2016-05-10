@@ -35,17 +35,14 @@ Connection.prototype.setupSocket = function() {
 
     var socket = this.socket;
 
-    logger.log('debug', 'setupSocket');
     socket.on('message', function (rawMessage) {
 
-        logger.log('debug', 'Socket message', rawMessage);
+        //logger.log('debug', 'Socket message', rawMessage);
 
         if (!rawMessage) return;
 
         if (rawMessage.type === 'utf8' && rawMessage.utf8Data) {
-            //console.log('Received Message: ' + rawMessage.utf8Data);
             rawMessage = rawMessage.utf8Data;
-            //socket.sendUTF(message.utf8Data);
         }
         /*
         else if (rawMessage.type === 'binary') {
@@ -54,26 +51,21 @@ Connection.prototype.setupSocket = function() {
         }
         */
 
-        var message = new Message(rawMessage);
-        //logger.log('debug', 'Socket sessionID', socket.sessionID);
-        //logger.log('debug', 'Socket id', socket.id);
-        //logger.log('debug', 'Socket handshake query', socket.handshake.query);
+        try {
+            var message = new Message(rawMessage);
+        } catch (e) {
+            logger.log('message_error', util.format('Could not parse message %s', rawMessage));
+        }
         message.set('sessionID', socket.sessionID);
-        //logger.log('debug', Object.keys(socket));
-
         //message.filterDestination(self.config.publicationAddresses);
-        //logger.log('debug', 'Socket subscriptionAddresses', self.config.subscriptionAddress);
         message.conformSource(self.config.cbid);
-
-        //logger.log('debug', 'socket message config', self.config);
-        //logger.log('debug', 'socket message', message);
 
         self.router.dispatch(message);
     });
 
     var unsubscribeToClient = this.toClient.onValue(function(message) {
 
-        //self.onMessageToClient(message)
+        message.removePrivateFields();
         var jsonMessage = message.toJSONString();
 
         // Device discovery hack
@@ -191,8 +183,6 @@ Connection.prototype.setupRedis = function() {
     });
     redisSub.on('message', function(channel, jsonMessage) {
 
-        //logger.log('debug', 'Redis received ', jsonMessage);
-
         //var source = _.property('source')(jsonMessage);
 
         var message = new Message(jsonMessage);
@@ -201,8 +191,6 @@ Connection.prototype.setupRedis = function() {
         if(message.get('source') != self.config.cbid) {
             self.router.dispatch(message);
         }
-        //logger.log('debug', 'Redis received', message.toJSON());
-        //self.fromRedis.push(message);
     });
 
     this.disconnect = function() {

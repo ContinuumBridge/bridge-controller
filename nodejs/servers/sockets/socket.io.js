@@ -15,8 +15,8 @@ function SocketIOServer(getConfig, options) {
     var heartbeatInterval = options.heartbeatInterval || 25000;
     var heartbeatTimeout = options.heartbeatTimeout || 60000;
 
-    console.log('heartbeatInterval ', heartbeatInterval);
-    console.log('heartbeatTimeout', heartbeatTimeout);
+    console.log('SocketIO heartbeatInterval ', heartbeatInterval);
+    console.log('SocketIO heartbeatTimeout', heartbeatTimeout);
 
     var httpServer = require('http').createServer();
     var socketServer = require('socket.io')(httpServer, {
