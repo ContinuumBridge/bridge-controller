@@ -72,7 +72,7 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
             request.reject();
             console.log(error);
             next(error);
-        });
+        }).done();
 
         /*
         socket.on('message', function(message) {

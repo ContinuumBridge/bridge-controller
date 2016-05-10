@@ -41,7 +41,7 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
 
             console.log(error);
             next(error);
-        });
+        }).done();
     });
 }
 
