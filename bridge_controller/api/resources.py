@@ -606,14 +606,10 @@ class AuthResource(LoggedInResource):
                 login(request, client)
                 # Return the client's data
                 bundle = self.build_bundle(obj=client, request=request)
-                #print "bundle.request is", bundle.request
 
                 bundle = self.full_dehydrate(bundle)
                 bundle = self.alter_detail_data_to_serialize(request, bundle)
                 return self.create_response(request, bundle)
-                #return self.create_response(request, {
-                #    'success': True
-                #})
             else:
                 return self.create_response(request, {
                     'success': False,

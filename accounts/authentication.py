@@ -9,13 +9,13 @@ class UserBackend(object):
     # Create an authentication method
     # This is called by the standard Django login procedure
     def authenticate(self, username=None, password=None, **kwargs):
-        print "In UserBackend authenticate"
-        print "In UserBackend authenticate username", username
-        print "In UserBackend authenticate password", password
+        #print "In UserBackend authenticate"
+        #print "In UserBackend authenticate username", username
+        #print "In UserBackend authenticate password", password
         UserModel = CBUser
         if username is None:
             username = kwargs.get(UserModel.USERNAME_FIELD)
-            print "In UserBackend authenticate username", username
+            #print "In UserBackend authenticate username", username
         try:
             user = UserModel._default_manager.get_by_natural_key(username)
             if user.check_password(password):
