@@ -119,7 +119,8 @@ class BridgeAuthResource(AuthResource, CBIDResourceMixin):
         queryset = Bridge.objects.all()
         # Resource used to send data on successful login
         data_resource = CurrentBridgeResource()
-        fields = ['first_name', 'last_name']
+        fields = ['cbid', 'name']
+        #fields = ['first_name', 'last_name']
         resource_name = 'auth'
 
 
