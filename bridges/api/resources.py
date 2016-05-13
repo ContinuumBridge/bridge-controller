@@ -115,6 +115,8 @@ class BridgeAuthResource(AuthResource, CBIDResourceMixin):
 
     """ Allows bridges to login and logout """
 
+    #controllers = fields.ToManyField('bridges.api.resources.BridgeControlResource', 'controls', full=False)
+
     class Meta(AuthResource.Meta):
         queryset = Bridge.objects.all()
         # Resource used to send data on successful login

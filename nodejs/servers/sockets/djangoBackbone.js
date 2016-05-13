@@ -95,15 +95,10 @@ function DjangoBackbone(djangoURL, cbid) {
     backboneSocket.read(function(req, res) {
 
         // Get a detail or list. Checking for app_licences is a hack for initial currentUser request
-        //console.log('request is', Object.keys(req));
-        //console.log('request options', req.options);
         var baseRequestURL = (req.model.id) ? djangoURL + req.model.id
             //: (req.model.app_licences || req.model.bridge_controls) ? djangoURL + 'user': djangoURL;
             : (req.model.type == 'loggedInUser') ? djangoURL + 'user': djangoURL;
 
-        //console.log('baseRequestURL request is', baseRequestURL);
-
-        //console.log('config is', req.socket.manager);
         // Translate filters from backbone to tastypie
         var filters;
         var filtersString = "";
@@ -117,13 +112,8 @@ function DjangoBackbone(djangoURL, cbid) {
                 filtersString += filtersString ? "&" + filterString : "?" + filterString;
             };
         }
-        //console.log('filtersString is', filtersString);
-        //console.log('filtersString is', !!filtersString);
-        //console.log('baseRequestURL is', baseRequestURL);
         var requestURL = baseRequestURL + filtersString;
-        //var requestURL = baseRequestURL;
 
-        //console.log('requestURL is', requestURL);
         var djangoOptions = {
             method: "get",
             headers: {
@@ -142,15 +132,10 @@ function DjangoBackbone(djangoURL, cbid) {
 
     backboneSocket.update(function(req, res) {
 
-        //var requestURL = (req.model.id) ? djangoURL + req.model.id + '/': djangoURL;
         // On a backboneio create function make a post request to Django
 
         var requestURL = (req.model.id) ? djangoURL + req.model.id.toString() + "/" : djangoURL;
-        //var resourceURL = djangoURL + req.model.id.toString();
-        //console.log('requestURL in update is', requestURL, req);
         var jsonData = JSON.stringify(req.model);
-
-        //console.log('jsonData is', jsonData);
 
         var restOptions = {
             method: "patch",

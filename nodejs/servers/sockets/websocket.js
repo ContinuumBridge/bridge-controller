@@ -35,11 +35,10 @@ function WSServer(getConfig, options) {
 WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
     var self = this;
-    console.log('WSServer setupAuthorization ');
 
     wsServer.on('request', function(request) {
 
-        logger.log('WS Server request', request);
+        //logger.log('WS Server request', request);
 
         var sessionID;
 
@@ -71,7 +70,6 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
             request.reject();
             console.log(error);
-            next(error);
         }).done();
 
         /*
