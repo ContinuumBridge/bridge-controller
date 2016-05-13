@@ -69,7 +69,7 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
         }, function(error) {
 
             request.reject();
-            console.log(error);
+            console.log('Authorisation with Django failed', error);
         }).done();
 
         /*
