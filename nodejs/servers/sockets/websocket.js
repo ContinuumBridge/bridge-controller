@@ -42,8 +42,6 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
         var sessionID;
 
-        //console.log('request.httpRequest.headers.sessionid', !!request.httpRequest.headers.sessionid);
-
         if (request.httpRequest && request.httpRequest.headers && request.httpRequest.headers.sessionid) {
             sessionID = request.httpRequest.headers.sessionid;
         } else {
@@ -68,7 +66,7 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
 
         }, function(error) {
 
-            request.reject();
+            request.reject(403, 'Unauthorised');
             console.log('Authorisation with Django failed', error);
         }).done();
 
