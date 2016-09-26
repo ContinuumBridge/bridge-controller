@@ -24,7 +24,7 @@ function WSServer(getConfig, options) {
         httpServer: httpServer,
         autoAcceptConnections: false,
         keepaliveInterval: options.heartbeatInterval,
-        keepaliveGracePeriod: option.heartbeatTimeout
+        keepaliveGracePeriod: options.heartbeatTimeout
     });
 
     wsServer.sockets = new EventEmitter();
