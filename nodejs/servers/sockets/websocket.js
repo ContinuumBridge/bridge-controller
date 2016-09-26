@@ -23,8 +23,8 @@ function WSServer(getConfig, options) {
     var wsServer = new WebSocketServer({
         httpServer: httpServer,
         autoAcceptConnections: false,
-        keepaliveInterval: options.heartbeatInterval,
-        keepaliveGracePeriod: options.heartbeatTimeout
+        keepaliveInterval: options.heartbeatInterval || 20000,
+        keepaliveGracePeriod: options.heartbeatTimeout || 10000
     });
 
     wsServer.sockets = new EventEmitter();

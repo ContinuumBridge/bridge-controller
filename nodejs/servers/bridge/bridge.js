@@ -19,8 +19,8 @@ var Bridge = function(port, djangoRootURL) {
 
     var options = {
         port: port,
-        heartbeatInterval: 300000,
-        heartbeatTimeout: 630000
+        heartbeatInterval: 1200000,
+        heartbeatTimeout: 20000
     }
     //console.log('Bridge 2');
 
