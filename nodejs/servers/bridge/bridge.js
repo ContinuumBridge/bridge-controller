@@ -10,7 +10,7 @@ logger = require('./logger');
 
 var Bridge = function(port, djangoRootURL) {
 
-    console.log('Bridge');
+    //console.log('Bridge');
     var self = this;
 
     this.djangoRootURL = djangoRootURL;
@@ -22,7 +22,7 @@ var Bridge = function(port, djangoRootURL) {
         heartbeatInterval: 300000,
         heartbeatTimeout: 630000
     }
-    console.log('Bridge 2');
+    //console.log('Bridge 2');
 
     this.socketServer = this.createSocketServer(SocketIOServer, options);
     console.log('Bridge Socket IO server on port', port);
