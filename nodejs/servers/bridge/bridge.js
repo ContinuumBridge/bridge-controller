@@ -1,5 +1,6 @@
 
 //var Server = require('../server');
+var _ = require('underscore');
 var BridgeConnection = require('./connection');
 var SocketIOServer = require('../sockets/socket.io');
 var Server = require('../server');
@@ -17,19 +18,24 @@ var Bridge = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
+    var heartbeatInterval = 1200000;
+    var heartbeatTimeout = 20000;
+
     var options = {
         port: port,
-        heartbeatInterval: 1200000,
-        heartbeatTimeout: 20000
-    }
+        heartbeatInterval: heartbeatInterval,
+        heartbeatTimeout: heartbeatTimeout
+    };
     //console.log('Bridge 2');
 
     this.socketServer = this.createSocketServer(SocketIOServer, options);
     console.log('Bridge Socket IO server on port', port);
 
     var wsOptions = {
-        port: port + 1
-    }
+        port: port + 1,
+        keepaliveInterval: heartbeatInterval,
+        keepaliveGracePeriod: heartbeatTimeout
+    };
 
     this.wsServer = this.createSocketServer(WSServer, wsOptions);
     console.log('Bridge Websocket server on port', wsOptions.port);
