@@ -18,13 +18,13 @@ var Bridge = function(port, djangoRootURL) {
     this.djangoURL = djangoRootURL + '/api/bridge/v1/';
     this.authURL = this.djangoURL + 'current_bridge/bridge/';
 
-    var heartbeatInterval = 1200000;
-    var heartbeatTimeout = 20000;
+    //var heartbeatInterval = ;
+    //var heartbeatTimeout = ;
 
     var options = {
         port: port,
-        heartbeatInterval: heartbeatInterval,
-        heartbeatTimeout: heartbeatTimeout
+        heartbeatInterval: 300000,
+        heartbeatTimeout: 630000
     };
     //console.log('Bridge 2');
 
@@ -33,8 +33,8 @@ var Bridge = function(port, djangoRootURL) {
 
     var wsOptions = {
         port: port + 1,
-        keepaliveInterval: heartbeatInterval,
-        keepaliveGracePeriod: heartbeatTimeout
+        keepaliveInterval: 1200000,
+        keepaliveGracePeriod: 20000
     };
 
     this.wsServer = this.createSocketServer(WSServer, wsOptions);

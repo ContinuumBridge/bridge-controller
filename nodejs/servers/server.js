@@ -26,7 +26,8 @@ Server.prototype.createSocketServer = function(SocketServer, options) {
 
     var getConfig = function(sessionID) {
         return self.getConnectionConfig(self.authURL, sessionID);
-    }
+    };
+
     var socketServer = new SocketServer(getConfig, options);
 
     socketServer.sockets.on('connection', function (socket) {

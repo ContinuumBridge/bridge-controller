@@ -16,13 +16,18 @@ function WSServer(getConfig, options) {
         response.writeHead(404);
         response.end();
     });
+
     httpServer.listen(options.port, function() {
-        console.log((new Date()) + ' Server is listening on port 8080');
+        console.log((new Date()) + ' Websocket server is listening on port ' + options.port);
     });
 
+    console.log('Creating websocket server');
     var wsServer = new WebSocketServer({
         httpServer: httpServer,
-        autoAcceptConnections: false
+        autoAcceptConnections: false,
+        //keepalive: true,
+        keepaliveInterval: 5000,
+        useNativeKeepalive: true
     });
 
     wsServer.sockets = new EventEmitter();
