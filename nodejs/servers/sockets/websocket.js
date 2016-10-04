@@ -1,6 +1,6 @@
 
-
-var cookie_reader = require('cookie')
+var _ = require('underscore')
+    ,cookie_reader = require('cookie')
     ,EventEmitter = require('events').EventEmitter
     ,http = require('http')
     ,WebSocketServer = require('websocket').server;
@@ -20,10 +20,11 @@ function WSServer(getConfig, options) {
         console.log((new Date()) + ' Server is listening on port 8080');
     });
 
-    var wsServer = new WebSocketServer({
+    var wsServer = new WebSocketServer(_.extend({
         httpServer: httpServer,
-        autoAcceptConnections: false
-    });
+        autoAcceptConnections: false,
+        //keepaliveInterval: 600000
+    }, options));
 
     wsServer.sockets = new EventEmitter();
 
@@ -46,7 +47,7 @@ WSServer.prototype.setupAuthorization = function(wsServer, getConfig) {
             sessionID = request.httpRequest.headers.sessionid;
         } else {
             var error = new Errors.Unauthorized('No sessionid was provided');
-            logger.log('unauthorized', error);
+            console.log('unauthorized', error);
             return request.reject(error);
         }
         //console.log('wsServer httpRequest is', request.httpRequest);
@@ -96,6 +97,7 @@ var WSSocket = function(ws) {
 
     var self = this;
     this.ws = ws;
+    this.remoteAddress = ws.remoteAddress;
 
     ws.on('message', function(message) {
         console.log('ws message');
@@ -112,6 +114,7 @@ var WSSocket = function(ws) {
 
     ws.on('close', function(reasonCode, description) {
 
+        emit.apply(self, ['disconnect', reasonCode, description]);
         self.emit('disconnect');
     });
 

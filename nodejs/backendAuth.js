@@ -37,7 +37,7 @@ var backendAuth = function(djangoAuthURL, sessionID) {
                 deferredSessionData.reject(error);
             } else {
                 var error = new Errors.DjangoError(response);
-                deferred.reject(error);
+                deferredSessionData.reject(error);
             }
         } else {
             var error = new Errors.DjangoError(response)

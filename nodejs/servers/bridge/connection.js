@@ -97,7 +97,7 @@ BridgeConnection.prototype.deviceDiscovery = function(message) {
                     console.log('devices is', discoveredDeviceInstalls);
                     message.set('body', body);
                     message.set('destination', 'broadcast');
-                    logger.log('debug', 'message at device_discovery exit is', message);
+                    //logger.log('debug', 'message at device_discovery exit is', message);
                     deferredDiscoveredDeviceInstalls.resolve(message);
                 }
             });

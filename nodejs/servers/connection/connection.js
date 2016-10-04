@@ -75,9 +75,6 @@ Connection.prototype.setupSocket = function() {
         }
 
         if (resource && resource == '/api/bridge/v1/device_discovery/') {
-            //logger.log('debug', 'socket server is ', Object.keys(socket.server));
-            //io.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
-            //socket.emit('discoveredDeviceInstall:reset', body.body);
             socket.server.to(socket.id).emit('discoveredDeviceInstall:reset', body.body);
 
         } else {
@@ -86,12 +83,21 @@ Connection.prototype.setupSocket = function() {
         }
     });
 
-    socket.on('disconnect', function() {
-        logger.log('info', 'Disconnected');
+    var disconnect = function(reasonCode, description) {
+        logger.log('info', util.format('%s %s disconnected %s', socket.config.cbid, socket.remoteAddress, reasonCode, description));
         unsubscribeToClient();
         self.emit('disconnect');
         socket.removeAllListeners('message');
         socket.removeAllListeners('disconnect');
+    };
+
+    // Socket IO
+    socket.on('disconnect', disconnect);
+    // Websocket
+    //socket.on('close', disconnect);
+
+    socket.on('error', function(error) {
+        logger.log('error', 'Socket error', error);
     });
 };
 
@@ -193,14 +199,14 @@ Connection.prototype.setupRedis = function() {
         }
     });
 
-    this.disconnect = function() {
+    var disconnect = function() {
 
         //redisSub.removeListener('message', onRedisMessage);
         redisSub.unsubscribe();
         unsubscribeToRedis();
     }
     this.on('disconnect', function() {
-        self.disconnect();
+        disconnect();
         //self.removeListener('disconnect');
     });
 
