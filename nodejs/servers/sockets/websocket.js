@@ -16,8 +16,9 @@ function WSServer(getConfig, options) {
         response.writeHead(404);
         response.end();
     });
+
     httpServer.listen(options.port, function() {
-        console.log((new Date()) + ' Server is listening on port 8080');
+        console.log((new Date()) + ' Websocket server is listening on port ' + options.port);
     });
 
     var wsServer = new WebSocketServer(_.extend({
