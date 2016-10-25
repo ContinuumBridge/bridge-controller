@@ -27,12 +27,11 @@ Portal.addInitializer(function() {
     console.log('socket address ', address );
     Portal.socket = Backbone.io(address, options);
 
-    //Portal.socket = Backbone.io('http://gfdsgfds:9453/');
-
     var connectionStatus = new Portal.ConnectionStatus({socket: Portal.socket});
     Portal.notificationCollection.add(connectionStatus);
 
     _.each(['connect', 'reconnect'], function(event) {
+        console.log('socket connected', event);
         Portal.socket.on(event, function() {
             connectionStatus.set({
                 connected: true,
@@ -44,6 +43,7 @@ Portal.addInitializer(function() {
     });
 
     _.each(['error', 'reconnect_error'], function(event) {
+        console.error('socket error', event);
         Portal.socket.on(event, function (error) {
             connectionStatus.set({
                 connected: false,
@@ -54,33 +54,19 @@ Portal.addInitializer(function() {
     });
 
     Portal.socket.on('reconnecting', function(){
+        console.error('socket reconnecting');
         connectionStatus.set('reconnecting', true);
     });
 
     Portal.socket.on('disconnect', function(){
+        console.error('socket disconnected');
         connectionStatus.set('connected', false);
     });
 
     Portal.socket.on('reconnect_failed', function(){
+        console.error('socket reconnect failed');
         connectionStatus.set('timeout', true);
     });
-
-    /*
-    Portal.socket.on('discoveredDeviceInstall:reset', function(foundDevices){
-        /*
-        var message = new Message(foundDevices);
-        var foundDevices = message.get('body');
-        console.log('foundDevices are', foundDevices);
-        console.log('foundDevices are', JSON.toString(foundDevices));
-
-        Portal.discoveredDeviceInstallCollection.reset(foundDevices);
-        var currentBridge = Portal.getCurrentBridge()
-            // Trigger reset for the GUI
-        var collection = currentBridge.get('discoveredDeviceInstalls');
-        collection.trigger('reset');
-
-    });
-    */
 
     Portal.socket.publish = function(message) {
 
@@ -93,14 +79,6 @@ Portal.addInitializer(function() {
       Portal.socket.emit('message', jsonMessage, function(data){
           console.log('data from socket emit', data);
       });
-      /*
-      Portal.getCurrentBridge().then(function(currentBridge) {
-
-          var destination = "BID" + currentBridge.get('id');
-          message.set('destination', destination);
-          console.log('Message is', message);
-      });
-      */
     };
 
     //Portal.messageRouter = new routers.MessageRouter();
@@ -120,13 +98,5 @@ Portal.addInitializer(function() {
         console.log('Server >', jsonMessage);
         Portal.dispatch(jsonMessage);
         //});
-        /*
-        var message = new Portal.Message(jsonMessage);
-
-        var date = new Date();
-        message.set('time_received', date);
-        console.log('Server >', message);
-        Portal.messageCollection.add(message);
-        */
     });
 });

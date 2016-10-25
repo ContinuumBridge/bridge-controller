@@ -18,6 +18,8 @@ DATABASES = {
     }
 }
 
+CLIENT_KEYS_BUCKET = "cb-staging-keys"
+
 '''
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development

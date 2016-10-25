@@ -31,9 +31,15 @@ SocketServer.prototype.setupAuthorization = function(socketServer, getConfig) {
         }
 
         console.log('Authorisation sessionID', sessionID);
+        console.log('Authorisation ip', socket.request.connection.remoteAddress);
+        socket.sessionID = sessionID;
+        //next();
         //console.log('socket sessionID is', sessionID);
 
         getConfig(sessionID).then(function(config) {
+            //console.log("getConfig returned ", config);
+            config.remoteAddress = socket.request.connection.remoteAddress;
+            console.log('config.remoteAddress ', config.remoteAddress);
             socket.config = config;
             socket.sessionID = sessionID;
             next();

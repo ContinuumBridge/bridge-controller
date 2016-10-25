@@ -54,6 +54,7 @@ Backbone.Collection = Backbone.Deferred.Collection;
 require('./backbone-cb-collection');
 
 QueryEngine = Backbone.QueryEngine = require('./query-engine/query-engine-bundle.js');
+//QueryEngine = Backbone.QueryEngine = require('imports?Backbone=>Backbone!./query-engine/query-engine-bundle.js');
 
 require('./backbone-cb-querycollection');
 

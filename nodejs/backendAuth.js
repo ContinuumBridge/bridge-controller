@@ -13,7 +13,7 @@ var backendAuth = function(djangoAuthURL, sessionID) {
 
     var deferredSessionData = Q.defer();
 
-    console.log('backendAuth sessionID is:', sessionID)
+    //console.log('backendAuth sessionID is:', sessionID);
     // Define options for Django REST Client
     var djangoAuthOptions = {
         method: "get",

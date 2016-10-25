@@ -1,5 +1,5 @@
-from django.db import models
 
+from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.conf import settings
 
@@ -28,15 +28,6 @@ class Client(CBAuth, AuthKeyMixin, CBIDModelMixin):
         verbose_name_plural = _('clients')
         app_label = 'clients'
 
-    def save(self, *args, **kwargs):
-        #On save, update timestamps
-        '''
-        if not self.id:
-            self.created = timezone.now() 
-       
-        self.modified = timezone.now()
-        '''
-        super(Client, self).save(*args, **kwargs)
 
     def get_full_name(self):
         """

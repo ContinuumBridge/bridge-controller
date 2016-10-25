@@ -28,7 +28,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <Nav.Topbar activeSection={activeSection}/>
-                <div className="container">
+                <div className="container app-body">
                     {this.props.children}
                 </div>
                 <Portal.NotificationListView collection={notifications} />

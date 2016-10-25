@@ -18,6 +18,12 @@
     left: 20px;
 }
 
+.nav-bridge-dropdown > .dropdown > .dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .dropdown-menu > li > a > .bridge-name {
     position: relative;
     left: -15px;

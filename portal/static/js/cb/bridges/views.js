@@ -31,6 +31,10 @@ Portal.BridgeStatusView = React.createClass({
                                         <th scope="row">Status: </th>
                                         <td>{bridge.get('status') + bridge.get('status_message')}</td>
                                     </tr>
+                                    <tr>
+                                        <th scope="row">Z Wave: </th>
+                                        <td>{bridge.get('zwave')}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

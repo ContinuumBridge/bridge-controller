@@ -15,12 +15,11 @@ var PortalConnection = function(socket) {
     var self = this;
     this.socket = socket;
 
-    console.log('PortalConnection socket is ', socket.sessionID);
     socket.getConfig(socket.sessionID).then(function(config) {
 
         self.config = socket.config = config;
 
-        console.log('Portal config is', config);
+        //console.log('Portal config is', config);
         // Router and django must be defined
         self.django = new Django(self);
         self.router = new Router(self);

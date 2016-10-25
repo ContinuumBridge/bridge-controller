@@ -100,9 +100,11 @@ var BridgeList = React.createClass({
         var bridges = this.props.collection.map(this.createItem);
         //var bridgeCollection = this.props.collection.without(currentBridge);
         return (
-            <DropdownButton bsStyle="link" className="bridge-dropdown-header btn-nav" title={bridgeName} key="bridge-dropdown" id="bridge-header">
-                {bridges}
-            </DropdownButton>
+            <div className="nav-bridge-dropdown">
+                <DropdownButton bsStyle="link" className="bridge-dropdown-header btn-nav" title={bridgeName} key="bridge-dropdown" id="bridge-header">
+                    {bridges}
+                </DropdownButton>
+            </div>
         )
     }
 });

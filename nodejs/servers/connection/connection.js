@@ -107,8 +107,12 @@ Connection.prototype.logConnection = function(type) {
 
     var pubAddressesString = config.publicationAddresses ? config.publicationAddresses.join(', ') : "";
     var subAddressesString = config.subscriptionAddresses ? config.subscriptionAddresses.join(', ') : "";
-    logger.log('info', 'New %s connection. Subscribed to %s, publishing to %s'
-        , type, subAddressesString, pubAddressesString);
+    logger.log('info', 'New %s connection from %s at %s. Subscribed to %s, publishing to %s',
+        type,
+        config.cbid,
+        config.remoteAddress,
+        subAddressesString,
+        pubAddressesString);
 }
 
 Connection.prototype.onMessageToClient = function(message) {

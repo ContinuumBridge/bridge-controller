@@ -42,7 +42,11 @@
     #events .features_op1_row .feature .img_box span.circle{
         top: 35%;
     }
+    .app-body {
+        margin-top: 75px;
+    }
 }
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 
 

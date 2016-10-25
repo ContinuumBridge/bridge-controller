@@ -1,6 +1,10 @@
 
+# AWS client
+import boto3
+
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from .abstract import PolymorphicAbstractBaseUser, PolymorphicBaseUserManager
@@ -33,6 +37,35 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
         verbose_name = _('cb_auth')
         verbose_name_plural = _('cb_auths')
         app_label = 'accounts'
+
+    def save(self, *args, **kwargs):
+
+        print "AuthKeyMixin::save"
+        upload_key = False
+        if self.pk is None:
+            upload_key = True
+
+        super(CBAuth, self).save(*args, **kwargs)
+
+        if upload_key:
+            #key = list(bytearray(self.plaintext_key))
+            #key = bytearray(self.plaintext_key)
+            key = self.plaintext_key.encode('iso-8859-15')
+            print "key  is", key
+            s3_client = boto3.client('s3')
+            response = s3_client.put_object(
+                Body=key,
+                Bucket=settings.CLIENT_KEYS_BUCKET,
+                ContentType='text/plain',
+                Key=self.cbid
+            )
+            response_metadata = response.get('ResponseMetadata', None)
+            print "response_metadata  is", response_metadata
+            if response_metadata and response_metadata.get('HTTPStatusCode', None) is 200:
+                self.plaintext_key = ""
+                # Save again without the plaintext key
+                super(CBAuth, self).save(*args, **kwargs)
+
 
     def get_full_name(self):
         """

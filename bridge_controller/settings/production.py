@@ -19,6 +19,8 @@ DATABASES = {
     }
 }
 
+CLIENT_KEYS_BUCKET = "cb-production-keys"
+
 INSTALLED_APPS += (
     #'debug_toolbar', # and other apps for local development
 )

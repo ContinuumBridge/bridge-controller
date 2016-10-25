@@ -18,6 +18,8 @@ DATABASES = {
     }
 }
 
+CLIENT_KEYS_BUCKET = "cb-staging-keys"
+
 '''
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
