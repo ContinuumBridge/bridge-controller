@@ -48,10 +48,7 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
         super(CBAuth, self).save(*args, **kwargs)
 
         if upload_key:
-            #key = list(bytearray(self.plaintext_key))
-            #key = bytearray(self.plaintext_key)
             key = self.plaintext_key.encode('iso-8859-15')
-            print "key  is", key
             s3_client = boto3.client('s3')
             response = s3_client.put_object(
                 Body=key,
@@ -60,11 +57,13 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
                 Key=self.cbid
             )
             response_metadata = response.get('ResponseMetadata', None)
-            print "response_metadata  is", response_metadata
             if response_metadata and response_metadata.get('HTTPStatusCode', None) is 200:
                 self.plaintext_key = ""
                 # Save again without the plaintext key
                 super(CBAuth, self).save(*args, **kwargs)
+            else:
+                print "response_metadata  is", response_metadata
+
 
 
     def get_full_name(self):
