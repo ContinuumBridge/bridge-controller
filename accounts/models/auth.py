@@ -40,9 +40,9 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
 
-        print "AuthKeyMixin::save"
+        #print "AuthKeyMixin::save"
         upload_key = False
-        if self.pk is None:
+        if self.pk is None and hasattr(self, 'plaintext_key'):
             upload_key = True
 
         super(CBAuth, self).save(*args, **kwargs)
@@ -62,9 +62,7 @@ class CBAuth(PolymorphicAbstractBaseUser, PermissionsMixin):
                 # Save again without the plaintext key
                 super(CBAuth, self).save(*args, **kwargs)
             else:
-                print "response_metadata  is", response_metadata
-
-
+                print "Error: Saving key for {0} to AWS S3 failed", response_metadata
 
     def get_full_name(self):
         """
