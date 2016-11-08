@@ -44,6 +44,6 @@ Portal.InstallableModelMixin = {
             }
             //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
         }
-        console.log('status changed', model, value, options);
+        //console.log('status changed', model, value, options);
     }
 }

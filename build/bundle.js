@@ -18491,9 +18491,9 @@
 	    Backbone.socketio = io;
 	    
 	    Backbone.io = Backbone.IO = function() {
-	        console.log('Backbone.IO arguments', arguments);
+	        //console.log('Backbone.IO arguments', arguments);
 	        var socket = io.apply(io, arguments);
-	        console.log('Backbone.IO after io.apply');
+	        //console.log('Backbone.IO after io.apply');
 	        connected.resolve(socket);
 	        return socket;
 	    };
@@ -18626,7 +18626,7 @@
 	        };
 	
 	        connected.then(function(socket) {
-	            console.log('socket.io.uri + name', socket.io.uri + name);
+	            //console.log('socket.io.uri + name', socket.io.uri + name);
 	            // Use the full uri to get the socket channel
 	            // socket.io.uri
 	            backend.socket = io(socket.io.uri + name);
@@ -79545,6 +79545,10 @@
 	var Router = __webpack_require__(268);
 	var DropdownButton = __webpack_require__(353).DropdownButton;
 	var MenuItem = __webpack_require__(353).MenuItem;
+	var Nav = __webpack_require__(353).Nav;
+	var Navbar = __webpack_require__(353).Navbar;
+	var NavDropdown = __webpack_require__(353).NavDropdown;
+	var NavItem = __webpack_require__(353).NavItem;
 	
 	module.exports.Topbar = React.createClass({
 	    displayName: 'Topbar',
@@ -79555,67 +79559,85 @@
 	    render: function render() {
 	
 	        return React.createElement(
-	            'div',
-	            { className: 'navbar navbar-inverse navbar-fixed-top' },
+	            Navbar,
+	            { inverse: true, collapseOnSelect: true, fixedTop: true },
 	            React.createElement(
-	                'div',
-	                { className: 'container' },
+	                Navbar.Header,
+	                null,
 	                React.createElement(
-	                    'div',
-	                    { className: 'navbar-header' },
-	                    React.createElement(
-	                        'button',
-	                        { type: 'button', className: 'navbar-toggle pull-right', 'data-toggle': 'collapse', 'data-target': '.navbar-ex1-collapse' },
-	                        React.createElement(
-	                            'span',
-	                            { className: 'sr-only' },
-	                            'Toggle navigation'
-	                        ),
-	                        React.createElement('span', { className: 'icon-bar' }),
-	                        React.createElement('span', { className: 'icon-bar' }),
-	                        React.createElement('span', { className: 'icon-bar' })
-	                    ),
+	                    Navbar.Brand,
+	                    null,
 	                    React.createElement(
 	                        'a',
-	                        { className: 'home navbar-brand' },
-	                        React.createElement(
-	                            'strong',
-	                            null,
-	                            'ContinuumBridge'
-	                        )
+	                        { href: '/' },
+	                        React.createElement('img', { src: '/static/img/cb-logo-inverse.png', className: 'nav-cb-logo' })
 	                    )
 	                ),
+	                React.createElement(Navbar.Toggle, null)
+	            ),
+	            React.createElement(
+	                Navbar.Collapse,
+	                null,
 	                React.createElement(
-	                    'div',
-	                    { className: 'collapse navbar-collapse navbar-ex1-collapse', role: 'navigation' },
+	                    Nav,
+	                    null,
+	                    React.createElement(BridgeList, { collection: Portal.bridgeCollection })
+	                ),
+	                React.createElement(
+	                    Nav,
+	                    { pullRight: true },
 	                    React.createElement(
-	                        'ul',
-	                        { id: 'navbar-left', className: 'nav navbar-nav navbar-left' },
-	                        React.createElement(BridgeList, { collection: Portal.bridgeCollection })
+	                        Tab,
+	                        { to: 'dashboard' },
+	                        'Dashboard'
 	                    ),
 	                    React.createElement(
-	                        'div',
-	                        { id: 'navbar-right', className: 'nav navbar-nav navbar-right' },
-	                        React.createElement(
-	                            Tab,
-	                            { to: 'dashboard' },
-	                            'Dashboard'
-	                        ),
-	                        React.createElement(
-	                            Tab,
-	                            { to: 'market' },
-	                            'App Market'
-	                        ),
-	                        React.createElement(
-	                            Tab,
-	                            { to: 'config' },
-	                            'Config'
-	                        ),
-	                        React.createElement(AccountList, null)
-	                    )
+	                        Tab,
+	                        { to: 'market' },
+	                        'App Market'
+	                    ),
+	                    React.createElement(
+	                        Tab,
+	                        { to: 'config' },
+	                        'Config'
+	                    ),
+	                    React.createElement(AccountList, null)
 	                )
 	            )
 	        );
+	        /*
+	        <div className="navbar navbar-inverse navbar-fixed-top">
+	            <div className="container">
+	                <div className="navbar-header">
+	                    <button type="button" className="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+	                        <span className="sr-only">Toggle navigation</span>
+	                        <span className="icon-bar"></span>
+	                        <span className="icon-bar"></span>
+	                        <span className="icon-bar"></span>
+	                    </button>
+	                    <a className="home navbar-brand"><strong>ContinuumBridge</strong></a>
+	                </div>
+	                 <div className="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
+	                    <ul id="navbar-left" className="nav navbar-nav navbar-left">
+	                        <BridgeList collection={Portal.bridgeCollection} />
+	                    </ul>
+	                    <div id="navbar-right" className="nav navbar-nav navbar-right">
+	                        <Tab to="dashboard">Dashboard</Tab>
+	                        <Tab to="market">App Market</Tab>
+	                        <Tab to="config">Config</Tab>
+	                        <AccountList />
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <NavItem eventKey={1} href="#">Link Right</NavItem>
+	                        <NavItem eventKey={2} href="#">Link Right</NavItem>
+	                        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+	                            <MenuItem eventKey={3.1}>Action</MenuItem>
+	                            <MenuItem eventKey={3.2}>Another action</MenuItem>
+	                            <MenuItem eventKey={3.3}>Something else here</MenuItem>
+	                        </NavDropdown>
+	        */
 	    }
 	});
 	
@@ -79665,7 +79687,7 @@
 	        */
 	        return React.createElement(
 	            'li',
-	            { key: bridge.id },
+	            { name: bridge.get('name'), key: bridge.id },
 	            React.createElement(
 	                'a',
 	                { 'data-tag': bridge.id, onClick: this.bridgeClick },
@@ -79683,14 +79705,11 @@
 	
 	        var bridges = this.props.collection.map(this.createItem);
 	        //var bridgeCollection = this.props.collection.without(currentBridge);
+	        //<div className="dropdown btn-group btn-group-link nav-bridge-dropdown">
 	        return React.createElement(
-	            'div',
-	            { className: 'nav-bridge-dropdown' },
-	            React.createElement(
-	                DropdownButton,
-	                { bsStyle: 'link', className: 'bridge-dropdown-header btn-nav', title: bridgeName, key: 'bridge-dropdown', id: 'bridge-header' },
-	                bridges
-	            )
+	            DropdownButton,
+	            { bsStyle: 'link', className: 'nav-bridge-dropdown', title: bridgeName, key: 'bridge-dropdown', id: 'nav-bridge-dropdown' },
+	            bridges
 	        );
 	    }
 	});
@@ -79722,7 +79741,7 @@
 	
 	        return React.createElement(
 	            DropdownButton,
-	            { bsStyle: 'link', className: 'bridge-dropdown-header', title: fullName, key: 'account-dropdown', id: 'account-header' },
+	            { bsStyle: 'link', className: 'account-dropdown-list', title: fullName, key: 'account-dropdown', id: 'account-dropdown-list' },
 	            React.createElement(
 	                Tab,
 	                { to: 'account' },
@@ -79742,23 +79761,7 @@
 	                    'Logout'
 	                )
 	            )
-	        )
-	        /*
-	        <li id="account-dropdown" className="dropdown">
-	            <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-	                <div className="header-text">{firstName} {lastName}</div>
-	                <b className="caret"></b>
-	            </a>
-	            <ul className="dropdown-menu">
-	                <Tab to="account">My Account</Tab>
-	                <Tab to="developer">Developer</Tab>
-	                <li name="logout">
-	                    <a href="/accounts/logout/">Logout</a>
-	                </li>
-	            </ul>
-	        </li>
-	        */
-	        ;
+	        );
 	    }
 	});
 	
@@ -82715,7 +82718,7 @@
 	    Portal.notificationCollection.add(connectionStatus);
 	
 	    _.each(['connect', 'reconnect'], function (event) {
-	        console.log('socket connected', event);
+	        //console.log('socket connected', event);
 	        Portal.socket.on(event, function () {
 	            connectionStatus.set({
 	                connected: true,
@@ -82727,7 +82730,7 @@
 	    });
 	
 	    _.each(['error', 'reconnect_error'], function (event) {
-	        console.error('socket error', event);
+	        //console.error('socket error', event);
 	        Portal.socket.on(event, function (error) {
 	            connectionStatus.set({
 	                connected: false,
@@ -82738,12 +82741,12 @@
 	    });
 	
 	    Portal.socket.on('reconnecting', function () {
-	        console.error('socket reconnecting');
+	        //console.error('socket reconnecting');
 	        connectionStatus.set('reconnecting', true);
 	    });
 	
 	    Portal.socket.on('disconnect', function () {
-	        console.error('socket disconnected');
+	        //console.error('socket disconnected');
 	        connectionStatus.set('connected', false);
 	    });
 	
@@ -83656,7 +83659,7 @@
 	            }
 	            //var notification = Portal.notificationCollection.findOrAdd({model: this, type: 'installStatus'});
 	        }
-	        console.log('status changed', model, value, options);
+	        //console.log('status changed', model, value, options);
 	    }
 	};
 
@@ -84085,7 +84088,7 @@
 	    initialize: function initialize() {
 	
 	        var self = this;
-	        console.log('initialize AppLicence');
+	        //console.log('initialize AppLicence');
 	
 	        this.on('all', function () {
 	            var app = self.get('app');

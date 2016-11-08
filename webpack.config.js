@@ -13,7 +13,7 @@ new webpack.optimize.CommonsChunkPlugin({
 
 module.exports = {
     entry: {
-        bundle: './portal/static/js/main.js'
+        bundle: './portal/static/js/main.js',
         //vendor: [
         //    './portal/static/js/vendor/vendor'
         //]

@@ -9,9 +9,9 @@ var io = require('socket.io-client');
     Backbone.socketio = io;
     
     Backbone.io = Backbone.IO = function() {
-        console.log('Backbone.IO arguments', arguments);
+        //console.log('Backbone.IO arguments', arguments);
         var socket = io.apply(io, arguments);
-        console.log('Backbone.IO after io.apply');
+        //console.log('Backbone.IO after io.apply');
         connected.resolve(socket);
         return socket;
     };
@@ -144,7 +144,7 @@ var io = require('socket.io-client');
         };
 
         connected.then(function(socket) {
-            console.log('socket.io.uri + name', socket.io.uri + name);
+            //console.log('socket.io.uri + name', socket.io.uri + name);
             // Use the full uri to get the socket channel
             // socket.io.uri
             backend.socket = io(socket.io.uri + name);

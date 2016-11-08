@@ -1,4 +1,4 @@
-import 'es5-shim';
+//import 'es5-shim';
 
 //import _ from 'underscore';
 //require("expose?XModule!underscore");

@@ -42,9 +42,9 @@
     #events .features_op1_row .feature .img_box span.circle{
         top: 35%;
     }
-    .app-body {
+    /*.app-body {
         margin-top: 75px;
-    }
+    }*/
 }
 
 /* Portrait tablet to landscape and desktop */

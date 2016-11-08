@@ -31,7 +31,7 @@ Portal.addInitializer(function() {
     Portal.notificationCollection.add(connectionStatus);
 
     _.each(['connect', 'reconnect'], function(event) {
-        console.log('socket connected', event);
+        //console.log('socket connected', event);
         Portal.socket.on(event, function() {
             connectionStatus.set({
                 connected: true,
@@ -43,7 +43,7 @@ Portal.addInitializer(function() {
     });
 
     _.each(['error', 'reconnect_error'], function(event) {
-        console.error('socket error', event);
+        //console.error('socket error', event);
         Portal.socket.on(event, function (error) {
             connectionStatus.set({
                 connected: false,
@@ -54,12 +54,12 @@ Portal.addInitializer(function() {
     });
 
     Portal.socket.on('reconnecting', function(){
-        console.error('socket reconnecting');
+        //console.error('socket reconnecting');
         connectionStatus.set('reconnecting', true);
     });
 
     Portal.socket.on('disconnect', function(){
-        console.error('socket disconnected');
+        //console.error('socket disconnected');
         connectionStatus.set('connected', false);
     });
 

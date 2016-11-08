@@ -1,7 +1,9 @@
 /* Navigation Bar */
 
-.bridge-dropdown-header {
-
+.nav-cb-logo {
+    width: 192px;
+    /*margin-left: 11px;*/
+    margin-top: -23px;
 }
 
 .btn-nav {
@@ -18,8 +20,10 @@
     left: 20px;
 }
 
-.nav-bridge-dropdown > .dropdown > .dropdown-menu {
-    max-height: 200px;
+/*.nav-bridge-dropdown > .dropdown > .dropdown-menu {*/
+/*ul[aria-labelledby="bridge-dropdown-list"] {*/
+.nav-bridge-dropdown + .dropdown-menu {
+    max-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
 }

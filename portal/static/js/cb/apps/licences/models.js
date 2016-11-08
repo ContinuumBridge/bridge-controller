@@ -71,7 +71,7 @@ Portal.AppLicence = Backbone.Deferred.Model.extend({
     initialize: function() {
 
         var self = this;
-        console.log('initialize AppLicence');
+        //console.log('initialize AppLicence');
 
         this.on('all', function() {
             var app = self.get('app');

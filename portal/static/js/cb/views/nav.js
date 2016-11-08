@@ -4,6 +4,10 @@ var React = require('react');
 var Router = require('react-router');
 var DropdownButton = require('react-bootstrap').DropdownButton;
 var MenuItem = require('react-bootstrap').MenuItem;
+var Nav = require('react-bootstrap').Nav;
+var Navbar = require('react-bootstrap').Navbar;
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var NavItem = require('react-bootstrap').NavItem;
 
 module.exports.Topbar = React.createClass({
 
@@ -12,6 +16,27 @@ module.exports.Topbar = React.createClass({
     render: function() {
 
         return (
+                <Navbar inverse collapseOnSelect fixedTop>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <a href="/"><img src="/static/img/cb-logo-inverse.png" className="nav-cb-logo"/></a>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        <Nav>
+                            <BridgeList collection={Portal.bridgeCollection} />
+                        </Nav>
+                        <Nav pullRight>
+                            <Tab to="dashboard">Dashboard</Tab>
+                            <Tab to="market">App Market</Tab>
+                            <Tab to="config">Config</Tab>
+                            <AccountList />
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+            )
+            /*
             <div className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header">
@@ -37,7 +62,14 @@ module.exports.Topbar = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+            <NavItem eventKey={1} href="#">Link Right</NavItem>
+                            <NavItem eventKey={2} href="#">Link Right</NavItem>
+                            <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+                                <MenuItem eventKey={3.1}>Action</MenuItem>
+                                <MenuItem eventKey={3.2}>Another action</MenuItem>
+                                <MenuItem eventKey={3.3}>Something else here</MenuItem>
+                            </NavDropdown>
+            */
     }
 });
 
@@ -84,7 +116,7 @@ var BridgeList = React.createClass({
               </div>;
         */
         return (
-            <li key={bridge.id}>
+            <li name={bridge.get('name')} key={bridge.id}>
                 <a data-tag={bridge.id} onClick={this.bridgeClick}>{bridge.get('name')}</a>
             </li>
         );
@@ -99,12 +131,11 @@ var BridgeList = React.createClass({
 
         var bridges = this.props.collection.map(this.createItem);
         //var bridgeCollection = this.props.collection.without(currentBridge);
+        //<div className="dropdown btn-group btn-group-link nav-bridge-dropdown">
         return (
-            <div className="nav-bridge-dropdown">
-                <DropdownButton bsStyle="link" className="bridge-dropdown-header btn-nav" title={bridgeName} key="bridge-dropdown" id="bridge-header">
-                    {bridges}
-                </DropdownButton>
-            </div>
+            <DropdownButton bsStyle="link" className="nav-bridge-dropdown" title={bridgeName} key="bridge-dropdown" id="nav-bridge-dropdown">
+                {bridges}
+            </DropdownButton>
         )
     }
 });
@@ -129,28 +160,13 @@ var AccountList = React.createClass({
         var fullName = firstName + " " + lastName;
 
         return (
-            <DropdownButton bsStyle="link" className="bridge-dropdown-header" title={fullName} key="account-dropdown" id="account-header">
+            <DropdownButton bsStyle="link" className="account-dropdown-list" title={fullName} key="account-dropdown" id="account-dropdown-list">
                 <Tab to="account">My Account</Tab>
                 <Tab to="developer">Developer</Tab>
                 <li name="logout">
                     <a href="/accounts/logout/">Logout</a>
                 </li>
             </DropdownButton>
-            /*
-            <li id="account-dropdown" className="dropdown">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                    <div className="header-text">{firstName} {lastName}</div>
-                    <b className="caret"></b>
-                </a>
-                <ul className="dropdown-menu">
-                    <Tab to="account">My Account</Tab>
-                    <Tab to="developer">Developer</Tab>
-                    <li name="logout">
-                        <a href="/accounts/logout/">Logout</a>
-                    </li>
-                </ul>
-            </li>
-            */
         )
     }
 })

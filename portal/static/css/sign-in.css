@@ -1,4 +1,10 @@
 
+.logo-large {
+    width: 460px;
+    margin-bottom: 20px;
+    padding-left: 15px;
+}
+
 .image-centred{
     display: block;
     margin-left: auto;
